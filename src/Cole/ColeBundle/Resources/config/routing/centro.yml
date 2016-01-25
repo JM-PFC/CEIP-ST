@@ -1,0 +1,30 @@
+centro:
+    path:     /
+    defaults: { _controller: "ColeBundle:Centro:index" }
+
+centro_show:
+    path:     /{id}/show
+    defaults: { _controller: "ColeBundle:Centro:show" }
+
+centro_new:
+    path:     /new
+    defaults: { _controller: "ColeBundle:Centro:new" }
+
+centro_create:
+    path:     /create
+    defaults: { _controller: "ColeBundle:Centro:create" }
+    requirements: { _method: post }
+
+centro_edit:
+    path:     /{id}/edit
+    defaults: { _controller: "ColeBundle:Centro:edit" }
+
+centro_update:
+    path:     /{id}/update
+    defaults: { _controller: "ColeBundle:Centro:update" }
+    requirements: { _method: post|put }
+
+centro_delete:
+    path:     /{id}/delete
+    defaults: { _controller: "ColeBundle:Centro:delete" }
+    requirements: { _method: post|delete }

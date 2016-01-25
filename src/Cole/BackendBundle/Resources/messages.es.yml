@@ -1,0 +1,5 @@
+The presented password cannot be empty.:El campo contraseña no puede estar vacío.
+Bad credentials:Combinación Usuario/Clave inválida.
+The presented password is invalid.:Combinación Usuario/Clave inválida.
+User account is disabled.: El usuario está desactivado.
+The CSRF token is invalid. Please try to resubmit the form: El token CSRF es inválido. Por favor carge de nuevo la página.

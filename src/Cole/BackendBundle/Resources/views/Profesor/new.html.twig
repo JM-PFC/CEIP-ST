@@ -1,0 +1,25 @@
+{% extends 'BackendBundle:Default:index.html.twig' %}
+
+{% block stylesheets %}
+    {{parent()}}
+{% endblock %}
+
+{% block javascript %}
+     {{parent()}}
+  {% endblock %}
+
+{% block body %}
+		<div>
+    <h1>Profesor creation</h1>
+
+    {{ form(form) }}
+
+        <ul class="record_actions">
+    <li>
+        <a href="{{ path('profesor') }}">
+            Back to the list
+        </a>
+    </li>
+</ul>
+	</div>
+{% endblock %}

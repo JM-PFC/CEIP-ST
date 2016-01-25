@@ -1,0 +1,744 @@
+*{
+    margin: 0;
+    padding: 0;
+}
+button{
+	cursor: pointer; 
+}
+a{
+    text-decoration: none;
+    color: #001F51;
+}
+body{
+	background: #EEECEC;
+	margin-left: auto;
+    margin-right: auto;
+
+    padding-top: 5px;
+
+    position: relative;
+    width: 95%;
+    min-width: 1024px;
+}
+
+/*Formularios*/
+.formulario >div >div{	
+	border-radius: 7px;
+	height: 50px;
+	margin-bottom: 10px;
+	margin-left: 40px;
+	padding-left: 20px;
+	padding-right: 15px;
+	padding-top: 4px;
+	width: 15%;
+	background: #b1cce7 ;
+
+}
+.formulario>#nombre>div{
+		float: left;
+		width: 20%;
+}
+.formulario>#datos>div:first-child{
+	display: block !important;
+}
+.formulario>#datos> div{
+	float: left;
+	width: 20%;
+}
+.formulario >div >div >div{
+	display: block;
+}
+.formulario >div >div >select{
+	display: block;
+}
+.formulario > div > div > input{
+	display: block;
+	font-size: 12pt !important;
+	height: 18px;
+	text-align: left;
+	padding-left: 10px;
+	width: 300px;
+}
+.formulario > #dni > div > input{
+	text-transform: uppercase;
+	width: 70%;
+}
+.formulario > #nombre > div > input{
+	text-transform: capitalize;
+	width: 200px;
+}
+.formulario > #datos> div > input{
+	width: 200px;
+}
+
+
+/* Espacio para menú de administración */
+.centrado{
+    clear: both;
+    position: relative;
+    display: block;
+    max-width: 1336px;
+    min-width: 1024px;
+    margin: 0 auto;
+    margin-top:10px; 
+    z-index: 1;
+    border-radius: 10px;
+    -moz-box-shadow:  black 2px 2px 15px;
+   	-webkit-box-shadow:  black 2px 2px 15px;
+   	box-shadow:  black 2px 2px 15px;
+}
+header{
+	background: #001F51;
+	color: white;
+	height: 35px;
+	border-radius: 10px 10px 0 0;
+}
+header h2{
+	float: left;
+	padding: 5px 30px;
+	font-size: 20px;
+	font-family: serif;
+	font-weight: lighter;
+	-moz-text-shadow: black 3px 3px 2px;
+    -webkit-text-shadow: black 3px 3px 2px;
+    text-shadow: black 3px 3px 2px;
+}
+header h3{
+	float: right;
+	padding: 8px 30px;
+	font-size: 16px;
+	font-family: serif;
+	font-weight: lighter;
+	-moz-text-shadow: black 3px 3px 2px;
+    -webkit-text-shadow: black 3px 3px 2px;
+    text-shadow: black 3px 3px 2px;
+}
+nav{
+	clear: both;
+}
+.barra_menu{
+	clear: both;
+	position: relative;
+	display: block;
+    height: 145px;
+    background:#BBCFF0;
+    color: white;
+    padding-top: 15px;
+    z-index: 50;
+}
+
+/*Pestañas del menú*/
+.menu{
+    width: 100%;
+    position: relative;
+    float: left;
+    color: white;
+    background: #334C73;
+    list-style: none;
+    line-height: 25px;
+    z-index: 10;
+    border-radius: 5px 5px 0 0;
+}
+.menu li{ 
+    list-style: none;
+    display: inline-block;
+    position:relative;
+    float: left;
+    text-align: center;
+    width: 10%;
+    font-size: 18px;
+    font-family: Helvetica,Arial,sans-serif;
+	margin-left: 30px;
+    display: table;
+         margin-top: 2px;
+}
+.menu a{
+    display: inline-block;
+    font-size: 0.9em;
+    color: white;
+    display: table-cell;
+    vertical-align: middle;
+    border-radius: 5px 5px 0 0; 
+}
+.menu a:hover{
+    background: grey;
+}
+.menu .activo{
+	z-index: 3;
+}
+
+.menu .activo a{
+	background: #E4E0E0;
+	color:#545454;
+}
+.menu li:before, .menu li:after, 
+.menu li a:before, .menu li a:after{
+	position: absolute;
+	bottom: 0;
+}
+.menu li:first-child:before, .menu li:last-child a:before,
+.menu li:last-child:after, .menu li:last-child a:after,
+.menu .activo:after, .menu .activo:before, 
+.menu .activo a:after, .menu .activo a:before{
+	content: "";
+}
+.menu .activo:before, .menu .activo:after{
+	background: #D8D8D8;
+	z-index: 1;
+}
+/*Cuadrados para efecto en las pestañas*/
+.menu li:before, .menu li:after{
+	background: #334C73;
+	width: 10px;
+	height: 10px;
+}
+.menu li:before{
+	left: -10px;
+}
+.menu li:after{
+	right: -10px;
+}
+/*Circulos para efecto en las pestañas*/
+.menu li a:after, .menu li a:before{
+	width: 20px;
+	height: 20px;
+	border-radius: 8px;
+	background: #334C73;
+	/*Circulos sobre cuadrados*/
+	z-index: 2;
+}
+.menu .activo a:after, .menu .activo a:before{
+	background: #334C73;
+}
+/*Primer y último elemento es diferente*/
+.menu li:first-child .activo a:before,
+.menu li:last-child .activo a:after{
+	background: #222;
+}
+.menu li a:before{
+	left: -20px;
+}
+.menu li a:after{
+	right: -20px;
+}
+
+/*Contenido de las pestañas en el menú*/
+.contenedor div{
+	position: absolute;
+	top: 25px;
+	width: 100%;
+	height: 95px;
+	padding: 5px 9.5px;
+    -moz-box-sizing: border-box;
+    -webkit-box-sizing: border-box;
+    box-sizing: border-box;
+    border-radius: 5px 5px 5px 5px;
+    z-index: 10;
+}
+.contenedor{
+	clear: both;
+	position: relative;
+	display: block;
+	background: #D8D8D8;
+	width: 90%;
+	min-width: 87%;
+	height: 120px;
+	-moz-box-shadow:  black 2px 2px 15px;
+   	-webkit-box-shadow:  black 2px 2px 15px;
+   	box-shadow:  black 2px 2px 15px;
+   	border-radius: 10px;
+   	border: ridge 3px grey;
+   	margin-left: auto;
+   	margin-right: auto;
+   	background: -moz-linear-gradient(bottom,  #E4E0E0 30%,  #D8D8D8 45%, #E4E0E0 58%);
+	margin-bottom: 20px;
+}
+.contenedor div div{
+	position: relative;
+	display: block;
+	float: left;
+	margin-top: -25px;
+	border: solid 1px grey;
+	width: auto;
+	height: 100%;
+	text-align: center;
+	border-radius: 5px;
+	margin-right: 5px;
+}
+.contenedor div a{
+	float: left;
+	padding: 0 5px;
+	margin: 0 auto;
+	margin-top: -2px;
+	min-width: 50px;
+}
+.contenedor div a:hover{
+	background: #9FCBE9;
+	height: 85%;
+	border-radius: 5px;	
+	z-index: -1
+}
+.contenedor div a img{
+	margin-top: -10px;
+	margin: 0 auto;
+	min-width: 30px;
+	max-height: 30px;
+}
+.contenedor div a span{
+	margin-top: -4px;
+	font-size: 12px;
+	line-height: 13px;
+    display: table-cell;
+    vertical-align: middle;
+    min-width: 50px;
+}
+.contenedor div div>span{
+	display: block;
+	margin-top: 64px;
+	padding:2px 6px ;
+	font-size: 12px;
+	background: #334C73;
+	margin-left: -10.5px;
+	margin-right: -10.5px;
+	border-radius: 0 0 5px 5px;
+}
+.salir{
+	background: #EB1919!important;
+	width: 100px !important;
+	border-radius: 5px;
+	float: right !important;
+	margin:0 20px !important;
+	margin-top: 1px !important;
+	background: -moz-linear-gradient(bottom,  #EB1919 10%,  #EB7171 55%) !important;
+	display: block;
+}
+.salir a:hover{
+	background: -moz-linear-gradient(bottom,  #EB7171 30%,  #EB1919 90%) !important;
+	border-radius: 5px;
+}
+.salir a img{
+	float: left;
+	padding: 1px 11px 2px 8px;
+	min-width: 15px;
+	max-height: 16px;
+	border-right:0.5px solid white;
+	margin-top: 3px;
+}
+.salir a p{
+	float: right;
+	padding: 0 20px 0 5px;
+}
+
+/* Espacio para contenido de las opciones del menú */
+.main{
+	display: inline-block;
+	position: relative;
+	clear: both;
+	width: 100%;
+	min-height: 65vh;
+	background: #BBCFF0;
+	border-radius: 0 0 10px 10px;
+	-moz-box-sizing: border-box;
+    -webkit-box-sizing: border-box;
+    box-sizing: border-box;
+  
+
+}
+.contenido_main{
+    clear: both;
+    position: relative;
+    display: block;
+    max-width: 99%;
+    margin: 0 25px;
+	min-height: 55vh;
+
+}
+#fondo_logo {
+    width: 30%;
+    height: auto;
+    margin: 0 auto;
+    padding: 4%;
+    max-width: 350px; 
+    font-size: 1em;
+}
+#fondo_logo img{
+	width: 80%;
+	height: auto;
+}
+#imagen{
+width: 200px;
+margin: 50px auto;
+}
+
+/*Pestañas del contenido*/
+#tabs{
+	margin:1px;
+	padding: 1px;
+	font-size: 15px;
+	overflow: hidden;
+}
+#tabs ul{
+	min-height: 2em;
+}
+#tabs li a{
+	padding: 4px;
+	padding-right: 25px;
+}
+#tabs li .ui-icon-close { 
+	float: left; 
+	margin: 0.4em 0 0 -20px; 
+	cursor: pointer; 
+}
+.close_tabs{
+	position: absolute;
+	top: 7px;
+	left: 94%;
+	display: none;
+	z-index: 20;
+}
+
+.close_tabs:hover{
+	background-color: grey;
+	border-radius: 5px;
+}
+
+/*Contenido*/
+#tabs>div{
+	overflow: auto;
+	margin: 5px 0;
+	max-height: 50vh;
+	min-height: 50vh;
+	padding-top: 2px;
+	width: 95%;
+}
+
+/*Mensaje máx pestañas*/
+#dialog-message{
+	font-size: 15px;
+	margin-top: 10px;
+}
+#dialog-message  p b{
+	margin-top: 20px;
+	display: inline-block;
+}
+.oculto{
+	display: none;
+}
+.visible{
+	visibility: visible;
+}
+.invisible{
+	visibility: hidden;
+}
+
+/*Tablas*/
+thead tr th {
+	background: #334C73;
+	min-width: 80px !important;
+	text-align: left;
+	padding: 0 5px;
+	font: 1em solid ;
+	color:white;
+}
+tbody tr td{
+	background: #b1cce7;
+	min-width: 80px !important;
+	text-align: left;
+	padding: 0 5px;
+}
+
+#tab-container
+{
+   float: left;
+   margin: 40px 0 0 0;
+   width: 126px;
+   margin-right: -1px;
+
+}
+#tab-container ul
+{
+   list-style: none;
+   text-align: center;
+}
+#tab-container ul li
+{
+   border-top: 1px solid #666;
+   border-right: 1px solid #666;
+   border-bottom: 1px solid #666;
+   border-left: 8px solid #666;
+   background-color: #ddd;
+   margin: 8px 0;
+   box-shadow: -1px -2px 2px -2px rgba(0, 0, 0, 0.5);
+}
+#tab-container ul li a,
+#tab-container ul li a:visited
+{
+   text-decoration: none;
+   color: #666;
+   display: block;
+   padding: 15px 5px;
+   width: 100px;
+}
+#tab-container ul li:hover
+{
+   border-left: 8px solid #333;
+}
+#tab-container ul li a:hover,
+#tab-container ul li.selected a
+{
+   color: #000;
+}
+#tab-container ul li.selected
+{
+   border-right: none;
+   background-color: #b1cce7;
+   
+   border-left: 8px solid #334c73;
+   font-weight: bold;
+}
+#content
+{
+   height: 280px;
+   width: 85%;
+   margin: 0 0 0 125px;
+   padding: 3px 15px;
+   
+   background-color: #b1cce7;
+   border: 1px solid #888;
+   /*overflow:hidden;*/
+
+   border-radius: 5px 5px 5px 5px;
+   box-shadow: 0 -2px 3px -2px rgba(0, 0, 0, .5);
+}
+#content>div{
+	display: none ;
+}
+#botones_form{
+	margin-left: 130px;
+	margin-top: 5px;
+	padding: 0 50px;
+}
+
+form {
+   
+    font: normal bold 12px Verdana, Arial;
+    width: 100%;
+}
+
+form label {
+    display: block;
+    width: 150px;
+    margin-right: 10px;
+    font-family: Verdana,Arial,sans-serif;
+	font-size: 1.2em ;
+}
+
+form input {
+    display: inline-block;
+    max-width: 240px;
+    width: 90%;
+    margin-bottom: 10px;
+	font-size: 12pt !important;
+	min-height: 18px;
+	text-align: left;
+	padding: 0 10px;
+	box-shadow: 0 1px 1px 0.6px rgba(0, 0, 0, 0.5);
+	text-transform:capitalize;
+}
+
+
+form input[type="radio"] {
+    display: inline-block;
+    width: 20px;
+    margin-bottom: 10px;
+}
+form label+div label{
+	display: inline;
+
+}
+form label+div{
+	margin-top: 5px;
+}
+fieldset{
+	margin-top: 5px;
+}
+
+.simple{
+	min-height: 260px;
+}
+
+.double{
+	height: 125.5px;
+}
+
+.horizontal div{
+	width: 100%; 
+}
+.dis_block div{
+	float: left;
+	clear: right;
+	margin-left: 3%;
+	max-width: 250px;
+	width: 20%;
+}
+
+.small div{
+	float: left;
+	clear: right;
+	margin-left: 2%!important;
+	max-width: 250px;
+	width: 22%;
+}
+
+
+
+
+legend{
+	margin-left: 10px;
+	margin-bottom: 5px;
+	color: #334c73;
+	font-size: 1.2em;
+
+}
+
+.izquierda>div{
+	float: left;
+	clear: right;
+	margin-left: 4%;
+	margin-right: 2%;
+	max-width: 250px;
+	width: 27%;
+}
+.dis_block{
+display: block;
+width: 100%;
+clear: both;
+}
+.block{
+	float: left;
+	clear: right;
+	height: auto;
+	width: 40%;
+	margin-left: 40px;
+	margin-top: 4px;
+}
+.dni{
+	width: 95px;
+	text-transform: uppercase !important;
+}
+.fecha{
+	width: 95px;
+}
+.telefono{
+	width: 100px;
+}
+.cp{
+	width: 90px;
+}
+.archivo{
+	width: 100%;
+	box-shadow: 0 0 0 0;
+}
+.email{
+	text-transform: none;
+	width: 100%;
+}
+.normal{
+	width: 80%;
+}
+.full_name{
+	width: 78%;
+	max-width: 100% !important;
+}
+#alumno_foto{
+	width: 100% !important;
+	max-width: 100% !important;
+}
+textarea{
+	height: 200px;
+	width: 100%;
+	margin-bottom: 15px;
+	font-size: 12pt !important;
+
+}
+
+.derecha{
+	float: right;
+	clear: right;
+}
+
+select{
+	margin-bottom: 10px;
+	min-height: 18px; 
+	font-family: Verdana,Arial,sans-serif;
+	font-size: 1.2em !important;
+}
+
+form button{
+	float: left;
+	margin: 2px 50px;
+	padding: 0 5px;
+	height: 30px;
+	cursor: pointer; 
+	min-width: 80px;
+	font-family: Verdana,Arial,sans-serif;
+	font-size: 1.2em !important;
+
+}
+form button:hover{
+	font-weight: bold;
+}
+
+.invalid{
+	box-shadow: 0 0px 3px 1.5px red;
+}
+
+.error{
+    background-color: #BC1010;
+    padding: 0.2px 2px;
+    border-radius: 0 4px 4px 0;
+    color: white;
+    font-size: 11.5px;
+    margin-left: 10px;
+    margin-top: 0px;
+    position: absolute;
+    opacity: 0.8;
+    width:8.6%; 
+    z-index: 2;
+}
+.error:before{ /* Este es un truco para crear una flechita */
+    content: '';
+    border-top: 8px solid transparent;
+    border-bottom: 8px solid transparent;
+    border-right: 8px solid #BC1010;
+    border-left: 8px solid transparent;
+    left: -15px;
+    position: absolute;
+    top: -1px;
+}
+.mensaje{
+    background-color: #334c73;
+    padding: 3px 12px;
+    border-radius: 4px;
+    display: none;
+    color: white;
+    font-size: 13px;
+    margin-left: 0px;
+    margin-top: -5px;
+    position: absolute;
+    max-width:23%; 
+    z-index: 3;
+}
+
+.mensaje:before{ /* Este es un truco para crear una flechita */
+    content: '';
+    border-top: 8px solid transparent;
+    border-bottom: 8px solid #334c73;
+    border-right: 8px solid transparent;
+    border-left: 8px solid transparent;
+    left: -15px;
+    position: absolute;
+    top: -15px;
+    left: 5%;
+
+}

@@ -1,0 +1,21 @@
+{% for noticia in noticias %}
+	<article class="contenedor_noticia">
+        <div  class="fecha_publicada no-seleccion">
+            <div  class="valor_day">{{noticia.fecha| localizeddate('none', 'none', 'none',none , " d ") }}</div>
+            <div class="valor_month">{{noticia.fecha| localizeddate('none', 'none', 'none',none , " MMMM ") | slice(1, 3)}}</div>
+            <div class="valor_year">{{noticia.fecha| localizeddate('none', 'none', 'none',none , "Y")}}</div>
+        </div>
+    
+        <div class="contenido_noticia">
+           	{% if noticia.foto != null %}
+               	<div class="imgLiquidFill imgLiquid">
+                    <a href="{{ path('noticia', {'id': noticia.id}) }}"><img src="{{ asset('bundles/cole/images/noticias/'~ noticia.foto)}}" alt="Loulou form Sos Chats Geneva"></a>
+                </div>
+            {% endif %}
+            <a href="{{ path('noticia', {'id': noticia.id}) }}"><h2>{{noticia.titulo}}</h2></a>
+            <p>{{noticia.descripcion|truncate(300,true)| nl2br}}<a class="href_blue" href="{{ path('noticia', {'id': noticia.id}) }}"> [Leer más]</a></p>
+        </div>
+    </article>
+
+{% endfor %}
+           

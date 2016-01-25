@@ -1,0 +1,57 @@
+{% extends '::frontend.html.twig' %}
+
+{% block main -%}
+    <h1>Centro list</h1>
+    {% if entities %}
+    <table class="records_list">
+        <thead>
+            <tr>
+                <th>Nombre</th>
+                <th>Direccion</th>
+                <th>Localidad</th>
+                <th>Provincia</th>
+                <th>Cp</th>
+                <th>Telefono</th>
+                <th>Fax</th>
+                <th>Web</th>
+                <th>Logo</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+
+        {% for entity in entities %}
+            <tr>
+                <td>{{ entity.nombre }}</td>
+                <td>{{ entity.direccion }}</td>
+                <td>{{ entity.localidad }}</td>
+                <td>{{ entity.provincia }}</td>
+                <td>{{ entity.cp }}</td>
+                <td>{{ entity.telefono }}</td>
+                <td>{{ entity.fax }}</td>
+                <td>{{ entity.web }}</td>
+                <td>{{ entity.logo }}</td>
+                <td>
+                <ul>
+                    <li>
+                        <a href="{{ path('centro_show', { 'id': entity.id }) }}">Mostrar</a>
+                    </li>
+                    <li>
+                        <a href="{{ path('centro_edit', { 'id': entity.id }) }}">Editar</a>
+                    </li>
+                </ul>
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+    {% else%}
+        <ul>
+        <li>
+            <a href="{{ path('centro_new') }}">
+                Rellenar los datos del centro
+            </a>
+        </li>
+    </ul>
+    {% endif %}
+    {% endblock %}

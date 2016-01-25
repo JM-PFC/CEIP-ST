@@ -1,0 +1,36 @@
+	{% extends '::frontend.html.twig' %}
+
+	{% block title %}Formulario de acceso{% endblock %}
+	{% block stylesheets %}
+		{{ parent() }}
+		<link href="{{ asset('bundles/intranet/css/intranet.css') }}" rel="stylesheet" type="text/css" />{% endblock %}
+	{% block main %}
+			<form class="login" action="{{ path('login_check') }}" method="post">
+				<h1>{% trans %}Acceso Área Privada{% endtrans %}</h1>
+				<fieldset id="inputs">
+				  <p> Por favor, introduzca su usuario y su contraseña.</p>
+				  <p>	
+					<label for="username">{% trans %}Nombre de usuario{% endtrans %}:</label>
+					<input type="text" id="username" name="_username" value="{{ last_username }}"placeholder="{%trans%}Usuario{%endtrans%}" title="Escriba su usuario" autofocus required/>
+				  </p>
+				  <p>	
+					<label for="password">{% trans %}Contraseña{% endtrans %}:</label>
+					<input type="password" id="password" name="_password" placeholder="{% trans %}Clave{%endtrans%}" title="Escriba su clave" required/>
+				  </p>
+				  <p>	
+			 		<label><input id="recuerdame" type="checkbox" id="remember_me" name="_remember_me" title="Recordar usuario/clave" checked />{% trans %}Recuérdame{% endtrans %}</label>
+			 	  </p>
+					<div class="mensaje_error">
+						{% if error %}
+						{{ error.message|trans () }}
+					{% endif %}</div>
+					<input id="acceder" type="submit" name="login" value="{% trans %}ENTRAR {% endtrans %}" title="Entrar en la zona privada">
+					<div id="passolvidado"><a href="#" title="Recuperar clave para la zona privada">{% trans %}Contraseña olvidada{% endtrans %}</a></div>
+
+					
+			</fieldset>
+
+			<div class="fondo"></div>
+		</form>
+	{% endblock %}
+	{% block aside %}{% endblock %}

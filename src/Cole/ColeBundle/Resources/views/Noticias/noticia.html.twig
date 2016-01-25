@@ -1,0 +1,21 @@
+{% extends  '::frontend.html.twig' %}
+
+
+
+{% block main %}
+   <article class="contenedor_noticia">
+                <div class="contenido_noticia">
+
+                    <h2>{{entity.titulo}}</h2>
+                    <p>{{entity.descripcion| nl2br}}</p>
+                    {% if entity.foto != null %}
+                        <div class="imgLiquidFill imgLiquid normal">
+                        <a class="no-seleccion" ><img src="{{ asset('bundles/cole/images/noticias/'~ entity.foto)}}" alt="Loulou form Sos Chats Geneva"></a></div>
+                    {% endif %}
+                </div>
+            </article>
+{% endblock %}
+
+{% block migas %}
+<a href="{{ path('index') }}">Inicio</a> > <a href="{{ path('noticias') }}"> Noticias</a>  > {{entity.titulo}}
+{% endblock %}

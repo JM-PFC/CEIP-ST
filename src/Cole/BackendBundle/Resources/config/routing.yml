@@ -1,0 +1,30 @@
+backend:
+    path:     /admin/
+    defaults: { _controller: BackendBundle:Default:index }
+
+login:
+    path:     /login
+    defaults: { _controller: BackendBundle:Security:login }
+
+login_check:
+    path:     /login_check
+
+logout:
+    path:     /logout
+
+BackendBundle_profesor:
+        resource: "@BackendBundle/Resources/config/routing/profesor.yml"
+        prefix:   /profesor
+
+BackendBundle_padres:
+        resource: "@BackendBundle/Resources/config/routing/padres.yml"
+        prefix:   /padres
+
+BackendBundle_alumno:
+        resource: "@BackendBundle/Resources/config/routing/alumno.yml"
+        prefix:   /alumno
+
+BackendBundle_curso:
+        resource: "@BackendBundle/Resources/config/routing/curso.yml"
+        prefix:   /curso
+

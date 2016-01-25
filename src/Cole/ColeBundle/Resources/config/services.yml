@@ -1,0 +1,7 @@
+parameters:
+#    cole.example.class: Cole\ColeBundle\Example
+
+services:
+#    cole.example:
+#        class: %cole.example.class%
+#        arguments: [@service_id, "plain_value", %parameter%]

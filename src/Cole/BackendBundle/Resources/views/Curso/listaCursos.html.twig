@@ -1,0 +1,6 @@
+{# Otra forma de mostrar lista seleccionable #}
+<select>
+    {% for curso in cursos %}
+        <option value="{{curso.Id}}">{{curso.Nivel ~ " " ~ curso.Curso}}</option>
+    {% endfor %}
+</select>

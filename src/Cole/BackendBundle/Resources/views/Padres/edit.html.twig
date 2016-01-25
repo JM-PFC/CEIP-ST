@@ -1,0 +1,24 @@
+{% extends 'BackendBundle:Default:index.html.twig' %}
+
+{% block stylesheets %}
+    {{parent()}}
+{% endblock %}
+
+{% block javascript %}
+     {{parent()}}
+
+  {% endblock %}
+{% block body -%}
+    <h1>Padres edit</h1>
+
+    {{ form(edit_form) }}
+
+        <ul class="record_actions">
+    <li>
+        <a href="{{ path('padres') }}">
+            Back to the list
+        </a>
+    </li>
+    <li class="formulario_borrar">{{ form(delete_form) }}</li>
+</ul>
+{% endblock %}

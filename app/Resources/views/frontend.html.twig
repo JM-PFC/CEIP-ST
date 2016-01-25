@@ -1,0 +1,176 @@
+{% extends  '::base.html.twig' %}
+{% block head %}
+    {{parent()}}
+    <title>{% block title %}Bienvenido a la web del centro{% endblock %}</title>
+
+{% endblock %}
+
+{% block stylesheets %}<link href="{{ asset('bundles/cole/css/estilo.css') }}" rel="stylesheet" type="text/css" />{% endblock %}
+    {% block javascript %}
+        {{parent()}}
+      <script type="text/javascript" src="{{ asset('bundles/cole/js/load.js') }}"></script>
+      <script src="{{asset("bundles/cole/js/imgLiquid-min.js")}}">   </script>{% endblock %}
+
+{% block body %}
+        <div class="cab_sup">
+            <div class="centrado">
+                <ul class="menu_sup_izq">
+                    <li class="primero"><a title="Ir a USUARIOS" href="{{path('login')}}">USUARIOS</a>
+                    </li>
+                    <li class="siguiente"><a title="Ir a ADMINISTRADOR" href="{{path('backend')}}">ADMINISTRADOR</a>
+                    </li>
+                </ul>
+                <div id="logotipo">
+                <a title="Ir al inicio de la web" href="{{path('index')}}">
+                <img alt="logo del colegio"  oncopy="alert('\xA9 Imagen propiedad del CEIP SANTA TERESA');return false" oncontextmenu="alert('\xA9 Imagen propiedad del CEIP SANTA TERESA');return false" src="{{ asset('bundles/cole/images/cabecera/logo_3.png')}}"></a></div>
+                <div class="menu_sup_der">
+                    <div>
+                        <div class="usuariologin">USUARIOS</div>
+                        <div  class="caja_login oculto">
+                             <div class="bloque_login">
+                                <h2>Área Privada</h2>
+                                <form id="login" action="{{ path('login_check') }}" method="post">
+                                <fieldset class="fsetoculto">
+                                    <!--usuario:-->
+                                    <div><label for="username" class="oculto">Usuario:</label><input type="text" id="username" name="_username" placeholder="{%trans%}Usuario{%endtrans%}" autofocus required title="Escriba su usuario"></div>
+        
+                                    <!--clave:-->
+                                    <div><label for="password" class="oculto">Clave:</label><input type="password" id="paswword" name="_password" placeholder="{% trans %}Clave{%endtrans%}" title="Escriba su clave"></div>
+                                    <!--Recordar-->
+                                    <div class="recordar"><label ><input id="recuerdame" type="checkbox" id="remember_me" name="_remember_me" title="Recordar usuario/clave" checked />{% trans %}Recordar{% endtrans %}</label></div>
+                                    <!--entrar-->
+                                    <p><input  id="acceder" type="submit" name="login" value="ENTRAR" title="Entrar en la zona privada" ></p>
+                                </fieldset>
+                                </form>
+                                <div>
+                                    <p><a href="#" title="Recuperar clave para la zona privada">Contraseña olvidada</a></p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                <div class="redes_soc_sup">
+                    <a target="_blank" title="facebook (en nueva ventana)" href="https://es-es.facebook.com/pages/Colegio-Público-Santa-Teresa-Cádiz/239422462789292"><img class= "icon_face" alt="facebook (en nueva ventana)" src="{{ asset('bundles/cole/images/cabecera/facebook.png')}}"></img></a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="centrado">
+         <header>
+            <div class="cabecera">
+                <div class="titulo">Colegio de Educación Infantil y Primaira<br> <strong>Santa Teresa</strong><br>Cádiz</div>
+                <div class="carrusel ">
+                    <img oncopy="alert('\xA9 Imagen propiedad del CEIP SANTA TERESA');return false" oncontextmenu="alert('\xA9 Imagen propiedad del CEIP SANTA TERESA');return false" src="{{ asset('bundles/cole/images/carrusel/mascara.png') }}" alt="">
+                    <div><img src="{{ asset('bundles/cole/images/carrusel/image1.jpg') }}" alt=""></div>
+                    <div><img src="{{ asset('bundles/cole/images/carrusel/image2.jpg') }}" alt=""></div>
+                    <div><img src="{{ asset('bundles/cole/images/carrusel/image3.jpg') }}" alt=""></div>
+                    <div><img src="{{ asset('bundles/cole/images/carrusel/image4.jpg') }}" alt=""></div>
+
+                </div>
+            </div>
+            <nav class="barra_menu">
+                <ul class="menu">
+                    <li class="boton_inicio" class="ribbon-content"><a href="{{path('index')}}"> Inicio </a></li>
+                    <li class="boton_naranja"><a href="{{path('pagina_estatica', {'pagina':'centro'})}}"> Centro </a>
+                        <ul class="submenu">
+                            <li><a href="#"> ¿Quienes somos? </a></li>
+                            <li><a href="#"> Carta Directora </a></li>
+                            <li><a href="#"> Historia        </a></li>
+                            <li><a href="#"> Instalaciones   </a></li>
+                            <li><a href="#"> ¿Quién fue Santa Teresa de Jesús?    </a></li>
+                            <li><a href="#"> A.M.P.A.</a></li>
+                        </ul>
+                    </li>
+                    <li class="boton_azul"><a href="{{path('pagina_estatica', {'pagina':'oferta-educativa'})}}">Oferta Educativa</a>
+                        <ul class="submenu">
+                            <li><a href="#"> Ed. Infantil</a></li>
+                            <li><a href="#"> Ed. Primaria</a></li>
+                            <li><a href="#"> Planes y Proyectos</a>
+                                <ul>
+                                    <li><a href="#"> Plan de Centro </a></li>
+                                    <li><a href="#"> Proyecto Educativo </a></li>
+                                    <li><a href="#"> Convivencia </a></li>
+                                    <li><a href="#"> Recicla</a></li>
+                                    <li><a href="#"> Actuación Pedagógica</a></li>
+                                    <li><a href="#"> Proyecto Educativo </a></li>
+                                    <li><a href="#"> Proyecto Educativo </a></li>
+                                </ul>
+                            </li>
+                        </ul>
+                    </li>
+                    {#<li class="boton_amarillo"><a href="{{path('pagina_estatica', {'pagina':'noticias'})}}"> Noticias </a>#}
+                    <li class="boton_amarillo"><a href="{{path('noticias')}}"> Noticias </a>
+
+                        <ul class="submenu">
+                            <li><a href="#"> General</a></li>
+                            <li><a href="#"> Infantil</a></li>
+                            <li><a href="#"> Primaria</a></li>
+                        </ul>
+                    </li>
+                    <li class="boton_rojo"><a href="{{path('pagina_estatica', {'pagina':'otros-servicios'})}}"> Servicios </a>
+                        <ul class="submenu">
+                            <li><a href="#"> Aula Matinal</a></li>
+                            <li><a href="#"> Comedor Escolar</a></li>
+                            <li><a href="#"> Actividades Extraescolares</a></li>
+                        </ul>
+                    </li>
+                    <li class="boton_verde"><a href="{{path('pagina_estatica', {'pagina':'oficina-virtual'})}}"> Oficina Virtual </a>
+                        <ul class="submenu">
+                            <li><a href="#"> Contacto y Horarios</a></li>
+                            <li><a href="#"> Petición de Instalaciones</a></li>
+                            <li><a href="#"> Calendarios</a></li>
+                            <li><a href="#"> Vuelta al Cole (año)</a></li>
+                            <li><a href="#"> Escolarización (año)</a></li>
+                            <li><a href="#"> FAQs</a></li>
+                        </ul>
+                    </li>
+                    
+                    <li class="boton_lila"><a href="{{path('pagina_estatica', {'pagina':'enlaces'})}}"> Enlaces </a>
+                        <ul class="submenu">
+                            <li><a href="#"> Blogs del Colegio</a></li>
+                            <li><a href="#"> Aprende más fácil</a></li>
+                        </ul>
+                    </li>
+                </ul>
+                <div class="migas">
+
+                    <span>
+                        {% block migas %}
+                            {% if 'now'|date("m") =="8" %}
+                                Bienvenidos al curso escolar {{ "now" | localizeddate('none', 'none', 'none',none , "Y") | capitalize}}/{{ "now+1year" | localizeddate('none', 'none', 'none',none , "Y") | capitalize}}.
+                            {% else %}
+                                Bienvenidos al curso escolar {{ "now-1year" | localizeddate('none', 'none', 'none',none , "Y") | capitalize}}/{{ "now" | localizeddate('none', 'none', 'none',none , "Y") | capitalize}}.
+                        {% endif %}
+                        {% endblock %}
+                    </span>
+                    <span class="no-seleccion"> {{ "now" | localizeddate('none', 'none', 'none',none , "cccc, d 'de' MMMM 'de' Y") | capitalize}}</span> 
+                    {#corregir traducción de fecha
+
+                    {% set locale = app.request.locale %}
+                    {% if locale == 'es' %}
+                        <span> {{ "now" | localizeddate('none', 'none', 'none',none , "cccc, d MMMM Y") | capitalize}}</span> 
+                    {% else %}
+                        <span> {{ "now" | date("l, j F  Y") | capitalize}}</span> 
+                    {% endif %} #}
+                </div>
+             </nav>
+            </header>
+            <acticle class="main">
+
+               {% block main %}
+
+               {% endblock %}
+            </article>
+        </div>
+        <div class="fondo_menu"></div>
+{% endblock %}
+{% block footer %}
+        <footer>
+            <div class="centrado">
+                <span> &copy; {{ 'now' | date('Y') }} - CEIP SANTA TERESA - Av. Duque de Nájera, 1. 11002 Cádiz - Tlf:956243336<span><br>
+                <a href="#">Mapa del sitio</a> ·
+                <a href="#">Contacto</a> ·
+                <a href="#">Privacidad</a> ·
+                <a href="#">Sobre nosotros</a>
+            </div>
+        </footer>
+{% endblock %}

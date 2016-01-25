@@ -1,0 +1,32 @@
+alumno:
+    path:     /
+    defaults: { _controller: "BackendBundle:Alumno:index" }
+
+alumno_show:
+    path:     /{id}/show
+    defaults: { _controller: "BackendBundle:Alumno:show" }
+
+alumno_new:
+    path:     /new
+    defaults: { _controller: "BackendBundle:Alumno:new" }
+
+alumno_create:
+    path:     /create
+    defaults: { _controller: "BackendBundle:Alumno:create" }
+    requirements: { _method: post }
+    options:
+        expose: true
+
+alumno_edit:
+    path:     /{id}/edit
+    defaults: { _controller: "BackendBundle:Alumno:edit" }
+
+alumno_update:
+    path:     /{id}/update
+    defaults: { _controller: "BackendBundle:Alumno:update" }
+    requirements: { _method: post|put }
+
+alumno_delete:
+    path:     /{id}/delete
+    defaults: { _controller: "BackendBundle:Alumno:delete" }
+    requirements: { _method: post|delete }

@@ -1,0 +1,36 @@
+noticias:
+    path:     /
+    defaults: { _controller: "ColeBundle:Noticias:noticias" }
+
+noticias_show:
+    path:     /{id}/show
+    defaults: { _controller: "ColeBundle:Noticias:show" }
+
+
+
+noticia:
+    path:     /{id}
+    defaults: {_controller: "ColeBundle:Noticias:noticia"}
+
+noticias_new:
+    path:     /new/
+    defaults: { _controller: "ColeBundle:Noticias:new" }
+
+noticias_create:
+    path:     /create/
+    defaults: { _controller: "ColeBundle:Noticias:create" }
+    requirements: { _method: post }
+
+noticias_edit:
+    path:     /{id}/edit
+    defaults: { _controller: "ColeBundle:Noticias:edit" }
+
+noticias_update:
+    path:     /{id}/update
+    defaults: { _controller: "ColeBundle:Noticias:update" }
+    requirements: { _method: post|put }
+
+noticias_delete:
+    path:     /{id}/delete
+    defaults: { _controller: "ColeBundle:Noticias:delete" }
+    requirements: { _method: post|delete }

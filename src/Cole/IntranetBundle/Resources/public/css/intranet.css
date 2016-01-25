@@ -1,0 +1,79 @@
+*{
+    margin: 0;
+    padding: 0;
+}
+
+/*Formulario Lógin*/
+.login{
+	width: 400px;
+	margin: 0 auto;
+	margin-bottom: 50px;
+}
+.login>h1{
+	padding-bottom: 5px;
+	text-align: center;
+}
+.login>fieldset>p:first-child {
+	text-align: center;
+	margin-bottom: 15px;
+	padding: 0 20px;
+	font-weight: bold;
+	font-size: 12px;
+}
+#inputs{
+	background: #b1cce7;
+	border-radius: 10px;
+	padding: 10px;
+	-moz-box-shadow:  black 5px 5px 15px;
+   	-webkit-box-shadow:  black 5px 5px 15px;
+   	box-shadow:  black 5px 5px 15px;
+}
+#passolvidado{
+	clear: both;
+	text-align: center;
+	margin-top: 15px;
+	background: #001F51;
+	margin-left: -10.5px;
+	margin-right: -11px;
+	margin-bottom: -11px;
+	padding: 5px;
+	border-radius: 0 0 8px 8px;
+	opacity: 0.9;
+
+}
+#passolvidado a{
+	color: white;
+}
+#passolvidado:hover{
+    text-decoration: underline;
+    color: white;
+}
+.login #acceder{
+	float: right;
+	margin-top: -26px;
+}
+.mensaje_error{
+	float: left;
+	color: red;
+	margin-left: 25px;
+}	
+p>label{
+	margin-left: 25px;
+	display: inline-block;
+	text-align: left;
+	width: 10em;
+	vertical-align: bottom;
+}
+p>input{
+	display: inline-block;
+	width: 12em;
+}
+#recuerdame{
+	margin: 10px 0;
+	display: inline-block;
+	width: 1em;
+}
+.fondo{
+	background:#b1cce7 ;
+	opacity: 0.3;
+}

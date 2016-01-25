@@ -1,0 +1,121 @@
+{% extends 'BackendBundle:Default:index.html.twig' %}
+
+{% block stylesheets %}
+	{{parent()}}
+{% endblock %}
+
+{% block javascript %}
+	{{parent()}}
+    <script type="text/javascript" src="{{ asset('bundles/backend/js/mask.js') }}"></script>
+
+{% endblock %}
+
+    {% block body %}
+    {# {{ form_enctype(form) }} es obsoleto en Symfony 2.3
+    <form class="formulario_alumno" id="alumno_nuevo" action="{{ path('alumno_create') }}" novalidate method="post" autocomplete="off"{{ form_enctype(form) }}> #}
+    {{form_start(form, {'action':path('alumno_create'),'method':'POST','attr':{'class':'formulario_alumno', 'id':'alumno_nuevo', novalidate:'novalidate', 'autocomplete':'off'}})}}
+
+    {{ form_errors(form) }}
+
+    <div id="tab-container">
+        <ul >
+            <li class="selected"><a href="tab1" name="tab1">Datos Personales</a></li>
+            <li><a href="tab2" name="tab2">Datos Responsables</a></li>
+            <li><a href="tab3" name="tab3">Otros Datos de Interés</a></li> 
+        </ul>
+    </div>
+        
+    <div id="content">
+        <div id="tab1" >
+            <fieldset class="simple">
+                <legend>Datos Personales del alumno</legend>
+                <div class="izquierda">
+                    {{ form_row(form.nombre) }}
+                    {{ form_row(form.apellido1) }}
+                    {{ form_row(form.apellido2) }}
+                    {{ form_row(form.direccion) }}
+                    {{ form_row(form.localidad) }}
+                    {{ form_row(form.provincia) }}
+                    {{ form_row(form.cp) }}
+                    {{ form_row(form.telefono) }}
+                    {{ form_row(form.fechaNacimiento) }}
+                    {{ form_row(form.sexo) }}
+                </div>
+            </fieldset>
+        </div>
+       
+        <div id="tab2">
+            <fieldset class="double">
+                <legend>Datos Primer Responsable</legend>
+                <div class="horizontal" id="primero">
+                    <div class="dis_block">
+                        {{ form_row(form.responsable1.dni) }}
+                        {{ form_row(form.responsable1.nombre) }}
+                        {{ form_row(form.responsable1.fechaNacimiento) }}                 
+                    </div>
+                    <div class="dis_block">
+                        {{ form_row(form.responsable1.profesion) }}
+                        {{ form_row(form.responsable1.estadoCivil) }}
+                        {{ form_row(form.responsable1.movil) }}
+                        {{ form_row(form.responsable1.email) }}
+                    </div>
+                </div>
+            </fieldset>
+
+            <fieldset class="double">
+                <legend>Datos Segundo Responsable (opcional)</legend>
+                <div class="horizontal" id="primero">
+                    <div class="dis_block">
+                        {{ form_row(form.responsable2.dni) }}
+                        {{ form_row(form.responsable2.nombre) }}
+                        {{ form_row(form.responsable2.fechaNacimiento) }}
+                    </div>
+                    <div class="dis_block">
+                        {{ form_row(form.responsable2.profesion) }}
+                        {{ form_row(form.responsable2.estadoCivil) }}
+                        {{ form_row(form.responsable2.movil) }}
+                        {{ form_row(form.responsable2.email) }}
+                    </div>
+                </div>
+            </fieldset>
+        </div>
+            
+        <div id="tab3">
+            <fieldset class="simple">
+                <legend>Otros Datos de Interés</legend>
+                <div class="block"> 
+                    {{ form_row(form.cursoIngreso) }}
+                        {# Otra forma de mostrar lista seleccionable
+                        <ul>
+                            <li>    
+                            {{ render(controller("BackendBundle:Curso:listaCursos")) }}
+                            </li> 
+                        </ul>
+                        #}
+                    {{ form_row(form.grupoSangre) }}
+                    <label class="required">Foto</label>
+                    <div>
+                        <input id="foto_no" type="radio" required="required" name="alumno[foto]" checked="checked">
+                        <label class="required" for="foto_no">Subirla más tarde.</label>
+                        <input id="foto_si" type="radio" required="required" name="alumno[foto]">
+                        <label class="required" for="foto_si">Subirla ahora.</label>
+                        {{ form_widget(form.foto) }}
+                    </div>
+                </div>
+                <div class="block"> 
+                    {{ form_row(form.observaciones) }}
+                </div>
+            </fieldset>
+        </div>
+    </div>
+        
+    <div id="botones_form">
+        {{ form_row(form.submit) }}
+        {{ form_row(form.limpiar) }}
+        {{ form_rest(form) }} 
+    </div>
+    <div id="result"></div>
+    
+    {{form_end(form)}}
+
+{% endblock %}

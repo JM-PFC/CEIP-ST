@@ -1,0 +1,18 @@
+fos_js_routing:
+    resource: "@FOSJsRoutingBundle/Resources/config/routing/routing.xml"
+    
+intranet:
+    resource: "@IntranetBundle/Resources/config/routing.yml"
+    prefix:   /
+
+cole:
+    resource: "@ColeBundle/Resources/config/routing.yml"
+    prefix:   /
+
+
+backend:
+    resource: "@BackendBundle/Resources/config/routing.yml"
+    prefix:   /
+
+
+

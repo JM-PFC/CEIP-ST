@@ -1,0 +1,10 @@
+{% extends  '::frontend.html.twig' %}
+
+{% block title %} Centro {% endblock %}
+{% block main %}
+
+{{ texto|slice(0, 500) ~ '...[Leer más...]'}}
+
+¡Bienvenido a la sesión: {{ pagina| capitalize}}!
+
+{% endblock %}

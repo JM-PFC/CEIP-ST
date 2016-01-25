@@ -1,0 +1,77 @@
+{% extends '::base.html.twig' %}
+
+{% block body -%}
+    <h1>Alumno list</h1>
+
+    <table class="records_list">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Nombre</th>
+                <th>Apellido1</th>
+                <th>Apellido2</th>
+                <th>Sexo</th>
+                <th>Fechanacimiento</th>
+                <th>Direccion</th>
+                <th>Localidad</th>
+                <th>Provincia</th>
+                <th>Cp</th>
+                <th>Telefono</th>
+                <th>Fechaalta</th>
+                <th>Cursoingreso</th>
+                <th>Curso</th>
+                <th>Grupo</th>
+                <th>Foto</th>
+                <th>Numalum</th>
+                <th>Gruposangre</th>
+                <th>Observaciones</th>
+                <th>Activo</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for entity in entities %}
+            <tr>
+                <td><a href="{{ path('alumno_show', { 'id': entity.id }) }}">{{ entity.id }}</a></td>
+                <td>{{ entity.nombre }}</td>
+                <td>{{ entity.apellido1 }}</td>
+                <td>{{ entity.apellido2 }}</td>
+                <td>{{ entity.sexo }}</td>
+                <td>{% if entity.fechaNacimiento %}{{ entity.fechaNacimiento|date('Y-m-d H:i:s') }}{% endif %}</td>
+                <td>{{ entity.direccion }}</td>
+                <td>{{ entity.localidad }}</td>
+                <td>{{ entity.provincia }}</td>
+                <td>{{ entity.cp }}</td>
+                <td>{{ entity.telefono }}</td>
+                <td>{% if entity.fechaAlta %}{{ entity.fechaAlta|date('Y-m-d H:i:s') }}{% endif %}</td>
+                <td>{{ entity.cursoIngreso }}</td>
+                <td>{{ entity.curso }}</td>
+                <td>{{ entity.grupo }}</td>
+                <td>{{ entity.foto }}</td>
+                <td>{{ entity.numAlum }}</td>
+                <td>{{ entity.grupoSangre }}</td>
+                <td>{{ entity.observaciones }}</td>
+                <td>{{ entity.activo }}</td>
+                <td>
+                <ul>
+                    <li>
+                        <a href="{{ path('alumno_show', { 'id': entity.id }) }}">show</a>
+                    </li>
+                    <li>
+                        <a href="{{ path('alumno_edit', { 'id': entity.id }) }}">edit</a>
+                    </li>
+                </ul>
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+        <ul>
+        <li>
+            <a href="{{ path('alumno_new') }}">
+                Create a new entry
+            </a>
+        </li>
+    </ul>
+    {% endblock %}

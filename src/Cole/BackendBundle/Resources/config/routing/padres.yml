@@ -1,0 +1,49 @@
+padres:
+    path:     /
+    defaults: { _controller: "BackendBundle:Padres:index" }
+    options:
+        expose: true
+
+padres_show:
+    path:     /{id}/show
+    defaults: { _controller: "BackendBundle:Padres:show" }
+
+padres_new:
+    path:     /new
+    defaults: { _controller: "BackendBundle:Padres:new" }
+
+padres_create:
+    path:     /create
+    defaults: { _controller: "BackendBundle:Padres:create" }
+    requirements: { _method: post }
+    options:
+        expose: true
+
+padres_edit:
+    path:     /{id}/edit
+    defaults: { _controller: "BackendBundle:Padres:edit" }
+
+padres_update:
+    path:     /{id}/update
+    defaults: { _controller: "BackendBundle:Padres:update" }
+    requirements: { _method: post|put }
+
+padres_delete:
+    path:     /{id}/delete
+    defaults: { _controller: "BackendBundle:Padres:delete" }
+    requirements: { _method: post|delete }
+    options:
+        expose: true
+
+comprobar_padre:
+    path:     /comprobarpadre
+    defaults: { _controller: "BackendBundle:Padres:comprobarpadre" }
+    options:
+        expose: true
+
+obtenerdatos_responsable:
+    path:     /obtenerdatosresponsable
+    defaults: { _controller: "BackendBundle:Padres:obtenerdatosresponsable" }
+    options:
+        expose: true
+

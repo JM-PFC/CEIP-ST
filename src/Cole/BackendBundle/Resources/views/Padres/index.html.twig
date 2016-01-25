@@ -1,0 +1,74 @@
+{% extends 'BackendBundle:Default:index.html.twig' %}
+
+{% block stylesheets %}
+    {{parent()}}
+{% endblock %}
+
+{% block javascript %}
+     {{parent()}}
+{% endblock %}
+
+{% block body %}
+<div>
+
+    <table class="records_list">
+        <thead>
+            <tr>
+                {#<th>Id</th>#}
+                <th>Dni</th>
+                <th>Nombre</th>
+                <th>Fecha Nacimiento</th>
+                <th>Profesión</th>
+                <th>Estado civil</th>
+                <th>Móvil</th>
+                <th>Email</th>
+                {#<th>Username</th>
+                <th>Password</th>
+                <th>Salt</th>
+                <th>Claveusuario</th>
+                <th>Activo</th>
+                <th>Actions</th>#}
+            </tr>
+        </thead>
+        <tbody>
+        {% for entity in entities %}
+            <tr>
+                {# <td><a href="{{ path('padres_show', { 'id': entity.id }) }}">{{ entity.id }}</a></td>#}
+                <td>{{ entity.dni|upper }}</td>
+                <td>{{ entity.nombre }}</td>
+
+                <td>{% if entity.fechaNacimiento %}{{ entity.fechaNacimiento|date('d-m-Y') }}{% endif %}</td>
+                <td>{{ entity.profesion }}</td>
+                <td>{{ entity.estadoCivil }}</td>
+
+                <td>{{ entity.movil }}</td>
+                <td>{{ entity.email }}</td>
+                {#<td>{{ entity.username }}</td>
+                <td>{{ entity.password }}</td>
+                <td>{{ entity.salt }}</td>
+                <td>{{ entity.claveUsuario }}</td>
+                <td>{{ entity.activo }}</td>#}
+                <td>
+                <ul>
+                    <li>
+                        <a href="{{ path('padres_show', { 'id': entity.id }) }}">show</a>
+                    </li>
+                    <li>
+                        <a href="{{ path('padres_edit', { 'id': entity.id }) }}">edit</a>
+                    </li>
+                </ul>
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+        <ul>
+        <li>
+            <a href="{{ path('padres_new') }}">
+                Create a new entry
+            </a>
+        </li>
+    </ul>
+</div>
+    {% endblock %}

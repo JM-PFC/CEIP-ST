@@ -1,0 +1,47 @@
+security:
+
+    firewalls:
+        frontend:
+            pattern:  ^/
+            anonymous: ~
+            provider: profesores
+            form_login:
+                login_path: /login
+                check_path: /login_check
+               # use_referer: true
+                default_target_path: /profesor
+
+
+
+        #    remember_me:
+         #       key:      coleST
+          #      lifetime: 1800
+
+    access_control:
+        - { path: ^/login, roles: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: admin/profesor/, roles: ROLE_ADMIN }
+        - { path: usuario/user/, roles: ROLE_PROFESOR }
+
+    providers:
+        profesores:
+            entity: { class: Cole\BackendBundle\Entity\Profesor, property: username}
+        #padres:
+        #    entity: { class: Cole\BackendBundle\Entity\Padres, property: username}
+
+    encoders:
+
+       #Cole\BackendBundle\Entity\Profesor: { algorithm: sha512, iterations: 10 }
+       Cole\BackendBundle\Entity\Profesor: { algorithm: sha512 }
+       Cole\BackendBundle\Entity\Padres: { algorithm: sha512 }
+       Cole\BackendBundle\Entity\Alumno: { algorithm: sha512 }
+
+
+       #Con datos de prueba tedremos que utilizar plaintext, pag 201
+       #Symfony\Component\Security\Core\User\User: plaintext
+        #Cole\BackendBundle\Entity\Profesor: plaintext
+        #Cole\BackendBundle\Entity\User: plaintext
+       #Symfony\Component\Security\Core\User\User: plaintext
+
+    role_hierarchy:
+        ROLE_ADMIN:       [ROLE_USUARIO, ROLE_PROFESOR]
+        #ROLE_SUPER_ADMIN: [ROLE_USER, ROLE_ADMIN, ROLE_ALLOWED_TO_SWITCH]

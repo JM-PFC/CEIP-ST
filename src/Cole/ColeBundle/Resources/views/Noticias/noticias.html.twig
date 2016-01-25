@@ -1,0 +1,46 @@
+{% extends  'ColeBundle:Default:index.html.twig' %}
+
+{% block contenido %}
+    {% for noticia in noticias %}
+	    <article class="contenedor_noticia ">
+        <div class="contenido_noticia contenido_border">
+            {% if noticia.foto != null %}
+                <div class="imgLiquidFill  img-small imgLiquid">
+                    <a href="{{ path('noticia', {'id': noticia.id}) }}"><img src="{{ asset('bundles/cole/images/noticias/'~ noticia.foto)}}" alt="Loulou form Sos Chats Geneva"></a>
+                </div>
+            {% endif %}
+            <a href="{{path('noticia', {'id': noticia.id}) }}"><h2 class=" no-margin ">{{noticia.titulo}}</h2></a>
+
+            <span><strong> {{ noticia.fecha | localizeddate('none', 'none', 'none',none , " d 'de' MMMM 'de' Y ',' H:mm'h.'") | capitalize}}</strong></span>                  
+                	
+            <p id="nuevo">{{noticia.descripcion|truncate(350,true)| nl2br}}<a class="href_blue" href="{{ path('noticia', {'id': noticia.id}) }}"><strong> [Leer más] </strong></a></p>
+        </div>
+        </article>
+    {% endfor %}
+{% endblock %}
+
+
+{% block aside %}
+    <article class="aside_columna">
+        <h3>Horarios de Atención</h3>
+        <p><strong>Secretaría:</strong> L-V 9:15-11:15 y 12:00-13:00.</br>
+        <strong>Dirección:</strong> L-V 09:00-10:00 (cita previa).</br>
+        <strong>Jefatura Estudios:</strong> X y V 13:00-14:00 (cita previa)</br></br>
+        <strong>TUTORÍAS:</strong> L 17:30-18:30 (cita previa).</p>
+    </article>
+    
+    <article class="aside_columna">
+        <h3>Sobre nosotros</h3>
+        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Eveniet esse, provident architecto dolores odit eius repellendus ex, aut voluptate natus, in officiis! Odio labore, earum, excepturi quod temporibus voluptatem provident. ...</p>
+        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Eveniet esse, provident architecto dolores odit eius repellendus ex, aut voluptate natus, in officiis! Odio labore, earum, excepturi quod temporibus voluptatem provident. ...</p>
+        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Eveniet esse, provident architecto dolores odit eius repellendus ex, aut voluptate natus, in officiis! Odio labore, earum, excepturi quod temporibus voluptatem provident. ...</p>
+    </article>
+
+{% endblock %}
+
+
+
+
+{% block migas %}
+<a href="{{ path('index') }}">Inicio</a> > Noticias
+{% endblock %}

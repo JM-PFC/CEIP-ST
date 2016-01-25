@@ -1,0 +1,15 @@
+{% extends '::frontend.html.twig' %}
+
+{% block main -%}
+    <h1>Centro creation</h1>
+
+    {{ form(form) }}
+
+        <ul class="record_actions">
+    <li>
+        <a href="{{ path('centro') }}">
+            Back to the list
+        </a>
+    </li>
+</ul>
+{% endblock %}

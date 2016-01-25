@@ -1,0 +1,20 @@
+ColeBundle_centro:
+    resource: "@ColeBundle/Resources/config/routing/centro.yml"
+    prefix:   /centro
+
+ColeBundle_noticias:
+    resource: "@ColeBundle/Resources/config/routing/noticias.yml"
+    prefix:   /noticias
+
+noticias_recientes:
+    path: /noticias/recientes
+    defaults: { _controller: ColeBundle:Noticias:NoticiasRecientes }
+
+
+pagina_estatica:
+    path:    /cole/{pagina}/
+    defaults: { _controller: ColeBundle:Cole:estatica }
+
+index:
+    path:     /
+    defaults: { _controller: ColeBundle:Default:index }
