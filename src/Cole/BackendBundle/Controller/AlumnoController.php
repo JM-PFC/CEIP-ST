@@ -266,7 +266,7 @@ class AlumnoController extends Controller
         $entity = $em->getRepository('BackendBundle:Alumno')->find($id);
 
         if (!$entity) {
-            throw $this->createNotFoundException('Unable to find Profesor entity.');
+            throw $this->createNotFoundException('Unable to find Alumno entity.');
         }
 
         $editForm = $this->createEditForm($entity);
@@ -317,7 +317,7 @@ class AlumnoController extends Controller
         $entity = $em->getRepository('BackendBundle:Alumno')->find($id);
 
         if (!$entity) {
-            throw $this->createNotFoundException('Unable to find Profesor entity.');
+            throw $this->createNotFoundException('Unable to find Alumno entity.');
         }
         $fileOriginal=$entity->getFoto();
 

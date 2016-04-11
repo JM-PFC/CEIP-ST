@@ -1,5 +1,16 @@
 $(document).ready(function () {
+  $('.dni').mask('A0000000-S',
+  {'translation': {A: {pattern: /[X-Zx-z]|[0-9]/}},
+     placeholder: "________-__"});
+  $('.telefono').mask('000 00 00 00'); 
+  $('.fecha').mask('00/00/0000', {placeholder: "__/__/____"});
+  $('.dni').css( "text-transform", "uppercase");
 
+  $("input[id^='año_acamedico']").mask('0000');
+  $("input[id^='año_profesional']").mask('00');
+  $("input[id^='edit_año_acamedico']").mask('0000');
+  $("input[id^='edit_año_profesional']").mask('00');
+        
     /////////////////////////////
   // Métodos para validación //
   /////////////////////////////
@@ -353,6 +364,165 @@ $(document).ready(function () {
     $("form #content-form-menu #"+ tab).css("display","inline"); //Muestra el contenido de la pestaña actual
     $("form #" +tab+" input:first").focus();
   }
+
+  // Se valida en línea los campos de los formularios.
+  $(document).on('blur','form :input[type!=file]' ,function() {
+
+    if ($(this).attr('validation')) {    
+      validation($(this));
+    }
+  });
+
+  setInterval(function(){
+    // Se añade un índice de tabuláción a todos los input.
+  $("form").find(":input").each(function(i){
+    $(this).attr("tabindex",i+1);
+  });
+}, 500);
+
+  // Se muestra y se oculta el mensaje de error en los campos del formulario.
+  $(document).on("mouseover","form :input", function () {
+      if($(this).next().prop("tagName")=="SPAN"){
+        $(this).next().css("display", "block");
+      }
+    });
+  $(document).on("mouseout","form :input[type!=radio]", function () {
+      if($(this).next().prop("tagName")=="SPAN"){
+        $(this).next().css("display", "none");
+      }
+    });
+
+  // Para no ocultar el button
+  $(document).on("mouseover","form :button", function () {
+    $(this).next().css("display", "block");
+    }
+  );
+
+  // Se obliga a guardar en mayuscula la letra del Dni con el guión de separación de la máscara del campo.
+  $(document).on('blur','form .dni' ,function() {
+    $(this).val($(this).val().toUpperCase());
+  });
+
+
+
+  //Efecto para cambiar de pestañas de opciones en el formulario.
+  $(document).on("click",'#tab-container a',function(event){
+    event.preventDefault();
+    form= $(this).closest("form");
+
+    if ($(this).closest("li").attr("class") == "selected"){ //Se detecta la pestaña actual.
+      //Se elimina el foco del elemento.
+      $(this).blur();
+      return;       
+    }
+    else{            
+      form.find("#content-form-menu div[id^='tab']").hide(); // Se oculta todo el contenido.
+      form.find("#tab-container li").attr("class",""); // Se resetea el valor de los id.
+      $(this).parent().attr("class","selected"); // Se activa la españa actual.
+      form.find('#content-form-menu #'+ $(this).attr('name')).css("display","inline"); // Se muestra el contenido de la pestaña actual.
+      //$('#' + $(this).attr('name')).fadeIn(); 
+      //$("#"+$(this).attr("name")+" input:first").focus();  Se selecciona el primer campo de la pestaña actual.
+    }
+    //Se elimina el foco del elemento.
+    $(this).blur();
+  });
+
+
+  $(document).on("keydown",'#tab-container a', function(e){
+
+    tab=$(this).attr("name");
+    if(e.keyCode == 9 || (e.keyCode == 13 ))
+    {
+      va=$("#"+tab).find(":input").attr("id");
+      $("#"+va).focus()
+    }
+    e.preventDefault();
+  });
+
+  // Transforma el texto con capitalize para guardarlo en la base de datos.
+  $(document).on("keyup",'input[type="text"]', function(){
+    var txt = $(this).val();
+    $(this).val(txt.replace(/^(.)/g, function($1){ return $1.toUpperCase(); }));
+    $(this).css("text-transform", "none");
+      if($(this).val().length==0){
+        $(this).css("text-transform", "capitalize");
+      }
+  });
+
+  // Al presionar cualquier tecla en cualquier elemento del formulario se ejectua la siguiente función
+  // Función para desplazarse mediante teclado por los campos.
+  $(document).on("keydown",':input', function(e){
+    // Sólo importa si las teclas presionadas fueron TAB o ENTER. (Para ver el código de otras teclas: http://www.webonweboff.com/tips/js/event_key_codes.aspx)
+    // Y que no sean botones o textarea.
+    if(e.keyCode == 9 || (e.keyCode == 13 && (!($(this).is("textarea")) && !($(this).is("button")))))
+    {
+      // Se obtiene el número del tabindex del campo actual.
+      var currentTabIndex = $(this).attr('tabindex');
+      // Se le suma 1 para tener el siguiente.
+      var nextTabIndex    = parseInt(currentTabIndex) + 1;
+      // Se obtiene (si existe) el siguiente elemento usando la variable nextTabIndex
+      var nextField       = $('[tabindex='+nextTabIndex+']');
+      // Se salta los elementos no activos.
+      while(nextField.attr("disabled")=="disabled")
+      {
+      var nextTabIndex    = parseInt(nextTabIndex) + 1;
+      var nextField       = $('[tabindex='+nextTabIndex+']');
+      }
+      // Comprobar si se encontró el elemento.
+      if(nextField.length > 0 && nextField.attr("type")!="hidden")
+      {
+        // Se marca la primera opción del radio de la foto al pasar a ese campo.
+        if( $(this).attr("type")!="radio" && nextField.attr("type")=="radio")
+        {
+          if(!nextField.prop('checked')&& !nextField.nextAll("input").prop('checked')){
+            nextField.prop('checked', true);
+          }
+          else if(nextField.prop('checked')){
+            nextField.focus();
+            return false;
+          }
+          else{
+            nextField.nextAll("input").focus();
+            return false;
+          }
+        }
+        // Comprobar que se pasa al segundo radio de la foto.
+        if( $(this).attr("type")=="radio" && nextField.attr("type")=="radio")
+        { 
+          // Se pasa al siguiente campo si no se sube foto sumando 2 al Tabindex.
+          if(nextField.nextAll("input").attr("type")=="file")
+          {
+            nextTabIndex++;      
+          }
+          // Se salta al campo file si está habilitado sumando 1 al Tabindex.
+          nextTabIndex++;            
+          nextField= $('[tabindex='+nextTabIndex+']');
+        }
+        // Se muestra el tab que contiene el siguiente campo si es diferente al actual.
+        tab= $(this).closest("div[id^='tab']").attr("id");
+        next_tab=nextField.closest("div[id^='tab']").attr("id");
+      
+        if(tab!=next_tab && nextField.attr("type")!="submit")
+        {
+          mostrarTab($(this).closest("form"),next_tab);
+        }
+    
+        // Los campos file y submit se deja por defecto.
+        if( $(this).attr("type")=="file")
+        {
+          $(this)[0].trigger("click");
+        }
+        // Se selecciona el siguiente campo.
+        nextField.focus();
+      }
+      else{
+        $("#botones_form>div:first>button").focus();
+      }
+      
+      // Ignorar el funcionamiento predeterminado (enviar el formulario)
+      e.preventDefault();
+    }
+  });
 
 
 
@@ -933,40 +1103,7 @@ $(document).on("submit",".formulario_profesor",function(event){
           $( this ).dialog( "close" );
 
           $.ajax({
-            type: 'POST',
-            url: $(this).attr('action'),
-            data:$(this).serialize(), 
-            dataType: 'json',
-         
-  
-            // Mostramos un mensaje con la respuesta de PHP
-            success: function(response) {
-              alert(response.message);
-            },
-            error: function (response, desc, err){
-              if (response.responseJSON && response.responseJSON.message) {
-                if(response.responseJSON.result == 0) {
-                  //Se elimina las clases de error, para luego añadirlas a los campos que siguen inválidos.
-                  form.find(":input").each(function(i){  
-                    $(this).prev().find(".error").remove();
-                    $(this).next(".mensaje").remove();
-                    $(this).removeClass("invalid");
-                    $(this).attr("validated", true);
-                  });
-                  //Se muestra los campos inválidos.        
-                  for (var key in response.responseJSON.data) { 
-                    form.find(":input[id='"+key+"']").addClass("invalid");   
-                    form.find(":input[id='"+key+"']").attr("validated", false);
-                    form.find(":input[id='"+key+"']").after("<span class='mensaje'>"+response.responseJSON.data[key]+"</span>");
-                    form.find(":input[id='"+key+"']").prev().append("<span class='error'>Dato inválido</span>");
-                  }
-                } 
-                alert(response.responseJSON.message);
-              } 
-              else {
-                alert(desc);
-              }
-            }
+          //................
          })
         },
         Cancel: function() {
@@ -993,12 +1130,13 @@ $("#dialog-confirm span").hide();
         success: function(response) {
 
           alert(response.message);
-          $("#padres_dialog").dialog('close');
-          limpiarForm(form);
 
           var id_alumno = $("#padres_nuevo").attr("alumno");
           var id_responsable = response.responsable;
           var responsable = $("#padres_nuevo").attr("responsable");
+          $("#padres_dialog").dialog('close');
+          limpiarForm(form);
+
 
           if(response.responsableDni!=$("#edit_alumno_responsable_dni_1").val() && response.responsableDni!=$("#edit_alumno_responsable_dni_2").val()){
            $.ajax({
@@ -1072,6 +1210,294 @@ $("#dialog-confirm span").hide();
     var arr = form.attr('action').split('/');
     div=$(this).closest("div[id^='tabs-']");
     $(div).load(Routing.generate(arr[4]+"_edit", {id:arr[5]}));
+  });
+
+  $(document).on('click',"#botones_form button[id$=nuevaFicha]", function(event){
+    event.preventDefault();
+    form= $(this).closest("form");
+
+    div=$(this).closest("div[id^='tabs-']");
+    var arr = form.attr('id').split('_');
+    $(div).load(Routing.generate(arr[0]+'_search'));
+  });
+
+    // Añadir foto
+  $(document).on('click','#iconos_foto a', function(event){ 
+    event.preventDefault();
+    form= $(this).closest("form");
+
+    if($(this).attr("id") == "icono_eliminar"){
+      form.find("div[class='columna_foto'] div[id!='iconos_foto']").each(function(){
+          $(this).addClass("oculto");
+      });
+      form.find("#por_defecto").removeClass("oculto");
+      form.find("#icono_eliminar").addClass("disable");
+      form.find("input[type='file']").attr("validated","true");
+      form.find("input[type='file']").val("");
+      form.find("#actualizada img").attr("src",form.find("#por_defecto img").attr("src"));
+
+      if(form.find("#actual img").attr("src").indexOf("SinFoto") < 0)
+        {
+          form.find("#icono_restablecer").removeClass("disable");    
+        }
+      return false;
+    }
+    else if($(this).attr("id") == "icono_restablecer"){
+      form.find("div[class='columna_foto'] div[id!='iconos_foto']").each(function(){
+          $(this).addClass("oculto");
+      });
+      form.find('#actual').removeClass("oculto");
+      form.find("#actualizada img").attr("src",form.find("#actual img").attr("src"));
+      form.find("#icono_restablecer").addClass("disable");
+      if(form.find("#actual img").attr("src").indexOf("SinFoto") >= 0)
+      {
+        form.find("#icono_eliminar").addClass("disable");
+      }
+      else{
+        form.find("#icono_eliminar").removeClass("disable");
+      }
+      
+      form.find("#error_foto").empty();
+      form.find("#por_defecto img").removeClass('invalid');
+
+      form.find("input[type='file']").attr("validated","true");
+      form.find("input[type='file']").val("");
+
+      return false;
+    }
+    else{
+      form.find("input[type='file']").trigger('click'); 
+    }
+    event.stopPropagation(); 
+  });
+
+/////////////////////////////////
+// Busqueda en los formularios //
+/////////////////////////////////
+
+  $(document).on("click","#contenedor_lista a", function(event){ 
+    event.preventDefault();
+    form= $(this).closest("form");
+    
+    var arr = form.attr('id').split('_');
+    var div= $(this).closest("div[id^='tabs-']");
+
+    $(div).empty();
+    $(div).load(Routing.generate(arr[1]+'_edit', {id:$(this).attr("id")}));
+  });
+
+  //Cambios en formularios de busqueda
+  $(document).on('change','#busqueda_profesor select',function() {
+    form= $(this).closest("form");
+
+    form.find("#contenedor_lista span").remove();     
+    var curso= form.find("select").val();
+    
+    form.find("#contenedor_lista").load(Routing.generate('profesores_por_curso', {id:curso}));
+  });
+
+  $(document).on('change','#busqueda_alumno select',function() {
+    form= $(this).closest("form");
+
+    form.find("#contenedor_lista span").remove();     
+    var curso= form.find("select").val();
+    
+    form.find("#contenedor_lista").load(Routing.generate('alumnos_por_curso', {id:curso}));
+  });
+
+
+
+//////////////////////////////////
+// Formularios de actualización //
+//////////////////////////////////
+
+  $(document).on("submit","#profesor_edit",function(event) {
+    event.preventDefault();
+    form= $(this).closest("form");
+
+    var perfilAcad='';
+    var perfilProf='';
+    // Se guarda el contenido del perfil Académico en su variable.   
+    form.find("div[id='perfil_acad'] :input").each(function(){
+      if(($(this).val()=="")) {
+        perfilAcad+="~";
+      }
+      else{
+        perfilAcad+=$(this).val();
+      }
+      perfilAcad+="|";
+    });
+
+    // Se guarda el contenido del perfil Profesional en su variable.   
+    form.find("div[id='perfil_prof'] :input").each(function(){
+      if(($(this).val()=="")) {
+        perfilProf+="~";
+      }
+      else{
+        perfilProf+=$(this).val();
+      }
+      perfilProf+="|";
+    });
+
+    $("#edit_profesor_perfilAcademico").val(perfilAcad);     
+    $("#edit_profesor_perfilProfesional").val(perfilProf); 
+
+    var val=0;
+    // Se recorre los campos del formulario mirando si estan validados o no.
+    form.find(":input[type!='file']").each(function(){
+
+      if(($(this).attr("id")!="edit_profesor_perfilAcademico" && $(this).attr("id")!="edit_profesor_perfilProfesional")&&(!$(this).attr("validated") || $(this).attr("validated")==false)){
+        if($(this).attr("validation")){
+          validation($(this));
+        }
+      }
+    });
+
+    //":input"añade a los input radio,select...
+    form.find(":input").each(function(){
+      if(($(this).attr("validated")=="false")) {
+        //Se muestra el input inválido.
+        $(this).focus();
+        val=1;
+        return false;
+      }       
+    });
+
+    var estado= "";
+
+    if(!form.find("#actual").hasClass("oculto")){
+      estado= "actual";
+    }
+    else if(!form.find("#actualizada").hasClass("oculto")){
+      estado= "actualizado";
+    }
+    else{
+      estado= "eliminado";
+    }
+          
+    var formdata=new FormData($(this)[0]);
+    formdata.append('estado', estado);
+
+    if(val==0){
+      $.ajax({
+        type: 'POST',
+        url: $(this).attr('action'),
+        data: formdata, 
+        dataType: 'json',
+        processData: false,
+        contentType: false,
+        cache: false,
+        success: function(response) {
+      
+          $("#icono_restablecer").addClass("disable");
+          //Hay que actualizar la pestaña que contiene la tabla de profesores.
+
+          
+          //Función para retrasar la ejecución siguiente.
+          //setTimeout(function(){ 
+          //  $("#editar_profesor_restablecer").trigger('click');
+          //}, 6000);
+
+          var arr = form.attr('action').split('/');
+          div=form.closest("div[id^='tabs-']");
+          $(div).load(Routing.generate('profesor_edit', {id:arr[5]}), function(responseTxt, statusTxt, xhr){
+            if(statusTxt == "success"){
+              form= $("#profesor_edit");
+
+              form.find("div[id='message']").remove();
+              form.find("div[id='result']").html("<div id='message'></div>");
+              form.find("div[id='message']").html("<h2> Datos actualizados</h2>").hide();
+              form.find("div[id='message']").fadeIn('slow').delay(5000).fadeOut('slow');
+            }
+
+            if(statusTxt == "error")
+              alert("Error: " + xhr.status + ": " + xhr.statusText);
+          });
+        } 
+      })
+ 
+    }
+  });
+
+  
+  $(document).on("submit","#alumno_edit",function(event) {
+    event.preventDefault();
+    form= $(this).closest("form");
+
+    var val=0;
+    // Se recorre los campos del formulario mirando si estan validados o no.
+    form.find(":input[type!='file']").each(function(){
+      if(!$(this).attr("validated") || $(this).attr("validated")==false){
+        if($(this).attr("validation")){
+          validation($(this));
+        }
+      }
+    });
+
+    //":input"añade a los input radio,select...
+    form.find(":input").each(function(){
+      if(($(this).attr("validated")=="false")) {
+        //Se muestra el input inválido.
+        $(this).focus();
+        val=1;
+        return false;
+      }       
+    });
+
+    var estado= "";
+
+    if(!form.find("#actual").hasClass("oculto")){
+      estado= "actual";
+    }
+    else if(!form.find("#actualizada").hasClass("oculto")){
+      estado= "actualizado";
+    }
+    else{
+      estado= "eliminado";
+    }
+          
+    var formdata=new FormData($(this)[0]);
+    formdata.append('estado', estado);
+
+    if(val==0){
+      $.ajax({
+        type: 'POST',
+        url: $(this).attr('action'),
+        data: formdata, 
+        dataType: 'json',
+        processData: false,
+        contentType: false,
+        cache: false,
+        success: function(response) {
+      
+          $("#icono_restablecer").addClass("disable");
+          //Hay que actualizar la pestaña que contiene la tabla de profesores.
+
+          
+          //Función para retrasar la ejecución siguiente.
+          //setTimeout(function(){ 
+          //  $("#editar_profesor_restablecer").trigger('click');
+          //}, 6000);
+
+          var arr = form.attr('action').split('/');
+          div=form.closest("div[id^='tabs-']");
+          $(div).load(Routing.generate('alumno_edit', {id:arr[5]}), function(responseTxt, statusTxt, xhr){
+            if(statusTxt == "success"){
+              form= $("#alumno_edit");
+
+              form.find("div[id='message']").remove();
+              form.find("div[id='result']").html("<div id='message'></div>");
+              form.find("div[id='message']").html("<h2> Datos actualizados</h2>").hide();
+              form.find("div[id='message']").fadeIn('slow').delay(5000).fadeOut('slow');
+            }
+
+            if(statusTxt == "error")
+              alert("Error: " + xhr.status + ": " + xhr.statusText);
+          });
+        } 
+      })
+ 
+    }
   });
 
 
@@ -1172,6 +1598,94 @@ $(document).on("blur","input[id='edit_profesor_dni']",function() {
     })
   }
 });
+
+  // Función para mostrar imagen previa de un input file
+  function mostrarImagen(input) {
+    if (input.files && input.files[0]) {
+      var reader = new FileReader();
+      reader.onload = function (e) {
+        $('#actualizada .img-small').attr('src', e.target.result);
+      }
+      reader.readAsDataURL(input.files[0]);
+    }
+  }
+
+  //Se comprueba que es válida la foto actualizada del usuario existente.
+  $(document).on("change","form[id$='edit'] input[type='file']",function() {
+    form= $(this).closest("form");
+    mostrarImagen(this);
+
+    if (($(this))[0].files.length > 0) {
+      var sizeByte = ($(this))[0].files[0].size;
+      var siezekiloByte = parseInt(sizeByte / 1024);
+    }
+
+    extensiones_permitidas = new Array(".png", ".jpg", ".jpeg"); 
+    extension = (form.find("input[type='file']").val().substring(form.find("input[type='file']").val().lastIndexOf("."))).toLowerCase();
+    // Se comprueba si la extensión está entre las permitidas.
+    permitida = false;
+    for (var i = 0; i < extensiones_permitidas.length; i++) {
+      if (extensiones_permitidas[i] == extension) {
+        permitida = true;
+        break;
+      }
+    } 
+
+    if(permitida && (siezekiloByte < $(this).attr('size')))
+    {
+      form.find("#error_foto").empty();
+
+      form.find("div[class='columna_foto'] div[id!='iconos_foto']").each(function(){
+        $(this).addClass("oculto");
+      });
+      form.find("#actualizada").removeClass("oculto");
+      
+      if(form.find("#actual img").attr("src").indexOf("SinFoto") >= 0)
+      {
+        form.find("#icono_eliminar").removeClass("disable");
+      }
+      else
+      {
+        form.find("#icono_restablecer").removeClass("disable");
+        form.find("#icono_eliminar").removeClass("disable");
+      }
+    }
+    else
+    {
+      form.find("#icono_eliminar").addClass("disable");
+      form.find("#icono_restablecer").removeClass("disable");
+      form.find("#actualizada img").attr("src","");
+      form.find("div[class='columna_foto'] div[id!='iconos_foto']").each(function(){
+        $(this).addClass("oculto");
+      });
+      form.find('#por_defecto').removeClass("oculto");
+      form.find("#error_foto").empty();
+
+      if(!permitida)
+      {
+        form.find("#por_defecto img").addClass('invalid');
+        form.find("#error_foto").append("<p>- No es un archivo válido.<br><br>(Formatos válidos: .png / .jpg / .jpeg)</p>");
+      }
+      else
+      {
+        form.find("#por_defecto img").addClass('invalid');
+        form.find("#error_foto").append("<p>- El tamaño supera el limite permitido.<br><br>(Tamaño máximo permitido: "+$(this).attr('size')+"KB)</p>");
+      }
+    }
+  });
+  
+  //Se comprueba que es válida la foto añadida al nuevo usuario.
+  $(document).on("change","form[id$='nuevo'] input[type='file']",function() {
+    form= $(this).closest("form");
+    if(form.find("input[type='file']")!= null)
+    {
+      form.find("#leyenda p").remove();
+      form.find("#leyenda").append("<p>"+form.find("input[type='file']").val()+"</p>");
+    }
+    if ($(this).attr('validation')) {    
+      validation($(this));
+    }
+  });
 
 //////////////////////////////////
 //           Cursos             //

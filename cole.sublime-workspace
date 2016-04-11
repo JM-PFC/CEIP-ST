@@ -355,7 +355,7 @@
 			"file": "web/bundles/backend/js/mask.js",
 			"settings":
 			{
-				"buffer_size": 31211,
+				"buffer_size": 9233,
 				"line_ending": "Unix"
 			}
 		},
@@ -363,7 +363,7 @@
 			"file": "web/bundles/backend/js/prueba.js",
 			"settings":
 			{
-				"buffer_size": 50126,
+				"buffer_size": 62290,
 				"line_ending": "Unix"
 			}
 		},
@@ -411,7 +411,7 @@
 			"file": "src/Cole/BackendBundle/Controller/AlumnoController.php",
 			"settings":
 			{
-				"buffer_size": 19528,
+				"buffer_size": 19524,
 				"line_ending": "Unix"
 			}
 		},
@@ -598,7 +598,7 @@
 			"file": "src/Cole/BackendBundle/Resources/views/Curso/edit.html.twig",
 			"settings":
 			{
-				"buffer_size": 2350,
+				"buffer_size": 1251,
 				"line_ending": "Unix"
 			}
 		},
@@ -606,7 +606,7 @@
 			"file": "src/Cole/BackendBundle/Resources/views/Curso/index.html.twig",
 			"settings":
 			{
-				"buffer_size": 10566,
+				"buffer_size": 4814,
 				"line_ending": "Unix"
 			}
 		},
@@ -923,6 +923,8 @@
 		"case_sensitive": true,
 		"find_history":
 		[
+			"arr",
+			"mostrarImagen",
 			"sigla",
 			"especifica",
 			"Especifica",
@@ -1048,9 +1050,7 @@
 			"limpiarForm",
 			"limpiar",
 			"alert",
-			".no",
-			"no",
-			"parent"
+			".no"
 		],
 		"highlight": true,
 		"in_selection": false,
@@ -1068,7 +1068,7 @@
 	"groups":
 	[
 		{
-			"selected": 1,
+			"selected": 4,
 			"sheets":
 			[
 				{
@@ -1109,8 +1109,8 @@
 						"selection":
 						[
 							[
-								7070,
-								7070
+								427,
+								427
 							]
 						],
 						"settings":
@@ -1175,7 +1175,7 @@
 							"translate_tabs_to_spaces": true
 						},
 						"translation.x": 0.0,
-						"translation.y": 932.0,
+						"translation.y": 284.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"
@@ -1185,43 +1185,15 @@
 					"file": "web/bundles/backend/js/mask.js",
 					"settings":
 					{
-						"buffer_size": 31211,
+						"buffer_size": 9233,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								25306,
-								25306
-							]
-						],
-						"settings":
-						{
-							"syntax": "Packages/JavaScript/JavaScript.tmLanguage",
-							"tab_size": 2,
-							"translate_tabs_to_spaces": true
-						},
-						"translation.x": 55.0,
-						"translation.y": 15606.0,
-						"zoom_level": 1.0
-					},
-					"type": "text"
-				},
-				{
-					"buffer": 5,
-					"file": "web/bundles/backend/js/prueba.js",
-					"settings":
-					{
-						"buffer_size": 50126,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								47011,
-								47011
+								1814,
+								1814
 							]
 						],
 						"settings":
@@ -1231,7 +1203,35 @@
 							"translate_tabs_to_spaces": true
 						},
 						"translation.x": 0.0,
-						"translation.y": 23732.0,
+						"translation.y": 864.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 5,
+					"file": "web/bundles/backend/js/prueba.js",
+					"settings":
+					{
+						"buffer_size": 62290,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								539,
+								539
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/JavaScript/JavaScript.tmLanguage",
+							"tab_size": 2,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"
@@ -1380,15 +1380,15 @@
 					"file": "src/Cole/BackendBundle/Controller/AlumnoController.php",
 					"settings":
 					{
-						"buffer_size": 19528,
+						"buffer_size": 19524,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								15312,
-								15312
+								11166,
+								11166
 							]
 						],
 						"settings":
@@ -1398,7 +1398,7 @@
 							"translate_tabs_to_spaces": true
 						},
 						"translation.x": 0.0,
-						"translation.y": 7954.0,
+						"translation.y": 5524.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"
@@ -1642,8 +1642,8 @@
 						"selection":
 						[
 							[
-								9831,
-								9831
+								231,
+								231
 							]
 						],
 						"settings":
@@ -1653,7 +1653,7 @@
 							"translate_tabs_to_spaces": true
 						},
 						"translation.x": 0.0,
-						"translation.y": 137.0,
+						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"
@@ -1670,8 +1670,8 @@
 						"selection":
 						[
 							[
-								814,
-								814
+								239,
+								239
 							]
 						],
 						"settings":
@@ -1681,7 +1681,7 @@
 							"translate_tabs_to_spaces": true
 						},
 						"translation.x": 0.0,
-						"translation.y": 0.0,
+						"translation.y": 108.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"
@@ -2027,15 +2027,15 @@
 					"file": "src/Cole/BackendBundle/Resources/views/Curso/edit.html.twig",
 					"settings":
 					{
-						"buffer_size": 2350,
+						"buffer_size": 1251,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								1235,
-								1235
+								1251,
+								1251
 							]
 						],
 						"settings":
@@ -2045,7 +2045,7 @@
 							"translate_tabs_to_spaces": true
 						},
 						"translation.x": 0.0,
-						"translation.y": 486.0,
+						"translation.y": 630.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"
@@ -2055,15 +2055,15 @@
 					"file": "src/Cole/BackendBundle/Resources/views/Curso/index.html.twig",
 					"settings":
 					{
-						"buffer_size": 10566,
+						"buffer_size": 4814,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								75,
-								75
+								4814,
+								4814
 							]
 						],
 						"settings":
@@ -2073,7 +2073,7 @@
 							"translate_tabs_to_spaces": true
 						},
 						"translation.x": 0.0,
-						"translation.y": 0.0,
+						"translation.y": 2340.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"
@@ -2127,7 +2127,7 @@
 							"translate_tabs_to_spaces": true
 						},
 						"translation.x": 0.0,
-						"translation.y": 432.0,
+						"translation.y": 450.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"
@@ -2155,7 +2155,7 @@
 							"translate_tabs_to_spaces": true
 						},
 						"translation.x": 0.0,
-						"translation.y": 0.0,
+						"translation.y": 702.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"
@@ -2183,7 +2183,7 @@
 							"translate_tabs_to_spaces": true
 						},
 						"translation.x": 0.0,
-						"translation.y": 702.0,
+						"translation.y": 108.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"
@@ -2256,8 +2256,8 @@
 						"selection":
 						[
 							[
-								204,
-								204
+								212,
+								212
 							]
 						],
 						"settings":
@@ -2267,7 +2267,7 @@
 							"translate_tabs_to_spaces": true
 						},
 						"translation.x": 0.0,
-						"translation.y": 0.0,
+						"translation.y": 216.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"
@@ -2301,7 +2301,7 @@
 							"translate_tabs_to_spaces": true
 						},
 						"translation.x": 0.0,
-						"translation.y": 338.0,
+						"translation.y": 18.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"
@@ -2329,7 +2329,7 @@
 							"translate_tabs_to_spaces": true
 						},
 						"translation.x": 0.0,
-						"translation.y": 2156.0,
+						"translation.y": 1674.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"
@@ -2357,7 +2357,7 @@
 							"translate_tabs_to_spaces": true
 						},
 						"translation.x": 0.0,
-						"translation.y": 356.0,
+						"translation.y": 702.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"
@@ -2385,7 +2385,7 @@
 							"translate_tabs_to_spaces": true
 						},
 						"translation.x": 0.0,
-						"translation.y": 194.0,
+						"translation.y": 720.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"
@@ -2413,7 +2413,7 @@
 							"translate_tabs_to_spaces": true
 						},
 						"translation.x": 0.0,
-						"translation.y": 1684.0,
+						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"
@@ -2441,7 +2441,7 @@
 							"translate_tabs_to_spaces": true
 						},
 						"translation.x": 0.0,
-						"translation.y": 216.0,
+						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"
@@ -2469,7 +2469,7 @@
 							"translate_tabs_to_spaces": true
 						},
 						"translation.x": 0.0,
-						"translation.y": 0.0,
+						"translation.y": 252.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"
@@ -2497,7 +2497,7 @@
 							"translate_tabs_to_spaces": true
 						},
 						"translation.x": 0.0,
-						"translation.y": 213.0,
+						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"
@@ -2544,8 +2544,8 @@
 		"rows":
 		[
 			0.0,
-			0.39938510185,
-			0.597590711176,
+			0.567893389143,
+			0.778529937695,
 			1.0
 		]
 	},
@@ -2579,6 +2579,6 @@
 	"show_open_files": false,
 	"show_tabs": true,
 	"side_bar_visible": true,
-	"side_bar_width": 192.0,
+	"side_bar_width": 365.0,
 	"status_bar_visible": true
 }

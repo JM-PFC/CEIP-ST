@@ -6,7 +6,38 @@
 
 {% block javascript %}
 
-    <script type="text/javascript" src="{{ asset('bundles/backend/js/mask.js') }}"></script>
+    <script >
+        // Asígnamos un valor por defecto al input radio de los formularios de creación.
+        $("form[id$='nuevo'] input[id$='_sexo_0']").attr("checked","checked");
+        
+        // Se deshabilita el campo file inicialmente.
+        $("#alumno_foto").prop("disabled", true);  
+
+        // Se habilita y deshabilita el campo file de la foto según la opción del radio.
+        $("#foto_no").focus(function(){
+          $("#alumno_foto").prop("disabled", true);  
+        });
+
+        $("#foto_si").focus(function(){
+          $("#alumno_foto").prop("disabled", false);  
+        });
+
+        // Se deshabilita los campos del segundo responsable por defecto, excepto el Dni.
+        $("form").find(":input[id^='alumno_responsable2_']").each(function(){ 
+            $(this).prop("disabled", true);
+        });
+        $("#alumno_responsable2_dni").prop("disabled", false);
+
+        // Se muestra por defecto la primera pestaña del formulario y se selecciona el primer campo.
+        var sel= $("#tabs div[aria-hidden='false']").attr("id");
+
+        if($("#"+sel+" #tab-container li:first").attr("class")=="selected"){
+            $("#"+sel+" #content-form-menu").find("[id^='tab']").hide(); // Se oculta todo el contenido.
+            $("#"+sel+" #tabs-form li:first").attr("class","selected"); // Se activa la primera pestaña.
+            $("#"+sel+" #content-form-menu #tab1").css("display","inline"); // Se muestra el contenido de la primera pestaña.
+            $("#"+sel+" #tab1 input:first").focus(); // Se selecciona el primer campo por defecto.
+        }
+    </script>
 
 {% endblock %}
 
