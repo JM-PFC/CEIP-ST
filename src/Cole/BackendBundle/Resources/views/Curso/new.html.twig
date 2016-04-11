@@ -1,15 +1,36 @@
-{% extends '::base.html.twig' %}
+{% extends 'BackendBundle:Default:index.html.twig' %}
+
+{% block stylesheets %}
+	{{parent()}}
+{% endblock %}
+
+{% block javascript %}
+
+    <script type="text/javascript" src="{{ asset('bundles/backend/js/mask.js') }}"></script>
+    <script>
+        $("#curso_nivel").prop('readonly', true); //input sólo lectura
+    </script>
+
+{% endblock %}
 
 {% block body -%}
-    <h1>Curso creation</h1>
-
-    {{ form(form) }}
-
-        <ul class="record_actions">
-    <li>
-        <a href="{{ path('curso') }}">
-            Back to the list
-        </a>
-    </li>
-</ul>
+    {{form_start(form, {'action':path('curso_create'),'method':'POST','attr':{'id':'curso_nuevo' , novalidate:'novalidate', 'autocomplete':'off'}})}}
+        {{ form_errors(form) }}
+        <div class="width100">
+            <div id="content-form">
+                <fieldset >
+                    <legend>Añadir nuevo Curso</legend>
+                        <div class="addcurso">
+                            {{ form_row(form.nivel) }}
+                            {{ form_row(form.curso) }}
+                        </div>
+                </fieldset>       
+            </div>
+        
+            <div id="botones_dialogo">
+                {{ form_row(form.submit) }}
+                {{ form_rest(form) }} 
+            </div>
+        </div>
+    {{form_end(form)}}
 {% endblock %}

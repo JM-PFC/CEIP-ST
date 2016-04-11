@@ -15,7 +15,7 @@ class PadresType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('dni','text',array('label' => 'DNI/NIE','max_length' => 10, 'attr' => array('lengthmin'=> 9,'validation' => 'Equal,Empty,Length,Dni', 'class' => 'dni')))
+            ->add('dni','text',array('label' => 'DNI/NIE','max_length' => 10, 'attr' => array('lengthmin'=> 9,'validation' => ' Equal,Empty,Length,Dni', 'class' => 'dni')))
             ->add('nombre','text',array('label' => 'Nombre y Apellidos', 'max_length' => 80,'attr' => array('validation' => 'Empty, Words', 'class' => 'full_name')))
             ->add('fechaNacimiento','date',array('label' => 'Fecha de Nacimiento', 'max_length' => 10,'widget' => 'single_text','format' => 'dd/MM/yyyy', 'attr' => array('lengthmin'=> 8,'class' => 'fecha','validation' => 'Empty,Length,Fecha,Fecha_Adulto')))
             ->add('profesion','text',array('label' => 'Profesión','max_length' => 50,'attr' => array('validation' => 'Words','class' => 'normal')))
@@ -28,6 +28,8 @@ class PadresType extends AbstractType
             //->add('claveUsuario')
             //->add('activo')
             //->add('role')
+            ->add('limpiar', 'button', array('attr' => array('class' => 'limpiar')))
+
         ;
     }
     
@@ -47,6 +49,6 @@ class PadresType extends AbstractType
      */
     public function getName()
     {
-        return 'cole_backendbundle_padres';
+        return 'responsable1';
     }
 }

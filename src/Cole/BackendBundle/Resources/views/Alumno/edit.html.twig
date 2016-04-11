@@ -1,4 +1,4 @@
-{% extends '::base.html.twig' %}
+{#{% extends '::base.html.twig' %}
 
 {% block body -%}
     <h1>Alumno edit</h1>
@@ -14,3 +14,280 @@
     <li>{{ form(delete_form) }}</li>
 </ul>
 {% endblock %}
+#}
+
+{% extends 'BackendBundle:Default:index.html.twig' %}
+
+{% block stylesheets %}
+   {{parent()}}
+{% endblock %}
+
+{% block javascript %}
+       
+  <script type="text/javascript" src="{{ asset('bundles/backend/js/jquery-ui/jquery-ui.js') }}"></script>
+  <script type="text/javascript" src="{{ asset('bundles/fosjsrouting/js/router.js') }}"></script>
+  <script type="text/javascript" src="{{ path('fos_js_routing_js', {"callback": "fos.Router.setData"}) }}"></script>
+   <script type="text/javascript" src="{{ asset('bundles/backend/js/mask.js') }}"></script>
+
+   <script> 
+   $('#edit_alumno_cursoIngreso option:contains("{{ entity.cursoIngreso }}")').prop('selected', true); //deshabilita input
+   $('.readonly').prop('readonly', true); //input sólo lectura
+
+   $("#padres_dialog").dialog(
+       {
+        bgiframe: true,
+        autoOpen: false,
+        height: 320,
+        width: 900,
+        modal: true,
+        resizable: false,
+        //show: 'fade',
+        //hide: 'fade',
+        //buttons: {
+       //Ok: function() {
+       //   $(this).dialog('close');
+       //} //end function for Ok button
+    //}//end buttons
+       }
+    );
+   $('#padres_dialog').on('dialogclose', function(event) {
+     $('#padres_dialog').empty();
+    });
+
+   </script>
+
+{% endblock %}
+
+{% block body %}
+    {# {{ form_enctype(form) }} es obsoleto en Symfony 2.3
+    <form class="formulario_alumno" id="alumno_nuevo" action="{{ path('alumno_create') }}" novalidate method="post" autocomplete="off"{{ form_enctype(form) }}> #}
+    {{form_start(edit_form, {'action':path('alumno_update',{'id':entity.id}),'method':'Put','attr':{'class':'edit_alumno', 'id':'alumno_edit', novalidate:'novalidate', 'autocomplete':'off'}})}}
+
+    {{ form_errors(edit_form) }}
+    <div>
+      <div id="content-form">
+        <fieldset class="ajustada">
+        <legend>Ficha del alumno: {{entity.nombre}} {{entity.apellido1}} {{entity.apellido2}}</legend>
+        <div class="columna_foto">
+            {{ form_errors(edit_form.foto) }}
+            <div id="actual">
+            {% if entity.foto != null %}
+            <img id="foto" class="img-small" src="{{ asset('uploads/images/' ~ entity.foto) }}">
+            {% else %}
+              {% if entity.sexo == "Femenino" %}
+                <img id="sin_foto" class="img-small" src="{{ asset('bundles/backend/images/perfil/SinFoto-niña.png') }}">
+              {% else %}
+                <img id="sin_foto" class="img-small" src="{{ asset('bundles/backend/images/perfil/SinFoto-niño.png') }}">
+              {% endif %}
+            {% endif %}
+          </div>
+            <div id="actualizada" class="oculto">
+              <img id="foto" class="img-small"  src="">
+          </div>
+          <div id="por_defecto" class="oculto" >
+            {% if entity.sexo == "Femenino" %}
+              <img id="sin_foto" class="img-small" src="{{ asset('bundles/backend/images/perfil/SinFoto-niña.png') }}">
+            {% else %}
+              <img id="sin_foto" class="img-small" src="{{ asset('bundles/backend/images/perfil/SinFoto-niño.png') }}">
+            {% endif %}
+          </div>
+          <div id="iconos_foto">
+            {% if entity.foto == null %}
+              <a id="icono_añadir" title="Añadir una foto" href="javascript:void(0);">
+                <img src="{{ asset('bundles/backend/images/menu/añadir.png')}}">
+              </a>
+              <a id="icono_restablecer" class="disable" title="Restablecer a foto inicial" href="javascript:void(0);">
+                <img disabled="" src="{{ asset('bundles/backend/images/menu/restablecer.png')}}">
+              </a>
+              <a id="icono_eliminar" class="disable" title="Eliminar la foto actual" href="javascript:void(0);">
+                <img src="{{ asset('bundles/backend/images/menu/eliminar.png')}}">
+              </a>
+            {% else %}
+              <a id="icono_añadir" title="Modificar foto" href="javascript:void(0);">
+                <img src="{{ asset('bundles/backend/images/menu/añadir.png')}}">
+              </a>
+              <a id="icono_restablecer" class="disable" title="Restablecer a foto inicial" href="javascript:void(0);">
+                <img disabled="" src="{{ asset('bundles/backend/images/menu/restablecer.png')}}">
+              </a>
+              <a id="icono_eliminar" title="Eliminar la foto actual" href="javascript:void(0);">
+                <img src="{{ asset('bundles/backend/images/menu/eliminar.png')}}">
+              </a>
+            {% endif %}    
+          </div>
+              {{ form_widget(edit_form.foto,{'id':'edit_'~edit_form.foto.vars.id }) }}
+          <span id="error_foto">
+
+          </span>              
+        </div> 
+        <div class="marco_columna_contenido">  
+        <div class="columna_contenido">
+          <div class="block-one">
+            <h3 class="label_contenido">Información Personal<span> (Datos básicos de identificación)</span></h3>
+            <div class="big_column">
+              {{ form_row(edit_form.nombre,{'id':'edit_'~edit_form.nombre.vars.id }) }}
+              {{ form_row(edit_form.apellido1,{'id':'edit_'~edit_form.apellido1.vars.id }) }}
+              {{ form_row(edit_form.apellido2,{'id':'edit_'~edit_form.apellido2.vars.id }) }}
+              {{ form_label(edit_form.sexo) }}
+              <div class="input_radio">
+                  {{ form_row(edit_form.sexo[0],{'id':'edit_'~edit_form.sexo.vars.id~'_0' }) }}
+                  {{ form_row(edit_form.sexo[1],{'id':'edit_'~edit_form.sexo.vars.id~'_1' }) }}
+              </div>
+           </div>
+            
+            <div class="big_column">
+              {{ form_row(edit_form.direccion,{'id':'edit_'~edit_form.direccion.vars.id }) }}
+              {{ form_row(edit_form.localidad,{'id':'edit_'~edit_form.localidad.vars.id }) }}
+              {{ form_row(edit_form.provincia,{'id':'edit_'~edit_form.provincia.vars.id }) }}
+              {{ form_row(edit_form.cp,{'id':'edit_'~edit_form.cp.vars.id }) }}
+            </div>
+  
+            <div class="end_column">
+              {{ form_row(edit_form.fechaNacimiento,{'id':'edit_'~edit_form.fechaNacimiento.vars.id }) }}
+              {{ form_row(edit_form.telefono,{'id':'edit_'~edit_form.telefono.vars.id }) }}
+            </div>
+          </div>
+          <div class="block-one">
+            <h3 class="label_contenido">Información Responsables<span> (Datos básicos de identificación de los responsables)</span></h3>
+            <fieldset >
+            <button id="editar_responsable1_modal" title="Asignar un nuevo responsable" class="responsable_modal" type="button" name="editar_responsable1[modal]" >Nuevo Responsable</button>
+            <legend class="inline">Datos Primer Responsable</legend>
+            <div class="horizontal" id="primero">
+              <div class="dis_block">
+                {{ form_row(edit_form.responsable1.dni,{'id':'edit_alumno_responsable_dni_1'}) }}
+                <div class="full_name_div">
+                  {{ form_label(edit_form.responsable1.nombre) }}
+                  {{ form_widget(edit_form.responsable1.nombre,{'id':'edit_'~edit_form.responsable1.nombre.vars.id }) }}
+                </div>
+                {{ form_row(edit_form.responsable1.fechaNacimiento,{'id':'edit_'~edit_form.responsable1.fechaNacimiento.vars.id }) }}                 
+              </div>
+              <div class="dis_block">
+                {{ form_row(edit_form.responsable1.profesion,{'id':'edit_'~edit_form.responsable1.profesion.vars.id }) }}
+                {{ form_row(edit_form.responsable1.estadoCivil,{'id':'edit_'~edit_form.responsable1.estadoCivil.vars.id }) }}
+                {{ form_row(edit_form.responsable1.movil,{'id':'edit_'~edit_form.responsable1.movil.vars.id }) }}
+                {{ form_row(edit_form.responsable1.email,{'id':'edit_'~edit_form.responsable1.email.vars.id }) }}
+              </div>
+            </div>
+          </fieldset >
+          </div>
+          {% if entity.responsable2 != null %}
+          <div class="block-one" id="responsable">
+          {% else %}
+          <div class="block-one oculto" id="responsable">
+          {% endif %}
+            <fieldset >
+            <legend class="inline">Datos Segundo Responsable</legend>
+            <button id="editar_responsable2_modal" title="Asignar un nuevo responsable" class="responsable_modal" type="button" name="editar_reponsable2[modal]" >Nuevo Responsable</button>
+            
+            <button id="eliminar_responsable" title="Eliminar responsable" class="eliminar_responsable_modal" type="button" >Eliminar Responsable</button>
+            <div class="horizontal" id="primero">
+              <div class="dis_block">
+                {{ form_row(edit_form.responsable2.dni,{'id':'edit_alumno_responsable_dni_2'}) }}
+                <div class="full_name_div">
+                  {{ form_label(edit_form.responsable2.nombre) }}
+                  {{ form_widget(edit_form.responsable2.nombre,{'id':'edit_'~edit_form.responsable2.nombre.vars.id }) }}
+                </div>
+                {{ form_row(edit_form.responsable2.fechaNacimiento,{'id':'edit_'~edit_form.responsable2.fechaNacimiento.vars.id }) }}                 
+              </div>
+              <div class="dis_block">
+                {{ form_row(edit_form.responsable2.profesion,{'id':'edit_'~edit_form.responsable2.profesion.vars.id }) }}
+                {{ form_row(edit_form.responsable2.estadoCivil,{'id':'edit_'~edit_form.responsable2.estadoCivil.vars.id }) }}
+                {{ form_row(edit_form.responsable2.movil,{'id':'edit_'~edit_form.responsable2.movil.vars.id }) }}
+                {{ form_row(edit_form.responsable2.email,{'id':'edit_'~edit_form.responsable2.email.vars.id }) }}
+              </div>
+            </div>
+            </fieldset >
+          </div>
+
+
+          {% if entity.responsable2 == null %}
+          <div class="block-one" id="noresponsable">
+          {% else %}
+          <div class="block-one oculto" id="noresponsable">
+          {% endif %}
+            <fieldset >
+            <legend class="inline">Datos Segundo Responsable</legend>
+            <button id="editar_responsable2_modal" title="Asignar un nuevo responsable" class="responsable_modal" type="button" name="editar_reponsable2[modal]" >Nuevo Responsable</button>
+            <h3 class="aviso_responsable">Actualmente sólo tiene un responsable asignado.</h3>
+            </fieldset >
+          </div>
+
+
+
+          <div class="block-one">
+            <h3 class="label_contenido">Información Académica<span> (Información sobre el alumno dentro de la institución)</span></h3>
+            <div class="small_column">
+              <div>
+                {{ form_label(edit_form.cursoIngreso) }}
+                <input class="readonly" value="{{ entity.cursoIngreso }}"></input>
+              </div>
+            </div>
+            <div class="small_column">
+              <div>
+                <label>Fecha Ingreso</label>
+                <input class="readonly" value="{{ entity.fechaAlta| localizeddate('none', 'none', 'none',none , "dd/MM/Y") }}"></input>
+              </div>
+            </div>
+            <div class="small_column">
+
+              <div>
+              <label>Curso actual</label>
+              <input class="readonly" value="{{ entity.curso }}"></input>
+              </div>
+
+            </div>
+  
+            <div class="small_column">
+              <div>
+                <label>Grupo</label>
+              <input class="readonly" value="{{ entity.grupo }}"></input>
+              </div>
+
+            </div>
+          </div>
+          <div class="block-one">
+            <h3 class="label_contenido">Datos de Interés<span> (Información adicional sobre el alumno)</span></h3>
+            <div class="small_column">
+             {{ form_row(edit_form.grupoSangre,{'id':'edit_'~edit_form.grupoSangre.vars.id }) }}
+            </div>
+          </div>    
+            <div class=" block-one">
+             {{ form_row(edit_form.observaciones,{'id':'edit_'~edit_form.observaciones.vars.id }) }}
+            </div>
+
+
+        </div>
+        </div>
+        </fieldset>       
+    </div>
+        
+    <div id="botones_form">
+        {{ form_row(edit_form.submit,{'id':'edit_'~edit_form.submit.vars.id }) }}
+      <div>
+        <button id="editar_alumno_restablecer" type="button" name="editar_alumno[restablecer]" >Restablecer</button>
+      </div> 
+      <div>
+        <button id="editar_alumno_nuevaFicha" type="button" name="editar_alumno[nuevaFicha]" >Buscar otra ficha</button>
+      </div>
+    </div>
+    <div id="padres_dialog" title="Asignar Nuevo Responsable">
+    </div>
+        
+    <div class="oculto">
+      {{ form_row(edit_form.responsable2.dni,{'id':'edit_'~edit_form.responsable2.dni.vars.id }) }}
+      {{ form_row(edit_form.responsable2.nombre,{'id':'edit_'~edit_form.responsable2.nombre.vars.id }) }}
+      {{ form_row(edit_form.responsable2.fechaNacimiento,{'id':'edit_'~edit_form.responsable2.fechaNacimiento.vars.id }) }}              
+      {{ form_row(edit_form.responsable2.profesion,{'id':'edit_'~edit_form.responsable2.profesion.vars.id }) }}
+      {{ form_row(edit_form.responsable2.estadoCivil,{'id':'edit_'~edit_form.responsable2.estadoCivil.vars.id }) }}
+      {{ form_row(edit_form.responsable2.movil,{'id':'edit_'~edit_form.responsable2.movil.vars.id }) }}
+      {{ form_row(edit_form.responsable2.email,{'id':'edit_'~edit_form.responsable2.email.vars.id }) }}
+      
+      {{ form_row(edit_form.cursoIngreso,{'id':'edit_'~edit_form.cursoIngreso.vars.id }) }}
+
+      {{ form_rest(edit_form) }} 
+    </div>
+    <div id="result"></div>
+    </div>
+   {{form_end(edit_form)}}
+
+{% endblock %}
+    

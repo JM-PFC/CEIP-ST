@@ -1,4 +1,11 @@
 $(document).ready(function () {
+  // Redireccionar a la url inicial si se abre alguna url en otra pestaña o ventana nueva.
+  var pathname = window.location.pathname;
+  if(pathname.indexOf("admin")<0){
+    // Se oculta el contenido para que no se vea al redireccionar.
+    $("body").addClass("oculto");
+    window.location.replace("http://localhost/Symfony/web/app_dev.php/admin/");
+  }
 
 	//Bloquear el botón back del navegador.
   if (typeof history.pushState === "function") {
@@ -68,6 +75,8 @@ $(document).ready(function () {
         $('#'+i).hide();
       };
       $($(this).attr("href")).fadeIn('fast');
+      $($(this).attr("href")).attr("style","display: block");
+
 
       // Se asigna la clase activo a la opción pulsada.
       $('li').removeClass("activo");
@@ -77,6 +86,8 @@ $(document).ready(function () {
       //if($("#tabs ul li").length==0)
       //window.location.hash = $($(this)).attr("title");
     }
+    //Se elimina el foco del elemento.
+    $(this).blur();
   });
 
 	var num_tabs = $("#tabs ul li").length +1,
@@ -224,6 +235,15 @@ $(document).ready(function () {
 			tabs.tabs( "refresh" );
 		}
 	});
+
+  // Se añade una referencia a a cada enlace con una variable "ref".
+  $(".contenedor>div").each(function(i){
+    id_div=$(this).attr("id");
+
+    $(this).find("div a").each(function(j){
+      $(this).attr("ref",id_div+"."+(j+1));
+    });
+  });
    	      
   // Se selecciona una opción del menú.
   $(".contenedor div div").on("click", "a",function(event) {
@@ -245,7 +265,7 @@ $(document).ready(function () {
   	  if(tabRef==ref2)
   	    unico=1;
     }
-    if(n_total<=7 || (n_total<=8 && unico==1)){	
+    if(n_total<=6 || (n_total<=7 && unico==1)){	
 	    if(unico==0){
 
         addTab();
@@ -322,10 +342,24 @@ $(document).ready(function () {
  					  }
  				  }
  			  });
- 			*/
- 			alert("Máximo de pestañas permitidas.\n\nPor favor cierre alguna pestaña para continuar.")    
+ 			*/  
+
+      // Se muestra el aviso de pestañas permitidas.
+      id=$(".contenedor div[style='display: block;']").attr("id");
+
+      setTimeout(function(){ 
+        $("#dialog-message").removeClass("oculto");
+        $(".contenedor div[id='"+id+"']").attr("style","display: none;");
+        //Se desactiva temporalmente los enlaces del menú almostrar el aviso.
+        $(".menu li a").css("pointer-events","none"); }, 200);
+      setTimeout(function(){ 
+        $("#dialog-message").addClass("oculto");
+        $(".contenedor div[id='"+id+"']").attr("style","display: block;"); 
+        $(".menu li a").css("pointer-events","visible");}, 2000);
  	  }
-    event.stopPropagation();    
+    event.stopPropagation();
+    //Se elimina el foco del elemento.
+    $(this).blur();   
   });  
 
 
@@ -335,6 +369,11 @@ $(document).ready(function () {
 
   // Se elimina los eventos asociados a los elementos li (para que no se repitan los eventos onclick)
   $("#tabs ul li").off();
+
+  // Se elimina de la lista el valor inicial del select.
+  $("select option[value='']").css("display", "none");
+
+
 
 
 });

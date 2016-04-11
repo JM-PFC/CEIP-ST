@@ -1,7 +1,7 @@
 $(document).ready(function () {
   //var tabCounter = $('#tabs').data('counter');
   
-  $("#tabs>ul>li").on("click","a",function(event){
+  $(document).on("click","#tabs>ul>li a",function(event){
     event.preventDefault(); //cancela el comportamiento por defecto.
     n_total= $("#tabs>ul:first").children("li").size();
     elemento=$(this).attr("id");
@@ -42,14 +42,16 @@ $(document).ready(function () {
       $(elemento).attr("tabindex","0");
       $(elemento).attr("class","ui-state-default ui-corner-top ui-tabs-active ui-state-active ");
     }
+    //Se elimina el foco del elemento.
+    $(this).blur();
     //Hash actualizado.
     //new_title=padre+"/"+$("#tabs>ul>li[aria-selected='true']>a").attr("title");
     //window.location.hash = new_title;
     event.stopPropagation();    
   });
   
-  // Se carga el contenido de los pestañas correspondiente al enlace.
-  $("#tabs div div a[id='open_tab']").on("click",function(event){
+  // Se carga el contenido de las pestañas correspondiente al enlace.
+  $(document).on("click","#tabs div div a[id='open_tab']",function(event){
     event.preventDefault();
     href=$(this).attr("href");
 
@@ -59,8 +61,12 @@ $(document).ready(function () {
   }); 
  
   // Se carga el contenido de los enlaces internos.
-  $("#tabs div div a[id!='open_tab']").on("click",function(event){
+  $(document).on("click","#tabs div div a[id!='open_tab']",function(event){
     event.preventDefault();
+    if($(this).attr("cargar-href")=="off")
+    {
+      return false;
+    }
  
     var elemento=$("#tabs>div[aria-hidden='false']").attr("id");         
     $("#"+elemento).load(this.href);// Se carga el contenido.     
@@ -68,11 +74,12 @@ $(document).ready(function () {
   }); 
 
   // Se cierra todas las pestañas abiertas con el botón cerrar.
-  $(".close_tabs button ").on("click",function(event){
+  $(document).on("click",".close_tabs button ",function(event){
     event.preventDefault();
  
     // Se lanza el evento click del icono de cerrar en todas las pestañas abiertas.
     $("#tabs ul li span").trigger("click"); 
   }); 
+
 
 });

@@ -1,55 +1,52 @@
-{#
-{% extends '::base.html.twig' %}
-
-{% block body -%}
-    <h1>Padres creation</h1>
-
-    {{ form(form) }}
-
-    <ul class="record_actions">
-    <li>
-        <a href="{{ path('padres') }}">
-            Back to the list
-        </a>
-    </li>
-</ul>
-{% endblock %}
-#}
 {% extends 'BackendBundle:Default:index.html.twig' %}
 
 {% block stylesheets %}
-	{{parent()}}
+    {{parent()}}
 {% endblock %}
 
 {% block javascript %}
-	 {{parent()}}
-
+   
+    <script type="text/javascript" src="{{ asset('bundles/backend/js/mask.js') }}"></script>
+    <script> 
+      $(".full_name").parent().css("width", "43%");
+      $(".full_name").parent().css("max-width", "45%");
+    </script>
 {% endblock %}
 
 {% block body %}
-		<form class="formulario" id="crear_padres" action="{{ path('padres_create') }}" method="post" {{ form_enctype(form) }}>
-			{{ form_errors(form) }}
-			<div id="dni">
-				{{ form_row(form.dni) }}
-			</div>
-			<div id="nombre">
-				{{ form_row(form.nombre) }}
+    {{form_start(form, {'action':path('padres_create'),'method':'POST','attr':{'class':'formulario_padres', 'id':'padres_nuevo' , novalidate:'novalidate', 'autocomplete':'off'}})}}
 
-			</div>
-			<div id="datos">
-				{{ form_row(form.fechaNacimiento) }}
-				{{ form_row(form.profesion) }}
-				{{ form_row(form.estadoCivil) }}
-				{{ form_row(form.movil) }}
-			</div>
-			<div id="resto">
-	        	<a id="open_tab" href="{{ path('padres') }}">Back to the list</a>
-	        	{{ form_rest(form) }} 
-       			{# {{ form_row(form.submit) }}#}
-        	</div>
-     
-		</form>
-		<div id="result"></div>
+        {{ form_errors(form) }}
+    <div >
+    <div id="content-form">
+        <fieldset >
+            <legend>Registro de Padres</legend>
+
+                    <div class="izquierda">
+                        {{ form_row(form.dni) }}
+                        <div class="full_name_div">
+                        {{ form_label(form.nombre) }}
+                        {{ form_widget(form.nombre) }}
+                        </div>
+                        {{ form_row(form.fechaNacimiento) }}
+                        {{ form_row(form.profesion) }}
+                        {{ form_row(form.estadoCivil) }}
+                        {{ form_row(form.movil) }}
+                        {{ form_row(form.email) }}
+                    </div>
+        </fieldset>       
+    </div>
+        
+    <div id="botones_form">
+        {{ form_row(form.submit) }}
+        {{ form_row(form.limpiar) }}
+        {{ form_rest(form) }} 
+    </div>
+    <div id="result"></div>
+    </div>
+     {#  <div class="oculto" id="dialog-confirm" title="Empty the recycle bin?">
+        <p><span class="ui-icon ui-icon-alert" style="float:left; margin:0 7px 20px 0;"></span>Se va a asignar un nuevo responsable al alumno y no podrá recuperar el anterior. </br>¿Estas seguro de asignar  el nuevo responsable al alumno?</p>
+    </div>#}
+    {{form_end(form)}}
 
 {% endblock %}
-

@@ -1,5 +1,4 @@
 *~
-
 # Cache and logs (Symfony2)
 /app/cache/*
 /app/logs/*
@@ -25,7 +24,7 @@
 /vendor/
 
 # Assets and user uploads
-# /web/bundles/
+/web/bundles/
 /web/uploads/
 
 # Assets managed by Bower

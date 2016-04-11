@@ -1,0 +1,39 @@
+{% extends 'BackendBundle:Default:index.html.twig' %}
+
+{% block stylesheets %}
+	{{parent()}}
+{% endblock %}
+
+{% block javascript %}
+    <script type="text/javascript" src="{{ asset('bundles/backend/js/mask.js') }}"></script>
+    <script>
+        $("#asignatura_tipo").prop('readonly', true); //input sólo lectura
+        $("#asignatura_edit form").attr("id","asignatura_delete");
+    </script>
+{% endblock %}
+
+{% block body -%}
+    {{form_start(edit_form, {'action':path('asignatura_update',{'id':entity.id}),'method':'PUT','attr':{'id':'asignatura_edit' , novalidate:'novalidate', 'autocomplete':'off'}})}}
+        {{ form_errors(edit_form) }}
+    	<div class="width100">
+    		<div id="content-form">
+        		<fieldset >
+            		<legend>Edición de Asignatura</legend>
+                        <div class="addregistro">
+                        	{{ form_row(edit_form.tipo) }}
+                        	{{ form_row(edit_form.nombre) }}
+                        	{{ form_row(edit_form.abreviatura) }}
+                    	</div>
+				</fieldset> 
+			</div>
+			<div class="oculto">
+				{{ form_row(edit_form.libro) }}
+    		</div>
+    		{{ form_rest(edit_form) }}
+    		{{form_end(edit_form)}}
+    		<div class="double_button">
+    			{{ form(delete_form) }}
+    		</div>
+		</div>
+	{{form_end(edit_form)}}
+{% endblock %}

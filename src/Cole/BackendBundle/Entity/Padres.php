@@ -140,9 +140,9 @@ class Padres
 
     public function __construct()
     {
+        $this->activo = true;
         $this->salt = base_convert(sha1(uniqid(mt_rand(),true)), 16, 36);
         $this->fechaAlta= new \DateTime();
-        $this->activo= 1;
         $this->alumnos = new ArrayCollection();
     }
 

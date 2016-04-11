@@ -119,7 +119,7 @@ class Alumno
      * 
      */
     private $responsable1;
-    //@ORM\JoinColumn(name="responsable2_id", referencedColumnName="id", nullable=false)
+    //@ORM\JoinColumn(name="responsable2_id", referencedColumnName="id", nullable=true)
     /**
      * 
      * @ORM\ManyToOne(targetEntity="Padres", inversedBy="alumnos", cascade={"persist"})
@@ -189,7 +189,7 @@ class Alumno
     /**
      * @var string
      *
-     * @ORM\Column(name="observaciones", type="string", length=250, nullable=true)
+     * @ORM\Column(name="observaciones", type="string", length=500, nullable=true)
      * 
      */
     private $observaciones;

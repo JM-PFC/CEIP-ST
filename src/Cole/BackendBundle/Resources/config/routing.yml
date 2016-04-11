@@ -28,3 +28,10 @@ BackendBundle_curso:
         resource: "@BackendBundle/Resources/config/routing/curso.yml"
         prefix:   /curso
 
+BackendBundle_asignatura:
+        resource: "@BackendBundle/Resources/config/routing/asignatura.yml"
+        prefix:   /asignatura
+
+BackendBundle_grupo:
+        resource: "@BackendBundle/Resources/config/routing/grupo.yml"
+        prefix:   /grupo

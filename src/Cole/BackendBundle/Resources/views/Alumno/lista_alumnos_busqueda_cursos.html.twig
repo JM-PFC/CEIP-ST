@@ -1,0 +1,38 @@
+{% extends '::base.html.twig' %}
+{% block javascript %}
+    
+    <script type="text/javascript" src="{{ asset('bundles/backend/js/mask.js') }}"></script>
+
+{% endblock %}
+
+{% block body %}
+<div id="cabecera_lista">
+    <h2>Lista de todos los alumnos</h2>
+</div>
+<div id="lista_alumnos">
+    <table class="records_list">
+        <thead>
+            <tr>
+                <th>Alumno/a (Apellidos, Nombre)</th>
+                <th class="corto">Grupo</th>
+                <th class="corto">Asignatura</th>
+            </tr>
+        </thead>
+    </table>
+
+    <div class="inner_table">
+        <table>
+        {% for entity in entities %}
+            <tr>
+                <td><a id="{{entity.id}}" href="javascript:void(0);">{{ entity.apellido1 ~ '  ' ~ entity.apellido2 ~ ',  ' ~ entity.nombre}}</a></td>
+
+                <td class="corto"><a id="{{entity.id}}" href="javascript:void(0);"> grupo prueba</a></td>
+                <td class="corto"><a id="{{entity.id}}" href="javascript:void(0);"> Matemáticas</a></td>
+            </tr>
+        {% endfor %}
+    </table>
+    </div>
+
+</div>
+
+    {% endblock %}

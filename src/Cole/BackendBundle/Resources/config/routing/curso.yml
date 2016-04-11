@@ -1,6 +1,8 @@
 curso:
     path:     /
     defaults: { _controller: "BackendBundle:Curso:index" }
+    options:
+        expose: true
 
 curso_show:
     path:     /{id}/show
@@ -9,6 +11,8 @@ curso_show:
 curso_new:
     path:     /new
     defaults: { _controller: "BackendBundle:Curso:new" }
+    options:
+        expose: true
 curso_list:
     path:     /list
     defaults: { _controller: "BackendBundle:Curso:listaCursos" }
@@ -21,6 +25,8 @@ curso_create:
 curso_edit:
     path:     /{id}/edit
     defaults: { _controller: "BackendBundle:Curso:edit" }
+    options:
+        expose: true
 
 curso_update:
     path:     /{id}/update
@@ -31,3 +37,5 @@ curso_delete:
     path:     /{id}/delete
     defaults: { _controller: "BackendBundle:Curso:delete" }
     requirements: { _method: post|delete }
+    options:
+        expose: true

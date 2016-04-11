@@ -1,0 +1,89 @@
+{% extends '::base.html.twig' %}
+{% block javascript %}
+    
+    <script type="text/javascript" src="{{ asset('bundles/backend/js/mask.js') }}"></script>
+
+{% endblock %}
+
+{% block body %}
+<div id="cabecera_lista">
+    <h2>Lista de todos los profesores</h2>
+</div>
+<div id="lista_profesores">
+    <table class="records_list">
+        <thead>
+            <tr>
+                <th>Profesor/a</th>
+                <th class="corto">Grupo</th>
+                <th class="corto">Asignatura</th>
+            </tr>
+        </thead>
+    </table>
+
+    <div class="inner_table">
+        <table>
+        {% for entity in entities %}
+            <tr>
+                {% if entity.sexo == "Femenino" %}
+                    <td><a id="{{entity.id}}" href="javascript:void(0);">{{ 'Dña.  ' ~ entity.nombre ~ '  ' ~ entity.apellido1 ~ '  ' ~ entity.apellido2}}</a></td>
+                {% else %}
+                    <td><a id="{{entity.id}}" href="javascript:void(0);">{{ 'D.  ' ~ entity.nombre ~ '  ' ~ entity.apellido1 ~ '  ' ~ entity.apellido2}}</a></td>
+                {% endif %}
+                <td class="corto"><a id="{{entity.id}}" href="javascript:void(0);"> grupo prueba</a></td>
+                <td class="corto"><a id="{{entity.id}}" href="javascript:void(0);"> Matemáticas</a></td>
+            </tr>
+        {% endfor %}
+    </table>
+    </div>
+
+</div>
+{#
+<div class="wrap">
+    <table class="head">
+        <tr>
+            <td>Head 1</td>
+            <td>Head 1</td>
+            <td>Head 1</td>
+        </tr>
+    </table>
+    <div class="inner_table">
+        <table>
+        <tr>
+            <td>Body 1</td>
+            <td>Body 1</td>
+            <td>Body 1</td>
+        </tr>
+            <tr>
+            <td>Body 1</td>
+            <td>Body 1</td>
+            <td>Body 1</td>
+        </tr>
+            <tr>
+            <td>Body 1</td>
+            <td>Body 1</td>
+            <td>Body 1</td>
+        </tr>
+              <tr>
+            <td>Body 1</td>
+            <td>Body 1</td>
+            <td>Body 1</td>
+        </tr>
+              <tr>
+            <td>Body 1</td>
+            <td>Body 1</td>
+            <td>Body 1</td>
+        </tr>
+              <tr>
+            <td>Body 1</td>
+            <td>Body 1</td>
+            <td>Body 1</td>
+        </tr>
+            <tr>
+            <td>Body 1</td>
+            <td>Body 1</td>
+            <td>Body 1</td>
+        </tr>
+    </table>
+    </div>
+</div>#}
+    {% endblock %}

@@ -1,0 +1,2584 @@
+{
+	"auto_complete":
+	{
+		"selected_items":
+		[
+			[
+				"wi",
+				"width"
+			],
+			[
+				"mar",
+				"margin-top"
+			],
+			[
+				"marg",
+				"margin-right"
+			],
+			[
+				"text",
+				"text-align"
+			],
+			[
+				"cont",
+				"content-form"
+			],
+			[
+				"max",
+				"max-height"
+			],
+			[
+				"borde",
+				"border-radius"
+			],
+			[
+				"pa",
+				"padding"
+			],
+			[
+				"padd",
+				"padding"
+			],
+			[
+				"pad",
+				"padding-left"
+			],
+			[
+				"margin",
+				"margin-bottom"
+			],
+			[
+				"permitida",
+				"permitida"
+			],
+			[
+				"fun",
+				"function"
+			],
+			[
+				"remove",
+				"removeClass"
+			],
+			[
+				"in",
+				"z-index"
+			],
+			[
+				"border",
+				"border-radius"
+			],
+			[
+				"le",
+				"length"
+			],
+			[
+				"fu",
+				"function"
+			],
+			[
+				"barra",
+				"barra_menu"
+			],
+			[
+				"he",
+				"height"
+			],
+			[
+				"widh",
+				"min-width"
+			],
+			[
+				"inline",
+				"inline-block"
+			],
+			[
+				"padi",
+				"padding-right"
+			],
+			[
+				"min",
+				"min-height"
+			],
+			[
+				"fon",
+				"font-size"
+			],
+			[
+				"bor",
+				"border"
+			],
+			[
+				"color",
+				"color"
+			],
+			[
+				"tex",
+				"text-align"
+			],
+			[
+				"be",
+				"before"
+			],
+			[
+				"font",
+				"font-weight"
+			],
+			[
+				"PAD",
+				"padding-bottom"
+			],
+			[
+				"blo",
+				"bloque_login"
+			],
+			[
+				"paddin",
+				"padding-left"
+			],
+			[
+				"inpu",
+				"input"
+			],
+			[
+				"text-",
+				"text-transform"
+			],
+			[
+				"textr",
+				"text-decoration"
+			],
+			[
+				"pD",
+				"padding"
+			],
+			[
+				"pro",
+				"property"
+			],
+			[
+				"con",
+				"contenido_noticia"
+			],
+			[
+				"spa",
+				"letter-spacing"
+			],
+			[
+				"bac",
+				"background"
+			],
+			[
+				"gro",
+				"background-color"
+			],
+			[
+				"hit",
+				"height"
+			],
+			[
+				"boder-",
+				"border-bottom"
+			],
+			[
+				"list-s",
+				"list-style"
+			],
+			[
+				"sp",
+				"letter-spacing"
+			],
+			[
+				"mag",
+				"margin-top"
+			],
+			[
+				"lo",
+				"logotipo"
+			],
+			[
+				"hei",
+				"height"
+			],
+			[
+				"wid",
+				"width"
+			],
+			[
+				"colo",
+				"color"
+			],
+			[
+				"op",
+				"opacity"
+			],
+			[
+				"ro",
+				"scroll"
+			],
+			[
+				"re",
+				"redes_soc_sup"
+			],
+			[
+				"z",
+				"z-index"
+			],
+			[
+				"size",
+				"font-size"
+			],
+			[
+				"hi",
+				"height"
+			],
+			[
+				"padin",
+				"padding-bottom"
+			],
+			[
+				"lef",
+				"left"
+			],
+			[
+				"pos",
+				"position"
+			],
+			[
+				"mari",
+				"margin-left"
+			],
+			[
+				"TE",
+				"text-align"
+			],
+			[
+				"st",
+				"list-style"
+			],
+			[
+				"ba",
+				"background"
+			],
+			[
+				"back",
+				"background"
+			],
+			[
+				"dis",
+				"display"
+			],
+			[
+				"ma",
+				"max-width"
+			],
+			[
+				"cl",
+				"clear"
+			],
+			[
+				"f",
+				"font-size"
+			],
+			[
+				"border-r",
+				"border-right"
+			],
+			[
+				"backgroung",
+				"background-image"
+			],
+			[
+				"background",
+				"background-color"
+			],
+			[
+				"border-co",
+				"border-color"
+			],
+			[
+				"siz",
+				"font-size"
+			],
+			[
+				"di",
+				"display"
+			],
+			[
+				"te",
+				"text-align"
+			],
+			[
+				"si",
+				"font-size"
+			],
+			[
+				"inl",
+				"inline-block"
+			]
+		]
+	},
+	"buffers":
+	[
+		{
+			"file": "web/bundles/backend/css/backend.css",
+			"settings":
+			{
+				"buffer_size": 21649,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "src/Cole/BackendBundle/Resources/views/Default/index.html.twig",
+			"settings":
+			{
+				"buffer_size": 9602,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "web/bundles/backend/js/load.js",
+			"settings":
+			{
+				"buffer_size": 14434,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "web/bundles/backend/js/form.js",
+			"settings":
+			{
+				"buffer_size": 3139,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "web/bundles/backend/js/mask.js",
+			"settings":
+			{
+				"buffer_size": 31211,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "web/bundles/backend/js/prueba.js",
+			"settings":
+			{
+				"buffer_size": 50126,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "src/Cole/BackendBundle/Resources/config/routing/alumno.yml",
+			"settings":
+			{
+				"buffer_size": 1838,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "src/Cole/BackendBundle/Resources/config/routing/padres.yml",
+			"settings":
+			{
+				"buffer_size": 1261,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "src/Cole/BackendBundle/Resources/config/routing/profesor.yml",
+			"settings":
+			{
+				"buffer_size": 1816,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "src/Cole/BackendBundle/Entity/Alumno.php",
+			"settings":
+			{
+				"buffer_size": 12721,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "src/Cole/BackendBundle/Entity/AlumnoRepository.php",
+			"settings":
+			{
+				"buffer_size": 1036,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "src/Cole/BackendBundle/Controller/AlumnoController.php",
+			"settings":
+			{
+				"buffer_size": 19528,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "src/Cole/BackendBundle/Form/AlumnoType.php",
+			"settings":
+			{
+				"buffer_size": 4524,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "src/Cole/BackendBundle/Resources/views/Alumno/new.html.twig",
+			"settings":
+			{
+				"buffer_size": 5807,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "src/Cole/BackendBundle/Resources/views/Alumno/edit.html.twig",
+			"settings":
+			{
+				"buffer_size": 13919,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "src/Cole/BackendBundle/Resources/views/Alumno/search.html.twig",
+			"settings":
+			{
+				"buffer_size": 1573,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "src/Cole/BackendBundle/Controller/ProfesorController.php",
+			"settings":
+			{
+				"buffer_size": 15084,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "src/Cole/BackendBundle/Entity/ProfesorRepository.php",
+			"settings":
+			{
+				"buffer_size": 774,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "src/Cole/BackendBundle/Entity/Profesor.php",
+			"settings":
+			{
+				"buffer_size": 13451,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "src/Cole/BackendBundle/Form/ProfesorType.php",
+			"settings":
+			{
+				"buffer_size": 3810,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "src/Cole/BackendBundle/Resources/views/Profesor/new.html.twig",
+			"settings":
+			{
+				"buffer_size": 10212,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "src/Cole/BackendBundle/Resources/views/Profesor/edit.html.twig",
+			"settings":
+			{
+				"buffer_size": 14693,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "src/Cole/BackendBundle/Resources/views/Profesor/search.html.twig",
+			"settings":
+			{
+				"buffer_size": 1580,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "src/Cole/BackendBundle/Resources/views/Profesor/lista_profesores_busqueda_cursos.html.twig",
+			"settings":
+			{
+				"buffer_size": 2428,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "src/Cole/BackendBundle/Controller/PadresController.php",
+			"settings":
+			{
+				"buffer_size": 11935,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "src/Cole/BackendBundle/Entity/Padres.php",
+			"settings":
+			{
+				"buffer_size": 9064,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "src/Cole/BackendBundle/Form/PadresType.php",
+			"settings":
+			{
+				"buffer_size": 2541,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "src/Cole/BackendBundle/Entity/PadresRepository.php",
+			"settings":
+			{
+				"buffer_size": 594,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "src/Cole/BackendBundle/Resources/views/Padres/new.html.twig",
+			"settings":
+			{
+				"buffer_size": 1914,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "src/Cole/BackendBundle/Resources/config/routing.yml",
+			"settings":
+			{
+				"buffer_size": 983,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "src/Cole/BackendBundle/Controller/DefaultController.php",
+			"settings":
+			{
+				"buffer_size": 271,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"contents": "{% extends  '::base.html.twig' %}\n{% block head %}\n    {{parent()}}\n    <title>{% block title %}Administración CEIP SANTA TERESA{% endblock %}</title>\n\n{% endblock %}\n\n{% block stylesheets %}\n	<link href=\"{{ asset('bundles/backend/css/backend.css') }}\" rel=\"stylesheet\" type=\"text/css\" />\n	<link href=\"{{ asset('bundles/backend/js/jquery-ui/	jquery-ui.css') }}\" rel=\"stylesheet\" type=\"text/css\" />\n{% endblock %}\n\n{% block javascript %}\n    {{parent()}}\n	<script type=\"text/javascript\" src=\"{{ asset('bundles/backend/js/jquery-ui/jquery-ui.js') }}\"></script>\n	<script type=\"text/javascript\" src=\"{{ asset('bundles/fosjsrouting/js/router.js') }}\"></script>\n	<script type=\"text/javascript\" src=\"{{ path('fos_js_routing_js', {\"callback\": \"fos.Router.setData\"}) }}\"></script>\n	<script type=\"text/javascript\" src=\"{{ asset('bundles/backend/js/load.js') }}\"></script>\n	<script type=\"text/javascript\" src=\"{{ asset('bundles/backend/js/form.js') }}\"></script>\n	<script type=\"text/javascript\" src=\"{{ asset('bundles/backend/js/prueba.js') }}\"></script>\n	<script src=\"{{ asset('bundles/backend/js/jquery.mask.min.js') }}\" type=\"text/javascript\"></script>\n	<script src=\"{{ asset('bundles/backend/js/jquery.update_tab.js') }}\" type=\"text/javascript\"></script>\n\n{% endblock %}\n\n\n{% block body %}\n	<div class=\"centrado\">\n    	<header>\n			<h2> C.E.I.P SANTA TERESA </h2> \n			<h3> Área de Administración</h3>\n			\n    	</header>\n    	<nav class=\"barra_menu\">\n			 <div class=\"contenedor\">\n				<ul class=\"menu\">\n					<li><a href=\"#1\" title=\"Institución\"> Institución </a></li>\n					<li><a href=\"#2\" title=\"Docentes\"> Docentes </a></li>\n					<li class=\"activo\"><a href=\"#3\" title=\"Alumnos\"> Alumnos </a></li>\n					<li><a href=\"#4\" title=\"Académico\"> Académico </a></li>\n					<li><a href=\"#5\" title=\"Herramientas\"> Herramientas </a></li>\n					<li><a href=\"#6\" title=\"Ayuda\"> Ayuda </a></li>\n					<li class=\"salir\"><a href=\"{{path('index')}}\" title=\"Salir de Administración\"> <img src=\"{{ asset('bundles/backend/images/menu/salir.png')}}\"> <p>Salir</p></a></li>\n				</ul>\n				<div id=\"1\">\n					<div>\n						<a title=\"Datos del Centro\" href=\"javascript:void(0);\">\n							<img src=\"{{ asset('bundles/backend/images/menu/centro2.png')}}\">\n							<span> Datos del </br> Centro </span>\n						</a>\n\n						<a title=\"Periodo Lectivo\" href=\"javascript:void(0);\">\n							<img src=\"{{ asset('bundles/backend/images/menu/calendario.png')}}\">\n							<span> Periodo </br> Lectivo</span>\n						</a>							\n						<span> Información </span>\n					</div>\n					<div>\n						<a title=\"Registro Instalación\" href=\"javascript:void(0);\">\n							<img src=\"{{ asset('bundles/backend/images/menu/instalaciones.png')}}\">\n							<span> Registro </span>\n						</a>\n						<a title=\"Reserva Instalación\" href=\"javascript:void(0);\">\n							<img src=\"{{ asset('bundles/backend/images/menu/instalaciones2.png')}}\">\n							<span> Reserva </span>\n						</a>\n					\n						<a title=\"Consulta Instalación\" href=\"javascript:void(0);\">\n							<img src=\"{{ asset('bundles/backend/images/menu/consultar.png')}}\">\n							<span> Consulta </span>\n						</a>\n						<span> Instalaciones </span>\n					</div>\n					<div>\n						<a title=\"Registro Equipación\" href=\"javascript:void(0);\">\n							<img src=\"{{ asset('bundles/backend/images/menu/equipación.png')}}\">\n							<span> Registro </span>\n						</a>\n						<a title=\"Reserva Equipación\" href=\"javascript:void(0);\">\n							<img src=\"{{ asset('bundles/backend/images/menu/equipación3.png')}}\">\n							<span> Reserva </span>\n						</a>\n					\n						<a title=\"Consulta Equipación\" href=\"javascript:void(0);\">\n							<img src=\"{{ asset('bundles/backend/images/menu/consultar.png')}}\">\n							<span> Consulta </span>\n						</a>\n						<span> Equipación </span>\n					</div>\n					<div>\n						<a title=\"Registro Eventos\" href=\"javascript:void(0);\">\n							<img src=\"{{ asset('bundles/backend/images/menu/eventos.png')}}\">\n							<span> Registro </span>\n					\n						<a title=\"Consulta Eventos\" href=\"javascript:void(0);\">\n							<img src=\"{{ asset('bundles/backend/images/menu/consultar.png')}}\">\n							<span> Consulta </span>\n						</a>\n						<span> Eventos </span>\n					</div>\n					<div>\n						<a title=\"Registro Noticias\" href=\"javascript:void(0);\">\n							<img src=\"{{ asset('bundles/backend/images/menu/noticias.png')}}\">\n							<span> Registro </span>\n						</a>\n						<a title=\"Consulta Noticias\" href=\"javascript:void(0);\">\n							<img src=\"{{ asset('bundles/backend/images/menu/consultar.png')}}\">\n							<span> Consulta </span>\n						</a>\n						<span> Noticias </span>\n					</div>\n				</div>\n				<div id=\"2\">\n					<div>\n						<a id=\"profesor_nuevo\" title=\"Nuevo Profesor\" href=\"{{path('profesor_new')}}\">\n							<img src=\"{{ asset('bundles/backend/images/menu/nuevo_profesor.png')}}\">\n							<span> Nuevo</span>\n						</a>\n						<a id=\"profesor_asignar_curso\" title=\"Asignar Curso\" href=\"javascript:void(0);\">\n							<img src=\"{{ asset('bundles/backend/images/menu/asignar.png')}}\">\n							<span> Asignar <br>Curso</span>\n						</a>								\n						<span> Registro Profesor</span>\n					</div>\n					<div>\n						<a id=\"ficha_profesor\" title=\"Ficha Profesor\" href=\"{{path('profesor_search')}}\">\n							<img src=\"{{ asset('bundles/backend/images/menu/profesor2.png')}}\">\n							<span> Ficha </span>\n						</a>\n						<a title=\"Consulta Profesor\" >\n							<img src=\"{{ asset('bundles/backend/images/menu/consultar.png')}}\">\n							<span> Consulta</span>\n						</a>\n						<span> Información </span>\n					</div>\n				</div>\n				<div id=\"3\">\n					<div>\n						<a id=\"alumnos_nuevo\" title=\"Nuevo Alumno\" href=\"{{path('alumno_new')}}\">\n							<img src=\"{{ asset('bundles/backend/images/menu/matricular.png')}}\">\n							<span> Nuevo</span>\n						</a>\n						<a id=\"alumnos_antiguo\" title=\"Antiguo Alumno \" href=\"{{path('padres')}}\">\n							<img src=\"{{ asset('bundles/backend/images/menu/matricular.png')}}\">\n							<span> Antiguo</span>\n						</a>\n						<a id=\"alumnos_multiple\" title=\"Matrícula Múltiple\" href=\"javascript:void(0);\">\n							<img src=\"{{ asset('bundles/backend/images/menu/matricular+.png')}}\">\n							<span> Múltiple</span>\n						</a>\n						<a id=\"alumnos_asignar_curso\" title=\"Asignar Curso\" href=\"javascript:void(0);\">\n							<img src=\"{{ asset('bundles/backend/images/menu/asignar.png')}}\">\n							<span> Asignar <br>Curso</span>\n						</a>								\n						<span> Matrícula Alumnos</span>\n					</div>\n					<div id=\"segundo\">\n						<a title=\"Ficha Alumno\" href=\"{{path('alumno_search')}}\">\n							<img src=\"{{ asset('bundles/backend/images/menu/alumno.png')}}\">\n							<span> Ficha </span>\n						</a>\n						<a title=\"Consulta Alumno\" >\n							<img src=\"{{ asset('bundles/backend/images/menu/consultar.png')}}\">\n							<span> Consulta</span>\n						</a>\n						<span> Información </span>\n					</div>\n				</div>\n				<div id=\"4\">\n					<div>\n						<a title=\"Registro Asignatura\" href=\"{{path('asignatura_new')}}\">\n							<img src=\"{{ asset('bundles/backend/images/menu/asignaturas.png')}}\">\n							<span> Registro </span>\n						</a>					\n						<a title=\"Consulta Asignatura\" href=\"javascript:void(0);\">\n							<img src=\"{{ asset('bundles/backend/images/menu/consultar.png')}}\">\n							<span> Consulta </span>\n						</a>\n						<span> Asignaturas </span>\n					</div>\n					<div>\n						<a id=\"nuevo_curso\" title=\"Registro Curso\" href=\"{{path('curso')}}\">\n							<img src=\"{{ asset('bundles/backend/images/menu/curso.png')}}\">\n							<span> Registro </span>\n						</a>			\n						<a id=\"grupos_curso\" title=\"Nº grupos/curso\" href=\"javascript:void(0);\">\n							<img src=\"{{ asset('bundles/backend/images/menu/grupo-cursos.png')}}\">\n							<span> Grupos <br>por curso </span>\n						</a>		\n						<a id=\"consulta_curso\" title=\"Consulta Curso\" href=\"javascript:void(0);\">\n							<img src=\"{{ asset('bundles/backend/images/menu/consultar.png')}}\">\n							<span> Consulta </span>\n						</a>\n						<span> Cursos </span>\n					</div>\n					<div>\n						<a title=\"Registro Grupo\" href=\"javascript:void(0);\">\n							<img src=\"{{ asset('bundles/backend/images/menu/grupo.png')}}\">\n							<span> Registro </span>\n						</a>					\n						<a title=\"Consulta Grupo\" href=\"javascript:void(0);\">\n							<img src=\"{{ asset('bundles/backend/images/menu/consultar.png')}}\">\n							<span> Consulta </span>\n						</a>\n						<a title=\"Asignar Grupo\" href=\"javascript:void(0);\">\n							<img src=\"{{ asset('bundles/backend/images/menu/horarios2.png')}}\">\n							<span> Asignar <br>Horario</span>\n						</a>\n						<span> Grupos </span>\n					</div>\n				</div>\n				<div id=\"5\">\n					<a href=\"javascript:void(0);\"> Herramientas</a>\n				</div>\n				<div id=\"6\">\n					<a href=\"javascript:void(0);\"> Ayuda</a>\n				</div>\n				<div  class=\"oculto\" id=\"dialog-message\" title=\"Número máximo de Pestañas\">\n					<div>\n						<p>Número máximo de pestañas permitidas.</p>\n						<p><b>Por favor cierre alguna pestaña para continuar.</b></p>\n					</div>\n				</div>\n			  </div>\n			</nav>\n    	<acticle class=\"main\">\n			{% block main %} \n				<div class=\"contenido_main\"> \n					<div id=\"fondo_logo\">\n						<img alt=\"logo del colegio\"   src=\"{{ asset('bundles/backend/images/logo_trans.png')}}\">\n					</div>\n					<div id=\"tabs\">\n						<ul>\n						</ul>\n					</div>\n					<div class=\"close_tabs\">\n						<button href=\"#\" title=\"Cerrar todas las pestañas\">\n							<p>Cerrar</p>\n						</button>\n					</div>\n				</div>\n			{% endblock %}\n    	</article>\n		<footer>\n		</footer>s\n\n	</div>\n	<div  class=\"oculto\" id=\"dialog-message\" title=\"Número máximo de Pestañas\">\n		<p>Número máximo de pestañas permitidas.</p>\n		<p><b>Por favor cierre alguna pestaña para continuar.</b></p>\n	</div>\n{% endblock %}\n",
+			"file": "src/Cole/BackendBundle/Resources/views/Security/index.html.twig",
+			"file_size": 9639,
+			"file_write_time": 1459879782000000,
+			"settings":
+			{
+				"buffer_size": 9599,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "app/config/config.yml",
+			"settings":
+			{
+				"buffer_size": 2877,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "src/Cole/IntranetBundle/IntranetBundle.php",
+			"settings":
+			{
+				"buffer_size": 128,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "src/Cole/BackendBundle/Resources/views/Curso/edit.html.twig",
+			"settings":
+			{
+				"buffer_size": 2350,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "src/Cole/BackendBundle/Resources/views/Curso/index.html.twig",
+			"settings":
+			{
+				"buffer_size": 10566,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "src/Cole/BackendBundle/Resources/views/Curso/listaCursos.html.twig",
+			"settings":
+			{
+				"buffer_size": 333,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "src/Cole/BackendBundle/Resources/views/Curso/new.html.twig",
+			"settings":
+			{
+				"buffer_size": 1137,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"contents": "{% extends 'BackendBundle:Default:index.html.twig' %}\n\n{% block stylesheets %}\n    {{parent()}}\n{% endblock %}\n\n{% block javascript %}\n\n    <script type=\"text/javascript\" src=\"{{ asset('bundles/backend/js/mask.js') }}\"></script>\n\n{% endblock %}\n\n{% block body -%}\n    <h1>Curso</h1>\n\n    <table class=\"record_properties\">\n        <tbody>\n            <tr>\n                <th>Curso</th>\n                <td>{{ entity.curso }}</td>\n            </tr>\n            <tr>\n                <th>Nivel</th>\n                <td>{{ entity.nivel }}</td>\n            </tr>\n        </tbody>\n    </table>\n\n        <ul class=\"record_actions\">\n    <li>\n        <a href=\"{{ path('curso') }}\">\n            Back to the list\n        </a>\n    </li>\n    <li>\n        <a href=\"{{ path('curso_edit', { 'id': entity.id }) }}\">\n            Edit\n        </a>\n    </li>\n    <li>{{ form(delete_form) }}</li>\n</ul>\n{% endblock %}\n",
+			"file": "src/Cole/BackendBundle/Resources/views/Curso/show.html.twig",
+			"file_size": 1001,
+			"file_write_time": 1459324876000000,
+			"settings":
+			{
+				"buffer_size": 897,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "src/Cole/BackendBundle/Entity/Curso.php",
+			"settings":
+			{
+				"buffer_size": 1513,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "src/Cole/BackendBundle/Form/CursoType.php",
+			"settings":
+			{
+				"buffer_size": 875,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "src/Cole/BackendBundle/Resources/config/routing/curso.yml",
+			"settings":
+			{
+				"buffer_size": 1014,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "src/Cole/BackendBundle/Controller/CursoController.php",
+			"settings":
+			{
+				"buffer_size": 7123,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "src/Cole/BackendBundle/Resources/views/Asignatura/edit.html.twig",
+			"settings":
+			{
+				"buffer_size": 1323,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "src/Cole/BackendBundle/Resources/views/Asignatura/index.html.twig",
+			"settings":
+			{
+				"buffer_size": 4946,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "src/Cole/BackendBundle/Resources/views/Asignatura/new.html.twig",
+			"settings":
+			{
+				"buffer_size": 1176,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "src/Cole/BackendBundle/Resources/views/Asignatura/show.html.twig",
+			"settings":
+			{
+				"buffer_size": 922,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "src/Cole/BackendBundle/Entity/Asignatura.php",
+			"settings":
+			{
+				"buffer_size": 2432,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "src/Cole/BackendBundle/Form/AsignaturaType.php",
+			"settings":
+			{
+				"buffer_size": 950,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "src/Cole/BackendBundle/Resources/config/routing/asignatura.yml",
+			"settings":
+			{
+				"buffer_size": 983,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "src/Cole/BackendBundle/Controller/AsignaturaController.php",
+			"settings":
+			{
+				"buffer_size": 7034,
+				"line_ending": "Unix"
+			}
+		}
+	],
+	"build_system": "",
+	"command_palette":
+	{
+		"height": 306.0,
+		"selected_items":
+		[
+			[
+				"ins",
+				"Package Control: Install Package"
+			],
+			[
+				"instal",
+				"Package Control: Install Package"
+			],
+			[
+				"list",
+				"Package Control: List Packages"
+			],
+			[
+				"insta",
+				"Package Control: Install Package"
+			]
+		],
+		"width": 449.0
+	},
+	"console":
+	{
+		"height": 139.0
+	},
+	"distraction_free":
+	{
+		"menu_visible": true,
+		"show_minimap": false,
+		"show_open_files": false,
+		"show_tabs": false,
+		"side_bar_visible": false,
+		"status_bar_visible": false
+	},
+	"file_history":
+	[
+		"/opt/lampp/htdocs/Symfony/src/Cole/BackendBundle/Resources/views/Padres/show.html.twig",
+		"/opt/lampp/htdocs/Symfony/src/Cole/BackendBundle/Controller/GrupoController.php",
+		"/opt/lampp/htdocs/Symfony/src/Cole/BackendBundle/Resources/views/Asignatura/show.html.twig",
+		"/opt/lampp/htdocs/Symfony/src/Cole/BackendBundle/Resources/views/Asignatura/new.html.twig",
+		"/opt/lampp/htdocs/Symfony/src/Cole/BackendBundle/Resources/config/services.yml",
+		"/opt/lampp/htdocs/Symfony/src/Cole/BackendBundle/Resources/config/routing.yml",
+		"/opt/lampp/htdocs/Symfony/src/Cole/ColeBundle/Resources/public/css/estilo.css",
+		"/home/jose/Escritorio/ui.tabs.overflowResize-master/ui.tabs.overflowResize.css",
+		"/home/jose/Escritorio/jQuery-UI-Scrollable-Tabs-2.0-master/index.html",
+		"/home/jose/Escritorio/jQuery-ScrollTabs-2.0.0/css/scrolltabs.css",
+		"/opt/lampp/htdocs/Symfony/app/Resources/views/frontend.html.twig",
+		"/opt/lampp/htdocs/Symfony/src/Cole/BackendBundle/Resources/config/routing/alumno.yml",
+		"/opt/lampp/htdocs/Symfony/src/Cole/BackendBundle/Resources/views/Alumno/edit.html.twig",
+		"/opt/lampp/htdocs/Symfony/src/Cole/BackendBundle/Resources/views/Padres/new.html.twig",
+		"/media/Data/MEMORIA/Proyecto Parada/optinet236-master/app/AppKernel.php",
+		"/opt/lampp/htdocs/Symfony/app/SymfonyRequirements.php",
+		"/opt/lampp/htdocs/Symfony/src/Cole/BackendBundle/Resources/public/js/formulario_busqueda_alumno.js",
+		"/opt/lampp/htdocs/Symfony/src/Cole/BackendBundle/Resources/public/js/formulario_busqueda_profesor.js",
+		"/opt/lampp/htdocs/Symfony/src/Cole/BackendBundle/Resources/views/Curso/listaCursos.html.twig",
+		"/opt/lampp/htdocs/Symfony/app/config/config.yml",
+		"/media/Data/MEMORIA/Proyecto Parada/optinet-master/optinet-master/src/mio/mioBundle/Controller/EmpleadoController.php",
+		"/opt/lampp/htdocs/Symfony/src/Cole/BackendBundle/Controller/PadresController.php",
+		"/opt/lampp/htdocs/Symfony/src/Cole/BackendBundle/Resources/views/Padres/index.html.twig",
+		"/opt/lampp/htdocs/Symfony/src/Cole/BackendBundle/Resources/views/Padres/edit.html.twig",
+		"/opt/lampp/htdocs/Symfony/src/Cole/BackendBundle/Resources/views/Security/login.html.twig",
+		"/opt/lampp/htdocs/Symfony/src/Cole/BackendBundle/Controller/AlumnoController.php",
+		"/opt/lampp/htdocs/Symfony/src/Cole/BackendBundle/Entity/Alumno.php",
+		"/opt/lampp/htdocs/Symfony/src/Cole/BackendBundle/Form/AlumnoType.php",
+		"/opt/lampp/htdocs/Symfony/src/Cole/BackendBundle/Resources/views/Alumno/new.html.twig",
+		"/opt/lampp/htdocs/Symfony/src/Cole/BackendBundle/Entity/Curso.php",
+		"/opt/lampp/htdocs/Symfony/src/Cole/BackendBundle/Controller/CursoController.php",
+		"/opt/lampp/htdocs/Symfony/src/Cole/BackendBundle/Resources/config/routing/curso.yml",
+		"/media/Data/MEMORIA/Proyecto Parada/optinet-master/optinet-master/src/mio/mioBundle/Controller/PedidoController.php",
+		"/media/Data/MEMORIA/Proyecto Parada/optinet-master/optinet-master/src/mio/mioBundle/Controller/MedicoController.php",
+		"/media/Data/MEMORIA/Proyecto Parada/optinet-master/optinet-master/src/mio/mioBundle/Entity/Empleado.php",
+		"/media/Data/MEMORIA/Proyecto Parada/optinet-master/optinet-master/src/mio/mioBundle/Form/EmpleadoType.php",
+		"/opt/lampp/htdocs/Symfony/src/Cole/BackendBundle/Form/CursoType.php",
+		"/home/jose/.cache/.fr-opEmXJ/index.php",
+		"/opt/lampp/htdocs/Symfony/src/Cole/BackendBundle/Resources/public/js/search_forms.js",
+		"/media/Data/MEMORIA/Proyecto Parada/optinet-master/optinet-master/src/mio/mioBundle/Controller/UsuarioController.php",
+		"/opt/lampp/htdocs/Symfony/src/Cole/BackendBundle/Resources/public/js/nuevo_profesor.js",
+		"/opt/lampp/htdocs/Symfony/src/Cole/BackendBundle/Entity/Profesor.php",
+		"/opt/lampp/htdocs/Symfony/web/bundles/backend/css/easyui.css",
+		"/opt/lampp/htdocs/Symfony/web/bundles/backend/images/logo_trans.png",
+		"/opt/lampp/htdocs/Symfony/src/Cole/ColeBundle/Resources/views/Cole/otros-servicios.html.twig",
+		"/opt/lampp/htdocs/Symfony/src/Cole/ColeBundle/Resources/views/Cole/oferta-educativa.html.twig",
+		"/opt/lampp/htdocs/Symfony/src/Cole/ColeBundle/Resources/views/Cole/centro.html.twig",
+		"/opt/lampp/htdocs/Symfony/src/Cole/ColeBundle/Resources/views/Cole/noticias.html.twig",
+		"/media/Data/MEMORIA/Proyecto Parada/optinet-master/optinet-master/src/mio/mioBundle/Controller/CitaController.php",
+		"/media/Data/MEMORIA/Proyecto Parada/optinet-master/optinet-master/src/mio/mioBundle/Controller/SecurityController.php",
+		"/home/jose/Escritorio/ COLE v1/estilo.css",
+		"/home/jose/Descargas/Duda sobre como subir una imagen con AJAX/upload.php",
+		"/home/jose/Descargas/Duda sobre como subir una imagen con AJAX/formulario_prueba.php",
+		"/media/Data/MEMORIA/Proyecto Parada/optinet-master/optinet-master/src/mio/mioBundle/Form/MedicoType.php",
+		"/media/Data/MEMORIA/Proyecto Parada/optinet-master/optinet-master/src/mio/mioBundle/Form/ProductoType.php",
+		"/media/Data/MEMORIA/Proyecto Parada/optinet-master/optinet-master/src/mio/mioBundle/Entity/OperacionRepository.php",
+		"/opt/lampp/htdocs/Symfony/src/Cole/BackendBundle/Resources/public/js/mask.js",
+		"/opt/lampp/htdocs/Symfony/src/Cole/BackendBundle/Resources/public/js/nuevo.js",
+		"/opt/lampp/htdocs/Symfony/src/Cole/BackendBundle/EventListener/UniqueResponsible.php",
+		"/opt/lampp/htdocs/Symfony/src/Cole/BackendBundle/Controller/DefaultController.php",
+		"/media/Data/MEMORIA/Proyecto Parada/optinet-master/optinet-master/src/mio/mioBundle/Entity/UsuarioRepository.php",
+		"/media/Data/MEMORIA/Proyecto Parada/optinet-master/optinet-master/src/mio/mioBundle/Entity/ProveedorRepository.php",
+		"/opt/lampp/htdocs/Symfony/src/Cole/BackendBundle/Entity/ProfesorRepository.php",
+		"/opt/lampp/htdocs/Symfony/src/Cole/BackendBundle/Entity/AlumnoRepository.php",
+		"/media/Data/MEMORIA/Proyecto Parada/optinet-master/optinet-master/src/mio/mioBundle/Entity/Medico.php",
+		"/media/Data/MEMORIA/Proyecto Parada/optinet-master/optinet-master/src/mio/mioBundle/Entity/Usuario.php",
+		"/media/Data/MEMORIA/Proyecto Parada/optinet-master/optinet-master/src/mio/mioBundle/Entity/Contrasena.php",
+		"/opt/lampp/htdocs/Symfony/vendor/symfony/symfony/src/Symfony/Component/Validator/Constraints/EqualTo.php",
+		"/opt/lampp/htdocs/Symfony/src/Cole/BackendBundle/Resources/public/js/jquery-ui/jquery-ui.min.css",
+		"/opt/lampp/htdocs/Symfony/src/Cole/BackendBundle/Controller/ProfesorController.php",
+		"/home/jose/Descargas/centrar_divs_verticalmente/estilos.css",
+		"/media/Data/MEMORIA/Proyecto Parada/optinet-master/optinet-master/src/mio/mioBundle/Form/UsuarioType.php",
+		"/media/Data/MEMORIA/Proyecto Parada/optinet-master/optinet-master/src/mio/mioBundle/Entity/Role.php",
+		"/opt/lampp/htdocs/Symfony/src/Cole/BackendBundle/Resources/views/Padres/crear_padres.html.twig",
+		"/opt/lampp/htdocs/Symfony/web/favicon2.ico",
+		"/home/jose/Escritorio/ COLE v1/base.html.twig",
+		"/opt/lampp/htdocs/Symfony/src/Cole/BackendBundle/Resources/views/Profesor/edit.html.twig",
+		"/media/Data/MEMORIA/Proyecto Parada/optinet236-master/src/mio/mioBundle/Form/FamiliaType.php",
+		"/media/Data/MEMORIA/Proyecto Parada/optinet236-master/src/mio/mioBundle/Form/EmpleadoType.php",
+		"/media/Data/MEMORIA/Proyecto Parada/optinet236-master/src/mio/mioBundle/Form/ProveedorType.php",
+		"/media/Data/MEMORIA/Proyecto Parada/optinet236-master/src/mio/mioBundle/Form/ProductoType.php",
+		"/media/Data/MEMORIA/Proyecto Parada/optinet236-master/src/mio/mioBundle/Form/UsuarioType.php",
+		"/media/Data/MEMORIA/Proyecto Parada/optinet236-master/src/mio/mioBundle/Entity/Usuario.php",
+		"/opt/lampp/htdocs/Symfony/src/Cole/BackendBundle/Resources/public/js/jquery-ui/jquery-ui.js",
+		"/opt/lampp/htdocs/Symfony/src/Cole/BackendBundle/Resources/public/js/jquery-ui/jquery-ui.ui.js",
+		"/opt/lampp/htdocs/Symfony/src/Cole/ColeBundle/Resources/public/js/jquery-1.11.2.js",
+		"/opt/lampp/htdocs/Symfony/web/bundles/backend/js/load.js",
+		"/opt/lampp/htdocs/Symfony/web/bundles/backend/js/form.js",
+		"/opt/lampp/etc/httpd.conf",
+		"/home/jose/.cache/.fr-cPVmN0/basic-jquery-validation-form/index.html",
+		"/opt/lampp/htdocs/Symfony/app/config/routing_dev.yml",
+		"/home/jose/Escritorio/Prueba_Repositorio/README.TXT",
+		"/home/jose/Escritorio/Prueba_Repositorio/README.txt",
+		"/home/jose/Escritorio/Prueba_Repositorio/.gitignore",
+		"/opt/lampp/htdocs/Symfony/README.md",
+		"/opt/lampp/htdocs/Symfony/.gitignore",
+		"/opt/lampp/htdocs/Symfony/UPGRADE.md",
+		"/opt/lampp/htdocs/Symfony/UPGRADE-2.3.md",
+		"/home/jose/.cache/.fr-XAlmfy/u537166529/public_html/index.php",
+		"/opt/lampp/htdocs/Symfony/src/Cole/BackendBundle/Resources/public/js/load.js",
+		"/opt/lampp/htdocs/Symfony/src/Cole/BackendBundle/Resources/public/js/jquery.maskedinput.js",
+		"/opt/lampp/htdocs/Symfony/app/AppKernel.php",
+		"/opt/lampp/htdocs/Symfony/src/Cole/BackendBundle/Resources/config/routing/padres.yml",
+		"/media/Data/MEMORIA/Proyecto Parada/optinet-master/optinet-master/src/mio/mioBundle/Resources/public/css/style.css",
+		"/opt/lampp/htdocs/Symfony/src/Cole/ColeBundle/Resources/views/Noticias/noticia.html.twig",
+		"/opt/lampp/htdocs/Symfony/vendor/symfony/symfony/src/Symfony/Component/Security/Core/Encoder/BasePasswordEncoder.php",
+		"/media/Data/MEMORIA/Proyecto Parada/optinet-master/optinet-master/src/mio/mioBundle/Controller/DefaultController.php",
+		"/opt/lampp/htdocs/Symfony/src/Cole/BackendBundle/Resources/views/Profesor/index.html.twig",
+		"/opt/lampp/htdocs/Symfony/src/Cole/BackendBundle/Form/ProfesorType.php",
+		"/opt/lampp/htdocs/Symfony/src/Cole/BackendBundle/Resources/views/Profesor/show.html.twig",
+		"/opt/lampp/htdocs/Symfony/src/Cole/BackendBundle/Resources/public/js/tabs.js",
+		"/opt/lampp/htdocs/Symfony/src/Cole/BackendBundle/Resources/public/js/jquery-ui/jquery-ui.css",
+		"/opt/lampp/htdocs/Symfony/src/Cole/BackendBundle/Resources/public/js/jquery-ui/jquery-ui.theme.css",
+		"/home/jose/Escritorio/jquery-ui-1.11.4/jquery-ui.theme.css",
+		"/home/jose/Escritorio/jquery-easyui-1.4.2/jquery.easyui.min.js",
+		"/home/jose/Escritorio/jquery-easyui-1.4.2/demo/tabs/tabstools.html",
+		"/home/jose/Escritorio/jquery-easyui-1.4.2/jquery.min.js",
+		"/opt/lampp/htdocs/Symfony/web/bundles/backend/js/jquery-ui-1.11.4.custom/jquery-ui.min.css",
+		"/opt/lampp/htdocs/Symfony/src/Cole/BackendBundle/Form/PadresType.php",
+		"/opt/lampp/htdocs/Symfony/app/logs/dev.log",
+		"/opt/lampp/htdocs/Symfony/src/Cole/BackendBundle/Entity/User.php",
+		"/opt/lampp/htdocs/Symfony/src/Cole/BackendBundle/Controller/UserController.php",
+		"/opt/lampp/htdocs/Symfony/vendor/symfony/symfony/src/Symfony/Component/Security/Core/Encoder/PlaintextPasswordEncoder.php",
+		"/opt/lampp/htdocs/Symfony/vendor/symfony/symfony/src/Symfony/Component/Security/Core/Encoder/EncoderFactory.php",
+		"/opt/lampp/htdocs/Symfony/vendor/symfony/symfony/src/Symfony/Component/Security/Core/Encoder/EncoderFactoryInterface.php",
+		"/media/Data/MEMORIA/Proyecto Parada/optinet-master/optinet-master/src/mio/mioBundle/ListenerCrud.php",
+		"/opt/lampp/htdocs/Symfony/src/Cole/BackendBundle/Resources/views/Default/login.html.twig",
+		"/opt/lampp/htdocs/Symfony/src/Cole/BackendBundle/Entity/Padres.php"
+	],
+	"find":
+	{
+		"height": 35.0
+	},
+	"find_in_files":
+	{
+		"height": 0.0,
+		"where_history":
+		[
+			"/opt/lampp/htdocs/Symfony/src/Cole/BackendBundle/Resources/config/routing",
+			"/opt/lampp/htdocs/Symfony/src/Cole/BackendBundle/Resources/views/Profesor",
+			"/opt/lampp/htdocs/Symfony/src/Cole/BackendBundle/Resources/public",
+			""
+		]
+	},
+	"find_state":
+	{
+		"case_sensitive": true,
+		"find_history":
+		[
+			"sigla",
+			"especifica",
+			"Especifica",
+			"cursos",
+			"curso_nivel",
+			"lista_cursos",
+			"PUT",
+			"edit_alumno_submit",
+			"edit_",
+			"edit_alumno_submit",
+			"edit",
+			"createView",
+			"40px",
+			"form",
+			"edit",
+			"alumno_edit",
+			"alumno_update",
+			"url",
+			"hola",
+			"edit",
+			"editar",
+			"id",
+			"curso",
+			"cursos",
+			"6",
+			"dialog-message",
+			"Por favor cierre alguna pestaña para continuar.",
+			"tabs",
+			"tabs li a",
+			"tabs",
+			"86",
+			"84",
+			"8486",
+			"84",
+			"botones",
+			"click",
+			"_edit",
+			"split",
+			"alumno_edit",
+			"edit",
+			"alumn_edit",
+			"padres_nuevo",
+			"readonly",
+			"onlyread",
+			"toUpperCase",
+			"toUpperCase()",
+			"form",
+			"padres",
+			"padres_",
+			"padres_contenido",
+			"padres",
+			"editar",
+			"editar_responsable1",
+			"modal",
+			"editar_responsable1_modal",
+			"show",
+			"hidden",
+			"hover",
+			"form",
+			"No se ha encontrado el alumno",
+			"table",
+			"submit",
+			"8",
+			"action",
+			"DNI",
+			"i",
+			"each",
+			"submit",
+			"validation",
+			"izquierda",
+			"blur",
+			"trim",
+			"submit",
+			"  function validateLetterInitial(field) {\n    if(!$(field).val()){\n      return true;\n    }\n    var filter = /^[A-Za-záéíóúÁÉÍÓÚüÜñÑ]/;\n    if (!filter.test($(field).val())) {\n      $(field).prev().append(\"<span class='error'>Dato inválido</span>\");\n      return false\n    }\n    else{\n      return true;\n    }\n  }",
+			"LetterInitial",
+			"submit",
+			"realizados",
+			"izquierda",
+			"hover",
+			"            <",
+			"}\n",
+			"click",
+			"''",
+			"\"\"",
+			"submit",
+			"tab-container",
+			"click",
+			"alert",
+			"h3",
+			"click",
+			"keydown",
+			"keydown	",
+			"edit",
+			"invalid",
+			"rinvalid",
+			"removeClass(\"invalid)",
+			"removeClass(\"invalid\")",
+			"blur",
+			"profesor",
+			"blur",
+			"comprobar_profesor",
+			"data",
+			"invalid",
+			"validation",
+			"comprobar_profesor",
+			"blur",
+			"profesor",
+			"find",
+			"eliminar_responsable",
+			"click",
+			"modal",
+			"eliminar_responsable2_modal",
+			"full_name_div",
+			"disabled",
+			"keyup",
+			"value",
+			"option",
+			"keyup",
+			"end",
+			"small",
+			"normal",
+			"email",
+			"limpiarForm",
+			"limpiar",
+			"alert",
+			".no",
+			"no",
+			"parent"
+		],
+		"highlight": true,
+		"in_selection": false,
+		"preserve_case": false,
+		"regex": false,
+		"replace_history":
+		[
+		],
+		"reverse": false,
+		"show_context": false,
+		"use_buffer2": false,
+		"whole_word": true,
+		"wrap": true
+	},
+	"groups":
+	[
+		{
+			"selected": 1,
+			"sheets":
+			[
+				{
+					"buffer": 0,
+					"file": "web/bundles/backend/css/backend.css",
+					"settings":
+					{
+						"buffer_size": 21649,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								19768,
+								19768
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/CSS/CSS.tmLanguage"
+						},
+						"translation.x": 0.0,
+						"translation.y": 19727.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 1,
+					"file": "src/Cole/BackendBundle/Resources/views/Default/index.html.twig",
+					"settings":
+					{
+						"buffer_size": 9602,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								7070,
+								7070
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/PHP-Twig/Syntaxes/HTML (Twig).tmLanguage",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 2,
+					"file": "web/bundles/backend/js/load.js",
+					"settings":
+					{
+						"buffer_size": 14434,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								14088,
+								14088
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/JavaScript/JavaScript.tmLanguage",
+							"tab_size": 2,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 6238.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 3,
+					"file": "web/bundles/backend/js/form.js",
+					"settings":
+					{
+						"buffer_size": 3139,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								2580,
+								2580
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/JavaScript/JavaScript.tmLanguage",
+							"tab_size": 2,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 932.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 4,
+					"file": "web/bundles/backend/js/mask.js",
+					"settings":
+					{
+						"buffer_size": 31211,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								25306,
+								25306
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/JavaScript/JavaScript.tmLanguage",
+							"tab_size": 2,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 55.0,
+						"translation.y": 15606.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 5,
+					"file": "web/bundles/backend/js/prueba.js",
+					"settings":
+					{
+						"buffer_size": 50126,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								47011,
+								47011
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/JavaScript/JavaScript.tmLanguage",
+							"tab_size": 2,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 23732.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 6,
+					"file": "src/Cole/BackendBundle/Resources/config/routing/alumno.yml",
+					"settings":
+					{
+						"buffer_size": 1838,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								1056,
+								1056
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/YAML/YAML.tmLanguage",
+							"tab_size": 4,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 7,
+					"file": "src/Cole/BackendBundle/Resources/config/routing/padres.yml",
+					"settings":
+					{
+						"buffer_size": 1261,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								340,
+								340
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/YAML/YAML.tmLanguage",
+							"tab_size": 4,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 8,
+					"file": "src/Cole/BackendBundle/Resources/config/routing/profesor.yml",
+					"settings":
+					{
+						"buffer_size": 1816,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								1604,
+								1604
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/YAML/YAML.tmLanguage",
+							"tab_size": 4,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 756.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 9,
+					"file": "src/Cole/BackendBundle/Entity/Alumno.php",
+					"settings":
+					{
+						"buffer_size": 12721,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								4585,
+								4585
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/PHP/PHP.tmLanguage",
+							"tab_size": 4,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 3217.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 10,
+					"file": "src/Cole/BackendBundle/Entity/AlumnoRepository.php",
+					"settings":
+					{
+						"buffer_size": 1036,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								564,
+								564
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/PHP/PHP.tmLanguage",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 108.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 11,
+					"file": "src/Cole/BackendBundle/Controller/AlumnoController.php",
+					"settings":
+					{
+						"buffer_size": 19528,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								15312,
+								15312
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/PHP/PHP.tmLanguage",
+							"tab_size": 4,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 7954.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 12,
+					"file": "src/Cole/BackendBundle/Form/AlumnoType.php",
+					"settings":
+					{
+						"buffer_size": 4524,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								3591,
+								3591
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/PHP/PHP.tmLanguage",
+							"tab_size": 4,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 162.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 13,
+					"file": "src/Cole/BackendBundle/Resources/views/Alumno/new.html.twig",
+					"settings":
+					{
+						"buffer_size": 5807,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								0,
+								0
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/PHP-Twig/Syntaxes/HTML (Twig).tmLanguage",
+							"tab_size": 4,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 14,
+					"file": "src/Cole/BackendBundle/Resources/views/Alumno/edit.html.twig",
+					"settings":
+					{
+						"buffer_size": 13919,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								1941,
+								1941
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/PHP-Twig/Syntaxes/HTML (Twig).tmLanguage",
+							"tab_size": 2,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 877.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 15,
+					"file": "src/Cole/BackendBundle/Resources/views/Alumno/search.html.twig",
+					"settings":
+					{
+						"buffer_size": 1573,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								832,
+								832
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/PHP-Twig/Syntaxes/HTML (Twig).tmLanguage",
+							"tab_size": 4,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 810.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 16,
+					"file": "src/Cole/BackendBundle/Controller/ProfesorController.php",
+					"settings":
+					{
+						"buffer_size": 15084,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								14247,
+								14247
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/PHP/PHP.tmLanguage",
+							"tab_size": 4,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 7503.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 17,
+					"file": "src/Cole/BackendBundle/Entity/ProfesorRepository.php",
+					"settings":
+					{
+						"buffer_size": 774,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								80,
+								80
+							],
+							[
+								567,
+								567
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/PHP/PHP.tmLanguage",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 18,
+					"file": "src/Cole/BackendBundle/Entity/Profesor.php",
+					"settings":
+					{
+						"buffer_size": 13451,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								2972,
+								2972
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/PHP/PHP.tmLanguage",
+							"tab_size": 4,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 2708.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 19,
+					"file": "src/Cole/BackendBundle/Form/ProfesorType.php",
+					"settings":
+					{
+						"buffer_size": 3810,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								2959,
+								2959
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/PHP/PHP.tmLanguage",
+							"tab_size": 4,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 270.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 20,
+					"file": "src/Cole/BackendBundle/Resources/views/Profesor/new.html.twig",
+					"settings":
+					{
+						"buffer_size": 10212,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								9831,
+								9831
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/PHP-Twig/Syntaxes/HTML (Twig).tmLanguage",
+							"tab_size": 4,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 137.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 21,
+					"file": "src/Cole/BackendBundle/Resources/views/Profesor/edit.html.twig",
+					"settings":
+					{
+						"buffer_size": 14693,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								814,
+								814
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/PHP-Twig/Syntaxes/HTML (Twig).tmLanguage",
+							"tab_size": 2,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 22,
+					"file": "src/Cole/BackendBundle/Resources/views/Profesor/search.html.twig",
+					"settings":
+					{
+						"buffer_size": 1580,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								758,
+								758
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/PHP-Twig/Syntaxes/HTML (Twig).tmLanguage",
+							"tab_size": 4,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 162.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 23,
+					"file": "src/Cole/BackendBundle/Resources/views/Profesor/lista_profesores_busqueda_cursos.html.twig",
+					"settings":
+					{
+						"buffer_size": 2428,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								0,
+								0
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/PHP-Twig/Syntaxes/HTML (Twig).tmLanguage",
+							"tab_size": 4,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 864.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 24,
+					"file": "src/Cole/BackendBundle/Controller/PadresController.php",
+					"settings":
+					{
+						"buffer_size": 11935,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								565,
+								565
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/PHP/PHP.tmLanguage",
+							"tab_size": 4,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 388.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 25,
+					"file": "src/Cole/BackendBundle/Entity/Padres.php",
+					"settings":
+					{
+						"buffer_size": 9064,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								3345,
+								3345
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/PHP/PHP.tmLanguage",
+							"tab_size": 4,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 1955.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 26,
+					"file": "src/Cole/BackendBundle/Form/PadresType.php",
+					"settings":
+					{
+						"buffer_size": 2541,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								1760,
+								1760
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/PHP/PHP.tmLanguage",
+							"tab_size": 4,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 750.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 27,
+					"file": "src/Cole/BackendBundle/Entity/PadresRepository.php",
+					"settings":
+					{
+						"buffer_size": 594,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								380,
+								380
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/PHP/PHP.tmLanguage",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 28,
+					"file": "src/Cole/BackendBundle/Resources/views/Padres/new.html.twig",
+					"settings":
+					{
+						"buffer_size": 1914,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								401,
+								401
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/PHP-Twig/Syntaxes/HTML (Twig).tmLanguage",
+							"tab_size": 4,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 29,
+					"file": "src/Cole/BackendBundle/Resources/config/routing.yml",
+					"settings":
+					{
+						"buffer_size": 983,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								74,
+								74
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/YAML/YAML.tmLanguage",
+							"tab_size": 4,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 30,
+					"file": "src/Cole/BackendBundle/Controller/DefaultController.php",
+					"settings":
+					{
+						"buffer_size": 271,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								247,
+								247
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/PHP/PHP.tmLanguage"
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 31,
+					"file": "src/Cole/BackendBundle/Resources/views/Security/index.html.twig",
+					"settings":
+					{
+						"buffer_size": 9599,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								9599,
+								9599
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/PHP-Twig/Syntaxes/HTML (Twig).tmLanguage",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 32,
+					"file": "app/config/config.yml",
+					"settings":
+					{
+						"buffer_size": 2877,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								0,
+								0
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/YAML/YAML.tmLanguage",
+							"tab_size": 4,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 449.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 33,
+					"file": "src/Cole/IntranetBundle/IntranetBundle.php",
+					"settings":
+					{
+						"buffer_size": 128,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								0,
+								0
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/PHP/PHP.tmLanguage"
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				}
+			]
+		},
+		{
+			"selected": 8,
+			"sheets":
+			[
+				{
+					"buffer": 34,
+					"file": "src/Cole/BackendBundle/Resources/views/Curso/edit.html.twig",
+					"settings":
+					{
+						"buffer_size": 2350,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								1235,
+								1235
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/PHP-Twig/Syntaxes/HTML (Twig).tmLanguage",
+							"tab_size": 4,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 486.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 35,
+					"file": "src/Cole/BackendBundle/Resources/views/Curso/index.html.twig",
+					"settings":
+					{
+						"buffer_size": 10566,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								75,
+								75
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/PHP-Twig/Syntaxes/HTML (Twig).tmLanguage",
+							"tab_size": 4,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 36,
+					"file": "src/Cole/BackendBundle/Resources/views/Curso/listaCursos.html.twig",
+					"settings":
+					{
+						"buffer_size": 333,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								204,
+								204
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/PHP-Twig/Syntaxes/HTML (Twig).tmLanguage"
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 37,
+					"file": "src/Cole/BackendBundle/Resources/views/Curso/new.html.twig",
+					"settings":
+					{
+						"buffer_size": 1137,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								1098,
+								1098
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/PHP-Twig/Syntaxes/HTML (Twig).tmLanguage",
+							"tab_size": 4,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 432.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 38,
+					"file": "src/Cole/BackendBundle/Resources/views/Curso/show.html.twig",
+					"settings":
+					{
+						"buffer_size": 897,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								557,
+								557
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/PHP-Twig/Syntaxes/HTML (Twig).tmLanguage",
+							"tab_size": 4,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 39,
+					"file": "src/Cole/BackendBundle/Entity/Curso.php",
+					"settings":
+					{
+						"buffer_size": 1513,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								617,
+								617
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/PHP/PHP.tmLanguage",
+							"tab_size": 4,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 702.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 40,
+					"file": "src/Cole/BackendBundle/Form/CursoType.php",
+					"settings":
+					{
+						"buffer_size": 875,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								859,
+								859
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/PHP/PHP.tmLanguage",
+							"tab_size": 4,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 230.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 41,
+					"file": "src/Cole/BackendBundle/Resources/config/routing/curso.yml",
+					"settings":
+					{
+						"buffer_size": 1014,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								334,
+								334
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/YAML/YAML.tmLanguage",
+							"tab_size": 4,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 486.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 42,
+					"file": "src/Cole/BackendBundle/Controller/CursoController.php",
+					"settings":
+					{
+						"buffer_size": 7123,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								204,
+								204
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/PHP/PHP.tmLanguage",
+							"tab_size": 4,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				}
+			]
+		},
+		{
+			"selected": 7,
+			"sheets":
+			[
+				{
+					"buffer": 43,
+					"file": "src/Cole/BackendBundle/Resources/views/Asignatura/edit.html.twig",
+					"settings":
+					{
+						"buffer_size": 1323,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								1000,
+								1000
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/PHP-Twig/Syntaxes/HTML (Twig).tmLanguage",
+							"tab_size": 4,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 338.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 44,
+					"file": "src/Cole/BackendBundle/Resources/views/Asignatura/index.html.twig",
+					"settings":
+					{
+						"buffer_size": 4946,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								4632,
+								4632
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/PHP-Twig/Syntaxes/HTML (Twig).tmLanguage",
+							"tab_size": 4,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 2156.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 45,
+					"file": "src/Cole/BackendBundle/Resources/views/Asignatura/new.html.twig",
+					"settings":
+					{
+						"buffer_size": 1176,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								891,
+								891
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/PHP-Twig/Syntaxes/HTML (Twig).tmLanguage",
+							"tab_size": 4,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 356.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 46,
+					"file": "src/Cole/BackendBundle/Resources/views/Asignatura/show.html.twig",
+					"settings":
+					{
+						"buffer_size": 922,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								479,
+								479
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/PHP-Twig/Syntaxes/HTML (Twig).tmLanguage",
+							"tab_size": 4,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 194.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 47,
+					"file": "src/Cole/BackendBundle/Entity/Asignatura.php",
+					"settings":
+					{
+						"buffer_size": 2432,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								1613,
+								1613
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/PHP/PHP.tmLanguage",
+							"tab_size": 4,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 1684.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 48,
+					"file": "src/Cole/BackendBundle/Form/AsignaturaType.php",
+					"settings":
+					{
+						"buffer_size": 950,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								519,
+								519
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/PHP/PHP.tmLanguage",
+							"tab_size": 4,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 216.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 49,
+					"file": "src/Cole/BackendBundle/Resources/config/routing/asignatura.yml",
+					"settings":
+					{
+						"buffer_size": 983,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								159,
+								159
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/YAML/YAML.tmLanguage",
+							"tab_size": 4,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 50,
+					"file": "src/Cole/BackendBundle/Controller/AsignaturaController.php",
+					"settings":
+					{
+						"buffer_size": 7034,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								321,
+								321
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/PHP/PHP.tmLanguage",
+							"tab_size": 4,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 213.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				}
+			]
+		}
+	],
+	"incremental_find":
+	{
+		"height": 0.0
+	},
+	"input":
+	{
+		"height": 33.0
+	},
+	"layout":
+	{
+		"cells":
+		[
+			[
+				0,
+				0,
+				1,
+				1
+			],
+			[
+				0,
+				1,
+				1,
+				2
+			],
+			[
+				0,
+				2,
+				1,
+				3
+			]
+		],
+		"cols":
+		[
+			0.0,
+			1.0
+		],
+		"rows":
+		[
+			0.0,
+			0.39938510185,
+			0.597590711176,
+			1.0
+		]
+	},
+	"menu_visible": true,
+	"output.find_results":
+	{
+		"height": 100.0
+	},
+	"replace":
+	{
+		"height": 64.0
+	},
+	"save_all_on_build": true,
+	"select_file":
+	{
+		"height": 0.0,
+		"selected_items":
+		[
+		],
+		"width": 0.0
+	},
+	"select_project":
+	{
+		"height": 500.0,
+		"selected_items":
+		[
+		],
+		"width": 380.0
+	},
+	"show_minimap": true,
+	"show_open_files": false,
+	"show_tabs": true,
+	"side_bar_visible": true,
+	"side_bar_width": 192.0,
+	"status_bar_visible": true
+}

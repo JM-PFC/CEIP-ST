@@ -5,21 +5,245 @@
 {% endblock %}
 
 {% block javascript %}
-     {{parent()}}
-  {% endblock %}
+   
+    <script type="text/javascript" src="{{ asset('bundles/backend/js/mask.js') }}"></script>
+
+{% endblock %}
 
 {% block body %}
-		<div>
-    <h1>Profesor creation</h1>
+    {{form_start(form, {'action':path('profesor_create'),'method':'POST','attr':{'class':'formulario_profesor', 'id':'profesor_nuevo', novalidate:'novalidate', 'autocomplete':'off'}})}}
 
-    {{ form(form) }}
 
-        <ul class="record_actions">
-    <li>
-        <a href="{{ path('profesor') }}">
-            Back to the list
-        </a>
-    </li>
-</ul>
-	</div>
+     {{ form_errors(form) }}
+    <div >
+    <div id="tab-container">
+        <ul >
+            <li class="selected"><a href="javascript:void(0);" name="tab1">Datos Personales</a></li>
+            <li><a href="javascript:void(0);" name="tab2">Perfil<br>Académico</a></li>
+            <li><a href="javascript:void(0);" name="tab3">Perfil<br>Profesional</a></li>
+
+        </ul>
+    </div>
+        
+    <div id="content-form-menu">
+        <div id="tab1" >
+        <fieldset class="ajustada">
+            <legend>Registro de Profesores</legend>
+            <div class="parent">
+                <div class="child">
+                    <div class="izquierda">
+                        {{ form_row(form.dni) }}
+                        {{ form_row(form.nombre) }}
+                        {{ form_row(form.apellido1) }}
+                        {{ form_row(form.apellido2) }}
+                        {{ form_row(form.sexo) }}
+                        {{ form_row(form.direccion) }}
+                        {{ form_row(form.localidad) }}
+                        {{ form_row(form.provincia) }}
+                        {{ form_row(form.cp) }}
+
+                        {{ form_row(form.fechaNacimiento) }}
+                        {{ form_row(form.telefono) }}
+                        {{ form_row(form.movil) }}
+                    </div>
+
+                    <div class="block-one">
+                        <div class="izquierda">
+                            {{ form_row(form.email) }}
+                            <div class="ancho">
+                                <label class="required">Foto</label>
+                                {{ form_widget(form.foto) }}
+                                <div id="leyenda"></div>
+                            </div>
+                        </div>
+                    </div> 
+                </div>
+            </div>    
+        </fieldset>       
+
+        </div>
+       
+        <div id="tab2">
+            <fieldset>
+            <legend>Perfil Académico</legend>
+            <div class="parent">
+            <div class="child">
+                <div>
+                    <label class="long">Estudios realizados</label>
+                    <label class="medium">Institución</label>
+                    <label class="medium">Localidad/Provincia</label>
+                    <label class="short">Año</label>
+              </div>
+                <div>
+                    <div class="long">
+                        <input id="perfil_acamedico1"  validation="Words"></input>
+                    </div>
+                    <div class="medium">
+                        <input id="perfil_acamedico2"  validation="Words"></input>
+                    </div>
+                    <div class="medium">
+                        <input  id="perfil_acamedico3" validation="Words"></input>
+                    </div>
+                    <div class="short">
+                        <input  id="año_acamedico4" validation="Numbers"></input>
+                    </div>
+                </div>
+                <div>
+                    <div class="long">
+                        <input id="perfil_acamedico5"  validation="Words"></input>
+                    </div>
+                    <div class="medium">
+                        <input id="perfil_acamedico6"  validation="Words"></input>
+                    </div>
+                    <div class="medium">
+                        <input  id="perfil_acamedico7" validation="Words"></input>
+                    </div>
+                    <div class="short">
+                        <input  id="año_acamedico8" validation="Numbers"></input>
+                    </div>
+                </div>
+                <div>
+                    <div class="long">
+                        <input id="perfil_acamedico9"  validation="Words"></input>
+                    </div>
+                    <div class="medium">
+                        <input id="perfil_acamedico10"  validation="Words"></input>
+                    </div>
+                    <div class="medium">
+                        <input  id="perfil_acamedico11" validation="Words"></input>
+                    </div>
+                    <div class="short">
+                        <input  id="año_acamedico12" validation="Numbers"></input>
+                    </div>
+                </div>
+                <div>
+                    <div class="long">
+                        <input id="perfil_acamedico13"  validation="Words"></input>
+                    </div>
+                    <div class="medium">
+                        <input id="perfil_acamedico14"  validation="Words"></input>
+                    </div>
+                    <div class="medium">
+                        <input  id="perfil_acamedico15" validation="Words"></input>
+                    </div>
+                    <div class="short">
+                        <input  id="año_acamedico16" validation="Numbers"></input>
+                    </div>
+                </div>
+                <div>
+                    <div class="long">
+                        <input id="perfil_acamedico17"  validation="Words"></input>
+                    </div>
+                    <div class="medium">
+                        <input id="perfil_acamedico18"  validation="Words"></input>
+                    </div>
+                    <div class="medium">
+                        <input  id="perfil_acamedico19" validation="Words"></input>
+                    </div>
+                    <div class="short">
+                        <input  id="año_acamedico20" validation="Numbers"></input>
+                    </div>
+                </div>
+            </div> 
+            </div>
+            </fieldset>  
+        </div>
+        <div id="tab3">
+            <fieldset>
+            <legend>Perfil Profesional</legend>
+            <div class="parent">
+            <div class="child">
+                <div>
+                    <label class="long">Instituciones donde ha enseñado</label>
+                    <label class="medium">Localidad</label>
+                    <label class="medium">Provincia</label>
+                    <label class="short">Años</label>
+                </div>
+                <div>
+                    <div class="long">
+                        <input id="perfil_profesional1"  validation="Words"></input>
+                    </div>
+                    <div class="medium">
+                        <input id="perfil_profesional2"  validation="Words"></input>
+                    </div>
+                    <div class="medium">
+                        <input  id="perfil_profesional3" validation="Words"></input>
+                    </div>
+                    <div class="short">
+                        <input  id="año_profesional4" validation="Numbers"></input>
+                    </div>
+                </div>
+                <div>
+                    <div class="long">
+                        <input id="perfil_profesional5"  validation="Words"></input>
+                    </div>
+                    <div class="medium">
+                        <input id="perfil_profesional6"  validation="Words"></input>
+                    </div>
+                    <div class="medium">
+                        <input  id="perfil_profesional7" validation="Words"></input>
+                    </div>
+                    <div class="short">
+                        <input  id="año_profesional8" validation="Numbers"></input>
+                    </div>
+                </div>
+                <div>
+                    <div class="long">
+                        <input id="perfil_profesional9"  validation="Words"></input>
+                    </div>
+                    <div class="medium">
+                        <input id="perfil_profesional10"  validation="Words"></input>
+                    </div>
+                    <div class="medium">
+                        <input  id="perfil_profesional11" validation="Words"></input>
+                    </div>
+                    <div class="short">
+                        <input  id="año_profesional12" validation="Numbers"></input>
+                    </div>
+                </div>
+                <div>
+                    <div class="long">
+                        <input id="perfil_profesional13"  validation="Words"></input>
+                    </div>
+                    <div class="medium">
+                        <input id="perfil_profesional14"  validation="Words"></input>
+                    </div>
+                    <div class="medium">
+                        <input  id="perfil_profesional15" validation="Words"></input>
+                    </div>
+                    <div class="short">
+                        <input  id="año_profesional16" validation="Numbers"></input>
+                    </div>
+                </div>
+                <div>
+                    <div class="long">
+                        <input id="perfil_profesional17"  validation="Words"></input>
+                    </div>
+                    <div class="medium">
+                        <input id="perfil_profesional18"  validation="Words"></input>
+                    </div>
+                    <div class="medium">
+                        <input  id="perfil_profesional19" validation="Words"></input>
+                    </div>
+                    <div class="short">
+                        <input  id="año_profesional20" validation="Numbers"></input>
+                    </div>
+                </div>
+            </div> 
+            </div>
+            </fieldset> 
+        </div> 
+    </div>
+        
+    <div id="botones_form">
+        {{ form_row(form.submit) }}
+        {{ form_row(form.limpiar) }}
+    </div>
+    <div class="oculto">
+        {{ form_rest(form) }} 
+    </div>
+    <div id="result"></div>
+    </div>
+    {{form_end(form)}}
+
 {% endblock %}

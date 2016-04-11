@@ -35,6 +35,6 @@ class CursoType extends AbstractType
      */
     public function getName()
     {
-        return 'cole_backendbundle_curso';
+        return 'curso';
     }
 }

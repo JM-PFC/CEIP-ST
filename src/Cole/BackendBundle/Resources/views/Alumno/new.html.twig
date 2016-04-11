@@ -5,30 +5,32 @@
 {% endblock %}
 
 {% block javascript %}
-	{{parent()}}
+
     <script type="text/javascript" src="{{ asset('bundles/backend/js/mask.js') }}"></script>
 
 {% endblock %}
 
-    {% block body %}
+{% block body %}
     {# {{ form_enctype(form) }} es obsoleto en Symfony 2.3
     <form class="formulario_alumno" id="alumno_nuevo" action="{{ path('alumno_create') }}" novalidate method="post" autocomplete="off"{{ form_enctype(form) }}> #}
     {{form_start(form, {'action':path('alumno_create'),'method':'POST','attr':{'class':'formulario_alumno', 'id':'alumno_nuevo', novalidate:'novalidate', 'autocomplete':'off'}})}}
 
     {{ form_errors(form) }}
-
+    <div >
     <div id="tab-container">
         <ul >
-            <li class="selected"><a href="tab1" name="tab1">Datos Personales</a></li>
-            <li><a href="tab2" name="tab2">Datos Responsables</a></li>
-            <li><a href="tab3" name="tab3">Otros Datos de Interés</a></li> 
+            <li class="selected"><a href="javascript:void(0);" name="tab1">Datos Personales</a></li>
+            <li><a href="javascript:void(0);" name="tab2">Datos Responsables</a></li>
+            <li><a href="javascript:void(0);" name="tab3">Otros Datos de Interés</a></li> 
         </ul>
     </div>
         
-    <div id="content">
+    <div id="content-form-menu">
         <div id="tab1" >
             <fieldset class="simple">
-                <legend>Datos Personales del alumno</legend>
+                <legend>Registro de Alumnos</legend>
+                <div class="parent">
+                <div class="child">
                 <div class="izquierda">
                     {{ form_row(form.nombre) }}
                     {{ form_row(form.apellido1) }}
@@ -41,16 +43,23 @@
                     {{ form_row(form.fechaNacimiento) }}
                     {{ form_row(form.sexo) }}
                 </div>
+                </div>
+                </div>
             </fieldset>
         </div>
        
         <div id="tab2">
+            <div class="parent">
+            <div class="child">
             <fieldset class="double">
                 <legend>Datos Primer Responsable</legend>
                 <div class="horizontal" id="primero">
                     <div class="dis_block">
                         {{ form_row(form.responsable1.dni) }}
-                        {{ form_row(form.responsable1.nombre) }}
+                        <div class="full_name_div">
+                            {{ form_label(form.responsable1.nombre) }}
+                            {{ form_widget(form.responsable1.nombre) }}
+                        </div>
                         {{ form_row(form.responsable1.fechaNacimiento) }}                 
                     </div>
                     <div class="dis_block">
@@ -67,7 +76,10 @@
                 <div class="horizontal" id="primero">
                     <div class="dis_block">
                         {{ form_row(form.responsable2.dni) }}
-                        {{ form_row(form.responsable2.nombre) }}
+                        <div class="full_name_div">
+                            {{ form_label(form.responsable2.nombre) }}
+                            {{ form_widget(form.responsable2.nombre) }}
+                        </div>
                         {{ form_row(form.responsable2.fechaNacimiento) }}
                     </div>
                     <div class="dis_block">
@@ -78,11 +90,15 @@
                     </div>
                 </div>
             </fieldset>
+            </div>
+                </div>
         </div>
             
         <div id="tab3">
             <fieldset class="simple">
                 <legend>Otros Datos de Interés</legend>
+                <div class="parent">
+                <div class="child">
                 <div class="block"> 
                     {{ form_row(form.cursoIngreso) }}
                         {# Otra forma de mostrar lista seleccionable
@@ -100,10 +116,13 @@
                         <input id="foto_si" type="radio" required="required" name="alumno[foto]">
                         <label class="required" for="foto_si">Subirla ahora.</label>
                         {{ form_widget(form.foto) }}
+                        <div id="leyenda"></div>
                     </div>
                 </div>
                 <div class="block"> 
                     {{ form_row(form.observaciones) }}
+                </div>
+                </div>
                 </div>
             </fieldset>
         </div>
@@ -112,10 +131,12 @@
     <div id="botones_form">
         {{ form_row(form.submit) }}
         {{ form_row(form.limpiar) }}
+    </div>
+    <div class="oculto">
         {{ form_rest(form) }} 
     </div>
     <div id="result"></div>
-    
+    </div>
     {{form_end(form)}}
 
 {% endblock %}

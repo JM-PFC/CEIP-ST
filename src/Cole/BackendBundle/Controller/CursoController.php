@@ -4,6 +4,7 @@ namespace Cole\BackendBundle\Controller;
 
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\HttpFoundation\JsonResponse;
 
 use Cole\BackendBundle\Entity\Curso;
 use Cole\BackendBundle\Form\CursoType;
@@ -47,6 +48,10 @@ class CursoController extends Controller
      */
     public function createAction(Request $request)
     {
+      // if request is XmlHttpRequest (AJAX) but not a POSt, throw an exception
+      if ($request->isXmlHttpRequest() && !$request->isMethod('POST')) {
+        throw new HttpException('XMLHttpRequests/AJAX calls must be POSTed');}
+
         $entity = new Curso();
         $form = $this->createCreateForm($entity);
         $form->handleRequest($request);
@@ -56,7 +61,21 @@ class CursoController extends Controller
             $em->persist($entity);
             $em->flush();
 
+            if ($request->isXmlHttpRequest()) {
+                return new JsonResponse(array(
+                    'message' => 'Success!',
+                    'success' => true), 200);
+            }
+
             return $this->redirect($this->generateUrl('curso_show', array('id' => $entity->getId())));
+        }
+
+        if ($request->isMethod('POST')) {
+            return new JsonResponse(array(
+            'result' => 0,
+            'message' => 'Invalid form',
+            'data' => $this->getErrorMessages($form,$form->getName()),
+            'success' => false), 400);
         }
 
         return $this->render('BackendBundle:Curso:new.html.twig', array(
@@ -79,7 +98,7 @@ class CursoController extends Controller
             'method' => 'POST',
         ));
 
-        $form->add('submit', 'submit', array('label' => 'Create'));
+        $form->add('submit', 'submit', array('label' => 'Insertar'));
 
         return $form;
     }
@@ -159,7 +178,7 @@ class CursoController extends Controller
             'method' => 'PUT',
         ));
 
-        $form->add('submit', 'submit', array('label' => 'Update'));
+        $form->add('submit', 'submit', array('label' => 'Actualizar'));
 
         return $form;
     }
@@ -229,7 +248,7 @@ class CursoController extends Controller
         return $this->createFormBuilder()
             ->setAction($this->generateUrl('curso_delete', array('id' => $id)))
             ->setMethod('DELETE')
-            ->add('submit', 'submit', array('label' => 'Delete'))
+            ->add('submit', 'submit', array('label' => 'Eliminar'))
             ->getForm()
         ;
     }

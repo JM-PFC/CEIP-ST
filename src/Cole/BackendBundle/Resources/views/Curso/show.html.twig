@@ -1,4 +1,14 @@
-{% extends '::base.html.twig' %}
+{% extends 'BackendBundle:Default:index.html.twig' %}
+
+{% block stylesheets %}
+    {{parent()}}
+{% endblock %}
+
+{% block javascript %}
+
+    <script type="text/javascript" src="{{ asset('bundles/backend/js/mask.js') }}"></script>
+
+{% endblock %}
 
 {% block body -%}
     <h1>Curso</h1>

@@ -1,0 +1,38 @@
+{% extends 'BackendBundle:Default:index.html.twig' %}
+
+{% block stylesheets %}
+	{{parent()}}
+{% endblock %}
+
+{% block javascript %}
+
+    <script type="text/javascript" src="{{ asset('bundles/backend/js/mask.js') }}"></script>
+    <script>
+        $("#asignatura_tipo").prop('readonly', true); //input sólo lectura
+    </script>
+
+{% endblock %}
+
+{% block body -%}
+    {{form_start(form, {'action':path('asignatura_create'),'method':'POST','attr':{'id':'asignatura_nueva' , novalidate:'novalidate', 'autocomplete':'off'}})}}
+        {{ form_errors(form) }}
+    	<div class="width100">
+    		<div id="content-form">
+        		<fieldset >
+            		<legend>Añadir nueva Asignatura</legend>
+                   		<div class="addregistro">
+                   			{{ form_row(form.tipo) }}
+                        	{{ form_row(form.nombre) }}
+                        	{{ form_row(form.abreviatura) }}
+                    	</div>
+        		</fieldset>       
+    		</div>  
+    		<div id="botones_dialogo">
+        		{{ form_row(form.submit) }}
+    		</div>
+    		 <div class="oculto">
+        		{{ form_rest(form) }} 
+    		</div>
+    	</div>
+    {{form_end(form)}}
+{% endblock %}

@@ -51,6 +51,7 @@
 .login #acceder{
 	float: right;
 	margin-top: -26px;
+	margin-right: 40px;
 }
 .mensaje_error{
 	float: left;

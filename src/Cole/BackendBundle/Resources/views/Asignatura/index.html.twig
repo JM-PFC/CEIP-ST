@@ -1,0 +1,127 @@
+{% extends 'BackendBundle:Default:index.html.twig' %}
+
+{% block stylesheets %}
+    {{parent()}}
+{% endblock %}
+    
+{% block javascript %}
+    <script type="text/javascript" src="{{ asset('bundles/backend/js/mask.js') }}"></script>
+    <script>
+    $("#añadir_troncal_modal").hover(function() {
+        $(this).find("#img_1").addClass("oculto");
+        $(this).find("#img_2").removeClass("oculto");
+
+    }, function() {
+        $(this).find("#img_2").addClass("oculto");
+        $(this).find("#img_1").removeClass("oculto");    }
+    );
+    $("#añadir_específica_modal").hover(function() {
+        $(this).find("#img_1").addClass("oculto");
+        $(this).find("#img_2").removeClass("oculto");
+
+    }, function() {
+        $(this).find("#img_2").addClass("oculto");
+        $(this).find("#img_1").removeClass("oculto");    }
+    );
+
+    $("#asignaturas_dialog").dialog(
+       {
+        bgiframe: true,
+        autoOpen: false,
+        height: 315,
+        width: 350,
+        modal: true,
+        resizable: false,
+       }
+    );
+    $('#asignaturas_dialog').on('dialogclose', function(event) {
+        $('#asignaturas_dialog').empty();
+    });
+
+
+    </script>
+{% endblock %}
+
+{% block body -%}
+    <div id="registro_asignaturas">
+    <div class="simple_column">
+        <div class="block_insert">
+            <h2>Registro de Asignaturas</h2></br>
+            <p>- Para <span>añadir</span> una nueva asignatura pulse sobre el icono de añadir en el bloque correspondiente.</p>
+            </br></br>
+            <p>- Para <span>modificar</span> o <span>eliminar</span> una asignatura, seleccione la asignatura correspondiente.</p>
+        </div> 
+    </div>
+    <div class="derecha" id="contenedor_registro">  
+        <div>
+            <div id="cabecera_lista">
+                <h2>Asignaturas Troncales
+                    <a id="añadir_troncal_modal" title="Añadir asignatura Troncal" href="javascript:void(0);">
+                        <img id="img_1" class="add_registro" src="{{ asset('bundles/backend/images/menu/añadir_azul.png')}}">
+                        <img id="img_2" class="add_registro oculto" src="{{ asset('bundles/backend/images/menu/añadir_azul2.png')}}">
+                    </a>
+                </h2>
+            </div>
+            <div id="lista_asignaturas">
+                <table class="records_list">
+                    <thead>
+                    <tr>
+                        <th>Asignatura</th>
+                        <th>Abreviatura</th>
+                    </tr>
+                    </thead>
+                </table>
+                <div class="inner_table">
+                    <table>
+                    {% for entity in entities %}
+                        {% if entity.tipo == "Troncal" %}
+                        <tr>
+                            <td><a cargar-href="off" href="{{ path('asignatura_edit', { 'id': entity.id }) }}">{{ entity.nombre }}</a></td>
+                            <td><a cargar-href="off" href="{{ path('asignatura_edit', { 'id': entity.id }) }}">{{ entity.abreviatura }}</a></td>
+                        </tr>
+                        {% endif %}
+                    {% endfor %}
+                    </table>
+                </div>
+            </div>
+        </div>          
+    </div>
+
+    <div class="derecha" id="contenedor_registro">  
+        <div>
+            <div id="cabecera_lista">
+                <h2>Asignaturas Específicas
+                    <a id="añadir_específica_modal" title="Añadir asignatura Específica" href="javascript:void(0);">
+                        <img id="img_1" class="add_registro" src="{{ asset('bundles/backend/images/menu/añadir_azul.png')}}">
+                        <img id="img_2" class="add_registro oculto" src="{{ asset('bundles/backend/images/menu/añadir_azul2.png')}}">
+                    </a>
+                </h2>
+            </div>
+            <div id="lista_asignaturas">
+                <table class="records_list">
+                    <thead>
+                    <tr>
+                        <th>Asignatura</th>
+                        <th>Abreviatura</th>
+                    </tr>
+                    </thead>
+                </table>
+                <div class="inner_table">
+                    <table>
+                    {% for entity in entities %}
+                        {% if entity.tipo == "Específica" %}
+                        <tr>
+                            <td><a cargar-href="off" href="{{ path('asignatura_edit', { 'id': entity.id }) }}">{{ entity.nombre }}</a></td>
+                            <td><a cargar-href="off" href="{{ path('asignatura_edit', { 'id': entity.id }) }}">{{ entity.abreviatura }}</a></td>
+                        </tr>
+                        {% endif %}
+                    {% endfor %}
+                    </table>
+                </div>
+            </div>
+        </div>          
+    </div>
+
+    <div id="asignaturas_dialog" title="Registro de Asignatura">
+    </div>
+    {% endblock %}

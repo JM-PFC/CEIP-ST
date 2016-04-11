@@ -1,16 +1,39 @@
-{% extends '::base.html.twig' %}
+{% extends 'BackendBundle:Default:index.html.twig' %}
+
+{% block stylesheets %}
+	{{parent()}}
+{% endblock %}
+
+{% block javascript %}
+
+    <script type="text/javascript" src="{{ asset('bundles/backend/js/mask.js') }}"></script>
+    <script>
+        $("#curso_nivel").prop('readonly', true); //input sólo lectura
+        $("#curso_edit form").attr("id","curso_delete");
+
+    </script>
+
+{% endblock %}
 
 {% block body -%}
-    <h1>Curso edit</h1>
 
-    {{ form(edit_form) }}
-
-        <ul class="record_actions">
-    <li>
-        <a href="{{ path('curso') }}">
-            Back to the list
-        </a>
-    </li>
-    <li>{{ form(delete_form) }}</li>
-</ul>
+    {{form_start(edit_form, {'action':path('curso_update',{'id':entity.id}),'method':'PUT','attr':{'id':'curso_edit' , novalidate:'novalidate', 'autocomplete':'off'}})}}
+        {{ form_errors(form) }}
+        <div class="width100">
+            <div id="content-form">
+                <fieldset >
+                     <legend>Edición de Curso</legend>
+                        <div class="addregistro">
+                            {{ form_row(edit_form.nivel) }}
+                            {{ form_row(edit_form.curso) }}
+                        </div>
+                </fieldset> 
+            </div>
+            {{ form_rest(edit_form) }}
+            {{form_end(edit_form)}}
+            <div class="double_button">
+                {{ form(delete_form) }}
+            </div>
+        </div>
+    {{form_end(edit_form)}}
 {% endblock %}

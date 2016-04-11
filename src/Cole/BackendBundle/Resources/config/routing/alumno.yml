@@ -20,13 +20,52 @@ alumno_create:
 alumno_edit:
     path:     /{id}/edit
     defaults: { _controller: "BackendBundle:Alumno:edit" }
+    options:
+        expose: true
 
 alumno_update:
     path:     /{id}/update
     defaults: { _controller: "BackendBundle:Alumno:update" }
     requirements: { _method: post|put }
+    options:
+        expose: true
 
 alumno_delete:
     path:     /{id}/delete
     defaults: { _controller: "BackendBundle:Alumno:delete" }
     requirements: { _method: post|delete }
+
+alumno_search:
+    path:     /alumno/search
+    defaults: { _controller: "BackendBundle:Alumno:search" }
+    options:
+        expose: true
+alumno_listaCursos:
+    path:     /alumno/listaCursos
+    defaults: { _controller: "BackendBundle:Curso:ListaCursos" }
+    options:
+        expose: true
+
+comprobar_alumno:
+    path:     /comprobaralumno
+    defaults: { _controller: "BackendBundle:Alumno:ComprobarAlumno" }
+    options:
+        expose: true
+
+alumnos_por_curso:
+    path:     /alumnos_por_curso/{id}
+    defaults: { _controller: "BackendBundle:Alumno:AlumnosPorCurso" }
+    options:
+        expose: true
+
+asignar_responsable:
+    path:     /asignar_responsable
+    defaults: { _controller: "BackendBundle:Alumno:AsignarResponsable" }
+    options:
+        expose: true
+
+eliminar_responsable:
+    path:     /eliminar_responsable
+    defaults: { _controller: "BackendBundle:Alumno:EliminarResponsable" }
+    options:
+        expose: true

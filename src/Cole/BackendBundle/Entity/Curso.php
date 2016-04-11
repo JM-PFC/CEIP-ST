@@ -94,6 +94,6 @@ class Curso
 
         public function __toString()
     {
-         return $this->getNivel().' - '.$this->getCurso();
+         return $this->getCurso().'  '.$this->getNivel();
     }
 }

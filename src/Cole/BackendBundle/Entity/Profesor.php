@@ -4,12 +4,16 @@ namespace Cole\BackendBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
+
 
 /**
  * Profesor
  *
  * @ORM\Table()
  * @ORM\Entity(repositoryClass="Cole\BackendBundle\Entity\ProfesorRepository")
+ * @UniqueEntity(fields={"dni"}, message="Este DNI ya existe en el sistema.")
  */
 class Profesor implements UserInterface, \Serializable
 {
@@ -66,7 +70,7 @@ class Profesor implements UserInterface, \Serializable
     /**
      * @var string
      *
-     * @ORM\Column(name="dni", type="string", length=9)
+     * @ORM\Column(name="dni", type="string", length=10, unique=true )
      */
     private $dni;
 
@@ -74,6 +78,7 @@ class Profesor implements UserInterface, \Serializable
      * @var string
      *
      * @ORM\Column(name="nombre", type="string", length=255)
+     * @Assert\NotBlank()
      */
     private $nombre;
 
@@ -81,6 +86,7 @@ class Profesor implements UserInterface, \Serializable
      * @var string
      *
      * @ORM\Column(name="apellido1", type="string", length=255)
+     * @Assert\NotBlank()
      */
     private $apellido1;
 
@@ -88,13 +94,31 @@ class Profesor implements UserInterface, \Serializable
      * @var string
      *
      * @ORM\Column(name="apellido2", type="string", length=255)
+     * @Assert\NotBlank()
      */
     private $apellido2;
 
     /**
      * @var string
      *
+     * @ORM\Column(name="sexo", type="string", length=9)
+     * @Assert\NotBlank()
+     */
+    private $sexo;
+
+    /**
+     * @var \DateTime
+     *
+     * @ORM\Column(name="fechaNacimiento", type="date")
+     * @Assert\NotBlank()
+     */
+    private $fechaNacimiento;
+
+    /**
+     * @var string
+     *
      * @ORM\Column(name="direccion", type="string", length=255)
+     * @Assert\NotBlank()
      */
     private $direccion;
 
@@ -102,6 +126,7 @@ class Profesor implements UserInterface, \Serializable
      * @var string
      *
      * @ORM\Column(name="localidad", type="string", length=255)
+     * @Assert\NotBlank()
      */
     private $localidad;
 
@@ -109,6 +134,7 @@ class Profesor implements UserInterface, \Serializable
      * @var string
      *
      * @ORM\Column(name="provincia", type="string", length=255)
+     * @Assert\NotBlank()
      */
     private $provincia;
 
@@ -116,34 +142,48 @@ class Profesor implements UserInterface, \Serializable
      * @var string
      *
      * @ORM\Column(name="cp", type="string", length=5)
+     * @Assert\NotBlank()
      */
     private $cp;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="telefono", type="string", length=9)
+     * @ORM\Column(name="telefono", type="string", length=12, nullable=true)
      */
     private $telefono;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="movil", type="string", length=9)
+     * @ORM\Column(name="movil", type="string", length=12, nullable=true)
      */
     private $movil;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="email", type="string", length=255, nullable=true)
+     * @Assert\Email()
+     */
+    private $email;
 
     /**
      * @var \DateTime
      *
      * @ORM\Column(name="fecha_alta", type="datetime")
+     * @Assert\NotBlank()
      */
     private $fechaAlta;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="foto", type="string", length=255)
+     * @ORM\Column(name="foto", type="string", length=255, nullable=true)
+     * @Assert\File(
+     * maxSize = "1024k",
+     * mimeTypes = {"image/jpeg", "image/png"},
+     * mimeTypesMessage = "Por favor, sube una imagen válida.")
      */
     private $foto;
 
@@ -174,6 +214,22 @@ class Profesor implements UserInterface, \Serializable
      * @ORM\Column(name="clave_usuario", type="string", length=255)
      */
     private $claveUsuario;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="perfilAcademico", type="string", length=1200, nullable=true)
+     * 
+     */
+    private $perfilAcademico;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="perfilProfesional", type="string", length=1200, nullable=true)
+     * 
+     */
+    private $perfilProfesional;
 
     /**
      * @var boolean
@@ -294,6 +350,53 @@ class Profesor implements UserInterface, \Serializable
     public function getApellido2()
     {
         return $this->apellido2;
+    }
+
+
+        /**
+     * Set sexo
+     *
+     * @param string $sexo
+     * @return Profesor
+     */
+    public function setSexo($sexo)
+    {
+        $this->sexo = $sexo;
+
+        return $this;
+    }
+
+    /**
+     * Get sexo
+     *
+     * @return string 
+     */
+    public function getSexo()
+    {
+        return $this->sexo;
+    }
+
+    /**
+     * Set fechaNacimiento
+     *
+     * @param \DateTime $fechaNacimiento
+     * @return Profesor
+     */
+    public function setFechaNacimiento($fechaNacimiento)
+    {
+        $this->fechaNacimiento = $fechaNacimiento;
+
+        return $this;
+    }
+
+    /**
+     * Get fechaNacimiento
+     *
+     * @return \DateTime 
+     */
+    public function getFechaNacimiento()
+    {
+        return $this->fechaNacimiento;
     }
 
     /**
@@ -432,6 +535,29 @@ class Profesor implements UserInterface, \Serializable
     public function getMovil()
     {
         return $this->movil;
+    }
+
+    /**
+     * Set email
+     *
+     * @param string $email
+     * @return Profesor
+     */
+    public function setEmail($email)
+    {
+        $this->email = $email;
+
+        return $this;
+    }
+
+    /**
+     * Get email
+     *
+     * @return string 
+     */
+    public function getEmail()
+    {
+        return $this->email;
     }
 
     /**
@@ -612,5 +738,53 @@ class Profesor implements UserInterface, \Serializable
     public function getRole()
     {
         return $this->role;
+    }
+
+
+
+    /**
+     * Set perfilAcademico
+     *
+     * @param string $perfilAcademico
+     * @return Profesor
+     */
+    public function setPerfilAcademico($perfilAcademico)
+    {
+        $this->perfilAcademico = $perfilAcademico;
+
+        return $this;
+    }
+
+    /**
+     * Get perfilAcademico
+     *
+     * @return string 
+     */
+    public function getPerfilAcademico()
+    {
+        return $this->perfilAcademico;
+    }
+
+    /**
+     * Set perfilProfesional
+     *
+     * @param string $perfilProfesional
+     * @return Profesor
+     */
+    public function setPerfilProfesional($perfilProfesional)
+    {
+        $this->perfilProfesional = $perfilProfesional;
+
+        return $this;
+    }
+
+    /**
+     * Get perfilProfesional
+     *
+     * @return string 
+     */
+    public function getPerfilProfesional()
+    {
+        return $this->perfilProfesional;
     }
 }

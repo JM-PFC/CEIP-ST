@@ -81,7 +81,7 @@ vich_uploader:
 
             inject_on_load:     false
             delete_on_update:   true
-            delete_on_remove:   true
+            delete_on_remove:   truee
 
 services:
     twig.extension.intl:
@@ -99,5 +99,7 @@ services:
         tags:
             - { name: twig.extension }
 
-
+parameters:
+    Dir_imagenes_prof: %kernel.root_dir%/../web/uploads/images/
+    Dir_imagenes_alum: %kernel.root_dir%/../web/uploads/images/
 

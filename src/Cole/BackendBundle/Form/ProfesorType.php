@@ -15,24 +15,28 @@ class ProfesorType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('dni')
-            ->add('nombre')
-            ->add('apellido1')
-            ->add('apellido2')
-            ->add('direccion')
-            ->add('localidad')
-            ->add('provincia')
-            ->add('cp')
-            ->add('telefono','text', array('label' => 'Teléfono', 'max_length' => 9, 'attr' => array('validation' => 'empty,lenght', 'class' => 'telefono')))
-            ->add('movil')
-            //->add('email')
-            ->add('fechaAlta')
-            ->add('foto', 'file', array('required' => false))
-            ->add('username')
-            ->add('password')
-            //->add('salt') No debe modificarlo el usuario
-            ->add('claveUsuario')
-            ->add('activo')
+            ->add('dni','text',array('label' => 'DNI/NIE','max_length' => 10, 'attr' => array('lengthmin'=> 9,'validation' => ' Equal,Empty,Length,Dni', 'class' => 'dni')))
+            ->add('nombre','text',array('label' => 'Nombre', 'max_length' => 30,'attr' => array('validation' => 'Empty, Words')))
+            ->add('apellido1','text',array('label' => 'Primer Apellido', 'max_length' => 30,'attr' => array('validation' => 'Empty, Words')))
+            ->add('apellido2','text',array('label' => 'Segundo Apellido','max_length' => 30, 'attr' => array('validation' => 'Empty, Words')))
+            ->add('sexo', 'choice', array('label' => 'Sexo','choices' => array('Masculino' => 'Masculino', 'Femenino'=>'Femenino'),'required'=> true, 'expanded'=>true, 'multiple'=>false))
+            ->add('fechaNacimiento','date',array('label' => 'Fecha de Nacimiento', 'max_length' => 10,'widget' => 'single_text','format' => 'dd/MM/yyyy', 'attr' => array('lengthmin'=> 8,'class' => 'fecha', 'placeholder'=>'__/__/____','validation' => 'Empty,Length,Fecha,Fecha_Adulto')))
+            ->add('direccion','text',array('label' => 'Dirección','max_length' => 50, 'attr' => array('validation' => 'Empty, LetterInitial')))
+            ->add('localidad','text',array('label' => 'Localidad','max_length' => 50, 'attr' => array('validation' => 'Empty, Letters')))
+            ->add('provincia','text',array('label' => 'Provincia','max_length' => 30,'attr' => array('validation' => 'Empty, Letters')))
+            ->add('cp','text',array('label' => 'Código Postal', 'max_length' => 5, 'attr' => array('class' => 'cp','validation' => 'Empty,Length,CP')))
+            ->add('telefono','text', array('label' => 'Teléfono', 'max_length' => 12, 'attr' => array('class' => 'telefono', 'lengthmin'=> 9, 'validation' => 'Length,Telefono')))
+            ->add('movil','text', array('label' => 'Móvil', 'max_length' => 12, 'attr' => array('lengthmin'=> 9,'class' => 'telefono','validation' => 'Length,Telefono')))
+            ->add('email','email', array('label' => 'Email','required'=> false,'attr' => array('validation' => 'Email')))
+            //->add('fechaAlta')
+            ->add('foto', 'file', array('data_class' => null,'required' => false, 'attr' => array( 'class' => 'archivo','size' => 50, 'mimeTypes' => '.png,.jpg,.jpeg','validation' => 'MimeTypes, MaxSize')))
+            ->add('perfilAcademico', 'textarea',array('label' => 'Observaciones:', 'max_length' => 1200, 'attr' => array('type'=>'textarea', 'validation' => 'Words')))
+            ->add('perfilProfesional', 'textarea',array('label' => 'Observaciones:', 'max_length' => 1200, 'attr' => array('type'=>'textarea', 'validation' => 'Words')))
+            //->add('username')
+            //->add('password')
+            //->add('salt')
+            //->add('claveUsuario')
+            //->add('activo')
             ->add('limpiar', 'button', array('attr' => array('class' => 'limpiar')))
 
             //->add('role') No debe modificarlo el usuario
@@ -54,6 +58,6 @@ class ProfesorType extends AbstractType
      */
     public function getName()
     {
-        return 'cole_backendbundle_profesor';
+        return 'profesor';
     }
 }

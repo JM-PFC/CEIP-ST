@@ -4,6 +4,7 @@
 }
 button{
 	cursor: pointer; 
+	box-shadow: 0 1px 1px 0px rgba(0, 0, 0, 0.5);
 }
 a{
     text-decoration: none;
@@ -21,57 +22,6 @@ body{
     min-width: 1024px;
 }
 
-/*Formularios*/
-.formulario >div >div{	
-	border-radius: 7px;
-	height: 50px;
-	margin-bottom: 10px;
-	margin-left: 40px;
-	padding-left: 20px;
-	padding-right: 15px;
-	padding-top: 4px;
-	width: 15%;
-	background: #b1cce7 ;
-
-}
-.formulario>#nombre>div{
-		float: left;
-		width: 20%;
-}
-.formulario>#datos>div:first-child{
-	display: block !important;
-}
-.formulario>#datos> div{
-	float: left;
-	width: 20%;
-}
-.formulario >div >div >div{
-	display: block;
-}
-.formulario >div >div >select{
-	display: block;
-}
-.formulario > div > div > input{
-	display: block;
-	font-size: 12pt !important;
-	height: 18px;
-	text-align: left;
-	padding-left: 10px;
-	width: 300px;
-}
-.formulario > #dni > div > input{
-	text-transform: uppercase;
-	width: 70%;
-}
-.formulario > #nombre > div > input{
-	text-transform: capitalize;
-	width: 200px;
-}
-.formulario > #datos> div > input{
-	width: 200px;
-}
-
-
 /* Espacio para menú de administración */
 .centrado{
     clear: both;
@@ -80,7 +30,7 @@ body{
     max-width: 1336px;
     min-width: 1024px;
     margin: 0 auto;
-    margin-top:10px; 
+    margin-top:1%; 
     z-index: 1;
     border-radius: 10px;
     -moz-box-shadow:  black 2px 2px 15px;
@@ -381,12 +331,12 @@ margin: 50px auto;
 	min-height: 2em;
 }
 #tabs li a{
-	padding: 4px;
-	padding-right: 25px;
+	padding: 4px 25px 5px 4px;
+	max-width: 123px;
 }
 #tabs li .ui-icon-close { 
 	float: left; 
-	margin: 0.4em 0 0 -20px; 
+	margin: 0.4em 0 0 -16px; 
 	cursor: pointer; 
 }
 .close_tabs{
@@ -406,17 +356,25 @@ margin: 50px auto;
 #tabs>div{
 	overflow: auto;
 	margin: 5px 0;
-	max-height: 50vh;
-	min-height: 50vh;
+	height: 52vh;
 	padding-top: 2px;
 	width: 95%;
 }
 
 /*Mensaje máx pestañas*/
 #dialog-message{
-	font-size: 15px;
-	margin-top: 10px;
+	font-size: 20px;
+	color: #334c73 !important;
+	
+	position: absolute;
+	z-index: 1;
 }
+#dialog-message>div{
+	margin: -23px auto;
+	width: 100%;
+
+
+	}
 #dialog-message  p b{
 	margin-top: 20px;
 	display: inline-block;
@@ -434,7 +392,7 @@ margin: 50px auto;
 /*Tablas*/
 thead tr th {
 	background: #334C73;
-	min-width: 80px !important;
+	min-width: 80px;
 	text-align: left;
 	padding: 0 5px;
 	font: 1em solid ;
@@ -442,7 +400,7 @@ thead tr th {
 }
 tbody tr td{
 	background: #b1cce7;
-	min-width: 80px !important;
+	min-width: 80px;
 	text-align: left;
 	padding: 0 5px;
 }
@@ -496,10 +454,15 @@ tbody tr td{
    border-left: 8px solid #334c73;
    font-weight: bold;
 }
-#content
+
+/*Formularios*/
+
+#content-form-menu
 {
-   height: 280px;
+   height: 46.5vh;
+   min-height: 292px;
    width: 85%;
+   min-width: 85%;
    margin: 0 0 0 125px;
    padding: 3px 15px;
    
@@ -510,43 +473,63 @@ tbody tr td{
    border-radius: 5px 5px 5px 5px;
    box-shadow: 0 -2px 3px -2px rgba(0, 0, 0, .5);
 }
-#content>div{
+#content-form-menu>div{
 	display: none ;
+}
+#content-form
+{
+   height: 46.5vh;
+   min-height: 295px;
+   width: 95%;
+   padding: 3px 15px;
+   margin: 0 auto;
+   
+   background-color: #b1cce7;
+   border: 1px solid #888;
+
+   border-radius: 5px 5px 5px 5px;
+   box-shadow: 0 -2px 3px -2px rgba(0, 0, 0, .5);
 }
 #botones_form{
 	margin-left: 130px;
 	margin-top: 5px;
 	padding: 0 50px;
 }
-
-form {
-   
+#botones_dialogo button{
+	margin-left: 10% !important; 
+	margin-top: 7px;
+}
+form{
     font: normal bold 12px Verdana, Arial;
     width: 100%;
+    display: flex;
+    height: 50vh;
+    margin-top: 0.5vh;
 }
-
+form>div{
+	margin: auto 10px;
+	width: 1200px;
+}
 form label {
     display: block;
-    width: 150px;
+    width: 100%;
     margin-right: 10px;
     font-family: Verdana,Arial,sans-serif;
 	font-size: 1.2em ;
+	margin-top: 1%;
 }
-
 form input {
     display: inline-block;
-    max-width: 240px;
+    /*max-width: 240px;*/
     width: 90%;
     margin-bottom: 10px;
 	font-size: 12pt !important;
 	min-height: 18px;
 	text-align: left;
 	padding: 0 10px;
-	box-shadow: 0 1px 1px 0.6px rgba(0, 0, 0, 0.5);
+	box-shadow: 0 1px 1px 0px rgba(0, 0, 0, 0.5);
 	text-transform:capitalize;
 }
-
-
 form input[type="radio"] {
     display: inline-block;
     width: 20px;
@@ -554,23 +537,29 @@ form input[type="radio"] {
 }
 form label+div label{
 	display: inline;
-
-}
-form label+div{
-	margin-top: 5px;
 }
 fieldset{
 	margin-top: 5px;
 }
-
 .simple{
-	min-height: 260px;
+	min-height: 275px;
+	height: 43.5vh;
 }
-
 .double{
-	height: 125.5px;
+	height: 133px;
 }
-
+.ajustada{
+	min-height: 270px;
+	margin-top: 1px;
+	padding-bottom: 5px;
+	height: 43.5vh;
+}
+.ajustada input{
+	margin-bottom: 7px !important;
+}
+.ajustada legend{
+	margin-bottom: 0px !important;
+}
 .horizontal div{
 	width: 100%; 
 }
@@ -581,7 +570,6 @@ fieldset{
 	max-width: 250px;
 	width: 20%;
 }
-
 .small div{
 	float: left;
 	clear: right;
@@ -589,10 +577,6 @@ fieldset{
 	max-width: 250px;
 	width: 22%;
 }
-
-
-
-
 legend{
 	margin-left: 10px;
 	margin-bottom: 5px;
@@ -600,28 +584,213 @@ legend{
 	font-size: 1.2em;
 
 }
-
 .izquierda>div{
 	float: left;
 	clear: right;
+	margin-left: 3%;
+	margin-right: 2%;
+	max-width: 250px;
+	width: 28%;
+}
+.izquierda>label{
+
+	margin-right: 3%;
+}
+
+.big_column{
+	float: left;
+	clear: right;
+	margin-right: 3%;
+	width: 36%;
+	margin-bottom: 8px;
+}
+.end_column{
+	float: left;
+	clear: right;	
+	width: 22%;
+}
+.end_column div input{
+	width: 105px !important;
+	text-transform: none;
+	text-align: center;
+}
+
+.small_column{
+	float: left;
+	clear: right;	
+	width: 22%;
+}
+
+.small_column div input{
+	width: 55% !important;
+	text-transform: none;
+}
+
+.columna_foto{
+	float: left;
+	clear: right;
+	margin-left: 2%;
+	margin-right: 2%;
+	margin-top: 8px;
+	max-width: 12%;
+}
+.columna_foto>div>img{
+	box-shadow: 0 1px 5px 0px rgba(0, 0, 0, 1);
+	border-radius: 5px;
+}
+.columna_foto div a img{
+	width: 20px;
+	height: 20px;
+	padding: 0 6px 0 8px;
+}
+.columna_contenido{
+	width: 97%;
+	overflow: auto;
+	max-height: 39vh;
+	min-height: 237px;
+	background: #e4e0e0;
+	border-radius: 3px;
+	margin: 0.5% 3%;
+}
+.marco_columna_contenido{
+	width: 84%;
+	height: 40.5vh;
+	min-height: 245px;
+	float: left;
+	background: #e4e0e0;
+	border-radius: 3px;
+	box-shadow: 0px 1px 5px 0px rgba(0, 0, 0, 1);
+	-webkit-box-shadow: 0px 1px 5px 0px rgba(0, 0, 0, 1);
+	-moz-box-shadow: 0px 1px 5px 0px rgba(0, 0, 0, 1);
+}
+.label_contenido{
+	width: 98%;
+	background: #334c73;
+	color: #fa8258;
+	padding: 3px 10px;
+	border-radius: 3px;
+	margin: 5px 0;
+}
+.label_contenido span{
+	font-size: 0.9em;
+	color: white;
+}
+#iconos_foto{
+	margin-top: 5px;
+}
+#error_foto p{
+	margin-top: 5px;
+	color: red;
+	margin-bottom: 5px;
+}
+.columna_izquierda>div{
+	display: block;
 	margin-left: 4%;
 	margin-right: 2%;
 	max-width: 250px;
-	width: 27%;
+	width: 100%;
+}
+.simple_column{
+	width: 29%;
+	float: left;
+}
+.block_insert{
+	float: left;
+	clear: both;
+	height: auto;text
+	width: 100%;
+	margin: 10%;
+	font-size: 16px;
+}
+.block_insert h2{
+	margin-bottom: 15px;
+	font-size: 1.3em;
+	text-decoration: underline;
+}
+.block_insert p span{
+	font-style: italic;
+	font-weight: bold;
+}
+.block_insert h2 span{
+	background: #b1cce7;
+	padding:3px 5px;
+	border-radius: 5px;
+	box-shadow: 0 1px 1px 1px rgba(0, 0, 0, 0.5);
+}
+.double_column{
+	width: 52%;
+	float: left;
+}
+.double_column p{
+	margin-left: 15px;
+	font-size: 1.3em;
 }
 .dis_block{
 display: block;
 width: 100%;
 clear: both;
 }
+.double_column>div{
+	float: left;
+	width: 50%;
+}
+.block_search button{
+margin: 65% 0 0 27%;
+}
+.block_search > div > div > button{
+margin-top: 10%;
+}
 .block{
 	float: left;
 	clear: right;
 	height: auto;
-	width: 40%;
+	width: 43%;
 	margin-left: 40px;
 	margin-top: 4px;
 }
+.block_search{
+	float: left;
+	clear: both;
+	height: auto;
+	width: 100%;
+	margin-left: 15%;
+	margin-top: 8%;
+}
+.block_search h2{
+	margin-bottom: 15px;
+	font-size: 1.3em;
+}
+.block_search h2 span{
+	background: #b1cce7;
+	padding:3px 5px;
+	border-radius: 5px;
+	box-shadow: 0 1px 1px 1px rgba(0, 0, 0, 0.5);
+}
+.block_search input{
+	width: 75%;
+}
+.block-one{
+	float: left;
+	clear: right;
+	height: auto;
+	width: 98%;
+	
+}
+.block-one input[type="file"]{
+	width: 100px;
+}
+.block-one p{
+	display: inline-block;
+}
+.ancho{
+	width: 100% !important;
+	max-width: 60% !important;
+}
+.ancho div{
+	width: 75%;
+	display: inline-block !important;
+}
+
 .dni{
 	width: 95px;
 	text-transform: uppercase !important;
@@ -630,69 +799,78 @@ clear: both;
 	width: 95px;
 }
 .telefono{
-	width: 100px;
+	width: 95px;
 }
 .cp{
-	width: 90px;
-}
-.archivo{
-	width: 100%;
-	box-shadow: 0 0 0 0;
+	width: 95px;
 }
 .email{
-	text-transform: none;
 	width: 100%;
+}
+.archivo{
+	box-shadow: 0 0 0 0;
+	margin-bottom: 1% !important;
+	padding-left: 0 !important;
 }
 .normal{
 	width: 80%;
 }
 .full_name{
-	width: 78%;
+	width: 90%;
 	max-width: 100% !important;
 }
+.full_name_div{
+	width: 43% !important;
+	max-width: 45% !important;
+}
 #alumno_foto{
-	width: 100% !important;
-	max-width: 100% !important;
+	display: block;
+	width: 95px;
+}
+#leyenda{
+	font-family: Verdana,Arial,sans-serif;
+	font-size: 1.2em;
+	padding-left: 5px;
+	display: inline-block !important;
 }
 textarea{
 	height: 200px;
 	width: 100%;
 	margin-bottom: 15px;
 	font-size: 12pt !important;
-
+	resize: none;
 }
-
 .derecha{
 	float: right;
 	clear: right;
 }
-
 select{
 	margin-bottom: 10px;
 	min-height: 18px; 
 	font-family: Verdana,Arial,sans-serif;
 	font-size: 1.2em !important;
+	box-shadow: 0 1px 1px 0px rgba(0, 0, 0, 0.5);
 }
-
 form button{
 	float: left;
-	margin: 2px 50px;
 	padding: 0 5px;
 	height: 30px;
 	cursor: pointer; 
-	min-width: 80px;
 	font-family: Verdana,Arial,sans-serif;
 	font-size: 1.2em !important;
-
+}
+#botones_form button{
+	margin: 2px 50px;
+	font-size: 1.2em !important;
 }
 form button:hover{
-	font-weight: bold;
+	/*font-weight: bold;
+	text-decoration: underline;*/
+	box-shadow: 0 1px 1px 0px rgba(0, 0, 0, 0.5)inset;
 }
-
 .invalid{
-	box-shadow: 0 0px 3px 1.5px red;
+	box-shadow: 0 0px 3px 1.5px red !important;
 }
-
 .error{
     background-color: #BC1010;
     padding: 0.2px 2px;
@@ -729,7 +907,6 @@ form button:hover{
     max-width:23%; 
     z-index: 3;
 }
-
 .mensaje:before{ /* Este es un truco para crear una flechita */
     content: '';
     border-top: 8px solid transparent;
@@ -740,5 +917,309 @@ form button:hover{
     position: absolute;
     top: -15px;
     left: 5%;
+}
+#contenedor_lista{
+	height: 100%;
+	width: 60%;
+	background: white;
+	box-shadow: 0 1px 1px 1px rgba(0, 0, 0, 0.5);
+	overflow: auto;
+	border-radius: 5px;
+}
+#contenedor_lista div table{
+	margin: 0 auto;
+	border-collapse: collapse;
+    border-spacing: 0;
+    width: 100%;
+    table-layout: auto;
+}
+#contenedor_lista div table tr{
+	border-bottom: 2px solid #b1cce7;
+	border-top: 2px solid #b1cce7;
+}
+#contenedor_lista div table td{
+	margin: 0 auto;
+	min-width: 230px;
+	font-size: 1.2em;
+	font-family: Verdana,Arial,sans-serif !important;
+	background: none;
+	padding: 5px ;
+    word-wrap: break-word;
+    min-width: 50%;
+}
+#contenedor_lista div table th{
+	text-align: center;
+	font: 1.3em solid;
+	border-bottom: 2px solid #b1cce7;
+	border-top: 2px solid #b1cce7;
+	padding: 3px ;
+	min-width: 49%;
 
 }
+#lista{
+	height: 86%;
+	overflow: auto;
+	margin: 1.1% 0 !important; 
+}
+#contenedor_lista tr:hover { 
+	background: #b1cce7!important;
+	color: white;
+}
+#contenedor_lista td a { 
+    display: block; 
+}
+#contenedor_registro{
+	width: 30%;
+	background: white;
+	box-shadow: 0 1px 1px 1px rgba(0, 0, 0, 0.5);
+	overflow: auto;
+	border-radius: 5px;
+	float: left;
+	margin-left: 5%;
+	margin-top: 2%;
+	font-size: 12px;
+	font-weight: bold;
+}
+#contenedor_registro h2{
+	text-align: center;
+
+}
+#contenedor_registro div table{
+	margin: 0 auto;
+	border-collapse: collapse;
+    border-spacing: 0;
+    width: 100%;
+    table-layout: auto;
+}
+#contenedor_registro div table tr{
+	border-bottom: 2px solid #b1cce7;
+	border-top: 2px solid #b1cce7;
+}
+#contenedor_registro div table td{
+	margin: 0 auto;
+	min-width: 230px;
+	font-size: 1.2em;
+	font-family: Verdana,Arial,sans-serif !important;
+	background: none;
+	height: 30px;
+    word-wrap: break-word;
+    min-width: 50%;
+    text-align: center;
+}
+#contenedor_registro div table th{
+	text-align: center;
+	font: 1.3em solid;
+	border-bottom: 2px solid #b1cce7;
+	border-top: 2px solid #b1cce7;
+	padding: 3px ;
+	min-width: 49%;
+
+}
+#contenedor_registro tr:hover { 
+	background: #b1cce7!important;
+	color: white;
+}
+#contenedor_registro td a { 
+    display: block; 
+}
+
+.inner_table {
+    max-height: 40.5vh;
+    overflow-y: auto;
+}
+#cabecera_lista{
+	background: #b1cce7;
+	box-shadow: 0 1px 1px 1px rgba(0, 0, 0, 0.5);
+	padding: 5px;
+	min-height: 20px;
+}
+.corto{
+	min-width: 25% !important;
+	text-align: left !important;
+}
+.img-small{
+    width:105px !important; 
+    height:130px !important;
+    border-radius: 5px !important;
+}
+#profesor_edit input[type='file']{
+	display:none;
+}
+#alumno_edit input[type='file']{
+	display:none;
+}
+.input_radio div{
+	display: inline-block;
+}
+.input_radio div label{
+	display: inline;
+}
+.input_radio div input{
+	float: left;
+}
+
+
+.button_foto{
+	width: 100px;
+	margin:0;
+	display: block;
+	clear: both;
+}
+.disable { 
+	pointer-events: none; 
+	opacity: 0.5;
+
+	filter: url('#grayscale'); /* Versión SVG para IE10, Chrome 17, FF3.5, Safari 5.2 and Opera 11.6 */
+	-webkit-filter: grayscale(100%);
+	-moz-filter: grayscale(100%);
+	-ms-filter: grayscale(100%);
+	-o-filter: grayscale(100%);
+	filter: grayscale(100%); /* Para cuando es estándar funcione en todos */
+	filter: Gray(); /* IE4-8 and 9 */
+
+	-webkit-transition: all 0.5s ease;
+	-moz-transition: all 0.5s ease;
+	-ms-transition: all 0.5s ease;
+	-o-transition: all 0.5s ease;
+	transition: all 0.5s ease;
+} 
+.parent{
+	display: inline-flex;
+	height: 40vh;
+	width: 100%;
+}
+.child{
+	margin: auto 0;
+	width: 100%;
+}
+/*Propiedades para la ventana modal de padres*/
+
+#padres_dialog form{
+	height: 0px !important;
+}
+#padres_dialog #content-form{
+	min-height: 210px !important;
+	height: 0px !important;
+}
+#cursos_dialog form{
+	height: 81% !important;
+}
+#cursos_dialog #content-form{
+	min-height: 154px !important;
+	height: 0px !important;
+	width: 88%;
+	margin: 0 !important;
+}
+#asignaturas_dialog form{
+	height: 81% !important;
+}
+#asignaturas_dialog #content-form{
+	min-height: 205px !important;
+	height: 0px !important;
+	width: 88%;
+	margin: 0 !important;
+}
+#padres_dialog .error{
+	width: 10%;top
+}
+.responsable_modal{
+background: -webkit-linear-gradient(#fa8258 0%, #f5d0a9 96%);
+background: -o-linear-gradient(#fa8258 0%, #f5d0a9 96%);
+background: linear-gradient(#fa8258 0%, #f5d0a9 96%);
+border-radius: 7px;
+float: right;
+margin-right: 12px;
+margin-bottom: 2px;
+margin-top: -9px;
+height: 25px;
+font: bold 12px Verdana,Arial;
+}
+.eliminar_responsable_modal{
+background: -webkit-linear-gradient(#FA5858 0%, #f5d0a9 96%);
+background: -o-linear-gradient(#FA5858 0%, #f5d0a9 96%);
+background: linear-gradient(#FA5858 0%, #f5d0a9 96%);
+border-radius: 7px;
+float: right;
+margin-right: 12px;
+margin-bottom: 2px;
+margin-top: -9px;
+height: 25px;
+font: bold 12px Verdana,Arial;
+}
+.inline{
+	display: inline; 
+}
+.aviso_responsable{
+	margin-bottom: 5px;
+	margin-left: 10px;
+}
+select>option[value=""]{
+	display: none;
+}
+.block-one .long{
+	margin-left: 0 !important; 
+}
+
+.long{
+	width: 35% !important;
+	margin-left: 4% !important; 
+	margin-right: 1%;
+	display: inline-block !important;
+	margin-bottom: 7px;
+}
+.medium{
+	width: 21% !important;
+	margin-left: 1% !important;
+	margin-right: 2%;
+	display: inline-block !important;
+	margin-bottom: 7px;
+}
+.short{
+	width: 5% !important;
+	margin-left: 1%!important;
+	display: inline-block !important;
+	margin-bottom: 7px;
+}
+#profesor_nuevo #tab3 div[class="short"] input{
+	padding: 0px !important;
+	text-align: center;
+}
+.add_registro{
+	margin: 0 auto;
+    max-height: 25px;
+    min-width: 25px;
+    float: right;
+    margin-right: 10px;
+}
+.width100{
+	width: 100% !important;
+}
+.addregistro div{
+	width: 50% !important;
+	margin-left: 22%;
+}
+.width100 form div{
+	width: 98% !important;
+}
+.double_button form{
+	display: inline;
+}
+.double_button button{
+float: right;
+}
+.width100 button{
+	margin: 0 10%;
+	margin-top: 7px;
+}
+
+
+
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,49 @@
+{% extends 'BackendBundle:Default:index.html.twig' %}
+
+{% block stylesheets %}
+    {{parent()}}
+{% endblock %}
+
+{% block javascript %}
+    <script type="text/javascript" src="{{ asset('bundles/backend/js/mask.js') }}"></script>
+{% endblock %}
+
+{% block body %}
+  <div id="buscador_profesor">
+    {{form_start(form, {'action':path('profesor_search'),'method':'POST','attr':{'class':'formulario_busqueda_profesor', 'id':'busqueda_profesor', novalidate:'novalidate', 'autocomplete':'off'}})}}
+    <div class="double_column">
+        <p>Seleccione un método de búsqueda para el profesor:</p>
+        <div>
+            <div class="block_search">
+                <h2><span>Búsqueda por Curso</span></h2>
+                <div id="lista_cursos">
+                    {{render(controller("BackendBundle:Curso:listaCursos"))}}
+                </div> 
+            </div> 
+            <div class="block_search">
+                <h2><span>Búsqueda por Nombre</span></h2>
+                {{ form_row(form.nombre) }}
+                {{ form_row(form.apellido1) }}
+                {{ form_row(form.apellido2) }}
+        </div>
+        </div>
+        <div>
+        <div class="block_search">
+                {{ form_row(form.submit) }}
+            <div class=".dis_block">
+                {{ form_row(form.limpiar) }}
+            </div>
+        </div>
+        </div>   
+            
+    </div>
+        <div class="derecha" id="contenedor_lista">  
+            <div >
+            <div id="cabecera_lista">
+
+            </div>          
+            </div>
+        </div>
+  </div>     
+
+{% endblock %}

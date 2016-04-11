@@ -178,8 +178,11 @@ body {
 }
 .bloque_login .recordar{
     float: left;
-    margin-top: -2px;
+    margin-top: 8px;
     font-size: 15px;
+}
+.recordar label input{
+    margin: 0 !important;
 }
 
 .bloque_login input[type="submit"]{

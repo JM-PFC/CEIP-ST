@@ -9,22 +9,60 @@ profesor_show:
 profesor_new:
     path:     /new
     defaults: { _controller: "BackendBundle:Profesor:new" }
-
+    options:
+        expose: true
 profesor_create:
     path:     /create
     defaults: { _controller: "BackendBundle:Profesor:create" }
     requirements: { _method: post }
+    options:
+        expose: true
 
 profesor_edit:
     path:     /{id}/edit
     defaults: { _controller: "BackendBundle:Profesor:edit" }
+    options:
+        expose: true
 
 profesor_update:
     path:     /{id}/update
     defaults: { _controller: "BackendBundle:Profesor:update" }
-    requirements: { _method: post|put }
+    requirements: { _method: post|put|get }
+    options:
+        expose: true
 
 profesor_delete:
     path:     /{id}/delete
     defaults: { _controller: "BackendBundle:Profesor:delete" }
     requirements: { _method: post|delete }
+
+profesor_search:
+    path:     /profesor/search
+    defaults: { _controller: "BackendBundle:Profesor:search" }
+    options:
+        expose: true
+
+comprobar_profesor:
+    path:     /comprobarprofesor
+    defaults: { _controller: "BackendBundle:Profesor:ComprobarProfesor" }
+    options:
+        expose: true
+
+comprobar_dni_profesor:
+    path:     /comprobar_dni_profesor
+    defaults: { _controller: "BackendBundle:Profesor:ComprobarDniProfesor" }
+    options:
+        expose: true
+
+comprobar_dni_profesor_editado:
+    path:     /comprobar_dni_profesor_editado
+    defaults: { _controller: "BackendBundle:Profesor:ComprobarDniProfesorEditado" }
+    options:
+        expose: true
+
+profesores_por_curso:
+    path:     /profesores_por_curso/{id}
+    defaults: { _controller: "BackendBundle:Profesor:ProfesoresPorCurso" }
+    options:
+        expose: true
+

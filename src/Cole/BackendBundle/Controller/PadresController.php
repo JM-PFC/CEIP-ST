@@ -31,11 +31,46 @@ class PadresController extends Controller
             'entities' => $entities,
         ));
     }
+
+    protected function getErrorMessages(\Symfony\Component\Form\Form $form, $name) 
+    {
+        $errors = array();
+
+        foreach ($form->getErrors() as $key => $error) {
+            $errors[] = $error->getMessage();
+        }
+
+        foreach ($form->all() as $child) {
+            $type = $child->getConfig()->getType()->getName();
+            if ($child->count()  && ($type !== 'choice')) {
+                $childErrors = $this->getErrorMessages($child, $child->getName());
+                if (sizeof($childErrors)) {
+                    $errors = array_merge($errors, $childErrors);
+                }
+            } else {
+                if (!$child->isValid()) {
+                    if($name=="responsable1" || $name=="responsable2")
+                    {
+                    $errors[$child->getParent()->getParent()->getName().'_'.$name.'_'.$child->getName()] = $this->getErrorMessages($child, $child->getName());
+ 
+                    }
+                    else{
+                    $errors[$name.'_'.$child->getName()] = $this->getErrorMessages($child, $child->getName());
+                    }
+                }
+            }
+        }
+
+        return $errors;
+    }
+
+
+
     /**
      * Creates a new Padres entity.
      *
      */
-    public function createAction(Request $request)
+    /*public function createAction(Request $request)
     {
         $entity = new Padres();
         $form = $this->createCreateForm($entity);
@@ -52,10 +87,6 @@ class PadresController extends Controller
             $role = $em->getRepository('BackendBundle:Role')->find(1);
             $entity->setRole($role);
 
-            $extra=$this->get('request')->request->get('extra');
-            $entity->setNombre($extra);
-            $telefono=$this->get('request')->request->get('telefono');
-            $entity->setMovil($telefono);
 
             $entity->setUsername("padre1");
             
@@ -79,7 +110,70 @@ class PadresController extends Controller
             'entity' => $entity,
             'form'   => $form->createView(),
         ));
+    }*/
+
+    public function createAction(Request $request)
+    {
+    // if request is XmlHttpRequest (AJAX) but not a POSt, throw an exception
+      if ($request->isXmlHttpRequest() && !$request->isMethod('POST')) {
+        throw new HttpException('XMLHttpRequests/AJAX calls must be POSTed');}
+
+        $entity = new Padres();
+        $form = $this->createCreateForm($entity);
+        $form->handleRequest($request);
+
+        if ($form->isValid()) {  
+            $em = $this->getDoctrine()->getEntityManager(); 
+            $factory = $this->get('security.encoder_factory'); 
+            $encoder = $factory->getEncoder($entity);
+            //$password = $encoder->encodePassword($entity->getPassword(), $entity->getSalt());
+            $password = $encoder->encodePassword("p".substr($entity->getDni(), 0, -2), $entity->getSalt());
+            $entity->setPassword($password);
+            $role = $em->getRepository('BackendBundle:Role')->find(1);
+            $entity->setRole($role);
+     
+            $entity->setActivo(true);
+
+            $entity->setUsername("p".substr($entity->getDni(), 0, -2));
+            $entity->setClaveUsuario("padre: ".substr($entity->getDni(), 0, -2).substr($entity->getDni(), -1));
+
+            $exists = $em->getRepository('Cole\BackendBundle\Entity\Padres')->findOneBy(array('dni' => $entity->getDni()));
+
+            if(!$exists){
+                $em = $this->getDoctrine()->getManager();
+                $em->persist($entity);
+                $em->flush();
+                $resp=$entity->getId();
+            }
+            else{
+                $resp=$exists->getId();
+            }
+
+            if ($request->isXmlHttpRequest()) {
+                return new JsonResponse(array(
+                    'responsable'=>$resp,
+                    'responsableDni'=>$entity->getDni(),
+                    'message' => 'Success!',
+                    'success' => true), 200);
+            }
+            return $this->redirect($this->generateUrl('padres_show', array('id' => $entity->getId())));
+        }
+
+        if ($request->isMethod('POST')) {
+            return new JsonResponse(array(
+            'result' => 0,
+            'message' => 'Invalid form',
+            'data' => $this->getErrorMessages($form,$form->getName()),
+            'success' => false), 400);
+        }
+
+        return $this->render('BackendBundle:Padres:new.html.twig', array(
+            'entity' => $entity,
+            'form'   => $form->createView(),
+        ));
     }
+
+
 
     /**
      * Creates a form to create a Padres entity.
@@ -95,7 +189,7 @@ class PadresController extends Controller
             'method' => 'POST',
         ));
 
-        $form->add('submit', 'submit', array('label' => 'Crear'));
+        $form->add('submit', 'submit', array('label' => 'Asignar'));
 
         return $form;
     }
@@ -257,14 +351,21 @@ class PadresController extends Controller
         $em = $this->getDoctrine()->getEntityManager();
         $responsable = $em->getRepository('BackendBundle:Padres')->findResponsable($dni);
         if($responsable){
-            return new JsonResponse(array('message' =>'El DNI introducido pertenece a:'."\n\n", 'name'=>$responsable->getNombre()), 200);
+            return new JsonResponse(array(
+                'success' => true,
+                'message' =>'El DNI introducido pertenece a:'."\n\n", 'name'=>$responsable->getNombre()), 200);
+        }
+        else{
+           return new JsonResponse(array(
+               'success' => false),200);
+
         }
     }
 
+
+
     public function obtenerdatosresponsableAction()
     {
-        
-        
         $dni=$this->get('request')->request->get('dni');
         $em = $this->getDoctrine()->getEntityManager();
         $responsable = $em->getRepository('BackendBundle:Padres')->findResponsable($dni);

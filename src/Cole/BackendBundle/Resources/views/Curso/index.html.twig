@@ -1,43 +1,127 @@
-{% extends '::base.html.twig' %}
+{% extends 'BackendBundle:Default:index.html.twig' %}
+
+{% block stylesheets %}
+    {{parent()}}
+{% endblock %}
+    
+{% block javascript %}
+    <script type="text/javascript" src="{{ asset('bundles/backend/js/mask.js') }}"></script>
+    <script>
+    $("#añadir_infantil_modal").hover(function() {
+        $(this).find("#img_1").addClass("oculto");
+        $(this).find("#img_2").removeClass("oculto");
+
+    }, function() {
+        $(this).find("#img_2").addClass("oculto");
+        $(this).find("#img_1").removeClass("oculto");    }
+    );
+    $("#añadir_primaria_modal").hover(function() {
+        $(this).find("#img_1").addClass("oculto");
+        $(this).find("#img_2").removeClass("oculto");
+
+    }, function() {
+        $(this).find("#img_2").addClass("oculto");
+        $(this).find("#img_1").removeClass("oculto");    }
+    );
+
+    $("#cursos_dialog").dialog(
+       {
+        bgiframe: true,
+        autoOpen: false,
+        height: 260,
+        width: 350,
+        modal: true,
+        resizable: false,
+       }
+    );
+    $('#cursos_dialog').on('dialogclose', function(event) {
+        $('#cursos_dialog').empty();
+    });
+
+
+    </script>
+{% endblock %}
 
 {% block body -%}
-    <h1>Curso list</h1>
+    <div id="registro_cursos">
+    <div class="simple_column">
+        <div class="block_insert">
+            <h2>Registro de Cursos</h2></br>
+            <p>- Para <span>añadir</span> un nuevo curso pulse sobre el icono de añadir en el nivel correspondiente.</p>
+            </br></br>
+            <p>- Para <span>modificar</span> o <span>eliminar</span> un curso, seleccione el curso correspondiente.</p>
+        </div> 
+    </div>
+    <div class="derecha" id="contenedor_registro">  
+        <div>
+            <div id="cabecera_lista">
+                <h2>Educación Infantil
+                    <a id="añadir_infantil_modal" title="Añadir curso de Infantil" href="javascript:void(0);">
+                        <img id="img_1" class="add_registro" src="{{ asset('bundles/backend/images/menu/añadir_azul.png')}}">
+                        <img id="img_2" class="add_registro oculto" src="{{ asset('bundles/backend/images/menu/añadir_azul2.png')}}">
+                    </a>
+                </h2>
+            </div>
+            <div id="lista_cursos">
+                <table class="records_list">
+                    <thead>
+                    <tr>
+                        <th>Curso</th>
+                        <th>Nivel</th>
+                    </tr>
+                    </thead>
+                </table>
+                <div class="inner_table">
+                    <table>
+                    {% for entity in entities %}
+                        {% if entity.nivel == "Infantil" %}
+                        <tr>
+                            <td><a cargar-href="off" href="{{ path('curso_edit', { 'id': entity.id }) }}">{{ entity.curso }}</a></td>
+                            <td><a cargar-href="off" href="{{ path('curso_edit', { 'id': entity.id }) }}">{{ entity.nivel }}</a></td>
+                        </tr>
+                        {% endif %}
+                    {% endfor %}
+                    </table>
+                </div>
+            </div>
+        </div>          
+    </div>
 
-    <table class="records_list">
-        <thead>
-            <tr>
-                <th>Id</th>
-                <th>Nivel</th>
-                <th>Curso</th>
-                <th>Actions</th>
-            </tr>
-        </thead>
-        <tbody>
-        {% for entity in entities %}
-            <tr>
-                <td><a href="{{ path('curso_show', { 'id': entity.id }) }}">{{ entity.id }}</a></td>
-                <td>{{ entity.nivel }}</td>
-                <td>{{ entity.curso }}</td>
-                <td>
-                <ul>
-                    <li>
-                        <a href="{{ path('curso_show', { 'id': entity.id }) }}">show</a>
-                    </li>
-                    <li>
-                        <a href="{{ path('curso_edit', { 'id': entity.id }) }}">edit</a>
-                    </li>
-                </ul>
-                </td>
-            </tr>
-        {% endfor %}
-        </tbody>
-    </table>
+    <div class="derecha" id="contenedor_registro">  
+        <div>
+            <div id="cabecera_lista">
+                <h2>Educación Primaria
+                    <a id="añadir_primaria_modal" title="Añadir curso de Primaria" href="javascript:void(0);">
+                        <img id="img_1" class="add_registro" src="{{ asset('bundles/backend/images/menu/añadir_azul.png')}}">
+                        <img id="img_2" class="add_registro oculto" src="{{ asset('bundles/backend/images/menu/añadir_azul2.png')}}">
+                    </a>
+                </h2>
+            </div>
+            <div id="lista_cursos">
+                <table class="records_list">
+                    <thead>
+                    <tr>
+                        <th>Curso</th>
+                        <th>Nivel</th>
+                    </tr>
+                    </thead>
+                </table>
+                <div class="inner_table">
+                    <table>
+                    {% for entity in entities %}
+                        {% if entity.nivel == "Primaria" %}
+                        <tr>
+                            <td><a cargar-href="off" href="{{ path('curso_edit', { 'id': entity.id }) }}">{{ entity.curso }}</a></td>
+                            <td><a cargar-href="off" href="{{ path('curso_edit', { 'id': entity.id }) }}">{{ entity.nivel }}</a></td>
+                        </tr>
+                        {% endif %}
+                    {% endfor %}
+                    </table>
+                </div>
+            </div>
+        </div>          
+    </div>
 
-        <ul>
-        <li>
-            <a href="{{ path('curso_new') }}">
-                Create a new entry
-            </a>
-        </li>
-    </ul>
+    <div id="cursos_dialog" title="Registro de Curso">
+    </div>
     {% endblock %}

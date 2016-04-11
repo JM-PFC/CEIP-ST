@@ -1,0 +1,38 @@
+asignatura:
+    path:     /
+    defaults: { _controller: "BackendBundle:Asignatura:index" }
+    options:
+        expose: true
+
+asignatura_show:
+    path:     /show
+    defaults: { _controller: "BackendBundle:Asignatura:show" }
+
+asignatura_new:
+    path:     /new
+    defaults: { _controller: "BackendBundle:Asignatura:new" }
+    options:
+        expose: true
+
+asignatura_create:
+    path:     /create
+    defaults: { _controller: "BackendBundle:Asignatura:create" }
+    requirements: { _method: post }
+
+asignatura_edit:
+    path:     /{id}/edit
+    defaults: { _controller: "BackendBundle:Asignatura:edit" }
+    options:
+        expose: true
+
+asignatura_update:
+    path:     /{id}/update
+    defaults: { _controller: "BackendBundle:Asignatura:update" }
+    requirements: { _method: post|put }
+
+asignatura_delete:
+    path:     /{id}/delete
+    defaults: { _controller: "BackendBundle:Asignatura:delete" }
+    requirements: { _method: post|delete }
+    options:
+        expose: true

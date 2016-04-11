@@ -11,7 +11,8 @@ padres_show:
 padres_new:
     path:     /new
     defaults: { _controller: "BackendBundle:Padres:new" }
-
+    options:
+        expose: true
 padres_create:
     path:     /create
     defaults: { _controller: "BackendBundle:Padres:create" }

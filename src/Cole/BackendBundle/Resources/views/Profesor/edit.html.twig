@@ -1,16 +1,317 @@
-{% extends '::base.html.twig' %}
+{% extends 'BackendBundle:Default:index.html.twig' %}
+
+{% block stylesheets %}
+   {{parent()}}
+{% endblock %}
+
+{% block javascript %}
+  
+  <script type="text/javascript" src="{{ asset('bundles/backend/js/mask.js') }}"></script>
+  <script> 
+
+    var arr_perfilAcad = $("#edit_profesor_perfilAcademico").val().split("|");     
+    var arr_perfilProf= $("#edit_profesor_perfilProfesional").val().split("|");
+
+    $("#perfil_acad :input").each(function(i){
+      if(arr_perfilAcad[i]!="~"){
+          $(this).val(arr_perfilAcad[i]);
+      }
+    });  
+
+    $("#perfil_prof :input").each(function(i){
+      if(arr_perfilProf[i]!="~"){
+        $(this).val(arr_perfilProf[i]);
+      }
+    });      
+
+   </script>
+
+{% endblock %}
 
 {% block body -%}
-    <h1>Profesor edit</h1>
+	{{form_start(edit_form, {'action':path('profesor_update',{'id':entity.id}),'method':'Put','attr':{'class':'edit_profesor', 'id':'profesor_edit', novalidate:'novalidate', 'autocomplete':'off'}})}}
 
-    {{ form(edit_form) }}
+	{{ form_errors(edit_form) }}
+	<div>
+ 		<div id="content-form">
+     	<fieldset class="ajustada">
+        <legend>Ficha del profesor: {{entity.nombre}} {{entity.apellido1}} {{entity.apellido2}}</legend>
+        <div class="columna_foto">
+         	{{ form_errors(edit_form.foto) }}
+	        <div id="actual">
+            {% if entity.foto != null %}
+            <img id="foto" class="img-small" src="{{ asset('uploads/images/' ~ entity.foto) }}">
+            {% else %}
+              {% if entity.sexo == "Femenino" %}
+                <img id="sin_foto" class="img-small" src="{{ asset('bundles/backend/images/perfil/SinFoto-M.png') }}">
+              {% else %}
+                <img id="sin_foto" class="img-small" src="{{ asset('bundles/backend/images/perfil/SinFoto-H.png') }}">
+              {% endif %}
+   	        {% endif %}
+          </div>
+         	<div id="actualizada" class="oculto">
+	          <img id="foto" class="img-small"  src="">
+          </div>
+          <div id="por_defecto" class="oculto" >
+            {% if entity.sexo == "Femenino" %}
+              <img id="sin_foto" class="img-small" src="{{ asset('bundles/backend/images/perfil/SinFoto-M.png') }}">
+            {% else %}
+              <img id="sin_foto" class="img-small" src="{{ asset('bundles/backend/images/perfil/SinFoto-H.png') }}">
+            {% endif %}
+          </div>
+          <div id="iconos_foto">
+            {% if entity.foto == null %}
+              <a id="icono_añadir" title="Añadir una foto" href="javascript:void(0);">
+  	            <img src="{{ asset('bundles/backend/images/menu/añadir.png')}}">
+              </a>
+              <a id="icono_restablecer" class="disable" title="Restablecer a foto inicial" href="javascript:void(0);">
+                <img disabled="" src="{{ asset('bundles/backend/images/menu/restablecer.png')}}">
+              </a>
+              <a id="icono_eliminar" class="disable" title="Eliminar la foto actual" href="javascript:void(0);">
+                <img src="{{ asset('bundles/backend/images/menu/eliminar.png')}}">
+              </a>
+            {% else %}
+              <a id="icono_añadir" title="Modificar foto" href="javascript:void(0);">
+                <img src="{{ asset('bundles/backend/images/menu/añadir.png')}}">
+              </a>
+              <a id="icono_restablecer" class="disable" title="Restablecer a foto inicial" href="javascript:void(0);">
+                <img disabled="" src="{{ asset('bundles/backend/images/menu/restablecer.png')}}">
+              </a>
+              <a id="icono_eliminar" title="Eliminar la foto actual" href="javascript:void(0);">
+                <img src="{{ asset('bundles/backend/images/menu/eliminar.png')}}">
+              </a>
+            {% endif %}    
+          </div>
+	  		  {{ form_widget(edit_form.foto,{'id':'edit_'~edit_form.foto.vars.id }) }}
+          <span id="error_foto">
 
-        <ul class="record_actions">
-    <li>
-        <a href="{{ path('profesor') }}">
-            Back to the list
-        </a>
-    </li>
-    <li>{{ form(delete_form) }}</li>
-</ul>
-{% endblock %}
+          </span>	           
+        </div>   
+        <div class="marco_columna_contenido">  
+          <div class="columna_contenido">
+            <div class="block-one">
+              <h3 class="label_contenido">Información Personal<span> (Datos básicos de identificación)</span></h3>
+              <div class="big_column">
+         	    	{{ form_row(edit_form.dni,{'id':'edit_'~edit_form.dni.vars.id }) }}
+        	    	{{ form_row(edit_form.nombre,{'id':'edit_'~edit_form.nombre.vars.id }) }}
+         	  		{{ form_row(edit_form.apellido1,{'id':'edit_'~edit_form.apellido1.vars.id }) }}
+         	  		{{ form_row(edit_form.apellido2,{'id':'edit_'~edit_form.apellido2.vars.id }) }}
+            		{{ form_label(edit_form.sexo) }}
+        	  		<div class="input_radio">
+              		{{ form_row(edit_form.sexo[0],{'id':'edit_'~edit_form.sexo.vars.id~'_0' }) }}
+              		{{ form_row(edit_form.sexo[1],{'id':'edit_'~edit_form.sexo.vars.id~'_1' }) }}
+            		</div>
+			    		</div>
+				  	
+				  		<div class="big_column">
+	       	  		{{ form_row(edit_form.direccion,{'id':'edit_'~edit_form.direccion.vars.id }) }}
+	          		{{ form_row(edit_form.localidad,{'id':'edit_'~edit_form.localidad.vars.id }) }}
+          			{{ form_row(edit_form.provincia,{'id':'edit_'~edit_form.provincia.vars.id }) }}
+    	    			{{ form_row(edit_form.cp,{'id':'edit_'~edit_form.cp.vars.id }) }}
+        				{{ form_row(edit_form.email,{'id':'edit_'~edit_form.email.vars.id }) }}
+							</div>
+
+							<div class="small_column">
+        				{{ form_row(edit_form.fechaNacimiento,{'id':'edit_'~edit_form.fechaNacimiento.vars.id }) }}
+        				{{ form_row(edit_form.telefono,{'id':'edit_'~edit_form.telefono.vars.id }) }}
+								{{ form_row(edit_form.movil,{'id':'edit_'~edit_form.movil.vars.id }) }}
+        				<div>
+        					<label class="required" for="edit_profesor_opciones">Otras opciones</label>
+        					<button type="button">Cursos que imparte</button>
+        				</div>
+							</div>
+						</div>
+
+						<div class="block-one" id="perfil_acad">
+              <h3 class="label_contenido">Información Académica<span> (Información sobre el profesor dentro de la institución)</span></h3>
+                <div>
+                    <label class="long">Estudios realizados</label>
+                    <label class="medium">Institución</label>
+                    <label class="medium">Localidad/Provincia</label>
+                    <label class="short">Año</label>
+              </div>
+                <div>
+                    <div class="long">
+                        <input id="edit_perfil_acamedico1"  validation="Words"></input>
+                    </div>
+                    <div class="medium">
+                        <input id="edit_perfil_acamedico2"  validation="Words"></input>
+                    </div>
+                    <div class="medium">
+                        <input  id="edit_perfil_acamedico3" validation="Words"></input>
+                    </div>
+                    <div class="short">
+                        <input  id="edit_año_acamedico4" validation="Numbers"></input>
+                    </div>
+                </div>
+                <div>
+                    <div class="long">
+                        <input id="edit_perfil_acamedico5"  validation="Words"></input>
+                    </div>
+                    <div class="medium">
+                        <input id="edit_perfil_acamedico6"  validation="Words"></input>
+                    </div>
+                    <div class="medium">
+                        <input  id="edit_perfil_acamedico7" validation="Words"></input>
+                    </div>
+                    <div class="short">
+                        <input  id="edit_año_acamedico8" validation="Numbers"></input>
+                    </div>
+                </div>
+                <div>
+                    <div class="long">
+                        <input id="edit_perfil_acamedico9"  validation="Words"></input>
+                    </div>
+                    <div class="medium">
+                        <input id="edit_perfil_acamedico10"  validation="Words"></input>
+                    </div>
+                    <div class="medium">
+                        <input  id="edit_perfil_acamedico11" validation="Words"></input>
+                    </div>
+                    <div class="short">
+                        <input  id="edit_año_acamedico12" validation="Numbers"></input>
+                    </div>
+                </div>
+                <div>
+                    <div class="long">
+                        <input id="edit_perfil_acamedico13"  validation="Words"></input>
+                    </div>
+                    <div class="medium">
+                        <input id="edit_perfil_acamedico14"  validation="Words"></input>
+                    </div>
+                    <div class="medium">
+                        <input  id="edit_perfil_acamedico15" validation="Words"></input>
+                    </div>
+                    <div class="short">
+                        <input  id="edit_año_acamedico16" validation="Numbers"></input>
+                    </div>
+                </div>
+                <div>
+                    <div class="long">
+                        <input id="edit_perfil_acamedico17"  validation="Words"></input>
+                    </div>
+                    <div class="medium">
+                        <input id="edit_perfil_acamedico18"  validation="Words"></input>
+                    </div>
+                    <div class="medium">
+                        <input  id="edit_perfil_acamedico19" validation="Words"></input>
+                    </div>
+                    <div class="short">
+                        <input  id="edit_año_acamedico20" validation="Numbers"></input>
+                    </div>
+                </div>
+						</div>
+
+            <div class="block-one" id="perfil_prof">
+              <h3 class="label_contenido">Perfil Profesional<span> (Experiencia académica, cursos y especializaciones realizadas durante la carrera de docencia)</span></h3>
+              <div>
+                    <label class="long">Instituciones donde ha enseñado</label>
+                    <label class="medium">Localidad</label>
+                    <label class="medium">Provincia</label>
+                    <label class="short">Años</label>
+                </div>
+                <div>
+                    <div class="long">
+                        <input id="edit_perfil_profesional1"  validation="Words"></input>
+                    </div>
+                    <div class="medium">
+                        <input id="edit_perfil_profesional2"  validation="Words"></input>
+                    </div>
+                    <div class="medium">
+                        <input  id="edit_perfil_profesional3" validation="Words"></input>
+                    </div>
+                    <div class="short">
+                        <input  id="edit_año_profesional4" validation="Numbers"></input>
+                    </div>
+                </div>
+                <div>
+                    <div class="long">
+                        <input id="edit_perfil_profesional5"  validation="Words"></input>
+                    </div>
+                    <div class="medium">
+                        <input id="edit_perfil_profesional6"  validation="Words"></input>
+                    </div>
+                    <div class="medium">
+                        <input  id="edit_perfil_profesional7" validation="Words"></input>
+                    </div>
+                    <div class="short">
+                        <input  id="edit_año_profesional8" validation="Numbers"></input>
+                    </div>
+                </div>
+                <div>
+                    <div class="long">
+                        <input id="edit_perfil_profesional9"  validation="Words"></input>
+                    </div>
+                    <div class="medium">
+                        <input id="edit_perfil_profesional10"  validation="Words"></input>
+                    </div>
+                    <div class="medium">
+                        <input  id="edit_perfil_profesional11" validation="Words"></input>
+                    </div>
+                    <div class="short">
+                        <input  id="edit_año_profesional12" validation="Numbers"></input>
+                    </div>
+                </div>
+                <div>
+                    <div class="long">
+                        <input id="edit_perfil_profesional13"  validation="Words"></input>
+                    </div>
+                    <div class="medium">
+                        <input id="edit_perfil_profesional14"  validation="Words"></input>
+                    </div>
+                    <div class="medium">
+                        <input  id="edit_perfil_profesional15" validation="Words"></input>
+                    </div>
+                    <div class="short">
+                        <input  id="edit_año_profesional16" validation="Numbers"></input>
+                    </div>
+                </div>
+                <div>
+                    <div class="long">
+                        <input id="edit_perfil_profesional17"  validation="Words"></input>
+                    </div>
+                    <div class="medium">
+                        <input id="edit_perfil_profesional18"  validation="Words"></input>
+                    </div>
+                    <div class="medium">
+                        <input  id="edit_perfil_profesional19" validation="Words"></input>
+                    </div>
+                    <div class="short">
+                        <input  id="edit_año_profesional20" validation="Numbers"></input>
+                    </div>
+                </div>
+
+              <div class="big_column">
+                <div>
+                  <label class="required" for="edit_profesor_opciones">Otras opciones</label>
+                  <button type="button">Cursos que imparte</button>
+                </div>
+              </div>
+            </div>
+
+					</div>
+				</div>
+    	</fieldset>       
+  	</div>
+        
+  	<div id="botones_form">
+   		{{ form_row(edit_form.submit,{'id':'edit_'~edit_form.submit.vars.id }) }}
+  		<div>
+   	  	<button id="editar_profesor_restablecer" type="button" name="editar_profesor[restablecer]" >Restablecer</button>
+    	</div> 
+   	
+   		<div>
+      	<button id="editar_profesor_nuevaFicha" type="button" name="editar_profesor[nuevaFicha]" >Buscar otra ficha</button>
+    	</div>
+  	</div>
+        
+  	<div class="oculto">
+      {{ form_row(edit_form.perfilAcademico,{'id':'edit_'~edit_form.perfilAcademico.vars.id }) }}
+      {{ form_row(edit_form.perfilProfesional,{'id':'edit_'~edit_form.perfilProfesional.vars.id }) }}
+   		{{ form_rest(edit_form) }} 
+  	</div>
+  
+  	<div id="result"></div>
+		{{form_end(edit_form)}} 
+	</div>
+{% endblock %}        
