@@ -1,4 +1,11 @@
-{% extends '::base.html.twig' %}
+{% extends 'BackendBundle:Default:index.html.twig' %}
+
+{% block stylesheets %}
+    {{parent()}}
+{% endblock %}
+    
+{% block javascript %}
+{% endblock %}
 
 {% block body -%}
     <h1>Grupo creation</h1>

@@ -1,0 +1,65 @@
+{% extends 'BackendBundle:Default:index.html.twig' %}
+
+{% block stylesheets %}
+    {{parent()}}
+{% endblock %}
+
+{% block javascript %}
+{% endblock %}
+
+{% block body-%}
+    {{form_start(edit_form, {'action':path('centro_update',{'id':entity.id}),'method':'PUT','attr':{ 'id':'centro_edit',novalidate:'novalidate', 'autocomplete':'off'}})}}
+
+    {{ form_errors(edit_form) }}
+    <div>
+      <div id="content-form">
+      	<fieldset class="ajustada">
+          <legend>Datos del centro</legend>
+
+        <div class="marco_columna_contenido marco_margin_left">
+                <div class="parent">
+        <div class="child">  
+        <div class="columna_contenido">
+          <div class="block-one">
+            <h3 class="label_contenido">Datos del Centro</h3>
+            <img id="img_centro" src="/Symfony/web/bundles/backend/images/logo_trans.png" alt="logo del colegio">
+            <div class="big_column">
+              {{ form_row(edit_form.nombre) }}
+              {{ form_row(edit_form.direccion) }}
+              {{ form_row(edit_form.localidad) }}
+              {{ form_row(edit_form.provincia) }}
+
+           </div>
+            <div class="big_column">
+              {{ form_row(edit_form.cp) }}
+              {{ form_row(edit_form.telefono) }}
+              {{ form_row(edit_form.email) }}
+              {{ form_row(edit_form.web) }}
+
+            </div>
+  
+          </div>
+        </div> 
+              </div> 
+      </div>     
+      </div>
+ 
+  </fieldset >
+    </div>
+    <div id="botones_form">
+        {{ form_row(edit_form.submit) }}
+      <div>
+        <button id="editar_centro_restablecer" type="button" name="editar_centro[restablecer]" >Restablecer</button>
+      </div> 
+    </div>
+
+        
+    <div class="oculto">
+        {{ form_row(edit_form.limpiar) }}
+    </div>
+
+    <div id="result"></div>
+    </div>
+
+   {{form_end(edit_form)}}
+{% endblock %}

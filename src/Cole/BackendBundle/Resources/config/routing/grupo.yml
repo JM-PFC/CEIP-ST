@@ -3,8 +3,10 @@ grupo:
     defaults: { _controller: "BackendBundle:Grupo:index" }
 
 grupo_show:
-    path:     /{id}/show
+    path:     /show
     defaults: { _controller: "BackendBundle:Grupo:show" }
+    options:
+        expose: true
 
 grupo_new:
     path:     /new
@@ -28,3 +30,9 @@ grupo_delete:
     path:     /{id}/delete
     defaults: { _controller: "BackendBundle:Grupo:delete" }
     requirements: { _method: post|delete }
+
+asignar_aula:
+    path:     /asignar_aula
+    defaults: { _controller: "BackendBundle:Grupo:AsignarAula" }
+    options:
+        expose: true

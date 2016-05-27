@@ -12,4 +12,22 @@ use Doctrine\ORM\EntityRepository;
  */
 class CursoRepository extends EntityRepository
 {
+
+	public function findCursoByNivel($curso,$nivel)
+	{
+		return $this->getEntityManager()->createQuery(
+			'SELECT c FROM BackendBundle:Curso c WHERE c.curso=:curso AND c.nivel=:nivel')
+		->setParameters(array(
+			'curso' => $curso,
+			'nivel' => $nivel))
+		->setMaxResults(1)
+		->getOneOrNullResult();
+	}
+
+	public function findAllByCurso()
+	{
+		return $this->getEntityManager()->createQuery(
+		'SELECT c FROM BackendBundle:Curso c ORDER BY c.nivel, c.curso')
+		->getResult();
+	}
 }

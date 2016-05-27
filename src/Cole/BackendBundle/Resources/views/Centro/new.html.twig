@@ -1,0 +1,64 @@
+{% extends 'BackendBundle:Default:index.html.twig' %}
+
+{% block stylesheets %}
+    {{parent()}}
+{% endblock %}
+
+{% block javascript %}
+{% endblock %}
+
+{% block body-%}
+    {{form_start(form, {'action':path('centro_create'),'method':'POST','attr':{  novalidate:'novalidate', 'autocomplete':'off'}})}}
+
+    {{ form_errors(form) }}
+    <div>
+      <div id="content-form">
+      	        <fieldset class="ajustada">
+        <legend>Datos del centro</legend>
+
+        <div class="columna_foto">
+ 
+        </div> 
+        <div class="marco_columna_contenido marco_margin_left">
+                <div class="parent">
+        <div class="child">  
+        <div class="columna_contenido">
+          <div class="block-one">
+            <h3 class="label_contenido">Datos del Centro</h3>
+            <div class="big_column">
+              {{ form_row(form.nombre) }}
+              {{ form_row(form.direccion) }}
+              {{ form_row(form.localidad) }}
+              {{ form_row(form.provincia) }}
+
+           </div>
+            <div class="big_column">
+              {{ form_row(form.cp) }}
+              {{ form_row(form.telefono) }}
+              {{ form_row(form.email) }}
+              {{ form_row(form.web) }}
+
+            </div>
+  
+          </div>
+        </div> 
+              </div> 
+      </div>     
+      </div>
+ 
+  </fieldset >
+    </div>
+    <div id="botones_form">
+        {{ form_row(form.submit) }}
+      <div>
+        {{ form_row(form.limpiar) }}
+      </div> 
+    </div>
+
+        
+    <div class="oculto">
+
+    </div>
+
+   {{form_end(form)}}
+{% endblock %}

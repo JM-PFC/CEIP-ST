@@ -1,7 +1,3 @@
-ColeBundle_centro:
-    resource: "@ColeBundle/Resources/config/routing/centro.yml"
-    prefix:   /centro
-
 ColeBundle_noticias:
     resource: "@ColeBundle/Resources/config/routing/noticias.yml"
     prefix:   /noticias

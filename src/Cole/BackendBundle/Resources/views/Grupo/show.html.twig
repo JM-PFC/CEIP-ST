@@ -1,36 +1,115 @@
-{% extends '::base.html.twig' %}
+{% extends 'BackendBundle:Default:index.html.twig' %}
+
+{% block stylesheets %}
+    {{parent()}}
+{% endblock %}
+    
+{% block javascript %}
+<script>
+    if($("#td_inf").hasScrollBar()){
+        $("#table_th_inf").css("margin-left","-2%");
+    }
+
+    if($("#td_prim").hasScrollBar()){
+        $("#table_th_prim").css("margin-left","-2%");
+    }
+</script>
+{% endblock %}
 
 {% block body -%}
-    <h1>Grupo</h1>
+    <div id="asignar_aula">
+    <div class="simple_column_red">
+        <div class="block_insert">
+            <h2>Asignar Aula</h2></br>
+            <p>- Se puede guardar todas las aulas asignadas a la vez.</p>
 
-    <table class="record_properties">
-        <tbody>
-            <tr>
-                <th>Id</th>
-                <td>{{ entity.id }}</td>
-            </tr>
-            <tr>
-                <th>Letra</th>
-                <td>{{ entity.letra }}</td>
-            </tr>
-            <tr>
-                <th>Aula</th>
-                <td>{{ entity.aula }}</td>
-            </tr>
-        </tbody>
-    </table>
+            </br></br>
+            <div class="center_w60">
+                <button id="button_grupos_all">Guardar Todo</button>
+                </br></br></br>
+                <button id="button_grupos_rest">Restablecer</button>
+            </div>
+        </div> 
+    </div>
+    <div class="derecha contenedor_registro" id="contenedor_asignar_aula">  
+        <div>
+            <div id="cabecera_lista">
+                <h2>Educación Infantil</h2>
+            </div>
+            <div id="fondo_azul_osc">
+                <table class="records_list" id="table_th_inf">
+                    <thead>
+                    <tr>
+                        <th>Curso</th>
+                        <th>Nivel</th>
+                        <th>Grupo</th>
+                        <th id="th_aula_inf">Aula</th>
+                        <th></th>
+                    </tr>
+                    </thead>
+                </table>
+                <div class="inner_table" id="td_inf">
+                    <table>
+                    {% for entity in entities %}
+                        {% if entity.curso.nivel == "Infantil" %}
+                        <tr>
+                            <td>{{ entity.curso.curso}}</td>
+                            <td>{{ entity.curso.nivel }}</td>
+                            <td>{{ entity.letra}}</td>
+                            <td>
+                                <input value="{{ entity.aula }} " id="aula">
+                                    
+                                </input>
+                            </td>
+                            <td><button>Guardar</button></td>
+                        </tr>
+                        {% endif %}
+                    {% endfor %}
+                    </table>
+                </div>
+            </div>
+        </div>          
+    </div>
 
-        <ul class="record_actions">
-    <li>
-        <a href="{{ path('grupo') }}">
-            Back to the list
-        </a>
-    </li>
-    <li>
-        <a href="{{ path('grupo_edit', { 'id': entity.id }) }}">
-            Edit
-        </a>
-    </li>
-    <li>{{ form(delete_form) }}</li>
-</ul>
-{% endblock %}
+    <div class="derecha contenedor_registro" id="contenedor_asignar_aula" >  
+        <div>
+            <div id="cabecera_lista">
+                <h2>Educación Primaria</h2>
+            </div>
+            <div id="fondo_azul_osc">
+                <table class="records_list" id="table_th_prim">
+                    <thead>
+                    <tr>
+                        <th>Curso</th>
+                        <th>Nivel</th>
+                        <th>Grupo</th>
+                        <th id="th_aula_prim">Aula</th>
+                        <th></th>
+                    </tr>
+                    </thead>
+                </table>
+                <div class="inner_table" id="td_prim">
+                    <table>
+                    {% for entity in entities %}
+                        {% if entity.curso.nivel  == "Primaria" %}
+                        <tr>
+                            <td>{{ entity.curso.curso}}</td>
+                            <td>{{ entity.curso.nivel }}</td>
+                            <td>{{ entity.letra}}</td>
+                            <td>
+                                <input  value="{{ entity.aula }}" id="aula">
+                                </input>
+                            </td>
+                            <td><button>Guardar</button></td>
+                        </tr>
+                        {% endif %}
+                    {% endfor %}
+                    </table>
+                </div>
+            </div>
+        </div>          
+    </div>
+
+    </div>
+    {% endblock %}
+

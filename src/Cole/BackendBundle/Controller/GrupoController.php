@@ -4,8 +4,10 @@ namespace Cole\BackendBundle\Controller;
 
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\HttpFoundation\JsonResponse;
 
 use Cole\BackendBundle\Entity\Grupo;
+use Cole\BackendBundle\Entity\Curso;
 use Cole\BackendBundle\Form\GrupoType;
 
 /**
@@ -91,21 +93,14 @@ class GrupoController extends Controller
      * Finds and displays a Grupo entity.
      *
      */
-    public function showAction($id)
+    public function showAction()
     {
         $em = $this->getDoctrine()->getManager();
 
-        $entity = $em->getRepository('BackendBundle:Grupo')->find($id);
+        $entities = $em->getRepository('BackendBundle:Grupo')->findAllByCurso();
 
-        if (!$entity) {
-            throw $this->createNotFoundException('Unable to find Grupo entity.');
-        }
-
-        $deleteForm = $this->createDeleteForm($id);
-
-        return $this->render('BackendBundle:Grupo:show.html.twig', array(
-            'entity'      => $entity,
-            'delete_form' => $deleteForm->createView(),
+           return $this->render('BackendBundle:Grupo:show.html.twig', array(
+            'entities' => $entities,
         ));
     }
 
@@ -221,4 +216,47 @@ class GrupoController extends Controller
             ->getForm()
         ;
     }
+
+    public function AsignarAulaAction(Request $request)
+    {
+        // if request is XmlHttpRequest (AJAX) but not a POSt, throw an exception
+        if ($request->isXmlHttpRequest() && !$request->isMethod('POST')) {
+            throw new HttpException('XMLHttpRequests/AJAX calls must be POSTed');
+        }
+
+        $letra=$this->get('request')->request->get('letra');
+        $curso=$this->get('request')->request->get('curso');
+        $nivel=$this->get('request')->request->get('nivel');
+        $aula=$this->get('request')->request->get('aula');
+
+        
+        $em = $this->getDoctrine()->getEntityManager();
+        $entity = $em->getRepository('BackendBundle:Curso')->findCursoByNivel($curso,$nivel);
+        if (!$entity) {
+                throw $this->createNotFoundException('Unable to find Curso entity.');
+            }
+
+        $grupo = $em->getRepository('BackendBundle:Grupo')->findGrupoByLetter($entity,$letra);
+        if (!$grupo) {
+                throw $this->createNotFoundException('Unable to find Curso entity.');
+            }
+
+        $em = $this->getDoctrine()->getManager();
+        if($aula!==""){
+            $grupo->setAula($aula);     
+        }else{
+            $grupo->setAula(NULL);     
+        }
+
+        $em->persist($grupo);
+        $em->flush();
+        
+        if ($request->isXmlHttpRequest()) {
+                return new JsonResponse(array(
+                    'message' => 'Success!',
+                    'success' => true), 200);
+        }
+    }
+
+
 }

@@ -1,0 +1,922 @@
+{% extends 'BackendBundle:Default:index.html.twig' %}
+
+{% block stylesheets %}
+    {{parent()}}
+{% endblock %}
+
+{% block javascript %}
+
+  <script>  
+  $("#festivos_dialog").dialog({
+    bgiframe: true,
+    autoOpen: false,
+    height: 320,
+    width: 350,
+    modal: true,
+    resizable: false,
+    close: function( event, ui ) {        
+      $("#div_leyenda").addClass("oculto");
+      $("#actualizar_calendario").trigger("click");
+    },
+    open: function(event) {   
+      $("#actualizar_calendario").trigger("click");
+    }
+  });
+
+    $("#curso_dialog").dialog({
+    bgiframe: true,
+    autoOpen: false,
+    height: 390,
+    width: 470,
+    modal: true,
+    resizable: false,
+    close: function( event, ui ) {
+      // Se comprueba si se hay que registrar un nuevo curso. Si se cierra se cierra la pestaña también.   
+      if($("#curso_dialog>div").hasClass("nuevo")){     
+          div=$(".contenido_main").find("div[id^='tabs-'][style='display: block']");
+          $(" li[aria-controls='"+div.attr("id")+"'] span").trigger("click");
+      }
+    }
+  });
+
+  $('#festivos_dialog').on('dialogclose', function(event) {
+    $('#festivos_dialog').empty();
+  });
+
+  if($("#inicio_curso_disable").val()=="" && $("#fin_curso_disable").val()==""){
+    $(".calendario").hide();
+    $("#contenedor_leyenda").hide();
+
+    $('#curso_dialog').load(Routing.generate("registrar_curso"), function(){
+    }).dialog('open'); 
+  }
+
+  $(document).on("click","#inicio_curso_disable",function(event){
+    event.preventDefault();
+    $('#curso_dialog').load(Routing.generate("registrar_curso"), function(){
+    }).dialog('open');
+  });
+
+  $(document).on("click","#fin_curso_disable",function(event){
+    event.preventDefault();
+    $('#curso_dialog').load(Routing.generate("registrar_curso"), function(){
+    }).dialog('open');
+  });
+
+  $("#inicio_curso_disable").prop('readonly', true); //input sólo lectura
+  $("#fin_curso_disable").prop('readonly', true); //input sólo lectura
+
+
+
+  inicio_d={{ inicio.inicioCurso|date('d') }};
+  inicio_m= {{ inicio.inicioCurso|date('m') }};
+  inicio_a= {{ inicio.inicioCurso|date('Y') }};
+  fin_d={{ fin.finCurso|date('d') }};
+  fin_m= {{ fin.finCurso|date('m') }};
+  fin_a= {{ fin.finCurso|date('Y') }};
+  $.datepicker.regional['es'] = {
+    minDate: new Date(inicio_a, inicio_m-1, inicio_d),
+    closeText: 'Cerrar',
+    prevText: '<Ant',
+    nextText: 'Sig>',
+    currentText: 'Hoy',
+    monthNames: ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'],
+    monthNamesShort: ['Ene','Feb','Mar','Abr', 'May','Jun','Jul','Ago','Sep', 'Oct','Nov','Dic'],
+    dayNames: ['Domingo', 'Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado'],
+    dayNamesShort: ['Dom','Lun','Mar','Mié','Juv','Vie','Sáb'],
+    dayNamesMin: ['Do','Lu','Ma','Mi','Ju','Vi','Sá'],
+    weekHeader: 'Sm',
+    dateFormat: 'dd/mm/yy',
+    firstDay: 1,
+    isRTL: false,
+    showMonthAfterYear: false,
+    yearSuffix: ''
+  };
+  
+  $.datepicker.setDefaults($.datepicker.regional['es']);
+
+  $("#calendario").datepicker(  {
+    showOtherMonths: true,
+
+    //showButtonPanel: true,
+    onChangeMonthYear:function () {
+    $("#actualizar_calendario").trigger("click");
+    },
+    showOn:function () {
+      alert("ahora");
+    },
+    onSelect: function (date) {
+      // Your CSS changes, just in case you still need them       
+      //mes=$(this).closest("td").attr("data-month");
+      //ano=$(this).closest("td").attr("data-year");
+      //alert(date); 
+      fecha_separada=$(this).val().split('/'); 
+      if(fecha_separada[0].substr(0, 1)==0){
+        dia_selec=fecha_separada[0].substr(1, 2);
+      }
+      else{
+        dia_selec=fecha_separada[0];
+      }
+     
+      //if($(this).find("a:contains('"+dia_selec+"')").hasClass("festivo") && $(this).find("a:contains('"+dia_selec+"')").attr("tipo")!="traslado"){ 
+
+      //Se comprueba buscando el elemento que contiene el dia seleccionado exacto con filter.
+      if($(this).find("a").filter(function() {return $(this).text() === dia_selec;}).hasClass("festivo") && $(this).find("a").filter(function() {return $(this).text() === dia_selec;}).attr("tipo")!="traslado"){
+        //console.log($(this).find("a:contains('"+dia_selec+"')").hasClass("festivo"));
+        $.ajax({
+          type: 'POST',
+          url: Routing.generate('comprobar_festivo'),
+          data: {dia:fecha_separada[0], mes:fecha_separada[1]},
+          dataType: 'json',
+          success: function(response) {
+
+            $('#festivos_dialog').load(Routing.generate("festivos_edit", {id:response.data}), function(){
+          $('#festivos_dialog form').attr("tipo",$("#festivos_tipo").val());
+
+
+            $('#festivos_dia').val(fecha_separada[0]);
+            $('#festivos_mes').val($("#calendario span[class='ui-datepicker-month']").text());
+
+            }).dialog('open'); 
+
+          }
+        }) 
+
+      }
+      else{
+        var tipo="";
+          $('#festivos_dialog').load(Routing.generate("festivos_new"), function(){
+          $('#festivos_dialog form').attr("tipo",tipo );
+
+          $('#festivos_dia').val(fecha_separada[0]);
+          $('#festivos_mes').val($("#calendario span[class='ui-datepicker-month']").text());
+          $('#festivos_numMes').val(fecha_separada[1]);
+
+          
+
+          $('#dia_festivo select').val($('#festivos_dia').val());
+          $('#mes_festivo select').val($('#festivos_numMes').val());
+
+        console.log($("#festivos_dia").val());  
+        }).dialog('open'); 
+      }
+    }
+  }); 
+
+  $("#ui-datepicker-div").addClass("margin_calendar_festivos");
+/*
+  var dia_i_curso;
+  var mes_i_curso;
+  var anyo_i_curso;
+  if($("#inicio_curso").val()){
+    fecha=$("#inicio_curso").val().split(" ");
+    if(fecha[1]=="Septiembre"){
+      dia_i_curso=fecha[0];
+      mes_i_curso=8;
+      anyo_i_curso=inicio_a;
+    }
+    else{
+      dia_i_curso=fecha[0];
+      mes_i_curso=9;
+      anyo_i_curso=inicio_a;
+    }
+  }else{
+    dia_i_curso=1;
+    mes_i_curso=8;
+    anyo_i_curso=inicio_a;
+  }
+
+  var dia_f_curso;
+  var mes_f_curso;
+  var anyo_f_curso;
+  if($("#fin_curso").val()){
+    fecha=$("#fin_curso").val().split(" ");
+      if(fecha[1]=="Mayo"){
+        dia_f_curso=fecha[0];
+        mes_f_curso=4;
+        anyo_f_curso=fin_a;
+      }
+      else{
+        dia_f_curso=fecha[0];
+        mes_f_curso=5;
+        anyo_f_curso=fin_a;
+      }
+  }else{
+    dia_f_curso=30;
+    mes_f_curso=5;
+    anyo_f_curso=fin_a;
+  }
+
+
+  $("#inicio_curso").datepicker({
+    defaultDate: new Date(anyo_i_curso, mes_i_curso, dia_i_curso),
+    changeMonth: false,
+    numberOfMonths: 2,
+    dateFormat:"d MM ",
+    minDate: new Date(inicio_a, 8, 1),
+    maxDate: new Date(inicio_a, 9, 31),
+    beforeShow: function() { 
+      var dato = $("#inicio_curso").val();
+      $("#inicio_curso").datepicker('option', 'maxDate', new Date(inicio_a, 9, 31));
+      $("#inicio_curso").datepicker('option', 'minDate', new Date(inicio_a, 8, 1));
+      $("#inicio_curso").datepicker( "option", "showCurrentAtPos", 0);
+
+      if($("#inicio_curso").datepicker('getDate')){
+        var data1 =$("#inicio_curso").datepicker('getDate').toString();
+        if(data1){
+          var data2= data1.split(" ");      
+          if(data2[1]=="Oct"){
+            $("#inicio_curso").datepicker( "option", "showCurrentAtPos", 1);
+          }
+          else{
+            $("#inicio_curso").datepicker( "option", "showCurrentAtPos", 0);
+          }
+        }
+      }
+      $("#inicio_curso").val(dato);
+    },
+    onClose: function( selectedDate ) {
+
+      if($("#inicio_curso").val()!="" && $("#fin_curso").val()==""){
+        $("#fin_curso").focus();
+      }
+
+      var dato=$(this).attr("id").split("_");
+
+      setTimeout(function(){ 
+        if((!$("#ui-datepicker-div").is(":visible")) && ($("#inicio_"+dato[1]).val()=="" || $("#inicio_"+dato[1]).val()==" " || $("#fin_"+dato[1]).val()=="" || $("#fin_"+dato[1]).val()==" ")){
+          $("#inicio_"+dato[1]).val("");
+          $("#fin_"+dato[1]).val("");
+          if($("#inicio_"+dato[1]).attr("value")==$("#inicio_"+dato[1]).val().toString()){
+              $("#inicio_"+dato[1]).removeClass("modified");
+          }
+          else{
+              $("#inicio_"+dato[1]).addClass("modified");
+          }
+          if($("#fin_"+dato[1]).attr("value")==$("#fin_"+dato[1]).val().toString()){
+            $("#fin_"+dato[1]).removeClass("modified");
+          }
+          else{
+              $("#fin_"+dato[1]).addClass("modified");
+          }
+          
+          $("#inicio_"+dato[1]).datepicker('option', 'minDate', new Date(inicio_a, 8, 1));
+          $("#inicio_"+dato[1]).datepicker('option', 'maxDate', new Date(fin_a, 5, 30));
+          $("#fin_"+dato[1]).datepicker('option', 'minDate', new Date(inicio_a, 8, 1));
+          $("#fin_"+dato[1]).datepicker('option', 'maxDate', new Date(fin_a, 5, 30)); 
+
+        }
+      },300);
+    }
+  });
+
+  $("#fin_curso").datepicker({
+    defaultDate: new Date(anyo_f_curso, mes_f_curso, dia_f_curso),
+    changeMonth: false,
+    numberOfMonths: 2,
+    dateFormat:"d MM ",
+    minDate: new Date(fin_a,4, 1),
+    maxDate: new Date(fin_a,5, 30),
+    onClose: function( selectedDate ) {
+
+      if($("#fin_curso").val()!="" && $("#inicio_curso").val()==""){
+        $("#inicio_curso").focus();
+      }
+
+      var dato=$(this).attr("id").split("_");
+
+      setTimeout(function(){ 
+        if((!$("#ui-datepicker-div").is(":visible")) && ($("#inicio_"+dato[1]).val()=="" || $("#inicio_"+dato[1]).val()==" " || $("#fin_"+dato[1]).val()=="" || $("#fin_"+dato[1]).val()==" ")){
+          $("#inicio_"+dato[1]).val("");
+          $("#fin_"+dato[1]).val("");
+          if($("#inicio_"+dato[1]).attr("value")==$("#inicio_"+dato[1]).val().toString()){
+              $("#inicio_"+dato[1]).removeClass("modified");
+          }
+          else{
+              $("#inicio_"+dato[1]).addClass("modified");
+          }
+          if($("#fin_"+dato[1]).attr("value")==$("#fin_"+dato[1]).val().toString()){
+            $("#fin_"+dato[1]).removeClass("modified");
+          }
+          else{
+              $("#fin_"+dato[1]).addClass("modified");
+          }
+          
+          $("#inicio_"+dato[1]).datepicker('option', 'minDate', new Date(inicio_a, 8, 1));
+          $("#inicio_"+dato[1]).datepicker('option', 'maxDate', new Date(fin_a, 5, 30));
+          $("#fin_"+dato[1]).datepicker('option', 'minDate', new Date(inicio_a, 8, 1));
+          $("#fin_"+dato[1]).datepicker('option', 'maxDate', new Date(fin_a, 5, 30)); 
+
+        }
+      },300);
+    }
+  });
+*/
+  var dia_i_navidad;
+  var mes_i_navidad;
+  var anyo_i_navidad;
+  if($("#inicio_navidad").val()){
+    fecha=$("#inicio_navidad").val().split(" ");
+    if(fecha[1]=="Enero"){
+      dia_i_navidad=fecha[0];
+      mes_i_navidad=0;
+      anyo_i_navidad=fin_a;
+    }
+    else{
+      dia_i_navidad=fecha[0];
+      mes_i_navidad=11;
+      anyo_i_navidad=inicio_a;
+    }
+  }else{
+    dia_i_navidad=1;
+    mes_i_navidad=11;
+    anyo_i_navidad=inicio_a;
+  }
+
+  var dia_f_navidad;
+  var mes_f_navidad;
+  var anyo_f_navidad;
+  if($("#fin_navidad").val()){
+    fecha=$("#fin_navidad").val().split(" ");
+      if(fecha[1]=="Enero"){
+        dia_f_navidad=fecha[0];
+        mes_f_navidad=0;
+        anyo_f_navidad=fin_a;
+      }
+      else{
+        dia_f_navidad=fecha[0];
+        mes_f_navidad=11;
+        anyo_f_navidad=inicio_a;
+      }
+  }else{
+    dia_f_navidad=31;
+    mes_f_navidad=0;
+    anyo_f_navidad=fin_a;
+  }
+
+  $("#inicio_navidad").datepicker({
+    defaultDate: new Date(anyo_i_navidad, mes_i_navidad, dia_i_navidad),
+    changeMonth: false,
+    numberOfMonths: 2,
+    dateFormat:"d MM ",
+    minDate: new Date(inicio_a, 11, 1),
+    maxDate: new Date(anyo_f_navidad, mes_f_navidad, dia_f_navidad),
+    beforeShow: function() { 
+      var dato = $("#inicio_navidad").val();
+      var data1 = $("#fin_navidad").datepicker('getDate');
+
+      if(data1 && data1.getMonth()+1==1){
+        data1.setDate(data1.getDate()-1  );
+        $("#inicio_navidad").datepicker('option', 'maxDate', data1);
+        $("#inicio_navidad").val(dato);
+
+      }
+      else if(data1 && data1.getMonth()+1==12 && data1.getFullYear()==fin_a){
+        data1.setYear(data1.getFullYear()-1 );
+        data1.setDate(data1.getDate()-1  );
+        $("#inicio_navidad").datepicker('option', 'maxDate', data1);
+        $("#inicio_navidad").val(dato);
+      }
+      else if(data1 && data1.getMonth()+1==12 && data1.getFullYear()==inicio_a){
+        data1.setYear(data1.getFullYear() );
+        data1.setDate(data1.getDate()-1  );
+        $("#inicio_navidad").datepicker('option', 'maxDate', data1);
+        $("#inicio_navidad").val(dato);
+      }
+    },
+    onClose: function( selectedDate ) {
+
+      var dato = $("#fin_navidad").val();
+      var data1 = $("#inicio_navidad").datepicker('getDate');
+
+      if(data1 && data1.getMonth()+1==1){
+        data1.setDate(data1.getDate()+1  );
+        $("#fin_navidad").datepicker('option', 'minDate', data1);
+        $("#fin_navidad").val(dato);
+
+      }
+      else if(data1 && data1.getMonth()+1==12){
+        data1.setYear(data1.getFullYear()-1 );
+        data1.setDate(data1.getDate()+1  );
+        $("#fin_navidad").datepicker('option', 'minDate', data1);
+        $("#fin_navidad").val(dato);
+      }
+
+      if($("#inicio_navidad").val()!="" && $("#fin_navidad").val()==""){
+        $("#fin_navidad").focus();
+      }
+
+      var dato=$(this).attr("id").split("_");
+
+
+      setTimeout(function(){ 
+        if((!$("#ui-datepicker-div").is(":visible")) && ($("#inicio_"+dato[1]).val()=="" || $("#inicio_"+dato[1]).val()==" " || $("#fin_"+dato[1]).val()=="" || $("#fin_"+dato[1]).val()==" ")){
+          $("#inicio_"+dato[1]).val("");
+          $("#fin_"+dato[1]).val("");
+          if($("#inicio_"+dato[1]).attr("value")==$("#inicio_"+dato[1]).val().toString()){
+              $("#inicio_"+dato[1]).removeClass("modified");
+          }
+          else{
+              $("#inicio_"+dato[1]).addClass("modified");
+          }
+          if($("#fin_"+dato[1]).attr("value")==$("#fin_"+dato[1]).val().toString()){
+            $("#fin_"+dato[1]).removeClass("modified");
+          }
+          else{
+              $("#fin_"+dato[1]).addClass("modified");
+          }
+          
+          $("#inicio_"+dato[1]).datepicker('option', 'minDate', new Date(inicio_a, 11, 1));
+          $("#inicio_"+dato[1]).datepicker('option', 'maxDate', new Date(fin_a, 0, 31));
+          $("#fin_"+dato[1]).datepicker('option', 'minDate', new Date(inicio_a, 11, 1));
+          $("#fin_"+dato[1]).datepicker('option', 'maxDate', new Date(fin_a, 0, 31)); 
+
+        }
+      },300);
+    }
+  });
+
+
+  $("#fin_navidad").datepicker({
+    defaultDate: new Date(anyo_f_navidad, mes_f_navidad, dia_f_navidad),
+    changeMonth: false,
+    numberOfMonths: 2,
+    dateFormat:"d MM ",
+    minDate: new Date(anyo_i_navidad, mes_i_navidad, dia_i_navidad),
+    maxDate: new Date(fin_a, 0, 31),
+    beforeShow: function() { 
+
+      var dato = $("#fin_navidad").val();
+      var data1 = $("#inicio_navidad").val().split(" ");
+
+      if(data1 && data1[1]=="Enero"){
+        $("#fin_navidad").datepicker('option', 'minDate', new Date(inicio_a, 11, parseInt(data1[0])+1));
+        $("#fin_navidad").val(dato);
+      }
+      else if(data1 && data1[1]=="Diciembre") {      
+        $("#fin_navidad").datepicker('option', 'minDate', new Date(inicio_a, 11, parseInt(data1[0])+1));
+        $("#fin_navidad").val(dato);
+      }
+    },
+    onClose: function( selectedDate ) {
+      var dato = $("#inicio_navidad").val();
+      var data1 = $("#fin_navidad").datepicker('getDate');
+
+      if(data1 && data1.getMonth()+1==1){
+        data1.setDate(data1.getDate()-1  );
+        $("#inicio_navidad").datepicker('option', 'maxDate', data1);
+        $("#inicio_navidad").val(dato);
+
+      }
+      else if(data1 && data1.getMonth()+1==12){
+        data1.setYear(data1.getFullYear()-1 );
+        data1.setDate(data1.getDate()-1  );
+
+        $("#inicio_navidad").datepicker('option', 'maxDate', data1);
+        $("#inicio_navidad").val(dato);
+      }
+
+      if($("#fin_navidad").val()!="" && $("#inicio_navidad").val()==""){
+        $("#inicio_navidad").focus();
+      }
+
+      var dato=$(this).attr("id").split("_");
+
+      setTimeout(function(){ 
+        if((!$("#ui-datepicker-div").is(":visible")) && ($("#inicio_"+dato[1]).val()=="" || $("#inicio_"+dato[1]).val()==" " || $("#fin_"+dato[1]).val()=="" || $("#fin_"+dato[1]).val()==" ")){
+          $("#inicio_"+dato[1]).val("");
+          $("#fin_"+dato[1]).val("");
+
+          if($("#inicio_"+dato[1]).attr("value")==$("#inicio_"+dato[1]).val().toString()){
+              $("#inicio_"+dato[1]).removeClass("modified");
+          }
+          else{
+              $("#inicio_"+dato[1]).addClass("modified");
+          }
+          if($("#fin_"+dato[1]).attr("value")==$("#fin_"+dato[1]).val().toString()){
+            $("#fin_"+dato[1]).removeClass("modified");
+          }
+          else{
+              $("#fin_"+dato[1]).addClass("modified");
+          }
+
+          $("#inicio_"+dato[1]).datepicker('option', 'minDate', new Date(inicio_a, 11, 1));
+          $("#inicio_"+dato[1]).datepicker('option', 'maxDate', new Date(fin_a, 0, 31));
+          $("#fin_"+dato[1]).datepicker('option', 'minDate', new Date(inicio_a, 11, 1));
+          $("#fin_"+dato[1]).datepicker('option', 'maxDate', new Date(fin_a, 0, 31));     
+        }
+      },300);
+    }
+  });
+
+  var dia_i_semanasanta;
+  var mes_i_semanasanta;
+  var anyo_i_semanasanta;
+  if($("#inicio_semanasanta").val()){
+    fecha=$("#inicio_semanasanta").val().split(" ");
+    if(fecha[1]=="Marzo"){
+      dia_i_semanasanta=fecha[0];
+      mes_i_semanasantad=2;
+      anyo_i_semanasanta=fin_a;
+    }
+    else{
+      dia_i_semanasanta=fecha[0];
+      mes_i_semanasanta=3;
+      anyo_i_semanasanta=fin_a;
+    }
+  }else{
+    dia_i_semanasanta=1;
+    mes_i_semanasanta=2;
+    anyo_i_semanasanta=fin_a;
+  }
+
+
+  var dia_f_semanasanta;
+  var mes_f_semanasanta;
+  var anyo_f_semanasanta;
+  if($("#fin_semanasanta").val()){
+    fecha=$("#fin_semanasanta").val().split(" ");
+      if(fecha[1]=="Marzo"){
+        dia_f_semanasanta=fecha[0];
+        mes_f_semanasanta=2;
+        anyo_f_semanasanta=fin_a;
+      }
+      else{
+        dia_f_semanasanta=fecha[0];
+        mes_f_semanasanta=3;
+        anyo_f_semanasanta=fin_a;
+      }
+  }else{
+    dia_f_semanasanta=30;
+    mes_f_semanasanta=3;
+    anyo_f_semanasanta=fin_a;
+  }
+
+  $("#inicio_semanasanta").datepicker({
+    defaultDate: new Date(anyo_i_semanasanta, mes_i_semanasanta, dia_i_semanasanta),
+    changeMonth: false,
+    numberOfMonths: 2,
+    dateFormat:"d MM ",
+    minDate: new Date(fin_a, 2, 1),
+    maxDate: new Date(anyo_f_semanasanta, mes_f_semanasanta, dia_f_semanasanta),
+    beforeShow: function() { 
+      var dato = $("#inicio_semanasanta").val();
+      var data1 = $("#fin_semanasanta").datepicker('getDate');
+
+      if(data1){
+        data1.setDate(data1.getDate()-1  );
+        $("#inicio_semanasanta").datepicker('option', 'maxDate', data1);
+        $("#inicio_semanasanta").val(dato);
+      }
+    },
+    onClose: function( selectedDate ) {
+      var data1 = $( "#inicio_semanasanta" ).datepicker('getDate');
+      var dato = $("#fin_semanasanta").val();
+
+      if(data1){
+        data1.setDate(data1.getDate()+1  );
+        $("#fin_semanasanta").datepicker('option', 'minDate', data1);
+        $("#fin_semanasanta").val(dato);
+      }
+
+      if($("#inicio_semanasanta").val()!="" && $("#fin_semanasanta").val()==""){
+        $("#fin_semanasanta").focus();
+      }
+
+
+      var dato=$(this).attr("id").split("_");
+
+
+      setTimeout(function(){ 
+        if((!$("#ui-datepicker-div").is(":visible")) && ($("#inicio_"+dato[1]).val()=="" || $("#inicio_"+dato[1]).val()==" " || $("#fin_"+dato[1]).val()=="" || $("#fin_"+dato[1]).val()==" ")){
+          $("#inicio_"+dato[1]).val("");
+          $("#fin_"+dato[1]).val("");
+          if($("#inicio_"+dato[1]).attr("value")==$("#inicio_"+dato[1]).val().toString()){
+              $("#inicio_"+dato[1]).removeClass("modified");
+          }
+          else{
+              $("#inicio_"+dato[1]).addClass("modified");
+          }
+          if($("#fin_"+dato[1]).attr("value")==$("#fin_"+dato[1]).val().toString()){
+            $("#fin_"+dato[1]).removeClass("modified");
+          }
+          else{
+              $("#fin_"+dato[1]).addClass("modified");
+          }
+          
+          $("#inicio_"+dato[1]).datepicker('option', 'minDate', new Date(fin_a, 2, 1));
+          $("#inicio_"+dato[1]).datepicker('option', 'maxDate', new Date(fin_a, 3, 30));
+          $("#fin_"+dato[1]).datepicker('option', 'minDate', new Date(fin_a, 2, 1));
+          $("#fin_"+dato[1]).datepicker('option', 'maxDate', new Date(fin_a, 3, 30)); 
+
+        }
+      },300);
+    }
+  });
+
+  $("#fin_semanasanta").datepicker({
+    defaultDate: new Date(anyo_f_semanasanta, mes_f_semanasanta, dia_f_semanasanta),
+    changeMonth: false,
+    numberOfMonths: 2,
+    dateFormat:"d MM ",
+    minDate: new Date(anyo_i_semanasanta, mes_i_semanasanta, dia_i_semanasanta),
+    maxDate: new Date(fin_a, 3, 30),
+    beforeShow: function() { 
+      var dato = $("#fin_semanasanta").val();
+      var data1 = $("#inicio_semanasanta").val().split(" ");
+
+      if(data1 && data1[1]=="Marzo"){
+        $("#fin_semanasanta").datepicker('option', 'minDate', new Date(fin_a, 2, parseInt(data1[0])+1));
+        $("#fin_semanasanta").val(dato);
+      }
+      else if(data1 && data1[1]=="Abril") {      
+        $("#fin_semanasanta").datepicker('option', 'minDate', new Date(fin_a, 3, parseInt(data1[0])+1));
+        $("#fin_semanasanta").val(dato);
+      }
+    },
+    onClose: function( selectedDate ) {
+      var data1 = $( "#fin_semanasanta" ).datepicker('getDate');
+      var dato = $("#inicio_semanasanta").val();
+
+      if(data1){
+        data1.setDate(data1.getDate()-1  );
+        $("#inicio_semanasanta").datepicker('option', 'maxDate', data1);
+        $("#inicio_semanasanta").val(dato);
+
+      }
+
+      if($("#fin_semanasanta").val()!="" && $("#inicio_semanasanta").val()==""){
+        $("#inicio_semanasanta").focus();
+      }
+
+      var dato=$(this).attr("id").split("_");
+
+      setTimeout(function(){ 
+        if((!$("#ui-datepicker-div").is(":visible")) && ($("#inicio_"+dato[1]).val()=="" || $("#inicio_"+dato[1]).val()==" " || $("#fin_"+dato[1]).val()=="" || $("#fin_"+dato[1]).val()==" ")){
+          $("#inicio_"+dato[1]).val("");
+          $("#fin_"+dato[1]).val("");
+          if($("#inicio_"+dato[1]).attr("value")==$("#inicio_"+dato[1]).val().toString()){
+              $("#inicio_"+dato[1]).removeClass("modified");
+          }
+          else{
+              $("#inicio_"+dato[1]).addClass("modified");
+          }
+          if($("#fin_"+dato[1]).attr("value")==$("#fin_"+dato[1]).val().toString()){
+            $("#fin_"+dato[1]).removeClass("modified");
+          }
+          else{
+              $("#fin_"+dato[1]).addClass("modified");
+          }
+          
+          $("#inicio_"+dato[1]).datepicker('option', 'minDate', new Date(fin_a, 2, 1));
+          $("#inicio_"+dato[1]).datepicker('option', 'maxDate', new Date(fin_a, 3, 30));
+          $("#fin_"+dato[1]).datepicker('option', 'minDate', new Date(fin_a, 2, 1));
+          $("#fin_"+dato[1]).datepicker('option', 'maxDate', new Date(fin_a, 3, 30));     
+        }
+      },300);
+    }
+  });
+
+  /*$("#fin_semanasanta").datepicker({
+    changeMonth: false,
+    numberOfMonths: 2,
+    dateFormat:"d MM ",
+    minDate: new Date(fin_a, 2, 1),
+    maxDate: new Date(fin_a, 3, 30),
+    onClose: function( selectedDate ) {
+      comprobarFecha("semanasanta", new Date(fin_a, 2, 1),new Date(fin_a, 3, 30))
+    }
+  });
+
+  function comprobarFecha(tipo,min,max) {
+      var data1 = $( "#fin_"+tipo ).datepicker('getDate');
+      if(data1){
+        data1.setDate(data1.getDate()  );
+        $("#inicio_"+tipo).datepicker('option', 'maxDate', data1);
+      }
+
+      if($("#fin_"+tipo).val()!="" && $("#inicio_"+tipo).val()==""){
+        $("#inicio_"+tipo).focus();
+      }
+      
+      setTimeout(function(){ 
+
+        if((!$("#ui-datepicker-div").is(":visible")) && ($("#inicio_"+tipo).val()=="" || $("#inicio_"+tipo).val()==" " || $("#fin_"+tipo).val()=="" || $("#fin_"+tipo).val()==" ")){
+          $("#inicio_"+tipo).val("");
+          $("#fin_"+tipo).val("");
+          $("#inicio_"+tipo).removeClass("modified");
+          $("#fin_"+tipo).removeClass("modified");
+          
+          $("#inicio_"+tipo).datepicker('option', 'minDate', min);
+          $("#inicio_"+tipo).datepicker('option', 'maxDate', max);
+          $("#fin_"+tipo).datepicker('option', 'minDate', min);
+          $("#fin_"+tipo).datepicker('option', 'maxDate', max);     
+        }
+      },300);
+    }*/
+
+
+
+  $("#añadir_nacional_modal").hover(function(){
+    $(this).find("#img_1").addClass("oculto");
+    $(this).find("#img_2").removeClass("oculto");
+  }, function(){
+      $(this).find("#img_2").addClass("oculto");
+      $(this).find("#img_1").removeClass("oculto");    
+  });
+  
+  $("#añadir_local_modal").hover(function(){
+    $(this).find("#img_1").addClass("oculto");
+    $(this).find("#img_2").removeClass("oculto");
+  }, function(){
+    $(this).find("#img_2").addClass("oculto");
+    $(this).find("#img_1").removeClass("oculto");    
+  });
+   
+  $("#añadir_curso_modal").hover(function(){
+    $(this).find("#img_1").addClass("oculto");
+    $(this).find("#img_2").removeClass("oculto");
+  }, function() {
+    $(this).find("#img_2").addClass("oculto");
+    $(this).find("#img_1").removeClass("oculto");    
+  });
+
+
+
+  $('#calendario a[class*="ui-state-disabled"]').hide();
+  $("#actualizar_calendario").trigger("click");
+</script> 
+{% endblock %}
+
+{% block body %}
+  <div id="asignacion_festivos">
+    <div class="parent_no_form">
+      <div class="child">
+        <div class="column_50" id="contenedor_festivos">
+
+          <div class="double_column_no_form">
+            <p>Seleccione un rango para las siguientes fechas:</p>
+            <div>
+              <h2><span>Curso </span><span id="año_inicio">{{ inicio.inicioCurso|date('Y') }}</span> <span> / </span><span id="año_fin"> {{ fin.finCurso|date('Y') }}</span></h2>
+              <div id="rango_festivos">Del <input id="inicio_curso_disable" value="{{ inicio.inicioCurso| localizeddate('none', 'none', 'none',none , "d ")}}{{ inicio.inicioCurso| localizeddate('none', 'none', 'none',none , "MMMM")| capitalize }}"></input> al <input id="fin_curso_disable"  value="{{ fin.finCurso| localizeddate('none', 'none', 'none',none , "d ")}}{{ fin.finCurso| localizeddate('none', 'none', 'none',none , "MMMM")| capitalize }}"></input>
+              </div>
+            </div>
+            <div>
+              <h2><span>Vacaciones Navidad</span></h2>
+              <div id="rango_festivos">Del <input id="inicio_navidad" value="{% if data.inicio_navidad is not null %}{{ data.inicio_navidad.dia }} {{ data.inicio_navidad.mes }}{% endif %}"></input> al <input id="fin_navidad" value="{% if data.fin_navidad is not null %}{{ data.fin_navidad.dia }} {{ data.fin_navidad.mes }}{% endif %}"></input>
+              </div>
+            </div>
+            <div>
+              <h2><span>Semana Santa</span></h2>
+              <div id="rango_festivos">Del <input id="inicio_semanasanta" value="{% if data.inicio_semanasanta is not null %}{{ data.inicio_semanasanta.dia }} {{ data.inicio_semanasanta.mes }}{% endif %}"></input> al <input id="fin_semanasanta" value="{% if data.fin_semanasanta is not null %}{{ data.fin_semanasanta.dia }} {{ data.fin_semanasanta.mes }}{% endif %}"></input>
+              </div>     
+            </div>
+            <div id="botones_festivos">
+              <div>
+                <button id="button_festivos_all">Guardar</button>
+              </div>
+              <div>
+                <button id="button_festivos_rest">Restablecer</button>
+              </div>
+            </div>
+
+          </div>
+          <div class="double_column_no_form" id="vistas_festivos">
+            <p>Vistas de Festivos:</p>
+            <div>
+              <input id="festivos_calendario" type="radio" name="festivos" checked="checked" value="Calendario"></input> 
+              <label class="required" for="festivos_calendario">Calendario</label>
+            </div>
+            <div>
+              <input id="festivos_nacional" type="radio" name="festivos" value="Nacional"></input> 
+              <label class="required" for="festivos_nacional">Nacionales</label>
+            </div>
+            <div>
+              <input id="festivos_local" type="radio" name="festivos" value="Local"></input> 
+              <label class="required" for="festivos_local">Locales</label>
+            </div>
+            <div>
+              <input id="festivos_curso" type="radio" name="festivos" value="Curso"></input> 
+              <label class="required" for="festivos_curso">Curso Actual</label>
+            </div>
+
+
+          </div>
+
+        </div>
+
+        <div id="contenedor_calendario" class="column_50">  
+
+          <div id="d_calendario">
+            <div class="calendario" >
+              <div id="contenedor_calendar">
+                <div id="calendario">
+                
+                </div>
+                <div id="div_table_botones">
+                <table class='ui-datepicker-calendar'id='botones_leyenda'>
+                  <tbody>
+                    <tr>
+                      <td>
+                        <a id="inicio" fecha={{ inicio.inicioCurso|date('d/m/Y') }} class='ui-state-default' href="javascript:void(0);">Inicio Curso</a>
+                      </td>
+                      
+                      {% if  'now'|date('Y-m-d') > inicio.inicioCurso|date('Y-m-d') and  'now'|date('Y-m-d') < fin.finCurso|date('Y-m-d') %}
+
+                      <td>
+                        <a id="hoy" class='ui-state-default' href="javascript:void(0);">Hoy</a>
+                      </td>
+                      {% else  %}
+                      <td>
+                        <a class=' ui-state-default ui-state-disabled' href="javascript:void(0);">Hoy</a>
+                      </td>
+
+                      {% endif %}
+
+                      <td>
+                        <a id="final" fecha={{ fin.finCurso|date('d/m/Y') }} class='ui-state-default' href="javascript:void(0);">Final Curso</a>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+                </div>
+              </div>
+            </div>
+            
+            <div id='contenedor_leyenda'>
+              <div id='cabecera_leyenda'>
+                <h4>Días festivos del mes</h4>
+              </div>
+              <div id='div_leyenda' class="oculto">
+              {{ render(controller("BackendBundle:Festivos:FestivosPorMes", { 'id': "now"|date("m") })) }}
+              </div>
+            </div>
+          </div>
+          <div id="div_nacional" class="contenedor_registro" style="display: none;">
+        <div>
+            <div id="cabecera_lista">
+                <h2>FESTIVOS NACIONALES
+                    <a id="añadir_nacional_modal" title="Añadir Festivo Nacional" href="javascript:void(0);">
+                        <img id="img_1" class="add_registro" src="{{ asset('bundles/backend/images/menu/añadir_azul.png')}}">
+                        <img id="img_2" class="add_registro oculto" src="{{ asset('bundles/backend/images/menu/añadir_azul2.png')}}">
+                    </a>
+                </h2>
+            </div>
+            <div class="Festivos_list">
+              {{ render(controller("BackendBundle:Festivos:FestivosPorTipo", { 'id': "Nacional" })) }}
+            </div>
+        </div> 
+
+          </div>
+          <div id="div_local" class="contenedor_registro" style="display: none;">
+        <div>
+            <div id="cabecera_lista">
+                <h2>FESTIVOS LOCALES
+                    <a id="añadir_local_modal" title="Añadir Festivo Local" href="javascript:void(0);">
+                        <img id="img_1" class="add_registro" src="{{ asset('bundles/backend/images/menu/añadir_azul.png')}}">
+                        <img id="img_2" class="add_registro oculto" src="{{ asset('bundles/backend/images/menu/añadir_azul2.png')}}">
+                    </a>
+                </h2>
+            </div>
+            <div class="Festivos_list">
+              {{ render(controller("BackendBundle:Festivos:FestivosPorTipo", { 'id': "Local" })) }}
+            </div>
+        </div> 
+          </div>
+          <div id="div_curso"  class="contenedor_registro" style="display: none;">
+        <div>
+            <div id="cabecera_lista">
+                <h2>FESTIVOS DEL CURSO
+                    <a id="añadir_curso_modal" title="Añadir Festivo del Curso Actual" href="javascript:void(0);">
+                        <img id="img_1" class="add_registro" src="{{ asset('bundles/backend/images/menu/añadir_azul.png')}}">
+                        <img id="img_2" class="add_registro oculto" src="{{ asset('bundles/backend/images/menu/añadir_azul2.png')}}">
+                    </a>
+                </h2>
+            </div>
+            <div  class="Festivos_list">
+              {{ render(controller("BackendBundle:Festivos:FestivosPorTipo", { 'id': "Curso" })) }}
+            </div>
+        </div> 
+
+          </div>
+
+
+          </div>
+        </div>
+      </div>
+    </div>
+      
+    <div class="oculto">
+      <button id="actualizar_calendario"></button>
+    </div>
+  </div>
+  
+  <div id="festivos_dialog" title="Registro de Festivos"></div>
+  <div id="curso_dialog" title="Registro del Curso">
+
+
+{% endblock %}
+
+{#
+<td>{% if entity.fecha %}{{ entity.fecha|date('Y-m-d H:i:s') }}{% endif %}</td>
+#}

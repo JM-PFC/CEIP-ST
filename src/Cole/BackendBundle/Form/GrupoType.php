@@ -15,6 +15,7 @@ class GrupoType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
+            ->add('curso')
             ->add('letra')
             ->add('aula')
         ;

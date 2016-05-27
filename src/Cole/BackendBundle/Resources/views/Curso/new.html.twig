@@ -8,6 +8,9 @@
 
     <script>
         $("#curso_nivel").prop('readonly', true); //input sólo lectura
+        $("#curso_numGrupos").val(1);
+        $(".addregistro span[class='mensaje']").empty();
+
     </script>
 
 {% endblock %}
@@ -19,7 +22,7 @@
             <div id="content-form">
                 <fieldset >
                     <legend>Añadir nuevo Curso</legend>
-                        <div class="addcurso">
+                        <div class="addregistro">
                             {{ form_row(form.nivel) }}
                             {{ form_row(form.curso) }}
                         </div>
@@ -28,6 +31,8 @@
         
             <div id="botones_dialogo">
                 {{ form_row(form.submit) }}
+            </div>
+            <div class="oculto">
                 {{ form_rest(form) }} 
             </div>
         </div>

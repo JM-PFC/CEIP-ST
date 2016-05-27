@@ -3,6 +3,9 @@
 namespace Cole\BackendBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\Common\Collections\ArrayCollection;
+use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
 /**
  * Asignatura
@@ -49,6 +52,16 @@ class Asignatura
      */
     private $libro;
 
+    /**
+    * @ORM\OneToMany(targetEntity="Imparte", mappedBy="asignatura")
+    */
+    private $imparte;
+    
+    public function __construct()
+    {
+
+        $this->imparte = new ArrayCollection();
+    }
 
     /**
      * Get id
@@ -153,5 +166,41 @@ class Asignatura
         return $this->tipo;
     }
 
+    public function __toString()
+    {
+        return $this->getNombre();
+    }
 
+    /**
+     * Add imparte
+     *
+     * @param \Cole\BackendBundle\Entity\Imparte $imparte
+     * @return Asignatura
+     */
+    public function addImparte(\Cole\BackendBundle\Entity\Imparte $imparte)
+    {
+        $this->imparte[] = $imparte;
+
+        return $this;
+    }
+
+    /**
+     * Remove imparte
+     *
+     * @param \Cole\BackendBundle\Entity\Imparte $imparte
+     */
+    public function removeImparte(\Cole\BackendBundle\Entity\Imparte $imparte)
+    {
+        $this->imparte->removeElement($imparte);
+    }
+
+    /**
+     * Get imparte
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getImparte()
+    {
+        return $this->imparte;
+    }
 }

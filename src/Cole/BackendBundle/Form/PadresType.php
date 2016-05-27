@@ -21,7 +21,7 @@ class PadresType extends AbstractType
             ->add('profesion','text',array('label' => 'Profesión','max_length' => 50,'attr' => array('validation' => 'Words','class' => 'normal')))
             ->add('estadoCivil','choice',array('label' => 'Estado Civil', 'choices' => array('Casado/a' => 'Casado/a', 'Soltero/a'=>'Soltero/a', 'Separado/a'=>'Separado/a', 'Divorciado/a'=>'Divorciado/a','Pareja de hecho'=>'Pareja de hecho','Viudo/a'=>'Viudo/a'),'required'=> true,'multiple'=>false))
             ->add('movil','text', array('label' => 'Móvil', 'max_length' => 12, 'attr' => array('lengthmin'=> 9,'class' => 'telefono','validation' => 'Length,Telefono')))
-            ->add('email','email', array('label' => 'Email','required'=> false,'attr' => array('class' => 'email','validation' => 'Email')))
+            ->add('email','email', array('label' => 'Email','required'=> false,'attr' => array('class' => 'text_transform_none','class' => 'email','validation' => 'Email')))
             //->add('username','text',array('label' => 'Usuario'))
             //->add('password','text', array('label' => 'Password'))
             //->add('salt')

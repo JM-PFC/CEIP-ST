@@ -7,6 +7,8 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\JsonResponse;
 
 use Cole\BackendBundle\Entity\Curso;
+use Cole\BackendBundle\Entity\Grupo;
+use Cole\BackendBundle\Entity\Imparte;
 use Cole\BackendBundle\Form\CursoType;
 
 /**
@@ -24,7 +26,7 @@ class CursoController extends Controller
     {
         $em = $this->getDoctrine()->getManager();
 
-        $entities = $em->getRepository('BackendBundle:Curso')->findAll();
+        $entities = $em->getRepository('BackendBundle:Curso')->findAllByCurso();
 
         return $this->render('BackendBundle:Curso:index.html.twig', array(
             'entities' => $entities,
@@ -122,21 +124,14 @@ class CursoController extends Controller
      * Finds and displays a Curso entity.
      *
      */
-    public function showAction($id)
+    public function showAction()
     {
         $em = $this->getDoctrine()->getManager();
 
-        $entity = $em->getRepository('BackendBundle:Curso')->find($id);
-
-        if (!$entity) {
-            throw $this->createNotFoundException('Unable to find Curso entity.');
-        }
-
-        $deleteForm = $this->createDeleteForm($id);
+        $entities = $em->getRepository('BackendBundle:Curso')->findAllByCurso();
 
         return $this->render('BackendBundle:Curso:show.html.twig', array(
-            'entity'      => $entity,
-            'delete_form' => $deleteForm->createView(),
+            'entities' => $entities,
         ));
     }
 
@@ -223,6 +218,7 @@ class CursoController extends Controller
 
         if ($form->isValid()) {
             $em = $this->getDoctrine()->getManager();
+
             $entity = $em->getRepository('BackendBundle:Curso')->find($id);
 
             if (!$entity) {
@@ -251,5 +247,99 @@ class CursoController extends Controller
             ->add('submit', 'submit', array('label' => 'Eliminar'))
             ->getForm()
         ;
+    }
+
+    public function AsignarNumeroGruposAction(Request $request)
+    {
+        // if request is XmlHttpRequest (AJAX) but not a POSt, throw an exception
+        if ($request->isXmlHttpRequest() && !$request->isMethod('POST')) {
+            throw new HttpException('XMLHttpRequests/AJAX calls must be POSTed');
+        }
+
+        $num_grupos=$this->get('request')->request->get('num_grupos');
+        $curso=$this->get('request')->request->get('curso');
+        $nivel=$this->get('request')->request->get('nivel');
+        
+        $em = $this->getDoctrine()->getEntityManager();
+        $entity = $em->getRepository('BackendBundle:Curso')->findCursoByNivel($curso,$nivel);
+        if (!$entity) {
+                throw $this->createNotFoundException('Unable to find Curso entity.');
+            }
+        $num_grupos_ant=$entity->getNumGrupos();
+
+        $em = $this->getDoctrine()->getManager();
+
+        if($num_grupos==$num_grupos_ant && $num_grupos==1){
+
+            $grupo = $em->getRepository('BackendBundle:Grupo')->findGrupoByLetter($curso,"A");
+            if (!$grupo) {
+                $grupo_1= new Grupo();
+                $grupo_1->setCurso($entity);
+                $grupo_1->setLetra("A"); 
+            }
+            $em->persist($grupo_1);
+        }
+        else if($num_grupos>$num_grupos_ant){
+            if($num_grupos_ant==1){
+
+            $grupo = $em->getRepository('BackendBundle:Grupo')->findGrupoByLetter($curso,"B");
+            if (!$grupo) {
+                $grupo_2= new Grupo();
+                $grupo_2->setCurso($entity);
+                $grupo_2->setLetra("B"); 
+            }
+
+                $em->persist($grupo_2);
+
+                if($num_grupos==3){
+
+                $grupo = $em->getRepository('BackendBundle:Grupo')->findGrupoByLetter($curso,"C");
+                if (!$grupo) {
+                    $grupo_3= new Grupo();
+                    $grupo_3->setCurso($entity);
+                    $grupo_3->setLetra("C"); 
+                }
+
+                    $em->persist($grupo_3);
+                }
+            }
+            else{
+                
+                $grupo = $em->getRepository('BackendBundle:Grupo')->findGrupoByLetter($curso,"C");
+                if (!$grupo) {
+                    $grupo_3= new Grupo();
+                    $grupo_3->setCurso($entity);
+                    $grupo_3->setLetra("C"); 
+                }
+
+                $em->persist($grupo_3);
+            }    
+        }
+        else{
+            if($num_grupos_ant==3){
+                $grupo_3 = $em->getRepository('BackendBundle:Grupo')->findGrupoByLetter($entity,"C");
+                $em->remove($grupo_3);
+
+                if($num_grupos==1){
+                    $grupo_2 = $em->getRepository('BackendBundle:Grupo')->findGrupoByLetter($entity,"B");
+                    $em->remove($grupo_2);
+                }
+            }
+            else{
+                $grupo_2 = $em->getRepository('BackendBundle:Grupo')->findGrupoByLetter($entity,"B");
+                $em->remove($grupo_2);
+            }
+        }
+
+        $entity->setNumGrupos($num_grupos);     
+
+        $em->persist($entity);
+        $em->flush();
+        
+        if ($request->isXmlHttpRequest()) {
+                return new JsonResponse(array(
+                    'message' => 'Success!',
+                    'success' => true), 200);
+        }
     }
 }

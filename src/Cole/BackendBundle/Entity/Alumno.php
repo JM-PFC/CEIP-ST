@@ -145,18 +145,14 @@ class Alumno
     private $cursoIngreso;
 
     /**
-     * @var string
-     *
-     * @ORM\Column(name="curso", type="string", length=255, nullable=true)
-     * 
+     * @ORM\ManyToOne(targetEntity="Curso", inversedBy="alumnos")
+     * @ORM\JoinColumn(name="curso", referencedColumnName="id" ,nullable=true)
      */
     private $curso;
 
     /**
-     * @var string
-     *
-     * @ORM\Column(name="grupo", type="string", length=255, nullable=true)
-     * 
+     * @ORM\ManyToOne(targetEntity="Grupo", inversedBy="alumnos")
+     * @ORM\JoinColumn(name="grupo", referencedColumnName="id" ,nullable=true)
      */
     private $grupo;
      
@@ -535,51 +531,7 @@ class Alumno
         return $this->cursoIngreso;
     }
 
-    /**
-     * Set curso
-     *
-     * @param string $curso
-     * @return Alumno
-     */
-    public function setCurso($curso)
-    {
-        $this->curso = $curso;
 
-        return $this;
-    }
-
-    /**
-     * Get curso
-     *
-     * @return string 
-     */
-    public function getCurso()
-    {
-        return $this->curso;
-    }
-
-    /**
-     * Set grupo
-     *
-     * @param string $grupo
-     * @return Alumno
-     */
-    public function setGrupo($grupo)
-    {
-        $this->grupo = $grupo;
-
-        return $this;
-    }
-
-    /**
-     * Get grupo
-     *
-     * @return string 
-     */
-    public function getGrupo()
-    {
-        return $this->grupo;
-    }
 
     /**
      * Set foto
@@ -701,4 +653,53 @@ class Alumno
         return $this->getNombre().' '.$this->getApellido1().' '.$this->getApellido2();
     }
 
+
+
+
+
+    /**
+     * Set grupo
+     *
+     * @param \Cole\BackendBundle\Entity\Grupo $grupo
+     * @return Alumno
+     */
+    public function setGrupo(\Cole\BackendBundle\Entity\Grupo $grupo = null)
+    {
+        $this->grupo = $grupo;
+
+        return $this;
+    }
+
+    /**
+     * Get grupo
+     *
+     * @return \Cole\BackendBundle\Entity\Grupo 
+     */
+    public function getGrupo()
+    {
+        return $this->grupo;
+    }
+
+    /**
+     * Set curso
+     *
+     * @param \Cole\BackendBundle\Entity\Curso $curso
+     * @return Alumno
+     */
+    public function setCurso(\Cole\BackendBundle\Entity\Curso $curso = null)
+    {
+        $this->curso = $curso;
+
+        return $this;
+    }
+
+    /**
+     * Get curso
+     *
+     * @return \Cole\BackendBundle\Entity\Curso 
+     */
+    public function getCurso()
+    {
+        return $this->curso;
+    }
 }

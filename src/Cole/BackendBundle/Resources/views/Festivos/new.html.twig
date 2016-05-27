@@ -1,0 +1,94 @@
+{% extends 'BackendBundle:Default:index.html.twig' %}
+
+{% block stylesheets %}
+	{{parent()}}
+{% endblock %}
+
+{% block javascript %}
+
+    <script>
+    $("#festivos_nueva").hide();
+    setTimeout(function(){
+        if($("#festivos_tipo").val()==""){
+            $("#festivos_nueva").show();
+            $("#tipo_festivo").removeClass("oculto");
+        }
+        else{
+            $("#festivos_nueva").show();
+            
+            $("#festivos_tipo").prop('readonly', true); //input sólo lectura
+            $("#tipo_festivo_asig").removeClass("oculto");
+        }
+    }, 5);
+    $(".addregistro span[class='mensaje']").empty();
+    </script>
+
+{% endblock %}
+
+{% block body -%}
+    {{form_start(form, {'action':path('festivos_create'),'method':'POST','attr':{'id':'festivos_nueva' ,'class':'festivos_form' , novalidate:'novalidate', 'autocomplete':'off'}})}}
+        {{ form_errors(form) }}
+    	<div class="width100">
+    		<div id="content-form">
+        		<fieldset >
+            		<legend>Añadir Festivo</legend>
+                   		<div class="addregistro" >
+                            <div id="tipo_festivo_asig" class="oculto">
+                   			{{ form_row(form.tipo) }}
+                            </div>
+                            <div id="tipo_festivo" class="oculto" >
+                                {{ form_label(form.tipo) }}
+                                <select >
+                                    <option selected="selected" class="oculto" value=" ">Tipo de Festivo</option>
+                                    <option value="Local">Festivo Local</option>
+                                    <option value="Nacional">Festivo Nacional</option>
+                                    <option value="Curso">Curso Actual</option>
+
+                                </select>
+                            </div>
+
+
+                            <div>
+                                <div id="dia_festivo">
+                                    {{ form_label(form.dia) }}
+                                    <select >
+                                        <option selected="selected" class="oculto" value=" ">Día</option>
+                                        {% for i in 1..31 %}
+                                            <option value={{ "%02d" | format(i) }}>{{ i }}</option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                                <div id="mes_festivo">
+                        	    {{ form_label(form.mes) }}
+                                <select >
+                                    <option selected="selected" class="oculto" value=" ">Mes</option>
+                                    <option value="01">Enero</option>
+                                    <option value="02">Febrero</option>
+                                    <option value="03">Marzo</option>
+                                    <option value="04">Abril</option>
+                                    <option value="05">Mayo</option>
+                                    <option value="06">Junio</option>
+                                    <option value="07">Julio</option>
+                                    <option value="08">Agosto</option>
+                                    <option value="09">Septiembre</option>
+                                    <option value="10">Octubre</option>
+                                    <option value="11">Noviembre</option>
+                                    <option value="12">Diciembre</option>
+                                </select>
+                                </div>
+                            </div>
+                        	{{ form_row(form.descripcion) }}
+                    	</div>
+        		</fieldset>
+                <span class='red oculto'>*Dato Requerido</span>   
+    		</div>  
+    		<div id="botones_dialogo">
+        		{{ form_row(form.submit) }}
+    		</div>
+    		 <div class="oculto">
+        		{{ form_rest(form) }} 
+    		</div>
+    	</div>
+    {{form_end(form)}}
+{% endblock %}
+

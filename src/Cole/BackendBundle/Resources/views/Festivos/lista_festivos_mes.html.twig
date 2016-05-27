@@ -1,0 +1,23 @@
+
+{% block body %}
+
+    {% for entity in entities %}
+        {% if  entity.numMes  ==  inicio.inicioCurso|date('m')  %}
+            {% if  entity.dia  >= inicio.inicioCurso|date('d')  %}
+                <h4 id="{{ entity.dia }}" >{{ entity.dia }}</h4>
+                <h4 id="h4_descripcion">{{ entity.descripcion }}</h4>
+            {% endif %}
+
+        {% elseif entity.numMes == fin.finCurso|date('m') %}
+            {% if entity.dia <= fin.finCurso|date('d') %}
+                <h4 id="{{ entity.dia }}">{{ entity.dia }}</h4>
+                <h4 id="h4_descripcion">{{ entity.descripcion }}</h4>
+            {% endif %}
+        {% else %}
+                <h4 id="{{ entity.dia }}">{{ entity.dia }}</h4>
+                <h4 id="h4_descripcion">{{ entity.descripcion }}</h4>
+        {% endif %}
+
+    {% endfor %}
+
+{% endblock %}

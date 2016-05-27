@@ -1,0 +1,82 @@
+festivos:
+    path:     /
+    defaults: { _controller: "BackendBundle:Festivos:index" }
+    options:
+        expose: true
+        
+festivos_show:
+    path:     /{id}/show
+    defaults: { _controller: "BackendBundle:Festivos:show" }
+    options:
+        expose: true
+
+festivos_new:
+    path:     /new
+    defaults: { _controller: "BackendBundle:Festivos:new" }
+    options:
+        expose: true
+
+festivos_create:
+    path:     /create
+    defaults: { _controller: "BackendBundle:Festivos:create" }
+    requirements: { _method: post }
+
+festivos_edit:
+    path:     /{id}/edit
+    defaults: { _controller: "BackendBundle:Festivos:edit" }
+    options:
+        expose: true
+
+festivos_update:
+    path:     /{id}/update
+    defaults: { _controller: "BackendBundle:Festivos:update" }
+    requirements: { _method: post|put }
+
+festivos_delete:
+    path:     /{id}/delete
+    defaults: { _controller: "BackendBundle:Festivos:delete" }
+    requirements: { _method: post|delete }
+    options:
+        expose: true
+
+festivos_por_tipo:
+    path:     /festivos_por_tipo/{id}
+    defaults: { _controller: "BackendBundle:Festivos:FestivosPorTipo" }
+    options:
+        expose: true
+
+festivos_por_mes:
+    path:     /festivos_por_mes/{id}
+    defaults: { _controller: "BackendBundle:Festivos:FestivosPorMes" }
+    options:
+        expose: true
+
+comprobar_festivo:
+    path:     /comprobar_festivo
+    defaults: { _controller: "BackendBundle:Festivos:ComprobarFestivo" }
+    options:
+        expose: true
+
+dias_festivos:
+    path:     /dias_festivos
+    defaults: { _controller: "BackendBundle:Festivos:DiasFestivos" }
+    options:
+        expose: true
+
+registrar_dia_vacaciones:
+    path:     /registrar_dia_vacaciones
+    defaults: { _controller: "BackendBundle:Festivos:RegistrarDiaVacaciones" }
+    options:
+        expose: true
+
+eliminar_dia_vacaciones:
+    path:     /eliminar_dia_vacaciones
+    defaults: { _controller: "BackendBundle:Festivos:EliminarDiaVacaciones" }
+    options:
+        expose: true
+
+registrar_curso:
+    path:     /edit_curso
+    defaults: { _controller: "BackendBundle:Festivos:RegistrarCurso" }
+    options:
+        expose: true

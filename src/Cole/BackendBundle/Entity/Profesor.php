@@ -4,6 +4,7 @@ namespace Cole\BackendBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\UserInterface;
+use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
@@ -150,6 +151,7 @@ class Profesor implements UserInterface, \Serializable
      * @var string
      *
      * @ORM\Column(name="telefono", type="string", length=12, nullable=true)
+     * @Assert\Regex(pattern="/^\d{3}([- .]?\d{2}){3}$/",message="No es un número de teléfono válido.")
      */
     private $telefono;
 
@@ -157,6 +159,7 @@ class Profesor implements UserInterface, \Serializable
      * @var string
      *
      * @ORM\Column(name="movil", type="string", length=12, nullable=true)
+     * @Assert\Regex(pattern="/^\d{3}([- .]?\d{2}){3}$/",message="No es un número de teléfono válido.")
      */
     private $movil;
 
@@ -240,14 +243,25 @@ class Profesor implements UserInterface, \Serializable
 
     /**
      * @ORM\ManyToOne(targetEntity="Role", cascade={"persist"})
-    */
+     */
     private $role;
+
+    /**
+     * @ORM\OneToMany(targetEntity="Imparte", mappedBy="profesor")
+     */
+    private $imparte;
+
+    /**
+     * @ORM\OneToOne(targetEntity="Grupo", mappedBy="profesor")
+     */
+    private $grupo;
     
     public function __construct()
     {
         $this->activo = true;
         $this->salt = base_convert(sha1(uniqid(mt_rand(),true)), 16, 36);
         $this->fechaAlta= new \DateTime();
+        $this->imparte = new ArrayCollection();
     }
 
     /**
@@ -786,5 +800,61 @@ class Profesor implements UserInterface, \Serializable
     public function getPerfilProfesional()
     {
         return $this->perfilProfesional;
+    }
+
+    /**
+     * Add imparte
+     *
+     * @param \Cole\BackendBundle\Entity\Imparte $imparte
+     * @return Profesor
+     */
+    public function addImparte(\Cole\BackendBundle\Entity\Imparte $imparte)
+    {
+        $this->imparte[] = $imparte;
+
+        return $this;
+    }
+
+    /**
+     * Remove imparte
+     *
+     * @param \Cole\BackendBundle\Entity\Imparte $imparte
+     */
+    public function removeImparte(\Cole\BackendBundle\Entity\Imparte $imparte)
+    {
+        $this->imparte->removeElement($imparte);
+    }
+
+    /**
+     * Get imparte
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getImparte()
+    {
+        return $this->imparte;
+    }
+
+    /**
+     * Set grupo
+     *
+     * @param \Cole\BackendBundle\Entity\Grupo $grupo
+     * @return Profesor
+     */
+    public function setGrupo(\Cole\BackendBundle\Entity\Grupo $grupo = null)
+    {
+        $this->grupo = $grupo;
+
+        return $this;
+    }
+
+    /**
+     * Get grupo
+     *
+     * @return \Cole\BackendBundle\Entity\Grupo 
+     */
+    public function getGrupo()
+    {
+        return $this->grupo;
     }
 }

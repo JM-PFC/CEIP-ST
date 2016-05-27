@@ -1,0 +1,17 @@
+{% extends 'BackendBundle:Default:index.html.twig' %}
+
+{% block stylesheets %}
+    {{parent()}}
+{% endblock %}
+
+{% block javascript %}
+{% endblock %}
+
+{% block body -%}
+    {% if entities %}
+        {{render(controller("BackendBundle:Centro:edit",{ 'id': 1 }))}}
+    {% else %}
+        {{render(controller("BackendBundle:Centro:new"))}}
+
+    {% endif %}
+{% endblock %}

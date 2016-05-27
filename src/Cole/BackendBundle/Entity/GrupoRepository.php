@@ -12,4 +12,30 @@ use Doctrine\ORM\EntityRepository;
  */
 class GrupoRepository extends EntityRepository
 {
+	public function findGrupoByLetter($curso,$letra)
+	{
+		return $this->getEntityManager()->createQuery(
+			'SELECT g FROM BackendBundle:Grupo g WHERE g.curso=:curso AND g.letra=:letra')
+		->setParameters(array(
+			'curso' => $curso,
+			'letra' => $letra))
+		->setMaxResults(1)
+		->getOneOrNullResult();
+	}
+	public function findGruposByCurso($curso)
+	{
+		return $this->getEntityManager()->createQuery(
+		'SELECT g FROM BackendBundle:Grupo g WHERE g.curso=:curso')
+		->setParameters(array(
+			'curso' => $curso))
+		->getResult();
+	}
+
+	public function findAllByCurso()
+	{
+		return $this->getEntityManager()->createQuery(
+		'SELECT g,c FROM BackendBundle:Grupo g JOIN g.curso c ORDER BY c.nivel, c.curso, g.letra')
+		->getResult();
+	}
+
 }

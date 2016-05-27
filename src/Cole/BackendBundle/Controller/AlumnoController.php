@@ -7,6 +7,8 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\JsonResponse;
 
 use Cole\BackendBundle\Entity\Alumno;
+use Cole\BackendBundle\Entity\Curso;
+use Cole\BackendBundle\Entity\Grupo;
 use Cole\BackendBundle\Form\AlumnoType;
 use Cole\BackendBundle\Form\BusquedaAlumnoType;
 
@@ -103,8 +105,15 @@ class AlumnoController extends Controller
 
             //Busqueda y asignación del responsable si ya existe en el hijo correspondiente.        
             $responsable1 = $em->getRepository('BackendBundle:Padres')->findResponsable($entity->getResponsable1()->getDni());
+            if (!$responsable1) {
+                throw $this->createNotFoundException('Unable to find Padres entity.');
+            }
             $responsable2 = $em->getRepository('BackendBundle:Padres')->findResponsable($entity->getResponsable2()->getDni());
-                        //En caso de tener sólo un responsable, al segundo se le asigna el mismo.
+            if (!$responsable2) {
+                throw $this->createNotFoundException('Unable to find Padres entity.');
+            }
+
+            //En caso de tener sólo un responsable, al segundo se le asigna el mismo.
             if($entity->getResponsable2()->getDni() == "" ){
                 $entity->setResponsable2(NULL); 
             }
@@ -503,9 +512,15 @@ class AlumnoController extends Controller
         
         $em = $this->getDoctrine()->getEntityManager();
         $entity = $em->getRepository('BackendBundle:Alumno')->findAlumnoById($id_alumno);
+        if (!$entity) {
+            throw $this->createNotFoundException('Unable to find Alumno entity.');
+        }
         
         //Busqueda y asignación del responsable.        
         $resp = $em->getRepository('BackendBundle:Padres')->findResponsableById($id_responsable);
+        if (!$entity) {
+            throw $this->createNotFoundException('Unable to find Padres entity.');
+        }
             
         if($responsable=="responsable1"){
             $entity->setResponsable1($resp); 
@@ -545,6 +560,9 @@ class AlumnoController extends Controller
         
         $em = $this->getDoctrine()->getEntityManager();
         $entity = $em->getRepository('BackendBundle:Alumno')->findAlumnoById($id_alumno);
+        if (!$entity) {
+            throw $this->createNotFoundException('Unable to find Alumno entity.');
+        }
             
         $entity->setResponsable2(NULL); 
 
@@ -559,7 +577,99 @@ class AlumnoController extends Controller
         }
     }
 
+    
+    public function AlumnosAsignadosCursoAction()
+    {
+        $curso=$this->get('request')->request->get('curso');
+        $nivel=$this->get('request')->request->get('nivel');
 
+        $em = $this->getDoctrine()->getEntityManager();
+
+        $entity = $em->getRepository('BackendBundle:Curso')->findCursoByNivel($curso,$nivel);
+        if (!$entity) {
+            throw $this->createNotFoundException('Unable to find Curso entity.');
+        }
+
+        $alumnos= $em->getRepository('BackendBundle:Alumno')->findAlumnosPorCurso($entity);
+        if($alumnos){
+            return new JsonResponse(array('data' =>"No se puede eliminar el curso.\n\nExisten alumnos asignados al curso.\n\n"), 200);
+        }
+        return new JsonResponse(array('data' =>null), 200);
+
+    }
+
+
+    public function AlumnosAsignadosGrupoAction()
+    {
+        $curso=$this->get('request')->request->get('curso');
+        $nivel=$this->get('request')->request->get('nivel');
+        $num_grupos=$this->get('request')->request->get('num_grupos');
+        $num_grupos_ant=$this->get('request')->request->get('num_grupos_ant');
+
+        $em = $this->getDoctrine()->getEntityManager();
+
+        $entity = $em->getRepository('BackendBundle:Curso')->findCursoByNivel($curso,$nivel);
+        if (!$entity) {
+            throw $this->createNotFoundException('Unable to find Curso entity.');
+        }
+
+        if($num_grupos_ant==2 && $num_grupos==1){
+
+            $grupo = $em->getRepository('BackendBundle:Grupo')->findGrupoByLetter($entity,"B");
+            if (!$entity) {
+                throw $this->createNotFoundException('Unable to find Grupo entity.');
+            }     
+
+            $alumnos= $em->getRepository('BackendBundle:Alumno')->findAlumnosPorGrupo($grupo);
+            if($alumnos){
+                return new JsonResponse(array('data' =>"No se puede actualizar el número de grupos.\n\nExisten alumnos asignados a (poner curso y grupo).\n\n"), 200);
+            }
+            return new JsonResponse(array('data' =>null), 200);
+        }
+        else if($num_grupos_ant==3 && $num_grupos==2){
+
+            $grupo = $em->getRepository('BackendBundle:Grupo')->findGrupoByLetter($entity,"C");
+            if (!$entity) {
+                throw $this->createNotFoundException('Unable to find Grupo entity.');
+            }     
+
+            $alumnos= $em->getRepository('BackendBundle:Alumno')->findAlumnosPorGrupo($grupo);
+            if($alumnos){
+                return new JsonResponse(array('data' =>"No se puede actualizar el número de grupos.\n\nExisten alumnos asignados a (poner curso y grupo).\n\n"), 200);
+            }
+            return new JsonResponse(array('data' =>null), 200);
+        }
+        else{
+
+            $grupo_3 = $em->getRepository('BackendBundle:Grupo')->findGrupoByLetter($entity,"C");
+            if (!$entity) {
+                throw $this->createNotFoundException('Unable to find Grupo entity.');
+            }
+
+            $grupo_2 = $em->getRepository('BackendBundle:Grupo')->findGrupoByLetter($entity,"B");
+            if (!$entity) {
+                throw $this->createNotFoundException('Unable to find Grupo entity.');
+            }          
+
+            $alumnos_grupo_3= $em->getRepository('BackendBundle:Alumno')->findAlumnosPorGrupo($grupo_3);
+            $alumnos_grupo_2= $em->getRepository('BackendBundle:Alumno')->findAlumnosPorGrupo($grupo_2);
+
+            if($alumnos_grupo_2 && $alumnos_grupo_3){
+                return new JsonResponse(array('data' =>"No se puede actualizar el número de grupos.\n\nExisten alumnos asignados a (poner curso y grupo B y C).\n\n"), 200);
+            }
+
+            else if(!$alumnos_grupo_2 && !$alumnos_grupo_3){
+                return new JsonResponse(array('data' =>null), 200);
+            }
+            else if($alumnos_grupo_2){
+                return new JsonResponse(array('data' =>"No se puede actualizar el número de grupos.\n\nExisten alumnos asignados a (poner curso y grupo B).\n\n"), 200);
+                }
+        else{
+                return new JsonResponse(array('data' =>"No se puede actualizar el número de grupos.\n\nExisten alumnos asignados a (poner curso y grupo C).\n\n"), 200);
+
+                }
+        }
+    }
 
 
 

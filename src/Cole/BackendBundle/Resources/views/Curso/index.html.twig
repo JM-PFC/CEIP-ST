@@ -37,7 +37,13 @@
         $('#cursos_dialog').empty();
     });
 
+    if($("#td_inf").hasScrollBar()){
+        $("#table_th_inf").css("margin-left","-2%");
+    }
 
+    if($("#td_prim").hasScrollBar()){
+        $("#table_th_prim").css("margin-left","-2%");
+    }
     </script>
 {% endblock %}
 
@@ -51,7 +57,7 @@
             <p>- Para <span>modificar</span> o <span>eliminar</span> un curso, seleccione el curso correspondiente.</p>
         </div> 
     </div>
-    <div class="derecha" id="contenedor_registro">  
+    <div class="derecha contenedor_registro" id="contenedor_registro">  
         <div>
             <div id="cabecera_lista">
                 <h2>Educación Infantil
@@ -61,16 +67,16 @@
                     </a>
                 </h2>
             </div>
-            <div id="lista_cursos">
-                <table class="records_list">
+            <div id="fondo_azul_osc">
+                <table class="records_list" id="table_th_inf">
                     <thead>
                     <tr>
                         <th>Curso</th>
-                        <th>Nivel</th>
+                        <th id="th_nivel_inf">Nivel</th>
                     </tr>
                     </thead>
                 </table>
-                <div class="inner_table">
+                <div class="inner_table" id="td_inf">
                     <table>
                     {% for entity in entities %}
                         {% if entity.nivel == "Infantil" %}
@@ -86,7 +92,7 @@
         </div>          
     </div>
 
-    <div class="derecha" id="contenedor_registro">  
+    <div class="derecha contenedor_registro" id="contenedor_registro">  
         <div>
             <div id="cabecera_lista">
                 <h2>Educación Primaria
@@ -96,16 +102,16 @@
                     </a>
                 </h2>
             </div>
-            <div id="lista_cursos">
-                <table class="records_list">
+            <div id="fondo_azul_osc">
+                <table class="records_list" id="table_th_prim">
                     <thead>
                     <tr>
                         <th>Curso</th>
-                        <th>Nivel</th>
+                        <th id="th_nivel_prim">Nivel</th>
                     </tr>
                     </thead>
                 </table>
-                <div class="inner_table">
+                <div class="inner_table" id="td_prim">
                     <table>
                     {% for entity in entities %}
                         {% if entity.nivel == "Primaria" %}

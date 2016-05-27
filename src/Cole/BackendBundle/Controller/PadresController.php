@@ -130,6 +130,9 @@ class PadresController extends Controller
             $password = $encoder->encodePassword("p".substr($entity->getDni(), 0, -2), $entity->getSalt());
             $entity->setPassword($password);
             $role = $em->getRepository('BackendBundle:Role')->find(1);
+            if (!$role) {
+                throw $this->createNotFoundException('Unable to find Role entity.');
+            }
             $entity->setRole($role);
      
             $entity->setActivo(true);
@@ -369,6 +372,9 @@ class PadresController extends Controller
         $dni=$this->get('request')->request->get('dni');
         $em = $this->getDoctrine()->getEntityManager();
         $responsable = $em->getRepository('BackendBundle:Padres')->findResponsable($dni);
+        if (!$responsable) {
+            throw $this->createNotFoundException('Unable to find Padres entity.');
+        }
         $array['nombre'] = $responsable->getNombre();
         $array['fechaNacimiento'] = $responsable->getFechaNacimiento()->format('d/m/Y');
         $array['profesion'] = $responsable->getProfesion();

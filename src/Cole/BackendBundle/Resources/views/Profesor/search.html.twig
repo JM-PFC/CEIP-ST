@@ -15,13 +15,13 @@
         <p>Seleccione un método de búsqueda para el profesor:</p>
         <div>
             <div class="block_search">
-                <h2><span>Búsqueda por Curso</span></h2>
+                <h2 class="h2_label"><span>Búsqueda por Curso</span></h2>
                 <div id="lista_cursos">
                     {{render(controller("BackendBundle:Curso:listaCursos"))}}
                 </div> 
             </div> 
             <div class="block_search">
-                <h2><span>Búsqueda por Nombre</span></h2>
+                <h2 class="h2_label"><span>Búsqueda por Nombre</span></h2>
                 {{ form_row(form.nombre) }}
                 {{ form_row(form.apellido1) }}
                 {{ form_row(form.apellido2) }}

@@ -1,0 +1,35 @@
+centro:
+    path:     /
+    defaults: { _controller: "BackendBundle:Centro:index" }
+    options:
+        expose: true
+
+centro_show:
+    path:     /{id}/show
+    defaults: { _controller: "BackendBundle:Centro:show" }
+
+centro_new:
+    path:     /new
+    defaults: { _controller: "BackendBundle:Centro:new" }
+    options:
+        expose: true
+centro_create:
+    path:     /create
+    defaults: { _controller: "BackendBundle:Centro:create" }
+    requirements: { _method: post }
+
+centro_edit:
+    path:     /{id}/edit
+    defaults: { _controller: "BackendBundle:Centro:edit" }
+    options:
+        expose: true
+
+centro_update:
+    path:     /{id}/update
+    defaults: { _controller: "BackendBundle:Centro:update" }
+    requirements: { _method: post|put }
+
+centro_delete:
+    path:     /{id}/delete
+    defaults: { _controller: "BackendBundle:Centro:delete" }
+    requirements: { _method: post|delete }

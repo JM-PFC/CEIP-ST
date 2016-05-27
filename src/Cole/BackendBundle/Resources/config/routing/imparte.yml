@@ -1,0 +1,30 @@
+imparte:
+    path:     /
+    defaults: { _controller: "BackendBundle:Imparte:index" }
+
+imparte_show:
+    path:     /{id}/show
+    defaults: { _controller: "BackendBundle:Imparte:show" }
+
+imparte_new:
+    path:     /new
+    defaults: { _controller: "BackendBundle:Imparte:new" }
+
+imparte_create:
+    path:     /create
+    defaults: { _controller: "BackendBundle:Imparte:create" }
+    requirements: { _method: post }
+
+imparte_edit:
+    path:     /{id}/edit
+    defaults: { _controller: "BackendBundle:Imparte:edit" }
+
+imparte_update:
+    path:     /{id}/update
+    defaults: { _controller: "BackendBundle:Imparte:update" }
+    requirements: { _method: post|put }
+
+imparte_delete:
+    path:     /{id}/delete
+    defaults: { _controller: "BackendBundle:Imparte:delete" }
+    requirements: { _method: post|delete }

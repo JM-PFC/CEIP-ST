@@ -69,3 +69,16 @@ eliminar_responsable:
     defaults: { _controller: "BackendBundle:Alumno:EliminarResponsable" }
     options:
         expose: true
+
+alumnos_asignados_curso:
+    path:     /alumnos_asignados_curso
+    defaults: { _controller: "BackendBundle:Alumno:AlumnosAsignadosCurso" }
+    options:
+        expose: true
+
+alumnos_asignados_grupo:
+    path:     /alumnos_asignados_grupo
+    defaults: { _controller: "BackendBundle:Alumno:AlumnosAsignadosGrupo" }
+    options:
+        expose: true
+

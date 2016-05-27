@@ -7,6 +7,7 @@
         <thead>
             <tr>
                 <th>Id</th>
+                <th>Curso</th>
                 <th>Letra</th>
                 <th>Aula</th>
                 <th>Actions</th>
@@ -16,6 +17,7 @@
         {% for entity in entities %}
             <tr>
                 <td><a href="{{ path('grupo_show', { 'id': entity.id }) }}">{{ entity.id }}</a></td>
+                <td>{{ entity.curso }}</td>
                 <td>{{ entity.letra }}</td>
                 <td>{{ entity.aula }}</td>
                 <td>

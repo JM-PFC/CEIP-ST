@@ -35,3 +35,15 @@ BackendBundle_asignatura:
 BackendBundle_grupo:
         resource: "@BackendBundle/Resources/config/routing/grupo.yml"
         prefix:   /grupo
+
+BackendBundle_imparte:
+        resource: "@BackendBundle/Resources/config/routing/imparte.yml"
+        prefix:   /imparte
+
+BackendBundle_centro:
+        resource: "@BackendBundle/Resources/config/routing/centro.yml"
+        prefix:   /centro
+
+BackendBundle_festivos:
+        resource: "@BackendBundle/Resources/config/routing/festivos.yml"
+        prefix:   /festivos

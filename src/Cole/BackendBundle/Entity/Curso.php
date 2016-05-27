@@ -3,6 +3,9 @@
 namespace Cole\BackendBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\Common\Collections\ArrayCollection;
+use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
 /**
  * Curso
@@ -35,6 +38,33 @@ class Curso
      */
     private $curso;
 
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="numGrupos", type="integer")
+     */
+    private $numGrupos;
+
+    /**
+    * @ORM\OneToMany(targetEntity="Imparte", mappedBy="curso", cascade={"remove"})
+    */
+    private $imparte;
+
+    /**
+    * @ORM\OneToMany(targetEntity="Grupo", mappedBy="curso", cascade={"remove"})
+    */
+    private $grupos;
+
+    /**
+    * @ORM\OneToMany(targetEntity="Alumno", mappedBy="curso")
+    */
+    private $alumnos;
+    
+    public function __construct()
+    {
+
+        $this->grupos = new ArrayCollection();
+    }    
 
     /**
      * Get id
@@ -95,5 +125,127 @@ class Curso
         public function __toString()
     {
          return $this->getCurso().'  '.$this->getNivel();
+    }
+
+    /**
+     * Add grupos
+     *
+     * @param \Cole\BackendBundle\Entity\Grupo $grupos
+     * @return Curso
+     */
+    public function addGrupo(\Cole\BackendBundle\Entity\Grupo $grupos)
+    {
+        $this->grupos[] = $grupos;
+
+        return $this;
+    }
+
+    /**
+     * Remove grupos
+     *
+     * @param \Cole\BackendBundle\Entity\Grupo $grupos
+     */
+    public function removeGrupo(\Cole\BackendBundle\Entity\Grupo $grupos)
+    {
+        $this->grupos->removeElement($grupos);
+    }
+
+    /**
+     * Get grupos
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getGrupos()
+    {
+        return $this->grupos;
+    }
+
+    /**
+     * Add imparte
+     *
+     * @param \Cole\BackendBundle\Entity\Imparte $imparte
+     * @return Curso
+     */
+    public function addImparte(\Cole\BackendBundle\Entity\Imparte $imparte)
+    {
+        $this->imparte[] = $imparte;
+
+        return $this;
+    }
+
+    /**
+     * Remove imparte
+     *
+     * @param \Cole\BackendBundle\Entity\Imparte $imparte
+     */
+    public function removeImparte(\Cole\BackendBundle\Entity\Imparte $imparte)
+    {
+        $this->imparte->removeElement($imparte);
+    }
+
+    /**
+     * Get imparte
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getImparte()
+    {
+        return $this->imparte;
+    }
+
+    /**
+     * Set numGrupos
+     *
+     * @param integer $numGrupos
+     * @return Curso
+     */
+    public function setNumGrupos($numGrupos)
+    {
+        $this->numGrupos = $numGrupos;
+
+        return $this;
+    }
+
+    /**
+     * Get numGrupos
+     *
+     * @return integer 
+     */
+    public function getNumGrupos()
+    {
+        return $this->numGrupos;
+    }
+
+    /**
+     * Add alumnos
+     *
+     * @param \Cole\BackendBundle\Entity\Alumno $alumnos
+     * @return Curso
+     */
+    public function addAlumno(\Cole\BackendBundle\Entity\Alumno $alumnos)
+    {
+        $this->alumnos[] = $alumnos;
+
+        return $this;
+    }
+
+    /**
+     * Remove alumnos
+     *
+     * @param \Cole\BackendBundle\Entity\Alumno $alumnos
+     */
+    public function removeAlumno(\Cole\BackendBundle\Entity\Alumno $alumnos)
+    {
+        $this->alumnos->removeElement($alumnos);
+    }
+
+    /**
+     * Get alumnos
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getAlumnos()
+    {
+        return $this->alumnos;
     }
 }

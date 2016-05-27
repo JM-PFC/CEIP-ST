@@ -5,9 +5,11 @@ curso:
         expose: true
 
 curso_show:
-    path:     /{id}/show
+    path:     /show
     defaults: { _controller: "BackendBundle:Curso:show" }
-
+    options:
+        expose: true
+        
 curso_new:
     path:     /new
     defaults: { _controller: "BackendBundle:Curso:new" }
@@ -37,5 +39,11 @@ curso_delete:
     path:     /{id}/delete
     defaults: { _controller: "BackendBundle:Curso:delete" }
     requirements: { _method: post|delete }
+    options:
+        expose: true
+
+Asignar_Ngrupos:
+    path:     /Asignar_Ngrupos
+    defaults: { _controller: "BackendBundle:Curso:AsignarNumeroGrupos" }
     options:
         expose: true

@@ -17,7 +17,7 @@
 {% block body -%}
 
     {{form_start(edit_form, {'action':path('curso_update',{'id':entity.id}),'method':'PUT','attr':{'id':'curso_edit' , novalidate:'novalidate', 'autocomplete':'off'}})}}
-        {{ form_errors(form) }}
+        {{ form_errors(edit_form) }}
         <div class="width100">
             <div id="content-form">
                 <fieldset >
@@ -28,7 +28,11 @@
                         </div>
                 </fieldset> 
             </div>
+            <div class="oculto">
+               {{ form_row(edit_form.numGrupos) }} 
+            </div>
             {{ form_rest(edit_form) }}
+
             {{form_end(edit_form)}}
             <div class="double_button">
                 {{ form(delete_form) }}

@@ -1,0 +1,116 @@
+{% extends 'BackendBundle:Default:index.html.twig' %}
+
+{% block stylesheets %}
+    {{parent()}}
+{% endblock %}
+
+{% block javascript %}
+
+    <script>
+        if($("#festivos_tipo").val()!="" && $("#festivos_edit").attr("tipo")!=""){
+            $("#tipo_festivo").removeClass("oculto");
+            $("#tipo_festivo select option[value='"+$("#festivos_tipo").val()+"']").prop('selected',true);
+
+        }
+        else if($("#festivos_tipo").val()!=""){
+            $("#festivos_tipo").prop('readonly', true); //input sólo lectura
+            $("#tipo_festivo_asig").removeClass("oculto");
+        }
+        else{
+            $("#tipo_festivo").removeClass("oculto");
+        }
+        $(".addregistro span[class='mensaje']").empty();
+
+        if($("#festivos_dia").val().length=="1"){
+            $("#dia_festivo select option[value='0"+$("#festivos_dia").val()+"']").prop('selected',true);
+
+            $("#dia_festivo select option:not('0"+$("#festivos_dia").val()+"')").attr('disabled',true);
+            $("#mes_festivo select option:not('0"+$("#festivos_dia").val()+"')").attr('disabled',true);
+        }
+        else{
+            $("#dia_festivo select option[value='"+$("#festivos_dia").val()+"']").prop('selected',true);
+
+            $("#dia_festivo select option:not('"+$("#festivos_dia").val()+"')").attr('disabled',true);
+            $("#mes_festivo select option:not('"+$("#festivos_dia").val()+"')").attr('disabled',true);
+        }
+
+        $("#mes_festivo select option[value='"+$("#festivos_numMes").val()+"']").prop('selected',true);
+
+        $("#festivos_edit form").attr("id","festivos_delete");
+
+    </script>
+
+{% endblock %}
+
+{% block body -%}
+
+    {{form_start(edit_form, {'action':path('festivos_update',{'id':entity.id}),'method':'PUT','attr':{'id':'festivos_edit' ,'class':'festivos_form', novalidate:'novalidate', 'autocomplete':'off'}})}}
+        {{ form_errors(edit_form) }}
+        <div class="width100">
+            <div id="content-form">
+                <fieldset >
+                    <legend>Editar Festivo</legend>
+                        <div class="addregistro" >
+                            <div id="tipo_festivo_asig" class="oculto">
+                            {{ form_row(edit_form.tipo) }}
+                            </div>
+                            <div id="tipo_festivo" class="oculto" >
+                                {{ form_label(edit_form.tipo) }}
+                                <select >
+                                    <option selected="selected" class="oculto" value=" ">Tipo de Festivo</option>
+                                    <option value="Local">Festivo Local</option>
+                                    <option value="Nacional">Festivo Nacional</option>
+                                    <option value="Curso">Curso Actual</option>
+
+                                </select>
+                            </div>
+
+
+                            <div>
+                                <div id="dia_festivo">
+                                    {{ form_label(edit_form.dia) }}
+                                    <select >
+                                        <option selected="selected" class="oculto" value=" ">Día</option>
+                                        {% for i in 1..31 %}
+                                            <option value={{ "%02d" | format(i) }}>{{ i }}</option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                                <div id="mes_festivo">
+                                {{ form_label(edit_form.mes) }}
+                                <select >
+                                    <option selected="selected" class="oculto" value=" ">Mes</option>
+                                    <option value="01">Enero</option>
+                                    <option value="02">Febrero</option>
+                                    <option value="03">Marzo</option>
+                                    <option value="04">Abril</option>
+                                    <option value="05">Mayo</option>
+                                    <option value="06">Junio</option>
+                                    <option value="07">Julio</option>
+                                    <option value="08">Agosto</option>
+                                    <option value="09">Septiembre</option>
+                                    <option value="10">Octubre</option>
+                                    <option value="11">Noviembre</option>
+                                    <option value="12">Diciembre</option>
+                                </select>
+                                </div>
+                            </div>
+                            {{ form_row(edit_form.descripcion) }}
+                        </div>
+                </fieldset>
+                <span class='red oculto'>*Dato Requerido</span>   
+            </div>  
+             <div class="oculto">
+                {{ form_row(edit_form.dia) }}
+                {{ form_row(edit_form.mes) }}
+                {{ form_row(edit_form.numMes) }}
+            </div>
+            {{ form_rest(edit_form) }}
+
+            {{form_end(edit_form)}}
+            <div class="double_button">
+                {{ form(delete_form) }}
+            </div>
+        </div>
+    {{form_end(edit_form)}}
+{% endblock %}

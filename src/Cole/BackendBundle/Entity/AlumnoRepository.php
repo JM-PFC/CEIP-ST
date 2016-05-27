@@ -34,7 +34,33 @@ class AlumnoRepository extends EntityRepository
 	public function findAlumnosPorCurso($id)
 	{
 	return $this->getEntityManager()->createQuery(
-		'SELECT a FROM BackendBundle:Alumno a WHERE a.activo=1 ORDER BY a.apellido1')
+		'SELECT a FROM BackendBundle:Alumno a WHERE a.activo=:activo AND a.curso=:id ORDER BY a.apellido1')
+		->setParameters(array(
+			'id' => $id,
+			'activo'=>1))
 		->getResult();
 	}
+
+	public function findAlumnosPorGrupo($grupo)
+	{
+	return $this->getEntityManager()->createQuery(
+		'SELECT a FROM BackendBundle:Alumno a WHERE a.activo=:activo AND a.grupo=:grupo ORDER BY a.apellido1')
+		->setParameters(array(
+			'grupo' => $grupo,
+			'activo'=>1))
+		->getResult();
+	}
+
+
+
+	public function findAlumnosAsignadosCurso($curso,$nivel)
+	{
+		return $this->getEntityManager()->createQuery(
+		'SELECT a FROM BackendBundle:Alumno a WHERE a.curso=:curso AND a.nivel=:nivel')
+		->getResult();
+	}
+
+
+
+
 }

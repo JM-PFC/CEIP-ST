@@ -3,39 +3,144 @@
 {% block stylesheets %}
     {{parent()}}
 {% endblock %}
-
+    
 {% block javascript %}
+    <script>
 
-
+    </script>
 {% endblock %}
 
 {% block body -%}
-    <h1>Curso</h1>
+    <div id="registro_Ngrupos">
+    <div class="simple_column_red">
+        <div class="block_insert">
+            <h2>Asignar Nº Grupos</h2></br>
+            <p>- Se puede selecionar el mismo nº de grupos para cada curso.</p>
+            </br>
+            <div class="center_w85">
+                <span>Nº de Grupos:</span>
+                <select id="select_grupos_all">
+                    <option selected="selected" class="oculto" value="0">Nº</option>
+                    <option  value="1">1</option>
+                    <option  value="2">2</option>
+                    <option  value="3">3</option>
+                </select>
+            </div>
 
-    <table class="record_properties">
-        <tbody>
-            <tr>
-                <th>Curso</th>
-                <td>{{ entity.curso }}</td>
-            </tr>
-            <tr>
-                <th>Nivel</th>
-                <td>{{ entity.nivel }}</td>
-            </tr>
-        </tbody>
-    </table>
+            </br></br>
+            <div class="center_w60">
+                <button id="button_grupos_all">Guardar Todo</button>
+                </br></br></br>
+                <button id="button_grupos_rest">Restablecer</button>
+            </div>
+        </div> 
+    </div>
+    <div class="derecha contenedor_registro" id="contenedor_registro_Ngrupos">  
+        <div>
+            <div id="cabecera_lista">
+                <h2>Educación Infantil</h2>
+            </div>
+            <div >
+                <table class="records_list">
+                    <thead>
+                    <tr>
+                        <th></th>
+                        <th>Curso</th>
+                        <th>Nivel</th>
+                        <th>Nº Grupos</th>
+                        <th></th>
+                    </tr>
+                    </thead>
+                </table>
+                <div class="inner_table">
+                    <table>
+                    {% for entity in entities %}
+                        {% if entity.nivel == "Infantil" %}
+                        <tr>
+                            <td><span class="oculto">*</span></td>
+                            <td>{{ entity.curso }}</td>
+                            <td>{{ entity.nivel }}</td>
+                            <td>
+                                <select id="Ngrupo">
+                                {% if entity.numGrupos == "1" %}
+                                    <option selected="selected" value="1">1</option>
+                                    <option  value="2">2</option>
+                                    <option  value="3">3</option>
+                                {% elseif entity.numGrupos == "2" %}
+                                    <option  value="1">1</option>
+                                    <option selected="selected" value="2">2</option>
+                                    <option  value="3">3</option>
+                                {% else %}
+                                    <option  value="1">1</option>
+                                    <option  value="2">2</option>
+                                    <option selected="selected" value="3">3</option>
+                                {% endif %}
+                                </select>
+                            </td>
+                            <td><button>Guardar</button></td>
+                        </tr>
+                        {% endif %}
+                    {% endfor %}
+                    </table>
+                </div>
+            </div>
+        </div>          
+    </div>
 
-        <ul class="record_actions">
-    <li>
-        <a href="{{ path('curso') }}">
-            Back to the list
-        </a>
-    </li>
-    <li>
-        <a href="{{ path('curso_edit', { 'id': entity.id }) }}">
-            Edit
-        </a>
-    </li>
-    <li>{{ form(delete_form) }}</li>
-</ul>
-{% endblock %}
+    <div class="derecha contenedor_registro" id="contenedor_registro_Ngrupos" >  
+        <div>
+            <div id="cabecera_lista">
+                <h2>Educación Primaria</h2>
+            </div>
+            <div >
+                <table class="records_list">
+                    <thead>
+                    <tr>
+                        <th></th>
+                        <th>Curso</th>
+                        <th>Nivel</th>
+                        <th>Nº Grupos</th>
+                        <th></th>
+                    </tr>
+                    </thead>
+                </table>
+                <div class="inner_table">
+                    <table>
+                    {% for entity in entities %}
+                        {% if entity.nivel == "Primaria" %}
+                        <tr>
+                            <td><span class="oculto">*</span></td>
+                            <td>{{ entity.curso }}</td>
+                            <td>{{ entity.nivel }}</td>
+                            <td>
+                                <select id="Ngrupo">
+                                {% if entity.numGrupos == "1" %}
+                                    <option selected="selected" value="1">1</option>
+                                    <option  value="2">2</option>
+                                    <option  value="3">3</option>
+                                {% elseif entity.numGrupos == "2" %}
+                                    <option  value="1">1</option>
+                                    <option selected="selected" value="2">2</option>
+                                    <option  value="3">3</option>
+                                {% else %}
+                                    <option  value="1">1</option>
+                                    <option  value="2">2</option>
+                                    <option selected="selected" value="3">3</option>
+                                {% endif %}
+                                </select>
+                            </td>
+                            <td><button>Guardar</button></td>
+                        </tr>
+                        {% endif %}
+                    {% endfor %}
+                    </table>
+                </div>
+            </div>
+        </div>          
+    </div>
+    </div>
+    <div id="aviso_error" class="oculto"> 
+        <span>*</span>
+        <span>No se puede actualizar el número de grupos. El curso seleccionado tiene alumnos asignados a sus grupos. </span>
+    </div>
+    {% endblock %}

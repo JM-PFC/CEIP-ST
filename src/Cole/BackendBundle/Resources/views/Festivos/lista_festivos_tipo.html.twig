@@ -1,0 +1,23 @@
+
+{% block body %}
+                <table class="records_list" id="table_th_inf">
+                    <thead>
+                    <tr>
+                        <th>Día</th>
+                        <th>Mes</th>
+                        <th>Festivo</th>
+                    </tr>
+                    </thead>
+                </table>
+                <div class="inner_table" id="td_inf">
+                    <table>
+                    {% for entity in entities %}
+                        <tr>
+                            <td><a cargar-href="off" href="{{ path('festivos_edit', { 'id': entity.id }) }}">{{ entity.dia }}</a></td>
+                            <td><a cargar-href="off" href="{{ path('festivos_edit', { 'id': entity.id }) }}">{{ entity.mes }}</a></td>
+                            <td><a cargar-href="off" href="{{ path('festivos_edit', { 'id': entity.id }) }}">{{ entity.descripcion }}</a></td>
+                        </tr>
+                    {% endfor %}
+                    </table>
+                </div>
+    {% endblock %}
