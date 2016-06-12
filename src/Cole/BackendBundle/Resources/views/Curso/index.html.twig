@@ -49,15 +49,17 @@
 
 {% block body -%}
     <div id="registro_cursos">
-    <div class="simple_column">
+    <div class="parent_no_form">
+    <div class="child">
+      <div class="simple_column">
         <div class="block_insert">
             <h2>Registro de Cursos</h2></br>
             <p>- Para <span>añadir</span> un nuevo curso pulse sobre el icono de añadir en el nivel correspondiente.</p>
             </br></br>
             <p>- Para <span>modificar</span> o <span>eliminar</span> un curso, seleccione el curso correspondiente.</p>
         </div> 
-    </div>
-    <div class="derecha contenedor_registro" id="contenedor_registro">  
+      </div>
+      <div class="derecha contenedor_registro" id="contenedor_registro">  
         <div>
             <div id="cabecera_lista">
                 <h2>Educación Infantil
@@ -90,9 +92,9 @@
                 </div>
             </div>
         </div>          
-    </div>
+      </div>
 
-    <div class="derecha contenedor_registro" id="contenedor_registro">  
+      <div class="derecha contenedor_registro" id="contenedor_registro">  
         <div>
             <div id="cabecera_lista">
                 <h2>Educación Primaria
@@ -125,8 +127,10 @@
                 </div>
             </div>
         </div>          
-    </div>
+      </div>
 
-    <div id="cursos_dialog" title="Registro de Curso">
+      <div id="cursos_dialog" title="Registro de Curso">
+    </div>
+    </div>
     </div>
     {% endblock %}

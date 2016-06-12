@@ -9,15 +9,36 @@
     <script>
     $("#festivos_nueva").hide();
     setTimeout(function(){
+
+        $("#festivos_dia").prop('readonly', true);
+        $("#festivos_mes").prop('readonly', true);
+        $("#festivos_dia").attr('type', '');
+
+
+
         if($("#festivos_tipo").val()==""){
             $("#festivos_nueva").show();
             $("#tipo_festivo").removeClass("oculto");
+            $("#mes_festivo_asig").removeClass("oculto");
+            $("#dia_festivo_asig").removeClass("oculto");
         }
         else{
             $("#festivos_nueva").show();
             
-            $("#festivos_tipo").prop('readonly', true); //input sólo lectura
+            $("#tipo_festivo_asig input").prop('readonly', true); //input sólo lectura
             $("#tipo_festivo_asig").removeClass("oculto");
+            $("#mes_festivo").removeClass("oculto");
+            $("#dia_festivo").removeClass("oculto");
+
+            if($("#festivos_nueva").attr("tipo")=="Nacional"){
+                $("#tipo_festivo_asig input").val("Festivo Nacional");
+            }
+            else if($("#festivos_nueva").attr("tipo")=="Local"){
+                $("#tipo_festivo_asig input").val("Festivo Local");
+            }
+            else{
+                $("#tipo_festivo_asig input").val("Curso Actual");
+            }
         }
     }, 5);
     $(".addregistro span[class='mensaje']").empty();
@@ -34,7 +55,13 @@
             		<legend>Añadir Festivo</legend>
                    		<div class="addregistro" >
                             <div id="tipo_festivo_asig" class="oculto">
-                   			{{ form_row(form.tipo) }}
+                                <div>
+                                    <label>Tipo</label>
+                                    <input ></input>
+                                </div>
+                            </div>
+                            <div id="tipo_f" class="oculto">
+                                {{ form_row(form.tipo) }}
                             </div>
                             <div id="tipo_festivo" class="oculto" >
                                 {{ form_label(form.tipo) }}
@@ -47,9 +74,8 @@
                                 </select>
                             </div>
 
-
-                            <div>
-                                <div id="dia_festivo">
+                            <div id="fecha_festivo">
+                                <div id="dia_festivo" class="oculto">
                                     {{ form_label(form.dia) }}
                                     <select >
                                         <option selected="selected" class="oculto" value=" ">Día</option>
@@ -58,9 +84,14 @@
                                         {% endfor %}
                                     </select>
                                 </div>
-                                <div id="mes_festivo">
-                        	    {{ form_label(form.mes) }}
-                                <select >
+
+                                <div id="dia_festivo_asig" class="oculto" >
+                                    {{ form_row(form.dia) }}
+                                </div>
+
+                                <div id="mes_festivo" class="oculto">
+                        	      {{ form_label(form.mes) }}
+                                  <select >
                                     <option selected="selected" class="oculto" value=" ">Mes</option>
                                     <option value="01">Enero</option>
                                     <option value="02">Febrero</option>
@@ -74,7 +105,11 @@
                                     <option value="10">Octubre</option>
                                     <option value="11">Noviembre</option>
                                     <option value="12">Diciembre</option>
-                                </select>
+                                  </select>
+                                </div>
+
+                                <div id="mes_festivo_asig" class="oculto">
+                                    {{ form_row(form.mes) }}
                                 </div>
                             </div>
                         	{{ form_row(form.descripcion) }}

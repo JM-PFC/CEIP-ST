@@ -33,3 +33,9 @@ centro_delete:
     path:     /{id}/delete
     defaults: { _controller: "BackendBundle:Centro:delete" }
     requirements: { _method: post|delete }
+
+registrar_fecha_curso:
+    path:     /registrar_fecha_curso
+    defaults: { _controller: "BackendBundle:Centro:fechaCurso" }
+    options:
+        expose: true

@@ -11,8 +11,10 @@
 {% endblock %}
 
 {% block body -%}
-    <div id="registro_Ngrupos">
-    <div class="simple_column_red">
+  <div id="registro_Ngrupos">
+    <div class="parent_no_form">
+    <div class="child">
+      <div class="simple_column_red">
         <div class="block_insert">
             <h2>Asignar Nº Grupos</h2></br>
             <p>- Se puede selecionar el mismo nº de grupos para cada curso.</p>
@@ -34,8 +36,9 @@
                 <button id="button_grupos_rest">Restablecer</button>
             </div>
         </div> 
-    </div>
-    <div class="derecha contenedor_registro" id="contenedor_registro_Ngrupos">  
+      </div>
+      <div>
+       <div class="derecha contenedor_registro" id="contenedor_registro_Ngrupos">  
         <div>
             <div id="cabecera_lista">
                 <h2>Educación Infantil</h2>
@@ -85,9 +88,9 @@
                 </div>
             </div>
         </div>          
-    </div>
+       </div>
 
-    <div class="derecha contenedor_registro" id="contenedor_registro_Ngrupos" >  
+       <div class="derecha contenedor_registro" id="contenedor_registro_Ngrupos" >  
         <div>
             <div id="cabecera_lista">
                 <h2>Educación Primaria</h2>
@@ -137,10 +140,14 @@
                 </div>
             </div>
         </div>          
-    </div>
-    </div>
-    <div id="aviso_error" class="oculto"> 
+       </div>
+       <div id="aviso_error" class="oculto"> 
         <span>*</span>
         <span>No se puede actualizar el número de grupos. El curso seleccionado tiene alumnos asignados a sus grupos. </span>
+       </div>   
+     </div>
     </div>
+    </div>
+  </div>
+
     {% endblock %}

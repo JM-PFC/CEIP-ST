@@ -18,7 +18,9 @@
 
 {% block body -%}
     <div id="asignar_aula">
-    <div class="simple_column_red">
+    <div class="parent_no_form">
+    <div class="child">
+      <div class="simple_column_red">
         <div class="block_insert">
             <h2>Asignar Aula</h2></br>
             <p>- Se puede guardar todas las aulas asignadas a la vez.</p>
@@ -30,8 +32,9 @@
                 <button id="button_grupos_rest">Restablecer</button>
             </div>
         </div> 
-    </div>
-    <div class="derecha contenedor_registro" id="contenedor_asignar_aula">  
+      </div>
+      <div>
+       <div class="derecha contenedor_registro" id="contenedor_asignar_aula">  
         <div>
             <div id="cabecera_lista">
                 <h2>Educación Infantil</h2>
@@ -69,9 +72,9 @@
                 </div>
             </div>
         </div>          
-    </div>
+       </div>
 
-    <div class="derecha contenedor_registro" id="contenedor_asignar_aula" >  
+       <div class="derecha contenedor_registro" id="contenedor_asignar_aula" >  
         <div>
             <div id="cabecera_lista">
                 <h2>Educación Primaria</h2>
@@ -108,8 +111,10 @@
                 </div>
             </div>
         </div>          
+       </div>
+      </div>
     </div>
-
+    </div>
     </div>
     {% endblock %}
 

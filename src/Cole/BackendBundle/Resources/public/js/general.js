@@ -1467,6 +1467,7 @@ $("#dialog-confirm span").hide();
     formdata.append('estado', estado);
 
     if(val==0){
+      alert("entra");
       $.ajax({
         type: 'POST',
         url: $(this).attr('action'),
@@ -2088,6 +2089,11 @@ $(document).on("blur","input[id='edit_profesor_dni']",function() {
     $(div).load(Routing.generate("grupo_show"));
   });
 
+  // Se hace click en toda la fila de la tabla.
+  $(document).on('click',".contenedor_registro .inner_table td",function(event){
+    $(this).find("a").trigger("click");
+  });
+
 
 //////////////////////////////////
 //         Asignaturas          //
@@ -2213,20 +2219,37 @@ $(document).on("blur","input[id='edit_profesor_dni']",function() {
   // Botones del calendario.
   $(document).on('click',"#botones_leyenda a[id='inicio']",function(event){
     event.preventDefault();
-    $("#calendario").datepicker("setDate", $(this).attr("fecha"));
+    fecha=$(this).attr("fecha").split("/");
+    $("#calendario")
 
+    month=parseInt($("#calendario td[data-handler='selectDay'] ").attr("data-month"))+1;
+    mes=parseInt(fecha[1]);
+
+    year=$("#calendario td[data-handler='selectDay'] ").attr("data-year");             
+    if(año==year && mes!=month){
+      $("#calendario").datepicker("setDate", $(this).attr("fecha"));
+    }
   });
 
   $(document).on('click',"#botones_leyenda a[id='final']",function(event){
-    event.preventDefault();
-    $("#calendario").datepicker("setDate", $(this).attr("fecha"));
+    fecha=$(this).attr("fecha").split("/");
+    $("#calendario")
+
+    month=parseInt($("#calendario td[data-handler='selectDay'] ").attr("data-month"))+1;
+    mes=parseInt(fecha[1]);
+
+    year=$("#calendario td[data-handler='selectDay'] ").attr("data-year");             
+    if(año==year && mes!=month){
+      $("#calendario").datepicker("setDate", $(this).attr("fecha"));
+    }
 
   });
   
   $(document).on('click',"#botones_leyenda a[id='hoy']",function(event){
-    event.preventDefault();
-    $("#calendario").datepicker().datepicker("setDate", new Date());
-
+    event.preventDefault();  
+    if(!$("#calendario td").hasClass("ui-datepicker-today")){
+      $("#calendario").datepicker().datepicker("setDate", new Date());
+    }
   });
 
   $(document).on("mouseover","#botones_leyenda a", function () {
@@ -2236,11 +2259,19 @@ $(document).on("blur","input[id='edit_profesor_dni']",function() {
   $(document).on("mouseout","#botones_leyenda a", function () {
     $(this).removeClass("ui-state-hover");
   });
+
+
+  $(document).on("click","#calendario_completo", function () {
+    alert("Se mostrará el calendario completo para descargar");
+  });
+  
  
  // Se actualiza el calenndario de festivos
   $(document).on('click',"#actualizar_calendario",function(event){
     event.preventDefault();
     // Retardo para ejecutarlo una vez cargado el datepicker.
+        $("#div_leyenda").addClass("oculto");      
+
     setTimeout(function(){ 
       mes=$("#contenedor_calendar tbody td[data-handler='selectDay']").attr("data-month");
       año=$("#contenedor_calendar tbody td[data-handler='selectDay']").attr("data-year");
@@ -2316,7 +2347,7 @@ $(document).on("blur","input[id='edit_profesor_dni']",function() {
                     $("#div_leyenda h4[id='"+(response.fin_vacaciones["dia"]+1)+"'").remove();
                     $(".ui-datepicker-calendar td[data-month='"+(mes-1)+"']").find("a").filter(function(){return $(this).text()==(response.fin_vacaciones["dia"]+1);}).removeClass("festivo");
                 }
-                // Semodifica los días devacaciones.
+                // Se modifica los días devacaciones.
                 for(var i = response.inicio_vacaciones["dia"]; i <= response.fin_vacaciones["dia"]; i++){
                   $(".ui-datepicker-calendar td[data-month='"+(mes-1)+"']").find("a").filter(function(){return $(this).text()==i;}).addClass("vacaciones");
                   $("#div_leyenda h4[id='"+i+"'").addClass("vacaciones");              
@@ -2329,7 +2360,7 @@ $(document).on("blur","input[id='edit_profesor_dni']",function() {
             $("#div_leyenda h4[id='"+response.inicio_vacaciones["dia"]+"'").addClass("vacaciones");
 
             var date = new Date(año,mes,1);
-            var fecha_ultimoDia = new Date(date.getFullYear(), date.getMonth() + 1, 0).toString().split(" ");
+            var fecha_ultimoDia = new Date(date.getFullYear(), date.getMonth() , 0).toString().split(" ");
             último_día=fecha_ultimoDia[2];
             
             setTimeout(function(){
@@ -2349,10 +2380,6 @@ $(document).on("blur","input[id='edit_profesor_dni']",function() {
           }
           else if(response.fin_vacaciones){
             $("#div_leyenda h4[id='"+response.fin_vacaciones["dia"]+"'").addClass("vacaciones");
-
-            var date = new Date(año,mes,1);
-            var fecha_ultimoDia = new Date(date.getFullYear(), date.getMonth() + 1, 0).toString().split(" ");
-            último_día=fecha_ultimoDia[2];
 
             setTimeout(function(){
               $(".ui-datepicker-calendar td[data-month='"+(mes-1)+"']").find("a").filter(function(){return $(this).text()==response.fin_vacaciones["dia"];}).removeClass("festivo");
@@ -2407,8 +2434,10 @@ $(document).on("blur","input[id='edit_profesor_dni']",function() {
           }
         })
       }
-    // Se muestra la leyenda una vez actualizado el calendario. 
-    $("#div_leyenda").removeClass("oculto");            
+      setTimeout(function(){
+        // Se muestra la leyenda una vez actualizado el calendario. 
+        $("#div_leyenda").removeClass("oculto");
+      }, 200);        
     }, 200);
   });
 
@@ -2514,17 +2543,17 @@ $(document).on("blur","input[id='edit_profesor_dni']",function() {
 
     $("#festivos_nueva :input").removeClass("invalid");
 
-      if($("#festivos_tipo").val()==" "){
+      if($("#festivos_tipo").val()==""){
       $("#tipo_festivo select").addClass("invalid");
       $("#festivos_nueva span").removeClass("oculto");
       change=1;
     }
-    if($("#festivos_dia").val()==" "){
+    if($("#festivos_dia").val()==""){
       $("#dia_festivo select").addClass("invalid");
       $("#festivos_nueva span").removeClass("oculto");
       change=1;
     }
-    if($("#festivos_mes").val()==" "){
+    if($("#festivos_mes").val()==""){
       $("#mes_festivo select").addClass("invalid");
       $("#festivos_nueva span").removeClass("oculto");
       change=1;
@@ -2729,10 +2758,24 @@ $(document).on("blur","input[id='edit_profesor_dni']",function() {
     }
   });
 
-    $(document).on('keyup',"#contenedor_festivos input[type!='radio']",function(event){
-      //Se elimina el valor del input al presionar una tecla, excepto en inicio_curso y fin_curso.
-      if($(this).attr("id").indexOf("_curso") < 0){
-        $(this).val(" ");
+    $(document).on('keyup',"#contenedor_festivos input[type!='radio']",function(e){
+      e.preventDefault();
+
+      var festivo= $(this).attr("id").split("_"); 
+      //Se elimina el valor de los inputs al presionar una tecla diferente al tabulador y Enter.
+      if(e.keyCode == 9 || e.keyCode == 13)
+      {
+        if(festivo[0]=="inicio"){
+          $("#fin_"+festivo[1]).focus();
+        }
+        else{
+          $("#inicio_"+festivo[1]).focus();
+        }
+      }      
+      else{
+        $(this).val("");
+        dia=$("#ui-datepicker-div").find("a[class*='ui-state-active']");
+        dia.removeClass("ui-state-active ui-state-hover");
       }
   });
 
@@ -2776,7 +2819,7 @@ $(document).on("blur","input[id='edit_profesor_dni']",function() {
           data: {id:id, dia:dia, mes:mes, año:año},
           dataType: 'json',
           success: function(response) {
-            // Se actualiza la pestaña de asignar aula una vez asignado todas.
+            // Se actualiza la pestaña de periodo lectivo.
             $("#periodo_lectivo").update_tab();
           }
         })
@@ -2788,7 +2831,7 @@ $(document).on("blur","input[id='edit_profesor_dni']",function() {
           data: {id:id},
           dataType: 'json',
           success: function(response) {
-            // Se actualiza la pestaña de asignar aula una vez asignado todas.
+            // Se actualiza la pestaña de periodo lectivo.
             $("#periodo_lectivo").update_tab();
           }
         })
@@ -2803,6 +2846,103 @@ $(document).on("blur","input[id='edit_profesor_dni']",function() {
       $(this).removeClass("modified");
     });
   });
+
+
+  $(document).on('click',"#button_fecha_curso_rest",function(event){
+    $("#fin_curso_disable").trigger("click");
+  });
+
+  $(document).on('click',"#button_fecha_curso",function(event){
+    $("#curso_dialog  #aviso_error").hide();
+
+    $("#curso_dialog input").each(function(){
+      $(this).removeClass("error_guardar");
+
+      if($(this).val()==" " || $(this).val()==""){
+        $(this).addClass("error_guardar");
+      }  
+    });
+    if($("#curso_dialog input").hasClass("error_guardar")){
+      $("#curso_dialog  #aviso_error").show();
+    }
+    else{
+      $("#curso_dialog  #aviso_error").hide();
+      var inicio=$("#fecha_inicio").val().split(" ");
+      var fin=$("#fecha_fin").val().split(" ");
+      var curso=$("#curso_dialog legend").text().split(" ");
+      var MES = ["Enero","Febrero","Marzo","Abril","Mayo","Junio","Julio","Agosto","Septiembre","Octubre","Noviembre","Diciembre"];
+
+      mes_ini = jQuery.inArray( inicio[1], MES );
+      mes_fin = jQuery.inArray( fin[1], MES );
+
+      ini = new Date(curso[1], mes_ini, inicio[0]);
+      fin = new Date(curso[3], mes_fin, fin[0]);
+
+      fecha_ini = ini.toLocaleString();
+      fecha_fin = fin.toLocaleString();
+
+      $.ajax({
+        type: 'POST',
+        url: Routing.generate('registrar_fecha_curso'),
+        data: {fecha_ini:fecha_ini.substring(0,9), fecha_fin:fecha_fin.substring(0,9)},
+        dataType: 'json',
+        success: function(response) {
+          alert(response.message);
+          // Se actualiza la pestaña de periodo lectivo.
+          $("#periodo_lectivo").update_tab();
+        }
+      })
+    }
+  });
+
+  $(document).on('change',"#registro_fecha_curso input",function(event){
+
+    if($(this).val()!=" " && $(this).val()!=""){
+      $(this).removeClass("error_guardar");
+    }
+    else{
+      //Se oculta el día anterior seleccionado si el input está vacío.
+      if($(this).attr("id")=="fecha_inicio"){
+        dia=$("#inicio_curso").find("a[class*='ui-state-active']");
+        dia.removeClass("ui-state-active ui-state-hover");
+      }
+      else{
+        dia=$("#fin_curso").find("a[class*='ui-state-active']");
+        dia.removeClass("ui-state-active ui-state-hover");
+      }
+    }
+
+    if(!$("#curso_dialog input").hasClass("error_guardar")){
+      $("#curso_dialog  #aviso_error").hide();
+    }
+  });
+
+  $(document).on("click","button[title='Close']",function(event){
+    event.preventDefault()
+    if($(this).closest("div").next().attr("id")=="curso_dialog" && $(this).closest("div").next().children('div').attr("id")=="nuevo"){
+      $("#tabs ul li[aria-selected='true'] span").trigger("click")
+    }
+  }); 
+
+  $(document).on('blur','#fecha_inicio' ,function() {
+    $(this).removeClass("error_guardar");
+
+    if($(this).val()==" " || $(this).val()==""){
+      $(this).addClass("error_guardar");
+    }  
+
+  });
+
+  $(document).on('blur','#fecha_fin' ,function() {
+    $(this).removeClass("error_guardar");
+
+    if($(this).val()==" " || $(this).val()==""){
+      $(this).addClass("error_guardar");
+    }  
+
+
+  });
+
 
 
 

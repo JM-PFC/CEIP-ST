@@ -1,0 +1,306 @@
+{% extends 'BackendBundle:Default:index.html.twig' %}
+
+{% block stylesheets %}
+	{{parent()}}
+{% endblock %}
+
+{% block javascript %}
+
+  <script>
+    $("#curso_dialog  #aviso_error").hide();
+
+    $("#inicio_curso").addClass("oculto");
+    $("#fin_curso").addClass("oculto");
+
+    $(document).on('click',"#fecha_inicio",function(){
+      var dato = $("#fecha_inicio").val();
+      $("#inicio_curso").datepicker('option', 'maxDate', new Date(anyo_i_curso, 9, 31));
+      $("#inicio_curso").datepicker('option', 'minDate', new Date(anyo_i_curso, 8, 1));
+      $("#inicio_curso").datepicker( "option", "showCurrentAtPos", 0);
+
+      if($("#inicio_curso").datepicker('getDate')){
+        var data1 =$("#inicio_curso").datepicker('getDate').toString();
+        if(data1){
+          var data2= data1.split(" ");      
+          if(data2[1]=="Oct"){
+            $("#inicio_curso").datepicker( "option", "showCurrentAtPos", 1);
+          }
+          else{
+            $("#inicio_curso").datepicker( "option", "showCurrentAtPos", 0);
+          }
+        }
+      }
+
+      $("#fecha_inicio").val(dato);
+
+      //Se oculta el día anterior seleccionado si el input está vacío.
+      if($(this).val()==" " || $(this).val()==""){
+        dia=$("#inicio_curso").find("a[class*='ui-state-active']");
+        dia.removeClass("ui-state-active ui-state-hover");
+      }
+
+      $("#aviso").hide();
+      $("#curso_dialog  #aviso_error").hide();
+      $("#fin_curso").hide();
+      $("#inicio_curso").show();
+
+    });
+
+    $(document).on('click',"#fecha_fin",function(){
+
+      //Se oculta el día anterior seleccionado si el input está vacío.
+      if($(this).val()==" " || $(this).val()==""){
+        dia=$("#fin_curso").find("a[class*='ui-state-active']");
+        dia.removeClass("ui-state-active ui-state-hover");
+      }
+
+      $("#aviso").hide();
+      $("#curso_dialog  #aviso_error").hide();
+      $("#inicio_curso").hide();
+      $("#fin_curso").show();
+    });
+
+    $(document).on('click',"#inicio_curso",function(){              
+      $("#fecha_inicio").focus();
+      $("#inicio_curso").show();
+      $("#aviso").hide();
+    });
+
+    $(document).on('click',"#fin_curso",function(){
+      $("#fecha_fin").focus();
+      $("#fin_curso").show();
+      $("#aviso").hide();
+    });
+
+    $(document).on('keyup',"#curso_dialog input",function(e){
+
+      //Se elimina el valor de los inputs al presionar una tecla diferente al tabulador y Enter.
+      if(e.keyCode == 9 || e.keyCode == 13)
+      {
+        if($(this).attr("id")=="fecha_inicio"){
+          $("#fecha_fin").focus();
+          $("#fecha_fin").trigger("click");
+        }
+        else{
+          $("#fecha_inicio").focus();
+          $("#fecha_inicio").trigger("click");
+        }
+      }
+      else{
+        $(this).val(" ");
+
+        //Se oculta el día anterior seleccionado si el input está vacío.
+        if($(this).attr("id")=="fecha_inicio"){
+          dia=$("#inicio_curso").find("a[class*='ui-state-active']");
+          dia.removeClass("ui-state-active ui-state-hover");
+        }
+        else{
+          dia=$("#fin_curso").find("a[class*='ui-state-active']");
+          dia.removeClass("ui-state-active ui-state-hover");
+        }
+      }
+    });
+
+    $(document).mouseup(function (e)
+    {
+      var container = $("#fecha_inicio");
+      var container2 = $("#fecha_fin");
+
+      var container_div = $("#inicio_curso");
+      var container2_div = $("#fin_curso");
+      if ($(e.target).attr("id")==container.attr("id") || $(e.target).attr("id")==container_div.attr("id") || $(e.target).parents("#inicio_curso").size() )
+      { 
+        $("#fin_curso").hide();
+        $("#aviso").hide();
+      }
+      else if ($(e.target).attr("id")==container2.attr("id") || $(e.target).attr("id")==container2_div.attr("id") || $(e.target).parents("#fin_curso").size())
+      {
+        $("#inicio_curso").hide();
+        $("#fin_curso").show();
+        $("#aviso").hide();
+      }
+      else{
+        $("#fin_curso").hide();
+        $("#inicio_curso").hide();
+        $("#aviso").show();
+        if($("#curso_dialog input").hasClass("error_guardar")){
+          $("#curso_dialog  #aviso_error").show();
+        }
+      }
+    });
+
+
+    inicio_d={{ inicio.inicioCurso|date('d') }};
+    inicio_m= {{ inicio.inicioCurso|date('m') }};
+    inicio_a= {{ inicio.inicioCurso|date('Y') }};
+    fin_d={{ fin.finCurso|date('d') }};
+    fin_m= {{ fin.finCurso|date('m') }};
+    fin_a= {{ fin.finCurso|date('Y') }};
+
+    var dia_i_curso;
+    var mes_i_curso;
+    var anyo_i_curso;
+    if($("#fecha_inicio").val()){
+      fecha=$("#fecha_inicio").val().split(" ");
+      if(fecha[1]=="Septiembre"){
+        dia_i_curso=fecha[0];
+        mes_i_curso=8;
+        anyo_i_curso=inicio_a;
+      }
+      else{
+        dia_i_curso=fecha[0];
+        mes_i_curso=9;
+        anyo_i_curso=inicio_a;
+      }
+    }else{
+      var d = new Date();
+      var month = d.getMonth()+1;
+      if(month>="6"){
+        anyo_i_curso=d.getFullYear();
+      }
+      else{
+        anyo_i_curso=d.getFullYear()-1;
+      }
+      dia_i_curso=1;
+      mes_i_curso=8;
+    }
+
+    var dia_f_curso;
+    var mes_f_curso;
+    var anyo_f_curso;
+    if($("#fecha_fin").val()){
+      fecha=$("#fecha_fin").val().split(" ");
+        if(fecha[1]=="Mayo"){
+          dia_f_curso=fecha[0];
+          mes_f_curso=4;
+          anyo_f_curso=fin_a;
+        }
+        else{
+          dia_f_curso=fecha[0];
+          mes_f_curso=5;
+          anyo_f_curso=fin_a;
+        }
+    }else{
+            var d = new Date();
+      var month = d.getMonth()+1;
+      if(month>="6"){
+        anyo_f_curso=d.getFullYear()+1;
+      }
+      else{
+        anyo_f_curso=d.getFullYear();
+      }
+      dia_f_curso=30;
+      mes_f_curso=5;
+    }
+
+
+
+    $("#inicio_curso").datepicker({
+      defaultDate: new Date(anyo_i_curso, mes_i_curso, dia_i_curso),
+      changeMonth: false,
+      numberOfMonths: 2,
+      dateFormat:"d MM ",
+      minDate: new Date(anyo_i_curso, 8, 1),
+      maxDate: new Date(anyo_i_curso, 9, 31),
+
+      onSelect: function (date) {
+        $('#fecha_inicio').val(date );
+        $("#inicio_curso").hide();
+        $("#aviso").show();
+
+        $('#fecha_inicio').removeClass("error_guardar");
+
+        if($("#curso_dialog input").hasClass("error_guardar")){
+          $("#curso_dialog  #aviso_error").show();
+        }
+
+        if(($("#fecha_inicio").val()!="" && $("#fecha_inicio").val()!=" ")  && ($("#fecha_fin").val()=="" || $("#fecha_fin").val()==" " )){
+          $("#fecha_fin").focus();
+          $("#fecha_fin").trigger("click");
+        }
+      }
+    });
+
+    $("#fin_curso").datepicker({
+      defaultDate: new Date(anyo_f_curso, mes_f_curso, dia_f_curso),
+      changeMonth: false,
+      numberOfMonths: 2,
+      dateFormat:"d MM ",
+      minDate: new Date(anyo_f_curso,4, 1),
+      maxDate: new Date(anyo_f_curso,5, 30),
+
+      onSelect: function (date) {
+        $('#fecha_fin').val(date );
+        $("#fin_curso").hide();
+        $("#aviso").show();
+
+        $('#fecha_fin').removeClass("error_guardar");
+    
+
+        if($("#curso_dialog input").hasClass("error_guardar")){
+          $("#curso_dialog  #aviso_error").show();
+        }
+
+        if(($("#fecha_fin").val()!="" && $("#fecha_fin").val()!=" ")  && ($("#fecha_inicio").val()=="" || $("#fecha_inicio").val()==" " )){
+          $("#fecha_inicio").focus();
+          $("#fecha_inicio").trigger("click");
+        }
+      }
+    });
+  </script>
+
+{% endblock %}
+
+{% block body -%}
+  {% if inicio.inicioCurso|date('Y') == "-1" %}
+  <div id="nuevo">
+  {% else %} 
+  <div>
+  {% endif %}
+    <div class="width100">
+    	<div id="content-form">
+        	<fieldset >
+            {% if inicio.inicioCurso|date('Y') == "-1" %} 
+              {% if 'now'|date('m')>="06" %}
+            	  <legend>Curso {{'now'|date('Y')}} / {{'now + 1year'|date('Y')}} </legend>
+              {% else %}
+                <legend>Curso {{'now- 1year'|date('Y')}} / {{'now'|date('Y')}} </legend>
+              {% endif %}
+                  <div id="registro_fecha_curso" class="addregistro" >
+                    <p>Para continuar debe añadir las fechas del curso:</p>
+            {% else %}
+                <legend>Curso {{inicio.inicioCurso|date('Y')}} / {{fin.finCurso|date('Y')}} </legend>
+                  <div id="registro_fecha_curso" class="addregistro" >
+                    <p>Selecciona la fecha que quiera modificar:</p>
+            {% endif %}      
+                    <div class="fecha_curso">
+                        <input id="fecha_inicio" value="{{ inicio.inicioCurso| localizeddate('none', 'none', 'none',none , "d ")}}{{ inicio.inicioCurso| localizeddate('none', 'none', 'none',none , "MMMM")| capitalize }}"></input><label for="fecha_inicio">Inicio curso:</label></br>
+                    </div>
+                    <div class="fecha_curso">
+                        <input id="fecha_fin" value="{{ fin.finCurso| localizeddate('none', 'none', 'none',none , "d ")}}{{ fin.finCurso| localizeddate('none', 'none', 'none',none , "MMMM")| capitalize }}"><label for="fecha_fin">Fin curso:</label></input>
+                    </div>
+                </div>
+                <div id="aviso">
+                    <p>(Pulsa sobre el espacio en blanco para seleccionar una fecha)</p>
+                </div>
+                <div id="inicio_curso" ></div>
+                <div id="fin_curso" ></div>
+
+                <div id="aviso_error">
+                  <span>*</span>
+                  <span>Debe seleccionar una fecha inicial y final del curso.</span>                  
+                </div>
+
+        	</fieldset>
+    	</div>  
+        <div id="botones_festivos">
+            <div>
+                <button id="button_fecha_curso">Guardar</button>
+            </div>
+            <div>
+                <button id="button_fecha_curso_rest">Restablecer</button>
+            </div>
+        </div>
+    </div>
+  </div>
+{% endblock %}

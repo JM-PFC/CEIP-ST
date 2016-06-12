@@ -43,15 +43,17 @@
 
 {% block body -%}
     <div id="registro_asignaturas">
-    <div class="simple_column">
+    <div class="parent_no_form">
+    <div class="child">
+      <div class="simple_column">
         <div class="block_insert">
             <h2>Registro de Asignaturas</h2></br>
             <p>- Para <span>añadir</span> una nueva asignatura pulse sobre el icono de añadir en el bloque correspondiente.</p>
             </br></br>
             <p>- Para <span>modificar</span> o <span>eliminar</span> una asignatura, seleccione la asignatura correspondiente.</p>
         </div> 
-    </div>
-    <div class="derecha contenedor_registro" id="contenedor_registro">  
+      </div>
+      <div class="derecha contenedor_registro" id="contenedor_registro">  
         <div>
             <div id="cabecera_lista">
                 <h2>Asignaturas Troncales
@@ -84,9 +86,9 @@
                 </div>
             </div>
         </div>          
-    </div>
+      </div>
 
-    <div class="derecha contenedor_registro" id="contenedor_registro">  
+      <div class="derecha contenedor_registro" id="contenedor_registro">  
         <div>
             <div id="cabecera_lista">
                 <h2>Asignaturas Específicas
@@ -119,8 +121,10 @@
                 </div>
             </div>
         </div>          
-    </div>
+      </div>
 
-    <div id="asignaturas_dialog" title="Registro de Asignatura">
+      <div id="asignaturas_dialog" title="Registro de Asignatura">
+    </div>
+    </div>
     </div>
     {% endblock %}

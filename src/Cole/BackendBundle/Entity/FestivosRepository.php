@@ -16,9 +16,17 @@ class FestivosRepository extends EntityRepository
 	public function findFestivosPorTipo($id)
 	{
 	return $this->getEntityManager()->createQuery(
-		'SELECT f FROM BackendBundle:Festivos f WHERE f.tipo=:tipo ORDER BY f.numMes, f.dia ')
+		'SELECT f FROM BackendBundle:Festivos f WHERE f.tipo=:tipo 			
+		and f.descripcion not like :descripcion1 
+		and f.descripcion not like :descripcion2 
+		and f.descripcion not like :descripcion3 
+		and f.descripcion not like :descripcion4 ORDER BY f.numMes, f.dia ')
 		->setParameters(array(
-			'tipo' => $id))
+			'tipo' => $id,
+			'descripcion1' => "Inicio Vacaciones de Semana Santa",
+			'descripcion2' => "Fin Vacaciones de Semana Santa",
+			'descripcion3' => "Inicio Vacaciones de Navidad",
+			'descripcion4' => "Fin Vacaciones de Navidad"))
 		->getResult();
 	}
 
@@ -56,16 +64,25 @@ class FestivosRepository extends EntityRepository
 	public function findDiasFestivos($mes)
 	{
 		return $this->getEntityManager()->createQuery(
-			'SELECT f.dia FROM BackendBundle:Festivos f WHERE f.numMes=:mes ORDER BY f.dia ')
+			'SELECT f.dia FROM BackendBundle:Festivos f WHERE f.numMes=:mes 
+			and f.descripcion not like :descripcion1 
+			and f.descripcion not like :descripcion2 
+			and f.descripcion not like :descripcion3 
+			and f.descripcion not like :descripcion4 ORDER BY f.dia ')
 		->setParameters(array(
-			'mes' => $mes))
+			'mes' => $mes,
+			'descripcion1' => "Inicio Vacaciones de Semana Santa",
+			'descripcion2' => "Fin Vacaciones de Semana Santa",
+			'descripcion3' => "Inicio Vacaciones de Navidad",
+			'descripcion4' => "Fin Vacaciones de Navidad"))
 		->getResult();
 	}
 
 	public function findDiaVacaciones($mes,$descripcion)
 	{
 		return $this->getEntityManager()->createQuery(
-			'SELECT f.dia FROM BackendBundle:Festivos f WHERE f.numMes=:mes and f.descripcion like :descripcion  ORDER BY f.dia ')
+			'SELECT f.dia FROM BackendBundle:Festivos f WHERE f.numMes=:mes 
+			and f.descripcion like :descripcion  ORDER BY f.dia ')
 		->setParameters(array(
 			'mes' => $mes,
 			'descripcion' => $descripcion."%"))

@@ -24,14 +24,14 @@
         if($("#festivos_dia").val().length=="1"){
             $("#dia_festivo select option[value='0"+$("#festivos_dia").val()+"']").prop('selected',true);
 
-            $("#dia_festivo select option:not('0"+$("#festivos_dia").val()+"')").attr('disabled',true);
-            $("#mes_festivo select option:not('0"+$("#festivos_dia").val()+"')").attr('disabled',true);
+            //$("#dia_festivo select option:not('0"+$("#festivos_dia").val()+"')").attr('disabled',true);
+            //$("#mes_festivo select option:not('0"+$("#festivos_dia").val()+"')").attr('disabled',true);
         }
         else{
             $("#dia_festivo select option[value='"+$("#festivos_dia").val()+"']").prop('selected',true);
 
-            $("#dia_festivo select option:not('"+$("#festivos_dia").val()+"')").attr('disabled',true);
-            $("#mes_festivo select option:not('"+$("#festivos_dia").val()+"')").attr('disabled',true);
+            //$("#dia_festivo select option:not('"+$("#festivos_dia").val()+"')").attr('disabled',true);
+            //$("#mes_festivo select option:not('"+$("#festivos_dia").val()+"')").attr('disabled',true);
         }
 
         $("#mes_festivo select option[value='"+$("#festivos_numMes").val()+"']").prop('selected',true);

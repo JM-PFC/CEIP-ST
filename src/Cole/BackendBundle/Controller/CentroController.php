@@ -4,6 +4,7 @@ namespace Cole\BackendBundle\Controller;
 
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\HttpFoundation\JsonResponse;
 
 use Cole\BackendBundle\Entity\Centro;
 use Cole\BackendBundle\Form\CentroType;
@@ -220,5 +221,35 @@ class CentroController extends Controller
             ->add('submit', 'submit', array('label' => 'Delete'))
             ->getForm()
         ;
+    }
+
+
+    public function fechaCursoAction()
+    {
+        $fecha_ini=$this->get('request')->request->get('fecha_ini');
+        $fecha_fin=$this->get('request')->request->get('fecha_fin');
+
+
+        list($día_ini,$mes_ini,$año_ini) = split('[/.-]', $fecha_ini);
+        list($día_fin,$mes_fin,$año_fin) = split('[/.-]', $fecha_fin);
+
+        $dt_ini = new \DateTime();
+        $dt_ini->setDate($año_ini, $mes_ini, $día_ini);
+
+        $dt_fin = new \DateTime();
+        $dt_fin->setDate($año_fin, $mes_fin, $día_fin);
+
+        $em = $this->getDoctrine()->getEntityManager();
+
+        $entity = $em->getRepository('BackendBundle:Centro')->findAll();
+
+        $entity[0]->setInicioCurso($dt_ini);
+        $entity[0]->setFinCurso($dt_fin);
+        
+        $em->persist($entity[0]);
+
+        $em->flush();
+        return new JsonResponse(array('message' => 'Success!','success' => true), 200);
+
     }
 }
