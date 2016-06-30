@@ -1597,7 +1597,7 @@ float: right;
 	background: #334c73;
 	float: left;
 	border-radius: 3px;
-	width: 20px;
+	width: 24px;
 	color: white;
 	text-align: center;
 	margin-bottom: 10px;
@@ -1605,7 +1605,7 @@ float: right;
 #div_leyenda h4[id="h4_descripcion"]{
 	border-radius: none;
 	float: left;
-	width: 85%;
+	width: 83%;
 	background: none;
 	margin-left: 5px;
 	clear: right;
@@ -1667,6 +1667,9 @@ float: right;
 	background: #fa8258;
 	margin-left: 11%;
 	width: 76%
+}
+#vistas_festivos form{
+	height: 0;
 }
 #rango_festivos input{
 	width: 38%;
@@ -1944,5 +1947,256 @@ float: right;
 #curso_dialog .inner_table span, #aviso_error span:nth-child(1){
 	font-size: 1em;
 }
+#calendario_pdf{
+	background: none;
+	height: 297mm;
+	width: 210mm;
+}
+#calendario_pdf>div{
+	width: 100%;
+	display: block;
+	margin: 5px;
+	clear: both;
+
+}
+#calendario_pdf>div:nth-child(1)>div{
+	float: left;
+}
+#calendario_pdf>div:nth-child(1)>div:nth-child(3){
+	float: right;
+	margin: 40px !important;
+}
+#calendario_pdf>div:nth-child(2)>h1{
+	font-family: "Comic Sans MS",cursive;
+	text-align: center;
+}
+#meses_calendario div div>div{
+	width: 16em !important;
+	margin: 0px;
+	background: none;	
+	float: left;
+}
+#meses_calendario div div{
+	margin-top: 5px;
+	margin-left: 1.2px;
+	border-radius: 0;
+	width: 99%;
+}
+#meses_calendario div div td{
+	min-width: 27px !important;
+}
+#meses_calendario div div th{
+	padding:3px !important;
+	min-width: 28.4px !important;
+}
+#meses_calendario div div td{
+	background: none;
+
+}
+#meses_calendario div div th span,#meses_calendario div div td a{
+	font-size: 15px;
+	text-align: center;
+	height: 20px;
+	border: 0;
+	background: none;
+}
+#meses_calendario div div .ui-datepicker-title{
+	line-height: 1.5em;
+	margin: 0 auto;
+	width: 100% !important;
+	height: 100%;
+	background: none;
+}
+#meses_calendario div div a[class*="disabled"] span{
+	display: none;
+}
+#meses_calendario div div a[class*="disabled"]{
+   pointer-events: none;
+   cursor: default;
+}
+#meses_calendario div div div>div>div,#meses_calendario div div>div>div{
+	clear: both;
+    width: 100% !important;
+    margin: 0;
+}
+#calendario_pdf #ui-datepicker-div{
+	display: none;
+}
+
+#calendario_pdf .ui-datepicker table{
+	width: 100.6% !important;
+	clear: both;
+	margin: 0;
+}
+#meses_calendario>#col_izq, #meses_calendario>#col_der{
+	float: left;
+	width: 50%;
+}
+#meses_calendario tr{
+	width: 100px;
+}
+#meses_calendario td:not(.ui-state-disabled)[class*=" ui-datepicker-week-end "]  {
+	background: #D8D8D8;
+}
+#meses_calendario td:not(.ui-state-disabled)[class*=" ui-datepicker-week-end "] a{
+	font-weight: bold;
+}
+#meses_calendario div[class*="ui-datepicker-inline"]{
+   height: 220px;
+    margin-bottom: 20px;
+    background: #fafafa;
+}
+#col_izq .ui-datepicker-header{
+	float: right;
+}
+#col_izq .ui-datepicker table{
+	float: right;
+	background: #FAFAFA;
+}
+#col_der .ui-datepicker table{
+	background: #FAFAFA;
+}
+
+.verde{
+	background:#93ED99 !important;
+	}
+.naranja{
+	background:#FACC2E !important;
+}
+.azul{
+	background:#b1cce7 !important;
+}
+#meses_calendario #mes{
+	display: block;
+
+}
+	
+#meses_calendario #leyenda{
+	height: 200px;
+    width: 47% !important;
+    overflow: hidden;
+    clear: both;
+    margin-top: 25px;
+}
+#col_der #leyenda{
+	float: right;
+}
+
+#meses_calendario #leyenda h4{
+	font-size: 0.7em;
+	margin-bottom: 8px;
+	margin-left: 10px;
+	float: left;
+	padding: 2px;
+	border-radius: 3px;
+	min-width: 20px;
+	color: white;
+	text-align: center;
+	background: #334c73;
+
+}
+#meses_calendario #leyenda h4[id="h4_descripcion"]{
+	border-radius: none;
+	float: left;
+	width: 82%;
+	background: none;
+	margin-left: 4px;
+	clear: right;
+	text-align: left;
+	color: #001f51;
+}
+.centrado_vertical{
+    position: relative;
+    top: 50%;
+    -ms-transform: translateY(-50%);
+    -webkit-transform: translateY(-50%);
+    transform: translateY(-50%);
+}
+#meses_calendario .ui-widget-content{
+	border: 1px inset transparent;
+}
+.f_Curso{
+	background:  #006a2a !important;
+	color: white !important;
+	font-weight: bold !important;
+	border-radius: 3px;
+}
+.f_Local{
+	background:  #334c73 !important;
+	color: white !important;
+	font-weight: bold !important;
+	border-radius: 3px;
+}
+.f_Nacional{
+	background: #334c73 !important;
+	color: white !important;	
+	font-weight: bold !important;
+	border-radius: 3px;
+}
+.f_fecha{
+	background: #BA3C3C !important;
+	color: white !important;	
+	font-weight: bold !important;
+	border-radius: 3px;
+}
+.f_vacaciones{
+	background: #FF8000 !important;
+	color: white !important;	
+	font-weight: bold !important;
+	border-radius: 3px;
+}
+#lectivos, #tipo_festivos{
+	width: 50%;
+	float: left;
+}
+#lectivos table,#tipo_festivos table{
+	border-collapse: collapse;
+	margin: 0 auto;
+	width: 100%;
+}
+#tipo_festivos table{
+ border-spacing: 0 3.15px !important;
+ border-collapse: separate;
+ margin-top: -3px;
+}
+#tipo_festivos tbody{
+border: 1px solid;
+}
+#lectivos ,#tipo_festivos {
+	background: #d8d8d8;
+	min-height: 92px;
+}
+#lectivos {
+	margin-left: 12.5%;
+	width: 35%;
+	border: 0 !important;
+}
+#tipo_festivos  {
+	padding-left: 10%;
+	width: 30%;
+}
+#lectivos th,#tipo_festivos th{
+	text-align: center;
+}
+#lectivos td{
+	font-size: 0.9em;
+	min-width: 0 !important;
+	height: 22px;
+}
+#tipo_festivos td{
+	font-size: 0.9em;
+	min-width: 0 !important;
+}
+#lectivos td,#tipo_festivos td{
+	background: none;
+}
+#lectivos tr>td:nth-child(1){
+	width: 200px;
+}
+#tipo_festivos tr>td:nth-child(1){
+	width: 10px;
+}
+
+
 
 

@@ -57,7 +57,7 @@
         <div class="centrado">
          <header>
             <div class="cabecera">
-                <div class="titulo">Colegio de Educación Infantil y Primaira<br> <strong>Santa Teresa</strong><br>Cádiz</div>
+                <div class="titulo">Colegio de Educación Infantil y Primaria<br> <strong>Santa Teresa</strong><br>Cádiz</div>
                 <div class="carrusel ">
                     <img oncopy="alert('\xA9 Imagen propiedad del CEIP SANTA TERESA');return false" oncontextmenu="alert('\xA9 Imagen propiedad del CEIP SANTA TERESA');return false" src="{{ asset('bundles/cole/images/carrusel/mascara.png') }}" alt="">
                     <div><img src="{{ asset('bundles/cole/images/carrusel/image1.jpg') }}" alt=""></div>
@@ -135,10 +135,17 @@
 
                     <span>
                         {% block migas %}
+                            {% if inicio.inicioCurso|date('Y') == "-1" %} 
+                                Bienvenidos a nuestra web. 
+                            {% else %}
+                                Bienvenidos a nuestra web. Curso escolar <span id="año_inicio"> {{ inicio.inicioCurso|date('Y') }} </span>/<span id="año_fin"> {{ fin.finCurso|date('Y') }}</span>
+                            {#
                             {% if 'now'|date("m") =="8" %}
                                 Bienvenidos al curso escolar {{ "now" | localizeddate('none', 'none', 'none',none , "Y") | capitalize}}/{{ "now+1year" | localizeddate('none', 'none', 'none',none , "Y") | capitalize}}.
                             {% else %}
+     
                                 Bienvenidos al curso escolar {{ "now-1year" | localizeddate('none', 'none', 'none',none , "Y") | capitalize}}/{{ "now" | localizeddate('none', 'none', 'none',none , "Y") | capitalize}}.
+                            #}
                         {% endif %}
                         {% endblock %}
                     </span>

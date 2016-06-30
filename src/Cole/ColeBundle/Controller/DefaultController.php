@@ -8,6 +8,14 @@ class DefaultController extends Controller
 {
     public function indexAction()
     {
-        return $this->render('ColeBundle:Default:index.html.twig');
+    	$em = $this->getDoctrine()->getManager();
+
+    	$inicio =$em->getRepository('BackendBundle:Centro')->findInicioCurso();
+        $fin =$em->getRepository('BackendBundle:Centro')->findFinCurso();
+
+        return $this->render('ColeBundle:Default:index.html.twig', array(
+            'inicio' => $inicio,
+            'fin' => $fin,
+            ));
     }
 }

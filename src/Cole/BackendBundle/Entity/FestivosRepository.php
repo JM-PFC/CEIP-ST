@@ -53,10 +53,18 @@ class FestivosRepository extends EntityRepository
 	public function findFestivo($dia, $mes)
 	{
 		return $this->getEntityManager()->createQuery(
-			'SELECT f FROM BackendBundle:Festivos f WHERE f.dia=:dia AND f.numMes=:mes')
+			'SELECT f FROM BackendBundle:Festivos f WHERE f.dia=:dia AND f.numMes=:mes 
+			and f.descripcion not like :descripcion1 
+			and f.descripcion not like :descripcion2 
+			and f.descripcion not like :descripcion3 
+			and f.descripcion not like :descripcion4 ORDER BY f.dia ')
 		->setParameters(array(
 			'dia' => $dia,
-			'mes' => $mes))
+			'mes' => $mes,
+			'descripcion1' => "Inicio Vacaciones de Semana Santa",
+			'descripcion2' => "Fin Vacaciones de Semana Santa",
+			'descripcion3' => "Inicio Vacaciones de Navidad",
+			'descripcion4' => "Fin Vacaciones de Navidad"))
 		->setMaxResults(1)
 		->getOneOrNullResult();
 	}
@@ -90,6 +98,11 @@ class FestivosRepository extends EntityRepository
 		->getOneOrNullResult();
 	}
 
-
+	public function findFestivosOrdenados()
+	{
+	return $this->getEntityManager()->createQuery(
+		'SELECT f FROM BackendBundle:Festivos f  ORDER BY f.numMes, f.dia ')
+		->getResult();
+	}
 
 }

@@ -5,6 +5,8 @@ namespace Cole\BackendBundle\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Ps\PdfBundle\Annotation\Pdf;
+use Symfony\Component\HttpFoundation\Response;
 
 
 use Cole\BackendBundle\Entity\Festivos;
@@ -292,12 +294,27 @@ class FestivosController extends Controller
     {
         $dia=$this->get('request')->request->get('dia');
         $mes=$this->get('request')->request->get('mes');
+        $descripcion=$this->get('request')->request->get('descripcion');
         $em = $this->getDoctrine()->getEntityManager();
         $fecha= $em->getRepository('BackendBundle:Festivos')->findFestivo($dia, $mes);
+        //En Registrar Festivo sólo será válida cuando no exista el festivo.
+        //En Editar Festivo será válida cuando no exista el festivo ó cuando exista y tenga la misma descripción.
+
         if($fecha){
-            return new JsonResponse(array('data' =>$fecha->getId()), 200);
+            //Se comprueba que la petición se realiza desde Registrar un Festivo.
+            if($descripcion==""){
+                return new JsonResponse(array('data' =>$fecha->getId()), 200);
+            }
+            //Se comprueba si ya existe otra fecha con diferente descripción para Editar un Festivo.
+            else if($descripcion!=$fecha->getDescripcion()){
+                return new JsonResponse(array('data' =>$fecha->getId()), 200);
+            }
+            return new JsonResponse(array('data' =>null), 200); //Sálida válida para Editar Festivo.
         }
-        return new JsonResponse(array('data' =>null), 200);
+        else{
+            return new JsonResponse(array('data' =>null), 200); //Sálida válida para Regstrar Festivo y Editar Festivo.
+
+        }
 
     }
 
@@ -433,6 +450,100 @@ class FestivosController extends Controller
             'inicio' => $inicio,
             'fin' => $fin,
             ));
+    }
+
+
+    public function GenerarPdfFestivosAction()
+    {
+        $em = $this->getDoctrine()->getManager();
+
+        $inicio =$em->getRepository('BackendBundle:Centro')->findInicioCurso();
+        $fin =$em->getRepository('BackendBundle:Centro')->findFinCurso();
+        $entities = $em->getRepository('BackendBundle:Festivos')->findFestivosOrdenados();
+
+
+        $html = $this->renderView('BackendBundle:Festivos:calendario.html.twig', array(
+            'entities' => $entities,
+            'inicio' => $inicio,
+            'fin' => $fin,
+        ));
+
+        $options = [
+            'margin-top'    => 3,
+            'margin-right'  => 8,
+            'margin-bottom' => 3,
+            'margin-left'   => 8,
+        ];
+
+        return new Response(
+            $this->get('knp_snappy.pdf')->getOutputFromHtml($html,$options),
+            200,
+            array(
+                'Content-Type'        => 'application/pdf',
+                'Content-Disposition' => 'attachment; filename="Calendario.pdf"'
+            )
+        );
+    }
+
+    /*
+
+use Symfony\Component\HttpFoundation\BinaryFileResponse;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+
+    public function GenerarPdfFestivosAction()
+    {
+                $basePath = $this->container->getParameter('kernel.root_dir');
+        $generator =  $this->get('knp_snappy.pdf');
+       $pdf = null;
+       $fileName = $basePath.'/Calendario.pdf'; // change this
+               $em = $this->getDoctrine()->getManager();
+
+       $inicio =$em->getRepository('BackendBundle:Centro')->findInicioCurso();
+       $fin =$em->getRepository('BackendBundle:Centro')->findFinCurso();
+       $html = $this->renderView('BackendBundle:Festivos:calendario.html.twig', array(
+                'inicio' => $inicio,
+                'fin' => $fin,
+               ));
+       try {
+            $pdf = $generator->getOutputFromHtml($html);
+        } catch (\RuntimeException $e) {
+            $matches = [];
+            if (preg_match('/([^\']+)\'.$/', $e->getMessage(), $matches)) {
+                $pdf = file_get_contents($matches[1]);
+                unlink($matches[1]);
+            } else  {
+                throw $e;
+            }
+        }
+       if ($pdf){
+          file_put_contents($fileName, $pdf);
+          return new BinaryFileResponse($fileName);
+       }
+       else{
+       // error message or smthing
+       }
+    }
+
+    */
+
+    //Función de prueba para ver los resultados del calendario en html.
+    public function GenerarFestivosAction()
+    {
+
+        $em = $this->getDoctrine()->getManager();
+
+        $inicio =$em->getRepository('BackendBundle:Centro')->findInicioCurso();
+        $fin =$em->getRepository('BackendBundle:Centro')->findFinCurso();
+        $entities = $em->getRepository('BackendBundle:Festivos')->findFestivosOrdenados();
+
+
+        return $this->render('BackendBundle:Festivos:calendario.html.twig', array(
+            'inicio' => $inicio,
+            'fin' => $fin,
+            'entities' => $entities,
+
+        ));
+        
     }
     
     

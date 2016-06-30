@@ -344,8 +344,6 @@ $(document).ready(function () {
       {
         mostrarTab(form,"tab1");
       }
-
-
   }
 
   // Función para limpiar los campos del formulario.
@@ -1836,8 +1834,6 @@ $(document).on("blur","input[id='edit_profesor_dni']",function() {
       return false;
   });
 
-
-
   $(document).on("submit","#curso_edit",function(event){
     event.preventDefault();
     form= $(this).closest("form");
@@ -2133,7 +2129,7 @@ $(document).on("blur","input[id='edit_profesor_dni']",function() {
         div=$("#registro_asignaturas").closest("div[id^='tabs-']");
         $(div).empty();
         $(div).load(Routing.generate('asignatura'));
-        //Actualizamoslas listas de asignaturas de las demás pestañas.
+        //Actualizamos las listas de asignaturas de las demás pestañas.
         //$("#tabs #lista_asignaturas").empty();
         //$("#tabs #lista_asignaturas").load(Routing.generate('alumno_listaAsignaturas'));
         },
@@ -2259,11 +2255,6 @@ $(document).on("blur","input[id='edit_profesor_dni']",function() {
   $(document).on("mouseout","#botones_leyenda a", function () {
     $(this).removeClass("ui-state-hover");
   });
-
-
-  $(document).on("click","#calendario_completo", function () {
-    alert("Se mostrará el calendario completo para descargar");
-  });
   
  
  // Se actualiza el calenndario de festivos
@@ -2305,7 +2296,12 @@ $(document).on("blur","input[id='edit_profesor_dni']",function() {
                     $(this).closest("tr").next("tr").find("td:nth-child(1) a").addClass("festivo");
                     $(this).closest("tr").next("tr").find("td:nth-child(1) a").attr("tipo","traslado");
                     setTimeout(function(){
-                      $( "<h4 id='"+(dato+1)+"'>"+(dato+1)+"</h4><h4 id='h4_descripcion'>Traslado del Festivo del día "+dato+".</h4>" ).insertAfter( $("#div_leyenda #"+dato).next());
+                      //Se muestra sólo un traslado del festivo (ya que hay dos elementos con el mismo día).
+                      $("#div_leyenda h4[id='"+dato+"']").each(function(){
+                        if($(this).next().text().indexOf(" Vacaciones ")<0){
+                          $( "<h4 id='"+(dato+1)+"'>"+(dato+1)+"</h4><h4 id='h4_descripcion'>Traslado del Festivo del día "+dato+".</h4>" ).insertAfter( $(this).next());
+                        }
+                      });
                     }, 20);
                   }
                 }
@@ -2318,7 +2314,12 @@ $(document).on("blur","input[id='edit_profesor_dni']",function() {
                   $(this).closest("tr").next("tr").find("td:nth-child(1) a").addClass("festivo");
                   $(this).closest("tr").next("tr").find("td:nth-child(1) a").attr("tipo","traslado");
                   setTimeout(function(){
-                    $( "<h4 id='"+(dato+1)+"'>"+(dato+1)+"</h4><h4 id='h4_descripcion'>Traslado del Festivo del día "+dato+".</h4>" ).insertAfter( $("#div_leyenda #"+dato).next());
+                    //Se muestra sólo un traslado del festivo (ya que hay dos elementos con el mismo día).
+                    $("#div_leyenda h4[id='"+dato+"']").each(function(){
+                      if($(this).next().text().indexOf(" Vacaciones ")<0){
+                        $( "<h4 id='"+(dato+1)+"'>"+(dato+1)+"</h4><h4 id='h4_descripcion'>Traslado del Festivo del día "+dato+".</h4>" ).insertAfter( $(this).next());
+                      }
+                    });
                   }, 20);
                 }
               }
@@ -2330,75 +2331,116 @@ $(document).on("blur","input[id='edit_profesor_dni']",function() {
             var descripcion_fin=$("#div_leyenda h4[id='"+response.fin_vacaciones["dia"]+"'").next().text().split(" ");
             // Se comprueba que existe ambos días de vacaciones en el mismo mes y que pertenecen al mismo tipo de vacaciones.
             if(descripcion_inicio[3]==descripcion_inicio[3]){
-              $("#div_leyenda h4[id='"+response.inicio_vacaciones["dia"]+"'").addClass("vacaciones");
-              $("#div_leyenda h4[id='"+response.fin_vacaciones["dia"]+"'").addClass("vacaciones");
               // Se retarda para modificar los días festivos dentro de las vacaciones.
               setTimeout(function(){
                 $(".ui-datepicker-calendar td[data-month='"+(mes-1)+"']").find("a").filter(function(){return $(this).text()==response.inicio_vacaciones["dia"];}).removeClass("festivo");
                 $(".ui-datepicker-calendar td[data-month='"+(mes-1)+"']").find("a").filter(function(){return $(this).text()==response.fin_vacaciones["dia"];}).removeClass("festivo");
-                // Se comprueba si existe día siguiente con festivo de traslado para eliminarlo.
+                // Se comprueba si existe al inicio de vacaciones día siguiente con festivo de traslado para eliminarlo.
                 if($("#div_leyenda h4[id='"+(response.inicio_vacaciones["dia"]+1)+"'").next().text().indexOf("Traslado") >= 0){
                     $("#div_leyenda h4[id='"+(response.inicio_vacaciones["dia"]+1)+"'").next().remove();
                     $("#div_leyenda h4[id='"+(response.inicio_vacaciones["dia"]+1)+"'").remove();
                     $(".ui-datepicker-calendar td[data-month='"+(mes-1)+"']").find("a").filter(function(){return $(this).text()==(response.inicio_vacaciones["dia"]+1);}).removeClass("festivo");                
                 }
-                if($("#div_leyenda h4[id='"+(response.fin_vacaciones["dia"]+1)+"'").next().text().indexOf("Traslado") >= 0){
-                    $("#div_leyenda h4[id='"+(response.fin_vacaciones["dia"]+1)+"'").next().remove();
-                    $("#div_leyenda h4[id='"+(response.fin_vacaciones["dia"]+1)+"'").remove();
-                    $(".ui-datepicker-calendar td[data-month='"+(mes-1)+"']").find("a").filter(function(){return $(this).text()==(response.fin_vacaciones["dia"]+1);}).removeClass("festivo");
-                }
-                // Se modifica los días devacaciones.
+                // Se añade la clase vacaciones a los días correspondientes.
                 for(var i = response.inicio_vacaciones["dia"]; i <= response.fin_vacaciones["dia"]; i++){
                   $(".ui-datepicker-calendar td[data-month='"+(mes-1)+"']").find("a").filter(function(){return $(this).text()==i;}).addClass("vacaciones");
                   $("#div_leyenda h4[id='"+i+"'").addClass("vacaciones");              
                 }
-
+                // Si se repite el día de inicio de vacaciones, se elimina la clase vacaciones en los días de la leyenda que no contiene la información de las vacaciones.
+                if($("#div_leyenda h4[id='"+response.inicio_vacaciones["dia"]+"']").length>1){
+                  $("#div_leyenda h4[id='"+response.inicio_vacaciones["dia"]+"']").each(function(){
+                    if($(this).next().text().indexOf(" Vacaciones ")<0){
+                      $(this).removeClass("vacaciones");
+                    }
+                  });
+                }
+                // Si se repite el día de fin de vacaciones, se elimina la clase vacaciones en los días de la leyenda que no contiene la información de las vacaciones.
+                if($("#div_leyenda h4[id='"+response.fin_vacaciones["dia"]+"']").length>1){
+                  $("#div_leyenda h4[id='"+response.fin_vacaciones["dia"]+"']").each(function(){
+                    if($(this).next().text().indexOf(" Vacaciones ")<0){
+                      $(this).removeClass("vacaciones");
+                    }               
+                    // Se elimina el día de final de vacaciones en la leyenda para unificarlo con el día de inicio.
+                    else if($(this).next().text().indexOf(" Vacaciones ")>=0){
+                      $(this).next().remove();
+                      $(this).remove();
+                    }
+                  });
+                  // Se modifica el inicio de vacaciones en la leyenda para añadir el día de fin de vacaciones.
+                  $("#div_leyenda h4[class='vacaciones']").text(response.inicio_vacaciones["dia"]+"-"+response.fin_vacaciones["dia"]);
+                  $("#div_leyenda h4[class='vacaciones']").next().text($("#div_leyenda h4[id='"+response.inicio_vacaciones["dia"]+"'][class='vacaciones']").next().text().replace("Inicio ",""));
+                }
               }, 50);
             }
           }
           else if(response.inicio_vacaciones){
-            $("#div_leyenda h4[id='"+response.inicio_vacaciones["dia"]+"'").addClass("vacaciones");
 
             var date = new Date(año,mes,1);
             var fecha_ultimoDia = new Date(date.getFullYear(), date.getMonth() , 0).toString().split(" ");
             último_día=fecha_ultimoDia[2];
             
             setTimeout(function(){
-              $(".ui-datepicker-calendar td[data-month='"+(mes-1)+"']").find("a").filter(function(){return $(this).text()==response.inicio_vacaciones["dia"];}).removeClass("festivo");
-              
-              if($("#div_leyenda h4[id='"+(response.inicio_vacaciones["dia"]+1)+"'").next().text().indexOf("Traslado") >= 0){
-                $("#div_leyenda h4[id='"+(response.inicio_vacaciones["dia"]+1)+"'").next().remove();
-                $("#div_leyenda h4[id='"+(response.inicio_vacaciones["dia"]+1)+"'").remove();
-                $(".ui-datepicker-calendar td[data-month='"+(mes-1)+"']").find("a").filter(function(){return $(this).text()==(response.inicio_vacaciones["dia"]+1);}).removeClass("festivo");                
+            // Si se repite el día de inicio de vacaciones, se asigna la clase vacaciones al día de inicio de las vacaciones.
+            if($("#div_leyenda h4[id='"+response.inicio_vacaciones["dia"]+"']").length>1){
+              $("#div_leyenda h4[id='"+response.inicio_vacaciones["dia"]+"']").each(function(){
+                if($(this).next().text().indexOf(" Vacaciones ")>0){
+                  $(this).addClass("vacaciones")
+                }
+              });
+              // Se comprueba que el festivo está tras las vacaciones en la leyenda, en caso contrario se modifica.
+              if($("#div_leyenda h4[id='"+response.inicio_vacaciones["dia"]+"'][class='vacaciones']").closest("h4[id='"+response.inicio_vacaciones["dia"]+"']").text()==response.inicio_vacaciones["dia"]){
+                vacaciones=$("#div_leyenda h4[id='"+response.inicio_vacaciones["dia"]+"'][class='vacaciones']").next().text();
+                $("#div_leyenda h4[id='"+response.inicio_vacaciones["dia"]+"'][class='vacaciones']").next().remove();
+                $("#div_leyenda h4[id='"+response.inicio_vacaciones["dia"]+"'][class='vacaciones']").remove();
+
+                $( "<h4 id='"+response.inicio_vacaciones["dia"]+"'class='vacaciones'>"+response.inicio_vacaciones["dia"]+"</h4><h4 id='h4_descripcion'>"+vacaciones+"</h4>" ).insertBefore( $("#div_leyenda h4[id='"+response.inicio_vacaciones["dia"]+"'][class!='vacaciones']")); 
               }
-              // Se modifica los días desde inicio de vacaciones hasta final de mes puesto que sigue en el siguiente mes.
-              for(var i = response.inicio_vacaciones["dia"]; i <= último_día; i++){
-                $(".ui-datepicker-calendar td[data-month='"+(mes-1)+"']").find("a").filter(function(){return $(this).text()==i;}).addClass("vacaciones");
-                $("#div_leyenda h4[id='"+i+"'").addClass("vacaciones");
-              }
+            }
+            else{
+              $("#div_leyenda h4[id='"+response.inicio_vacaciones["dia"]+"']").addClass("vacaciones");
+            }
+
+            // Se modifica los días desde inicio de vacaciones hasta final de mes puesto que sigue en el siguiente mes.
+            for(var i = response.inicio_vacaciones["dia"]; i <= último_día; i++){
+              $(".ui-datepicker-calendar td[data-month='"+(mes-1)+"']").find("a").filter(function(){return $(this).text()==i;}).addClass("vacaciones");
+            }
+
             }, 50);
           }
           else if(response.fin_vacaciones){
-            $("#div_leyenda h4[id='"+response.fin_vacaciones["dia"]+"'").addClass("vacaciones");
 
             setTimeout(function(){
-              $(".ui-datepicker-calendar td[data-month='"+(mes-1)+"']").find("a").filter(function(){return $(this).text()==response.fin_vacaciones["dia"];}).removeClass("festivo");
 
-              if($("#div_leyenda h4[id='"+(response.fin_vacaciones["dia"]+1)+"'").next().text().indexOf("Traslado") >= 0){
-                $("#div_leyenda h4[id='"+(response.fin_vacaciones["dia"]+1)+"'").next().remove();
-                $("#div_leyenda h4[id='"+(response.fin_vacaciones["dia"]+1)+"'").remove();
-                $(".ui-datepicker-calendar td[data-month='"+(mes-1)+"']").find("a").filter(function(){return $(this).text()==(response.fin_vacaciones["dia"]+1);}).removeClass("festivo");
+            //Se añade la clase vacaciones, sólo a los elementos de ese día que contiene la información de las vacaciones.
+            if($("#div_leyenda h4[id='"+response.fin_vacaciones["dia"]+"']").length>1){
+              $("#div_leyenda h4[id='"+response.fin_vacaciones["dia"]+"']").each(function(){
+                if($(this).next().text().indexOf(" Vacaciones ")>0){
+                  $(this).addClass("vacaciones");
+                }
+              });
+              // Se comprueba que el festivo está tras las vacaciones en la leyenda, en caso contrario se modifica.
+              if($("#div_leyenda h4[id='"+response.fin_vacaciones["dia"]+"'][class='vacaciones']").closest("h4[id='"+response.fin_vacaciones["dia"]+"']").text()==response.fin_vacaciones["dia"]){
+                vacaciones=$("#div_leyenda h4[id='"+response.fin_vacaciones["dia"]+"'][class='vacaciones']").next().text();
+                $("#div_leyenda h4[id='"+response.fin_vacaciones["dia"]+"'][class='vacaciones']").next().remove();
+                $("#div_leyenda h4[id='"+response.fin_vacaciones["dia"]+"'][class='vacaciones']").remove();
+
+                $( "<h4 id='"+response.fin_vacaciones["dia"]+"'class='vacaciones'>"+response.fin_vacaciones["dia"]+"</h4><h4 id='h4_descripcion'>"+vacaciones+"</h4>" ).insertBefore( $("#div_leyenda h4[id='"+response.fin_vacaciones["dia"]+"'][class!='vacaciones']")); 
               }
-              // Se modifica los días desde inicio del mes hasta final de vacaciones puesto que sigue en el mes anterior.
-              for(var i = response.fin_vacaciones["dia"]; i >= 1; i--){
-                $(".ui-datepicker-calendar td[data-month='"+(mes-1)+"']").find("a").filter(function(){return $(this).text()==i;}).addClass("vacaciones");
-                $(".ui-datepicker-calendar td[data-month='"+(mes-1)+"']").find("a").filter(function(){return $(this).text()==i;}).removeClass("festivo");
-                $("#div_leyenda h4[id='"+i+"'").addClass("vacaciones");            
-              }
+            }
+            else{
+              $("#div_leyenda h4[id='"+response.fin_vacaciones["dia"]+"']").addClass("vacaciones");
+            }
+
+            // Se modifica los días desde inicio del mes hasta final de vacaciones puesto que sigue en el mes anterior.
+            for(var i = response.fin_vacaciones["dia"]; i >= 1; i--){
+              $(".ui-datepicker-calendar td[data-month='"+(mes-1)+"']").find("a").filter(function(){return $(this).text()==i;}).addClass("vacaciones");
+            }
+
             }, 50);
           }
         }
       })
+
       // Se Comprueba si el último día del mes anterior es un domingo y es festivo, para traspasar el festivo al primer día del mes actual.
       dia_1=$("#calendario tbody tr:first td:first a");
       if( dia_1.text() == "1" ){
@@ -2426,6 +2468,7 @@ $(document).on("blur","input[id='edit_profesor_dni']",function() {
 
             if(response.data!=null)
             {
+              alert("entra");
               dia_1.addClass("festivo");
               setTimeout(function(){
                 $("#div_leyenda").prepend("<h4 id='"+dia_1.text()+"'>"+dia_1.text()+"</h4><h4 id='h4_descripcion'>Traslado del Festivo del día "+dia_ant+" de "+MES[$("#calendario tbody tr:first td:last").attr("data-month")-1]+" </h4>" );
@@ -2573,10 +2616,12 @@ $(document).on("blur","input[id='edit_profesor_dni']",function() {
 
     var dia= $("#dia_festivo select").val();
     var mes= $("#mes_festivo select").val();
+    var descripcion="";
+
     $.ajax({
       type: 'POST',
       url: Routing.generate('comprobar_festivo'),
-      data: {dia:dia, mes:mes },
+      data: {dia:dia, mes:mes ,descripcion:descripcion},
       dataType: 'json',
       success: function(response) {
         if(response.data!=null)
@@ -2596,14 +2641,14 @@ $(document).on("blur","input[id='edit_profesor_dni']",function() {
               if($("#festivos_nueva").attr("tipo")!=""){
                 tipo=$("#festivos_tipo").val();
                 $("#festivos_dialog").dialog('close');
-
+                //Se actualiza la lista de festivos.
                 div=$("#asignacion_festivos div[id$='"+tipo.toLowerCase()+"'] .Festivos_list");
                 $(div).empty();
                 $(div).load(Routing.generate('festivos_por_tipo', {id:tipo}));
               }
               else{
-
                 $("#festivos_dialog").dialog('close');
+                //Se actualiza la lista de festivos.
                 div=$("#asignacion_festivos div[style='display: block;'] .Festivos_list");
                 $(div).empty();
                 var tipo= form.attr("tipo");
@@ -2656,40 +2701,57 @@ $(document).on("blur","input[id='edit_profesor_dni']",function() {
     else{
       $("#festivos_edit span").addClass("oculto");
     }
-
-      $.ajax({
-        type: 'PUT',
-        url: $(this).attr('action'),
-        data:$(this).serialize(), 
-  
-        success: function() {
-          var tipo= $("#festivos_tipo").attr("value");
-          if($("#festivos_edit").attr("tipo")!=""){
-            tipo2=$("#festivos_tipo").val();
-            $("#festivos_dialog").dialog('close'); 
-
-            div=$("#asignacion_festivos div[id$='"+tipo.toLowerCase()+"'] .Festivos_list");
-            $(div).empty();
-            $(div).load(Routing.generate('festivos_por_tipo', {id:tipo}));
-
-            div2=$("#asignacion_festivos div[id$='"+tipo2.toLowerCase()+"'] .Festivos_list");
-            $(div2).empty();
-            $(div2).load(Routing.generate('festivos_por_tipo', {id:tipo2}));
-
-          }
-          else{
-            $("#festivos_dialog").dialog('close'); 
-            div=$("#asignacion_festivos div[style='display: block;'] .Festivos_list");
-            $(div).empty();
-            $(div).load(Routing.generate('festivos_por_tipo', {id:tipo}));
-          }
-
-
-          $("#actualizar_calendario").trigger("click");
-
+    var dia= $("#dia_festivo select").val();
+    var mes= $("#mes_festivo select").val();
+    var descripcion=$("#festivos_descripcion").val();
+    
+    $.ajax({
+      type: 'POST',
+      url: Routing.generate('comprobar_festivo'),
+      data: {dia:dia, mes:mes, descripcion:descripcion},
+      dataType: 'json',
+      success: function(response) {
+        if(response.data!=null)
+        {
+          alert("El día y mes introducido ya tiene asignado un festivo en el sistema.");
+          return false;
         }
-      })
-      return false;
+        else{
+          $.ajax({
+            type: 'PUT',
+            url: $("#festivos_edit").attr('action'),
+            data:$("#festivos_edit").serialize(), 
+  
+            success: function() {
+              var tipo= $("#festivos_tipo").attr("value");
+              if($("#festivos_edit").attr("tipo")!=""){
+                tipo2=$("#festivos_tipo").val();
+                $("#festivos_dialog").dialog('close'); 
+                
+                //Se actualizan las listas modificadas de los festivos.
+                div=$("#asignacion_festivos div[id$='"+tipo.toLowerCase()+"'] .Festivos_list");
+                $(div).empty();
+                $(div).load(Routing.generate('festivos_por_tipo', {id:tipo}));
+
+                div2=$("#asignacion_festivos div[id$='"+tipo2.toLowerCase()+"'] .Festivos_list");
+                $(div2).empty();
+                $(div2).load(Routing.generate('festivos_por_tipo', {id:tipo2}));
+              }
+              else{
+                $("#festivos_dialog").dialog('close'); 
+
+                //Se actualiza las lista de festivos.
+                div=$("#asignacion_festivos div[style='display: block;'] .Festivos_list");
+                $(div).empty();
+                $(div).load(Routing.generate('festivos_por_tipo', {id:tipo}));
+            }
+              $("#actualizar_calendario").trigger("click");
+            }
+          })
+          return false;
+        } 
+      } 
+    })
   });
 
   $(document).on("click","#festivos_delete button",function(event){
@@ -2779,20 +2841,6 @@ $(document).on("blur","input[id='edit_profesor_dni']",function() {
       }
   });
 
-
-/*    $(document).on('blur',"#contenedor_festivos input[type!='radio']",function(event){
-      var dato=$(this).attr("id").split("_");
-          setTimeout(function(){ 
-      if(($("#inicio_"+dato[1]).val()=="" || $("#inicio_"+dato[1]).val()==" " || $("#fin_"+dato[1]).val()=="" || $("#fin_"+dato[1]).val()==" ") && (!$("#inicio_"+dato[1]).is(":focus")) && (!$("#fin_"+dato[1]).is(":focus")) && (!$("#ui-datepicker-div a").is(":focus"))){
-        if(!$("#ui-datepicker-div").is(":visible")){
-          $("#inicio_"+dato[1]).val("");
-          $("#fin_"+dato[1]).val("");
-          $("#inicio_"+dato[1]).removeClass("modified");
-          $("#fin_"+dato[1]).removeClass("modified");
-        }
-      }
-    },200);
-  });*/
 
   $(document).on('click',"#button_festivos_all",function(event){
     if($("#contenedor_festivos input[type!='radio'][class*='modified']").length==0){
@@ -2939,8 +2987,6 @@ $(document).on("blur","input[id='edit_profesor_dni']",function() {
     if($(this).val()==" " || $(this).val()==""){
       $(this).addClass("error_guardar");
     }  
-
-
   });
 
 

@@ -21,6 +21,8 @@ class AppKernel extends Kernel
             new Cole\ColeBundle\ColeBundle(),
             new Cole\BackendBundle\BackendBundle(),
             new Cole\IntranetBundle\IntranetBundle(),
+            //new Ps\PdfBundle\PsPdfBundle(),
+            new Knp\Bundle\SnappyBundle\KnpSnappyBundle(),
         );
 
         if (in_array($this->getEnvironment(), array('dev', 'test'))) {

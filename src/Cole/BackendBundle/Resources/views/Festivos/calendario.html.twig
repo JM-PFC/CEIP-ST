@@ -1,0 +1,628 @@
+
+<!DOCTYPE html>
+<html lang="es">
+    <head>
+    	<meta charset="UTF-8" />
+        <meta content="Calendario del Curso" name="description" />
+        <meta content="CEIP, SANTA TERESA, CÁDIZ, WEB, COLEGIO" name="keywords" />
+        <link id="favicon" rel="icon" type="image/x-icon" href="{{ asset('favicon.ico') }}" />
+	    <link href="{{ app.request.scheme ~ '://' ~ app.request.httpHost ~ asset('bundles/backend/css/backend.css') }}" rel="stylesheet" type="text/css" />
+	    <link href="{{ app.request.scheme ~ '://' ~ app.request.httpHost ~ asset('bundles/cole/css/estilo.css') }}" rel="stylesheet" type="text/css" />
+	    <link href="{{app.request.scheme ~ '://' ~ app.request.httpHost ~ asset('bundles/backend/js/jquery-ui/	jquery-ui.css') }}" rel="stylesheet" type="text/css" />
+        <script src="{{app.request.scheme ~ '://' ~ app.request.httpHost ~ asset('bundles/cole/js/jquery-1.11.2.js')}}" type="text/javascript"></script>
+        <script type="text/javascript" src="{{app.request.scheme ~ '://' ~ app.request.httpHost ~ asset('bundles/backend/js/jquery-ui/jquery-ui.js') }}"></script>
+   
+
+
+
+        <script  type="text/javascript">
+
+ 
+        $.datepicker.regional['es'] = {
+            monthNames: ['ENERO', 'FEBRERO', 'MARZO', 'ABRIL', 'MAYO', 'JUNIO', 'JULIO', 'AGOSTO', 'SEPTIEMBRE', 'OCTUBRE', 'NOVIEMBRE', 'DICIEMBRE'],
+            dayNamesMin: ['D','L','M','Mi','J','V','S'],
+            firstDay: 1,
+        };
+
+        $.datepicker.setDefaults($.datepicker.regional['es']);
+
+
+        inicio_d={{ inicio.inicioCurso|date('d') }};
+        inicio_m= {{ inicio.inicioCurso|date('m') }};
+        inicio_a= {{ inicio.inicioCurso|date('Y') }};
+        fin_d={{ fin.finCurso|date('d') }};
+        fin_m= {{ fin.finCurso|date('m') }};
+        fin_a= {{ fin.finCurso|date('Y') }};
+
+
+    </script>
+   	</head>
+
+    <body id="calendario_pdf">
+    	<div>
+    		<div>
+				<img height= "150px" width= "150px" alt="logo del colegio"   src= " {{ app.request.scheme ~ '://' ~ app.request.httpHost ~ asset('bundles/backend/images/logo_trans.png') }} ">
+    	   	</div>
+    		<div class="titulo">
+				Colegio de Educación Infantil y Primaria
+				<br>
+				<strong>Santa Teresa</strong>
+				<br>
+				Cádiz
+			</div>
+			 <div>
+    			<h2> Curso<span id="año_inicio"> {{ inicio.inicioCurso|date('Y') }}</span>/<span id="año_fin">{{ fin.finCurso|date('Y') }}</span></h2>
+			</div>
+    	</div>
+    	<div>
+    		<h1> Caledario Escolar </h1>
+    	</div>
+    	<div id="meses_calendario">
+            <div id="col_izq">
+                <div id="mes">
+                    <div id="leyenda" num="9">
+                        <div>
+                            {% if inicio.inicioCurso| localizeddate('none', 'none', 'none',none , "MMMM") == "septiembre"  %}
+                                <h4 id="{{ inicio.inicioCurso|date('d') }}" class="f_fecha" >{{ inicio.inicioCurso|date('d') }}</h4>
+                                <h4 id="h4_descripcion">Inicio del curso</h4>
+                            {% endif %}
+                            {% for entity in entities %}
+                                {% if entity.mes == "Septiembre" %}
+                                <h4 id="{{ entity.dia }}" class="f_{{ entity.tipo }}" >{{ entity.dia }}</h4>
+                                <h4 id="h4_descripcion">{{ entity.descripcion }}</h4>
+                                {% endif %}
+                            {% endfor %}
+                        </div>
+                    </div>
+                    <div id="septiembre" ></div>
+                </div>
+                <div id="mes">
+                    <div id="leyenda" num="11">
+                        <div>
+                            
+                            {% for entity in entities %}
+                                {% if entity.mes == "Noviembre" %}
+                                <h4 id="{{ entity.dia }}" class="f_{{ entity.tipo }}">{{ entity.dia }}</h4>
+                                <h4 id="h4_descripcion">{{ entity.descripcion }}</h4>
+                                {% endif %}
+                            {% endfor %}
+                        </div>
+                    </div>
+                    <div id="noviembre" ></div>
+                </div>
+                <div id="mes">
+                    <div id="leyenda" num="1">
+                        <div>
+                            {% for entity in entities %}
+                                {% if entity.mes == "Enero" %}
+                                    {% if entity.descripcion == "Inicio Vacaciones de Navidad" or entity.descripcion == "Fin Vacaciones de Navidad" %}
+                                        <h4 id="{{ entity.dia }}" class=" " >{{ entity.dia }}</h4>
+                                        <h4 id="h4_descripcion">{{ entity.descripcion }}</h4>
+                                    {% else %}
+                                        <h4 id="{{ entity.dia }}" class="f_{{ entity.tipo }}" >{{ entity.dia }}</h4>
+                                        <h4 id="h4_descripcion">{{ entity.descripcion }}</h4>
+                                    {% endif %}
+                                {% endif %}
+                            {% endfor %}                            
+                        </div>
+                    </div>
+                    <div id="enero" ></div>
+                </div>
+                <div id="mes">
+                    <div id="leyenda" num="3">
+                        <div>
+                            {% for entity in entities %}
+                                {% if entity.mes == "Marzo" %}
+                                    {% if entity.descripcion == "Inicio Vacaciones de Semana Santa" or entity.descripcion == "Fin Vacaciones de Semana Santa" %}
+                                        <h4 id="{{ entity.dia }}" class=" " >{{ entity.dia }}</h4>
+                                        <h4 id="h4_descripcion">{{ entity.descripcion }}</h4>
+                                    {% else %}
+                                        <h4 id="{{ entity.dia }}" class="f_{{ entity.tipo }}" >{{ entity.dia }}</h4>
+                                        <h4 id="h4_descripcion">{{ entity.descripcion }}</h4>
+                                    {% endif %}
+                                {% endif %}
+                            {% endfor %}                            
+                        </div>
+                    </div>
+                    <div id="marzo" ></div>
+                </div>
+                <div id="mes">
+                    <div id="leyenda" num="5">
+                        <div>
+                            {% for entity in entities %}
+                                {% if entity.mes == "Mayo" %}
+                                <h4 id="{{ entity.dia }}" class="f_{{ entity.tipo }}" >{{ entity.dia }}</h4>
+                                <h4 id="h4_descripcion">{{ entity.descripcion }}</h4>
+                                {% endif %}
+                            {% endfor %}                            
+                        </div>
+                    </div>
+                    <div id="mayo" ></div>
+                </div>
+            </div>
+            <div id="col_der">
+                <div id="mes">
+                    <div id="leyenda" num="10">
+                        <div>
+                            {% for entity in entities %}
+                                {% if entity.mes == "Octubre" %}
+                                <h4 id="{{ entity.dia }}" class="f_{{ entity.tipo }}" >{{ entity.dia }}</h4>
+                                <h4 id="h4_descripcion">{{ entity.descripcion }}</h4>
+                                {% endif %}
+                            {% endfor %}                            
+                        </div>
+                    </div>
+                    <div id="octubre" ></div>
+                </div>
+                <div id="mes">
+                    <div id="leyenda" num="12">
+                        <div>
+                            {% for entity in entities %}
+                                {% if entity.mes == "Diciembre" %}
+                                    {% if entity.descripcion == "Inicio Vacaciones de Navidad" or entity.descripcion == "Fin Vacaciones de Navidad" %}
+                                        <h4 id="{{ entity.dia }}" class=" " >{{ entity.dia }}</h4>
+                                        <h4 id="h4_descripcion">{{ entity.descripcion }}</h4>
+                                    {% else %}
+                                        <h4 id="{{ entity.dia }}" class="f_{{ entity.tipo }}" >{{ entity.dia }}</h4>
+                                        <h4 id="h4_descripcion">{{ entity.descripcion }}</h4>
+                                    {% endif %}
+                                {% endif %}
+                            {% endfor %}                            
+                        </div>
+                    </div>
+                    <div id="diciembre" ></div>
+                </div>
+                <div id="mes">
+                    <div id="leyenda" num="2">
+                        <div>
+                            {% for entity in entities %}
+                                {% if entity.mes == "Febrero" %}
+                                <h4 id="{{ entity.dia }}" class="f_{{ entity.tipo }}" >{{ entity.dia }}</h4>
+                                <h4 id="h4_descripcion">{{ entity.descripcion }}</h4>
+                                {% endif %}
+                            {% endfor %}                            
+                        </div>
+                    </div>
+                    <div id="febrero" ></div>
+                </div>
+                <div id="mes">
+                    <div id="leyenda" num="4">
+                        <div>
+                            {% for entity in entities %}
+                                {% if entity.mes == "Abril" %}
+                                    {% if entity.descripcion == "Inicio Vacaciones de Semana Santa" or entity.descripcion == "Fin Vacaciones de Semana Santa" %}
+                                        <h4 id="{{ entity.dia }}" class=" " >{{ entity.dia }}</h4>
+                                        <h4 id="h4_descripcion">{{ entity.descripcion }}</h4>
+                                    {% else %}
+                                        <h4 id="{{ entity.dia }}" class="f_{{ entity.tipo }}" >{{ entity.dia }}</h4>
+                                        <h4 id="h4_descripcion">{{ entity.descripcion }}</h4>
+                                    {% endif %}
+                                {% endif %}
+                            {% endfor %}                            
+                        </div>
+                    </div>
+                    <div id="abril" ></div>
+                </div>
+                <div id="mes">
+                    <div id="leyenda" num="6">
+                        <div>
+                            {% for entity in entities %}
+                                {% if entity.mes == "Junio" %}
+                                <h4 id="{{ entity.dia }}" class="f_{{ entity.tipo }}" >{{ entity.dia }}</h4>
+                                <h4 id="h4_descripcion">{{ entity.descripcion }}</h4>
+                                {% endif %}
+                            {% endfor %}
+                            {% if fin.finCurso| localizeddate('none', 'none', 'none',none , "MMMM") == "junio"  %}
+                            <h4 id="{{ inicio.inicioCurso|date('d') }}" class="f_fecha" >{{ fin.finCurso|date('d') }}</h4>
+                            <h4 id="h4_descripcion">Último día del curso</h4>
+                            {% endif %}                            
+                        </div>
+                    </div>                
+                    <div id="junio" ></div>
+                </div>
+
+            </div>
+            <div id="lectivos">
+                <table>
+                <thead>
+                    <tr>
+                        <th colspan="3">Nº días lectivos del curso</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Primer Trimestre</td>
+                        <td id="lectivos_1"></td>
+                        <td>días lectivos</td>
+                    </tr>
+                    <tr>
+                        <td>Segundo Trimestre</td>
+                        <td id="lectivos_2"></td>
+                        <td>días lectivos</td>
+                    </tr>
+                    <tr>
+                        <td>Tercer Trimestre</td>
+                        <td id="lectivos_3"></td>
+                        <td>días lectivos</td>
+                    </tr>
+                </tbody>    
+                </table> 
+            </div>
+
+            <div id="tipo_festivos">
+                <table>
+                <thead>
+                    <tr>
+                        <th colspan="3">Días no lectivos</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td colspan="2" class="f_Nacional"></td>
+                        <td>Festivos Nacionales/Locales</td>
+                    </tr>
+                    <tr>
+                        <td colspan="2" class="f_Curso"></td>
+                        <td>Festivos del Curso</td>
+                    </tr>
+                    <tr>
+                        <td colspan="2" class="f_vacaciones"></td>
+                        <td>Días de Vacaciones</td>
+                    </tr>
+                </tbody>    
+                </table> 
+            </div>
+    	</div>
+        
+        <script  type="text/javascript">
+
+            var MES = ["enero","febrero","marzo","abril","mayo","junio","julio","agosto","septiembre","octubre","noviembre","diciembre"];
+
+            for (i = 0; i <=11; i++) {
+                if( i==9 || i==11) {
+                    $('#'+MES[i]).datepicker({
+                        defaultDate: new Date(inicio_a, i, 1),
+                        changeMonth: false,
+                        numberOfMonths: 1,
+                        minDate: new Date(inicio_a, i, 1),
+                        maxDate: new Date(inicio_a, i, 31),
+                    });
+                }
+                else if(i==0 || i==2 || i==4){ 
+                    $('#'+MES[i]).datepicker({
+                       defaultDate: new Date(fin_a, i, 1),
+                        changeMonth: false,
+                        numberOfMonths: 1,
+                        minDate: new Date(fin_a, i, 1),
+                        maxDate: new Date(fin_a, i, 31),
+                    });
+                }
+                else if(i==1){ 
+                    //Se comprueba si es año bisiesto. 
+                    if((fin_a % 4 == 0) && ((fin_a % 100 != 0) || (fin_a % 400 == 0))){
+                        $('#'+MES[i]).datepicker({
+                            defaultDate: new Date(fin_a, i, 1),
+                            changeMonth: false,
+                            numberOfMonths: 1,
+                            minDate: new Date(fin_a, i, 1),
+                            maxDate: new Date(fin_a, i, 29),
+                        }); 
+                    }
+                    else{
+                        $('#'+MES[i]).datepicker({
+                            defaultDate: new Date(fin_a, i, 1),
+                            changeMonth: false,
+                            numberOfMonths: 1,
+                            minDate: new Date(fin_a, i, 1),
+                            maxDate: new Date(fin_a, i, 28),
+                        });                 
+                    }
+                }
+                else{
+                    if(i>5){
+                        $('#'+MES[i]).datepicker({
+                            defaultDate: new Date(inicio_a, i, 1),
+                            changeMonth: false,
+                            numberOfMonths: 1,
+                            minDate: new Date(inicio_a, i, 1),
+                            maxDate: new Date(inicio_a, i, 30),
+                        });
+                    }
+                    else{
+                        $('#'+MES[i]).datepicker({
+                            defaultDate: new Date(fin_a, i, 1),
+                            changeMonth: false,
+                            numberOfMonths: 1,
+                            minDate: new Date(fin_a, i, 1),
+                            maxDate: new Date(fin_a, i, 30),
+                        });
+                    }
+                }
+            }
+
+            $(".ui-datepicker-month").filter(function(){return $(this).text()==="SEPTIEMBRE" || $(this).text()==="OCTUBRE" || $(this).text()==="NOVIEMBRE" || $(this).text()==="DICIEMBRE" ;}).closest("div[class^='ui-datepicker-header']").addClass("azul");
+            $(".ui-datepicker-month").filter(function(){return $(this).text()==="ENERO" || $(this).text()==="FEBRERO" || $(this).text()==="MARZO" ;}).closest("div[class^='ui-datepicker-header']").addClass("verde");
+            $(".ui-datepicker-month").filter(function(){return $(this).text()==="ABRIL" || $(this).text()==="MAYO" || $(this).text()==="JUNIO" ;}).closest("div[class^='ui-datepicker-header']").addClass("naranja");
+
+            $("a[class*='ui-state-active']").removeClass("ui-state-active ui-state-hover");
+
+            for (i = 0; i <=11; i++) {
+                month=$("#meses_calendario tbody td[data-month='"+i+"'] ").closest("div[class='hasDatepicker']").attr("id");
+                mes=i+1;
+                if(mes!=10 && mes!=11 && mes!=12){
+                    mes='0'+mes;
+                    }
+                //Se carga los festivos en la leyenda.
+                // $("#"+month).prev().children('div').load(Routing.generate('festivos_por_mes', {id:mes}));
+            }
+            $("#meses_calendario #leyenda div").addClass("centrado_vertical");
+
+            //Se comprueba si existe un festivo en domingo.
+            $("#meses_calendario #leyenda").each(function(){
+                $(this).find("h4[id!='h4_descripcion'][class!=' ']").each(function(){
+                    dia=parseInt($(this).attr("id"));
+                    clase=$(this).attr("class");
+                    elem=$(this).closest("div[id='leyenda']").next().find("a").filter(function(){return $(this).text()==dia;});
+                    elem.addClass(clase);
+
+                    if((elem.closest("td").hasClass(" ui-datepicker-week-end ") || elem.closest("td").hasClass(" ui-datepicker-week-end ui-datepicker-days-cell-over  ui-datepicker-current-day")) &&  elem.closest("tr").find("td:last a").text() == elem.text() && !elem.closest("div[id='leyenda']").find("h4[id='"+elem.closest("tr").next("tr").find("td:nth-child(1) a").text()+"']").length){
+                        //Se comrpueba si el último día del mes es domingo.
+                        if(elem.closest("tbody").find("tr:last td:last a").text()!=elem.text()){
+                            // Mostramos el traspado del festivo al lunes en el mismo mes.
+                            elem.closest("tr").next("tr").find("td:nth-child(1) a").addClass("f_Curso");
+
+                            //Se comprueba si coincide el final de vacaciones con domingo festivo, para mostrarlo en la leyenda.
+                            if($(this).closest("div[id='leyenda']").find("h4[id='"+dia+"']").length==1){
+                            $( "<h4 id='"+(dia+1)+"'class='f_Curso'>"+(dia+1)+"</h4><h4 id='h4_descripcion'>Traslado del Festivo del día "+dia+".</h4>" ).insertAfter( elem.closest("div[class='hasDatepicker']").prev().find("#"+dia).next());  
+                            }
+                            //Se muestra el traslado del festivo tras el festivo del día anterior y el final de las vacaciones.
+                            else{
+                            $( "<h4 id='"+(dia+1)+"'class='f_Curso'>"+(dia+1)+"</h4><h4 id='h4_descripcion'>Traslado del Festivo del día "+dia+".</h4>" ).insertAfter( elem.closest("div[class='hasDatepicker']").prev().find("#"+dia+"[class!=' ']").next()); 
+                            }
+
+                        }
+                        else{
+                            // Mostramos el traspado del festivo al lunes del siguiente mes.
+                            mes=parseInt(elem.closest("div[class='hasDatepicker']").prev().attr("num"));
+
+                            $("#meses_calendario div[num='"+(mes+1)+"']").next().find("a").filter(function(){return $(this).text()==1;}).addClass("f_Curso");
+
+                            $("#meses_calendario div[num='"+(mes+1)+"']>div").prepend( "<h4 id='1'class='f_Curso'>1</h4><h4 id='h4_descripcion'>Traslado del Festivo del día "+dia+" de "+$("#meses_calendario div[num='"+mes+"']").next().attr("id")+".</h4>" );
+                        }
+                    }
+                });     
+
+            });
+
+            //Se comprueban las vacaciones y se marcan en el calendario.
+            function TransCalendario(dia_inicio, dia_fin, mes_inicio, mes_fin, vacaciones) {
+
+                if(mes_inicio==mes_fin){
+
+                    mes=$("#"+mes_inicio).find("tbody td[data-handler='selectDay']").attr("data-month");
+                    año=$("#"+mes_inicio).find(" tbody td[data-handler='selectDay']").attr("data-year");
+                    mes++;
+
+
+                    for(var i = dia_inicio; i <= dia_fin; i++){
+
+                        $("#"+mes_inicio).find("tbody td").find("a").filter(function(){return $(this).text()==i;}).addClass("f_vacaciones");
+                    }
+
+                    $("#meses_calendario div[num='"+mes+"'] h4").filter(function(){return $(this).text()==="Inicio "+vacaciones ;}).prev().addClass("f_vacaciones");
+                    $("#meses_calendario div[num='"+mes+"'] h4").filter(function(){return $(this).text()==="Inicio "+vacaciones ;}).prev().removeClass("f_Curso");
+                    $("#meses_calendario div[num='"+mes+"'] h4").filter(function(){return $(this).text()==="Fin "+vacaciones ;}).prev().addClass("f_vacaciones");
+                    $("#meses_calendario div[num='"+mes+"'] h4").filter(function(){return $(this).text()==="Fin "+vacaciones ;}).prev().removeClass("f_Curso");
+
+                    if($("#meses_calendario div[num='"+mes+"'] h4[id='"+dia_inicio+"']").length>1 ){
+                        $("#meses_calendario div[num='"+mes+"'] h4[id='"+dia_inicio+"']").each(function(){
+                            if($(this).next().text()!="Inicio "+vacaciones ){
+                                $(this).next().remove();
+                                $(this).remove();
+                            }
+                        });
+                    }
+
+                    $("#meses_calendario div[num='"+mes+"'] h4[id!=h4_descripcion]").each(function(){
+                        if($(this).attr("id")>dia_inicio && $(this).attr("id")<dia_fin){
+                            $(this).next().remove();
+                            $(this).remove();
+                        }
+                    });
+
+                    if($("#meses_calendario div[num='"+mes+"'] h4[id='"+dia_fin+"']").length>1 && $("#meses_calendario div[num='"+mes+"']").next().find("td a").filter(function(){return $(this).text()==dia_fin;}).closest("td a").text()!=$("#meses_calendario div[num='"+mes+"']").next().find("td a").filter(function(){return $(this).text()==dia_fin;}).closest("tr").find("td:last a").text()){
+
+                    $("#meses_calendario div[num='"+mes+"'] h4[id='"+dia_fin+"'][class!='f_vacaciones']").next().remove();
+                    $("#meses_calendario div[num='"+mes+"'] h4[id='"+dia_fin+"'][class!='f_vacaciones']").remove();
+
+                    }
+
+                    $("#meses_calendario div[num='"+mes+"'] h4").filter(function(){return $(this).text()==="Inicio "+vacaciones ;}).prev().text(dia_inicio+"-"+dia_fin);
+                    $("#meses_calendario div[num='"+mes+"'] h4").filter(function(){return $(this).text()==="Inicio "+vacaciones ;}).text(vacaciones );
+                    $("#meses_calendario div[num='"+mes+"'] h4").filter(function(){return $(this).text()==="Fin "+vacaciones ;}).prev().remove();
+                    $("#meses_calendario div[num='"+mes+"'] h4").filter(function(){return $(this).text()==="Fin "+vacaciones ;}).remove();
+                }
+                else{
+                    mes=$("#"+mes_inicio).find("tbody td[data-handler='selectDay']").attr("data-month");
+                    año=$("#"+mes_inicio).find(" tbody td[data-handler='selectDay']").attr("data-year");
+                    mes++;
+
+                    var date = new Date(año,mes,1);
+                    var fecha_ultimoDia = new Date(date.getFullYear(), date.getMonth() , 0).toString().split(" ");
+                    último_día=fecha_ultimoDia[2];
+
+                    for(var i = dia_inicio; i <= último_día; i++){
+                        $("#"+mes_inicio).find("tbody td").find("a").filter(function(){return $(this).text()==i;}).addClass("f_vacaciones");
+                        $("#"+mes_inicio).find("tbody td").find("a").filter(function(){return $(this).text()==i;}).removeClass("f_Curso");
+                    }
+                    $("#meses_calendario div[num='"+mes+"'] h4").filter(function(){return $(this).text()==="Inicio "+vacaciones ;}).prev().addClass("f_vacaciones");
+                    $("#meses_calendario div[num='"+mes+"'] h4").filter(function(){return $(this).text()==="Inicio "+vacaciones ;}).prev().removeClass("f_Curso");
+
+                    if($("#meses_calendario div[num='"+mes+"'] h4[id='"+dia_inicio+"']").length>1 ){
+                        $("#meses_calendario div[num='"+mes+"'] h4[id='"+dia_inicio+"']").each(function(){
+                            if($(this).next().text()!="Inicio "+vacaciones ){
+                                $(this).next().remove();
+                                $(this).remove();
+                            }
+                        });
+                    }
+                    $("#meses_calendario div[num='"+mes+"'] h4[id!=h4_descripcion]").each(function(){
+                        if($(this).attr("id")>dia_inicio){
+                            $(this).next().remove();
+                            $(this).remove();
+                        }
+                    });
+
+                    mes=$("#"+mes_fin).find("tbody td[data-handler='selectDay']").attr("data-month");
+                    año=$("#"+mes_fin).find(" tbody td[data-handler='selectDay']").attr("data-year");
+                    mes++;
+                    for(var i = dia_fin; i >= 1; i--){
+                        $("#"+mes_fin).find("tbody td").find("a").filter(function(){return $(this).text()==i;}).addClass("f_vacaciones");
+                        $("#"+mes_fin).find("tbody td").find("a").filter(function(){return $(this).text()==i;}).removeClass("f_Curso");
+                    }
+                    $("#meses_calendario div[num='"+mes+"'] h4").filter(function(){return $(this).text()==="Fin "+vacaciones ;}).prev().addClass("f_vacaciones");
+                    $("#meses_calendario div[num='"+mes+"'] h4").filter(function(){return $(this).text()==="Fin "+vacaciones ;}).prev().removeClass("f_Curso");
+
+    
+                    $("#meses_calendario div[num='"+mes+"'] h4[id!=h4_descripcion]").each(function(){
+                        if($(this).attr("id")<dia_fin){
+                            $(this).next().remove();
+                            $(this).remove();
+                        }
+                    });
+
+                    // Se comprueba que el aviso del festivo está tras las vacaciones en la leyenda, en caso contrario se modifica.
+                    if($("#meses_calendario div[num='"+mes+"'] h4[id='"+dia_fin+"']").length>1 ){
+                        if($("#meses_calendario div[num='"+mes+"']").next().find("td a").filter(function(){return $(this).text()==dia_fin;}).closest("td a").text()!=$("#meses_calendario div[num='"+mes+"']").next().find("td a").filter(function(){return $(this).text()==dia_fin;}).closest("tr").find("td:last a").text()){
+
+                            $("#meses_calendario div[num='"+mes+"'] h4[id='"+dia_fin+"'][class!='f_vacaciones']").next().remove();
+                            $("#meses_calendario div[num='"+mes+"'] h4[id='"+dia_fin+"'][class!='f_vacaciones']").remove();
+
+                        }
+                        else if($("#meses_calendario div[num='"+mes+"'] h4[id='"+dia_fin+"']").next().next().attr("id")!=dia_fin){
+                        
+                            $("#meses_calendario div[num='"+mes+"'] h4[id='"+dia_fin+"'][class='f_vacaciones']").next().remove();
+                            $("#meses_calendario div[num='"+mes+"'] h4[id='"+dia_fin+"'][class='f_vacaciones']").remove();
+
+                            $( "<h4 id='"+dia_fin+"'class='f_vacaciones'>"+dia_fin+"</h4><h4 id='h4_descripcion'>Fin "+vacaciones+"</h4>" ).insertBefore( $("#meses_calendario div[num='"+mes+"'] h4[id='"+dia_fin+"'][class!='f_vacaciones']")); 
+                       }
+                    }
+                }
+
+            }
+
+            if ( $("#meses_calendario #leyenda").find("h4").filter(function(){return $(this).text()=="Inicio Vacaciones de Navidad";}).length && $("#meses_calendario #leyenda").find("h4").filter(function(){return $(this).text()=="Fin Vacaciones de Navidad";}).length){
+                dia_inicio= parseInt($("#meses_calendario #leyenda").find("h4").filter(function(){return $(this).text()=="Inicio Vacaciones de Navidad";}).prev().attr("id"));
+                dia_fin= parseInt($("#meses_calendario #leyenda").find("h4").filter(function(){return $(this).text()=="Fin Vacaciones de Navidad";}).prev().attr("id"));
+                mes_inicio= $("#meses_calendario #leyenda").find("h4").filter(function(){return $(this).text()=="Inicio Vacaciones de Navidad";}).closest("div[id='leyenda']").next().attr("id");
+                mes_fin= $("#meses_calendario #leyenda").find("h4").filter(function(){return $(this).text()=="Fin Vacaciones de Navidad";}).closest("div[id='leyenda']").next().attr("id");
+                vacaciones="Vacaciones de Navidad";
+
+                TransCalendario(dia_inicio, dia_fin, mes_inicio, mes_fin, vacaciones);
+
+            }
+
+            if ( $("#meses_calendario #leyenda").find("h4").filter(function(){return $(this).text()=="Inicio Vacaciones de Semana Santa";}).length && $("#meses_calendario #leyenda").find("h4").filter(function(){return $(this).text()=="Fin Vacaciones de Semana Santa";}).length){
+                dia_inicio= parseInt($("#meses_calendario #leyenda").find("h4").filter(function(){return $(this).text()=="Inicio Vacaciones de Semana Santa";}).prev().attr("id"));
+                dia_fin= parseInt($("#meses_calendario #leyenda").find("h4").filter(function(){return $(this).text()=="Fin Vacaciones de Semana Santa";}).prev().attr("id"));
+                mes_inicio= $("#meses_calendario #leyenda").find("h4").filter(function(){return $(this).text()=="Inicio Vacaciones de Semana Santa";}).closest("div[id='leyenda']").next().attr("id");
+                mes_fin= $("#meses_calendario #leyenda").find("h4").filter(function(){return $(this).text()=="Fin Vacaciones de Semana Santa";}).closest("div[id='leyenda']").next().attr("id");
+                vacaciones="Vacaciones de Semana Santa";
+
+                TransCalendario(dia_inicio, dia_fin, mes_inicio, mes_fin, vacaciones);
+            }
+            
+            //Se modifican las clases del día actual para luego realizar búsquedas de los días lectivos con las mismas clases en todos.
+            $("#meses_calendario .hasDatepicker td[class=' ui-datepicker-days-cell-over  ui-datepicker-current-day']").attr("class"," ");
+            $("#meses_calendario .hasDatepicker td[class='  ui-datepicker-today'] ").attr("class"," ");
+            $("#meses_calendario .hasDatepicker td a[class='ui-state-default ui-state-highlight'] ").removeClass("ui-state-highlight");
+
+            //Se calcula el número de días lectivos de cada mes y guarda en el atributo lectivos del div.
+            $("#meses_calendario .hasDatepicker").each(function(){
+                var lectivos=0;
+                $(this).find("td[class!=' ui-datepicker-week-end '] a[class='ui-state-default']").each(function(){
+                    lectivos++;
+                });
+                $(this).attr("lectivos",lectivos);
+            });
+
+            //Se actualiza el número de días lectivos de Septiembre según la fecha de comienzo del curso.
+            var lectivos=0;
+            var ini_curso=parseInt($("#meses_calendario h4").filter(function(){return $(this).text()==="Inicio del curso" ;}).prev().attr("id"));
+            $("#meses_calendario #septiembre").find("td[class!=' ui-datepicker-week-end '] a[class='ui-state-default']").each(function(){
+                if(parseInt($(this).text())>ini_curso){
+                    return false;
+                }
+                lectivos++;
+            });
+            //Se le resta 1 para contabilizar el día de comienzo.
+            lectivos--;
+            $("#meses_calendario #septiembre").attr("lectivos",$("#meses_calendario #septiembre").attr("lectivos")-lectivos);
+
+            //Se actualiza el número de días lectivos de Junio según la fecha de finalización del curso.
+            var lectivos=0;
+            var fin_curso=parseInt($("#meses_calendario h4").filter(function(){return $(this).text()==="Último día del curso" ;}).prev().attr("id"));
+            $("#meses_calendario #junio").find("td[class!=' ui-datepicker-week-end '] a[class='ui-state-default']").each(function(){
+                if(parseInt($(this).text())>ini_curso){
+                    lectivos++;                
+                }
+            });
+            //Se le resta 1 para contabilizar el último día.
+            lectivos--;
+            $("#meses_calendario #junio").attr("lectivos",$("#meses_calendario #junio").attr("lectivos")-lectivos);
+
+            //Se calcula y se muestran los días lectivos de cada trimestre.
+            $("#lectivos_1").text(parseInt($("#septiembre").attr("lectivos"))+parseInt($("#octubre").attr("lectivos"))+parseInt($("#noviembre").attr("lectivos"))+parseInt($("#diciembre").attr("lectivos")));
+            
+            var mes_ini_SS=$("#meses_calendario h4").filter(function(){return $(this).text()==="Inicio Vacaciones de Semana Santa" ;}).closest("div[id='leyenda']").next().attr("id");
+            var mes_fin_SS=$("#meses_calendario h4").filter(function(){return $(this).text()==="Fin Vacaciones de Semana Santa" ;}).closest("div[id='leyenda']").next().attr("id");
+            var dia_ini_SS=$(" #meses_calendario h4").filter(function(){return $(this).text()==="Inicio Vacaciones de Semana Santa" ;}).prev().attr("id");
+            var dia_fin_SS=$(" #meses_calendario h4").filter(function(){return $(this).text()==="Fin Vacaciones de Semana Santa" ;}).prev().attr("id");
+            
+            //Condiciones según cuadre las vacaciones de Semana Santa en el Trimestre 2 y 3.
+            //Que cuadre entre los dos meses, ó en el mismo mes pero al justo al final de marzo ó principio de abril.
+            if(mes_ini_SS != mes_fin_SS || (mes_ini_SS == mes_fin_SS && (dia_ini_SS==1 || dia_fin_SS==31))){
+                $("#lectivos_2").text(parseInt($("#enero").attr("lectivos"))+parseInt($("#febrero").attr("lectivos"))+parseInt($("#marzo").attr("lectivos")));  
+
+                $("#lectivos_3").text(parseInt($("#abril").attr("lectivos"))+parseInt($("#mayo").attr("lectivos"))+parseInt($("#junio").attr("lectivos"))); 
+            }
+            //Que cuadre en el mismo mes pero antes de acabar marzo o después de empezar abril.
+            else{
+                if(mes_fin_SS=="marzo"){
+                    //Se calcula el resto de días de marzo tras las vacaciones y se le añade al tercer trimestre y se le resta al segundo trimestre.
+                    var dias=0;
+                    $("#meses_calendario #marzo").find("td[class!=' ui-datepicker-week-end '] a[class='ui-state-default']").each(function(){
+                        if(parseInt($(this).text())>dia_fin_SS){
+                            dias++;                
+                        }
+                    });
+                    $("#lectivos_2").text(parseInt($("#enero").attr("lectivos"))+parseInt($("#febrero").attr("lectivos"))+parseInt($("#marzo").attr("lectivos"))-dias);  
+
+                    $("#lectivos_3").text(parseInt($("#abril").attr("lectivos"))+parseInt($("#mayo").attr("lectivos"))+parseInt($("#junio").attr("lectivos"))+dias); 
+                }
+                else{
+                    //Se calcula el resto de días de abril antes de las vacaciones y se le añade al segundo trimestre y se le resta altercer trimestre.
+                    var dias=0;
+                    $("#meses_calendario #abril").find("td[class!=' ui-datepicker-week-end '] a[class='ui-state-default']").each(function(){
+                        if(parseInt($(this).text())>dia_ini_SS){
+                            return false;
+                        }
+                        dias++;                
+
+                    });
+                    $("#lectivos_2").text(parseInt($("#enero").attr("lectivos"))+parseInt($("#febrero").attr("lectivos"))+parseInt($("#marzo").attr("lectivos"))+dias);  
+
+                    $("#lectivos_3").text(parseInt($("#abril").attr("lectivos"))+parseInt($("#mayo").attr("lectivos"))+parseInt($("#junio").attr("lectivos"))-dias); 
+
+                }
+            }
+
+
+
+
+        </script>
+    </body>
+</html>
+
+
+

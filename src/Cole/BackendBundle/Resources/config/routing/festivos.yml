@@ -80,3 +80,18 @@ registrar_curso:
     defaults: { _controller: "BackendBundle:Festivos:RegistrarCurso" }
     options:
         expose: true
+
+calendariopdf:
+  pattern:  /Calendario_Curso
+  defaults: { _controller: "BackendBundle:Festivos:GenerarPdfFestivos", _format: pdf}
+  options:
+      expose: true
+
+calendario:
+  pattern:  /Calendario
+  defaults: { _controller: "BackendBundle:Festivos:GenerarFestivos"}
+  options:
+      expose: true
+
+
+
