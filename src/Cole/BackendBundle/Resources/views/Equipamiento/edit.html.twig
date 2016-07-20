@@ -1,0 +1,45 @@
+{% extends 'BackendBundle:Default:index.html.twig' %}
+
+{% block head %}{% endblock %}
+{% block stylesheets %}{% endblock %}
+
+{% block javascript %}
+
+    <script>
+    if($("#tabs div[aria-hidden='false'] .registro_equipamientos").attr("id")=="registro_equipamientos"){
+        $("#equipamiento_nueva #equipamiento_nombre").attr("placeholder","Inserte el nombre para añadir nuevo equipamiento");
+        $("#equipamiento_nueva #equipamiento_unidades").attr("placeholder","u."); 
+    }
+    else{
+
+        $("#tabs div[aria-hidden='false'] #equipamiento_editar").attr("id","instalación_editar");
+
+        $("#instalación_editar #equipamiento_nombre").attr("id","instalación_nombre");
+        $("#instalación_editar #equipamiento_unidades").attr("id","instalación_unidades");
+        $("#instalación_editar #equipamiento_tipo").attr("id","instalación_tipo");
+        $("#instalación_editar #instalación_nombre").attr("placeholder","Inserte el nombre para añadir nueva instalación");
+        $("#instalación_editar #instalación_unidades").val(1);
+        $("#instalación_editar #instalación_tipo").val("Instalación");
+        $("#instalación_unidades").addClass("oculto");
+    }
+
+    </script>
+
+{% endblock %}
+
+{% block body -%}
+    {{form_start(edit_form, {'action':path('equipamiento_update',{'id':entity.id}),'method':'PUT','attr':{'id':'equipamiento_editar' ,'class':'equipamiento_form' , novalidate:'novalidate', 'autocomplete':'off'}})}}
+        {{ form_errors(edit_form) }}
+
+		{{ form_widget(edit_form.nombre) }}
+		{{ form_widget(edit_form.unidades) }}
+
+    		 <div class="oculto">
+        		{{ form_rest(edit_form) }} 
+    		</div>
+    		{{form_end(edit_form)}}
+    		 <div class="oculto" id="equipamiento_eliminar">
+                {{ form(delete_form) }}
+            </div>
+    {{form_end(edit_form)}}
+{% endblock %}

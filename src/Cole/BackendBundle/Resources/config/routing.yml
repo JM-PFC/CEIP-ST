@@ -47,3 +47,7 @@ BackendBundle_centro:
 BackendBundle_festivos:
         resource: "@BackendBundle/Resources/config/routing/festivos.yml"
         prefix:   /festivos
+
+BackendBundle_equipamiento:
+        resource: "@BackendBundle/Resources/config/routing/equipamiento.yml"
+        prefix:   /equipamiento

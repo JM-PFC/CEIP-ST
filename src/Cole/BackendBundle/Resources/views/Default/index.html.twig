@@ -2,7 +2,7 @@
 {% block head %}
     {{parent()}}
     <title>{% block title %}Administración CEIP SANTA TERESA{% endblock %}</title>
-
+	<meta content="user-scalable=no, initial-scale=1.0, maximum-scale=1.0, width=device-width" name="viewport"/> 
 {% endblock %}
 
 {% block stylesheets %}
@@ -56,7 +56,7 @@
 						<span> Información </span>
 					</div>
 					<div>
-						<a title="Registro Instalación" href="javascript:void(0);">
+						<a id="registrar_instalación" title="Registro Instalación" href="{{path('instalaciones')}}">
 							<img src="{{ asset('bundles/backend/images/menu/instalaciones.png')}}">
 							<span> Registro </span>
 						</a>
@@ -72,20 +72,20 @@
 						<span> Instalaciones </span>
 					</div>
 					<div>
-						<a title="Registro Equipación" href="javascript:void(0);">
+						<a id="registrar_equipamiento" title="Registro Equipamiento" href="{{path('equipamiento')}}">
 							<img src="{{ asset('bundles/backend/images/menu/equipación.png')}}">
 							<span> Registro </span>
 						</a>
-						<a title="Reserva Equipación" href="javascript:void(0);">
+						<a title="Reserva Equipamiento" href="javascript:void(0);">
 							<img src="{{ asset('bundles/backend/images/menu/equipación3.png')}}">
 							<span> Reserva </span>
 						</a>
 					
-						<a title="Consulta Equipación" href="javascript:void(0);">
+						<a title="Consulta Equipamiento" href="javascript:void(0);">
 							<img src="{{ asset('bundles/backend/images/menu/consultar.png')}}">
 							<span> Consulta </span>
 						</a>
-						<span> Equipación </span>
+						<span> Equipamiento </span>
 					</div>
 					<div>
 						<a title="Registro Eventos" href="javascript:void(0);">
@@ -235,6 +235,12 @@
 					</div>
 					<div id="tabs">
 						<ul>
+							<div id="prev_tab" style="display:none" class="moving_tabs ui-state-default">
+								<a><img class="prev" src="{{ asset('bundles/backend/images/menu/prev.png')}}"></a>
+							</div>
+							<div id="next_tab"  style="display:none" class="moving_tabs ui-state-default">
+								<a><img class="prev" src="{{ asset('bundles/backend/images/menu/next.png')}}"></a>
+							</div>
 						</ul>
 					</div>
 					<div class="close_tabs">

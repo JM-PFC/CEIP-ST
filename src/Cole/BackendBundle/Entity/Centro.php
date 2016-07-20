@@ -88,7 +88,7 @@ class Centro
      * @var string
      *
      * @ORM\Column(name="web", type="string", length=255, nullable=true)    
-     * @Assert\Regex(pattern="/^[A-Za-záéíóúÁÉÍÓÚüÜñÑ]{2,}([\s][A-Za-záéíóúÁÉÍÓÚüÜñÑ]+)*$/",message="Contiene caracteres inválidos.")
+     * @Assert\Regex(pattern="/^(www|http:\/\/)(.*\.(com$|es$|net$|org$))$/",message="No es una direccion web válida.")
      */
     private $web;
 

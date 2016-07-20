@@ -1,0 +1,45 @@
+{% extends 'BackendBundle:Default:index.html.twig' %}
+
+{% block head %}{% endblock %}
+{% block stylesheets %}{% endblock %}
+
+{% block javascript %}
+
+    <script>
+    if($("#tabs div[aria-hidden='false'] .registro_equipamientos").attr("id")=="registro_equipamientos"){
+        $("#equipamiento_nueva #equipamiento_nombre").attr("placeholder","Inserte el nombre para añadir nuevo equipamiento");
+        $("#equipamiento_nueva #equipamiento_unidades").attr("placeholder","u."); 
+    }
+    else{
+        /*
+
+        $("#equipamiento_nueva").attr("id","instalación_nueva");
+        $("#instalación_nueva #equipamiento_nombre").attr("placeholder","Inserte el nombre para añadir nueva instalación");
+                */
+        $("#tabs div[aria-hidden='false'] #equipamiento_nueva").attr("id","instalación_nueva");
+
+        $("#instalación_nueva #equipamiento_nombre").attr("id","instalación_nombre");
+        $("#instalación_nueva #equipamiento_unidades").attr("id","instalación_unidades");
+        $("#instalación_nueva #equipamiento_tipo").attr("id","instalación_tipo");
+        $("#instalación_nueva #instalación_nombre").attr("placeholder","Inserte el nombre para añadir nueva instalación");
+        $("#instalación_nueva #instalación_unidades").val(1);
+        $("#instalación_nueva #instalación_tipo").val("Instalación");
+        $("#instalación_unidades").addClass("oculto");
+    }
+
+    </script>
+
+{% endblock %}
+
+{% block body -%}
+    {{form_start(form, {'action':path('equipamiento_create'),'method':'POST','attr':{'id':'equipamiento_nueva' ,'class':'equipamiento_form' , novalidate:'novalidate', 'autocomplete':'off'}})}}
+        {{ form_errors(form) }}
+
+		{{ form_widget(form.nombre) }}
+		{{ form_widget(form.unidades) }}
+    		 <div class="oculto">
+        		{{ form_rest(form) }} 
+    		</div>
+    {{form_end(form)}}
+{% endblock %}
+

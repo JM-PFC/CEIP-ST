@@ -194,6 +194,19 @@ $(document).ready(function () {
       return true;
     }
   }
+    function validateWeb(field) {
+    if(!$(field).val()){
+        return true;
+    }
+    var filter = /^(www|http:\/\/)(.*\.(com$|es$|net$|org$))$/ ;
+    if (!filter.test($(field).val())) {
+      $(field).prev().append("<span class='error'>Dato inválido</span>");
+      return false
+    }
+    else{
+      return true;
+    }
+  }
 
   function validateEqual(field) {
     if(!$(field).val()){
@@ -283,6 +296,7 @@ $(document).ready(function () {
     "CP":"No es un código postal válido.",
     "Telefono":"No es un número de teléfono válido.",
     "Email":"No es un email válido.",
+    "Web":"No es una direccion web válida.",
     "Equal":"Ya existe este representante del alumno.",
     "MaxSize":"El tamaño supera el limite permitido.",
     "MimeTypes":"No es un archivo válido.",
@@ -2302,7 +2316,7 @@ $(document).on("blur","input[id='edit_profesor_dni']",function() {
                           $( "<h4 id='"+(dato+1)+"'>"+(dato+1)+"</h4><h4 id='h4_descripcion'>Traslado del Festivo del día "+dato+".</h4>" ).insertAfter( $(this).next());
                         }
                       });
-                    }, 20);
+                    }, 50);
                   }
                 }
               }
@@ -2320,7 +2334,7 @@ $(document).on("blur","input[id='edit_profesor_dni']",function() {
                         $( "<h4 id='"+(dato+1)+"'>"+(dato+1)+"</h4><h4 id='h4_descripcion'>Traslado del Festivo del día "+dato+".</h4>" ).insertAfter( $(this).next());
                       }
                     });
-                  }, 20);
+                  }, 50);
                 }
               }
             });
@@ -2468,7 +2482,6 @@ $(document).on("blur","input[id='edit_profesor_dni']",function() {
 
             if(response.data!=null)
             {
-              alert("entra");
               dia_1.addClass("festivo");
               setTimeout(function(){
                 $("#div_leyenda").prepend("<h4 id='"+dia_1.text()+"'>"+dia_1.text()+"</h4><h4 id='h4_descripcion'>Traslado del Festivo del día "+dia_ant+" de "+MES[$("#calendario tbody tr:first td:last").attr("data-month")-1]+" </h4>" );
@@ -2990,6 +3003,241 @@ $(document).on("blur","input[id='edit_profesor_dni']",function() {
   });
 
 
+  //////////////////////////////////
+  //        Instalaciones         //
+  //////////////////////////////////
+  $(document).on("focus","#instalación_nombre",function(event){
+    event.preventDefault();
+      $("#instalación_nombre").removeClass("invalid_placeholder");
+  });
+
+  $(document).on("blur","#instalación_nombre",function(event){
+    event.preventDefault();
+    if($(this).val()==""){
+      $(this).addClass("invalid_placeholder");
+    }
+    else{
+      $(this).removeClass("invalid_placeholder");
+    }
+  });
+
+  $(document).on("click","#instalación_new",function(event){
+    event.preventDefault();
+
+    if($("#instalación_nombre").val()==""){
+      $("#instalación_nombre").addClass("invalid_placeholder");
+    }
+    else{
+      $.ajax({
+        type: 'POST',
+        url: $("#instalación_nueva").attr('action'),
+        data:$("#instalación_nueva").serialize(), 
+        dataType: 'json',
+        success: function(response) {
+          // Se actualiza la pestaña de periodo lectivo.
+          $("#registrar_instalación").update_tab();
+        }
+      })
+    }
+  });
+
+  $(document).on("click","#registro_instalaciones td a",function(event){
+    $("#registro_instalaciones td a").closest("tr").removeClass("edit_equipamiento");
+    $(this).closest("tr").addClass("edit_equipamiento");
+    $("#datos_instalación").load($(this).attr("href"));
+    $("#cerrar_instalación_edit").removeClass("oculto");
+    $("#instalación_delete").closest("th").removeClass("oculto");
+    $("#instalación_edit").closest("th").removeClass("oculto");
+    $("#instalación_new").closest("th").addClass("oculto");
+    $("#instalación_nombre").val($(this).text());
+    $("#instalación_nombre").attr('placeholder','Inserte el nombre para actualizar la instalación');
+  });
+
+  $(document).on("click","#cerrar_instalación_edit",function(event){
+    $("#registro_instalaciones td a").closest("tr").removeClass("edit_equipamiento");
+    $("#datos_instalación").load(Routing.generate('equipamiento_new'));
+
+    $("#cerrar_instalación_edit").addClass("oculto");
+    $("#instalación_delete").closest("th").addClass("oculto");
+    $("#instalación_edit").closest("th").addClass("oculto");
+    $("#instalación_new").closest("th").removeClass("oculto");
+    $("#instalación_nombre").val("");
+    $("#instalación_nombre").attr('placeholder','Inserte el nombre para añadir nueva instalación');
+    $("#datos_instalación").removeClass("oculto");
+  });
+
+  $(document).on("click","#instalación_edit",function(event){
+    event.preventDefault();
+
+    if($("#instalación_nombre").val()==""){
+      $("#instalación_nombre").addClass("invalid_placeholder");
+    }
+    else{
+      $.ajax({
+        type: 'PUT',
+        url: $("#instalación_editar").attr('action'),
+        data:$("#instalación_editar").serialize(), 
+        success: function(response) {
+          // Se actualiza la pestaña de periodo lectivo.
+          $("#registrar_instalación").update_tab();
+        }
+      })
+    }
+  });
+
+  $(document).on("click","#instalación_delete",function(event){
+    event.preventDefault();
+    form= $(this).closest("th").prev().find("div[id='equipamiento_eliminar'] form");
+
+    var arr= form.attr('action').split('/');
+    if(confirm("Se va a eliminar la instalación del sistema.\n\n¿Estas seguro de eliminarla?\n\n")==true)
+    {
+      $.ajax({
+        type: 'DELETE',
+        url: Routing.generate("equipamiento_delete", {id:arr[5]}),
+        data: form.serialize(),
+        
+        success: function() {
+          // Se actualiza la pestaña de periodo lectivo.
+          $("#registrar_instalación").update_tab();
+        }
+      })
+    }
+      return false;
+  });
+
+  //////////////////////////////////
+  //        Equipamientos         //
+  //////////////////////////////////
+
+  $(document).on("focus","#equipamiento_nueva input",function(event){
+    event.preventDefault();
+      $(this).removeClass("invalid_placeholder");
+  });
+
+  $(document).on("blur","#equipamiento_nueva input",function(event){
+    event.preventDefault();
+    if($(this).val()==""){
+      $(this).addClass("invalid_placeholder");
+    }
+    else{
+      $(this).removeClass("invalid_placeholder");
+    }
+  });
+
+  $(document).on("change","#equipamiento_nueva input",function(event){
+    event.preventDefault();
+    if($(this).val()==""){
+      $(this).addClass("invalid_placeholder");
+    }
+    else{
+      $(this).removeClass("invalid_placeholder");
+    }
+  });
+
+
+  $(document).on("keydown","#equipamiento_unidades",function(event){
+    if(($("#equipamiento_unidades").val().length==2 && event.keyCode != 8 && event.keyCode != 46&& event.keyCode != 37 && event.keyCode != 39 ) || (  ($("#equipamiento_unidades").val().length==1 || $("#equipamiento_unidades").val().length==0) && !(event.keyCode>=96 && event.keyCode<=105) && !(event.keyCode>=48 && event.keyCode<=57) && event.keyCode != 8 && event.keyCode != 46 && event.keyCode != 37 && event.keyCode != 39)){
+      return false;
+    }
+  });
+
+  $(document).on("click","#equipamiento_new",function(event){
+    event.preventDefault();
+
+    if($("#equipamiento_nombre").val()=="" || $("#equipamiento_unidades").val()==""){
+      if($("#equipamiento_nombre").val()=="")
+        $("#equipamiento_nombre").addClass("invalid_placeholder");
+      if($("#equipamiento_unidades").val()=="")
+        $("#equipamiento_unidades").addClass("invalid_placeholder");
+    }
+    else{
+      $.ajax({
+        type: 'POST',
+        url: $("#equipamiento_nueva").attr('action'),
+        data:$("#equipamiento_nueva").serialize(), 
+        dataType: 'json',
+        success: function(response) {
+          // Se actualiza la pestaña de periodo lectivo.
+          $("#registrar_equipamiento").update_tab();
+        }
+      })
+    }
+  });
+
+$(document).on("click","#registro_equipamientos td a",function(event){
+    $("#registro_equipamientos td a").closest("tr").removeClass("edit_equipamiento");
+    $(this).closest("tr").addClass("edit_equipamiento");
+    $("#datos_equipamiento").load($(this).attr("href"));
+    $("#cerrar_equipamiento_edit").removeClass("oculto");
+    $("#equipamiento_delete").closest("th").removeClass("oculto");
+    $("#equipamiento_edit").closest("th").removeClass("oculto");
+    $("#equipamiento_new").closest("th").addClass("oculto");
+    $("#equipamiento_nombre").val($(this).text());
+    $("#equipamiento_nombre").attr('placeholder','Inserte el nombre para actualizar elequipamiento');
+  });
+
+  $(document).on("click","#cerrar_equipamiento_edit",function(event){
+    $("#registro_equipamientos td a").closest("tr").removeClass("edit_equipamiento");
+    $("#datos_equipamiento").load(Routing.generate('equipamiento_new'));
+
+    $("#cerrar_equipamiento_edit").addClass("oculto");
+    $("#equipamiento_delete").closest("th").addClass("oculto");
+    $("#equipamiento_edit").closest("th").addClass("oculto");
+    $("#equipamiento_new").closest("th").removeClass("oculto");
+    $("#equipamiento_nombre").val("");
+    $("#equipamiento_nombre").attr('placeholder','Inserte el nombre para añadir nuevo equipamiento');
+    $("#datos_equipamiento").removeClass("oculto");
+  });
+
+  $(document).on("click","#equipamiento_edit",function(event){
+    event.preventDefault();
+
+    if($("#equipamiento_nombre").val()=="" || $("#equipamiento_unidades").val()==""){
+      if($("#equipamiento_nombre").val()=="")
+        $("#equipamiento_nombre").addClass("invalid_placeholder");
+      if($("#equipamiento_unidades").val()=="")
+        $("#equipamiento_unidades").addClass("invalid_placeholder");
+    }
+    else{
+      $.ajax({
+        type: 'PUT',
+        url: $("#equipamiento_editar").attr('action'),
+        data:$("#equipamiento_editar").serialize(), 
+        success: function(response) {
+          // Se actualiza la pestaña de periodo lectivo.
+          $("#registrar_equipamiento").update_tab();
+        }
+      })
+    }
+  });
+
+  $(document).on("click","#equipamiento_delete",function(event){
+    event.preventDefault();
+    form= $(this).closest("th").prev().find("div[id='equipamiento_eliminar'] form");
+
+    var arr= form.attr('action').split('/');
+    if(confirm("Se va a eliminar el equipamiento del sistema.\n\n¿Estas seguro de eliminarlo?\n\n")==true)
+    {
+      $.ajax({
+        type: 'DELETE',
+        url: Routing.generate("equipamiento_delete", {id:arr[5]}),
+        data: form.serialize(),
+        
+        success: function() {
+          // Se actualiza la pestaña de periodo lectivo.
+          $("#registrar_equipamiento").update_tab();
+        }
+      })
+    }
+      return false;
+  });
+
+
+
+
+
+//alert($('#tabs ul li:eq(0)').outerWidth(true));
 
 
 (function($) {

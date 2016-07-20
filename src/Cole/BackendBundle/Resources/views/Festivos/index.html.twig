@@ -1,8 +1,7 @@
 {% extends 'BackendBundle:Default:index.html.twig' %}
 
-{% block stylesheets %}
-    {{parent()}}
-{% endblock %}
+{% block head %}{% endblock %}
+{% block stylesheets %}{% endblock %}
 
 {% block javascript %}
 
@@ -23,7 +22,7 @@
     }
   });
 
-    $("#curso_dialog").dialog({
+  $("#curso_dialog").dialog({
     bgiframe: true,
     autoOpen: false,
     height: 450,
@@ -44,6 +43,7 @@
     $('#festivos_dialog').empty();
   });
 
+  // Se comprueba si existe fecha del curso registrada, sino se obliga a registrarlas.
   if($("#inicio_curso_disable").val()=="" && $("#fin_curso_disable").val()==""){
     $(".calendario").hide();
     $("#contenedor_leyenda").hide();

@@ -22,7 +22,7 @@ class CentroType extends AbstractType
             ->add('cp','text',array('label' => 'Código Postal', 'max_length' => 5, 'attr' => array('class' => 'cp','validation' => 'Empty,Length,CP')))
             ->add('telefono','text', array('label' => 'Teléfono', 'max_length' => 12, 'attr' => array('class' => 'telefono', 'lengthmin'=> 9, 'validation' => 'Length,Telefono')))
             ->add('email','email', array('label' => 'Email','required'=> false,'attr' => array('class' => 'text_transform_none','validation' => 'Email')))
-            ->add('web','text',array('label' => 'Web', 'max_length' => 30,'attr' => array('class' => 'text_transform_none','validation' => 'LetterInitial')))
+            ->add('web','text',array('label' => 'Web', 'max_length' => 30,'attr' => array('class' => 'text_transform_none','validation' => 'Web')))
             ->add('limpiar', 'button', array('attr' => array('class' => 'limpiar')))
         ;
 

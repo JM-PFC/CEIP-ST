@@ -1,0 +1,44 @@
+equipamiento:
+    path:     /
+    defaults: { _controller: "BackendBundle:Equipamiento:index" }
+    options:
+        expose: true
+
+instalaciones:
+    path:     /instalaciones
+    defaults: { _controller: "BackendBundle:Equipamiento:index2" }
+    options:
+        expose: true
+
+equipamiento_show:
+    path:     /{id}/show
+    defaults: { _controller: "BackendBundle:Equipamiento:show" }
+
+equipamiento_new:
+    path:     /new
+    defaults: { _controller: "BackendBundle:Equipamiento:new" }
+    options:
+        expose: true
+
+equipamiento_create:
+    path:     /create
+    defaults: { _controller: "BackendBundle:Equipamiento:create" }
+    requirements: { _method: post }
+    options:
+        expose: true
+
+equipamiento_edit:
+    path:     /{id}/edit
+    defaults: { _controller: "BackendBundle:Equipamiento:edit" }
+
+equipamiento_update:
+    path:     /{id}/update
+    defaults: { _controller: "BackendBundle:Equipamiento:update" }
+    requirements: { _method: post|put }
+
+equipamiento_delete:
+    path:     /{id}/delete
+    defaults: { _controller: "BackendBundle:Equipamiento:delete" }
+    requirements: { _method: post|delete }
+    options:
+        expose: true

@@ -138,7 +138,7 @@
                             {% if inicio.inicioCurso|date('Y') == "-1" %} 
                                 Bienvenidos a nuestra web. 
                             {% else %}
-                                Bienvenidos a nuestra web. Curso escolar <span id="año_inicio"> {{ inicio.inicioCurso|date('Y') }} </span>/<span id="año_fin"> {{ fin.finCurso|date('Y') }}</span>
+                                Bienvenidos a nuestra web - Curso escolar <span id="año_inicio"> {{ inicio.inicioCurso|date('Y') }} </span>/<span id="año_fin"> {{ fin.finCurso|date('Y') }}</span>
                             {#
                             {% if 'now'|date("m") =="8" %}
                                 Bienvenidos al curso escolar {{ "now" | localizeddate('none', 'none', 'none',none , "Y") | capitalize}}/{{ "now+1year" | localizeddate('none', 'none', 'none',none , "Y") | capitalize}}.
