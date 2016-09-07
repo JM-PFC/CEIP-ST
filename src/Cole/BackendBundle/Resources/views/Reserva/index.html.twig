@@ -1,0 +1,82 @@
+{% extends '::base.html.twig' %}
+
+{% block head %}{% endblock %}
+{% block stylesheets %}{% endblock %}
+
+{% block javascript %}
+    
+{% endblock %}
+
+{% block body -%}
+    <div id="consulta_instalacion">
+    <div class="parent_no_form">
+    <div class="child">
+
+       <div class="derecha contenedor_registro" id="contenedor_consulta_instalacion" >  
+        <div>
+            <div id="cabecera_lista">
+                <h2>Instalaciones Reservadas</h2>
+            </div>
+            <div id="fondo_azul_osc">
+                <table class="records_list" id="table_th_prim">
+                    <thead>
+                    <tr>
+                        <th>Id</th>
+                        <th>Profesor</th>
+                        <th>Equipamiento</th>
+                        <th>Fecha</th>
+                        <th>Propósito</th>
+                    </tr>
+                    </thead>
+                </table>
+                <div class="inner_table" id="td_prim">
+                    <table id="lista_color">
+                    {% for entity in entities %}
+                        <tr>
+                            <td><a href="{{ path('reserva_show', { 'id': entity.id }) }}">{{ entity.id }}</a></td>
+                            <td >{{ entity.profesor.nombre ~ " " ~ entity.profesor.apellido1 ~ " " ~ entity.profesor.apellido2}}</td>
+                            <td>{{ entity.equipamiento.nombre}}</td>
+                            <td>{% if entity.fecha %}{{ entity.fecha|date('Y-m-d H:i:s') }}{% endif %}</td>
+                            <td>{{ entity.propósito }}</td>
+                        </tr>
+                    {% endfor %}
+                    </table>
+                </div>
+            </div>
+        </div>          
+       </div>
+      </div>
+    </div>
+    </div>
+    </div>
+    {% endblock %}
+{# 
+
+
+{% block body -%}
+<div id="consulta_instalacion">
+    <table class="records_list">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Profesor</th>
+                <th>Equipamiento</th>
+                <th>Fecha</th>
+                <th>Propósito</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for entity in entities %}
+            <tr>
+                <td><a href="{{ path('reserva_show', { 'id': entity.id }) }}">{{ entity.id }}</a></td>
+                <td >{{ entity.profesor.nombre ~ " " ~ entity.profesor.apellido1 ~ " " ~ entity.profesor.apellido2}}</td>
+                <td>{{ entity.equipamiento.nombre}}</td>
+                <td>{% if entity.fecha %}{{ entity.fecha|date('Y-m-d H:i:s') }}{% endif %}</td>
+                <td>{{ entity.propósito }}</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+</div>
+    {% endblock %}
+    #}

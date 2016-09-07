@@ -1,0 +1,166 @@
+{% extends 'BackendBundle:Default:index.html.twig' %}
+
+{% block head %}{% endblock %}
+{% block stylesheets %}{% endblock %}
+    
+{% block javascript %}
+    <script>
+        if($("#contenedor_registro_horario #lista_color tbody tr").length==0){
+            $("#contenedor_registro_horario #aviso_horario").removeClass("oculto");
+        }
+        else{
+            $("#contenedor_registro_horario #aviso_horario").addClass("oculto");
+        }
+    </script>
+{% endblock %}
+
+{% block body -%}
+  <div id="registro_horario">
+    <div class="parent_no_form">
+    <div class="child">
+      <div class="simple_column_red">
+        <div class="block_insert">
+            <h2>Registro Horario Escolar</h2></br>
+            <p>-Se puede guardar todas las horas asignadas a la vez</p>
+            </br>
+            <div>
+                <span>Total de horas de clases:</span>
+                <select id="total_horas" class="select_number">
+                    <option selected="selected" class="oculto" value="0">Nº</option>
+                    <option  value="5" >5</option>
+                    <option  value="6">6</option>
+                    <option  value="7">7</option>
+                    <option  value="8">8</option>
+                    <option  value="9">9</option>
+                    <option  value="10">10</option>
+                </select>
+            </div>
+            <div>
+                <span>Nº de clases antes del recreo:</span>
+                <select id="horas_recreo" class="select_number">
+                    <option selected="selected" class="oculto" value="0">Nº</option>
+                    <option  value="1">1</option>
+                    <option  value="2">2</option>
+                    <option  value="3">3</option>
+                    <option  value="4">4</option>
+                    <option  value="5">5</option>
+                </select>
+            </div>
+
+            <div>
+                <span>Clases después de la comida: 
+                    <input id="no" type="radio" checked="checked" name="alumno[foto]" required="required" >
+                    <label class="required" for="no">No</label>
+                    <input id="si" type="radio" name="alumno[foto]" required="required" >
+                    <label class="required" for="si">Si</label>
+                </span>
+                <span class="disabled">Nº de horas de clase después de la comida:</span>
+                <select id="horas_comida" class="select_number" disabled="">
+                    <option selected="selected" class="oculto" value="0">Nº</option>
+                    <option  value="1">1</option>
+                    <option  value="2">2</option>
+                    <option  value="3">3</option>
+                </select>
+            </div>
+        </br></br>
+        <div class="center_button">
+            <button id="button_generate" disabled="">Generar Horario</button>
+          
+            <button id="button_rest" disabled="">Borrar opciones</button>
+        </div>
+        <div id="aviso_error" class="oculto"> 
+            <span>*</span>
+            <span>Debe introducir una hora válida en horario escolar (08:00-18:00h.) y que esté comprendida entre la hora anterior y posterior.</span>
+        </div>
+        </div> 
+      </div>
+      <div>
+       <div class="contenedor_registro_horario" id="contenedor_registro_horario" >  
+        <div>
+            <div id="cabecera_lista">
+                <h2>Horario  Escolar</h2>
+            </div>
+            <div >
+                <table class="records_list">
+                    <thead>
+                    <tr>
+                        <th></th>
+                        <th>Hora de clase</th>
+                        <th>Inicio</th>
+                        <th>Fin</th>
+                        <th></th>
+                    </tr>
+                    </thead>
+                </table>
+                <div class="inner_table">
+                    <table id="lista_color">
+                    <p id="aviso_horario" class="oculto">No se ha establecido ningún horario escolar.<br> <br>Por favor, introduzca los datos necesarios para generar un nuevo horario y complete las horas de clase.
+                    </p>    
+                    {% for entity in entities %}
+                        {% if entity.horaClase  == 1 %}
+                        <tr>
+                            <td><span class="oculto">*</span></td>
+                            <td>{{ entity.horaClase }}</td>
+                            <td><input type="time" value="{{ entity.inicio|date('H:i') }}" step="1"> </input></td>
+                            <td><input type="time"  value="{{ entity.fin|date('H:i') }}" step="1"> </input></td>
+                            <td><button>Guardar</button></td>
+                        </tr>
+                        {% endif %}
+                    {% endfor %}
+                    </table>
+                </div>
+            </div>
+        </div>
+       </div>
+       <div class="contenedor_registro_horario oculto" id="contenedor_nuevo_horario" >  
+        <div>
+            <div id="cabecera_lista">
+                <h2>Nuevo Horario Escolar</h2>
+            </div>
+            <div >
+                <table class="records_list">
+                    <thead>
+                    <tr>
+                        <th></th>
+                        <th>Hora de clase</th>
+                        <th>Inicio</th>
+                        <th>Fin</th>
+                        <th></th>
+                    </tr>
+                    </thead>
+                </table>
+                <div class="inner_table">
+                    <table id="lista_color">
+                        <tbody>
+                        {#
+                        <tr>
+                            <td><span class="oculto">*</span></td>
+                            <td>{{ entity.horaClase }}</td>
+                            <td><input type="time" step="1"> </input></td>
+                            <td><input type="time" step="1"> </input></td>
+                        </tr>
+                        #}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+       </div>
+
+        <div id="registro_horario_guardar">
+            <button id="button_horario_all">Guardar Todo</button>
+            <button id="button_horario_rest">Restablecer</button>
+        </div>
+        <div id="nuevo_horario_guardar" class="oculto">
+            <button id="button_horario_save">Guardar</button>
+            <button id="button_horario_clear">Borrar</button>
+            <button id="button_horario_rest">Restablecer</button>
+        </div>         
+     </div>
+    </div>
+    </div>
+  </div>
+
+    {% endblock %}
+
+

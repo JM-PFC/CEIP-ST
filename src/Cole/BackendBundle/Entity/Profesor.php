@@ -255,6 +255,11 @@ class Profesor implements UserInterface, \Serializable
      * @ORM\OneToOne(targetEntity="Grupo", mappedBy="profesor")
      */
     private $grupo;
+
+    /**
+     * @ORM\OneToMany(targetEntity="Reserva", mappedBy="profesor")
+     */
+    private $reserva;
     
     public function __construct()
     {
@@ -856,5 +861,38 @@ class Profesor implements UserInterface, \Serializable
     public function getGrupo()
     {
         return $this->grupo;
+    }
+
+    /**
+     * Add reserva
+     *
+     * @param \Cole\BackendBundle\Entity\Reserva $reserva
+     * @return Profesor
+     */
+    public function addReserva(\Cole\BackendBundle\Entity\Reserva $reserva)
+    {
+        $this->reserva[] = $reserva;
+
+        return $this;
+    }
+
+    /**
+     * Remove reserva
+     *
+     * @param \Cole\BackendBundle\Entity\Reserva $reserva
+     */
+    public function removeReserva(\Cole\BackendBundle\Entity\Reserva $reserva)
+    {
+        $this->reserva->removeElement($reserva);
+    }
+
+    /**
+     * Get reserva
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getReserva()
+    {
+        return $this->reserva;
     }
 }

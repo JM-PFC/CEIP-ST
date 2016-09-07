@@ -1,0 +1,30 @@
+reserva:
+    path:     /
+    defaults: { _controller: "BackendBundle:Reserva:index" }
+
+reserva_show:
+    path:     /{id}/show
+    defaults: { _controller: "BackendBundle:Reserva:show" }
+
+reserva_new:
+    path:     /new
+    defaults: { _controller: "BackendBundle:Reserva:new" }
+
+reserva_create:
+    path:     /create
+    defaults: { _controller: "BackendBundle:Reserva:create" }
+    requirements: { _method: post }
+
+reserva_edit:
+    path:     /{id}/edit
+    defaults: { _controller: "BackendBundle:Reserva:edit" }
+
+reserva_update:
+    path:     /{id}/update
+    defaults: { _controller: "BackendBundle:Reserva:update" }
+    requirements: { _method: post|put }
+
+reserva_delete:
+    path:     /{id}/delete
+    defaults: { _controller: "BackendBundle:Reserva:delete" }
+    requirements: { _method: post|delete }

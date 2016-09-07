@@ -12,7 +12,7 @@
 
 {% block javascript %}
     {{parent()}}
-    	<script type="text/javascript" src="{{ asset('bundles/backend/js/load.js') }}" async="async"></script>
+    <script type="text/javascript" src="{{ asset('bundles/backend/js/load.js') }}" async="async"></script>
 	<script type="text/javascript" src="{{ asset('bundles/backend/js/general.js') }}" async="async"></script>
 	<script type="text/javascript" src="{{ asset('bundles/backend/js/jquery-ui/jquery-ui.js') }}"></script>
 	<script type="text/javascript" src="{{ asset('bundles/fosjsrouting/js/router.js') }}"></script>
@@ -25,7 +25,7 @@
 
 
 {% block body %}
-	<div class="centrado">
+	<div class="centrado oculto">
     	<header>
 			<h2> C.E.I.P SANTA TERESA </h2> 
 			<h3> Área de Administración</h3>
@@ -65,7 +65,7 @@
 							<span> Reserva </span>
 						</a>
 					
-						<a title="Consulta Instalación" href="javascript:void(0);">
+						<a title="Consulta Instalación" href="{{path('reserva')}}">
 							<img src="{{ asset('bundles/backend/images/menu/consultar.png')}}">
 							<span> Consulta </span>
 						</a>
@@ -194,23 +194,30 @@
 						<span> Cursos </span>
 					</div>
 					<div>
-						<a title="Registro Grupo" href="{{path('grupo_new')}}">
-							<img src="{{ asset('bundles/backend/images/menu/grupo.png')}}">
-							<span> Registro </span>
-						</a>					
-						<a id="consulta_grupo" title="Consulta Grupo" href="javascript:void(0);">
-							<img src="{{ asset('bundles/backend/images/menu/consultar.png')}}">
-							<span> Consulta </span>
-						</a>
-						<a title="Asignar Horario" href="javascript:void(0);">
+						<a id="asignar_horario" title="Asignar Horario" href="javascript:void(0);">
 							<img src="{{ asset('bundles/backend/images/menu/horarios2.png')}}">
 							<span> Asignar <br>Horario</span>
 						</a>
 						<a id="asignar_aula"  title="Asignar Aula" href="{{path('grupo_show')}}">
 							<img src="{{ asset('bundles/backend/images/menu/aula.png')}}">
 							<span> Asignar <br>Aula</span>
+						</a>					
+						<a id="consulta_grupo" title="Consulta Grupo" href="javascript:void(0);">
+							<img src="{{ asset('bundles/backend/images/menu/consultar.png')}}">
+							<span> Consulta </span>
 						</a>
 						<span> Grupos </span>
+					</div>
+					<div>
+						<a title="Registro Horario" href="{{path('horario_show')}}">
+							<img src="{{ asset('bundles/backend/images/menu/horario_escolar.png')}}">
+							<span> Registro </span>
+						</a>					
+						<a id="consulta_horario" title="Consulta Horario" href="javascript:void(0);">
+							<img src="{{ asset('bundles/backend/images/menu/consultar.png')}}">
+							<span> Consulta </span>
+						</a>
+						<span> Horario Escolar </span>
 					</div>
 				</div>
 				<div id="5">

@@ -364,7 +364,7 @@ margin: 50px auto;
 	padding: 3% 12% 3% 3%;
 	text-align: center;
 	width: 83%;
-	font-size: 0.9em;
+	font-size: 1em;
 }
 #tabs li .ui-icon-close { 
 	float: left; 
@@ -387,7 +387,7 @@ margin: 50px auto;
 @media only screen and (max-width: 1250px) {
 	#tabs .ui-tabs-nav li a{
 		padding-top: 7px;
-		font-size: 11.6px;
+		font-size: 12.5px;
 	}
 }
 
@@ -1040,6 +1040,9 @@ form button:hover{
 	overflow: auto;
 	margin: 1.1% 0 !important; 
 }
+#lista_color tr:nth-child(2n) { 
+	background: #dae6f2!important;
+}
 #contenedor_lista tr:hover { 
 	background: #b1cce7!important;
 	color: white;
@@ -1161,7 +1164,10 @@ form button:hover{
 #registro_Ngrupos .block_insert span{
 	font-weight: bold;
 }
-#select_grupos_all{
+#Ngrupo{
+	text-align: center
+}
+.select_number{
 	font-size: 1em !important;
 	margin: 3px;
 	min-width: 45px;
@@ -1208,9 +1214,7 @@ form button:hover{
 #contenedor_registro_Ngrupos div table th:nth-child(1){
 	min-width: 7%;
 }
-#contenedor_registro_Ngrupos tr:nth-child(2n) { 
-	background: #dae6f2!important;
-}
+
 #contenedor_registro_Ngrupos td a { 
     display: block; 
 }
@@ -1253,7 +1257,6 @@ form button:hover{
 }
 #contenedor_asignar_aula h2{
 	text-align: center;
-
 }
 #contenedor_asignar_aula div table{
 	margin: 0 auto;
@@ -1262,7 +1265,6 @@ form button:hover{
     width: 100%;
     table-layout: auto;
 }
-
 #contenedor_asignar_aula div table td{
 	margin: 0 auto;
 	min-width: 230px;
@@ -1291,9 +1293,7 @@ form button:hover{
 	text-align: left;
 	padding-left: 5px;
 }
-#contenedor_asignar_aula tr:nth-child(2n) { 
-	background: #dae6f2!important;
-}
+
 #contenedor_asignar_aula td a { 
     display: block; 
 }
@@ -2298,4 +2298,176 @@ border: 1px solid;
 }
 .edit_equipamiento{
 	background: #b1cce7;
+}
+
+#consulta_instalacion tr>th,#consulta_instalacion tr>td{
+	width: 200px !important;
+}
+
+#consulta_instalacion tr>th:nth-child(1),#consulta_instalacion tr>td:nth-child(1){
+	width: 10px !important;
+	text-align: center;
+}
+#consulta_instalacion tr>th{
+	text-align: center;
+}
+
+#consulta_instalacion thead tr th, #consulta_instalacion tbody tr td{
+	min-width: 25px !important;
+}
+#contenedor_consulta_instalacion{
+	min-height: 50vh;
+    box-shadow: 0 1px 1px 1px rgba(0, 0, 0, 0.5);
+    margin-top: 10px;
+}
+.contenedor_registro_horario {
+    background: white none repeat scroll 0 0;
+    border-radius: 5px;
+    box-shadow: 0 1px 1px 1px rgba(0, 0, 0, 0.5);
+    float: left;
+    font-size: 12px;
+    font-weight: bold;
+    margin-left: 3%;
+    margin-top: 2%;
+    margin-bottom: 10px;
+    overflow: auto;
+    width: 95%;
+    min-height:44vh;
+}
+#registro_horario .block_insert{
+    margin-left: 4%;
+    margin-right: 4%;
+    text-align: center;
+    width: 90%;
+}
+#registro_horario .block_insert p{
+    text-align: justify;
+}
+#registro_horario .block_insert span{
+	font-weight: bold;
+}
+#registro_horario>div>div>div:nth-child(2){
+	width: 53%;
+	float: left;
+}
+#registro_horario .simple_column_red{
+	width: 47%;
+}
+.contenedor_registro_horario input{
+	width: 70px;
+	text-align: center;
+}
+.contenedor_registro_horario  h2{
+	text-align: center;
+
+}
+.contenedor_registro_horario  div table{
+	margin: 0 auto;
+	border-collapse: collapse;
+    border-spacing: 0;
+    width: 100%;
+    table-layout: auto;
+}
+
+.contenedor_registro_horario div table td{
+	margin: 0 auto;
+	min-width: 230px;
+	font-size: 1.2em;
+	font-family: Verdana,Arial,sans-serif !important;
+	background: none;
+	height: 30px;
+    word-wrap: break-word;
+    min-width: 25%;
+    text-align: center;
+   	border-bottom: 2px solid #b1cce7;
+}
+.contenedor_registro_horario  div table td:nth-child(1){
+	min-width: 7%;
+}
+.contenedor_registro_horario  div table th{
+	text-align: center;
+	font: 1.3em solid;
+	padding: 3px ;
+	min-width: 25%;
+}
+#contenedor_nuevo_horario  div table th{
+	min-width: 31.5%;
+}
+#contenedor_nuevo_horario  div table th:nth-child(1){
+	min-width: 7%;
+}
+.contenedor_registro_horario  div table th:nth-child(1){
+	min-width: 7%;
+}
+
+.contenedor_registro_horario  td a { 
+    display: block; 
+}
+.contenedor_registro_horario  .inner_table {
+    max-height: 229px;
+    overflow-y: auto;
+}
+.contenedor_registro_horario table select {
+	margin-top: 3px;
+	margin-bottom: 3px;
+	font-size: 1em !important
+}
+.contenedor_registro_horario  td { 
+	cursor: default;
+}
+
+#button_horario_all{
+	margin: 0 23%; 
+}
+#button_horario_save{
+	margin-left: 15% !important; 
+}
+#nuevo_horario_guardar button{
+	margin: 0 7%; 
+}
+#registro_horario .block_insert{
+	margin: 3% 6%;
+}
+#registro_horario .block_insert span{
+	float: left;
+	margin: 5px;
+	clear: both;
+}
+#registro_horario #aviso_error span{
+	float: left;
+	margin: 0;
+	margin-right: 5px ;
+	clear: none;
+}
+#registro_horario #aviso_error span:nth-child(2){
+	width: 94%;
+	float: left;
+}
+#registro_horario #aviso_error{
+	margin-top: 10px;
+	width: 105%;
+	text-align: left;
+}
+#registro_horario .block_insert select{
+	float: right;
+	margin-right: 50px;
+}
+.center_button{
+	clear: both;
+	padding-top: 10px;
+	width: 80%;
+}
+#button_generate{
+	margin-right: 15%;
+}
+input[id="si"]{
+	margin-left: 10px;
+}
+.disabled{
+	color: grey;
+}
+#aviso_horario{
+	font-size: 16px;
+	margin: 10%;
+	text-align: center;
 }

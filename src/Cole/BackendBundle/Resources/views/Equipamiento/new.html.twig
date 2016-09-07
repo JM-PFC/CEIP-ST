@@ -6,9 +6,22 @@
 {% block javascript %}
 
     <script>
+
+
     if($("#tabs div[aria-hidden='false'] .registro_equipamientos").attr("id")=="registro_equipamientos"){
         $("#equipamiento_nueva #equipamiento_nombre").attr("placeholder","Inserte el nombre para añadir nuevo equipamiento");
         $("#equipamiento_nueva #equipamiento_unidades").attr("placeholder","u."); 
+
+        $('#registro_equipamientos .contenedor_registro_instalaciones input').focus(function(){
+        $(this).data('placeholder',$(this).attr('placeholder')).attr('placeholder','');
+        }).blur(function(){
+            if($(this).attr("id")=="equipamiento_unidades"){
+                $(this).attr('placeholder',"u.");
+            }
+            else{
+                $(this).attr('placeholder',$(this).data('placeholder'));
+            }
+        });
     }
     else{
         /*
@@ -25,6 +38,12 @@
         $("#instalación_nueva #instalación_unidades").val(1);
         $("#instalación_nueva #instalación_tipo").val("Instalación");
         $("#instalación_unidades").addClass("oculto");
+
+        $('#registro_instalaciones .contenedor_registro_instalaciones input').focus(function(){
+            $(this).data('placeholder',$(this).attr('placeholder')).attr('placeholder','');
+            }).blur(function(){
+            $(this).attr('placeholder',$(this).data('placeholder'));
+        });
     }
 
     </script>

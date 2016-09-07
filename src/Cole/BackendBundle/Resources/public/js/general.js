@@ -10,8 +10,10 @@ $(document).ready(function () {
   $("input[id^='año_profesional']").mask('00');
   $("input[id^='edit_año_acamedico']").mask('0000');
   $("input[id^='edit_año_profesional']").mask('00');
-        
-    /////////////////////////////
+  //$("input[type='time']").mask('00:00', {placeholder: "__:__"});
+
+
+  /////////////////////////////
   // Métodos para validación //
   /////////////////////////////
   function validateEmpty(field) {
@@ -481,7 +483,7 @@ $(document).ready(function () {
       // Se le suma 1 para tener el siguiente.
       var nextTabIndex    = parseInt(currentTabIndex) + 1;
       // Se obtiene (si existe) el siguiente elemento usando la variable nextTabIndex
-      var nextField       = $('[tabindex='+nextTabIndex+']');
+      var nextField       = $(this).closest("div[id^='tabs-']").find('input[tabindex='+nextTabIndex+']');
       // Se salta los elementos no activos.
       while(nextField.attr("disabled")=="disabled")
       {
@@ -516,7 +518,7 @@ $(document).ready(function () {
           }
           // Se salta al campo file si está habilitado sumando 1 al Tabindex.
           nextTabIndex++;            
-          nextField= $('[tabindex='+nextTabIndex+']');
+          nextField= $(this).closest("div[id^='tabs-']").find('input[tabindex='+nextTabIndex+']');
         }
         // Se muestra el tab que contiene el siguiente campo si es diferente al actual.
         tab= $(this).closest("div[id^='tab']").attr("id");
@@ -1927,7 +1929,7 @@ $(document).on("blur","input[id='edit_profesor_dni']",function() {
     $(this).closest("tr").find("select").removeClass("error_guardar");
     $(this).closest("tr").find("span").addClass("oculto");
     if(!$("#registro_Ngrupos").find("select").hasClass('error_guardar')){
-      $("#aviso_error").addClass("oculto");
+      $("#registro_Ngrupos #aviso_error").addClass("oculto");
     }
 
     if($(this).val()!=$(this).find("option[selected='selected']").val()){
@@ -1967,11 +1969,11 @@ $(document).on("blur","input[id='edit_profesor_dni']",function() {
   
         success: function(response) {
           // Si no hay alumnos asignados al curso se puede eliminar.
-          if(response.data!=null){
+          if(response.data!=null){  
             tr.find("select").addClass("modified");
             tr.find("select").addClass("error_guardar");
             tr.find("select").removeClass("modified");
-            $("#aviso_error").removeClass("oculto");
+            $("#registro_Ngrupos #aviso_error").removeClass("oculto");
             tr.find("span").removeClass("oculto");
             //alert(response.data);
             tr.find("select").val(num_grupos_ant);
@@ -2002,7 +2004,7 @@ $(document).on("blur","input[id='edit_profesor_dni']",function() {
     $(this).closest("tr").find("select").removeClass("error_guardar");
         $(this).closest("tr").find("select").removeClass("modified");
 
-    $("aviso_error").addClass("oculto");
+    $("#registro_Ngrupos #aviso_error").addClass("oculto");
     // Se actualiza el atributo numGrupos de la entidad Curso y se crean los grupos correspondiente al curso.
     $.ajax({
       type: 'POST',
@@ -2022,6 +2024,10 @@ $(document).on("blur","input[id='edit_profesor_dni']",function() {
   // Se modifica el nº de grupo en todos los cursos a la vez.
   $(document).on('change',"#select_grupos_all",function(event){
     value=$("#select_grupos_all").val();
+
+    //Se desactiva la primera opción del select.
+    $(this).find("option:eq('0')").prop("disabled", true);
+
     $("#contenedor_registro_Ngrupos select").each(function(){
       if($(this).val()!=value){
         $(this).closest("tr").find("span").addClass("oculto");
@@ -2038,7 +2044,7 @@ $(document).on("blur","input[id='edit_profesor_dni']",function() {
     });
 
       if (!$("#contenedor_registro_Ngrupos").find("select").hasClass('error_guardar')){
-      $("#aviso_error").addClass("oculto");
+      $("#registro_Ngrupos #aviso_error").addClass("oculto");
     }
   });
 
@@ -3049,8 +3055,11 @@ $(document).on("blur","input[id='edit_profesor_dni']",function() {
     $("#instalación_delete").closest("th").removeClass("oculto");
     $("#instalación_edit").closest("th").removeClass("oculto");
     $("#instalación_new").closest("th").addClass("oculto");
+    $("#instalación_nombre").removeClass("invalid_placeholder");
     $("#instalación_nombre").val($(this).text());
-    $("#instalación_nombre").attr('placeholder','Inserte el nombre para actualizar la instalación');
+    setTimeout(function(){ 
+      $("#instalación_nombre").attr('placeholder','Inserte el nombre para actualizar la instalación');
+    },300);
   });
 
   $(document).on("click","#cerrar_instalación_edit",function(event){
@@ -3062,6 +3071,7 @@ $(document).on("blur","input[id='edit_profesor_dni']",function() {
     $("#instalación_edit").closest("th").addClass("oculto");
     $("#instalación_new").closest("th").removeClass("oculto");
     $("#instalación_nombre").val("");
+    $("#instalación_nombre").removeClass("invalid_placeholder");
     $("#instalación_nombre").attr('placeholder','Inserte el nombre para añadir nueva instalación');
     $("#datos_instalación").removeClass("oculto");
   });
@@ -3115,7 +3125,7 @@ $(document).on("blur","input[id='edit_profesor_dni']",function() {
       $(this).removeClass("invalid_placeholder");
   });
 
-  $(document).on("blur","#equipamiento_nueva input",function(event){
+  $(document).on("blur","#registro_equipamientos .contenedor_registro_instalaciones form input",function(event){
     event.preventDefault();
     if($(this).val()==""){
       $(this).addClass("invalid_placeholder");
@@ -3173,8 +3183,11 @@ $(document).on("click","#registro_equipamientos td a",function(event){
     $("#equipamiento_delete").closest("th").removeClass("oculto");
     $("#equipamiento_edit").closest("th").removeClass("oculto");
     $("#equipamiento_new").closest("th").addClass("oculto");
+    $("#equipamiento_nombre").removeClass("invalid_placeholder");
     $("#equipamiento_nombre").val($(this).text());
-    $("#equipamiento_nombre").attr('placeholder','Inserte el nombre para actualizar elequipamiento');
+    setTimeout(function(){ 
+      $("#equipamiento_nombre").attr('placeholder','Inserte el nombre para actualizar el equipamiento');
+    },300);
   });
 
   $(document).on("click","#cerrar_equipamiento_edit",function(event){
@@ -3186,6 +3199,7 @@ $(document).on("click","#registro_equipamientos td a",function(event){
     $("#equipamiento_edit").closest("th").addClass("oculto");
     $("#equipamiento_new").closest("th").removeClass("oculto");
     $("#equipamiento_nombre").val("");
+    $("#equipamiento_nombre").removeClass("invalid_placeholder");
     $("#equipamiento_nombre").attr('placeholder','Inserte el nombre para añadir nuevo equipamiento');
     $("#datos_equipamiento").removeClass("oculto");
   });
@@ -3232,6 +3246,445 @@ $(document).on("click","#registro_equipamientos td a",function(event){
     }
       return false;
   });
+
+
+
+  //////////////////////////////////
+  //        Horario Clase         //
+  //////////////////////////////////
+
+  $(document).on("click","#registro_horario #button_generate",function(event){
+    // Se vacia el contenedor para el nuevo horario.
+    $("#contenedor_nuevo_horario tbody").empty();
+    // Se añade las filas con cada hora de clase con los horarios en el nuevo contenedor.
+    for (var i = 1; i <= $("#total_horas").val(); i++) {
+      // Se añade el horario de recreo.
+      if(parseInt($("#horas_recreo").val())+1 == i){
+        cont='<tr><td><span class="oculto">*</span>';
+        cont+='</td>';
+        cont+='<td>RECREO';
+        cont+='</td>';
+        cont+='<td><input type="time" step="1"> </input>';
+        cont+='</td>';
+        cont+='<td><input type="time" step="1"> </input>';
+        cont+='</td>';
+        cont+='</tr>';
+        $("#contenedor_nuevo_horario tbody:last-child").append(cont);
+      }
+      // Se añade el horario de comida, cuando esté activa la opción.
+      if(parseInt($("#total_horas").val())-parseInt($("#horas_comida").val())+1 == i && !$("#registro_horario #no").is(':checked') ){
+        cont='<tr><td><span class="oculto">*</span>';
+        cont+='</td>';
+        cont+='<td>COMIDA';
+        cont+='</td>';
+        cont+='<td><input type="time" step="1"> </input>';
+        cont+='</td>';
+        cont+='<td><input type="time" step="1"> </input>';
+        cont+='</td>';
+        cont+='</tr>';
+        $("#contenedor_nuevo_horario tbody:last-child").append(cont);
+      }
+      contenido='<tr><td><span class="oculto">*</span>';
+      contenido+='</td>';
+      contenido+='<td>'+i+'ª';
+      contenido+='</td>';
+      contenido+='<td><input type="time" step="1"> </input>';
+      contenido+='</td>';
+      contenido+='<td><input type="time" step="1"> </input>';
+      contenido+='</td>';
+      contenido+='</tr>';
+      $("#contenedor_nuevo_horario tbody:last-child").append(contenido);
+    }
+    // Máscara para los input time.
+    $("input[type='time']").mask('AB:CB',
+    {'translation': {A: {pattern: /[0-1]/}, B: {pattern: /[0-9]/}, C: {pattern: /[0-5]/}},
+     placeholder: "__:__"});
+
+    $("#contenedor_nuevo_horario").find(":input").each(function(i){
+      $(this).attr("tabindex",i+1);
+    });
+    
+    //Se deshabilita todos los input menos los de la primera hora.
+    $("#contenedor_nuevo_horario").find("input").each(function(i){
+      $(this).prop("disabled", true);
+    });
+    $("#contenedor_nuevo_horario input:first").prop("disabled", false);
+    $("#contenedor_nuevo_horario input:first").closest("td").next("td").find("input").prop("disabled", false);
+    $("#button_horario_save").prop("disabled", true);
+
+    // Se muestra el contenedor para el nuevo horario.
+    $("#contenedor_registro_horario").addClass("oculto");
+    $("#contenedor_nuevo_horario").removeClass("oculto");
+
+    $("#contenedor_nuevo_horario input:first").focus();
+    $("#contenedor_nuevo_horario input:first").attr('placeholder','');
+    $("#button_horario_clear").prop("disabled", true);  
+
+    // Se muestra el panel de guardar el nuevo horario.
+    $("#nuevo_horario_guardar").removeClass("oculto");
+    $("#registro_horario_guardar").addClass("oculto");
+  });
+  // Se ejecuta al soltar una tecla introducida en los input pares.
+  $(document).on('keyup',"#contenedor_nuevo_horario input:odd",function(event){
+    if($(this).val().trim().length==5){
+      tab=parseInt($(this).attr("tabindex"));
+      // Se habilita los input de la siguiente clase al introducir la hora final de la clase anterior.
+      for (var i=tab; i <=tab+2; i++){        
+        $("#contenedor_nuevo_horario input[tabindex="+i+"]").prop("disabled", false);
+      }
+      // Se le asigna la hora final de la clase anterior ala hora inicial de la siguiente clase, 
+      // y se pasa el foco a la hora final de la siguiente clase para más comodidad(si ese input está vacío).
+      $("#contenedor_nuevo_horario input[tabindex="+(tab+1)+"]").val($(this).val());
+      if($("#contenedor_nuevo_horario input[tabindex="+(tab+2)+"]").val()==""){
+        $("#contenedor_nuevo_horario input[tabindex="+(tab+2)+"]").focus();
+      }
+    }
+  });
+
+  // Se ejecuta al pulsar una tecla en los input de horario escolar.
+  $(document).on('keyup',"#contenedor_nuevo_horario input",function(e){
+    // Se elimina el placeholder para que no aparezca al borrar el valor del input.
+    $(this).attr('placeholder','');
+    // Se ejecuta al introducir una hora completa en un input.Si se pulsa borrar se ignora.
+    if($(this).val().trim().length==5 && e.keyCode != 8){
+      $(this).attr("value",$(this).val());
+      tab=parseInt($(this).attr("tabindex"));
+      if($("#contenedor_nuevo_horario input[tabindex="+(tab+1)+"]").val()==""){
+        $("#contenedor_nuevo_horario input[tabindex="+(tab+1)+"]").focus();
+      }
+      // Se valida en línea la hora introducida.
+      val=$(this).val().split(':');
+      if((val[0]<08 || val[0]>19) || (val[1]<00 || val[1]>59)){
+        $(this).addClass("invalid");
+        $(this).closest("tr").find("td>span").removeClass("oculto");
+        $("#registro_horario #aviso_error").removeClass("oculto");
+      }
+      else{
+        $(this).removeClass("invalid");
+        $("#contenedor_nuevo_horario input").each (function(){
+          if($(this).hasClass("invalid")){
+            $(this).closest("tr").find("td>span").removeClass("oculto");
+            return false;
+          }
+          $(this).closest("tr").find("td>span").addClass("oculto");
+        });
+
+        $("#contenedor_nuevo_horario input").each (function(){
+          if($(this).hasClass("invalid")){
+            $("#registro_horario #aviso_error").removeClass("oculto");
+            return false;
+          }
+          $("#registro_horario #aviso_error").addClass("oculto");
+        });
+
+        $("#contenedor_nuevo_horario input").each (function(){
+          if($(this).val()=="" || $(this).hasClass("invalid")){
+            $("#button_horario_save").prop("disabled", true);  
+            return false;
+          }
+          $("#button_horario_save").prop("disabled", false);  
+        });
+      }
+      $("#contenedor_nuevo_horario input").each (function(){
+        if($(this).val()!=""){
+          $("#button_horario_clear").prop("disabled", false);  
+          return false;
+        }
+        $("#button_horario_clear").prop("disabled", true);
+      });
+
+      validateTime($(this));
+      if(!$(this).hasClass("invalid")){
+
+        tab_prev=parseInt($(this).attr("tabindex"))-1;
+        if($("#contenedor_nuevo_horario input[tabindex="+tab_prev+"]").val()!=""){
+          validateTime($("#contenedor_nuevo_horario input[tabindex="+tab_prev+"]"));
+        }
+
+        tab_next=parseInt($(this).attr("tabindex"))+1;
+        if($("#contenedor_nuevo_horario input[tabindex="+tab_next+"]").val()!=""){
+          validateTime($("#contenedor_nuevo_horario input[tabindex="+tab_next+"]"));
+        }
+      }
+    }
+    if($(this).val().trim().length==0){
+      $(this).removeClass("invalid");
+
+      $("#contenedor_nuevo_horario input").each (function(){
+        if($(this).hasClass("invalid")){
+          $(this).closest("tr").find("td>span").removeClass("oculto");
+          return false;
+        }
+        $(this).closest("tr").find("td>span").addClass("oculto");
+      });
+
+      $("#contenedor_nuevo_horario input").each (function(){
+        if($(this).hasClass("invalid")){
+          $("#registro_horario #aviso_error").removeClass("oculto");
+          return false;
+        }
+          $("#registro_horario #aviso_error").addClass("oculto");
+      });
+
+      $("#contenedor_nuevo_horario input").each (function(){
+        if($(this).val()!=""){
+          $("#button_horario_clear").prop("disabled", false);  
+          return false;
+        }
+        $("#button_horario_clear").prop("disabled", true);
+      });
+    }
+
+  });
+  // Función para validar las horas del horario Escolar.
+  function validateTime(tab) {
+    // Se valida los input impares, excepto el primero.
+    if($(tab).attr("tabindex")!=1 && $(tab).attr("tabindex")%2==1){
+      h_act=$(tab).val().split(':');
+
+      tab_prev=parseInt($(tab).attr("tabindex"))-1;
+      h_prev=$("#contenedor_nuevo_horario input[tabindex="+tab_prev+"]").val().split(':');
+
+      tab_next=parseInt($(tab).attr("tabindex"))+1;
+      h_next=$("#contenedor_nuevo_horario input[tabindex="+tab_next+"]").val().split(':');
+      
+      if((h_act[0]<h_prev[0] && h_prev[0]!="")||(h_act[0]>h_next[0] && h_next[0]!="")||((h_act[0]==h_next[0]) && (h_act[1]>=h_next[1]) && h_next[1]!="") || ((h_act[0]==h_prev[0]) &&  (h_act[1]<h_prev[1]) && (h_prev[1]!=""))){
+        $(tab).addClass("invalid");
+      }
+      else{
+        $(tab).removeClass("invalid");  
+        }
+      }
+    // Se valida el primer input.  
+    else if($(tab).attr("tabindex")%2==1){
+      h_act=$(tab).val().split(':');
+      tab_next=parseInt($(tab).attr("tabindex"))+1;
+      h_next=$("#contenedor_nuevo_horario input[tabindex="+tab_next+"]").val().split(':');
+        
+      if((h_act[0]>h_next[0] && h_next[0]!="" )||((h_act[0]==h_next[0]) && (h_act[1]>=h_next[1])&& h_next[1]!="") ){
+        $(tab).addClass("invalid");
+      }
+      else{
+        $(tab).removeClass("invalid");  
+      }
+    }
+    // Se valida los input pares, excepto el último.
+    if($(tab).attr("tabindex")!=$("#contenedor_nuevo_horario input:last ").attr("tabindex") && $(tab).attr("tabindex")%2==0){
+      h_act=$(tab).val().split(':');
+
+      tab_prev=parseInt($(tab).attr("tabindex"))-1;
+      h_prev=$("#contenedor_nuevo_horario input[tabindex="+tab_prev+"]").val().split(':');
+
+      tab_next=parseInt($(tab).attr("tabindex"))+1;
+      h_next=$("#contenedor_nuevo_horario input[tabindex="+tab_next+"]").val().split(':');
+        //||(h_act[0]>h_next[0] && h_next[0]!="")||((h_act[0]==h_next[0]) && (h_act[1]>h_next[1]) && h_next[1]!="")
+      if((h_act[0]<h_prev[0] && h_prev[0]!="") ||((h_act[0]==h_prev[0]) && (h_act[1]<=h_prev[1]) && h_prev[1]!="")){
+        $(tab).addClass("invalid");
+      }
+      else{
+        $(tab).removeClass("invalid");
+      }
+    }
+    // Se valida el último input.
+    else if($(tab).attr("tabindex")%2==0){
+      h_act=$(tab).val().split(':');
+
+      tab_prev=parseInt($(tab).attr("tabindex"))-1;
+      h_prev=$("#contenedor_nuevo_horario input[tabindex="+tab_prev+"]").val().split(':');
+
+      if((h_act[0]<h_prev[0] && h_prev[0]!="") ||((h_act[0]==h_prev[0]) && (h_act[1]<=h_prev[1]) && h_prev[1]!="")){
+        $(tab).addClass("invalid");
+      }
+      else{
+        $(tab).removeClass("invalid");
+      }
+    }
+    // Se comprueba todos los valores de los input para añadir o quitar los avisos de error.
+    $("#contenedor_nuevo_horario input").each (function(){
+      if($(this).hasClass("invalid")){
+        $(this).closest("tr").find("td>span").removeClass("oculto");
+        return false;
+      }
+      $(this).closest("tr").find("td>span").addClass("oculto");
+    });
+
+    $("#contenedor_nuevo_horario input").each (function(){
+      if($(this).hasClass("invalid")){
+        $("#registro_horario #aviso_error").removeClass("oculto");
+        return false;
+      }
+      $("#registro_horario #aviso_error").addClass("oculto");
+    });
+
+    $("#contenedor_nuevo_horario input").each (function(){
+      if($(this).val()=="" || $(this).hasClass("invalid")){
+        $("#button_horario_save").prop("disabled", true);  
+        return false;
+      }
+      $("#button_horario_save").prop("disabled", false);  
+    });
+  }
+
+  // Se obliga a introducir valores entre 08:00 -18:00 para no validar.
+  $(document).on('keydown',"#contenedor_nuevo_horario input",function(e){
+    // Se asigna una máscara según el primer valor introducido.
+    if($(this).val().trim().length>0 && $(this).val().trim().length<5 && e.keyCode != 8){
+      if($(this).val().substr(0, 1)==0){
+        $(this).unmask();
+        // Máscara para las horas que empiezan por "0"(08:00-09:00).
+        $(this).mask('AB:CD',
+        {'translation': {A: {pattern: /[0-1]/}, B: {pattern: /[8-9]/}, C: {pattern: /[0-5]/}, D: {pattern: /[0-9]/}},
+        placeholder: "__:__"});
+      }
+      else{
+        $(this).unmask();
+        // Máscara para las horas que empiezan por "1"(10:00-18:00).
+        $(this).mask('AB:CB',
+        {'translation': {A: {pattern: /[0-1]/}, B: {pattern: /[0-9]/}, C: {pattern: /[0-5]/}},
+        placeholder: "__:__"});
+      }
+    }
+  });
+
+  // Se oculta el placeholder en el input seleccionado.
+  $(document).on("focus","#contenedor_nuevo_horario input",function(event){
+    $(this).data('placeholder',$(this).attr('placeholder')).attr('placeholder','');
+  });
+
+  // Se deja el valor en blanco en caso de no introducir una hora completa.
+  $(document).on("blur","#contenedor_nuevo_horario input",function(event){
+    $(this).attr('placeholder',$(this).data('placeholder'));
+    if($(this).val().length<5){
+      $(this).val("");
+    }
+    if($(this).val()==""){
+      $("#contenedor_nuevo_horario input").each (function(){
+        if($(this).val()==""){
+          $("#button_horario_save").prop("disabled", true);  
+          return false;
+        }
+        $("#button_horario_save").prop("disabled", false);  
+      });
+    }
+
+    /*if($(this).val()==""){
+      $(this).addClass("invalid");
+      $("#registro_horario #aviso_error").removeClass("oculto");
+      $(this).closest("tr").find("td>span").removeClass("oculto");
+      $("#button_horario_save").prop("disabled", true);  
+    }
+    else{
+      $("#button_horario_clear").prop("disabled", false);
+    }
+    */
+  });
+
+  // Se añade ":" tras introducir dos cifras.
+  $(document).on('keyup',"input[type='time']",function(e){
+    if($(this).val().trim().length==2 && e.keyCode != 8){
+      $(this).val($(this).val()+":");
+    }
+  });
+
+  $(document).on("click","#registro_horario #button_rest",function(event){
+    // Se restablece el valor inicial de cada select y desactivamos el botón.
+    $("#registro_horario .block_insert select").prop('selectedIndex',0);
+    $("#button_rest").prop("disabled", true);
+    $("#button_generate").prop("disabled", true);
+  });
+
+  $(document).on('change',"#registro_horario .block_insert select",function(event){
+    $("#button_rest").prop("disabled", false);
+    // Se desactiva la primera opción del select.
+    $(this).find("option:eq('0')").prop("disabled", true);
+    // Se comprueba que todos los select activos tienen un valor para activar el botón de generar nuevo horario.
+    $("#registro_horario .block_insert").find("select:enabled").each (function(){
+      if($(this).val()==0){
+        $("#button_generate").prop("disabled", true);  
+        return false;
+      }
+      $("#button_generate").prop("disabled", false);  
+    });
+  });
+  $(document).on("click","#button_horario_clear",function(event){
+    // Se restablece el valor inicial de cada input, se elimina la clase invalid en todos los input y se oculta los * en cada fila.
+    $("#contenedor_nuevo_horario input").each (function(){
+      $(this).attr("value","");
+      $(this).val($(this).attr("value"));
+      $(this).removeClass("invalid");
+      $(this).closest("tr").find("td>span").addClass("oculto");
+    });
+    // Se elimina el aviso de error
+    $("#registro_horario #aviso_error").addClass("oculto");
+
+    //Se deshabilita todos los input menos los de la primera hora.
+    $("#contenedor_nuevo_horario").find("input").each(function(i){
+      $(this).prop("disabled", true);
+    });
+    $("#contenedor_nuevo_horario input:first").prop("disabled", false);
+    $("#contenedor_nuevo_horario input:first").closest("td").next("td").find("input").prop("disabled", false);
+    $("#contenedor_nuevo_horario input:first").focus();
+    $("#button_horario_save").prop("disabled", true);  
+
+  });
+
+  $(document).on("click","#button_horario_rest",function(event){
+    // Se vacia el contenedor para el nuevo horario y se muestra el contenedor inicial.
+    $("#contenedor_nuevo_horario tbody").empty();
+    $("#contenedor_nuevo_horario").addClass("oculto");
+    $("#contenedor_registro_horario").removeClass("oculto");
+    //Se muestra el panel de guardar inicial.
+    $("#nuevo_horario_guardar").addClass("oculto");
+    $("#registro_horario_guardar").removeClass("oculto"); 
+    //Se restablece el valor inicial de cada input.
+    $("#contenedor_registro_horario input").each (function(){
+      $(this).val($(this).attr("value"));
+    });
+
+    $("#registro_horario #aviso_error").addClass("oculto");
+
+  });
+
+  $(document).on('change',"#registro_horario input[id='si']",function(event){
+    // Se comprueba si select de la comida esta activo y tiene valor para activar el botón de generar nuevo horario.
+    if($(this).val()=="on"){
+      $("#horas_comida").prop("disabled", false);  
+      $("#horas_comida").prev().removeClass("disabled");
+      if($("#horas_comida").val()==0){
+        $("#button_generate").prop("disabled", true);  
+      }
+    }
+  });
+
+  $(document).on('change',"#registro_horario input[id='no']",function(event){
+    if($(this).val()=="on"){
+      // Se desactiva el select.
+      $("#horas_comida").prop("disabled", true);  
+      $("#horas_comida").prev().addClass("disabled");
+    }  
+    // Se comprueba que los restantes select activos tienen un valor para activar el botón de generar nuevo horario.
+    if($("#total_horas").val()!=0 && $("#horas_recreo").val()!=0){
+        $("#button_generate").prop("disabled", false);  
+    }
+  });
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

@@ -42,6 +42,11 @@ class Equipamiento
      */
     private $tipo;
 
+    /**
+     * @ORM\OneToMany(targetEntity="Reserva", mappedBy="profesor")
+     */
+    private $reserva;
+
 
     /**
      * Get id
@@ -120,5 +125,45 @@ class Equipamiento
     public function getTipo()
     {
         return $this->tipo;
+    }
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->reserva = new \Doctrine\Common\Collections\ArrayCollection();
+    }
+
+    /**
+     * Add reserva
+     *
+     * @param \Cole\BackendBundle\Entity\Reserva $reserva
+     * @return Equipamiento
+     */
+    public function addReserva(\Cole\BackendBundle\Entity\Reserva $reserva)
+    {
+        $this->reserva[] = $reserva;
+
+        return $this;
+    }
+
+    /**
+     * Remove reserva
+     *
+     * @param \Cole\BackendBundle\Entity\Reserva $reserva
+     */
+    public function removeReserva(\Cole\BackendBundle\Entity\Reserva $reserva)
+    {
+        $this->reserva->removeElement($reserva);
+    }
+
+    /**
+     * Get reserva
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getReserva()
+    {
+        return $this->reserva;
     }
 }

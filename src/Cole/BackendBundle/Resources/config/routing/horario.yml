@@ -1,0 +1,32 @@
+horario:
+    path:     /
+    defaults: { _controller: "BackendBundle:Horario:index" }
+
+horario_show:
+    path:     /show
+    defaults: { _controller: "BackendBundle:Horario:show" }
+    options:
+        expose: true
+
+horario_new:
+    path:     /new
+    defaults: { _controller: "BackendBundle:Horario:new" }
+
+horario_create:
+    path:     /create
+    defaults: { _controller: "BackendBundle:Horario:create" }
+    requirements: { _method: post }
+
+horario_edit:
+    path:     /{id}/edit
+    defaults: { _controller: "BackendBundle:Horario:edit" }
+
+horario_update:
+    path:     /{id}/update
+    defaults: { _controller: "BackendBundle:Horario:update" }
+    requirements: { _method: post|put }
+
+horario_delete:
+    path:     /{id}/delete
+    defaults: { _controller: "BackendBundle:Horario:delete" }
+    requirements: { _method: post|delete }

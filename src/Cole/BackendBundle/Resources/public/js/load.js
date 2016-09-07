@@ -627,6 +627,14 @@ $(document).ready(function () {
 
 });
 
+// se ejecuta cuando la página completa está completamente cargado,
+// incluyendo todos los marcos, objetos e imágenes
+$(window).load(function() {
+  $(".centrado").removeClass("oculto");
+});
+
+
+
 
 
 /*

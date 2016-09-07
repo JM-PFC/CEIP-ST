@@ -15,16 +15,7 @@
         $(this).find("#img_1").removeClass("oculto");    
     });
 
-    $('#registro_equipamientos .contenedor_registro_instalaciones input').focus(function(){
-        $(this).data('placeholder',$(this).attr('placeholder')).attr('placeholder','');
-        }).blur(function(){
-            if($(this).attr("id")=="equipamiento_unidades"){
-                $(this).attr('placeholder',"u.");
-            }
-            else{
-                $(this).attr('placeholder',$(this).data('placeholder'));
-            }
-    });
+
     //$('#equipamiento_unidades').val(1);
     $('#equipamiento_tipo').val("Equipamiento");
 

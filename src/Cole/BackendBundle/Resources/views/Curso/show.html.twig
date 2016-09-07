@@ -20,7 +20,7 @@
             </br>
             <div class="center_w85">
                 <span>Nº de Grupos:</span>
-                <select id="select_grupos_all">
+                <select id="select_grupos_all" class="select_number">
                     <option selected="selected" class="oculto" value="0">Nº</option>
                     <option  value="1">1</option>
                     <option  value="2">2</option>
@@ -55,7 +55,7 @@
                     </thead>
                 </table>
                 <div class="inner_table">
-                    <table>
+                    <table id="lista_color">
                     {% for entity in entities %}
                         {% if entity.nivel == "Infantil" %}
                         <tr>
@@ -107,7 +107,7 @@
                     </thead>
                 </table>
                 <div class="inner_table">
-                    <table>
+                    <table id="lista_color">
                     {% for entity in entities %}
                         {% if entity.nivel == "Primaria" %}
                         <tr>

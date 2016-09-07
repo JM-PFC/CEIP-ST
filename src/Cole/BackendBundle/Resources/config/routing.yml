@@ -51,3 +51,11 @@ BackendBundle_festivos:
 BackendBundle_equipamiento:
         resource: "@BackendBundle/Resources/config/routing/equipamiento.yml"
         prefix:   /equipamiento
+
+BackendBundle_reserva:
+        resource: "@BackendBundle/Resources/config/routing/reserva.yml"
+        prefix:   /reserva
+
+BackendBundle_horario:
+        resource: "@BackendBundle/Resources/config/routing/horario.yml"
+        prefix:   /horario

@@ -15,12 +15,6 @@
         $(this).find("#img_1").removeClass("oculto");    
     });
 
-    $('#instalación_nueva input').focus(function(){
-        $(this).data('placeholder',$(this).attr('placeholder')).attr('placeholder','');
-        }).blur(function(){
-        $(this).attr('placeholder',$(this).data('placeholder'));
-    });
-
     $('#registro_instalaciones #equipamiento_unidades').addClass("oculto");
     $('#instalación_tipo').val("Instalación");
 
