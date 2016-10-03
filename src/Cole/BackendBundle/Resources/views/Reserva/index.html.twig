@@ -4,7 +4,7 @@
 {% block stylesheets %}{% endblock %}
 
 {% block javascript %}
-    
+
 {% endblock %}
 
 {% block body -%}
@@ -34,9 +34,13 @@
                     {% for entity in entities %}
                         <tr>
                             <td><a href="{{ path('reserva_show', { 'id': entity.id }) }}">{{ entity.id }}</a></td>
+                            {% if entity.profesor != null %}
                             <td >{{ entity.profesor.nombre ~ " " ~ entity.profesor.apellido1 ~ " " ~ entity.profesor.apellido2}}</td>
+                            {% else %}
+                            <td > Centro</td>
+                            {% endif %}
                             <td>{{ entity.equipamiento.nombre}}</td>
-                            <td>{% if entity.fecha %}{{ entity.fecha|date('Y-m-d H:i:s') }}{% endif %}</td>
+                            <td>{% if entity.fecha %}{{ entity.fecha|date('Y-m-d') }}{% endif %}</td>
                             <td>{{ entity.propósito }}</td>
                         </tr>
                     {% endfor %}

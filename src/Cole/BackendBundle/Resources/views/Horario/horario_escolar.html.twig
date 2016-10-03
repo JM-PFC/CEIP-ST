@@ -1,0 +1,13 @@
+{% block body %}
+<tbody>
+{% for entity in entities %}
+    <tr>
+        <td><span class="oculto">*</span></td>
+        <td>{{entity.horaClase}}</td>
+        <td><input type="time" value="{{ entity.inicio|date('H:i') }}" step="1"> </input></td>
+        <td><input type="time"  value="{{ entity.fin|date('H:i') }}" step="1"> </input></td>
+        <td><button disabled="disabled">Guardar</button></td>
+    </tr>
+{% endfor %}
+</tbody>
+{% endblock %}

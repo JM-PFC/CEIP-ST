@@ -97,10 +97,6 @@ class HorarioController extends Controller
         $em = $this->getDoctrine()->getManager();
 
         $entities = $em->getRepository('BackendBundle:Horario')->findAll();
-
-
-
-
            return $this->render('BackendBundle:Horario:show.html.twig', array(
             'entities' => $entities,
         ));
@@ -217,5 +213,94 @@ class HorarioController extends Controller
             ->add('submit', 'submit', array('label' => 'Delete'))
             ->getForm()
         ;
+    }
+    public function  NuevoHorarioAction(Request $request)
+    {
+        // if request is XmlHttpRequest (AJAX) but not a POSt, throw an exception
+        if ($request->isXmlHttpRequest() && !$request->isMethod('POST')) {
+            throw new HttpException('XMLHttpRequests/AJAX calls must be POSTed');
+        }
+
+        $cadena=$this->get('request')->request->get('cadena');
+        $cont=$this->get('request')->request->get('cont');
+
+        $datos = explode("-", $cadena);
+        
+        $em = $this->getDoctrine()->getEntityManager();
+        $entities = $em->getRepository('BackendBundle:Horario')->findAll();
+        if ($entities) {
+            foreach ($entities  as $entity ) {
+                $em->remove($entity);
+            }
+        }
+        $em->flush();
+
+        for ($i=0, $j=0; $i < $cont ; $i++) { 
+            $clase= new Horario();
+            $clase->setHoraClase($datos[$j]);
+            $j++;
+            $clase->setInicio(new \DateTime($datos[$j]));
+            $j++;
+            $clase->setFin(new \DateTime($datos[$j]));
+            $j++;
+
+            $em->persist($clase);
+            $em->flush();
+        }
+        
+        if ($request->isXmlHttpRequest()) {
+                return new JsonResponse(array(
+                    'message' => 'Success!',
+                    'success' => true), 200);
+        } 
+    }
+    
+    public function EditarHorarioAction(Request $request)
+    {
+        // if request is XmlHttpRequest (AJAX) but not a POSt, throw an exception
+        if ($request->isXmlHttpRequest() && !$request->isMethod('POST')) {
+            throw new HttpException('XMLHttpRequests/AJAX calls must be POSTed');
+        }
+
+        $clase=$this->get('request')->request->get('clase');
+        $ini=$this->get('request')->request->get('ini');
+        $fin=$this->get('request')->request->get('fin');
+
+        
+        $em = $this->getDoctrine()->getEntityManager();
+        $entity = $em->getRepository('BackendBundle:Horario')->findHoraClase($clase);
+        if (!$entity) {
+                throw $this->createNotFoundException('Unable to find Curso entity.');
+            }
+
+        $em = $this->getDoctrine()->getManager();
+        if($ini!=="" && $fin!==""){
+            $entity->setInicio(new \DateTime($ini));
+            $entity->setFin(new \DateTime($fin));    
+    
+        }else{
+            $entity->setInicio(NULL);     
+            $entity->setFin(NULL);     
+        }
+
+        $em->persist($entity);
+        $em->flush();
+        
+        if ($request->isXmlHttpRequest()) {
+                return new JsonResponse(array(
+                    'message' => 'Success!',
+                    'success' => true), 200);
+        }
+    }
+
+    public function HorarioEscolarActualAction()
+    {
+
+        $em = $this->getDoctrine()->getManager();
+
+            $entities = $em->getRepository('BackendBundle:Horario')->findAll();
+            return $this->render('BackendBundle:Horario:horario_escolar.html.twig', array(
+            'entities' => $entities,
+            ));
     }
 }

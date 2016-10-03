@@ -24,7 +24,7 @@ class Horario
     /**
      * @var string
      *
-     * @ORM\Column(name="hora_clase", type="string", length=50)
+     * @ORM\Column(name="horaClase", type="string", length=50)
      */
     private $horaClase;
 
@@ -42,6 +42,10 @@ class Horario
      */
     private $fin;
 
+    /**
+     * @ORM\OneToMany(targetEntity="Reserva", mappedBy="horario")
+     */
+    private $reserva;
 
     /**
      * Get id
@@ -122,4 +126,44 @@ class Horario
         return $this->fin;
     }
     
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->reserva = new \Doctrine\Common\Collections\ArrayCollection();
+    }
+
+    /**
+     * Add reserva
+     *
+     * @param \Cole\BackendBundle\Entity\Reserva $reserva
+     * @return Horario
+     */
+    public function addReserva(\Cole\BackendBundle\Entity\Reserva $reserva)
+    {
+        $this->reserva[] = $reserva;
+
+        return $this;
+    }
+
+    /**
+     * Remove reserva
+     *
+     * @param \Cole\BackendBundle\Entity\Reserva $reserva
+     */
+    public function removeReserva(\Cole\BackendBundle\Entity\Reserva $reserva)
+    {
+        $this->reserva->removeElement($reserva);
+    }
+
+    /**
+     * Get reserva
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getReserva()
+    {
+        return $this->reserva;
+    }
 }

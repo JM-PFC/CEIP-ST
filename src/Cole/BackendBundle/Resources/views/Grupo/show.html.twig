@@ -55,11 +55,11 @@
                     {% for entity in entities %}
                         {% if entity.curso.nivel == "Infantil" %}
                         <tr>
-                            <td>{{ entity.curso.curso}}</td>
-                            <td>{{ entity.curso.nivel }}</td>
-                            <td>{{ entity.letra}}</td>
+                            <td>{{entity.curso.curso}}</td>
+                            <td>{{entity.curso.nivel }}</td>
+                            <td>{{entity.letra}}</td>
                             <td>
-                                <input value="{{ entity.aula }} " id="aula">
+                                <input value="{{entity.aula}}" id="aula">
                                     
                                 </input>
                             </td>

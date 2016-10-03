@@ -213,7 +213,7 @@
                                 {% endif %}
                             {% endfor %}
                             {% if fin.finCurso| localizeddate('none', 'none', 'none',none , "MMMM") == "junio"  %}
-                            <h4 id="{{ inicio.inicioCurso|date('d') }}" class="f_fecha" >{{ fin.finCurso|date('d') }}</h4>
+                            <h4 id="{{ fin.finCurso|date('d') }}" class="f_fecha" >{{ fin.finCurso|date('d') }}</h4>
                             <h4 id="h4_descripcion">Último día del curso</h4>
                             {% endif %}                            
                         </div>
@@ -434,13 +434,19 @@
 
                     $("#meses_calendario div[num='"+mes+"'] h4[id='"+dia_fin+"'][class!='f_vacaciones']").next().remove();
                     $("#meses_calendario div[num='"+mes+"'] h4[id='"+dia_fin+"'][class!='f_vacaciones']").remove();
-
                     }
+                    //$("#meses_calendario div[num='"+mes+"'] h4").filter(function(){return $(this).text()==="Inicio "+vacaciones ;}).prev().text(dia_inicio+"-"+dia_fin);
+                    //$("#meses_calendario div[num='"+mes+"'] h4").filter(function(){return $(this).text()==="Inicio "+vacaciones ;}).text(vacaciones );
+                    //$("#meses_calendario div[num='"+mes+"'] h4").filter(function(){return $(this).text()==="Fin "+vacaciones ;}).prev().remove();
+                    //$("#meses_calendario div[num='"+mes+"'] h4").filter(function(){return $(this).text()==="Fin "+vacaciones ;}).remove();
+                    $( "<h4 id="+dia_inicio+" class='f_vacaciones'>"+dia_inicio+"-"+dia_fin+"</h4>" ).insertAfter( $("#meses_calendario div[num='"+mes+"'] h4").filter(function(){return $(this).text()==="Inicio "+vacaciones ;}));
+                    $( "<h4 id='h4_descripcion'>Vacaciones de Semana Santa</h4>" ).insertAfter( $("#meses_calendario div[num='"+mes+"'] h4").filter(function(){return $(this).text()==="Inicio "+vacaciones ;}).next());
 
-                    $("#meses_calendario div[num='"+mes+"'] h4").filter(function(){return $(this).text()==="Inicio "+vacaciones ;}).prev().text(dia_inicio+"-"+dia_fin);
-                    $("#meses_calendario div[num='"+mes+"'] h4").filter(function(){return $(this).text()==="Inicio "+vacaciones ;}).text(vacaciones );
-                    $("#meses_calendario div[num='"+mes+"'] h4").filter(function(){return $(this).text()==="Fin "+vacaciones ;}).prev().remove();
-                    $("#meses_calendario div[num='"+mes+"'] h4").filter(function(){return $(this).text()==="Fin "+vacaciones ;}).remove();
+                    $("#meses_calendario div[num='"+mes+"'] h4").filter(function(){return $(this).text()==="Inicio "+vacaciones ;}).addClass("oculto");
+                    $("#meses_calendario div[num='"+mes+"'] h4").filter(function(){return $(this).text()==="Inicio "+vacaciones ;}).prev().addClass("oculto");
+          
+                    $("#meses_calendario div[num='"+mes+"'] h4").filter(function(){return $(this).text()==="Fin "+vacaciones ;}).prev().addClass("oculto");
+                    $("#meses_calendario div[num='"+mes+"'] h4").filter(function(){return $(this).text()==="Fin "+vacaciones ;}).addClass("oculto");
                 }
                 else{
                     mes=$("#"+mes_inicio).find("tbody td[data-handler='selectDay']").attr("data-month");
@@ -497,7 +503,6 @@
 
                             $("#meses_calendario div[num='"+mes+"'] h4[id='"+dia_fin+"'][class!='f_vacaciones']").next().remove();
                             $("#meses_calendario div[num='"+mes+"'] h4[id='"+dia_fin+"'][class!='f_vacaciones']").remove();
-
                         }
                         else if($("#meses_calendario div[num='"+mes+"'] h4[id='"+dia_fin+"']").next().next().attr("id")!=dia_fin){
                         
@@ -508,7 +513,6 @@
                        }
                     }
                 }
-
             }
 
             if ( $("#meses_calendario #leyenda").find("h4").filter(function(){return $(this).text()=="Inicio Vacaciones de Navidad";}).length && $("#meses_calendario #leyenda").find("h4").filter(function(){return $(this).text()=="Fin Vacaciones de Navidad";}).length){
@@ -536,6 +540,8 @@
             $("#meses_calendario .hasDatepicker td[class=' ui-datepicker-days-cell-over  ui-datepicker-current-day']").attr("class"," ");
             $("#meses_calendario .hasDatepicker td[class='  ui-datepicker-today'] ").attr("class"," ");
             $("#meses_calendario .hasDatepicker td a[class='ui-state-default ui-state-highlight'] ").removeClass("ui-state-highlight");
+            $("#meses_calendario .hasDatepicker td[class=' ui-datepicker-week-end ui-datepicker-days-cell-over  ui-datepicker-current-day']").attr("class"," ui-datepicker-week-end ");
+
 
             //Se calcula el número de días lectivos de cada mes y guarda en el atributo lectivos del div.
             $("#meses_calendario .hasDatepicker").each(function(){
@@ -563,7 +569,7 @@
             var lectivos=0;
             var fin_curso=parseInt($("#meses_calendario h4").filter(function(){return $(this).text()==="Último día del curso" ;}).prev().attr("id"));
             $("#meses_calendario #junio").find("td[class!=' ui-datepicker-week-end '] a[class='ui-state-default']").each(function(){
-                if(parseInt($(this).text())>ini_curso){
+                if(parseInt($(this).text())>fin_curso){
                     lectivos++;                
                 }
             });
@@ -582,6 +588,7 @@
             //Condiciones según cuadre las vacaciones de Semana Santa en el Trimestre 2 y 3.
             //Que cuadre entre los dos meses, ó en el mismo mes pero al justo al final de marzo ó principio de abril.
             if(mes_ini_SS != mes_fin_SS || (mes_ini_SS == mes_fin_SS && (dia_ini_SS==1 || dia_fin_SS==31))){
+
                 $("#lectivos_2").text(parseInt($("#enero").attr("lectivos"))+parseInt($("#febrero").attr("lectivos"))+parseInt($("#marzo").attr("lectivos")));  
 
                 $("#lectivos_3").text(parseInt($("#abril").attr("lectivos"))+parseInt($("#mayo").attr("lectivos"))+parseInt($("#junio").attr("lectivos"))); 
@@ -613,13 +620,8 @@
                     $("#lectivos_2").text(parseInt($("#enero").attr("lectivos"))+parseInt($("#febrero").attr("lectivos"))+parseInt($("#marzo").attr("lectivos"))+dias);  
 
                     $("#lectivos_3").text(parseInt($("#abril").attr("lectivos"))+parseInt($("#mayo").attr("lectivos"))+parseInt($("#junio").attr("lectivos"))-dias); 
-
                 }
             }
-
-
-
-
         </script>
     </body>
 </html>

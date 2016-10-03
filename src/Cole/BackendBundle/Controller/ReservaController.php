@@ -4,6 +4,8 @@ namespace Cole\BackendBundle\Controller;
 
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\HttpFoundation\JsonResponse;
+
 
 use Cole\BackendBundle\Entity\Reserva;
 use Cole\BackendBundle\Form\ReservaType;
@@ -35,22 +37,64 @@ class ReservaController extends Controller
      */
     public function createAction(Request $request)
     {
+        // if request is XmlHttpRequest (AJAX) but not a POSt, throw an exception
+        if ($request->isXmlHttpRequest() && !$request->isMethod('POST')) {
+            throw new HttpException('XMLHttpRequests/AJAX calls must be POSTed');
+        }
         $entity = new Reserva();
-        $form = $this->createCreateForm($entity);
-        $form->handleRequest($request);
+        $em = $this->getDoctrine()->getEntityManager();
+        
+        $fecha=$this->get('request')->request->get('fecha');
+        $equipamiento=$this->get('request')->request->get('equipamiento');
+        $horas=$this->get('request')->request->get('objDatos');
+        $equipa=$em->getRepository('BackendBundle:Equipamiento')->findEquipamientoByName($equipamiento);
+        $NoDisponible=array();
 
-        if ($form->isValid()) {
-            $em = $this->getDoctrine()->getManager();
-            $em->persist($entity);
-            $em->flush();
+        $date=explode("-",$fecha);
 
-            return $this->redirect($this->generateUrl('reserva_show', array('id' => $entity->getId())));
+        $diaNoLectivo=$this->get("festivos")->ComprobarDiaNoLectivoAction($date[2],$date[1],$date[0]);
+        if($diaNoLectivo==false){
+          foreach ($horas as $hora ) {
+            $clase=$em->getRepository('BackendBundle:Horario')->findOneByHoraClase($hora);
+            $unidades= $em->getRepository('BackendBundle:Reserva')->findComprobarUnidades($clase,$equipa, $fecha);
+            // Se comprueba que hay unidades disponibles.
+            if((int)$unidades[1] < $equipa->getUnidades() && (int)$unidades[1] >= 0){
+                // Se obtiene el usuario actual ----------------------------------> De momento sólo reserva el centro (null)
+
+                //Hay que hacer un condicional viendo si el usuario tiene el rol profesor para guardar el iddel profesor,sino no hacer nada(se guarda nulo)
+                //$entity->setProfesor($profesor);
+
+                //Se obtiene el id del equipamiento.
+                $entity->setEquipamiento($em->getRepository('BackendBundle:Equipamiento')->findEquipamientoByName($equipamiento));
+        
+                //Se obtiene el id del horario correspondiente.
+                $entity->setFecha(new \DateTime($fecha)); 
+                    
+                //Se obtiene el id del horario correspondiente.
+                $entity->setHorario($em->getRepository('BackendBundle:Horario')->findOneByHoraClase($hora));
+                $em->persist($entity);
+                $em->flush();
+            }
+            else{
+                $NoDisponible[]=$hora;
+            }
+          }
+            if ($request->isXmlHttpRequest()) {
+                return new JsonResponse(array(
+                    'message' => 'Success!',
+                    'data' =>  $NoDisponible,
+                    'success' => true), 200);
+            } 
+        }
+        else{
+            if ($request->isXmlHttpRequest()) {
+                return new JsonResponse(array(
+                    'message' => 'festivo',
+                    'data' =>  $NoDisponible,
+                    'success' => true), 200);
+            } 
         }
 
-        return $this->render('BackendBundle:Reserva:new.html.twig', array(
-            'entity' => $entity,
-            'form'   => $form->createView(),
-        ));
     }
 
     /**
@@ -221,4 +265,135 @@ class ReservaController extends Controller
             ->getForm()
         ;
     }
+
+    public function instalacionesAction()
+    {
+        $em = $this->getDoctrine()->getManager();
+
+        $entities = $em->getRepository('BackendBundle:Equipamiento')->findInstalaciones();
+        $tipo="instalaciones"; 
+        $clases = $em->getRepository('BackendBundle:Horario')->findClases();
+
+        $inicio =$em->getRepository('BackendBundle:Centro')->findInicioCurso();
+        $fin =$em->getRepository('BackendBundle:Centro')->findFinCurso();
+
+        $array['inicio_navidad']=$em->getRepository('BackendBundle:Festivos')->findFestivosPorDescripcion("Inicio Vacaciones de Navidad");
+        $array['fin_navidad']=$em->getRepository('BackendBundle:Festivos')->findFestivosPorDescripcion("Fin Vacaciones de Navidad");
+        $array['inicio_semanasanta']=$em->getRepository('BackendBundle:Festivos')->findFestivosPorDescripcion("Inicio Vacaciones de Semana Santa");
+        $array['fin_semanasanta']=$em->getRepository('BackendBundle:Festivos')->findFestivosPorDescripcion("Fin Vacaciones de Semana Santa");
+
+        return $this->render('BackendBundle:Reserva:reserva_instalaciones.html.twig', array(
+            'entities' => $entities,
+            'clases' => $clases,
+            'inicio' => $inicio,
+            'fin' => $fin,
+            'data'=>$array,
+            'tipo'=>$tipo
+        ));
+    }
+
+    public function equipamientosAction()
+    {
+        $em = $this->getDoctrine()->getManager();
+
+        $entities = $em->getRepository('BackendBundle:Equipamiento')->findByTipo("Equipamiento");
+        $tipo="equipamientos"; 
+        $clases = $em->getRepository('BackendBundle:Horario')->findClases();
+
+        $inicio =$em->getRepository('BackendBundle:Centro')->findInicioCurso();
+        $fin =$em->getRepository('BackendBundle:Centro')->findFinCurso();
+
+        $array['inicio_navidad']=$em->getRepository('BackendBundle:Festivos')->findFestivosPorDescripcion("Inicio Vacaciones de Navidad");
+        $array['fin_navidad']=$em->getRepository('BackendBundle:Festivos')->findFestivosPorDescripcion("Fin Vacaciones de Navidad");
+        $array['inicio_semanasanta']=$em->getRepository('BackendBundle:Festivos')->findFestivosPorDescripcion("Inicio Vacaciones de Semana Santa");
+        $array['fin_semanasanta']=$em->getRepository('BackendBundle:Festivos')->findFestivosPorDescripcion("Fin Vacaciones de Semana Santa");
+
+        return $this->render('BackendBundle:Reserva:reserva_instalaciones.html.twig', array(
+            'entities' => $entities,
+            'clases' => $clases,
+            'inicio' => $inicio,
+            'fin' => $fin,
+            'data'=>$array,
+            'tipo'=>$tipo
+        ));
+    }
+
+    public function ComprobarReservasAction() //Se tiene que obtener el usuario logueado para cambiarlo por null abajo
+    {
+        $equipamiento=$this->get('request')->request->get('equipamiento');
+        $fecha=$this->get('request')->request->get('fecha');
+
+        $em = $this->getDoctrine()->getEntityManager();
+
+        $equipamiento=$em->getRepository('BackendBundle:Equipamiento')->findEquipamientoByName($equipamiento);   
+        $reserva= $em->getRepository('BackendBundle:Reserva')->findReservasUsuario(null, $equipamiento, $fecha);
+        $horarios= $em->getRepository('BackendBundle:Horario')->findClases();
+        $longitud = count($horarios);
+        $NoDisponible=array();
+        for($i=0; $i<$longitud; $i++)
+        {
+            $unidades= $em->getRepository('BackendBundle:Reserva')->findComprobarUnidades($horarios[$i],$equipamiento, $fecha);
+
+            if(!((int)$unidades[1] < $equipamiento->getUnidades() && (int)$unidades[1] >= 0)){
+                $NoDisponible[]= $em->getRepository('BackendBundle:Reserva')->findReservasUnidades($horarios[$i],$equipamiento, $fecha);
+            }       
+        }
+
+        /*
+        $horarios= $em->getRepository('BackendBundle:Horario')->findClases();
+        $longitud = count($horarios);
+
+        for($i=0; $i<$longitud; $i++)
+        {
+            $unidades= $em->getRepository('BackendBundle:Reserva')->findComprobarUnidades($horarios[$i],$equipamiento, $fecha);
+
+            if((int)$unidades[1] < $equipamiento->getUnidades() && (int)$unidades[1] >= 0){
+                $NoDisponible[$i]= $em->getRepository('BackendBundle:Reserva')->findReservasUnidades($horarios[$i],$equipamiento, $fecha);
+            }
+            else{
+               $NoDisponible[$i]=null; 
+            }         
+        }
+        print_r($_POST);
+
+        */
+
+        if($reserva){
+                if($NoDisponible){
+                    return new JsonResponse(array('data' =>$reserva , 'data2' =>$NoDisponible), 200);
+                }
+                else{
+                        return new JsonResponse(array('data' =>$reserva, 'data2' =>null), 200);
+                }
+        }
+        else{
+            if($NoDisponible){
+                    return new JsonResponse(array('data' =>null , 'data2' =>$NoDisponible), 200);
+                }
+                else{
+                        return new JsonResponse(array('data' =>null, 'data2' =>null), 200);
+                }
+        }
+
+    }
+
+
+    public function EquipamientoReservadoAction() 
+    {
+        $equipamiento=$this->get('request')->request->get('equipamiento');
+
+        $em = $this->getDoctrine()->getEntityManager();
+
+        $equipamiento=$em->getRepository('BackendBundle:Equipamiento')->findEquipamientoByName($equipamiento);   
+        $reserva= $em->getRepository('BackendBundle:Reserva')->findByEquipamiento($equipamiento);
+
+        if($reserva){
+            return new JsonResponse(array('data' =>$reserva), 200);
+        }
+        else{
+            return new JsonResponse(array('data' =>null), 200);
+        }
+    }
+
+
 }

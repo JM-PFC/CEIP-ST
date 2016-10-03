@@ -21,6 +21,16 @@
           href=$("#tabs ul li a[ref='"+ref+"']").attr("href");
           $(href).load($(this).attr("href"));
         }
+     },
+    close_tab: function(){
+
+        tab_open=tab_is_open($(this).attr("ref"));
+        if(tab_open==true)
+        {
+          ref=$(this).attr("ref");
+
+          href=$("#tabs ul li a[ref='"+ref+"']").next("span").trigger("click");
+        }
      }
   });
 })(jQuery)

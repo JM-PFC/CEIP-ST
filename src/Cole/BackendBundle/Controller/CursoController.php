@@ -299,7 +299,6 @@ class CursoController extends Controller
                     $grupo_3->setCurso($entity);
                     $grupo_3->setLetra("C"); 
                 }
-
                     $em->persist($grupo_3);
                 }
             }

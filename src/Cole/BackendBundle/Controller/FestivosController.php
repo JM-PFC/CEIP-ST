@@ -547,6 +547,83 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
     }
     
     
+    public function ComprobarDiaNoLectivoAction($dia,$mes,$anyo) 
+    {
+        // Se comprueba que no es festivo.
+        $em = $this->getDoctrine()->getManager();
+        $entities = $em->getRepository('BackendBundle:Festivos')->findFestivo($dia, $mes);
+        if(!empty($entities)){
+            return true;
+        }
+
+        // Se comprueba que siendo lunes y el domingo no sea festivo.
+        $fecha=$anyo."-".$mes."-".$dia;
+        $dw = date('w', strtotime($fecha));
+
+        if($dw==1){
+            $dia_anterior = date( 'Y-m-d', strtotime( $fecha.' -1 day' ) );
+            $fecha_ant=explode("-",$dia_anterior);
+            $DomingoFestivo= $em->getRepository('BackendBundle:Festivos')->findFestivo($fecha_ant[2], $fecha_ant[1]);
+            if(!empty($DomingoFestivo)){
+                return true;
+            }
+        }
+
+        // Se comprueba que no sea un día de vacaciones.
+        $dw = date('Y-m-d', strtotime($fecha));
+        // Se obtiene la fecha inicial y final del curso para usar luego el año correspondiente. 
+        $ini_curso=$em->getRepository('BackendBundle:Centro')->findInicioCurso();
+        $array_ini=explode("-",$ini_curso["inicioCurso"]->format('Y-m-d')); //Conversión de array a String
+        $fin_curso=$em->getRepository('BackendBundle:Centro')->findFinCurso();
+        $array_fin=explode("-",$fin_curso["finCurso"]->format('Y-m-d'));
+
+        // Se obtiene las fechas de vacaciones.
+        $ini_nav=$em->getRepository('BackendBundle:Festivos')->findFestivosPorDescripcion("Inicio Vacaciones de Navidad");
+        $fin_nav=$em->getRepository('BackendBundle:Festivos')->findFestivosPorDescripcion("Fin Vacaciones de Navidad");
+        $ini_ss=$em->getRepository('BackendBundle:Festivos')->findFestivosPorDescripcion("Inicio Vacaciones de Semana Santa");
+        $fin_ss=$em->getRepository('BackendBundle:Festivos')->findFestivosPorDescripcion("Fin Vacaciones de Semana Santa");
+        
+        // Se comrpueba si existe vacaciones de Navidad y si un día de esas vacaciones.
+        if(!empty($ini_nav) && !empty($fin_nav)) {
+            $Fecha_ini_nav = date('Y-m-d', strtotime($array_ini[0]."-".$ini_nav->getNumMes()."-".$ini_nav->getDia()));
+            $Fecha_fin_nav = date('Y-m-d', strtotime($array_fin[0]."-".$fin_nav->getNumMes()."-".$fin_nav->getDia()));
+
+            if (($dw >= $Fecha_ini_nav) && ($dw <= $Fecha_fin_nav)){
+                return true;
+            }
+        }
+         // Se comrpueba si existe vacaciones de Semana Santa y si un día de esas vacaciones.
+        if(!empty($ini_ss) && !empty($fin_ss)){
+
+            $Fecha_ini_ss = date('Y-m-d', strtotime($array_fin[0]."-".$ini_ss->getNumMes()."-".$ini_ss->getDia()));
+            $Fecha_fin_ss = date('Y-m-d', strtotime($array_fin[0]."-".$fin_ss->getNumMes()."-".$fin_ss->getDia()));
+
+            if (($dw >= $Fecha_ini_ss) && ($dw <= $Fecha_fin_ss)){
+                return true;
+            }
+        }
+        // En caso de que no exista ningún festivo se devolverá false para que se pueda guardar la reserva.
+        return false;
+    }
+
+    
+    public function ComprobarFechasCursoAction() 
+    {
+        $em = $this->getDoctrine()->getManager();
+
+        // Se obtiene la fecha inicial del curso para comprobar que está registrada. 
+        $ini_curso=$em->getRepository('BackendBundle:Centro')->findInicioCurso();
+
+        // Se obtiene la fecha inicial de las vacaciones para comprobar que están registrada. 
+        $ini_nav=$em->getRepository('BackendBundle:Festivos')->findFestivosPorDescripcion("Inicio Vacaciones de Navidad");
+        $ini_ss=$em->getRepository('BackendBundle:Festivos')->findFestivosPorDescripcion("Inicio Vacaciones de Semana Santa");
+        
+        return new JsonResponse(array(
+            'curso' =>  $ini_curso,
+            'navidad' =>  $ini_nav,
+            'semanasanta' =>  $ini_ss,
+            'success' => true), 200);
+    }
 
 
 }

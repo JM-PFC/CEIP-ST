@@ -1,0 +1,190 @@
+{% extends 'BackendBundle:Default:index.html.twig' %}
+
+{% block head %}{% endblock %}
+{% block stylesheets %}{% endblock %}
+
+{% block javascript %}
+
+  <script>
+
+  inicio_d={{ inicio.inicioCurso|date('d') }};
+  inicio_m= {{ inicio.inicioCurso|date('m') }};
+  inicio_a= {{ inicio.inicioCurso|date('Y') }};  
+  fin_d={{ fin.finCurso|date('d') }};
+  fin_m= {{ fin.finCurso|date('m') }};
+  fin_a= {{ fin.finCurso|date('Y') }};
+
+  $.datepicker.regional['es'] = {
+    closeText: 'Cerrar',
+    prevText: '<Ant',
+    nextText: 'Sig>',
+    currentText: 'Hoy',
+    monthNames: ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'],
+    monthNamesShort: ['Ene','Feb','Mar','Abr', 'May','Jun','Jul','Ago','Sep', 'Oct','Nov','Dic'],
+    dayNames: ['Domingo', 'Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado'],
+    dayNamesShort: ['Dom','Lun','Mar','Mié','Juv','Vie','Sáb'],
+    dayNamesMin: ['Do','Lu','Ma','Mi','Ju','Vi','Sá'],
+    weekHeader: 'Sm',
+    dateFormat: 'dd/mm/yy',
+    firstDay: 1,
+    isRTL: false,
+    showMonthAfterYear: false,
+    yearSuffix: ''
+  };
+  
+  $.datepicker.setDefaults($.datepicker.regional['es']);
+
+  if(new Date()<new Date(inicio_a, inicio_m-1, inicio_d)){
+    min=new Date(inicio_a, inicio_m-1, inicio_d);
+  }
+  else{
+    min=new Date();
+  }
+// beforeShowDay: $.datepicker.noWeekends (Para deshabilitar fines de semana)
+  $( "#reserva_{{ tipo }} #dia_reserva_{{ tipo }}" ).datepicker({ minDate: min, maxDate: new Date(fin_a, fin_m-1, fin_d),beforeShowDay: $.datepicker.noWeekends, defaultDate: null,
+    onChangeMonthYear:function () {
+      $("#reserva_{{ tipo }} #actualizar_calendario_lectivo").trigger("click");
+    },    
+    onSelect: function (date,inst) {
+
+      d=$("#reserva_{{ tipo }} #contenedor_reserva .ui-datepicker-calendar a[class*='ui-state-active']").text();
+      m=('0'+(parseInt($("#reserva_{{ tipo }} #contenedor_reserva .ui-datepicker-calendar a[class*='ui-state-active']").closest("td").attr("data-month"))+1)).slice(-2);
+      a=$("#reserva_{{ tipo }} #contenedor_reserva .ui-datepicker-calendar a[class*='ui-state-active']").closest("td").attr("data-year");
+      fecha=d+"/"+m+"/"+a;
+      // Se evita darle click al día seleccionado.
+      if(fecha!=date){
+        // Se desactiva el botón de guardar al cambiar de día.
+        $("#reserva_{{ tipo }} #reserva_save").prop("disabled",true);
+
+        // Se establece como falso para impedir el redibujado en la función interna de la libreria jquery-ui (if (inst.inline) {this._updateDatepicker(inst);...})
+        inst.inline = false;
+        // Se elimina los estilos de la selección existente.
+        $("#reserva_{{ tipo }} #contenedor_reserva .ui-datepicker-calendar .ui-datepicker-current-day").removeClass("ui-datepicker-current-day").children().removeClass("ui-state-active");
+        $("#reserva_{{ tipo }} #contenedor_reserva .ui-datepicker-calendar tbody a[class*='ui-state-active']").removeClass("ui-state-active");
+        // Se busca el enlace seleccionado y se le aplica los estilos.
+        $("#reserva_{{ tipo }} #contenedor_reserva .ui-datepicker-calendar tbody a").each(function(){
+          if ($(this).text() == inst.selectedDay) {
+            $(this).addClass("ui-state-active");
+            $(this).parent().addClass("ui-datepicker-current-day");
+          }
+        });
+        //Se simula el darle click a un día, guardando el día en un input y haciendo click para capturar el evento en general.js
+        dia=date.split("/");
+        $("#reserva_{{ tipo }} #dia_seleccionado").attr("value",date);
+        $("#reserva_{{ tipo }} #dia_seleccionado").trigger("click");
+      }
+    } 
+  });
+  $('#reserva_{{ tipo }} #contenedor_reserva a[class*="ui-state-disabled"]').hide();
+  $("#reserva_{{ tipo }} #actualizar_calendario_lectivo").trigger("click");
+  
+  // Se comprueba si estan registradas las fechas del curso.
+  $.ajax({
+    type: 'POST',
+    url: Routing.generate('comprobar_fechas_curso'),
+    dataType: 'json',
+    success: function(response) {
+      // Se muestra un aviso indicando si falta alguna fecha por registrar y se cierra laopción de reservas.
+      if(response.curso==null || response.navidad==null || response.semanasanta==null ){
+        texto="Para poder hacer una reserva debe completar el calendario del curso con las siguientes fechas:<br/><br/>";
+        if(response.curso==null){
+          texto+="<h4>- Fecha de inicio y fin del curso </h4> <br/>";
+        }
+        if(response.navidad==null){
+          texto+="<h4>- Vacaciones de Navidad </h4> <br/>";
+        }
+        if(response.semanasanta==null){
+          texto+="<h4>- Vacaciones de Semana Santa </h4> <br/>";
+        }
+        if("{{ tipo }}" == "instalaciones"){
+          titulo="No se pueden reservar las instalaciones";
+        }
+        else{
+          titulo="No se pueden reservar los equipamientos";
+        }
+
+        swal({
+          title: titulo,
+          text: texto,
+          type: 'warning',
+          showCancelButton: false,
+          confirmButtonColor: color,
+          closeOnConfirm: true,
+          html: true,
+          //timer:10000,
+          animation: false
+          }, 
+          function(){
+            swal.close();
+            div=$(".contenido_main").find("div[id^='tabs-'][style='display: block']");
+            $(" li[aria-controls='"+div.attr("id")+"'] span").trigger("click");
+          }
+        );
+      }
+    }
+  })
+</script> 
+
+{% endblock %}
+
+{% block body %}
+  <div id="reserva_{{ tipo }}" class="contenedor_principal_reserva_con_titulo">
+    <div class="parent_no_form">
+      <div class="child">
+        {% if  tipo  == "instalaciones" %}
+          <h2>Reserva de Instalaciones</h2>
+        {% else %}
+          <h2>Reserva de Equipaciones</h2>
+        {% endif %}
+        <div class="contenedor_principal_reserva">
+          <div class="tiple_column_no_form">
+            <span>Seleccione una instalación:</span>
+            <div class="parent_no_form">
+            <div class="child">
+              <div class="contenedor_reserva" id="contenedor_reserva_equipamientos">
+              {% for entity in entities %}
+                <button>{{ entity.nombre }}</button>
+              {% endfor %}
+              </div>
+            </div>
+            </div>
+          </div>
+          <div class="tiple_column_no_form">
+            <span>Seleccione una fecha:</span>
+            <div class="parent_no_form">
+            <div class="child">
+              <div class="contenedor_reserva" id="contenedor_reserva">
+                <div id="dia_reserva_{{ tipo }}" class="calendario_lectivos"></div>
+                <div id="div_leyenda" class="oculto"></div>
+                <input id="dia_seleccionado" class="oculto"></input>
+                <button id="actualizar_calendario_lectivo" class="oculto"></button>
+              </div>
+            </div>
+            </div>
+          </div>
+
+          <div class="four_column_no_form">
+            <span>Seleccione hora para la reserva:</span>
+            <div class="parent_no_form">
+            <div class="child">
+              <div class="contenedor_reserva" id="contenedor_reserva_horas">
+              {% for clase in clases %}
+                <button type="radio" disabled="disabled" clase="{{clase.horaClase}}" min="{{  clase.inicio|date('H:i')}}"><span>{{ clase.horaClase ~ " Hora " }}</span>{{  clase.inicio|date('H:i') ~ " - " ~ clase.fin|date('H:i') }}</button>
+              {% endfor %}
+              </div>
+            </div>
+            </div>
+          </div>
+          <div id="guardar_reserva">
+            <div>
+              <button id="reserva_save" disabled="disabled">Guardar</button>
+              {#<button id="reserva_rest" disabled="disabled">Borrar</button>#}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  </div>
+{% endblock %}
+

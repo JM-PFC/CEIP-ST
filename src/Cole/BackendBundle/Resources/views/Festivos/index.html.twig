@@ -6,6 +6,7 @@
 {% block javascript %}
 
   <script>  
+
   $("#festivos_dialog").dialog({
     bgiframe: true,
     autoOpen: false,
@@ -105,7 +106,7 @@
     showOn:function () {
       alert("ahora");
     },
-    onSelect: function (date) {
+    onSelect: function (date,inst) {
 
       fecha_separada=$(this).val().split('/'); 
       if(fecha_separada[0].substr(0, 1)==0){
@@ -116,8 +117,21 @@
       }
      
       //if($(this).find("a:contains('"+dia_selec+"')").hasClass("festivo") && $(this).find("a:contains('"+dia_selec+"')").attr("tipo")!="traslado"){ 
+      
+      // Se establece como falso para impedir el redibujado en la función interna de la libreria jquery-ui (if (inst.inline) {this._updateDatepicker(inst);...})
+      inst.inline = false;
+      // Se elimina los estilos de la selección existente.
+      $("#d_calendario .ui-datepicker-calendar .ui-datepicker-current-day").removeClass("ui-datepicker-current-day").children().removeClass("ui-state-active");
 
-      //Se comprueba buscando el elemento que contiene el dia seleccionado exacto con filter.
+      // Se busca el enlace seleccionado y se le aplica los estilos.
+      $("#d_calendario .ui-datepicker-calendar TBODY A").each(function(){
+        if ($(this).text() == inst.selectedDay) {
+          $(this).addClass("ui-state-active");
+          $(this).parent().addClass("ui-datepicker-current-day");
+        }
+      });
+
+      // Se comprueba buscando el elemento que contiene el dia seleccionado exacto con filter.
       if($(this).find("a").filter(function() {return $(this).text() === dia_selec;}).hasClass("festivo") && $(this).find("a").filter(function() {return $(this).text() === dia_selec;}).attr("tipo")!="traslado"){
         //console.log($(this).find("a:contains('"+dia_selec+"')").hasClass("festivo"));
         $.ajax({
@@ -128,17 +142,14 @@
           success: function(response) {
 
             $('#festivos_dialog').load(Routing.generate("festivos_edit", {id:response.data}), function(){
-          $('#festivos_dialog form').attr("tipo",$("#festivos_tipo").val());
-
+            $('#festivos_dialog form').attr("tipo",$("#festivos_tipo").val());
 
             $('#festivos_dia').val(fecha_separada[0]);
             $('#festivos_mes').val($("#calendario span[class='ui-datepicker-month']").text());
 
             }).dialog('open'); 
-
           }
         }) 
-
       }
       else{
         var tipo="";
@@ -149,12 +160,9 @@
           $('#festivos_mes').val($("#calendario span[class='ui-datepicker-month']").text());
           $('#festivos_numMes').val(fecha_separada[1]);
 
-          
-
           $('#dia_festivo select').val($('#festivos_dia').val());
           $('#mes_festivo select').val($('#festivos_numMes').val());
 
-        console.log($("#festivos_dia").val());  
         }).dialog('open'); 
       }
     }

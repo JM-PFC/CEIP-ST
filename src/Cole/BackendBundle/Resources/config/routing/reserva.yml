@@ -2,6 +2,26 @@ reserva:
     path:     /
     defaults: { _controller: "BackendBundle:Reserva:index" }
 
+reserva_instalaciones:
+    path:     /instalaciones
+    defaults: { _controller: "BackendBundle:Reserva:instalaciones" }
+
+reserva_equipamientos:
+    path:     /equipamientos
+    defaults: { _controller: "BackendBundle:Reserva:equipamientos" }
+
+comprobar_reserva:
+    path:     /comprobar_reservas
+    defaults: { _controller: "BackendBundle:Reserva:ComprobarReservas" }
+    options:
+        expose: true
+
+equipamiento_reservado:
+    path:     /equipamiento_reservado
+    defaults: { _controller: "BackendBundle:Reserva:EquipamientoReservado" }
+    options:
+        expose: true
+
 reserva_show:
     path:     /{id}/show
     defaults: { _controller: "BackendBundle:Reserva:show" }
@@ -14,7 +34,9 @@ reserva_create:
     path:     /create
     defaults: { _controller: "BackendBundle:Reserva:create" }
     requirements: { _method: post }
-
+    options:
+        expose: true
+        
 reserva_edit:
     path:     /{id}/edit
     defaults: { _controller: "BackendBundle:Reserva:edit" }

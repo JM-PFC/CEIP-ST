@@ -12,4 +12,32 @@ use Doctrine\ORM\EntityRepository;
  */
 class EquipamientoRepository extends EntityRepository
 {
+	public function findInstalaciones()
+	{
+		return $this->getEntityManager()->createQuery(
+		'SELECT e FROM BackendBundle:Equipamiento e WHERE e.tipo=:tipo')
+		->setParameters(array(
+			'tipo' => "Instalación"))
+		->getResult();
+	}
+
+
+	public function findEquipamientos()
+	{
+		return $this->getEntityManager()->createQuery(
+		'SELECT e FROM BackendBundle:Equipamiento e WHERE e.tipo=:tipo')
+		->setParameters(array(
+			'tipo' => "Equipamiento"))
+		->getResult();
+	}
+
+	public function findEquipamientoByName($nombre)
+	{
+		return $this->getEntityManager()->createQuery(
+		'SELECT e FROM BackendBundle:Equipamiento e WHERE e.nombre=:nombre')
+		->setParameters(array(
+			'nombre' => $nombre))
+		->setMaxResults(1)
+		->getOneOrNullResult();
+	}
 }

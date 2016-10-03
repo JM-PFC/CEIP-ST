@@ -11,6 +11,18 @@
         else{
             $("#contenedor_registro_horario #aviso_horario").addClass("oculto");
         }
+
+        $("#contenedor_registro_horario").find("input").each(function(i){
+            $(this).attr("tabindex",i+1);
+        });
+
+        $("#contenedor_registro_horario").find("input").each (function(){
+            $(this).attr("val_ini",$(this).val());
+        });
+
+
+
+
     </script>
 {% endblock %}
 
@@ -21,7 +33,7 @@
       <div class="simple_column_red">
         <div class="block_insert">
             <h2>Registro Horario Escolar</h2></br>
-            <p>-Se puede guardar todas las horas asignadas a la vez</p>
+            <p>-Seleccione lo datos para generar un nuevo horario:</p>
             </br>
             <div>
                 <span>Total de horas de clases:</span>
@@ -68,10 +80,7 @@
           
             <button id="button_rest" disabled="">Borrar opciones</button>
         </div>
-        <div id="aviso_error" class="oculto"> 
-            <span>*</span>
-            <span>Debe introducir una hora válida en horario escolar (08:00-18:00h.) y que esté comprendida entre la hora anterior y posterior.</span>
-        </div>
+
         </div> 
       </div>
       <div>
@@ -97,15 +106,13 @@
                     <p id="aviso_horario" class="oculto">No se ha establecido ningún horario escolar.<br> <br>Por favor, introduzca los datos necesarios para generar un nuevo horario y complete las horas de clase.
                     </p>    
                     {% for entity in entities %}
-                        {% if entity.horaClase  == 1 %}
                         <tr>
                             <td><span class="oculto">*</span></td>
                             <td>{{ entity.horaClase }}</td>
                             <td><input type="time" value="{{ entity.inicio|date('H:i') }}" step="1"> </input></td>
                             <td><input type="time"  value="{{ entity.fin|date('H:i') }}" step="1"> </input></td>
-                            <td><button>Guardar</button></td>
+                            <td><button disabled="disabled">Guardar</button></td>
                         </tr>
-                        {% endif %}
                     {% endfor %}
                     </table>
                 </div>
@@ -148,15 +155,20 @@
        </div>
 
         <div id="registro_horario_guardar">
-            <button id="button_horario_all">Guardar Todo</button>
-            <button id="button_horario_rest">Restablecer</button>
+            <button disabled="disabled" id="button_horario_all">Guardar Todo</button>
+            <button disabled="disabled" id="horario_rest">Restablecer</button>
         </div>
         <div id="nuevo_horario_guardar" class="oculto">
             <button id="button_horario_save">Guardar</button>
             <button id="button_horario_clear">Borrar</button>
             <button id="button_horario_rest">Restablecer</button>
-        </div>         
+        </div>       
      </div>
+     
+                <div id="aviso_error" class="oculto"> 
+            <span>*</span>
+            <span>Debe introducir una hora válida en horario escolar (08:00-18:00h.) y que esté comprendida entre la hora anterior y posterior.</span>
+        </div>  
     </div>
     </div>
   </div>

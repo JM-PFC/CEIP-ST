@@ -12,4 +12,25 @@ use Doctrine\ORM\EntityRepository;
  */
 class HorarioRepository extends EntityRepository
 {
+	public function findHoraClase($clase)
+	{
+		return $this->getEntityManager()->createQuery(
+		'SELECT h FROM BackendBundle:Horario h WHERE h.horaClase=:horaClase')
+		->setParameters(array(
+			'horaClase' => $clase))
+		->setMaxResults(1)
+		->getOneOrNullResult();
+	}
+
+	public function findClases()
+	{
+		return $this->getEntityManager()->createQuery(
+		'SELECT h FROM BackendBundle:Horario h WHERE h.horaClase not like :recreo 
+		and h.horaClase not like :comida')
+		->setParameters(array(
+			'recreo' => "RECREO",
+			'comida' => "COMIDA"))
+		->getResult();
+	}
+
 }

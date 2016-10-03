@@ -23,7 +23,7 @@ class Reserva
 
     /**
     * @ORM\ManyToOne(targetEntity="Profesor", inversedBy="reserva")
-    * @ORM\JoinColumn(name="profesor_id", referencedColumnName="id", nullable=false)
+    * @ORM\JoinColumn(name="profesor_id", referencedColumnName="id")
     */
     private $profesor;
 
@@ -36,14 +36,21 @@ class Reserva
     /**
      * @var \DateTime
      *
-     * @ORM\Column(name="fecha", type="datetime")
+     * @ORM\Column(name="fecha", type="date")
      */
     private $fecha;
 
     /**
+    * @ORM\ManyToOne(targetEntity="Horario", inversedBy="reserva")
+    * @ORM\JoinColumn(name="horario_id", referencedColumnName="id", nullable=false)
+    */
+    private $horario;
+
+
+    /**
      * @var string
      *
-     * @ORM\Column(name="propósito", type="string", length=300)
+     * @ORM\Column(name="propósito", type="string", length=300, nullable=true)
      */
     private $propósito;
 
@@ -148,5 +155,74 @@ class Reserva
     public function getEquipamiento()
     {
         return $this->equipamiento;
+    }
+
+    /**
+     * Set inicio
+     *
+     * @param \DateTime $inicio
+     * @return Reserva
+     */
+    public function setInicio($inicio)
+    {
+        $this->inicio = $inicio;
+
+        return $this;
+    }
+
+    /**
+     * Get inicio
+     *
+     * @return \DateTime 
+     */
+    public function getInicio()
+    {
+        return $this->inicio;
+    }
+
+    /**
+     * Set fin
+     *
+     * @param \DateTime $fin
+     * @return Reserva
+     */
+    public function setFin($fin)
+    {
+        $this->fin = $fin;
+
+        return $this;
+    }
+
+    /**
+     * Get fin
+     *
+     * @return \DateTime 
+     */
+    public function getFin()
+    {
+        return $this->fin;
+    }
+
+    /**
+     * Set horario
+     *
+     * @param \Cole\BackendBundle\Entity\Horario $horario
+     * @return Reserva
+     */
+    public function setHorario(\Cole\BackendBundle\Entity\Horario $horario)
+    {
+        $this->horario = $horario;
+
+        return $this;
+    }
+
+    /**
+     * Get horario
+     *
+     * @return \Cole\BackendBundle\Entity\Horario 
+     */
+    public function getHorario()
+    {
+        return $this->horario;
     }
 }

@@ -99,6 +99,11 @@ services:
         tags:
             - { name: twig.extension }
 
+    festivos:
+        class: Cole\BackendBundle\Controller\FestivosController
+        calls:
+            - [setContainer, ["@service_container"]]
+
 parameters:
     Dir_imagenes_prof: %kernel.root_dir%/../web/uploads/images/
     Dir_imagenes_alum: %kernel.root_dir%/../web/uploads/images/

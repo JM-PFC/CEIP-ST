@@ -12,7 +12,8 @@ $(document).ready(function () {
   $("input[id^='edit_año_profesional']").mask('00');
   //$("input[type='time']").mask('00:00', {placeholder: "__:__"});
 
-
+  //Se establece el color del botón de confirmación de las notificaciones para usar con swal().
+  color="#5A88B6";
   /////////////////////////////
   // Métodos para validación //
   /////////////////////////////
@@ -2072,7 +2073,12 @@ $(document).on("blur","input[id='edit_profesor_dni']",function() {
 
   // Se indica el select modificado.
   $(document).on('change',"#aula",function(event){
-    $(this).addClass("modified");
+    if(($(this).val()=="" && $(this).attr("value")=="") || $(this).val()==$(this).attr("value")){
+      $(this).removeClass("modified");
+    }
+    else{
+      $(this).addClass("modified");
+    }
   });
 
   // Se quita la marca del input modificado y se actualiza el aula.
@@ -2281,19 +2287,20 @@ $(document).on("blur","input[id='edit_profesor_dni']",function() {
   $(document).on('click',"#actualizar_calendario",function(event){
     event.preventDefault();
     // Retardo para ejecutarlo una vez cargado el datepicker.
-        $("#div_leyenda").addClass("oculto");      
+        $("#d_calendario #div_leyenda").addClass("oculto");      
 
     setTimeout(function(){ 
-      mes=$("#contenedor_calendar tbody td[data-handler='selectDay']").attr("data-month");
-      año=$("#contenedor_calendar tbody td[data-handler='selectDay']").attr("data-year");
+      mes=$("#d_calendario  #contenedor_calendar tbody td[data-handler='selectDay']").attr("data-month");
+      año=$("#d_calendario  #contenedor_calendar tbody td[data-handler='selectDay']").attr("data-year");
       mes++;
       if(mes!=10 && mes!=11 && mes!=12){
         mes='0'+mes;
       }
       //Se carga los festivos en la leyenda.
-      $("#div_leyenda").empty();
-      $("#div_leyenda").load(Routing.generate('festivos_por_mes', {id:mes}));
+      $("#d_calendario #div_leyenda").empty();
+      $("#d_calendario #div_leyenda").load(Routing.generate('festivos_por_mes', {id:mes}));
       $("#calendario td a").removeClass("festivo");
+      $("#calendario td a").removeClass("vacaciones");
 
       $.ajax({
         type: 'POST',
@@ -2302,7 +2309,7 @@ $(document).on("blur","input[id='edit_profesor_dni']",function() {
         dataType: 'json',
         success: function(response) {
           for (var key in response.data) { 
-            $(".ui-datepicker-calendar td[data-month='"+(mes-1)+"'] a:contains('"+response.data[key]["dia"]+"')").each(function(){  
+            $("#calendario .ui-datepicker-calendar td[data-month='"+(mes-1)+"'] a:contains('"+response.data[key]["dia"]+"')").each(function(){  
               var dato=response.data[key]["dia"];
               var comp= $(this).text();
               // Con :contains se obtiene los días del calendario que contiene en sus dígitos el dato dado.
@@ -2311,13 +2318,13 @@ $(document).on("blur","input[id='edit_profesor_dni']",function() {
                 if(String(comp).length=="1"){
                   $(this).addClass("festivo");
                   // Se comprueba que el día festivo es un domingo y que el lunes no hay ningún festivo añadido. 
-                  if($(this).closest("td").hasClass(" ui-datepicker-week-end ") &&  $(this).closest("tr").find("td:last a").text() == $(this).text() && !$("#div_leyenda h4[id='"+$(this).closest("tr").next("tr").find("td:nth-child(1) a").text()+"']").length){
+                  if($(this).closest("td").hasClass(" ui-datepicker-week-end ") &&  $(this).closest("tr").find("td:last a").text() == $(this).text() && !$("#d_calendario #div_leyenda h4[id='"+$(this).closest("tr").next("tr").find("td:nth-child(1) a").text()+"']").length){
                     // Mostramos el traspado del festivo al lunes.
                     $(this).closest("tr").next("tr").find("td:nth-child(1) a").addClass("festivo");
                     $(this).closest("tr").next("tr").find("td:nth-child(1) a").attr("tipo","traslado");
                     setTimeout(function(){
                       //Se muestra sólo un traslado del festivo (ya que hay dos elementos con el mismo día).
-                      $("#div_leyenda h4[id='"+dato+"']").each(function(){
+                      $("#d_calendario #div_leyenda h4[id='"+dato+"']").each(function(){
                         if($(this).next().text().indexOf(" Vacaciones ")<0){
                           $( "<h4 id='"+(dato+1)+"'>"+(dato+1)+"</h4><h4 id='h4_descripcion'>Traslado del Festivo del día "+dato+".</h4>" ).insertAfter( $(this).next());
                         }
@@ -2329,13 +2336,13 @@ $(document).on("blur","input[id='edit_profesor_dni']",function() {
               else{
                 $(this).addClass("festivo");
                 // Se comprueba que el día festivo es un domingo, que el lunes no hay ningún festivo añadido y que el festivo no coincida con el último día del mes. 
-                if($(this).closest("td").hasClass(" ui-datepicker-week-end ") &&  $(this).closest("tr").find("td:last a").text() == $(this).text() && !$("#div_leyenda h4[id='"+$(this).closest("tr").next("tr").find("td:nth-child(1) a").text()+"']").length && $("#calendario tbody tr:last td:last a").text()!=$(this).text() ){
+                if($(this).closest("td").hasClass(" ui-datepicker-week-end ") &&  $(this).closest("tr").find("td:last a").text() == $(this).text() && !$("#d_calendario #div_leyenda h4[id='"+$(this).closest("tr").next("tr").find("td:nth-child(1) a").text()+"']").length && $("#calendario tbody tr:last td:last a").text()!=$(this).text() ){
                   // Mostramos el traspado del festivo al lunes.
                   $(this).closest("tr").next("tr").find("td:nth-child(1) a").addClass("festivo");
                   $(this).closest("tr").next("tr").find("td:nth-child(1) a").attr("tipo","traslado");
                   setTimeout(function(){
                     //Se muestra sólo un traslado del festivo (ya que hay dos elementos con el mismo día).
-                    $("#div_leyenda h4[id='"+dato+"']").each(function(){
+                    $("#d_calendario #div_leyenda h4[id='"+dato+"']").each(function(){
                       if($(this).next().text().indexOf(" Vacaciones ")<0){
                         $( "<h4 id='"+(dato+1)+"'>"+(dato+1)+"</h4><h4 id='h4_descripcion'>Traslado del Festivo del día "+dato+".</h4>" ).insertAfter( $(this).next());
                       }
@@ -2347,50 +2354,59 @@ $(document).on("blur","input[id='edit_profesor_dni']",function() {
           }
           // Se comprueba de que existe un día de comienzo/fin de vacaciones.
           if(response.inicio_vacaciones && response.fin_vacaciones){
-            var descripcion_inicio=$("#div_leyenda h4[id='"+response.inicio_vacaciones["dia"]+"'").next().text().split(" ");
-            var descripcion_fin=$("#div_leyenda h4[id='"+response.fin_vacaciones["dia"]+"'").next().text().split(" ");
+            var descripcion_inicio=$("#d_calendario #div_leyenda h4[id='"+response.inicio_vacaciones["dia"]+"'").next().text().split(" ");
+            var descripcion_fin=$("#d_calendario #div_leyenda h4[id='"+response.fin_vacaciones["dia"]+"'").next().text().split(" ");
             // Se comprueba que existe ambos días de vacaciones en el mismo mes y que pertenecen al mismo tipo de vacaciones.
-            if(descripcion_inicio[3]==descripcion_inicio[3]){
+            if(descripcion_inicio[3]==descripcion_fin[3]){
               // Se retarda para modificar los días festivos dentro de las vacaciones.
               setTimeout(function(){
-                $(".ui-datepicker-calendar td[data-month='"+(mes-1)+"']").find("a").filter(function(){return $(this).text()==response.inicio_vacaciones["dia"];}).removeClass("festivo");
-                $(".ui-datepicker-calendar td[data-month='"+(mes-1)+"']").find("a").filter(function(){return $(this).text()==response.fin_vacaciones["dia"];}).removeClass("festivo");
+                $("#calendario .ui-datepicker-calendar td[data-month='"+(mes-1)+"']").find("a").filter(function(){return $(this).text()==response.inicio_vacaciones["dia"];}).removeClass("festivo");
+                $("#calendario .ui-datepicker-calendar td[data-month='"+(mes-1)+"']").find("a").filter(function(){return $(this).text()==response.fin_vacaciones["dia"];}).removeClass("festivo");
                 // Se comprueba si existe al inicio de vacaciones día siguiente con festivo de traslado para eliminarlo.
-                if($("#div_leyenda h4[id='"+(response.inicio_vacaciones["dia"]+1)+"'").next().text().indexOf("Traslado") >= 0){
-                    $("#div_leyenda h4[id='"+(response.inicio_vacaciones["dia"]+1)+"'").next().remove();
-                    $("#div_leyenda h4[id='"+(response.inicio_vacaciones["dia"]+1)+"'").remove();
-                    $(".ui-datepicker-calendar td[data-month='"+(mes-1)+"']").find("a").filter(function(){return $(this).text()==(response.inicio_vacaciones["dia"]+1);}).removeClass("festivo");                
+                if($("#d_calendario #div_leyenda h4[id='"+(response.inicio_vacaciones["dia"]+1)+"'").next().text().indexOf("Traslado") >= 0){
+                    $("#d_calendario #div_leyenda h4[id='"+(response.inicio_vacaciones["dia"]+1)+"'").next().remove();
+                    $("#d_calendario #div_leyenda h4[id='"+(response.inicio_vacaciones["dia"]+1)+"'").remove();
+                    $("#calendario .ui-datepicker-calendar td[data-month='"+(mes-1)+"']").find("a").filter(function(){return $(this).text()==(response.inicio_vacaciones["dia"]+1);}).removeClass("festivo");                
                 }
                 // Se añade la clase vacaciones a los días correspondientes.
                 for(var i = response.inicio_vacaciones["dia"]; i <= response.fin_vacaciones["dia"]; i++){
-                  $(".ui-datepicker-calendar td[data-month='"+(mes-1)+"']").find("a").filter(function(){return $(this).text()==i;}).addClass("vacaciones");
-                  $("#div_leyenda h4[id='"+i+"'").addClass("vacaciones");              
+                  $("#calendario .ui-datepicker-calendar td[data-month='"+(mes-1)+"']").find("a").filter(function(){return $(this).text()==i;}).addClass("vacaciones");
+                  //$("#d_calendario #div_leyenda h4[id='"+i+"'").addClass("vacaciones");              
                 }
+                $("#d_calendario #div_leyenda h4[id='"+response.inicio_vacaciones["dia"]+"'").addClass("vacaciones");              
+                $("#d_calendario #div_leyenda h4[id='"+response.fin_vacaciones["dia"]+"'").addClass("vacaciones");              
+
                 // Si se repite el día de inicio de vacaciones, se elimina la clase vacaciones en los días de la leyenda que no contiene la información de las vacaciones.
-                if($("#div_leyenda h4[id='"+response.inicio_vacaciones["dia"]+"']").length>1){
-                  $("#div_leyenda h4[id='"+response.inicio_vacaciones["dia"]+"']").each(function(){
+                if($("#d_calendario #div_leyenda h4[id='"+response.inicio_vacaciones["dia"]+"']").length>1){
+                  $("#d_calendario #div_leyenda h4[id='"+response.inicio_vacaciones["dia"]+"']").each(function(){
                     if($(this).next().text().indexOf(" Vacaciones ")<0){
                       $(this).removeClass("vacaciones");
                     }
                   });
                 }
                 // Si se repite el día de fin de vacaciones, se elimina la clase vacaciones en los días de la leyenda que no contiene la información de las vacaciones.
-                if($("#div_leyenda h4[id='"+response.fin_vacaciones["dia"]+"']").length>1){
-                  $("#div_leyenda h4[id='"+response.fin_vacaciones["dia"]+"']").each(function(){
+                if($("#d_calendario #div_leyenda h4[id='"+response.fin_vacaciones["dia"]+"']").length>1){
+                  $("#d_calendario #div_leyenda h4[id='"+response.fin_vacaciones["dia"]+"']").each(function(){
                     if($(this).next().text().indexOf(" Vacaciones ")<0){
                       $(this).removeClass("vacaciones");
                     }               
                     // Se elimina el día de final de vacaciones en la leyenda para unificarlo con el día de inicio.
-                    else if($(this).next().text().indexOf(" Vacaciones ")>=0){
-                      $(this).next().remove();
-                      $(this).remove();
-                    }
+                    //else if($(this).next().text().indexOf(" Vacaciones ")>=0){
+                     // $(this).next().remove();
+                     // $(this).remove();
+                   // }
                   });
+
                   // Se modifica el inicio de vacaciones en la leyenda para añadir el día de fin de vacaciones.
-                  $("#div_leyenda h4[class='vacaciones']").text(response.inicio_vacaciones["dia"]+"-"+response.fin_vacaciones["dia"]);
-                  $("#div_leyenda h4[class='vacaciones']").next().text($("#div_leyenda h4[id='"+response.inicio_vacaciones["dia"]+"'][class='vacaciones']").next().text().replace("Inicio ",""));
+                  //$("#d_calendario #div_leyenda h4[class='vacaciones']").text(response.inicio_vacaciones["dia"]+"-"+response.fin_vacaciones["dia"]);
+                  //$("#d_calendario #div_leyenda h4[class='vacaciones']").next().text($("#d_calendario #div_leyenda h4[id='"+response.inicio_vacaciones["dia"]+"'][class='vacaciones']").next().text().replace("Inicio ",""));
                 }
-              }, 50);
+            // Se modifica el inicio de vacaciones en la leyenda para añadir el día de fin de vacaciones.
+                  //$("#d_calendario #div_leyenda h4[id='"+response.inicio_vacaciones["dia"]+"']").text(response.inicio_vacaciones["dia"]+"-"+response.fin_vacaciones["dia"]);
+                  //$("#d_calendario #div_leyenda h4[id='"+response.inicio_vacaciones["dia"]+"']").next().text($("#d_calendario #div_leyenda h4[id='"+response.inicio_vacaciones["dia"]+"'][class='vacaciones']").next().text().replace("Inicio Vacaciones de ",""));
+                  //$("#d_calendario #div_leyenda h4[id='"+response.fin_vacaciones["dia"]+"']").next().remove();
+                  //$("#d_calendario #div_leyenda h4[id='"+response.fin_vacaciones["dia"]+"']").remove();
+              }, 20);
             }
           }
           else if(response.inicio_vacaciones){
@@ -2401,28 +2417,28 @@ $(document).on("blur","input[id='edit_profesor_dni']",function() {
             
             setTimeout(function(){
             // Si se repite el día de inicio de vacaciones, se asigna la clase vacaciones al día de inicio de las vacaciones.
-            if($("#div_leyenda h4[id='"+response.inicio_vacaciones["dia"]+"']").length>1){
-              $("#div_leyenda h4[id='"+response.inicio_vacaciones["dia"]+"']").each(function(){
+            if($("#d_calendario #div_leyenda h4[id='"+response.inicio_vacaciones["dia"]+"']").length>1){
+              $("#d_calendario #div_leyenda h4[id='"+response.inicio_vacaciones["dia"]+"']").each(function(){
                 if($(this).next().text().indexOf(" Vacaciones ")>0){
                   $(this).addClass("vacaciones")
                 }
               });
               // Se comprueba que el festivo está tras las vacaciones en la leyenda, en caso contrario se modifica.
-              if($("#div_leyenda h4[id='"+response.inicio_vacaciones["dia"]+"'][class='vacaciones']").closest("h4[id='"+response.inicio_vacaciones["dia"]+"']").text()==response.inicio_vacaciones["dia"]){
-                vacaciones=$("#div_leyenda h4[id='"+response.inicio_vacaciones["dia"]+"'][class='vacaciones']").next().text();
-                $("#div_leyenda h4[id='"+response.inicio_vacaciones["dia"]+"'][class='vacaciones']").next().remove();
-                $("#div_leyenda h4[id='"+response.inicio_vacaciones["dia"]+"'][class='vacaciones']").remove();
+              if($("#d_calendario #div_leyenda h4[id='"+response.inicio_vacaciones["dia"]+"'][class='vacaciones']").closest("h4[id='"+response.inicio_vacaciones["dia"]+"']").text()==response.inicio_vacaciones["dia"]){
+                vacaciones=$("#d_calendario #div_leyenda h4[id='"+response.inicio_vacaciones["dia"]+"'][class='vacaciones']").next().text();
+                $("#d_calendario #div_leyenda h4[id='"+response.inicio_vacaciones["dia"]+"'][class='vacaciones']").next().remove();
+                $("#d_calendario #div_leyenda h4[id='"+response.inicio_vacaciones["dia"]+"'][class='vacaciones']").remove();
 
-                $( "<h4 id='"+response.inicio_vacaciones["dia"]+"'class='vacaciones'>"+response.inicio_vacaciones["dia"]+"</h4><h4 id='h4_descripcion'>"+vacaciones+"</h4>" ).insertBefore( $("#div_leyenda h4[id='"+response.inicio_vacaciones["dia"]+"'][class!='vacaciones']")); 
+                $( "<h4 id='"+response.inicio_vacaciones["dia"]+"'class='vacaciones'>"+response.inicio_vacaciones["dia"]+"</h4><h4 id='h4_descripcion'>"+vacaciones+"</h4>" ).insertBefore( $("#d_calendario #div_leyenda h4[id='"+response.inicio_vacaciones["dia"]+"'][class!='vacaciones']")); 
               }
             }
             else{
-              $("#div_leyenda h4[id='"+response.inicio_vacaciones["dia"]+"']").addClass("vacaciones");
+              $("#d_calendario #div_leyenda h4[id='"+response.inicio_vacaciones["dia"]+"']").addClass("vacaciones");
             }
 
             // Se modifica los días desde inicio de vacaciones hasta final de mes puesto que sigue en el siguiente mes.
             for(var i = response.inicio_vacaciones["dia"]; i <= último_día; i++){
-              $(".ui-datepicker-calendar td[data-month='"+(mes-1)+"']").find("a").filter(function(){return $(this).text()==i;}).addClass("vacaciones");
+              $("#calendario .ui-datepicker-calendar td[data-month='"+(mes-1)+"']").find("a").filter(function(){return $(this).text()==i;}).addClass("vacaciones");
             }
 
             }, 50);
@@ -2432,28 +2448,28 @@ $(document).on("blur","input[id='edit_profesor_dni']",function() {
             setTimeout(function(){
 
             //Se añade la clase vacaciones, sólo a los elementos de ese día que contiene la información de las vacaciones.
-            if($("#div_leyenda h4[id='"+response.fin_vacaciones["dia"]+"']").length>1){
-              $("#div_leyenda h4[id='"+response.fin_vacaciones["dia"]+"']").each(function(){
+            if($("#d_calendario #div_leyenda h4[id='"+response.fin_vacaciones["dia"]+"']").length>1){
+              $("#d_calendario #div_leyenda h4[id='"+response.fin_vacaciones["dia"]+"']").each(function(){
                 if($(this).next().text().indexOf(" Vacaciones ")>0){
                   $(this).addClass("vacaciones");
                 }
               });
               // Se comprueba que el festivo está tras las vacaciones en la leyenda, en caso contrario se modifica.
-              if($("#div_leyenda h4[id='"+response.fin_vacaciones["dia"]+"'][class='vacaciones']").closest("h4[id='"+response.fin_vacaciones["dia"]+"']").text()==response.fin_vacaciones["dia"]){
+              if($("#d_calendario #div_leyenda h4[id='"+response.fin_vacaciones["dia"]+"'][class='vacaciones']").closest("h4[id='"+response.fin_vacaciones["dia"]+"']").text()==response.fin_vacaciones["dia"]){
                 vacaciones=$("#div_leyenda h4[id='"+response.fin_vacaciones["dia"]+"'][class='vacaciones']").next().text();
-                $("#div_leyenda h4[id='"+response.fin_vacaciones["dia"]+"'][class='vacaciones']").next().remove();
-                $("#div_leyenda h4[id='"+response.fin_vacaciones["dia"]+"'][class='vacaciones']").remove();
+                $("#d_calendario #div_leyenda h4[id='"+response.fin_vacaciones["dia"]+"'][class='vacaciones']").next().remove();
+                $("#d_calendario #div_leyenda h4[id='"+response.fin_vacaciones["dia"]+"'][class='vacaciones']").remove();
 
-                $( "<h4 id='"+response.fin_vacaciones["dia"]+"'class='vacaciones'>"+response.fin_vacaciones["dia"]+"</h4><h4 id='h4_descripcion'>"+vacaciones+"</h4>" ).insertBefore( $("#div_leyenda h4[id='"+response.fin_vacaciones["dia"]+"'][class!='vacaciones']")); 
+                $( "<h4 id='"+response.fin_vacaciones["dia"]+"'class='vacaciones'>"+response.fin_vacaciones["dia"]+"</h4><h4 id='h4_descripcion'>"+vacaciones+"</h4>" ).insertBefore( $("#d_calendario #div_leyenda h4[id='"+response.fin_vacaciones["dia"]+"'][class!='vacaciones']")); 
               }
             }
             else{
-              $("#div_leyenda h4[id='"+response.fin_vacaciones["dia"]+"']").addClass("vacaciones");
+              $("#d_calendario #div_leyenda h4[id='"+response.fin_vacaciones["dia"]+"']").addClass("vacaciones");
             }
 
             // Se modifica los días desde inicio del mes hasta final de vacaciones puesto que sigue en el mes anterior.
             for(var i = response.fin_vacaciones["dia"]; i >= 1; i--){
-              $(".ui-datepicker-calendar td[data-month='"+(mes-1)+"']").find("a").filter(function(){return $(this).text()==i;}).addClass("vacaciones");
+              $("#calendario .ui-datepicker-calendar td[data-month='"+(mes-1)+"']").find("a").filter(function(){return $(this).text()==i;}).addClass("vacaciones");
             }
 
             }, 50);
@@ -2490,7 +2506,7 @@ $(document).on("blur","input[id='edit_profesor_dni']",function() {
             {
               dia_1.addClass("festivo");
               setTimeout(function(){
-                $("#div_leyenda").prepend("<h4 id='"+dia_1.text()+"'>"+dia_1.text()+"</h4><h4 id='h4_descripcion'>Traslado del Festivo del día "+dia_ant+" de "+MES[$("#calendario tbody tr:first td:last").attr("data-month")-1]+" </h4>" );
+                $("#d_calendario #div_leyenda").prepend("<h4 id='"+dia_1.text()+"'>"+dia_1.text()+"</h4><h4 id='h4_descripcion'>Traslado del Festivo del día "+dia_ant+" de "+MES[$("#calendario tbody tr:first td:last").attr("data-month")-1]+" </h4>" );
               }, 20);
             }
           }
@@ -2498,9 +2514,9 @@ $(document).on("blur","input[id='edit_profesor_dni']",function() {
       }
       setTimeout(function(){
         // Se muestra la leyenda una vez actualizado el calendario. 
-        $("#div_leyenda").removeClass("oculto");
-      }, 200);        
-    }, 200);
+        $("#d_calendario #div_leyenda").removeClass("oculto");
+      }, 150);        
+    }, 150);
   });
 
   // Insertar festivos en calendario.
@@ -2824,7 +2840,6 @@ $(document).on("blur","input[id='edit_profesor_dni']",function() {
     if($(this).val()==" "){
       $(this).removeClass("modified");
       if($("#inicio_"+dato[1]).val()==" " && $("#fin_"+dato[1]).val()==" "){
-        alert("hola");
         $("#inicio_"+dato[1]).removeClass("invalid");
         $("#fin_"+dato[1]).removeClass("invalid");
       }
@@ -2886,8 +2901,10 @@ $(document).on("blur","input[id='edit_profesor_dni']",function() {
           data: {id:id, dia:dia, mes:mes, año:año},
           dataType: 'json',
           success: function(response) {
-            // Se actualiza la pestaña de periodo lectivo.
+            // Se actualiza la pestaña de periodo lectivo y reservas de equipamientos.
             $("#periodo_lectivo").update_tab();
+            $("#reservar_instalaciones").update_tab();
+            $("#reservar_equipamientos").update_tab();
           }
         })
       }
@@ -2900,6 +2917,8 @@ $(document).on("blur","input[id='edit_profesor_dni']",function() {
           success: function(response) {
             // Se actualiza la pestaña de periodo lectivo.
             $("#periodo_lectivo").update_tab();
+            $("#reservar_instalaciones").close_tab();
+            $("#reservar_equipamientos").close_tab();
           }
         })
       }
@@ -2954,8 +2973,12 @@ $(document).on("blur","input[id='edit_profesor_dni']",function() {
         data: {fecha_ini:fecha_ini.substring(0,9), fecha_fin:fecha_fin.substring(0,9)},
         dataType: 'json',
         success: function(response) {
-          alert(response.message);
+          alert("Se ha guardado la fecha de inicio y final del curso.");
+          // Se añade un gif para la espera de la carga del contenido actualizado.
+          $('#asignacion_festivos').html('<div class="ajaxload"><img src="/Symfony/web/bundles/backend/images/loading.gif"/></div>');
           // Se actualiza la pestaña de periodo lectivo.
+          $("#curso_dialog div[class='nuevo']").removeClass("nuevo");
+          $("#curso_dialog").dialog('close');
           $("#periodo_lectivo").update_tab();
         }
       })
@@ -3008,247 +3031,6 @@ $(document).on("blur","input[id='edit_profesor_dni']",function() {
     }  
   });
 
-
-  //////////////////////////////////
-  //        Instalaciones         //
-  //////////////////////////////////
-  $(document).on("focus","#instalación_nombre",function(event){
-    event.preventDefault();
-      $("#instalación_nombre").removeClass("invalid_placeholder");
-  });
-
-  $(document).on("blur","#instalación_nombre",function(event){
-    event.preventDefault();
-    if($(this).val()==""){
-      $(this).addClass("invalid_placeholder");
-    }
-    else{
-      $(this).removeClass("invalid_placeholder");
-    }
-  });
-
-  $(document).on("click","#instalación_new",function(event){
-    event.preventDefault();
-
-    if($("#instalación_nombre").val()==""){
-      $("#instalación_nombre").addClass("invalid_placeholder");
-    }
-    else{
-      $.ajax({
-        type: 'POST',
-        url: $("#instalación_nueva").attr('action'),
-        data:$("#instalación_nueva").serialize(), 
-        dataType: 'json',
-        success: function(response) {
-          // Se actualiza la pestaña de periodo lectivo.
-          $("#registrar_instalación").update_tab();
-        }
-      })
-    }
-  });
-
-  $(document).on("click","#registro_instalaciones td a",function(event){
-    $("#registro_instalaciones td a").closest("tr").removeClass("edit_equipamiento");
-    $(this).closest("tr").addClass("edit_equipamiento");
-    $("#datos_instalación").load($(this).attr("href"));
-    $("#cerrar_instalación_edit").removeClass("oculto");
-    $("#instalación_delete").closest("th").removeClass("oculto");
-    $("#instalación_edit").closest("th").removeClass("oculto");
-    $("#instalación_new").closest("th").addClass("oculto");
-    $("#instalación_nombre").removeClass("invalid_placeholder");
-    $("#instalación_nombre").val($(this).text());
-    setTimeout(function(){ 
-      $("#instalación_nombre").attr('placeholder','Inserte el nombre para actualizar la instalación');
-    },300);
-  });
-
-  $(document).on("click","#cerrar_instalación_edit",function(event){
-    $("#registro_instalaciones td a").closest("tr").removeClass("edit_equipamiento");
-    $("#datos_instalación").load(Routing.generate('equipamiento_new'));
-
-    $("#cerrar_instalación_edit").addClass("oculto");
-    $("#instalación_delete").closest("th").addClass("oculto");
-    $("#instalación_edit").closest("th").addClass("oculto");
-    $("#instalación_new").closest("th").removeClass("oculto");
-    $("#instalación_nombre").val("");
-    $("#instalación_nombre").removeClass("invalid_placeholder");
-    $("#instalación_nombre").attr('placeholder','Inserte el nombre para añadir nueva instalación');
-    $("#datos_instalación").removeClass("oculto");
-  });
-
-  $(document).on("click","#instalación_edit",function(event){
-    event.preventDefault();
-
-    if($("#instalación_nombre").val()==""){
-      $("#instalación_nombre").addClass("invalid_placeholder");
-    }
-    else{
-      $.ajax({
-        type: 'PUT',
-        url: $("#instalación_editar").attr('action'),
-        data:$("#instalación_editar").serialize(), 
-        success: function(response) {
-          // Se actualiza la pestaña de periodo lectivo.
-          $("#registrar_instalación").update_tab();
-        }
-      })
-    }
-  });
-
-  $(document).on("click","#instalación_delete",function(event){
-    event.preventDefault();
-    form= $(this).closest("th").prev().find("div[id='equipamiento_eliminar'] form");
-
-    var arr= form.attr('action').split('/');
-    if(confirm("Se va a eliminar la instalación del sistema.\n\n¿Estas seguro de eliminarla?\n\n")==true)
-    {
-      $.ajax({
-        type: 'DELETE',
-        url: Routing.generate("equipamiento_delete", {id:arr[5]}),
-        data: form.serialize(),
-        
-        success: function() {
-          // Se actualiza la pestaña de periodo lectivo.
-          $("#registrar_instalación").update_tab();
-        }
-      })
-    }
-      return false;
-  });
-
-  //////////////////////////////////
-  //        Equipamientos         //
-  //////////////////////////////////
-
-  $(document).on("focus","#equipamiento_nueva input",function(event){
-    event.preventDefault();
-      $(this).removeClass("invalid_placeholder");
-  });
-
-  $(document).on("blur","#registro_equipamientos .contenedor_registro_instalaciones form input",function(event){
-    event.preventDefault();
-    if($(this).val()==""){
-      $(this).addClass("invalid_placeholder");
-    }
-    else{
-      $(this).removeClass("invalid_placeholder");
-    }
-  });
-
-  $(document).on("change","#equipamiento_nueva input",function(event){
-    event.preventDefault();
-    if($(this).val()==""){
-      $(this).addClass("invalid_placeholder");
-    }
-    else{
-      $(this).removeClass("invalid_placeholder");
-    }
-  });
-
-
-  $(document).on("keydown","#equipamiento_unidades",function(event){
-    if(($("#equipamiento_unidades").val().length==2 && event.keyCode != 8 && event.keyCode != 46&& event.keyCode != 37 && event.keyCode != 39 ) || (  ($("#equipamiento_unidades").val().length==1 || $("#equipamiento_unidades").val().length==0) && !(event.keyCode>=96 && event.keyCode<=105) && !(event.keyCode>=48 && event.keyCode<=57) && event.keyCode != 8 && event.keyCode != 46 && event.keyCode != 37 && event.keyCode != 39)){
-      return false;
-    }
-  });
-
-  $(document).on("click","#equipamiento_new",function(event){
-    event.preventDefault();
-
-    if($("#equipamiento_nombre").val()=="" || $("#equipamiento_unidades").val()==""){
-      if($("#equipamiento_nombre").val()=="")
-        $("#equipamiento_nombre").addClass("invalid_placeholder");
-      if($("#equipamiento_unidades").val()=="")
-        $("#equipamiento_unidades").addClass("invalid_placeholder");
-    }
-    else{
-      $.ajax({
-        type: 'POST',
-        url: $("#equipamiento_nueva").attr('action'),
-        data:$("#equipamiento_nueva").serialize(), 
-        dataType: 'json',
-        success: function(response) {
-          // Se actualiza la pestaña de periodo lectivo.
-          $("#registrar_equipamiento").update_tab();
-        }
-      })
-    }
-  });
-
-$(document).on("click","#registro_equipamientos td a",function(event){
-    $("#registro_equipamientos td a").closest("tr").removeClass("edit_equipamiento");
-    $(this).closest("tr").addClass("edit_equipamiento");
-    $("#datos_equipamiento").load($(this).attr("href"));
-    $("#cerrar_equipamiento_edit").removeClass("oculto");
-    $("#equipamiento_delete").closest("th").removeClass("oculto");
-    $("#equipamiento_edit").closest("th").removeClass("oculto");
-    $("#equipamiento_new").closest("th").addClass("oculto");
-    $("#equipamiento_nombre").removeClass("invalid_placeholder");
-    $("#equipamiento_nombre").val($(this).text());
-    setTimeout(function(){ 
-      $("#equipamiento_nombre").attr('placeholder','Inserte el nombre para actualizar el equipamiento');
-    },300);
-  });
-
-  $(document).on("click","#cerrar_equipamiento_edit",function(event){
-    $("#registro_equipamientos td a").closest("tr").removeClass("edit_equipamiento");
-    $("#datos_equipamiento").load(Routing.generate('equipamiento_new'));
-
-    $("#cerrar_equipamiento_edit").addClass("oculto");
-    $("#equipamiento_delete").closest("th").addClass("oculto");
-    $("#equipamiento_edit").closest("th").addClass("oculto");
-    $("#equipamiento_new").closest("th").removeClass("oculto");
-    $("#equipamiento_nombre").val("");
-    $("#equipamiento_nombre").removeClass("invalid_placeholder");
-    $("#equipamiento_nombre").attr('placeholder','Inserte el nombre para añadir nuevo equipamiento');
-    $("#datos_equipamiento").removeClass("oculto");
-  });
-
-  $(document).on("click","#equipamiento_edit",function(event){
-    event.preventDefault();
-
-    if($("#equipamiento_nombre").val()=="" || $("#equipamiento_unidades").val()==""){
-      if($("#equipamiento_nombre").val()=="")
-        $("#equipamiento_nombre").addClass("invalid_placeholder");
-      if($("#equipamiento_unidades").val()=="")
-        $("#equipamiento_unidades").addClass("invalid_placeholder");
-    }
-    else{
-      $.ajax({
-        type: 'PUT',
-        url: $("#equipamiento_editar").attr('action'),
-        data:$("#equipamiento_editar").serialize(), 
-        success: function(response) {
-          // Se actualiza la pestaña de periodo lectivo.
-          $("#registrar_equipamiento").update_tab();
-        }
-      })
-    }
-  });
-
-  $(document).on("click","#equipamiento_delete",function(event){
-    event.preventDefault();
-    form= $(this).closest("th").prev().find("div[id='equipamiento_eliminar'] form");
-
-    var arr= form.attr('action').split('/');
-    if(confirm("Se va a eliminar el equipamiento del sistema.\n\n¿Estas seguro de eliminarlo?\n\n")==true)
-    {
-      $.ajax({
-        type: 'DELETE',
-        url: Routing.generate("equipamiento_delete", {id:arr[5]}),
-        data: form.serialize(),
-        
-        success: function() {
-          // Se actualiza la pestaña de periodo lectivo.
-          $("#registrar_equipamiento").update_tab();
-        }
-      })
-    }
-      return false;
-  });
-
-
-
   //////////////////////////////////
   //        Horario Clase         //
   //////////////////////////////////
@@ -3256,6 +3038,10 @@ $(document).on("click","#registro_equipamientos td a",function(event){
   $(document).on("click","#registro_horario #button_generate",function(event){
     // Se vacia el contenedor para el nuevo horario.
     $("#contenedor_nuevo_horario tbody").empty();
+
+    // Se oculta el aviso de error por si estaba mostrado.
+    $("#registro_horario #aviso_error").addClass("oculto");
+
     // Se añade las filas con cada hora de clase con los horarios en el nuevo contenedor.
     for (var i = 1; i <= $("#total_horas").val(); i++) {
       // Se añade el horario de recreo.
@@ -3324,6 +3110,7 @@ $(document).on("click","#registro_equipamientos td a",function(event){
     $("#nuevo_horario_guardar").removeClass("oculto");
     $("#registro_horario_guardar").addClass("oculto");
   });
+
   // Se ejecuta al soltar una tecla introducida en los input pares.
   $(document).on('keyup',"#contenedor_nuevo_horario input:odd",function(event){
     if($(this).val().trim().length==5){
@@ -3341,114 +3128,22 @@ $(document).on("click","#registro_equipamientos td a",function(event){
     }
   });
 
-  // Se ejecuta al pulsar una tecla en los input de horario escolar.
-  $(document).on('keyup',"#contenedor_nuevo_horario input",function(e){
-    // Se elimina el placeholder para que no aparezca al borrar el valor del input.
-    $(this).attr('placeholder','');
-    // Se ejecuta al introducir una hora completa en un input.Si se pulsa borrar se ignora.
-    if($(this).val().trim().length==5 && e.keyCode != 8){
-      $(this).attr("value",$(this).val());
-      tab=parseInt($(this).attr("tabindex"));
-      if($("#contenedor_nuevo_horario input[tabindex="+(tab+1)+"]").val()==""){
-        $("#contenedor_nuevo_horario input[tabindex="+(tab+1)+"]").focus();
-      }
-      // Se valida en línea la hora introducida.
-      val=$(this).val().split(':');
-      if((val[0]<08 || val[0]>19) || (val[1]<00 || val[1]>59)){
-        $(this).addClass("invalid");
-        $(this).closest("tr").find("td>span").removeClass("oculto");
-        $("#registro_horario #aviso_error").removeClass("oculto");
-      }
-      else{
-        $(this).removeClass("invalid");
-        $("#contenedor_nuevo_horario input").each (function(){
-          if($(this).hasClass("invalid")){
-            $(this).closest("tr").find("td>span").removeClass("oculto");
-            return false;
-          }
-          $(this).closest("tr").find("td>span").addClass("oculto");
-        });
-
-        $("#contenedor_nuevo_horario input").each (function(){
-          if($(this).hasClass("invalid")){
-            $("#registro_horario #aviso_error").removeClass("oculto");
-            return false;
-          }
-          $("#registro_horario #aviso_error").addClass("oculto");
-        });
-
-        $("#contenedor_nuevo_horario input").each (function(){
-          if($(this).val()=="" || $(this).hasClass("invalid")){
-            $("#button_horario_save").prop("disabled", true);  
-            return false;
-          }
-          $("#button_horario_save").prop("disabled", false);  
-        });
-      }
-      $("#contenedor_nuevo_horario input").each (function(){
-        if($(this).val()!=""){
-          $("#button_horario_clear").prop("disabled", false);  
-          return false;
-        }
-        $("#button_horario_clear").prop("disabled", true);
-      });
-
-      validateTime($(this));
-      if(!$(this).hasClass("invalid")){
-
-        tab_prev=parseInt($(this).attr("tabindex"))-1;
-        if($("#contenedor_nuevo_horario input[tabindex="+tab_prev+"]").val()!=""){
-          validateTime($("#contenedor_nuevo_horario input[tabindex="+tab_prev+"]"));
-        }
-
-        tab_next=parseInt($(this).attr("tabindex"))+1;
-        if($("#contenedor_nuevo_horario input[tabindex="+tab_next+"]").val()!=""){
-          validateTime($("#contenedor_nuevo_horario input[tabindex="+tab_next+"]"));
-        }
-      }
-    }
-    if($(this).val().trim().length==0){
-      $(this).removeClass("invalid");
-
-      $("#contenedor_nuevo_horario input").each (function(){
-        if($(this).hasClass("invalid")){
-          $(this).closest("tr").find("td>span").removeClass("oculto");
-          return false;
-        }
-        $(this).closest("tr").find("td>span").addClass("oculto");
-      });
-
-      $("#contenedor_nuevo_horario input").each (function(){
-        if($(this).hasClass("invalid")){
-          $("#registro_horario #aviso_error").removeClass("oculto");
-          return false;
-        }
-          $("#registro_horario #aviso_error").addClass("oculto");
-      });
-
-      $("#contenedor_nuevo_horario input").each (function(){
-        if($(this).val()!=""){
-          $("#button_horario_clear").prop("disabled", false);  
-          return false;
-        }
-        $("#button_horario_clear").prop("disabled", true);
-      });
-    }
-
-  });
   // Función para validar las horas del horario Escolar.
   function validateTime(tab) {
+    div_actual=$(tab).closest("div[id$='_horario']");
+
     // Se valida los input impares, excepto el primero.
     if($(tab).attr("tabindex")!=1 && $(tab).attr("tabindex")%2==1){
       h_act=$(tab).val().split(':');
 
       tab_prev=parseInt($(tab).attr("tabindex"))-1;
-      h_prev=$("#contenedor_nuevo_horario input[tabindex="+tab_prev+"]").val().split(':');
+      h_prev=$(div_actual).find("input[tabindex="+tab_prev+"]").val().split(':');
 
       tab_next=parseInt($(tab).attr("tabindex"))+1;
-      h_next=$("#contenedor_nuevo_horario input[tabindex="+tab_next+"]").val().split(':');
+      h_next=$(div_actual).find("input[tabindex="+tab_next+"]").val().split(':');
       
       if((h_act[0]<h_prev[0] && h_prev[0]!="")||(h_act[0]>h_next[0] && h_next[0]!="")||((h_act[0]==h_next[0]) && (h_act[1]>=h_next[1]) && h_next[1]!="") || ((h_act[0]==h_prev[0]) &&  (h_act[1]<h_prev[1]) && (h_prev[1]!=""))){
+        $(tab).removeClass("modified");
         $(tab).addClass("invalid");
       }
       else{
@@ -3459,9 +3154,10 @@ $(document).on("click","#registro_equipamientos td a",function(event){
     else if($(tab).attr("tabindex")%2==1){
       h_act=$(tab).val().split(':');
       tab_next=parseInt($(tab).attr("tabindex"))+1;
-      h_next=$("#contenedor_nuevo_horario input[tabindex="+tab_next+"]").val().split(':');
+      h_next=$(div_actual).find("input[tabindex="+tab_next+"]").val().split(':');
         
       if((h_act[0]>h_next[0] && h_next[0]!="" )||((h_act[0]==h_next[0]) && (h_act[1]>=h_next[1])&& h_next[1]!="") ){
+        $(tab).removeClass("modified");
         $(tab).addClass("invalid");
       }
       else{
@@ -3469,16 +3165,17 @@ $(document).on("click","#registro_equipamientos td a",function(event){
       }
     }
     // Se valida los input pares, excepto el último.
-    if($(tab).attr("tabindex")!=$("#contenedor_nuevo_horario input:last ").attr("tabindex") && $(tab).attr("tabindex")%2==0){
+    else if($(tab).attr("tabindex")!=$(div_actual).find("input:last ").attr("tabindex") && $(tab).attr("tabindex")%2==0){
       h_act=$(tab).val().split(':');
 
       tab_prev=parseInt($(tab).attr("tabindex"))-1;
-      h_prev=$("#contenedor_nuevo_horario input[tabindex="+tab_prev+"]").val().split(':');
+      h_prev=$(div_actual).find("input[tabindex="+tab_prev+"]").val().split(':');
 
       tab_next=parseInt($(tab).attr("tabindex"))+1;
-      h_next=$("#contenedor_nuevo_horario input[tabindex="+tab_next+"]").val().split(':');
-        //||(h_act[0]>h_next[0] && h_next[0]!="")||((h_act[0]==h_next[0]) && (h_act[1]>h_next[1]) && h_next[1]!="")
-      if((h_act[0]<h_prev[0] && h_prev[0]!="") ||((h_act[0]==h_prev[0]) && (h_act[1]<=h_prev[1]) && h_prev[1]!="")){
+      h_next=$(div_actual).find("input[tabindex="+tab_next+"]").val().split(':');
+
+      if((h_act[0]<h_prev[0] && h_prev[0]!="")||((h_act[0]==h_prev[0]) && (h_act[1]<=h_prev[1]) && h_prev[1]!="")||(h_act[0]>h_next[0] && h_next[0]!="")||((h_act[0]==h_next[0]) && (h_act[1]>h_next[1]) && h_next[1]!="")){
+        $(tab).removeClass("modified");
         $(tab).addClass("invalid");
       }
       else{
@@ -3490,43 +3187,203 @@ $(document).on("click","#registro_equipamientos td a",function(event){
       h_act=$(tab).val().split(':');
 
       tab_prev=parseInt($(tab).attr("tabindex"))-1;
-      h_prev=$("#contenedor_nuevo_horario input[tabindex="+tab_prev+"]").val().split(':');
+      h_prev=$(div_actual).find("input[tabindex="+tab_prev+"]").val().split(':');
 
       if((h_act[0]<h_prev[0] && h_prev[0]!="") ||((h_act[0]==h_prev[0]) && (h_act[1]<=h_prev[1]) && h_prev[1]!="")){
+        $(tab).removeClass("modified");
         $(tab).addClass("invalid");
       }
       else{
         $(tab).removeClass("invalid");
       }
     }
-    // Se comprueba todos los valores de los input para añadir o quitar los avisos de error.
-    $("#contenedor_nuevo_horario input").each (function(){
-      if($(this).hasClass("invalid")){
-        $(this).closest("tr").find("td>span").removeClass("oculto");
-        return false;
-      }
+
+    // Se comprueba todos los valores de los input para añadir o quitar los avisos.
+    $(div_actual).find("input").each (function(){
       $(this).closest("tr").find("td>span").addClass("oculto");
     });
+    $(div_actual).find("input[class='invalid']").each (function(){
+      $(this).closest("tr").find("td>span").removeClass("oculto");
+    });
 
-    $("#contenedor_nuevo_horario input").each (function(){
+    $(div_actual).find("input").each (function(){
       if($(this).hasClass("invalid")){
         $("#registro_horario #aviso_error").removeClass("oculto");
         return false;
       }
       $("#registro_horario #aviso_error").addClass("oculto");
     });
+    
+    if($(div_actual).attr("id").indexOf("nuevo")>0){
+      $(div_actual).find("input").each (function(){                         
+        if($(this).val()=="" || $(this).hasClass("invalid")){
+          $("#button_horario_save").prop("disabled", true);  
+          return false;
+        }
+        $("#button_horario_save").prop("disabled", false);  
+      });
+    }
+    else{
+      // Se indica las modificaciones de los input.
+      $(div_actual).find("input").each (function(){
+        if($(this).val()!=$(this).attr("val_ini") && $(this).val()!="" &&  !$(this).hasClass("invalid")){     
+            $(this).addClass("modified");
+        }
+        else{
+            $(this).removeClass("modified");
+          }
+      });
 
-    $("#contenedor_nuevo_horario input").each (function(){
-      if($(this).val()=="" || $(this).hasClass("invalid")){
-        $("#button_horario_save").prop("disabled", true);  
-        return false;
-      }
-      $("#button_horario_save").prop("disabled", false);  
-    });
+      // Se habilta el botón "Guardar", sólo para las filas que tengan hora de inicio y fin correctas
+      $(div_actual).find("input").each (function(){
+        $(this).closest("tr").find("button").prop("disabled", true);
+      });
+
+      $(div_actual).find("input[class='modified']").each (function(){
+        $(this).closest("tr").find("button").prop("disabled", false);
+      });
+
+      $(div_actual).find("input[class='invalid'],input[value='']").each (function(){
+        $(this).closest("tr").find("button").prop("disabled", true);
+      });
+
+      // Se habilta el botón "Restablecer", cuando se modifica cualquier valor original.
+      $(div_actual).find("input").each (function(){
+        if($(this).hasClass("modified") || $(this).hasClass("invalid")){     
+          $("#horario_rest").prop("disabled", false);  
+            return false;
+        }
+          $("#horario_rest").prop("disabled", true);  
+      });
+      // Se habilta el botón "Guardar Todo", cuando existe algun valor modificado y ningún error (Con 'keyup' se comprueba que tampoco exista input vacío).
+      $(div_actual).find("input").each (function(){                         
+        if($(this).hasClass("invalid") || !$(div_actual).find("input").hasClass("modified") ){
+          $("#button_horario_all").prop("disabled", true);  
+          return false;
+        }
+        $("#button_horario_all").prop("disabled", false);  
+      });
+    }
   }
 
-  // Se obliga a introducir valores entre 08:00 -18:00 para no validar.
-  $(document).on('keydown',"#contenedor_nuevo_horario input",function(e){
+  // Se ejecuta al pulsar una tecla en los input de horario escolar.
+  $(document).on('keyup',"#registro_horario div[id$='_horario'] input",function(e){
+    div_actual=$(this).closest("div[id$='_horario']");
+    // Se elimina el placeholder para que no aparezca al borrar el valor del input.
+    //$(this).attr('placeholder','');
+    // Se ejecuta al introducir una hora completa en un input.Si se pulsa borrar se ignora.
+    if($(this).val().trim().length==5 && e.keyCode != 8){
+      $(this).attr("value",$(this).val());
+      tab=parseInt($(this).attr("tabindex"));
+      if($(div_actual).find("input[tabindex="+(tab+1)+"]").val()==""){
+        $(div_actual).find("input[tabindex="+(tab+1)+"]").focus();
+      }
+      // Se valida en línea la hora introducida.
+      val=$(this).val().split(':');
+      if((val[0]<08 || val[0]>18) || (val[1]<00 || val[1]>59)){
+        $(this).removeClass("modified");
+        $(this).addClass("invalid");
+        $(this).closest("tr").find("td>span").removeClass("oculto");
+        $("#registro_horario #aviso_error").removeClass("oculto");
+      }
+      else{
+        $(this).removeClass("invalid");
+
+        /*$(div_actual).find("input").each (function(){
+          if($(this).hasClass("invalid")){
+            $(this).closest("tr").find("td>span").removeClass("oculto");
+            return false;
+          }
+          $(this).closest("tr").find("td>span").addClass("oculto");
+        });
+
+        $(div_actual).find("input").each (function(){
+          if($(this).hasClass("invalid")){
+            $("#registro_horario #aviso_error").removeClass("oculto");
+            return false;
+          }
+          $("#registro_horario #aviso_error").addClass("oculto");
+        });*/
+      }
+
+      // Se valida la hora introducida si se ha introducido un valor válido.
+      if(!$(this).hasClass("invalid")){
+
+        validateTime($(this));
+        // Se valida el elemento anterior y posterior para quitar posibles avisos.
+       if(!$(this).hasClass("invalid")){
+        tab_prev=parseInt($(this).attr("tabindex"))-1;
+        if($(div_actual).find("input[tabindex="+tab_prev+"]").val()!="" && $(this).attr("tabindex")>1){
+          validateTime($(div_actual).find("input[tabindex="+tab_prev+"]"));
+        }
+
+        tab_next=parseInt($(this).attr("tabindex"))+1;
+        if($(div_actual).find("input[tabindex="+tab_next+"]").val()!=""  && $(this).attr("tabindex")<$(div_actual).find("input:last").attr("tabindex")){
+          validateTime($(div_actual).find("input[tabindex="+tab_next+"]"));
+        }
+       }
+      }
+      // Se comprueba que el div actual sea el de nuevo horario(#contenedor_nuevo_horario).
+      if(div_actual.attr("id").indexOf("nuevo")>0){
+        //Se habilita el botón "Borrar" al introducir una hora.
+        $("#button_horario_clear").prop("disabled", false);  
+      }
+      // Se validan los demás input con clase "invalid" por si son válidos con los cambios de hora realizados.
+      $(div_actual).find("input[class='invalid']").each (function(){
+        validateTime($(this));
+      });
+    }
+
+    if($(this).val().trim().length==0){
+      $(this).removeClass("invalid");
+      $(this).attr("value","");
+      // Se elimina el aviso de error * si no hay ningún valor con inválido en la misma fila.
+      $(this).closest("tr").find("input").each (function(){
+        if($(this).hasClass("invalid")){
+          $(this).closest("tr").find("td>span").removeClass("oculto");
+          return false;
+        }
+        $(this).closest("tr").find("td>span").addClass("oculto");
+      });
+
+      $(div_actual).find("input").each (function(){
+        if($(this).hasClass("invalid")){
+          $("#registro_horario #aviso_error").removeClass("oculto");
+          return false;
+        }
+          $("#registro_horario #aviso_error").addClass("oculto");
+      });
+      
+      // Se habilita/deshabilita opciones en registro de nuevo horario.
+      if(div_actual.attr("id").indexOf("nuevo")>0){
+        $(div_actual).find("input").each(function(){              
+          if($(this).val()!=""){
+            $("#button_horario_clear").prop("disabled", false);  
+            return false;
+          }
+          $("#button_horario_clear").prop("disabled", true);
+        });
+      }
+      // Se habilita/deshabilita opciones en editar horario.
+      else{
+        $("#horario_rest").prop("disabled", false);  
+      }
+    }
+
+    if($(this).val().length<5){
+      if(div_actual.attr("id").indexOf("nuevo")>0){
+        $("#button_horario_save").prop("disabled", true);
+      }
+      else{
+        $("#button_horario_all").prop("disabled", true);
+        $(this).closest("tr").find("button").prop("disabled", true);
+        $(this).removeClass("modified");
+      }  
+    }
+  });
+
+  // Se obliga a introducir valores entre 08:00-18:00 para no validar.
+  $(document).on('keydown',"#registro_horario div[id$='_horario'] input",function(e){
     // Se asigna una máscara según el primer valor introducido.
     if($(this).val().trim().length>0 && $(this).val().trim().length<5 && e.keyCode != 8){
       if($(this).val().substr(0, 1)==0){
@@ -3539,44 +3396,28 @@ $(document).on("click","#registro_equipamientos td a",function(event){
       else{
         $(this).unmask();
         // Máscara para las horas que empiezan por "1"(10:00-18:00).
-        $(this).mask('AB:CB',
-        {'translation': {A: {pattern: /[0-1]/}, B: {pattern: /[0-9]/}, C: {pattern: /[0-5]/}},
+        $(this).mask('AB:CD',
+        {'translation': {A: {pattern: /[0-1]/}, B: {pattern: /[0-8]/}, C: {pattern: /[0-5]/}, D: {pattern: /[0-9]/}},
         placeholder: "__:__"});
       }
     }
   });
 
-  // Se oculta el placeholder en el input seleccionado.
-  $(document).on("focus","#contenedor_nuevo_horario input",function(event){
+  // Se oculta el placeholder en el input seleccionado.    
+  $(document).on("focus","#registro_horario div[id$='_horario'] input",function(event){
     $(this).data('placeholder',$(this).attr('placeholder')).attr('placeholder','');
   });
 
   // Se deja el valor en blanco en caso de no introducir una hora completa.
-  $(document).on("blur","#contenedor_nuevo_horario input",function(event){
-    $(this).attr('placeholder',$(this).data('placeholder'));
+  $(document).on("blur","#registro_horario div[id$='_horario'] input",function(event){
+    //$(this).attr('placeholder',$(this).data('placeholder'));
+    $(this).data('placeholder',$(this).attr('placeholder')).attr('placeholder','__:__');
+
     if($(this).val().length<5){
       $(this).val("");
+      $(this).removeClass("modified");
+      $(this).attr("value","");
     }
-    if($(this).val()==""){
-      $("#contenedor_nuevo_horario input").each (function(){
-        if($(this).val()==""){
-          $("#button_horario_save").prop("disabled", true);  
-          return false;
-        }
-        $("#button_horario_save").prop("disabled", false);  
-      });
-    }
-
-    /*if($(this).val()==""){
-      $(this).addClass("invalid");
-      $("#registro_horario #aviso_error").removeClass("oculto");
-      $(this).closest("tr").find("td>span").removeClass("oculto");
-      $("#button_horario_save").prop("disabled", true);  
-    }
-    else{
-      $("#button_horario_clear").prop("disabled", false);
-    }
-    */
   });
 
   // Se añade ":" tras introducir dos cifras.
@@ -3606,6 +3447,7 @@ $(document).on("click","#registro_equipamientos td a",function(event){
       $("#button_generate").prop("disabled", false);  
     });
   });
+  
   $(document).on("click","#button_horario_clear",function(event){
     // Se restablece el valor inicial de cada input, se elimina la clase invalid en todos los input y se oculta los * en cada fila.
     $("#contenedor_nuevo_horario input").each (function(){
@@ -3636,13 +3478,27 @@ $(document).on("click","#registro_equipamientos td a",function(event){
     //Se muestra el panel de guardar inicial.
     $("#nuevo_horario_guardar").addClass("oculto");
     $("#registro_horario_guardar").removeClass("oculto"); 
-    //Se restablece el valor inicial de cada input.
-    $("#contenedor_registro_horario input").each (function(){
-      $(this).val($(this).attr("value"));
+
+    //Se restablece el valor inicial de cada input, simulando el pulsar restablecer horario actual.
+    $("#horario_rest").trigger("click");
+  });
+
+  $(document).on("click","#horario_rest",function(event){
+    $("#contenedor_registro_horario #lista_color").load(Routing.generate('horario_escolar_actual'),function(data){
+      $("#contenedor_registro_horario").find("input").each (function(){
+        $(this).attr("val_ini",$(this).val());
+      });
+      $("#contenedor_registro_horario").find("input").each(function(i){
+        $(this).attr("tabindex",i+1);
+      });
     });
 
+    $("#horario_rest").prop("disabled", true);
+    $("#button_horario_all").prop("disabled", true);
+    $("#contenedor_registro_horario tbody button").each (function(){
+      $(this).prop("disabled", true);
+    });  
     $("#registro_horario #aviso_error").addClass("oculto");
-
   });
 
   $(document).on('change',"#registro_horario input[id='si']",function(event){
@@ -3668,27 +3524,812 @@ $(document).on("click","#registro_equipamientos td a",function(event){
     }
   });
 
+  $(document).on("click","#contenedor_registro_horario tbody button",function(event){
+    $(this).closest("tr").find("input").removeClass("modified");
+    clase=$(this).closest("tr").children('td').slice(1, 2).html();
+    hora_ini=$(this).closest("tr").children('td').slice(2, 3).find("input").attr("value");
+    hora_fin=$(this).closest("tr").children('td').slice(3, 4).find("input").attr("value");
+    ini=hora_ini+":00";
+    fin=hora_fin+":00";
+    // Se actualiza las horas modificadas en la entidad Horario.
+    $.ajax({
+      type: 'POST',
+      url: Routing.generate('editar_horario'),
+      data: {clase:clase,ini:ini,fin:fin},        
+    })
+  });
+
+  // Se quita la marca de los input modificados y se guarda los valores en la base de datos.
+  $(document).on('click',"#registro_horario_guardar #button_horario_all",function(event){
+
+    $("#contenedor_registro_horario input[class='modified']").each(function(){  
+      $(this).closest("tr").find("button").trigger("click");
+    });
+  });
+
+  $(document).on('click',"#button_horario_save",function(event){
+    cadena="";
+    cont=0;
+
+    $("#contenedor_nuevo_horario tbody tr").each(function(){ 
+      cadena+= $(this).find("td:nth-child(2)").text() + "-";
+      cadena+= $(this).find("td:nth-child(3) input").val()+ ":00-";
+      cadena+= $(this).find("td:nth-child(4) input").val()+ ":00-";
+      cont++;
+    });
+    cadena=cadena.slice(0,-1);
+    $.ajax({
+      type: 'POST',
+      url: Routing.generate('nuevo_horario'),
+      data: {cadena:cadena,cont:cont},
+      success: function(response) {
+          // Se muestra el calendario actual actualizado.
+          $("#aviso_horario").addClass("oculto");
+          $("#registro_horario_guardar #horario_rest").prop("disabled",false);
+          $("#registro_horario_guardar #horario_rest").trigger("click");
+          $("#nuevo_horario_guardar #button_horario_rest").trigger("click");    
+        }
+    })
+  });
+
+  //////////////////////////////////
+  //        Instalaciones         //
+  //////////////////////////////////
+
+  $(document).on("focus","#instalación_nombre",function(event){
+    event.preventDefault();
+      $("#instalación_nombre").removeClass("invalid_placeholder");
+  });
+
+  $(document).on("blur","#instalación_nombre",function(event){
+    event.preventDefault();
+    if($(this).val()==""){
+      $(this).addClass("invalid_placeholder");
+    }
+    else{
+      $(this).removeClass("invalid_placeholder");
+    }
+  });
+
+  $(document).on("click","#instalación_new",function(event){
+    event.preventDefault();
+
+    if($("#instalación_nombre").val()==""){
+      $("#instalación_nombre").addClass("invalid_placeholder");
+    }
+    else{
+      $.ajax({
+        type: 'POST',
+        url: $("#instalación_nueva").attr('action'),
+        data:$("#instalación_nueva").serialize(), 
+        dataType: 'json',
+        success: function(response) {
+          // Se actualiza las pestañas de instalaciones.
+          $("#registrar_instalaciones").update_tab();
+          $("#reservar_instalaciones").update_tab();
+        }
+      })
+    }
+  });
+
+  $(document).on("click","#registro_instalaciones td a",function(event){
+    $("#instalación_nombre").attr('placeholder',' ');
+
+    $("#registro_instalaciones td a").closest("tr").removeClass("edit_equipamiento");
+    $(this).closest("tr").addClass("edit_equipamiento");
+    $("#datos_instalación").load($(this).attr("href"), function(){
+      $("#instalación_nombre").attr('placeholder','Inserte el nombre para actualizar la instalación');
+    });
+    $("#cerrar_instalación_edit").removeClass("oculto");
+    $("#instalación_delete").closest("th").removeClass("oculto");
+    $("#instalación_edit").closest("th").removeClass("oculto");
+    $("#instalación_new").closest("th").addClass("oculto");
+    $("#instalación_nombre").removeClass("invalid_placeholder");
+    $("#instalación_nombre").val($(this).text());
+  });
+
+  $(document).on("click","#cerrar_instalación_edit",function(event){
+    $("#registro_instalaciones td a").closest("tr").removeClass("edit_equipamiento");
+    $("#datos_instalación").load(Routing.generate('equipamiento_new'));
+
+    $("#cerrar_instalación_edit").addClass("oculto");
+    $("#instalación_delete").closest("th").addClass("oculto");
+    $("#instalación_edit").closest("th").addClass("oculto");
+    $("#instalación_new").closest("th").removeClass("oculto");
+    $("#instalación_nombre").val("");
+    $("#instalación_nombre").removeClass("invalid_placeholder");
+    $("#instalación_nombre").attr('placeholder','Inserte el nombre para añadir nueva instalación');
+    $("#datos_instalación").removeClass("oculto");
+  });
+
+  $(document).on("click","#instalación_edit",function(event){
+    event.preventDefault();
+
+    if($("#instalación_nombre").val()==""){
+      $("#instalación_nombre").addClass("invalid_placeholder");
+    }
+    else{
+      $.ajax({
+        type: 'PUT',
+        url: $("#instalación_editar").attr('action'),
+        data:$("#instalación_editar").serialize(), 
+        success: function(response) {
+          // Se actualiza las pestañas de instalaciones.
+          $("#registrar_instalaciones").update_tab();
+          $("#reservar_instalaciones").update_tab();
+          $("#consultar_instalación").update_tab();
+        }
+      })
+    }
+  });
+
+  $(document).on("click","#instalación_delete",function(event){
+    event.preventDefault();
+    form= $(this).closest("th").prev().find("div[id='equipamiento_eliminar'] form");
+
+    var arr= form.attr('action').split('/');
+    equipamiento=$("#instalación_nombre").val();
+
+    swal({
+    title: "Se va a eliminar la instalación del sistema.",
+    text: "¿Estas seguro de continuar? No podrás deshacer este paso...",
+    type: "warning",
+    showCancelButton: true,
+    cancelButtonText: "Cancelar",
+    confirmButtonColor: color,
+    confirmButtonText: "¡Adelante!",
+    closeOnConfirm: false },
+
+    function(){
+
+      $.ajax({
+        type: 'POST',
+        url: Routing.generate('equipamiento_reservado'),
+        data: {equipamiento:equipamiento},
+        dataType: 'json',
+        async:false,
+  
+        success: function(response) {
+          // Si no hay alumnos asignados al curso se puede eliminar.
+          if(response.data!=null){ 
+            swal({
+            title: "La eliminación no se ha efectuado",
+            text: 'La instalación <span>"'+equipamiento+'"</span> no se puede eliminar porque está reservada. Debe eliminar las reservas de la instalación para poder eliminarla.',
+            type: "error",
+            confirmButtonColor: color,
+            html: true
+             });
+          }
+          else{
+            $.ajax({
+              type: 'DELETE',
+              url: Routing.generate("equipamiento_delete", {id:arr[5]}),
+              data: form.serialize(),
+        
+              success: function() {
+                // Se actualiza las pestañas de equipamientos.
+                $("#registrar_instalaciones").update_tab();
+                $("#reservar_instalaciones").update_tab();
+              }
+            })
+            swal.close();
+          }
+        }
+      })
+    });
+    /*
+    if(confirm("Se va a eliminar la instalación del sistema.\n\n¿Estas seguro de eliminarla?\n\n")==true)
+    {
+      $.ajax({
+        type: 'POST',
+        url: Routing.generate('equipamiento_reservado'),
+        data: {equipamiento:equipamiento},
+        dataType: 'json',
+        async:false,
+  
+        success: function(response) {
+          // Si no hay alumnos asignados al curso se puede eliminar.
+          if(response.data!=null){ 
+            alert('La instalación: "'+equipamiento+'" no se puede eliminar porque está reservada. Debe eliminar las reservas de la instalación para poder eliminarla.');
+          /* 
+            tr.find("select").addClass("modified");
+            tr.find("select").addClass("error_guardar");
+            tr.find("select").removeClass("modified");
+            $("#registro_Ngrupos #aviso_error").removeClass("oculto");
+            tr.find("span").removeClass("oculto");
+            //alert(response.data);
+            tr.find("select").val(num_grupos_ant);
+          }
+          else{
+            $.ajax({
+              type: 'DELETE',
+              url: Routing.generate("equipamiento_delete", {id:arr[5]}),
+              data: form.serialize(),
+        
+              success: function() {
+                // Se actualiza las pestañas de equipamientos.
+                $("#registrar_instalaciones").update_tab();
+                $("#reservar_instalaciones").update_tab();
+              }
+            })
+          }
+        }
+      })
+    }*/
+      return false;
+  });
 
 
+  //////////////////////////////////
+  //        Equipamientos         //
+  //////////////////////////////////
 
 
+  $(document).on("focus","#equipamiento_nueva input",function(event){
+    event.preventDefault();
+      $(this).removeClass("invalid_placeholder");
+  });
+
+  $(document).on("blur","#registro_equipamientos .contenedor_registro_instalaciones form input",function(event){
+    event.preventDefault();
+    if($(this).val()==""){
+      $(this).addClass("invalid_placeholder");
+    }
+    else{
+      $(this).removeClass("invalid_placeholder");
+    }
+  });
+
+  $(document).on("change","#equipamiento_nueva input",function(event){
+    event.preventDefault();
+    if($(this).val()==""){
+      $(this).addClass("invalid_placeholder");
+    }
+    else{
+      $(this).removeClass("invalid_placeholder");
+    }
+  });
 
 
+  $(document).on("keydown","#equipamiento_unidades",function(event){
+    if(($("#equipamiento_unidades").val().length==2 && event.keyCode != 8 && event.keyCode != 46&& event.keyCode != 37 && event.keyCode != 39 ) || (  ($("#equipamiento_unidades").val().length==1 || $("#equipamiento_unidades").val().length==0) && !(event.keyCode>=96 && event.keyCode<=105) && !(event.keyCode>=48 && event.keyCode<=57) && event.keyCode != 8 && event.keyCode != 46 && event.keyCode != 37 && event.keyCode != 39)){
+      return false;
+    }
+  });
+
+  $(document).on("click","#equipamiento_new",function(event){
+    event.preventDefault();
+
+    if($("#equipamiento_nombre").val()=="" || $("#equipamiento_unidades").val()==""){
+      if($("#equipamiento_nombre").val()=="")
+        $("#equipamiento_nombre").addClass("invalid_placeholder");
+      if($("#equipamiento_unidades").val()=="")
+        $("#equipamiento_unidades").addClass("invalid_placeholder");
+    }
+    else{
+      $.ajax({
+        type: 'POST',
+        url: $("#equipamiento_nueva").attr('action'),
+        data:$("#equipamiento_nueva").serialize(), 
+        dataType: 'json',
+        success: function(response) {
+          // Se actualiza las pestañas de equipamientos.
+          $("#registrar_equipamientos").update_tab();
+          $("#reservar_equipamientos").update_tab();
+        }
+      })
+    }
+  });
+
+$(document).on("click","#registro_equipamientos td a",function(event){
+    $("#equipamiento_nombre").attr('placeholder',' ');
+
+    $("#registro_equipamientos td a").closest("tr").removeClass("edit_equipamiento");
+    $(this).closest("tr").addClass("edit_equipamiento");
+    $("#datos_equipamiento").load($(this).attr("href"), function(){
+      $("#equipamiento_nombre").attr('placeholder','Inserte el nombre para actualizar el equipamiento');
+    });
+    $("#cerrar_equipamiento_edit").removeClass("oculto");
+    $("#equipamiento_delete").closest("th").removeClass("oculto");
+    $("#equipamiento_edit").closest("th").removeClass("oculto");
+    $("#equipamiento_new").closest("th").addClass("oculto");
+    $("#equipamiento_nombre").removeClass("invalid_placeholder");
+
+  });
+
+  $(document).on("click","#cerrar_equipamiento_edit",function(event){
+    $("#registro_equipamientos td a").closest("tr").removeClass("edit_equipamiento");
+    $("#datos_equipamiento").load(Routing.generate('equipamiento_new'));
+
+    $("#cerrar_equipamiento_edit").addClass("oculto");
+    $("#equipamiento_delete").closest("th").addClass("oculto");
+    $("#equipamiento_edit").closest("th").addClass("oculto");
+    $("#equipamiento_new").closest("th").removeClass("oculto");
+    $("#equipamiento_nombre").val("");
+    $("#equipamiento_nombre").removeClass("invalid_placeholder");
+    $("#equipamiento_nombre").attr('placeholder','Inserte el nombre para añadir nuevo equipamiento');
+    $("#datos_equipamiento").removeClass("oculto");
+    setTimeout(function(){ 
+      $("#equipamiento_tipo").val('Equipamiento');
+    },100);
+  });
+
+  $(document).on("click","#equipamiento_edit",function(event){
+    event.preventDefault();
+
+    if($("#equipamiento_nombre").val()=="" || $("#equipamiento_unidades").val()==""){
+      if($("#equipamiento_nombre").val()=="")
+        $("#equipamiento_nombre").addClass("invalid_placeholder");
+      if($("#equipamiento_unidades").val()=="")
+        $("#equipamiento_unidades").addClass("invalid_placeholder");
+    }
+    else{
+      $.ajax({
+        type: 'PUT',
+        url: $("#equipamiento_editar").attr('action'),
+        data:$("#equipamiento_editar").serialize(), 
+        success: function(response) {
+          // Se actualiza las pestañas de equipamientos.
+          $("#registrar_equipamientos").update_tab();
+          $("#reservar_equipamientos").update_tab();
+          $("#consultar_equipamientos").update_tab();
+        }
+      })
+    }
+  });
+
+  $(document).on("click","#equipamiento_delete",function(event){
+    event.preventDefault();
+    form= $(this).closest("th").prev().find("div[id='equipamiento_eliminar'] form");
+
+    var arr= form.attr('action').split('/');
+    equipamiento=$("#equipamiento_nombre").val();
+
+    swal({
+    title: "Se va a eliminar el equipamiento del sistema.",
+    text: "¿Estas seguro de continuar? No podrás deshacer este paso...",
+    type: "warning",
+    showCancelButton: true,
+    cancelButtonText: "Cancelar",
+    confirmButtonColor: color,
+    confirmButtonText: "¡Adelante!",
+    closeOnConfirm: false },
+
+    function(){
+
+      $.ajax({
+        type: 'POST',
+        url: Routing.generate('equipamiento_reservado'),
+        data: {equipamiento:equipamiento},
+        dataType: 'json',
+        async:false,
+  
+        success: function(response) {
+          // Si no hay alumnos asignados al curso se puede eliminar.
+          if(response.data!=null){ 
+            swal({
+            title: "La eliminación no se ha efectuado",
+            text: 'El equipamiento <span>"'+equipamiento+'"</span> no se puede eliminar porque está reservado. Debe eliminar las reservas del equipamiento para poder eliminarlo.',
+            type: "error",
+            confirmButtonColor: color,
+            html: true
+             });
+          }
+          else{
+            $.ajax({
+              type: 'DELETE',
+              url: Routing.generate("equipamiento_delete", {id:arr[5]}),
+              data: form.serialize(),
+        
+              success: function() {
+                // Se actualiza las pestañas de equipamientos.
+                $("#registrar_equipamientos").update_tab();
+                $("#reservar_equipamientos").update_tab();
+              }
+            })
+            swal.close();
+          }
+        }
+      })
+    });
+    return false;
+  });
+
+  ///////////////////////////////////////////
+  //  Reserva Instalaciones/Equipamientos  //
+  ////////////////////////////////// ////////
+
+  // Se deshabilita los días no lectivos en el calendario de reservas. 
+  $(document).on('click',"#actualizar_calendario_lectivo",function(event){
+    contenedor=$(this).closest("div[id^='reserva_']");
+
+    event.preventDefault();
+    // Retardo para ejecutarlo una vez cargado el datepicker.
+    contenedor.find("#contenedor_reserva #div_leyenda").addClass("oculto"); 
+    // Se elimina los estilos del día actual en el calendario.     
+    setTimeout(function() {
+      contenedor.find('a.ui-state-highlight').removeClass('ui-state-active');
+      contenedor.find('a.ui-state-highlight').removeClass('ui-state-hover');
+      contenedor.find('a.ui-state-highlight').removeClass('ui-state-highlight');
+    }, 1);
+
+    setTimeout(function(){ 
+      mes=contenedor.find("#contenedor_reserva tbody td[data-handler='selectDay']").attr("data-month");
+      año=contenedor.find("#contenedor_reserva tbody td[data-handler='selectDay']").attr("data-year");
+      mes++;
+      if(mes!=10 && mes!=11 && mes!=12){
+        mes='0'+mes;
+      }
+      //Se carga los festivos en la leyenda.
+      contenedor.find("#contenedor_reserva #div_leyenda").empty();
+      contenedor.find("#contenedor_reserva #div_leyenda").load(Routing.generate('festivos_por_mes', {id:mes}));
+      contenedor.find("#contenedor_reserva td a").removeClass("festivo");
+      //Se eliminan la clases en los enlaces para que inicialmente esten todos habilitados y luego se deshabiliten los festivos correspondientes.
+      contenedor.find("#contenedor_reserva td:not([class*='ui-datepicker-week-end'],[class=' ui-datepicker-unselectable ui-state-disabled '])").attr("class","");
+      $.ajax({
+        type: 'POST',
+        url: Routing.generate('dias_festivos'),
+        data: {mes:mes},
+        dataType: 'json',
+        success: function(response) {
+          
+        setTimeout(function(){
+          for (var key in response.data) { 
+            // Se añade un enlace en los días festivos deshabilitados del fin de semana, para que luego se encuentre como elemento "a".
+            contenedor.find("#contenedor_reserva .ui-datepicker-calendar td[class=' ui-datepicker-week-end ui-datepicker-unselectable ui-state-disabled '] span").filter(function(){return $(this).text()==response.data[key]["dia"];}).each(function(){  
+              $( "<a class='ui-state-default' href='javascript:void(0);'>"+response.data[key]["dia"]+"</a>" ).insertAfter( $(this));
+              $(this).closest("td").attr("data-month",(mes-1));
+              $(this).remove();
+            });
+
+            contenedor.find("#contenedor_reserva .ui-datepicker-calendar td[data-month='"+(mes-1)+"'] a:contains('"+response.data[key]["dia"]+"')").each(function(){  
+              var dato=response.data[key]["dia"];
+              var comp= $(this).text();
+              // Con :contains se obtiene los días del calendario que contiene en sus dígitos el dato dado.
+              // Si el dato obtenido tiene un sólo dígito, se excluye los días de dos dígitos del calendario que contiene ese dato.
+              if(String(dato).length=="1"){
+                if(String(comp).length=="1"){
+                  $(this).closest("td").addClass("ui-datepicker-unselectable ui-state-disabled");
+                  // Se comprueba que el día festivo es un domingo y que el lunes no hay ningún festivo añadido. 
+                  if($(this).closest("td").hasClass("ui-datepicker-week-end") &&  $(this).closest("tr").find("td:last a").text() == $(this).text() && !contenedor.find("#contenedor_reserva #div_leyenda h4[id='"+$(this).closest("tr").next("tr").find("td:nth-child(1) a").text()+"']").length){
+                    // Mostramos el traspado del festivo al lunes.
+                    $(this).closest("tr").next("tr").find("td:nth-child(1) a").closest("td").addClass("ui-datepicker-unselectable ui-state-disabled");
+                    $(this).closest("tr").next("tr").find("td:nth-child(1) a").attr("tipo","traslado");
+
+                      //Se muestra sólo un traslado del festivo (ya que hay dos elementos con el mismo día).
+                      contenedor.find("#contenedor_reserva #div_leyenda h4[id='"+dato+"']").each(function(){
+                        if($(this).next().text().indexOf(" Vacaciones ")<0){
+                          $( "<h4 id='"+(dato+1)+"'>"+(dato+1)+"</h4><h4 id='h4_descripcion'>Traslado del Festivo del día "+dato+".</h4>" ).insertAfter( $(this).next());
+                        }
+                      });
+                    $(this).closest("tr").next("tr").find("td:nth-child(1) a").attr("title",contenedor.find("#contenedor_reserva #div_leyenda h4[id="+ $(this).closest("tr").next("tr").find("td:nth-child(1) a").text()+"]").next("h4").text());
+                  }
+                }
+              }
+              else{
+                $(this).closest("td").addClass("ui-datepicker-unselectable ui-state-disabled");
+                // Se comprueba que el día festivo es un domingo, que el lunes no hay ningún festivo añadido y que el festivo no coincida con el último día del mes. 
+                if($(this).closest("td").hasClass("ui-datepicker-week-end") &&  $(this).closest("tr").find("td:last a").text() == $(this).text() && !contenedor.find("#contenedor_reserva #div_leyenda h4[id='"+$(this).closest("tr").next("tr").find("td:nth-child(1) a").text()+"']").length && contenedor.find("#contenedor_reserva tbody tr:last td:last a").text()!=$(this).text() ){
+                  // Mostramos el traspado del festivo al lunes.
+                  $(this).closest("tr").next("tr").find("td:nth-child(1) a").closest("td").addClass("ui-datepicker-unselectable ui-state-disabled");
+                  $(this).closest("tr").next("tr").find("td:nth-child(1) a").attr("tipo","traslado");
+
+                  //setTimeout(function(){
+                    //Se muestra sólo un traslado del festivo (ya que hay dos elementos con el mismo día).
+                    $("#contenedor_reserva #div_leyenda h4[id='"+dato+"']").each(function(){
+                      if($(this).next().text().indexOf(" Vacaciones ")<0){
+                        $( "<h4 id='"+(dato+1)+"'>"+(dato+1)+"</h4><h4 id='h4_descripcion'>Traslado del Festivo del día "+dato+".</h4>" ).insertAfter( $(this).next());
+                      }
+                    });
+                  $(this).closest("tr").next("tr").find("td:nth-child(1) a").attr("title",contenedor.find("#contenedor_reserva #div_leyenda h4[id="+ $(this).closest("tr").next("tr").find("td:nth-child(1) a").text()+"]").next("h4").text());
+                  //}, 50);
+                }
+              }
+            });
+          }
+        }, 50);
+          // Se comprueba de que existe un día de comienzo/fin de vacaciones.
+          if(response.inicio_vacaciones && response.fin_vacaciones){
+            var descripcion_inicio=contenedor.find("#contenedor_reserva #div_leyenda h4[id='"+response.inicio_vacaciones["dia"]+"']").next().text().split(" ");
+            var descripcion_fin=contenedor.find("#contenedor_reserva #div_leyenda h4[id='"+response.fin_vacaciones["dia"]+"']").next().text().split(" ");
+            // Se comprueba que existe ambos días de vacaciones en el mismo mes y que pertenecen al mismo tipo de vacaciones.
+            if(descripcion_inicio[3]==descripcion_fin[3]){
+              // Se retarda para modificar los días festivos dentro de las vacaciones.
+              setTimeout(function(){
+                contenedor.find("#contenedor_reserva .ui-datepicker-calendar td[data-month='"+(mes-1)+"'] a").filter(function(){return $(this).text()==response.inicio_vacaciones["dia"];}).removeClass("festivo");
+                contenedor.find("#contenedor_reserva .ui-datepicker-calendar td[data-month='"+(mes-1)+"'] a").filter(function(){return $(this).text()==response.fin_vacaciones["dia"];}).removeClass("festivo");
+                // Se comprueba si existe al inicio de vacaciones día siguiente con festivo de traslado para eliminarlo.
+                if(contenedor.find("#contenedor_reserva #div_leyenda h4[id='"+(response.inicio_vacaciones["dia"]+1)+"']").next().text().indexOf("Traslado") >= 0){
+                    contenedor.find("#contenedor_reserva #div_leyenda h4[id='"+(response.inicio_vacaciones["dia"]+1)+"']").next().remove();
+                    contenedor.find("#contenedor_reserva #div_leyenda h4[id='"+(response.inicio_vacaciones["dia"]+1)+"']").remove();
+                    contenedor.find("#contenedor_reserva .ui-datepicker-calendar td[data-month='"+(mes-1)+"'] a").filter(function(){return $(this).text()==(response.inicio_vacaciones["dia"]+1);}).removeClass("festivo");                
+                }
+                // Se añade la clase vacaciones a los días correspondientes.
+                for(var i = response.inicio_vacaciones["dia"]; i <= response.fin_vacaciones["dia"]; i++){
+                  contenedor.find("#contenedor_reserva .ui-datepicker-calendar td[data-month='"+(mes-1)+"'] a").filter(function(){return $(this).text()==i;}).closest("td").addClass("ui-datepicker-unselectable ui-state-disabled");;
+                  contenedor.find("#contenedor_reserva #div_leyenda h4[id='"+i+"']").addClass("vacaciones"); 
+                  contenedor.find("#contenedor_reserva .ui-datepicker-calendar td[data-month='"+(mes-1)+"'][class='ui-datepicker-unselectable ui-state-disabled'] a").filter(function(){return $(this).text()==i;}).attr("title",contenedor.find("#contenedor_reserva #div_leyenda h4[class='vacaciones']").next().text().replace("Inicio ",""));
+                }
+                // Si se repite el día de inicio de vacaciones, se elimina la clase vacaciones en los días de la leyenda que no contiene la información de las vacaciones.
+                if(contenedor.find("#contenedor_reserva #div_leyenda h4[id='"+response.inicio_vacaciones["dia"]+"']").length>1){
+                  contenedor.find("#contenedor_reserva #div_leyenda h4[id='"+response.inicio_vacaciones["dia"]+"']").each(function(){
+                    if($(this).next().text().indexOf(" Vacaciones ")<0){
+                      $(this).removeClass("vacaciones");
+                    }
+                  });
+                }
+                // Si se repite el día de fin de vacaciones, se elimina la clase vacaciones en los días de la leyenda que no contiene la información de las vacaciones.
+                if(contenedor.find("#contenedor_reserva #div_leyenda h4[id='"+response.fin_vacaciones["dia"]+"']").length>1){
+                  contenedor.find("#contenedor_reserva #div_leyenda h4[id='"+response.fin_vacaciones["dia"]+"']").each(function(){
+                    if($(this).next().text().indexOf(" Vacaciones ")<0){
+                      $(this).removeClass("vacaciones");
+                    }               
+                    // Se elimina el día de final de vacaciones en la leyenda para unificarlo con el día de inicio.
+                    else if($(this).next().text().indexOf(" Vacaciones ")>=0){
+                      $(this).next().remove();
+                      $(this).remove();
+                    }
+                  });
+                  // Se modifica el inicio de vacaciones en la leyenda para añadir el día de fin de vacaciones.
+                  contenedor.find("#contenedor_reserva #div_leyenda h4[class='vacaciones']").text(response.inicio_vacaciones["dia"]+"-"+response.fin_vacaciones["dia"]);
+                  contenedor.find("#contenedor_reserva #div_leyenda h4[class='vacaciones']").next().text(contenedor.find("#contenedor_reserva #div_leyenda h4[id='"+response.inicio_vacaciones["dia"]+"'][class='vacaciones']").next().text().replace("Inicio ",""));
+                }
+              }, 20);
+            }
+          }
+          else if(response.inicio_vacaciones){
+            var date = new Date(año,mes,1);
+            var fecha_ultimoDia = new Date(date.getFullYear(), date.getMonth() , 0).toString().split(" ");
+            último_día=fecha_ultimoDia[2];
+            
+            setTimeout(function(){
+            // Si se repite el día de inicio de vacaciones, se asigna la clase vacaciones al día de inicio de las vacaciones.
+            if(contenedor.find("#contenedor_reserva #div_leyenda h4[id='"+response.inicio_vacaciones["dia"]+"']").length>1){
+              contenedor.find("#contenedor_reserva #div_leyenda h4[id='"+response.inicio_vacaciones["dia"]+"']").each(function(){
+                if($(this).next().text().indexOf(" Vacaciones ")>0){
+                  $(this).addClass("vacaciones");   
+                }
+              });
+              // Se comprueba que el festivo está tras las vacaciones en la leyenda, en caso contrario se modifica.
+              if(contenedor.find("#contenedor_reserva #div_leyenda h4[id='"+response.inicio_vacaciones["dia"]+"'][class='vacaciones']").closest("h4[id='"+response.inicio_vacaciones["dia"]+"']").text()==response.inicio_vacaciones["dia"]){
+                vacaciones=contenedor.find("#contenedor_reserva #div_leyenda h4[id='"+response.inicio_vacaciones["dia"]+"'][class='vacaciones']").next().text();
+                contenedor.find("#contenedor_reserva #div_leyenda h4[id='"+response.inicio_vacaciones["dia"]+"'][class='vacaciones']").next().remove();
+                contenedor.find("#contenedor_reserva #div_leyenda h4[id='"+response.inicio_vacaciones["dia"]+"'][class='vacaciones']").remove();
+
+                $( "<h4 id='"+response.inicio_vacaciones["dia"]+"'class='vacaciones'>"+response.inicio_vacaciones["dia"]+"</h4><h4 id='h4_descripcion'>"+vacaciones+"</h4>" ).insertBefore( contenedor.find("#contenedor_reserva #div_leyenda h4[id='"+response.inicio_vacaciones["dia"]+"'][class!='vacaciones']")); 
+              }
+            }
+            else{
+              contenedor.find("#contenedor_reserva #div_leyenda h4[id='"+response.inicio_vacaciones["dia"]+"']").addClass("vacaciones");
+            }
+            // Se modifica los días desde inicio de vacaciones hasta final de mes puesto que sigue en el siguiente mes.
+            for(var i = response.inicio_vacaciones["dia"]; i <= último_día; i++){
+              contenedor.find("#contenedor_reserva .ui-datepicker-calendar td[data-month='"+(mes-1)+"'] a").filter(function(){return $(this).text()==i;}).closest("td").addClass("ui-datepicker-unselectable ui-state-disabled");
+              contenedor.find("#contenedor_reserva .ui-datepicker-calendar td[data-month='"+(mes-1)+"'][class='ui-datepicker-unselectable ui-state-disabled'] a").filter(function(){return $(this).text()==i;}).attr("title",contenedor.find("#contenedor_reserva #div_leyenda h4[class='vacaciones']").next().text().replace("Inicio ",""));
+            }
+
+            }, 50);
+          }
+          else if(response.fin_vacaciones){
+
+            setTimeout(function(){
+            //Se añade la clase vacaciones, sólo a los elementos de ese día que contiene la información de las vacaciones.
+            if(contenedor.find("#contenedor_reserva #div_leyenda h4[id='"+response.fin_vacaciones["dia"]+"']").length>1){
+              contenedor.find("#contenedor_reserva #div_leyenda h4[id='"+response.fin_vacaciones["dia"]+"']").each(function(){
+                if($(this).next().text().indexOf(" Vacaciones ")>0){
+                  $(this).addClass("vacaciones");   
+                }
+              });
+              // Se comprueba que el festivo está tras las vacaciones en la leyenda, en caso contrario se modifica.
+              if(contenedor.find("#contenedor_reserva #div_leyenda h4[id='"+response.fin_vacaciones["dia"]+"'][class='vacaciones']").closest("h4[id='"+response.fin_vacaciones["dia"]+"']").text()==response.fin_vacaciones["dia"]){
+                vacaciones=contenedor.find("#div_leyenda h4[id='"+response.fin_vacaciones["dia"]+"'][class='vacaciones']").next().text();
+                contenedor.find("#contenedor_reserva #div_leyenda h4[id='"+response.fin_vacaciones["dia"]+"'][class='vacaciones']").next().remove();
+                contenedor.find("#contenedor_reserva #div_leyenda h4[id='"+response.fin_vacaciones["dia"]+"'][class='vacaciones']").remove();
+
+                $( "<h4 id='"+response.fin_vacaciones["dia"]+"'class='vacaciones'>"+response.fin_vacaciones["dia"]+"</h4><h4 id='h4_descripcion'>"+vacaciones+"</h4>" ).insertBefore( contenedor.find("#contenedor_reserva #div_leyenda h4[id='"+response.fin_vacaciones["dia"]+"'][class!='vacaciones']")); 
+              }
+            }
+            else{
+              contenedor.find("#contenedor_reserva #div_leyenda h4[id='"+response.fin_vacaciones["dia"]+"']").addClass("vacaciones");
+            }
+            // Se modifica los días desde inicio del mes hasta final de vacaciones puesto que sigue en el mes anterior.
+            for(var i = response.fin_vacaciones["dia"]; i >= 1; i--){
+              contenedor.find("#contenedor_reserva .ui-datepicker-calendar td[data-month='"+(mes-1)+"'] a").filter(function(){return $(this).text()==i;}).closest("td").addClass("ui-datepicker-unselectable ui-state-disabled");
+              contenedor.find("#contenedor_reserva .ui-datepicker-calendar td[data-month='"+(mes-1)+"'][class='ui-datepicker-unselectable ui-state-disabled']").find("a").filter(function(){return $(this).text()==i;}).attr("title",contenedor.find("#contenedor_reserva #div_leyenda h4[class='vacaciones']").next().text().replace("Fin ",""));
+            }
+            }, 50);
+          }
+        }
+      })
+
+      // Se Comprueba si el último día del mes anterior es un domingo y es festivo, para traspasar el festivo al primer día del mes actual.
+      dia_1=contenedor.find("#contenedor_reserva tbody tr:first td:first a");
+      if( dia_1.text() == "1" ){
+        // Se obtiene un string con los datos el último día del mes anterior (Ej: Sun Jan 31 2016) .
+        fecha=new Date(dia_1.closest("div").find("div>span:nth-child(2) ").text(), "0"+contenedor.find("#contenedor_reserva tbody tr:first td:first").attr("data-month"), 0).toDateString();
+        fecha=fecha.split(" ");
+        dia_ant=fecha[2];
+        // Asignamos a una variable el mes anterior que correcponda. En datepicker aparece el número del mes-1.
+        if(contenedor.find("#contenedor_reserva tbody tr:first td:first").attr("data-month")=="0"){
+          mes_ant="12";
+        }
+        else if(contenedor.find("#contenedor_reserva tbody tr:first td:first").attr("data-month").length=="1"){
+          mes_ant=0+contenedor.find("#contenedor_reserva tbody tr:first td:first").attr("data-month");
+        }
+        else{
+          mes_ant=contenedor.find("#contenedor_reserva tbody tr:first td:first").attr("data-month");
+        }
+        var MES = ["Enero","Febrero","Marzo","Abril","Mayo","Junio","Julio","Agosto","Septiembre","Octubre","Noviembre","Diciembre"];
+        $.ajax({
+          type: 'POST',
+          url: Routing.generate('comprobar_festivo'),
+          data: {mes:mes_ant, dia:dia_ant},
+          dataType: 'json',
+          success: function(response) {
+            if(response.data!=null)
+            {
+              dia_1.closest("td").addClass("ui-datepicker-unselectable ui-state-disabled");
+              setTimeout(function(){
+                contenedor.find("#contenedor_reserva #div_leyenda").prepend("<h4 id='"+dia_1.text()+"'>"+dia_1.text()+"</h4><h4 id='h4_descripcion'>Traslado del Festivo del día "+dia_ant+" de "+MES[$("#contenedor_reserva tbody tr:first td:last").attr("data-month")-1]+" </h4>" );
+              }, 20);
+            }
+          }
+        })
+      }
+      setTimeout(function(){
+        // Se actualizan los title de los festivos que aún no tiene el atributo asignado.
+        contenedor.find("#contenedor_reserva #div_leyenda h4[id!='h4_descripcion']").each(function(){
+          dato=$(this).text();
+          if((contenedor.find("#contenedor_reserva .ui-datepicker-calendar td").find("a").filter(function(){return $(this).text()==dato;}).attr("title")!="Vacaciones de Semana Santa" && contenedor.find("#contenedor_reserva .ui-datepicker-calendar td").find("a").filter(function(){return $(this).text()==dato;}).attr("title")!="Vacaciones de Navidad") || (contenedor.find("#contenedor_reserva .ui-datepicker-calendar td").find("a").filter(function(){return $(this).text()==dato;}).attr("title")==undefined) ){
+            contenedor.find("#contenedor_reserva .ui-datepicker-calendar td").find("a").filter(function(){return $(this).text()==dato;}).attr("title",$(this).next("h4").text());
+          }
+        }); 
+        // Se unifica el título de las vacaciones.
+        contenedor.find("#contenedor_reserva .ui-datepicker-calendar td a[title^='Inicio de Vacaciones']").each(function(){
+          $(this).attr("title",$(this).attr("title").replace("Inicio ",""));
+        });
+        contenedor.find("#contenedor_reserva .ui-datepicker-calendar td a[title^='Fin de Vacaciones']").each(function(){
+          $(this).attr("title",$(this).attr("title").replace("Fin ",""));
+        });
+      }, 200); 
+    }, 170);
+  });
 
 
+  $(document).on('click',"#contenedor_reserva_equipamientos button",function(event){  /// cambiar nombre para que sea valido para los dos tipos instalaciones y equipamientos
+    contenedor= $(this).closest("div[id^='reserva_']");
+
+    // Se marca el equipamiento seleccionado.
+    if(!$(this).hasClass("elected")){
+      contenedor.find("#contenedor_reserva_equipamientos button").removeClass("elected"); 
+      $(this).addClass("elected");
+    }
+
+    // Se llama a la función de comprobar las horas de reserva cuando seleccionamos una instalación y un día.
+    if(contenedor.find("#contenedor_reserva tbody td a").hasClass("ui-state-default ui-state-active")){
+      HorasReserva(contenedor.find("#contenedor_reserva_horas"));
+    }
+
+    // Se desactiva el botón de guardar al cambiar de día.
+    contenedor.find("#reserva_save").prop("disabled",true);
+  });
+
+  //Se simula el hacer click en el calendario, haciendo click en un input oculto que contiene el día deleccionado.
+  $(document).on('click',"#dia_seleccionado",function(e){
+    contenedor= $(this).closest("div[id^='reserva_']");
+
+    if(contenedor.find("#contenedor_reserva_equipamientos button").hasClass("elected")){
+      HorasReserva(contenedor.find("#contenedor_reserva_horas"));
+    }
+  });
+
+  //Se marca las horas de reserva seleccionada y se habilita el botón guardar si existe al menos una hora seleccionada.
+  $(document).on('click',"#contenedor_reserva_horas button",function(event){
+    contenedor= $(this).closest("div[id^='reserva_']");
+
+    if($(this).hasClass("elected")){
+      $(this).removeClass("elected");
+    }
+    else{
+      $(this).addClass("elected");
+    }
+
+    if(contenedor.find('#contenedor_reserva_horas .elected').length) {
+      contenedor.find("#reserva_save").prop("disabled",false);
+    }
+    else{
+      contenedor.find("#reserva_save").prop("disabled",true);
+    }
+  });
+
+  $(document).on('click',".contenedor_principal_reserva #reserva_save",function(event){  
+    contenedor= $(this).closest("div[id^='reserva_']");
+
+    fecha=contenedor.find("#dia_seleccionado").val();
+    fecha= fecha.split("/");
+    fecha= fecha[2]+"-"+fecha[1]+"-"+fecha[0];
+    equipamiento=contenedor.find("#contenedor_reserva_equipamientos button[class='elected']").text();
+
+    // Se obtiene las horas seleccionadas.
+    var objDatos= Array();
+    contenedor.find("div[id='contenedor_reserva_horas'] button[class='elected']").each(function(){
+      objDatos.push($(this).attr("clase"));
+    });
+
+    $.ajax({
+      type: 'POST',
+      url: Routing.generate('reserva_create'),
+      data:{objDatos:objDatos,equipamiento:equipamiento,fecha:fecha}, 
+      dataType: 'json',
+      success: function(response) {
+        // Se actualiza las pestañas de equipamientos.
+        $("#consultar_instalaciones").update_tab(); //cambiar de forma generica para los dos añadiendo la terminación del actual.
+        contenedor.find("div[id='contenedor_reserva_equipamientos'] button[class='elected']").trigger("click");
+        if(response.data.length != 0)
+        {
+          var aviso= "Se ha producido un error en el sistema. Las siguientes horas de clases no se han podido resevar porque ya estaban reservadas para éste día: \n";
+          for (var key in response.data) { 
+            alert(response.data[key]);
+            aviso+=response.data[key]+" Hora \n";
+          }
+          alert(aviso);
+        }
+        if(response.message=="festivo"){
+          alert("Se ha producido un error en el sistema. El día seleccionado es NO Lectivo, por lo que no se realizará la reserva.");
+        }
+      }
+    })
+  });
 
 
+  function HorasReserva(contenedor) {
+    container=contenedor.closest("div[id^='reserva_']");
+    
+    fecha=container.find("#dia_seleccionado").val();
+    fecha= fecha.split("/");
+    fecha= fecha[2]+"-"+fecha[1]+"-"+fecha[0];
+    equipamiento=container.find("#contenedor_reserva_equipamientos button[class='elected']").text();
 
+    // Se comprueba si el usuario tiene reservas en el día indicado y se muestra.
+    // Se comprueba si quedan unidades de equipamiento ó la instalación está libre para el día indicado.
+    $.ajax({
+      type: 'POST',
+      url: Routing.generate('comprobar_reserva'),
+      data: {equipamiento:equipamiento, fecha:fecha},
+      dataType: 'json',
+      success: function(response) {
+        contenedor.find("button").prop("disabled",false);
+        contenedor.find("button").removeClass();
 
+        if(response.data!=null)
+        {
+          for (var key in response.data) { 
+            container.find("#contenedor_reserva_horas button[clase="+response.data[key]["horaClase"]+"]").prop("disabled", true);
+            container.find("#contenedor_reserva_horas button[clase="+response.data[key]["horaClase"]+"]").addClass("reservado");
+          }
+        }
+        if(response.data2!=null)
+        {
+          for (var key in response.data2) { 
+            container.find("#contenedor_reserva_horas button[clase="+response.data2[key]["horaClase"]+"]").prop("disabled", true);
+          }
+        }
 
-
-
-
-
-
-
-
-
+        // Se desactivan las horas de reserva del día actual inferiores a la hora actual.
+        var f = new Date();
+        if((f.getDate()+"/0"+(f.getMonth()+1)+"/"+f.getFullYear())==$("#dia_seleccionado").val()){
+          container.find("#contenedor_reserva_horas button").each(function(){
+            var dt = new Date();
+            var time = ('0'+dt.getHours()).slice(-2) + ":" + ('0'+dt.getMinutes()).slice(-2);
+   
+            if($(this).attr("min").replace(':', '') <= time.replace(':', '')){
+              $(this).prop("disabled",true);
+            }
+          });
+        }
+      }
+    })
+  }
 
 //alert($('#tabs ul li:eq(0)').outerWidth(true));
 

@@ -7,7 +7,11 @@
 
 {% block stylesheets %}
 	<link href="{{ asset('bundles/backend/css/backend.css') }}" rel="stylesheet" type="text/css" />
-	<link href="{{ asset('bundles/backend/js/jquery-ui/	jquery-ui.css') }}" rel="stylesheet" type="text/css" />
+	<link href="{{ asset('bundles/backend/js/jquery-ui/jquery-ui.css') }}" rel="stylesheet" type="text/css" />
+	<link href="{{ asset('bundles/backend/js/sweetalert-master/dist/sweetalert.css') }}" rel="stylesheet" type="text/css">
+	{#<link href="{{ asset('bundles/backend/js/sweetalert-master/themes/facebook/facebook.css') }}" rel="stylesheet" type="text/css">#}
+	{#<link href="{{ asset('bundles/backend/js/sweetalert-master/themes/twitter/twitter.css') }}" rel="stylesheet" type="text/css">#}
+	{#<link href="{{ asset('bundles/backend/js/sweetalert-master/themes/google/google.css') }}" rel="stylesheet" type="text/css">#}
 {% endblock %}
 
 {% block javascript %}
@@ -15,6 +19,8 @@
     <script type="text/javascript" src="{{ asset('bundles/backend/js/load.js') }}" async="async"></script>
 	<script type="text/javascript" src="{{ asset('bundles/backend/js/general.js') }}" async="async"></script>
 	<script type="text/javascript" src="{{ asset('bundles/backend/js/jquery-ui/jquery-ui.js') }}"></script>
+	<script type="text/javascript" src="{{ asset('bundles/backend/js/sweetalert-master/dist/sweetalert.min.js') }}"></script>
+
 	<script type="text/javascript" src="{{ asset('bundles/fosjsrouting/js/router.js') }}"></script>
 	<script type="text/javascript" src="{{ path('fos_js_routing_js', {"callback": "fos.Router.setData"}) }}"></script>
 
@@ -40,7 +46,8 @@
 					<li><a href="#4" title="Académico"> Académico </a></li>
 					<li><a href="#5" title="Herramientas"> Herramientas </a></li>
 					<li><a href="#6" title="Ayuda"> Ayuda </a></li>
-					<li class="salir"><a href="{{path('index')}}" title="Salir de Administración"> <img src="{{ asset('bundles/backend/images/menu/salir.png')}}"> <p>Salir</p></a></li>
+					{#<li class="salir"><a href="{{path('index')}}" title="Salir de Administración"> <img src="{{ asset('bundles/backend/images/menu/salir.png')}}"> <p>Salir</p></a></li>#}
+					<li class="salir"><a href="{{path('logout')}}" title="Salir de Administración"> <img src="{{ asset('bundles/backend/images/menu/salir.png')}}"> <p>Salir</p></a></li>
 				</ul>
 				<div id="1">
 					<div>
@@ -56,32 +63,32 @@
 						<span> Información </span>
 					</div>
 					<div>
-						<a id="registrar_instalación" title="Registro Instalación" href="{{path('instalaciones')}}">
+						<a id="registrar_instalaciones" title="Registro Instalación" href="{{path('instalaciones')}}">
 							<img src="{{ asset('bundles/backend/images/menu/instalaciones.png')}}">
 							<span> Registro </span>
 						</a>
-						<a title="Reserva Instalación" href="javascript:void(0);">
+						<a id="reservar_instalaciones" title="Reserva Instalación" href="{{path('reserva_instalaciones')}}">
 							<img src="{{ asset('bundles/backend/images/menu/instalaciones2.png')}}">
 							<span> Reserva </span>
 						</a>
 					
-						<a title="Consulta Instalación" href="{{path('reserva')}}">
+						<a id="consultar_instalaciones" title="Consulta Instalación" href="{{path('reserva')}}">
 							<img src="{{ asset('bundles/backend/images/menu/consultar.png')}}">
 							<span> Consulta </span>
 						</a>
 						<span> Instalaciones </span>
 					</div>
 					<div>
-						<a id="registrar_equipamiento" title="Registro Equipamiento" href="{{path('equipamiento')}}">
+						<a id="registrar_equipamientos" title="Registro Equipamiento" href="{{path('equipamiento')}}">
 							<img src="{{ asset('bundles/backend/images/menu/equipación.png')}}">
 							<span> Registro </span>
 						</a>
-						<a title="Reserva Equipamiento" href="javascript:void(0);">
+						<a id="reservar_equipamientos" title="Reserva Equipamiento" href="{{path('reserva_equipamientos')}}">
 							<img src="{{ asset('bundles/backend/images/menu/equipación3.png')}}">
 							<span> Reserva </span>
 						</a>
 					
-						<a title="Consulta Equipamiento" href="javascript:void(0);">
+						<a id="consultar_equipamientos" title="Consulta Equipamiento" href="javascript:void(0);">
 							<img src="{{ asset('bundles/backend/images/menu/consultar.png')}}">
 							<span> Consulta </span>
 						</a>

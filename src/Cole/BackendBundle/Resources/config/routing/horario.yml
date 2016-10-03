@@ -30,3 +30,21 @@ horario_delete:
     path:     /{id}/delete
     defaults: { _controller: "BackendBundle:Horario:delete" }
     requirements: { _method: post|delete }
+
+nuevo_horario:
+    path:     /nuevo_horario
+    defaults: { _controller: "BackendBundle:Horario:NuevoHorario" }
+    options:
+        expose: true
+
+editar_horario:
+    path:     /editar_horario
+    defaults: { _controller: "BackendBundle:Horario:EditarHorario" }
+    options:
+        expose: true
+
+horario_escolar_actual:
+    path:     /horario_escolar_actual
+    defaults: { _controller: "BackendBundle:Horario:HorarioEscolarActual" }
+    options:
+        expose: true
