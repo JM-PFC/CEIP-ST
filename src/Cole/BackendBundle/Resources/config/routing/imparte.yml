@@ -28,3 +28,9 @@ imparte_delete:
     path:     /{id}/delete
     defaults: { _controller: "BackendBundle:Imparte:delete" }
     requirements: { _method: post|delete }
+
+datos_imparte:
+    path:     /datos_imparte
+    defaults: { _controller: "BackendBundle:Imparte:DatosImparte" }
+    options:
+        expose: true

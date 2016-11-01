@@ -4,83 +4,194 @@
 {% block stylesheets %}{% endblock %}
 
 {% block javascript %}
+<script>
+
+
+    function changeRecord(){
+        // Se actualiza el estado de la reserva.
+        $("#consulta_reserva_{{ tipo }}").find("td").filter(function(){return $(this).text().trim()=="Hoy";}).next("td").each(function(){
+            var now = new Date();
+            var outStr = now.getHours()+':'+now.getMinutes();
+            if(Date.parse('01/01/2016 '+$(this).attr("inicio")+':00') > Date.parse('01/01/2016 '+outStr+':00')){
+                $(this).next("td").text("Pendiente");
+            }
+            else if(Date.parse('01/01/2016 '+$(this).attr("fin")+':00') < Date.parse('01/01/2016 '+outStr+':00')){
+                $(this).next("td").text("Finalizado");
+            }
+            else{
+                $(this).next("td").text("En uso");
+            }
+        });
+        // Se cambia los estilos para los registros  de reservas en uso o finalizadas.
+        $("#consulta_reservas_{{ tipo }} tbody tr td:contains('Finalizado')").closest("tr").css({"background-color":"rgba(0, 0, 0, 0.2)","border-top":"1px solid #ffffff","border-bottom":"1px solid #ffffff"});
+        $("#consulta_reservas_{{ tipo }} tbody tr td:contains('Finalizado')").css("color","#bc1010");
+        $("#consulta_reservas_{{ tipo }} tbody tr td:contains('En uso')").css("color","#0B610B");
+
+        // Se elimina la opción de eliminar reserva para las reservas en uso o finalizadas.
+        $("#consulta_reservas_{{ tipo }} tbody tr td:contains('En uso')").closest("tr").find("td:last-child img").remove();
+        $("#consulta_reservas_{{ tipo }} tbody tr td:contains('Finalizado')").closest("tr").find("td:last-child img").remove();
+        // Se elimina el evento de puntero en todos los registros de reservas finalizadas.
+        $("#consulta_reservas_{{ tipo }} tbody tr td:contains('Finalizado')").closest("tr").css("pointer-events","none");
+
+
+
+    }
+    // Se llama a la función anterior casa 5 segundos.
+    changeRecord();
+    setInterval(changeRecord, 5000);
+
+        // Taba con la opción de ordenar y búsqueda.
+        $('#consulta_reserva_{{ tipo }}').DataTable( { //on( 'page.dt',   function () { $(".current").prop("disabled", true); } )
+             //"aLengthMenu": [[25, 50, 100, 250, 500, -1], [25, 50, 100, 250, 500, "All"]],
+            "order": [[ 2, "asc" ]],
+            "aLengthMenu": [[ -1], [ "All"]],
+            "columnDefs": [ {
+                "targets": 'no-sort',
+                "orderable": false,} ],
+            "language": {
+                "zeroRecords": "Lo siento, no se ha encontrado ningún registro coincidente",
+                "emptyTable": "Actualmente no hay ninguna reserva registrada en el sistema",
+
+                "lengthMenu": "Mostrar _MENU_ entradas",
+                "loadingRecords": "Carregando...",
+                "processing":     "Processando...",
+                "info": "Página _PAGE_ de _PAGES_",
+                "infoEmpty": "No hay registros disponibles",
+                "infoFiltered": "(filtrado de _MAX_ registros)",
+                "search": "Buscar:",
+                "Next": "Siguiente",
+                "paginate": {
+                    "previous": "Anterior",
+                    "next": "Siguiente"
+                }
+            }
+        } );
+
+        $("#consulta_reservas_{{ tipo }} .dataTables_info").addClass("oculto");
+        $("#consulta_reservas_{{ tipo }} .dataTables_paginate").addClass("oculto");
+        $("#consulta_reservas_{{ tipo }} .dataTables_length").addClass("oculto");
+        $('#consulta_reservas_{{ tipo }} .dataTables_filter').appendTo('#consulta_reservas_{{ tipo }} #buscador');
+
+        // Se comprueba si existe scrol vertical para ajustar el thead
+        var h=0;
+        $('#consulta_reservas_{{ tipo }} table tbody tr').each(function(){ 
+            h+=parseInt($('#consulta_reservas_{{ tipo }} table tbody').attr("tr"));
+        });
+
+        if( h>$('#consulta_reservas_{{ tipo }} table tbody').height()){
+            $("#consulta_reserva_{{ tipo }} thead tr>th:last-child").attr('style', 'width: 6.5% !important');
+        }
+        else{
+            $("#consulta_reserva_{{ tipo }} thead tr>th:last-child").attr('style', 'width: 5.5% !important');
+        }
+    
+        $(window).resize(function() {
+            var h=0;
+        $('#consulta_reservas_{{ tipo }} table tbody tr').each (function(){ 
+            h+=parseInt($('#consulta_reservas_{{ tipo }} table tbody').attr("tr"));
+        });
+
+
+        if(h>$('#consulta_reservas_{{ tipo }} table tbody').height() ){
+            $("#consulta_reserva_{{ tipo }} thead tr>th:last-child").attr('style', 'width: 6.5% !important');
+        }
+        else{
+            $("#consulta_reserva_{{ tipo }} thead tr>th:last-child").attr('style', 'width: 5.5% !important');
+        }
+    });
+
+    $("#consulta_reservas_{{ tipo }} tbody tr td[class='dataTables_empty']").closest("tr").addClass("no_cursor");
+
+    </script>
 
 {% endblock %}
 
 {% block body -%}
-    <div id="consulta_instalacion">
-    <div class="parent_no_form">
-    <div class="child">
-
-       <div class="derecha contenedor_registro" id="contenedor_consulta_instalacion" >  
-        <div>
-            <div id="cabecera_lista">
-                <h2>Instalaciones Reservadas</h2>
+    <div id="consulta_{{ tipo }}">
+        <div class="parent_no_form">
+        <div class="child">
+            <div class="derecha contenedor_registro" id="consulta_reservas_{{ tipo }}" >  
+                <div>
+                    <div id="cabecera_lista">
+                        <h2 class="text_cabecera">{{ tipo|capitalize }} Reservadas</h2>
+                        <div id="buscador"> </div>
+                    </div>
+                    <div id="fondo_azul_osc" class="tabla_con_info">
+                        <div id="tableContainer" class="tableContainer inner_table">
+                            <table id="consulta_reserva_{{ tipo }}" class="scrollTable lista_color">
+                                <thead class="fixedHeader">
+                                    <tr>
+                                        {#<th class="id">Id</th>#}
+                                        <th class="w_20">Profesor</th>
+                                        <th class="w_12">Equipamiento</th>
+                                        <th>Fecha</th>
+                                        <th>Hora</th>
+                                        <th>Estado</th>
+                                        <th class="no-sort consulta_reservas_{{ tipo }}_Scroll"></th>
+                                    </tr>
+                                </thead>
+                                <tbody class="scrollContent" tr="31">
+                                    {% set cont = 1 %}
+                                    {% for entity in entities %}
+                                        {% if entity.profesor != null %}
+                                        <tr id="{{entity.profesor.id}}"  title="Pulsa para contactar con el profesor">
+                                            {#<td class="id">{{ cont }}</td>#}
+                                            <td class="w_20">{{ entity.profesor.nombre ~ " " ~ entity.profesor.apellido1 ~ " " ~ entity.profesor.apellido2}}</td>
+                                        {% else %}
+                                        <tr id="centro" class="no_cursor">
+                                            <td class="w_20"> Reserva del Centro</td>
+                                        {% endif %}
+                                            <td class="w_12">{{ entity.equipamiento.nombre}}</td>
+                                            <td data-order="{{ entity.fecha|date('m/d/Y') }}">
+                                            {% if entity.fecha|date('m/d/Y') ==  'today'|date('m/d/Y')  %}
+                                                {{ "Hoy" }}
+                                            {% elseif entity.fecha|date('m/d/Y') ==  'tomorrow'|date('m/d/Y') %}
+                                                {{"Mañana"}}
+                                            {% else %}
+                                                {{ entity.fecha|date('d/m/Y') }}
+                                            {% endif %}
+                                            </td>
+                                            <td class="hora" inicio="{{ entity.horario.inicio|date('H:i') }}" fin="{{ entity.horario.fin|date('H:i') }}">{{ entity.horario.inicio|date('H:i') ~ " - " ~ entity.horario.fin|date('H:i')}}</td>
+                                            <td>
+                                            {% if entity.fecha|date('m/d/Y') ==  'today'|date('m/d/Y') %}
+                                                {% if entity.horario.inicio|date('H:i') >  'now'|date('H:i')  %}
+                                                    {{"Pendiente"}}
+                                                {% elseif entity.horario.fin|date('H:i') <  'now'|date('H:i') %}
+                                                    {{"Finalizado"}}
+                                                {% else %}
+                                                    {{"En uso"}}
+                                                {% endif %}
+                                            {% elseif entity.fecha|date('m/d/Y') >  'today'|date('m/d/Y') %}
+                                                {{"Pendiente"}}
+                                            {% else %}
+                                                {{"Finalizado"}}
+                                            {% endif %}
+                                            </td>
+                                            <td class="eliminar">{{ entity.propósito }}
+                                                <img id="eliminar_0" src="{{ asset('bundles/backend/images/menu/eliminar0.png') }}">
+                                                <img id="eliminar_1" title="Eliminar la reserva" class="oculto" src="{{ asset('bundles/backend/images/menu/eliminar1.png') }}">
+                                            </td>
+                                        </tr>
+                                        {% set cont = cont + 1 %}
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <div class="info_en_tabla">
+                        <div class="cabecera_info">
+                            Datos Profesor
+                        </div>
+                        <div class="contenido_info">
+                            <div id="sin_seleccionar">
+                                <p>Para ver detalles indique una reserva de un profesor</p>
+                            </div>
+                            <div id="seleccionado" class="oculto"></div>
+                        </div>             
+                    </div>
+                </div>          
             </div>
-            <div id="fondo_azul_osc">
-                <table class="records_list" id="table_th_prim">
-                    <thead>
-                    <tr>
-                        <th>Id</th>
-                        <th>Profesor</th>
-                        <th>Equipamiento</th>
-                        <th>Fecha</th>
-                        <th>Propósito</th>
-                    </tr>
-                    </thead>
-                </table>
-                <div class="inner_table" id="td_prim">
-                    <table id="lista_color">
-                    {% for entity in entities %}
-                        <tr>
-                            <td><a href="{{ path('reserva_show', { 'id': entity.id }) }}">{{ entity.id }}</a></td>
-                            {% if entity.profesor != null %}
-                            <td >{{ entity.profesor.nombre ~ " " ~ entity.profesor.apellido1 ~ " " ~ entity.profesor.apellido2}}</td>
-                            {% else %}
-                            <td > Centro</td>
-                            {% endif %}
-                            <td>{{ entity.equipamiento.nombre}}</td>
-                            <td>{% if entity.fecha %}{{ entity.fecha|date('Y-m-d') }}{% endif %}</td>
-                            <td>{{ entity.propósito }}</td>
-                        </tr>
-                    {% endfor %}
-                    </table>
-                </div>
-            </div>
-        </div>          
-       </div>
-      </div>
-    </div>
-    </div>
+        </div>
+        </div>
     </div>
     {% endblock %}
-{# 
-
-
-{% block body -%}
-<div id="consulta_instalacion">
-    <table class="records_list">
-        <thead>
-            <tr>
-                <th>Id</th>
-                <th>Profesor</th>
-                <th>Equipamiento</th>
-                <th>Fecha</th>
-                <th>Propósito</th>
-            </tr>
-        </thead>
-        <tbody>
-        {% for entity in entities %}
-            <tr>
-                <td><a href="{{ path('reserva_show', { 'id': entity.id }) }}">{{ entity.id }}</a></td>
-                <td >{{ entity.profesor.nombre ~ " " ~ entity.profesor.apellido1 ~ " " ~ entity.profesor.apellido2}}</td>
-                <td>{{ entity.equipamiento.nombre}}</td>
-                <td>{% if entity.fecha %}{{ entity.fecha|date('Y-m-d H:i:s') }}{% endif %}</td>
-                <td>{{ entity.propósito }}</td>
-            </tr>
-        {% endfor %}
-        </tbody>
-    </table>
-</div>
-    {% endblock %}
-    #}

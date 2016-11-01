@@ -1,0 +1,21 @@
+{% for entity in entity %}
+  <div class="columna_foto">
+  {% if entity.foto != null %}
+    <img id="foto" class="img-mini" src="{{ asset('uploads/images/' ~ entity.foto) }}">
+  {% else %}
+    {% if entity.sexo == "Femenino" %}
+    <img id="sin_foto" class="img-mini" src="{{ asset('bundles/backend/images/perfil/SinFoto-M.png') }}">
+    {% else %}
+    <img id="sin_foto" class="img-mini" src="{{ asset('bundles/backend/images/perfil/SinFoto-H.png') }}">
+    {% endif %}
+  {% endif %}
+  </div>
+  <div>
+
+    <h3>Grupo impartido:</h3>
+    <p id="grupo"> </p> {#Se añade el contenido mediante javascript#}
+    <h3>Asignatura impartida:</h3>
+    <p id="asignatura"> </p>{#Se añade el contenido mediante javascript#}
+    </div>
+{% endfor %}
+

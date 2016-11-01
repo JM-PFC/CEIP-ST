@@ -21,14 +21,19 @@ class ReservaController extends Controller
      * Lists all Reserva entities.
      *
      */
-    public function indexAction()
+    public function indexAction($tipo)
     {
         $em = $this->getDoctrine()->getManager();
-
-        $entities = $em->getRepository('BackendBundle:Reserva')->findAll();
+        if($tipo=="instalaciones"){
+        $entities = $em->getRepository('BackendBundle:Reserva')->findallReservasInstalaciones();
+        }
+        else{
+        $entities = $em->getRepository('BackendBundle:Reserva')->findallReservasEquipamientos();
+        }
 
         return $this->render('BackendBundle:Reserva:index.html.twig', array(
             'entities' => $entities,
+            'tipo' => $tipo,
         ));
     }
     /**
@@ -47,6 +52,24 @@ class ReservaController extends Controller
         $fecha=$this->get('request')->request->get('fecha');
         $equipamiento=$this->get('request')->request->get('equipamiento');
         $horas=$this->get('request')->request->get('objDatos');
+        $error=array();
+
+        // Se comprueba que se han seleccionado todas las opciones para la reserva.
+        if(!$equipamiento || !$fecha || !$horas ){
+            if(!$equipamiento){
+                $error[]="- Equipamiento";
+            }
+            if(!$fecha){
+                $error[]="- Fecha";
+            }
+            if(!$horas){
+                $error[]="- Horas de reserva";
+            }
+            return new JsonResponse(array(
+                    'error' =>  $error), 200); 
+        }
+
+        $total_reservas=count($horas);
         $equipa=$em->getRepository('BackendBundle:Equipamiento')->findEquipamientoByName($equipamiento);
         $NoDisponible=array();
 
@@ -54,35 +77,42 @@ class ReservaController extends Controller
 
         $diaNoLectivo=$this->get("festivos")->ComprobarDiaNoLectivoAction($date[2],$date[1],$date[0]);
         if($diaNoLectivo==false){
-          foreach ($horas as $hora ) {
-            $clase=$em->getRepository('BackendBundle:Horario')->findOneByHoraClase($hora);
-            $unidades= $em->getRepository('BackendBundle:Reserva')->findComprobarUnidades($clase,$equipa, $fecha);
-            // Se comprueba que hay unidades disponibles.
-            if((int)$unidades[1] < $equipa->getUnidades() && (int)$unidades[1] >= 0){
-                // Se obtiene el usuario actual ----------------------------------> De momento sólo reserva el centro (null)
+            foreach ($horas as $hora ) {
+                $clase=$em->getRepository('BackendBundle:Horario')->findOneByHoraClase($hora);
+                $unidades= $em->getRepository('BackendBundle:Reserva')->findComprobarUnidades($clase,$equipa, $fecha);
+                //Comprobamos si existe la misma reserva. ---------------------> De momento enviamos null como usuario
+                $reserva= $em->getRepository('BackendBundle:Reserva')->findComprobarReserva(null,$clase,$equipa, $fecha);
 
-                //Hay que hacer un condicional viendo si el usuario tiene el rol profesor para guardar el iddel profesor,sino no hacer nada(se guarda nulo)
-                //$entity->setProfesor($profesor);
+                // Se comprueba que hay unidades disponibles.
+                if((int)$unidades[1] < $equipa->getUnidades() && (int)$unidades[1] >= 0 && empty($reserva) ){
+                    $entity = new Reserva();
 
-                //Se obtiene el id del equipamiento.
-                $entity->setEquipamiento($em->getRepository('BackendBundle:Equipamiento')->findEquipamientoByName($equipamiento));
+                    // Se obtiene el usuario actual ----------------------------------> De momento sólo reserva el centro (null)
+
+                    //Hay que hacer un condicional viendo si el usuario tiene el rol profesor para guardar el iddel profesor,sino no hacer nada(se guarda nulo)
+                    //$entity->setProfesor($profesor);
+
+                    //Se obtiene el id del equipamiento.
+                    $entity->setEquipamiento($em->getRepository('BackendBundle:Equipamiento')->findEquipamientoByName($equipamiento));
         
-                //Se obtiene el id del horario correspondiente.
-                $entity->setFecha(new \DateTime($fecha)); 
+                    //Se asigna la fecha.
+                    $entity->setFecha(new \DateTime($fecha)); 
                     
-                //Se obtiene el id del horario correspondiente.
-                $entity->setHorario($em->getRepository('BackendBundle:Horario')->findOneByHoraClase($hora));
-                $em->persist($entity);
-                $em->flush();
+                    //Se obtiene el id del horario correspondiente.
+                    $entity->setHorario($em->getRepository('BackendBundle:Horario')->findOneByHoraClase($hora));
+                    $em->persist($entity);
+                    $em->flush();
+                }
+                else{
+                    $NoDisponible[]=$hora;
+                    $total_reservas--;
+                }
             }
-            else{
-                $NoDisponible[]=$hora;
-            }
-          }
             if ($request->isXmlHttpRequest()) {
                 return new JsonResponse(array(
-                    'message' => 'Success!',
+                    'message' => $total_reservas,
                     'data' =>  $NoDisponible,
+                    'error' =>  $error,
                     'success' => true), 200);
             } 
         }
@@ -91,6 +121,7 @@ class ReservaController extends Controller
                 return new JsonResponse(array(
                     'message' => 'festivo',
                     'data' =>  $NoDisponible,
+                    'error' =>  $error,
                     'success' => true), 200);
             } 
         }
@@ -231,6 +262,13 @@ class ReservaController extends Controller
      */
     public function deleteAction(Request $request, $id)
     {
+
+        $em = $this->getDoctrine()->getManager();
+        $query = $em->createQuery('DELETE BackendBundle:Reserva r WHERE r.id = :rId')->setParameter("rId", $id);
+
+        $query->execute();
+
+/*
         $form = $this->createDeleteForm($id);
         $form->handleRequest($request);
 
@@ -244,9 +282,11 @@ class ReservaController extends Controller
 
             $em->remove($entity);
             $em->flush();
-        }
+        }*/
 
-        return $this->redirect($this->generateUrl('reserva'));
+        return new JsonResponse(array('success' => true), 200);
+
+        /*return $this->redirect($this->generateUrl('reserva'));*/
     }
 
     /**
@@ -395,5 +435,30 @@ class ReservaController extends Controller
         }
     }
 
+    public function ObtenerReservaAction()
+    {
+        $em = $this->getDoctrine()->getManager();
+
+        $profesor=$this->get('request')->request->get('profesor');
+        $equipamiento=$this->get('request')->request->get('equipamiento');
+        $fecha=$this->get('request')->request->get('fecha');
+        $ini=$this->get('request')->request->get('ini');
+        $fin=$this->get('request')->request->get('fin');
+
+        //Se obtiene el id del horario correspondiente.
+        $clase=$em->getRepository('BackendBundle:Horario')->findOneByHora($ini, $fin);
+
+        //Se obtiene el id del equipamiento.
+        $equipa=$em->getRepository('BackendBundle:Equipamiento')->findEquipamientoByName($equipamiento);
+
+        $reserva= $em->getRepository('BackendBundle:Reserva')->findComprobarReserva($profesor,$clase,$equipa, $fecha);
+
+        if($reserva){
+            return new JsonResponse(array('num' =>$reserva->getId(), 'tipo'=>$equipa->getTipo()), 200);
+        }
+        else{
+            return new JsonResponse(array('num' =>null), 200);
+        }
+    }
 
 }

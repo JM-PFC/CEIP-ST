@@ -1,20 +1,87 @@
-{% extends 'BackendBundle:Default:index.html.twig' %}
+
+
+
+
+
+{% extends '::base.html.twig' %}
 
 {% block head %}{% endblock %}
 {% block stylesheets %}{% endblock %}
 
 {% block javascript %}
-    
+    <script>
+
+    $(window).resize(function() {
+    if($('.scrollContent').hasScrollBar()){
+        $("#lista_padres thead tr>th:last-child").css("width","13%");
+    }
+    else{
+        $("#lista_padres  thead tr>th:last-child").css("width","7%");
+    }
+    });
+
+
+    function changeColor(){
+        $("#contenedor_consulta_instalacion tbody tr td:contains('Finalizado')").closest("tr").css({"background-color":"rgba(0, 0, 0, 0.2)","border-top":"1px solid #ffffff","border-bottom":"1px solid #ffffff"});
+        $("#contenedor_consulta_instalacion tbody tr td:contains('Finalizado')").css("color","#bc1010");
+        $("#contenedor_consulta_instalacion tbody tr td:contains('En uso')").css("color","#0B610B");
+    }
+    changeColor();
+    setInterval(changeColor, 5000);
+        $('#lista_padres').DataTable( { //on( 'page.dt',   function () { $(".current").prop("disabled", true); } )
+             //"aLengthMenu": [[25, 50, 100, 250, 500, -1], [25, 50, 100, 250, 500, "All"]],
+            "order": [[ 3, "asc" ]],
+            "aLengthMenu": [[ -1], [ "All"]],
+            "columnDefs": [ {
+                "targets": 'no-sort',
+                "orderable": false,} ],
+            "language": {
+                "lengthMenu": "Mostrar _MENU_ entradas",
+                "zeroRecords": "Lo siento, no se ha encontrado ningún registro coincidente",
+                "info": "Página _PAGE_ de _PAGES_",
+                "infoEmpty": "No hay registros disponibles",
+                "infoFiltered": "(filtrado de _MAX_ registros)",
+                "search": "Filtrar registros:",
+                "Next": "Siguiente",
+                "paginate": {
+                    "previous": "Anterior",
+                    "next": "Siguiente"
+                }
+            }
+        } );
+
+        $(".dataTables_info").addClass("oculto");
+        $(".dataTables_paginate").addClass("oculto");
+        $(".dataTables_length").addClass("oculto");
+        $('.dataTables_filter').appendTo('#buscador');
+
+          $(".dataTables_paginate .current").prop("disabled", true);
+    </script>
+
 {% endblock %}
 
-{% block body %}
-<div>
-    <table class="records_list">
-        <thead>
-            <tr>
+{% block body -%}
+    <div id="consulta_instalacion">
+    <div class="parent_no_form">
+    <div class="child">
+
+       <div class="derecha contenedor_registro"  >  
+        <div>
+            <div id="cabecera_lista">
+                <h2 class="text_cabecera">Lista de padres</h2>
+                <div id="buscador">
+
+                </div>
+            </div>
+            <div id="fondo_azul_osc">
+                <div id="tableContainer" class="tableContainer inner_table">
+                    <table id="lista_padres" class="scrollTable lista_color">
+                        <thead class="fixedHeader">
+                            <tr>
+
                 {#<th>Id</th>#}
                 <th>Dni</th>
-                <th>Nombre</th>
+                <th class="w_20">Nombre</th>
                 <th>Fecha Nacimiento</th>
                 <th>Profesión</th>
                 <th>Estado civil</th>
@@ -26,10 +93,12 @@
                 <th>Claveusuario</th>
                 <th>Activo</th>
                 <th>Actions</th>#}
-            </tr>
-        </thead>
-        <tbody>
-        {% for entity in entities %}
+
+                                <th class="no-sort">Acción</th>
+                            </tr>
+                        </thead>
+                        <tbody class="scrollContent">
+                            {% for entity in entities %}
             <tr>
                 {# <td><a href="{{ path('padres_show', { 'id': entity.id }) }}">{{ entity.id }}</a></td>#}
                 <td>{{ entity.dni|upper }}</td>
@@ -58,6 +127,81 @@
                 </td>
             </tr>
         {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+
+            </div>
+        </div>          
+       </div>
+      </div>
+    </div>
+    </div>
+    </div>
+    {% endblock %}
+
+
+    {#
+{% extends 'BackendBundle:Default:index.html.twig' %}
+
+{% block head %}{% endblock %}
+{% block stylesheets %}{% endblock %}
+
+{% block javascript %}
+    
+{% endblock %}
+
+{% block body %}
+<div>
+    <table class="records_list">
+        <thead>
+            <tr>
+                {#<th>Id</th>
+                <th>Dni</th>
+                <th>Nombre</th>
+                <th>Fecha Nacimiento</th>
+                <th>Profesión</th>
+                <th>Estado civil</th>
+                <th>Móvil</th>
+                <th>Email</th>
+                {#<th>Username</th>
+                <th>Password</th>
+                <th>Salt</th>
+                <th>Claveusuario</th>
+                <th>Activo</th>
+                <th>Actions</th>#
+            </tr>
+        </thead>
+        <tbody>
+        {% for entity in entities %}
+            <tr>
+                {# <td><a href="{{ path('padres_show', { 'id': entity.id }) }}">{{ entity.id }}</a></td>
+                <td>{{ entity.dni|upper }}</td>
+                <td>{{ entity.nombre }}</td>
+
+                <td>{% if entity.fechaNacimiento %}{{ entity.fechaNacimiento|date('d-m-Y') }}{% endif %}</td>
+                <td>{{ entity.profesion }}</td>
+                <td>{{ entity.estadoCivil }}</td>
+
+                <td>{{ entity.movil }}</td>
+                <td>{{ entity.email }}</td>
+                {#<td>{{ entity.username }}</td>
+                <td>{{ entity.password }}</td>
+                <td>{{ entity.salt }}</td>
+                <td>{{ entity.claveUsuario }}</td>
+                <td>{{ entity.activo }}</td>
+                <td>
+                <ul>
+                    <li>
+                        <a href="{{ path('padres_show', { 'id': entity.id }) }}">show</a>
+                    </li>
+                    <li>
+                        <a href="{{ path('padres_edit', { 'id': entity.id }) }}">edit</a>
+                    </li>
+                </ul>
+                </td>
+            </tr>
+        {% endfor %}
         </tbody>
     </table>
 
@@ -70,3 +214,4 @@
     </ul>
 </div>
     {% endblock %}
+    #}

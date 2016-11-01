@@ -38,11 +38,6 @@ class Grupo
     private $aula;
 
     /**
-     * @ORM\OneToMany(targetEntity="Imparte", mappedBy="grupo")
-     */
-    private $imparte;
-
-    /**
      * @ORM\ManyToOne(targetEntity="Curso", inversedBy="grupos")
      * @ORM\JoinColumn(name="curso_id", referencedColumnName="id", nullable=false)
      */

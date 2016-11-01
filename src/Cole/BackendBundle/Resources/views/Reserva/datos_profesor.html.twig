@@ -1,0 +1,11 @@
+{% for ent in entity %}
+
+<div class="columna_foto">
+    <img id="sin_foto" class="img-small" src="{{ asset('bundles/backend/images/perfil/SinFoto-M.png') }}">
+</div>
+<p>{{ent.nombre}}</p>
+<p>Apellido1</p>
+<p>Apellido 2</p>
+<span>Grupo importido:</span><p> 1º de Primaria</p>
+<button>Contactar</button>
+{% endfor %}

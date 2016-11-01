@@ -4,6 +4,12 @@
 {% block stylesheets %}{% endblock %}
 
 {% block javascript %}
+  <script>
+    // Se deshabilita los botones de guardar y restablecer.      
+    $("#edit_centro_submit").prop("disabled",true);
+    $("#editar_centro_restablecer").prop("disabled",true);
+
+  </script>
 {% endblock %}
 
 {% block body-%}
@@ -12,8 +18,8 @@
     {{ form_errors(edit_form) }}
     <div>
       <div id="content-form">
-      	<fieldset class="ajustada">
-          <legend>Datos del centro</legend>
+      <fieldset class="ajustada no_border">
+        <div></div>
 
         <div class="marco_columna_contenido marco_margin_left">
 
@@ -22,17 +28,17 @@
             <h3 class="label_contenido">Datos del Centro</h3>
             <img id="img_centro" src="/Symfony/web/bundles/backend/images/logo_trans.png" alt="logo del colegio">
             <div class="big_column">
-              {{ form_row(edit_form.nombre) }}
-              {{ form_row(edit_form.direccion) }}
-              {{ form_row(edit_form.localidad) }}
-              {{ form_row(edit_form.provincia) }}
+              {{ form_row(edit_form.nombre,{'id':'edit_'~edit_form.nombre.vars.id }) }}
+              {{ form_row(edit_form.direccion,{'id':'edit_'~edit_form.direccion.vars.id }) }}
+              {{ form_row(edit_form.localidad,{'id':'edit_'~edit_form.localidad.vars.id }) }}
+              {{ form_row(edit_form.provincia,{'id':'edit_'~edit_form.provincia.vars.id }) }}
 
            </div>
             <div class="big_column">
-              {{ form_row(edit_form.cp) }}
-              {{ form_row(edit_form.telefono) }}
-              {{ form_row(edit_form.email) }}
-              {{ form_row(edit_form.web) }}
+              {{ form_row(edit_form.cp,{'id':'edit_'~edit_form.cp.vars.id }) }}
+              {{ form_row(edit_form.telefono,{'id':'edit_'~edit_form.telefono.vars.id }) }}
+              {{ form_row(edit_form.email,{'id':'edit_'~edit_form.email.vars.id }) }}
+              {{ form_row(edit_form.web,{'id':'edit_'~edit_form.web.vars.id }) }}
 
             </div>
   
@@ -44,7 +50,7 @@
   </fieldset >
     </div>
     <div id="botones_form">
-        {{ form_row(edit_form.submit) }}
+        {{ form_row(edit_form.submit,{'id':'edit_'~edit_form.submit.vars.id }) }}
       <div>
         <button id="editar_centro_restablecer" type="button" name="editar_centro[restablecer]" >Restablecer</button>
       </div> 

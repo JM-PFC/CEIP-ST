@@ -1,5 +1,5 @@
 reserva:
-    path:     /
+    path:     /consultar/{tipo}
     defaults: { _controller: "BackendBundle:Reserva:index" }
 
 reserva_instalaciones:
@@ -36,7 +36,7 @@ reserva_create:
     requirements: { _method: post }
     options:
         expose: true
-        
+
 reserva_edit:
     path:     /{id}/edit
     defaults: { _controller: "BackendBundle:Reserva:edit" }
@@ -50,3 +50,11 @@ reserva_delete:
     path:     /{id}/delete
     defaults: { _controller: "BackendBundle:Reserva:delete" }
     requirements: { _method: post|delete }
+    options:
+        expose: true
+
+obtener_reserva:
+    path:     /obtener_reserva
+    defaults: { _controller: "BackendBundle:Reserva:ObtenerReserva" }
+    options:
+        expose: true

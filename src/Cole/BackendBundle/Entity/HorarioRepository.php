@@ -22,6 +22,17 @@ class HorarioRepository extends EntityRepository
 		->getOneOrNullResult();
 	}
 
+	public function findOneByHora($ini, $fin)
+	{
+		return $this->getEntityManager()->createQuery(
+		'SELECT h FROM BackendBundle:Horario h WHERE h.inicio=:inicio and h.fin=:fin ')
+		->setParameters(array(
+			'inicio' => $ini,
+			'fin' => $fin))
+		->setMaxResults(1)
+		->getOneOrNullResult();
+	}
+
 	public function findClases()
 	{
 		return $this->getEntityManager()->createQuery(
@@ -32,5 +43,7 @@ class HorarioRepository extends EntityRepository
 			'comida' => "COMIDA"))
 		->getResult();
 	}
+
+	
 
 }

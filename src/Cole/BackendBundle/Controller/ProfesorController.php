@@ -464,4 +464,12 @@ class ProfesorController extends Controller
         }
     }
 
+    public function DatosProfesorAction($id)
+    {
+        $em = $this->getDoctrine()->getManager();
+        $entity = $em->getRepository('BackendBundle:Profesor')->findById($id);
+        return $this->render('BackendBundle:Profesor:datos_profesor.html.twig', array(
+            'entity' => $entity,));
+    }
+
 }

@@ -20,7 +20,7 @@ class ProfesorType extends AbstractType
             ->add('apellido1','text',array('label' => 'Primer Apellido', 'max_length' => 30,'attr' => array('validation' => 'Empty, Words')))
             ->add('apellido2','text',array('label' => 'Segundo Apellido','max_length' => 30, 'attr' => array('validation' => 'Empty, Words')))
             ->add('sexo', 'choice', array('label' => 'Sexo','choices' => array('Masculino' => 'Masculino', 'Femenino'=>'Femenino'),'required'=> true, 'expanded'=>true, 'multiple'=>false))
-            ->add('fechaNacimiento','date',array('label' => 'Fecha de Nacimiento', 'max_length' => 10,'widget' => 'single_text','format' => 'dd/MM/yyyy', 'attr' => array('lengthmin'=> 8,'class' => 'fecha', 'placeholder'=>'__/__/____','validation' => 'Empty,Length,Fecha,Fecha_Adulto')))
+            ->add('fechaNacimiento','date',array('label' => 'Fecha Nacimiento', 'max_length' => 10,'widget' => 'single_text','format' => 'dd/MM/yyyy', 'attr' => array('lengthmin'=> 8,'class' => 'fecha', 'placeholder'=>'__/__/____','validation' => 'Empty,Length,Fecha,Fecha_Adulto')))
             ->add('direccion','text',array('label' => 'Dirección','max_length' => 50, 'attr' => array('validation' => 'Empty, LetterInitial')))
             ->add('localidad','text',array('label' => 'Localidad','max_length' => 50, 'attr' => array('validation' => 'Empty, Letters')))
             ->add('provincia','text',array('label' => 'Provincia','max_length' => 30,'attr' => array('validation' => 'Empty, Letters')))

@@ -86,9 +86,9 @@ class AlumnoController extends Controller
         if ($form->isValid()) {
             $em = $this->getDoctrine()->getEntityManager();
             $entity->setFechaAlta(new \DateTime("now"));
-            $entity->setCurso("1º Infantil");
-            $entity->setGrupo("1º Infantil A");
-            $entity->setNumAlum("1");
+            $entity->setCurso($entity->getCursoIngreso());
+            $entity->setGrupo(null);
+            $entity->setNumAlum(null);
             $entity->setActivo(true);
             $role = $em->getRepository('BackendBundle:Role')->find(1);
             $entity->getResponsable1()->setRole($role);
@@ -105,15 +105,15 @@ class AlumnoController extends Controller
 
             //Busqueda y asignación del responsable si ya existe en el hijo correspondiente.        
             $responsable1 = $em->getRepository('BackendBundle:Padres')->findResponsable($entity->getResponsable1()->getDni());
-            if (!$responsable1) {
+            /*if (!$responsable1) {
                 throw $this->createNotFoundException('Unable to find Padres entity.');
-            }
+            }*/
             $responsable2 = $em->getRepository('BackendBundle:Padres')->findResponsable($entity->getResponsable2()->getDni());
-            if (!$responsable2) {
+            /*if (!$responsable2) {
                 throw $this->createNotFoundException('Unable to find Padres entity.');
-            }
+            }*/
 
-            //En caso de tener sólo un responsable, al segundo se le asigna el mismo.
+            //En caso de tener sólo un responsable, al segundo se le asigna null.
             if($entity->getResponsable2()->getDni() == "" ){
                 $entity->setResponsable2(NULL); 
             }
@@ -152,8 +152,7 @@ class AlumnoController extends Controller
 
             //Se obtiene la foto subida yse guarda en la carpeta destino, asignandole un nombre único.
             $file = $entity->getFoto();
-
-            if($entity->getFoto()!="on"){
+            if($entity->getFoto()!="On" && $entity->getFoto()!="" ){
                 $fileName = uniqid().'.'.$file->guessExtension();
                 $photoDir = $this->container->getParameter('kernel.root_dir').'/../web/uploads/images';
                 $file->move($photoDir, $fileName);
@@ -381,6 +380,9 @@ class AlumnoController extends Controller
                 }
                 $entity->setFoto(NULL);
             }
+            if($entity->getResponsable2()->getDni() == "" ){
+                $entity->setResponsable2(NULL); 
+            }
             $em->flush();
 
             if ($request->isXmlHttpRequest()) {
@@ -592,7 +594,7 @@ class AlumnoController extends Controller
 
         $alumnos= $em->getRepository('BackendBundle:Alumno')->findAlumnosPorCurso($entity);
         if($alumnos){
-            return new JsonResponse(array('data' =>"No se puede eliminar el curso.\n\nExisten alumnos asignados al curso.\n\n"), 200);
+            return new JsonResponse(array('data' =>$alumnos), 200);
         }
         return new JsonResponse(array('data' =>null), 200);
 

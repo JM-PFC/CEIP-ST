@@ -40,7 +40,7 @@ body.stop-scrolling {
       right: 15px; } }
   .sweet-alert h2 {
     color: #575757;
-    font-size: 25px;
+    font-size: 23px;
     text-align: center;
     font-weight: 600;
     text-transform: none;
@@ -55,10 +55,10 @@ body.stop-scrolling {
     text-align: center;
     font-weight: 300;
     position: relative;
-    text-align: justify;
+    text-align: center;
     float: none;
     margin: 0;
-    padding: 0;
+    padding: 0 10px;
     line-height: normal; }
     .sweet-alert p span {
     color: #797979;
@@ -935,3 +935,6 @@ body.stop-scrolling {
     -moz-transform: translateY(145%);
     -o-transform: translateY(145%);
     transform: translateY(145%); } }
+  .justificado{
+    text-align: justify !important;
+  }

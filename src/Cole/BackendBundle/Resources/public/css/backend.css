@@ -4,7 +4,37 @@
 }
 button{
 	cursor: pointer; 
-	box-shadow: 0 1px 1px 0px rgba(0, 0, 0, 0.5);
+	min-height: 26px;
+	border-radius: 5px;
+	padding: 3px;
+}
+button[class*="ui-dialog-titlebar-close"]{
+	min-width: 0;
+	min-height: 0;
+}
+/*Se elimina el borde punteado al hacer click en un "button" (Firefox)*/
+button::-moz-focus-inner {
+   border: 0;
+}
+/*Se elimina el borde punteado al hacer click en un "button" (Resto de navegadores)*/
+button{
+   outline:none;
+}
+button:focus{
+	/*color: #334c73;*/
+	background-color: #C3C4C5;
+}
+/*Se elimina el borde punteado al hacer click en un enlace "a"*/
+a:active{
+	outline: none;
+}
+button:hover{
+	background: #b1cce7;
+}
+
+button:disabled{
+   pointer-events: none;
+   cursor: default;
 }
 a{
     text-decoration: none;
@@ -14,12 +44,19 @@ body{
 	background: #EEECEC;
 	margin-left: auto;
     margin-right: auto;
-
     padding-top: 5px;
-
     position: relative;
     width: 95%;
     min-width: 1024px;
+
+    cursor: default;
+	-webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+select{
+	cursor: pointer;b
 }
 
 /* Espacio para menú de administración */
@@ -300,7 +337,8 @@ nav{
     display: block;
     max-width: 99%;
     margin: 0 25px;
-	min-height: 55vh;
+	min-height: 64vh;
+	overflow: hidden;
 
 }
 #fondo_logo {
@@ -369,19 +407,47 @@ margin: 50px auto;
 #tabs li .ui-icon-close { 
 	float: left; 
 	margin: 0.4em 0 0 -16px; 
-	cursor: pointer; 
+	cursor: auto; 
 }
+#tabs li .ui-icon-close:hover { 
+	background-image: url("../images/menu/ui-icons_334c73_256x240.png");
+	background-position: -32px -192px;
+}
+.ui-dialog-titlebar-close:hover{
+	background: #bc1010 !important;
+}
+.ui-dialog-titlebar-close:hover .ui-icon{
+	background-image: url("../images/menu/ui-icons_ffffff_256x240.png");
+	background-position: -96.1px -128px;
+}
+
+.ui-tabs .ui-tabs-nav li.ui-tabs-active a:hover,input[readonly=""]{
+	cursor: default;
+	-webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none; 
+}
+
 .close_tabs{
 	position: absolute;
-	top: 7px;
-	left: 94%;
+	top: 9px;
+	left: 93.8%;
 	display: none;
 	z-index: 20;
 }
-
-.close_tabs:hover{
-	background-color: grey;
+.close_tabs button{
+	height: 25px;
+}
+.close_tabs button p{
+	margin-top: -2px;
+}
+.close_tabs button:hover{
+	background-color: #C3C4C5 !important;
 	border-radius: 5px;
+}
+.close_tabs button{
+	min-width: 0 !important;
 }
 
 @media only screen and (max-width: 1250px) {
@@ -389,6 +455,24 @@ margin: 50px auto;
 		padding-top: 7px;
 		font-size: 12.5px;
 	}
+	/*Select Horario escolar*/
+	.select_number{
+		margin-right: -2px !important;
+	}
+
+	/*Botones horario escolar nuevo*/
+	#nuevo_horario_guardar button{
+	margin-left: 10% !important; 
+	}
+	/*Cuadro contenido_info de reservas*/
+	.contenido_info #seleccionado p{
+	padding:0 3%!important;
+	}
+	
+	.contenido_info #seleccionado h3{
+	padding: 0 3%!important;
+	}
+
 }
 
 /*Contenido*/
@@ -530,13 +614,26 @@ tbody tr td{
    box-shadow: 0 -2px 3px -2px rgba(0, 0, 0, .5);
 }
 #botones_form{
-	margin-left: 130px;
-	margin-top: 5px;
 	padding: 0 50px;
+	height: 35px;
+	overflow:hidden;
+    text-align: center;
+    margin:auto;
+}
+#botones_form div{
+	display: inline-table;
+}
+#botones_dialogo div{
+	width: 100%;
+	overflow:hidden;
+    text-align: center;
+    margin:auto;
 }
 #botones_dialogo button{
-	margin-left: 10% !important; 
+	margin-left: 4% !important; 
 	margin-top: 7px;
+	display:inline-table;
+	float: none !important;
 }
 form{
     font: normal bold 12px Verdana, Arial;
@@ -544,6 +641,9 @@ form{
     display: flex;
     height: 50vh;
     margin-top: 0.5vh;
+}
+form button, .block_insert button, .buttons_form button{
+	min-width: 100px !important;
 }
 form>div{
 	margin: auto 10px;
@@ -555,7 +655,28 @@ form label {
     margin-right: 10px;
     font-family: Verdana,Arial,sans-serif;
 	font-size: 1.2em ;
-	margin-top: 1%;
+	margin-top: 0.5%;
+	height: 20px;
+}
+/*Para el problema de mostrar bien el aviso de error en la pestaña*/
+label[for^="edit_"][for$="_fechaNacimiento"]{width: 125%}
+label[for*="responsable"][for$="_fechaNacimiento"]{width: 125%}
+label[for^="edit_"][for$="_fechaNacimiento"][for*="_responsable"]{width: 135% !important}
+label[for="alumno_apellido2"]{width: 103%}
+label[for="alumno_fechaNacimiento"]{width: 103%}
+
+@media only screen and (max-width: 1250px) {
+	label[for$="_fechaNacimiento"][for^="edit_"]:before{content:'F. Nacimiento'}
+
+}
+@media only screen and (min-width: 1250px) {
+	label[for$="_fechaNacimiento"][for^="edit_"]:before{content:'Fecha Nacimiento'}
+}
+@media only screen and (max-width: 1230px) {
+	label[for^="alumno_res"][for$="_fechaNacimiento"]:before{content:'F. Nacimiento'}
+}
+@media only screen and (min-width: 1230px) {
+	label[for^="alumno_res"][for$="_fechaNacimiento"]:before{content:'Fecha Nacimiento'}
 }
 form input {
     display: inline-block;
@@ -589,12 +710,20 @@ input[type="radio"]{
 input[type="radio"]+label{
 	cursor: pointer;
 }
+#message h2{
+	margin-top: 10px;
+	color: #3c763d;
+}
 .simple{
 	min-height: 275px;
 	height: 43.5vh;
 }
 .double{
 	height: 133px;
+}
+.no_border{
+	border: none;
+	margin-top: 1.5% !important;
 }
 .ajustada{
 	min-height: 270px;
@@ -649,7 +778,7 @@ legend{
 	float: left;
 	clear: right;
 	margin-right: 3%;
-	width: 36%;
+	width: 34%;
 	margin-bottom: 8px;
 }
 .end_column{
@@ -666,12 +795,13 @@ legend{
 .small_column{
 	float: left;
 	clear: right;	
-	width: 22%;
+	width: 25%;
 }
 
 .small_column div input{
 	width: 55% !important;
 	text-transform: none;
+	text-align: center;
 }
 
 .columna_foto{
@@ -680,7 +810,7 @@ legend{
 	margin-left: 2%;
 	margin-right: 2%;
 	margin-top: 8px;
-	max-width: 12%;
+	/*max-width: 12%;*/
 }
 .columna_foto>div>img{
 	box-shadow: 0 1px 5px 0px rgba(0, 0, 0, 1);
@@ -701,7 +831,7 @@ legend{
 	margin: 0.5% 3%;
 }
 .marco_columna_contenido{
-	width: 83%;
+	width: 81%;
 	height: 40.5vh;
 	min-height: 245px;
 	float: left;
@@ -746,7 +876,7 @@ legend{
 .block_insert{
 	float: left;
 	clear: both;
-	height: auto;text
+	height: auto;
 	width: 100%;
 	margin: 10%;
 	font-size: 16px;
@@ -784,7 +914,7 @@ clear: both;
 	width: 50%;
 }
 .block_search button{
-margin: 65% 0 0 27%;
+margin: 65% 0 0 20%;
 }
 .block_search > div > div > button{
 margin-top: 10%;
@@ -855,6 +985,7 @@ margin-top: 10%;
 }
 .email{
 	width: 100%;
+	text-transform: none !important;
 }
 .archivo{
 	box-shadow: 0 0 0 0;
@@ -871,6 +1002,9 @@ margin-top: 10%;
 .full_name_div{
 	width: 43% !important;
 	max-width: 45% !important;
+}
+.email_small{
+	width: 24% !important;
 }
 #alumno_foto{
 	display: block;
@@ -900,6 +1034,9 @@ select{
 	font-size: 1.2em !important;
 	box-shadow: 0 1px 1px 0px rgba(0, 0, 0, 0.5);
 }
+select option{
+	padding: 0.5px 5px;
+}
 form button{
 	float: left;
 	padding: 0 5px;
@@ -909,13 +1046,9 @@ form button{
 	font-size: 1.2em !important;
 }
 #botones_form button{
-	margin: 2px 50px;
+	margin: 5px 50px;
 	font-size: 1.2em !important;
-}
-form button:hover{
-	/*font-weight: bold;
-	text-decoration: underline;*/
-	box-shadow: 0 1px 1px 0px rgba(0, 0, 0, 0.5)inset;
+	min-width: 135px;
 }
 .invalid{
 	box-shadow: 0 0px 3px 1px red !important;
@@ -936,12 +1069,12 @@ form button:hover{
 .error{
     background-color: #BC1010;
     padding: 0.2px 2px;
-    border-radius: 0 4px 4px 0;
+    border-radius: 3px 4px 4px 3px;
     color: white;
     font-size: 11.5px;
     margin-left: 10px;
     margin-top: 0px;
-    position: absolute;
+    position: relative;
     opacity: 0.8;
     width:7.6%; 
     z-index: 2;
@@ -969,9 +1102,10 @@ form button:hover{
     border-bottom: 7px solid transparent;
     border-right: 7px solid #BC1010;
     border-left: 7px solid transparent;
-    left: -14px;
+    left: -12.5px;
     position: absolute;
     top: 0px;
+    z-index:-1;
 }
 .mensaje{
     background-color: #334c73;
@@ -1025,10 +1159,11 @@ form button:hover{
 	padding: 5px ;
     word-wrap: break-word;
     min-width: 50%;
+    cursor: pointer;
 }
 #contenedor_lista div table th{
 	text-align: center;
-	font: 1.3em solid;
+	font: 1.2em solid;
 	border-bottom: 2px solid #b1cce7;
 	border-top: 2px solid #b1cce7;
 	padding: 3px ;
@@ -1040,15 +1175,16 @@ form button:hover{
 	overflow: auto;
 	margin: 1.1% 0 !important; 
 }
-#lista_color tr:nth-child(2n) { 
-	background: #dae6f2!important;
+#lista_color tr:nth-child(2n),.lista_color tr:nth-child(2n)  { 
+	background: #dae6f2;
 }
 #contenedor_lista tr:hover { 
 	background: #b1cce7!important;
 	color: white;
 }
 #contenedor_lista td a { 
-    display: block; 
+    display: block;
+    pointer-events: none; 
 }
 #registro_asignaturas .simple_column{
 	width: 24%;
@@ -1172,7 +1308,7 @@ form button:hover{
 .select_number{
 	font-size: 1em !important;
 	margin: 3px;
-	min-width: 45px;
+	min-width: 51px;
     text-align: center
 }
 #registro_Ngrupos>div>div>div:nth-child(2){
@@ -1320,6 +1456,30 @@ form button:hover{
 	padding: 5px;
 	min-height: 20px;
 }
+.text_cabecera{
+	width: 55%;
+	float: left;
+	text-align: right !important;
+}
+#buscador{
+	width: 40%;
+	float: right;
+	font-size: 13px;
+	margin-top: -2px;
+}
+#buscador label{
+	float: right;
+}
+#buscador input{
+	padding: 1px 3px;
+	margin-left: 5px;
+}
+.sorting_desc{
+	color: #fa8258;
+}
+.sorting_asc{
+	color: #fa8258;
+}
 .corto{
 	min-width: 25% !important;
 	text-align: left !important;
@@ -1329,8 +1489,19 @@ form button:hover{
     height:130px !important;
     border-radius: 5px !important;
 }
+.img-mini{
+    width:85px !important; 
+    height:105px !important;
+    border-radius: 5px !important;
+}
 #profesor_edit input[type='file']{
 	display:none;
+}
+#alumno_edit .m_input{
+	width: 60% !important;
+}
+#alumno_edit .s_input{
+	width: 25% !important;
 }
 #alumno_edit input[type='file']{
 	display:none;
@@ -1344,8 +1515,6 @@ form button:hover{
 .input_radio div input{
 	float: left;
 }
-
-
 .button_foto{
 	width: 100px;
 	margin:0;
@@ -1428,28 +1597,49 @@ form button:hover{
 	width: 10%;
 }
 .responsable_modal{
-background: -webkit-linear-gradient(#fa8258 0%, #f5d0a9 96%);
-background: -o-linear-gradient(#fa8258 0%, #f5d0a9 96%);
-background: linear-gradient(#fa8258 0%, #f5d0a9 96%);
-border-radius: 7px;
-float: right;
-margin-right: 12px;
-margin-bottom: 2px;
-margin-top: -9px;
-height: 25px;
-font: bold 12px Verdana,Arial;
+    background: -webkit-linear-gradient(#fa8258 0%, #f5d0a9 96%);
+    background: -o-linear-gradient(#fa8258 0%, #f5d0a9 96%);
+    background: linear-gradient(#fa8258 0%, #f5d0a9 96%);
+    box-shadow: 0 1px 1px 0px rgba(0, 0, 0, 0.5)inset;
+    box-shadow: 0 1px 1px 0px rgba(0, 0, 0, 0.5);
+	border-radius: 7px;
+	float: right;
+	margin-right: 12px;
+	margin-bottom: 2px;
+	margin-top: -9px;
+	height: 25px;
+	font: bold 12px Verdana,Arial;
 }
 .eliminar_responsable_modal{
-background: -webkit-linear-gradient(#FA5858 0%, #f5d0a9 96%);
-background: -o-linear-gradient(#FA5858 0%, #f5d0a9 96%);
-background: linear-gradient(#FA5858 0%, #f5d0a9 96%);
-border-radius: 7px;
-float: right;
-margin-right: 12px;
-margin-bottom: 2px;
-margin-top: -9px;
-height: 25px;
-font: bold 12px Verdana,Arial;
+    background: -webkit-linear-gradient(#FA5858 0%, #f5d0a9 96%);
+    background: -o-linear-gradient(#FA5858 0%, #f5d0a9 96%);
+    background: linear-gradient(#FA5858 0%, #f5d0a9 96%);
+    box-shadow: 0 1px 1px 0px rgba(0, 0, 0, 0.5)inset;
+    box-shadow: 0 1px 1px 0px rgba(0, 0, 0, 0.5);
+	border-radius: 7px;
+	float: right;
+	margin-right: 12px;
+	margin-bottom: 2px;
+	margin-top: -9px;
+	height: 25px;
+	font: bold 12px Verdana,Arial;
+}
+
+button[class="responsable_modal"]:hover{
+    background: -webkit-linear-gradient(#fa8258 0%, #f5d0a9 96%);
+    background: -o-linear-gradient(#fa8258 0%, #f5d0a9 96%);
+    background: linear-gradient(#fa8258 0%, #f5d0a9 96%);
+    box-shadow: none;
+}
+
+button[class="eliminar_responsable_modal"]:hover{
+    background: -webkit-linear-gradient(#FA5858 0%, #f5d0a9 96%);
+    background: -o-linear-gradient(#FA5858 0%, #f5d0a9 96%);
+    background: linear-gradient(#FA5858 0%, #f5d0a9 96%);
+    box-shadow: none;
+}
+button[class$="responsable_modal"]:focus{
+    box-shadow: none;
 }
 .inline{
 	display: inline; 
@@ -1480,10 +1670,13 @@ select>option[value=""]{
 	margin-bottom: 7px;
 }
 .short{
-	width: 5% !important;
+	width: 6% !important;
 	margin-left: 1%!important;
 	display: inline-block !important;
 	margin-bottom: 7px;
+}
+.short input{
+	text-align: center;
 }
 #profesor_nuevo #tab3 div[class="short"] input{
 	padding: 0px !important;
@@ -1530,7 +1723,7 @@ select>option[value=""]{
 float: right;
 }
 .width100 button{
-	margin: 0 10%;
+	margin: 0 7%;
 	margin-top: 7px;
 }
 #centro_edit img {
@@ -1716,8 +1909,8 @@ float: right;
 }
 #vistas_festivos button{
 	background: #fa8258;
-	margin-left: 11%;
-	width: 76%
+	margin: 0 auto;
+	max-width: 89%;
 }
 #vistas_festivos form{
 	height: 0;
@@ -1747,14 +1940,16 @@ float: right;
 }
 #botones_festivos{
 	display: block;
-	margin-top: 20px;
-	width: 100%;
+	margin-top: 20px !important;
+	width: 90%;
+	padding-right: 4%;
+	overflow:hidden;
+    text-align: center;
+    margin:auto;
 }
 #botones_festivos div{
-	display: block;
-	float: left;
-	margin-left: 16.5%;
-	margin-right: 6%;
+	display:inline-table;
+	margin: 0 7%;
 }
 .contenedor_registro{
 	background: white none repeat scroll 0 0;
@@ -1775,7 +1970,7 @@ float: right;
 	margin: 0 auto;
 	border-collapse: collapse;
     border-spacing: 0;
-    width: 100%;
+    width: 100% !important;
     table-layout: auto;
 }
 .contenedor_registro div table td{
@@ -1794,7 +1989,7 @@ float: right;
 .contenedor_registro div table th{
 	text-align: center;
 	font: 1.3em solid;
-	padding: 3px ;
+	padding: 3px 5px;
 	min-width: 0;
 }
 .contenedor_calendario tr:hover { 
@@ -2312,26 +2507,17 @@ border: 1px solid;
 	border-top: 3px solid #334c73 ;
 }
 
-#consulta_instalacion tr>th,#consulta_instalacion tr>td{
-	width: 200px !important;
-}
 
-#consulta_instalacion tr>th:nth-child(1),#consulta_instalacion tr>td:nth-child(1){
-	width: 10px !important;
-	text-align: center;
-}
-#consulta_instalacion tr>th{
-	text-align: center;
-}
-
-#consulta_instalacion thead tr th, #consulta_instalacion tbody tr td{
-	min-width: 25px !important;
-}
-#contenedor_consulta_instalacion{
+#consulta_reservas_instalaciones,#consulta_reservas_equipamientos{
 	min-height: 50vh;
     box-shadow: 0 1px 1px 1px rgba(0, 0, 0, 0.5);
     margin-top: 10px;
 }
+
+#consulta_reservas_instalaciones tbody tr:nth-child(1),#consulta_reservas_equipamientos tbody tr:nth-child(1){
+	border-top: none !important;
+}
+
 .contenedor_registro_horario {
     background: white none repeat scroll 0 0;
     border-radius: 5px;
@@ -2431,12 +2617,11 @@ border: 1px solid;
 #button_horario_all{
 	margin: 0 23%; 
 }
-#button_horario_save{
-	margin-left: 21% !important; 
-}
+
 #nuevo_horario_guardar button{
-	margin: 0 7%; 
+	margin-left: 14%; 
 }
+
 #registro_horario .block_insert{
 	margin: 3% 6%;
 }
@@ -2514,10 +2699,13 @@ input[id="si"]{
 }
 .tiple_column_no_form{
 	float: left;
-	width: 32%;
+	width: 35%;
 	border-right: 2px solid #aaaaaa;
 	min-height: 47vh;
 	padding-right: 1%;
+}
+.contenedor_principal_reserva>div:nth-child(2){
+	width: 28% ;
 }
 .four_column_no_form{
 	float: left;
@@ -2646,22 +2834,33 @@ input[id="si"]{
 }
 
 @media only screen and (max-width: 1200px) {
+	.close_tabs button{
+		width: 54px;
+	}
 	#guardar_reserva{
-	width: 100%;
-    display: block;
+		width: 100%;
+    	display: block;
 	}
 	#guardar_reserva button{
-	margin: 0 auto;
+		margin: 0 auto;
 	}
 
 	.contenedor_principal_reserva>div:nth-child(1){
-		width: 36%;
+		width: 32%;
 		min-height: 38vh;
 	}
 
 	.contenedor_principal_reserva>div:nth-child(2){
 		width: 32%;
 		min-height: 38vh;
+	}
+	#contenedor_reserva_equipamientos button {
+    	display: block;
+    	margin: 3% auto !important;
+    	min-width: 56% !important;
+	}
+	.four_column_no_form {
+    	margin-left: 30px;
 	}
 	
 	.contenedor_principal_reserva .four_column_no_form{
@@ -2671,6 +2870,10 @@ input[id="si"]{
 	.contenedor_principal_reserva #guardar_reserva{
 		min-height: 0 !important;
 		margin-top: 15px;
+		margin-left: -30px;
+	}
+	.contenedor_reserva {
+    	max-height: 37vh;
 	}
 	.contenedor_principal_reserva #guardar_reserva div{
 		width: 16%;
@@ -2681,7 +2884,16 @@ input[id="si"]{
 	float: right;
 	}
 
+	/*Registro Asignaturas*/
+	#registro_asignaturas #contenedor_registro{
+		width: 33%;
+	}
+	#contenedor_registro{
+		margin-left: 5%;
+	}
+
 }
+
 .contenedor_principal_reserva div[class="parent_no_form"]{
 	height: 39vh;
 }
@@ -2718,10 +2930,238 @@ input[id="si"]{
     border-color: #398439;
 }
 
-#consulta_instalacion .contenedor_registro .inner_table {
-    max-height: 41vh !important;
-}
-
 .ajaxload img{
 	margin: 20vh 40vw;
+}
+
+
+
+#consulta_instalaciones .contenedor_registro .inner_table,#consulta_equipamientos .contenedor_registro .inner_table {
+    /*max-height: 41vh !important;*/
+    max-height: 45vh !important;
+    height: 100% !important;
+}
+
+/* end basic styling*/
+
+/* define height and width of scrollable area. Add 16px to width for scrollbar*/
+div.tableContainer {
+	clear: both;
+	height: 285px;
+	overflow: auto;
+}
+
+/* Reset overflow value to hidden for all non-IE browsers. */
+html>body div.tableContainer {
+	overflow: hidden;
+}
+
+/* define width of table. IE browsers only*/
+div.tableContainer table {
+	float: left;
+	/* width: 740px */
+}
+
+/* define width of table. Add 16px to width for scrollbar.           */
+/* All other non-IE browsers.                                        */
+html>body div.tableContainer table {
+	/* width: 756px */
+}
+
+/* set table header to a fixed position. WinIE 6.x only                                       */
+/* In WinIE 6.x, any element with a position property set to relative and is a child of       */
+/* an element that has an overflow property set, the relative value translates into fixed.    */
+/* Ex: parent element DIV with a class of tableContainer has an overflow property set to auto */
+
+* html thead.fixedHeader tr {
+	position: relative;
+}
+
+/* set THEAD element to have block level attributes. All other non-IE browsers            */
+/* this enables overflow to work on TBODY element. All other non-IE, non-Mozilla browsers */
+
+/* make the TH elements pretty */
+
+thead.fixedHeader th {
+	font-weight: normal;
+	padding: 4px 3px;
+	text-align: left
+}
+
+html>body tbody.scrollContent {
+	display: block;
+	height: 41vh;
+	overflow: auto;
+	width: 100%
+}
+
+html>body thead.fixedHeader {
+	display: table;
+	overflow: auto;
+	width: 100%
+}
+
+/* make TD elements pretty. Provide alternating classes for striping the table */
+/* http://www.alistapart.com/articles/zebratables/                             */
+tbody.scrollContent td, tbody.scrollContent tr.normalRow td {
+	background: #FFF;
+	border-bottom: none;
+	border-left: none;
+	border-style: none !important;
+	border-right: 1px solid #CCC;
+	border-top: 1px solid #DDD;
+	padding: 0px 3px 0px 4px;
+	height: 25px !important;
+}
+
+tbody.scrollContent tr.alternateRow td {
+	background: #EEE;
+	border-bottom: none;
+	border-left: none;
+	border-right: 1px solid #CCC;
+	border-top: 1px solid #DDD;
+	padding: 2px 3px 3px 4px
+}
+table.dataTable.no-footer{
+	border: none !important;
+	border-right: 1px solid #334c73 !important;
+}
+table.dataTable thead th, table.dataTable tbody td{
+	padding: 3px 1% !important;
+}
+
+.dataTable tr th,.dataTable tr td{
+	text-align: center !important;
+	width: 10% !important;
+}
+.dataTable tr th[class*="id"],.dataTable tr td[class*="id"]{
+	width: 1% !important;
+	text-align: center;
+}
+.dataTable tr td[class*="id"]{
+	background-color: rgba(187, 201, 215, 0.4);
+}
+.dataTable tr th[class*="w_20"],.dataTable tr td[class*="w_20"]{
+	width: 15% !important;
+	text-align: left !important;
+}
+.dataTable tr th[class*="w_12"],.dataTable tr td[class*="w_12"]{
+	width: 12% !important;
+}
+.dataTable thead tr th, .dataTable tbody tr td{
+	min-width: 25px !important;
+}
+
+.dataTable tr th:last-child{
+	width: 11% !important;
+}
+.dataTable tr td:last-child{
+	width: 5% !important;
+	padding: 0 !important;
+}
+#consulta_reservas_instalaciones tr th, #consulta_reservas_instalaciones tr td,#consulta_reservas_equipamientos tr th, #consulta_reservas_equipamientos tr td{
+	width: 9% ;
+}
+#consulta_reservas_instalaciones tr th:last-child,#consulta_reservas_equipamientos tr th:last-child{
+	width: 5.5% !important;
+}
+#consulta_reservas_instalaciones .scrollContent tr:hover,#consulta_reservas_equipamientos .scrollContent tr:hover{
+	background: rgba(51, 76, 115, 0.4);
+}
+#consulta_reservas_instalaciones .scrollContent img,#consulta_reservas_equipamientos .scrollContent img{
+	margin: 0 auto;
+    max-height:28px;
+    min-width: 20px;
+}
+#consulta_reserva_instalaciones  tbody,#consulta_reserva_equipamientos  tbody{
+	border-right: 1px solid black !important;
+}
+#consulta_reserva_instalaciones .scrollContent thead,#consulta_reserva_equipamientos .scrollContent thead{
+	border-right: none !important;
+}
+.tabla_con_info{
+	width: 83% !important;
+	float: left;
+}
+.info_en_tabla{
+	width: 17% !important;
+	float: right;
+	height: 45vh;
+}
+.cabecera_info{
+	background: #334c73;
+	height: 19px;
+	font-size: 1.3em;
+	color: white;
+	margin: 0 auto;
+	padding: 3px 0;
+	text-align: center;
+	font-family: solid;
+}
+.contenido_info{
+	border-top: 1px solid black;
+}
+.contenido_info .columna_foto{
+	width: 96%;
+}
+.contenido_info .columna_foto img{
+	display: block;
+	margin: 5px auto;
+	margin-bottom: 10px;
+}
+.contenido_info #seleccionado p{
+	color: #334c73;
+	padding:0 10%;
+	font-size: 1.2em;
+	margin: 4px 0;
+	margin-bottom: 5px;
+}
+.contenido_info #seleccionado h3{
+	padding: 0 10%;
+	margin: 0 0;
+	margin-top: 5px;
+}
+.contenido_info #sin_seleccionar p{
+	text-align: center;
+	font-size: 1.2em;
+	font-family: Courier,Helvetica,Arial,sans-serif;
+	margin-top: 17vh;
+}
+#consulta_reservas_instalaciones .scrollContent tr[class*="no_cursor"],#consulta_reservas_equipamientos .scrollContent tr[class*="no_cursor"]{
+	pointer-events: none !important ;
+	cursor: none !important;
+}
+#consulta_reservas_instalaciones .scrollContent tr[class*="no_cursor"] td,#consulta_reservas_equipamientos .scrollContent tr[class*="no_cursor"] td{
+	pointer-events: none !important;
+	cursor: none !important;
+}
+#consulta_reservas_instalaciones .scrollContent tr td img, #consulta_reservas_equipamientos .scrollContent tr td img{
+	cursor: pointer; 
+	pointer-events: auto;
+}
+#consulta_reservas_instalaciones .scrollContent .dataTables_empty,#consulta_reservas_equipamientos .scrollContent .dataTables_empty{
+	padding-top: 20vh !important;
+}
+.swal-wide{
+
+    width:600px !important;
+    margin-left: -317px !important;
+}
+.sweet-alert button:focus{
+	text-decoration: underline;
+
+}
+.sweet-alert th, .sweet-alert td{
+	font-size: 15px !important;
+	text-align: center;
+}
+ .sweet-alert td{
+	color: #334c73;
+	min-width: 85px;
+}
+ .sweet-alert td:nth-child(1){
+	text-align: left;
+}
+ .sweet-alert table{
+	margin:0 auto;
 }

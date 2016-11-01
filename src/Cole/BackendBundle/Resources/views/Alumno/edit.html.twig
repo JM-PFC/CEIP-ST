@@ -16,8 +16,11 @@
         autoOpen: false,
         height: 320,
         width: 900,
-        modal: true,
+        modal: false,
         resizable: false,
+        close: function( event, ui ) {
+        $(".ui-widget-overlay").remove();
+        }
         //show: 'fade',
         //hide: 'fade',
         //buttons: {
@@ -30,7 +33,18 @@
    $('#padres_dialog').on('dialogclose', function(event) {
      $('#padres_dialog').empty();
     });
+    // Se deshabilita los botones de guardar y restablecer.
+    $("#edit_alumno_submit").prop("disabled",true);
+    $("#editar_alumno_restablecer").prop("disabled",true);
+    // Se añade opciones para que se pueda comprobar cuando modificamos el formulario para volver a mostrar los botones.
+    $("#edit_alumno_cursoIngreso option:selected").attr("selected", "selected");
+    $("#edit_alumno_observaciones").attr("value", $("#edit_alumno_observaciones").val());
 
+    // Se elimina el contenido de la etiqueta de fecha de nacimiento para que muestre bien el aviso de error(se añade con css).
+    $("label[for^='edit_'][for$='_fechaNacimiento']").text("");
+      $("#alumno_edit select option:selected").each(function(){
+        $(this).closest("select").attr("seleccionado", $(this).val());
+      });
    </script>
 
 {% endblock %}
@@ -141,7 +155,10 @@
                 {{ form_row(edit_form.responsable1.profesion,{'id':'edit_'~edit_form.responsable1.profesion.vars.id }) }}
                 {{ form_row(edit_form.responsable1.estadoCivil,{'id':'edit_'~edit_form.responsable1.estadoCivil.vars.id }) }}
                 {{ form_row(edit_form.responsable1.movil,{'id':'edit_'~edit_form.responsable1.movil.vars.id }) }}
-                {{ form_row(edit_form.responsable1.email,{'id':'edit_'~edit_form.responsable1.email.vars.id }) }}
+                <div class="email_small">
+                  {{ form_label(edit_form.responsable1.email) }}
+                  {{ form_widget(edit_form.responsable1.email,{'id':'edit_'~edit_form.responsable1.email.vars.id ,'attr':{'class': 'text_transform_none'} }) }}
+                </div>
               </div>
             </div>
           </fieldset >
@@ -169,7 +186,10 @@
                 {{ form_row(edit_form.responsable2.profesion,{'id':'edit_'~edit_form.responsable2.profesion.vars.id }) }}
                 {{ form_row(edit_form.responsable2.estadoCivil,{'id':'edit_'~edit_form.responsable2.estadoCivil.vars.id }) }}
                 {{ form_row(edit_form.responsable2.movil,{'id':'edit_'~edit_form.responsable2.movil.vars.id }) }}
-                {{ form_row(edit_form.responsable2.email,{'id':'edit_'~edit_form.responsable2.email.vars.id }) }}
+                <div class="email_small">
+                  {{ form_label(edit_form.responsable2.email) }}
+                  {{ form_widget(edit_form.responsable2.email,{'id':'edit_'~edit_form.responsable2.email.vars.id ,'attr':{'class': 'text_transform_none'} }) }}
+                </div>
               </div>
             </div>
             </fieldset >
@@ -195,20 +215,20 @@
             <div class="small_column">
               <div>
                 {{ form_label(edit_form.cursoIngreso) }}
-                <input class="readonly" value="{{ entity.cursoIngreso }}"></input>
+                <input class="readonly m_input" value="{{ entity.cursoIngreso }}"></input>
               </div>
             </div>
-            <div class="small_column">
+            <div class="small_column ">
               <div>
                 <label>Fecha Ingreso</label>
-                <input class="readonly" value="{{ entity.fechaAlta| localizeddate('none', 'none', 'none',none , "dd/MM/Y") }}"></input>
+                <input class="readonly " value="{{ entity.fechaAlta| localizeddate('none', 'none', 'none',none , "dd/MM/Y") }}"></input>
               </div>
             </div>
             <div class="small_column">
 
               <div>
               <label>Curso actual</label>
-              <input class="readonly" value="{{ entity.curso }}"></input>
+              <input class="readonly m_input" value="{{ entity.curso }}"></input>
               </div>
 
             </div>
@@ -216,7 +236,7 @@
             <div class="small_column">
               <div>
                 <label>Grupo</label>
-              <input class="readonly" value="{{ entity.grupo }}"></input>
+              <input class="readonly s_input" value="{{ entity.grupo }}"></input>
               </div>
 
             </div>
@@ -267,4 +287,3 @@
    {{form_end(edit_form)}}
 
 {% endblock %}
-    

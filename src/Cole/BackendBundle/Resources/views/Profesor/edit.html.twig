@@ -1,4 +1,3 @@
-{% extends 'BackendBundle:Default:index.html.twig' %}
 
 {% block head %}{% endblock %}
 {% block stylesheets %}{% endblock %}
@@ -13,6 +12,7 @@
     $("#perfil_acad :input").each(function(i){
       if(arr_perfilAcad[i]!="~"){
           $(this).val(arr_perfilAcad[i]);
+          $(this).attr("value",arr_perfilAcad[i]);
       }
     });  
 
@@ -20,7 +20,14 @@
       if(arr_perfilProf[i]!="~"){
         $(this).val(arr_perfilProf[i]);
       }
-    });      
+    });
+      // Se deshabilita los botones de guardar y restablecer.      
+      $("#edit_profesor_submit").prop("disabled",true);
+      $("#editar_profesor_restablecer").prop("disabled",true);
+
+    // Se elimina el contenido de la etiqueta de fecha de nacimiento para que muestre bien el aviso de error(se añade con css).
+    $("label[for^='edit_'][for$='_fechaNacimiento']").text("");
+
 
    </script>
 
@@ -109,7 +116,7 @@
         				{{ form_row(edit_form.email,{'id':'edit_'~edit_form.email.vars.id }) }}
 							</div>
 
-							<div class="small_column">
+							<div class="end_column">
         				{{ form_row(edit_form.fechaNacimiento,{'id':'edit_'~edit_form.fechaNacimiento.vars.id }) }}
         				{{ form_row(edit_form.telefono,{'id':'edit_'~edit_form.telefono.vars.id }) }}
 								{{ form_row(edit_form.movil,{'id':'edit_'~edit_form.movil.vars.id }) }}
@@ -139,7 +146,7 @@
                         <input  id="edit_perfil_acamedico3" validation="Words"></input>
                     </div>
                     <div class="short">
-                        <input  id="edit_año_acamedico4" validation="Numbers"></input>
+                        <input  id="edit_año_acamedico4" validation="Numbers,Año"></input>
                     </div>
                 </div>
                 <div>
@@ -153,7 +160,7 @@
                         <input  id="edit_perfil_acamedico7" validation="Words"></input>
                     </div>
                     <div class="short">
-                        <input  id="edit_año_acamedico8" validation="Numbers"></input>
+                        <input  id="edit_año_acamedico8" validation="Numbers,Año"></input>
                     </div>
                 </div>
                 <div>
@@ -167,7 +174,7 @@
                         <input  id="edit_perfil_acamedico11" validation="Words"></input>
                     </div>
                     <div class="short">
-                        <input  id="edit_año_acamedico12" validation="Numbers"></input>
+                        <input  id="edit_año_acamedico12" validation="Numbers,Año"></input>
                     </div>
                 </div>
                 <div>
@@ -181,7 +188,7 @@
                         <input  id="edit_perfil_acamedico15" validation="Words"></input>
                     </div>
                     <div class="short">
-                        <input  id="edit_año_acamedico16" validation="Numbers"></input>
+                        <input  id="edit_año_acamedico16" validation="Numbers,Año"></input>
                     </div>
                 </div>
                 <div>
@@ -195,7 +202,7 @@
                         <input  id="edit_perfil_acamedico19" validation="Words"></input>
                     </div>
                     <div class="short">
-                        <input  id="edit_año_acamedico20" validation="Numbers"></input>
+                        <input  id="edit_año_acamedico20" validation="Numbers,Año"></input>
                     </div>
                 </div>
 						</div>

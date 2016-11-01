@@ -48,6 +48,11 @@ class Horario
     private $reserva;
 
     /**
+    * @ORM\OneToMany(targetEntity="Imparte", mappedBy="horario")
+    */
+    private $imparte;
+
+    /**
      * Get id
      *
      * @return integer 
@@ -165,5 +170,38 @@ class Horario
     public function getReserva()
     {
         return $this->reserva;
+    }
+
+    /**
+     * Add imparte
+     *
+     * @param \Cole\BackendBundle\Entity\Imparte $imparte
+     * @return Horario
+     */
+    public function addImparte(\Cole\BackendBundle\Entity\Imparte $imparte)
+    {
+        $this->imparte[] = $imparte;
+
+        return $this;
+    }
+
+    /**
+     * Remove imparte
+     *
+     * @param \Cole\BackendBundle\Entity\Imparte $imparte
+     */
+    public function removeImparte(\Cole\BackendBundle\Entity\Imparte $imparte)
+    {
+        $this->imparte->removeElement($imparte);
+    }
+
+    /**
+     * Get imparte
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getImparte()
+    {
+        return $this->imparte;
     }
 }

@@ -14,7 +14,10 @@
 
         // Se habilita y deshabilita el campo file de la foto según la opción del radio.
         $("#foto_no").focus(function(){
-          $("#alumno_foto").prop("disabled", true);  
+            $("#alumno_foto").prop("disabled", true);
+            //Se asigna restablece el valor en el input y se elimina el nombre del archivo del div leyenda.
+            $("#alumno_foto").val("");
+            $(this).closest("div").find("div[id='leyenda']>p").remove();
         });
 
         $("#foto_si").focus(function(){
@@ -34,8 +37,11 @@
             $("#"+sel+" #content-form-menu").find("[id^='tab']").hide(); // Se oculta todo el contenido.
             $("#"+sel+" #tabs-form li:first").attr("class","selected"); // Se activa la primera pestaña.
             $("#"+sel+" #content-form-menu #tab1").css("display","inline"); // Se muestra el contenido de la primera pestaña.
-            $("#"+sel+" #tab1 input:first").focus(); // Se selecciona el primer campo por defecto.
+            //$("#"+sel+" #tab1 input:first").focus(); // Se selecciona el primer campo por defecto.
         }
+
+        // Se elimina el contenido de la etiqueta de fecha de nacimiento para que muestre bien el aviso de error(se añade con css).
+        $("label[for^='alumno_res'][for$='_fechaNacimiento']").text("");
     </script>
 
 {% endblock %}
@@ -96,7 +102,7 @@
                         {{ form_row(form.responsable1.profesion) }}
                         {{ form_row(form.responsable1.estadoCivil) }}
                         {{ form_row(form.responsable1.movil) }}
-                        {{ form_row(form.responsable1.email) }}
+                        {{ form_row(form.responsable1.email,{'attr': {'class': 'your-text_transform_none'}}) }}
                     </div>
                 </div>
             </fieldset>
@@ -116,7 +122,7 @@
                         {{ form_row(form.responsable2.profesion) }}
                         {{ form_row(form.responsable2.estadoCivil) }}
                         {{ form_row(form.responsable2.movil) }}
-                        {{ form_row(form.responsable2.email) }}
+                        {{ form_row(form.responsable2.email,{'attr': {'class': 'your-text_transform_none'}}) }}
                     </div>
                 </div>
             </fieldset>

@@ -300,6 +300,8 @@ $(document).ready(function () {
   // Se selecciona una opción del menú.
   $(".contenedor div div").on("click", "a",function(event) {
   	event.preventDefault(); //cancela el comportamiento por defecto
+    // Se cierra las notificaciones.
+    PNotify.removeAll();
 
     n_total= $('#tabs>ul:first').children("li").size();
  	  tabTitle = $(this).attr("title");
@@ -479,6 +481,9 @@ $(document).ready(function () {
   // Se selecciona las pestañas abiertas.
   $(document).on("click","#tabs>ul>li a",function(event){
     event.preventDefault(); //cancela el comportamiento por defecto.
+    // Se cierra las notificaciones.
+    PNotify.removeAll(); 
+
     n_total= $("#tabs>ul:first").children("li").size();
     elemento=$(this).attr("id");
     ultimo=$('#tabs>ul>li>a:last').attr("id");

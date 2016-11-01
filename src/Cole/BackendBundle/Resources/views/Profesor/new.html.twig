@@ -16,8 +16,37 @@
             $("#"+sel+" #content-form-menu").find("[id^='tab']").hide(); // Se oculta todo el contenido.
             $("#"+sel+" #tabs-form li:first").attr("class","selected"); // Se activa la primera pestaña.
             $("#"+sel+" #content-form-menu #tab1").css("display","inline"); // Se muestra el contenido de la primera pestaña.
-            $("#"+sel+" #tab1 input:first").focus(); // Se selecciona el primer campo por defecto.
+            //$("#"+sel+" #tab1 input:first").focus(); // Se selecciona el primer campo por defecto.
         }
+
+        $("#profesor_nuevo #tab2 input").each (function(){ 
+            $(this).prop("disabled",true);
+        });
+        $("#profesor_nuevo #tab2 div[class='child']>div:nth-child(2) input").each (function(){ 
+            $(this).prop("disabled",false);
+        });
+        $("#profesor_nuevo #tab3 input").each (function(){ 
+            $(this).prop("disabled",true);
+        });
+        $("#profesor_nuevo #tab3 div[class='child']>div:nth-child(2) input").each (function(){ 
+            $(this).prop("disabled",false);
+        });
+
+        $(document).on("keyup",'#profesor_nuevo #tab2 input', function(){
+            var val=0;
+            $(this).parent("div").parent("div").find("input").each (function(){ 
+                if( !$(this).val() ) {
+
+                    val=1;                
+                }
+            });
+            if(val==0){ // mirar porque sale el div dsiguiente de la misma fila
+                $(this).parent("div").parent("div").next("div").find("input").each (function(){ 
+                    $(this).prop("disabled",false);
+                });
+            }
+        });
+
     </script>
 
 {% endblock %}
@@ -61,7 +90,7 @@
 
                     <div class="block-one">
                         <div class="izquierda">
-                            {{ form_row(form.email) }}
+                            {{ form_row(form.email,{'attr':{'class': 'text_transform_none'}}) }}
                             <div class="ancho">
                                 <label class="required">Foto</label>
                                 {{ form_widget(form.foto) }}
@@ -81,11 +110,11 @@
             <div class="parent">
             <div class="child">
                 <div>
-                    <label class="long">Estudios realizados</label>
+                    <label class="long">Últimos Estudios realizados</label>
                     <label class="medium">Institución</label>
                     <label class="medium">Localidad/Provincia</label>
                     <label class="short">Año</label>
-              </div>
+                </div>
                 <div>
                     <div class="long">
                         <input id="perfil_acamedico1"  validation="Words"></input>
@@ -97,7 +126,7 @@
                         <input  id="perfil_acamedico3" validation="Words"></input>
                     </div>
                     <div class="short">
-                        <input  id="año_acamedico4" validation="Numbers"></input>
+                        <input  id="año_acamedico4" validation="Numbers,Año"></input>
                     </div>
                 </div>
                 <div>
@@ -111,7 +140,7 @@
                         <input  id="perfil_acamedico7" validation="Words"></input>
                     </div>
                     <div class="short">
-                        <input  id="año_acamedico8" validation="Numbers"></input>
+                        <input  id="año_acamedico8" validation="Numbers,Año"></input>
                     </div>
                 </div>
                 <div>
@@ -125,7 +154,7 @@
                         <input  id="perfil_acamedico11" validation="Words"></input>
                     </div>
                     <div class="short">
-                        <input  id="año_acamedico12" validation="Numbers"></input>
+                        <input  id="año_acamedico12" validation="Numbers,Año"></input>
                     </div>
                 </div>
                 <div>
@@ -139,7 +168,7 @@
                         <input  id="perfil_acamedico15" validation="Words"></input>
                     </div>
                     <div class="short">
-                        <input  id="año_acamedico16" validation="Numbers"></input>
+                        <input  id="año_acamedico16" validation="Numbers,Año"></input>
                     </div>
                 </div>
                 <div>
@@ -153,7 +182,7 @@
                         <input  id="perfil_acamedico19" validation="Words"></input>
                     </div>
                     <div class="short">
-                        <input  id="año_acamedico20" validation="Numbers"></input>
+                        <input  id="año_acamedico20" validation="Numbers,Año"></input>
                     </div>
                 </div>
             </div> 
@@ -166,7 +195,7 @@
             <div class="parent">
             <div class="child">
                 <div>
-                    <label class="long">Instituciones donde ha enseñado</label>
+                    <label class="long">Últimas Instituciones donde ha enseñado</label>
                     <label class="medium">Localidad</label>
                     <label class="medium">Provincia</label>
                     <label class="short">Años</label>

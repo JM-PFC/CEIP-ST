@@ -4,6 +4,7 @@ namespace Cole\BackendBundle\Form;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
+use Doctrine\ORM\EntityRepository;
 
 class AlumnoType extends AbstractType
 {
@@ -19,7 +20,7 @@ class AlumnoType extends AbstractType
             ->add('apellido2','text',array('label' => 'Segundo Apellido','max_length' => 30, 'attr' => array('validation' => 'Empty, Words')))
             //->add('sexo', 'choice', array('label' => 'Sexo','choices' => array('Masculino' => 'Masculino', 'Femenino'=>'Femenino'),'data'=>'Masculino','required'=> true, 'expanded'=>true, 'multiple'=>false))
             ->add('sexo', 'choice', array('label' => 'Sexo','choices' => array('Masculino' => 'Masculino', 'Femenino'=>'Femenino'),'required'=> true, 'expanded'=>true, 'multiple'=>false))
-            ->add('fechaNacimiento','date',array('label' => 'Fecha de Nacimiento', 'max_length' => 10,'widget' => 'single_text','format' => 'dd/MM/yyyy', 'attr' => array('lengthmin'=> 8,'class' => 'fecha', 'placeholder'=>'__/__/____','validation' => 'Empty,Length,Fecha,Fecha_Niño')))
+            ->add('fechaNacimiento','date',array('label' => 'Fecha Nacimiento', 'max_length' => 10,'widget' => 'single_text','format' => 'dd/MM/yyyy', 'attr' => array('lengthmin'=> 8,'class' => 'fecha', 'placeholder'=>'__/__/____','validation' => 'Empty,Length,Fecha,Fecha_Niño')))
             //->add('fechaNacimiento', 'birthday', array('format'=> 'dd MMMM yyyy', 'widget'=> 'choice', 'years'=> range(date('Y')-15, date('Y')-2), 'empty_value' => array('year' => 'Año', 'month' => 'Mes', 'day' => 'Día')))
             ->add('direccion','text',array('label' => 'Dirección','max_length' => 50, 'attr' => array('validation' => 'Empty, LetterInitial')))
             ->add('localidad','text',array('label' => 'Localidad','max_length' => 50, 'attr' => array('validation' => 'Empty, Letters')))
@@ -27,7 +28,7 @@ class AlumnoType extends AbstractType
             ->add('cp','text',array('label' => 'Código Postal', 'max_length' => 5, 'attr' => array('class' => 'cp','validation' => 'Empty,Length,CP')))
             ->add('telefono','text', array('label' => 'Teléfono', 'max_length' => 12, 'attr' => array('class' => 'telefono', 'lengthmin'=> 9, 'validation' => 'Length,Telefono')))
             //->add('fechaAlta','date',array('label' => 'Fecha de Alta','read_only' => 'true','widget' => 'single_text','format' => 'dd/MM/yyyy')))
-            ->add('cursoIngreso','entity',array('class' => 'BackendBundle:Curso', 'empty_data' => null,'empty_value'=> 'Seleccione un curso','required'=> true, 'attr' => array('validation' => 'Empty')))
+            ->add('cursoIngreso','entity',array('class' => 'BackendBundle:Curso','query_builder' => function (EntityRepository $er) {return $er->createQueryBuilder('u')->add('orderBy','u.nivel ASC, u.curso ASC');}, 'empty_data' => null,'empty_value'=> 'Seleccione un curso','required'=> true, 'attr' => array('validation' => 'Empty')))
 
             //->add('curso')
             //->add('grupo')
@@ -35,7 +36,7 @@ class AlumnoType extends AbstractType
             //->add('numAlum')
             ->add('grupoSangre','choice',array('empty_value'=> 'Seleccione una opción','label' => 'Grupo Sanguíneo', 'choices' => array('A+' => 'A+', 'A-'=>'A-', 'B+'=>'B+', 'B-'=>'B-','AB+'=>'AB+','AB-'=>'AB-','0+'=>'0+','0-'=>'0-'),'required'=> false,'multiple'=>false))
 
-            ->add('observaciones', 'textarea',array('label' => 'Observaciones:', 'max_length' => 500, 'attr' => array('type'=>'textarea', 'validation' => 'Words')))
+            ->add('observaciones', 'textarea',array('label' => 'Observaciones:', 'max_length' => 500, 'attr' => array('type'=>'textarea', 'validation' => 'LetterInitial')))
             //->add('activo')
             //->add('responsable1')
             //->add('responsable2')

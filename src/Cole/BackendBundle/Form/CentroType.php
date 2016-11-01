@@ -44,6 +44,6 @@ class CentroType extends AbstractType
      */
     public function getName()
     {
-        return 'cole_backendbundle_centro';
+        return 'centro';
     }
 }

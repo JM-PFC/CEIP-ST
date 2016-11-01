@@ -4,6 +4,7 @@ namespace Cole\BackendBundle\Controller;
 
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\HttpFoundation\JsonResponse;
 
 use Cole\BackendBundle\Entity\Imparte;
 use Cole\BackendBundle\Form\ImparteType;
@@ -220,5 +221,28 @@ class ImparteController extends Controller
             ->add('submit', 'submit', array('label' => 'Delete'))
             ->getForm()
         ;
+    }
+
+    public function DatosImparteAction() 
+    {
+        $dia_semanal=$this->get('request')->request->get('dia_semanal');
+        $ini=$this->get('request')->request->get('ini');
+        $fin=$this->get('request')->request->get('fin');
+        $profesor=$this->get('request')->request->get('profesor');
+
+        $em = $this->getDoctrine()->getEntityManager();
+
+        $datos= $em->getRepository('BackendBundle:Imparte')->findByDatos($dia_semanal,$ini,$fin,$profesor);
+
+        if($datos){
+            return new JsonResponse(array('data' =>"existe",
+                'nivel'=>$datos->getGrupo()->getCurso()->getNivel(),
+                'curso'=>$datos->getGrupo()->getCurso()->getCurso(),
+                'grupo' =>$datos->getGrupo()->getLetra(),
+                'asignatura'=>$datos->getAsignatura()->getNombre()), 200);
+        }
+        else{
+            return new JsonResponse(array('data' =>null), 200);
+        }
     }
 }

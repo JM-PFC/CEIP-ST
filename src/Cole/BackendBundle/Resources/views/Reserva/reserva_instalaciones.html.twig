@@ -86,15 +86,15 @@
     success: function(response) {
       // Se muestra un aviso indicando si falta alguna fecha por registrar y se cierra laopción de reservas.
       if(response.curso==null || response.navidad==null || response.semanasanta==null ){
-        texto="Para poder hacer una reserva debe completar el calendario del curso con las siguientes fechas:<br/><br/>";
+        texto="<p class='justificado'>Para poder hacer una reserva debe completar el calendario del curso con las siguientes fechas:</p><br/>";
         if(response.curso==null){
-          texto+="<h4>- Fecha de inicio y fin del curso </h4> <br/>";
+          texto+="<h4>Fecha de inicio y fin del curso</h4> <br/>";
         }
         if(response.navidad==null){
-          texto+="<h4>- Vacaciones de Navidad </h4> <br/>";
+          texto+="<h4>Vacaciones de Navidad</h4> <br/>";
         }
         if(response.semanasanta==null){
-          texto+="<h4>- Vacaciones de Semana Santa </h4> <br/>";
+          texto+="<h4>Vacaciones de Semana Santa</h4> <br/>";
         }
         if("{{ tipo }}" == "instalaciones"){
           titulo="No se pueden reservar las instalaciones";
@@ -108,7 +108,9 @@
           text: texto,
           type: 'warning',
           showCancelButton: false,
+          allowOutsideClick: false,
           confirmButtonColor: color,
+          animation: false,
           closeOnConfirm: true,
           html: true,
           //timer:10000,
@@ -169,7 +171,7 @@
             <div class="child">
               <div class="contenedor_reserva" id="contenedor_reserva_horas">
               {% for clase in clases %}
-                <button type="radio" disabled="disabled" clase="{{clase.horaClase}}" min="{{  clase.inicio|date('H:i')}}"><span>{{ clase.horaClase ~ " Hora " }}</span>{{  clase.inicio|date('H:i') ~ " - " ~ clase.fin|date('H:i') }}</button>
+                <button type="radio" disabled="disabled" clase="{{clase.horaClase}}" min="{{  clase.inicio|date('H:i')}}" ><span>{{ clase.horaClase ~ " Hora " }}</span>{{  "(" ~ clase.inicio|date('H:i') ~ " - " ~ clase.fin|date('H:i') ~ ")" }}</button>
               {% endfor %}
               </div>
             </div>

@@ -27,11 +27,6 @@ class Imparte
     */
     private $asignatura;
 
-        /**
-    * @ORM\ManyToOne(targetEntity="Curso", inversedBy="imparte")
-    * @ORM\JoinColumn(name="curso_id", referencedColumnName="id", nullable=false)
-    */
-    private $curso;
 
     /**
     * @ORM\ManyToOne(targetEntity="Grupo", inversedBy="imparte")
@@ -48,7 +43,16 @@ class Imparte
     /**
      * @var string
      *
-     * @ORM\Column(name="horario", type="string", length=255)
+     * @ORM\Column(name="dia_semanal", type="string", length=255, nullable=false)
+     */
+    private $dia_semanal;
+
+    /**
+     * @var string
+     *
+     * 
+     * @ORM\ManyToOne(targetEntity="Horario", inversedBy="imparte")
+     * @ORM\JoinColumn(name="horario", referencedColumnName="id" ,nullable=false)
      */
     private $horario;
 
@@ -205,5 +209,28 @@ class Imparte
     public function getCurso()
     {
         return $this->curso;
+    }
+
+    /**
+     * Set dia_semanal
+     *
+     * @param string $diaSemanal
+     * @return Imparte
+     */
+    public function setDiaSemanal($diaSemanal)
+    {
+        $this->dia_semanal = $diaSemanal;
+
+        return $this;
+    }
+
+    /**
+     * Get dia_semanal
+     *
+     * @return string 
+     */
+    public function getDiaSemanal()
+    {
+        return $this->dia_semanal;
     }
 }

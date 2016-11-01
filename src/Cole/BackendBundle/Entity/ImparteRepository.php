@@ -13,7 +13,7 @@ use Doctrine\ORM\EntityRepository;
 class ImparteRepository extends EntityRepository
 {
 
-		public function findByCurso($curso)
+	public function findByCurso($curso)
 	{
 		return $this->getEntityManager()->createQuery(
 		'SELECT i FROM BackendBundle:Imparte i WHERE i.curso=:curso')
@@ -22,6 +22,17 @@ class ImparteRepository extends EntityRepository
 		->getResult();
 	}
 
-
+	public function findByDatos($dia_semanal,$ini,$fin,$profesor)
+	{
+		return $this->getEntityManager()->createQuery(
+			'SELECT i FROM BackendBundle:Imparte i INNER JOIN i.horario h WHERE i.profesor=:profesor and i.dia_semanal=:dia_semanal and h.inicio=:ini and h.fin=:fin')
+		->setParameters(array(
+			'profesor' => $profesor,
+			'dia_semanal' => $dia_semanal, 
+			'ini' => $ini,
+			'fin' => $fin))
+		->setMaxResults(1)
+		->getOneOrNullResult();
+	}
 
 }

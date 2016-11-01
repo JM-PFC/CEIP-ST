@@ -90,7 +90,7 @@ class Padres
     /**
      * @var string
      *
-     * @ORM\Column(name="username", type="string", length=255)
+     * @ORM\Column(name="username", type="string", length=255, nullable=true)
      * 
      */
     private $username;
@@ -98,7 +98,7 @@ class Padres
     /**
      * @var string
      *
-     * @ORM\Column(name="password", type="string", length=255)
+     * @ORM\Column(name="password", type="string", length=255, nullable=true)
      * 
      */
     private $password;
@@ -114,7 +114,7 @@ class Padres
     /**
      * @var string
      *
-     * @ORM\Column(name="clave_usuario", type="string", length=255)
+     * @ORM\Column(name="clave_usuario", type="string", length=255, nullable=true)
      * 
      */
     private $claveUsuario;// variable pararecuperación de clave.
@@ -122,7 +122,7 @@ class Padres
     /**
      * @var boolean
      *
-     * @ORM\Column(name="activo", type="boolean")
+     * @ORM\Column(name="activo", type="boolean", nullable=true)
      * 
      */
     private $activo;

@@ -37,7 +37,6 @@ class FestivosController extends Controller
         $array['inicio_semanasanta']=$em->getRepository('BackendBundle:Festivos')->findFestivosPorDescripcion("Inicio Vacaciones de Semana Santa");
         $array['fin_semanasanta']=$em->getRepository('BackendBundle:Festivos')->findFestivosPorDescripcion("Fin Vacaciones de Semana Santa");
 
-
         return $this->render('BackendBundle:Festivos:index.html.twig', array(
             'entities' => $entities,
             'inicio' => $inicio,

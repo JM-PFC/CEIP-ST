@@ -66,3 +66,8 @@ profesores_por_curso:
     options:
         expose: true
 
+datos_profesor:
+    path:     /datos_profesor/{id}
+    defaults: { _controller: "BackendBundle:Profesor:DatosProfesor" }
+    options:
+        expose: true
