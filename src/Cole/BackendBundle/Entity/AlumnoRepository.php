@@ -23,10 +23,9 @@ class AlumnoRepository extends EntityRepository
 	public function findAlumnoById($id)
 	{
 		return $this->getEntityManager()->createQuery(
-			'SELECT a FROM BackendBundle:Alumno a WHERE a.id=:id AND a.activo=:activo')
+			'SELECT a FROM BackendBundle:Alumno a WHERE a.id=:id')
 		->setParameters(array(
-			'id' => $id,
-			'activo'=>1))
+			'id' => $id))
 		->setMaxResults(1)
 		->getOneOrNullResult();
 	}
@@ -41,6 +40,15 @@ class AlumnoRepository extends EntityRepository
 		->getResult();
 	}
 
+	public function findAntiguosAlumnosPorCurso($id)
+	{
+	return $this->getEntityManager()->createQuery(
+		'SELECT a FROM BackendBundle:Alumno a WHERE a.activo=:activo AND a.curso=:id ORDER BY a.apellido1')
+		->setParameters(array(
+			'id' => $id,
+			'activo'=>0))
+		->getResult();
+	}
 	public function findAlumnosPorGrupo($grupo)
 	{
 	return $this->getEntityManager()->createQuery(

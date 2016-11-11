@@ -24,10 +24,10 @@ class CursoRepository extends EntityRepository
 		->getOneOrNullResult();
 	}
 
-	public function findAllByCurso()
+	public function findAll()
 	{
 		return $this->getEntityManager()->createQuery(
-		'SELECT c FROM BackendBundle:Curso c ORDER BY c.nivel, c.curso')
+		'SELECT c FROM BackendBundle:Curso c ORDER BY c.numOrden')
 		->getResult();
 	}
 }

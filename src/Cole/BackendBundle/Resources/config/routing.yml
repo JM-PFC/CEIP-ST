@@ -59,3 +59,7 @@ BackendBundle_reserva:
 BackendBundle_horario:
         resource: "@BackendBundle/Resources/config/routing/horario.yml"
         prefix:   /horario
+
+BackendBundle_matricula:
+        resource: "@BackendBundle/Resources/config/routing/matricula.yml"
+        prefix:   /matricula

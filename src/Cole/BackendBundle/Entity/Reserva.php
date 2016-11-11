@@ -48,14 +48,6 @@ class Reserva
 
 
     /**
-     * @var string
-     *
-     * @ORM\Column(name="propósito", type="string", length=300, nullable=true)
-     */
-    private $propósito;
-
-
-    /**
      * Get id
      *
      * @return integer 
@@ -86,29 +78,6 @@ class Reserva
     public function getFecha()
     {
         return $this->fecha;
-    }
-
-    /**
-     * Set propósito
-     *
-     * @param string $propósito
-     * @return Reserva
-     */
-    public function setPropósito($propósito)
-    {
-        $this->propósito = $propósito;
-
-        return $this;
-    }
-
-    /**
-     * Get propósito
-     *
-     * @return string 
-     */
-    public function getPropósito()
-    {
-        return $this->propósito;
     }
 
     /**

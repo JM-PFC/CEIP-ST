@@ -28,8 +28,8 @@ class AlumnoType extends AbstractType
             ->add('cp','text',array('label' => 'Código Postal', 'max_length' => 5, 'attr' => array('class' => 'cp','validation' => 'Empty,Length,CP')))
             ->add('telefono','text', array('label' => 'Teléfono', 'max_length' => 12, 'attr' => array('class' => 'telefono', 'lengthmin'=> 9, 'validation' => 'Length,Telefono')))
             //->add('fechaAlta','date',array('label' => 'Fecha de Alta','read_only' => 'true','widget' => 'single_text','format' => 'dd/MM/yyyy')))
-            ->add('cursoIngreso','entity',array('class' => 'BackendBundle:Curso','query_builder' => function (EntityRepository $er) {return $er->createQueryBuilder('u')->add('orderBy','u.nivel ASC, u.curso ASC');}, 'empty_data' => null,'empty_value'=> 'Seleccione un curso','required'=> true, 'attr' => array('validation' => 'Empty')))
-
+            //->add('cursoIngreso','entity',array('class' => 'BackendBundle:Curso','query_builder' => function (EntityRepository $er) {return $er->createQueryBuilder('u')->add('orderBy','u.nivel ASC, u.curso ASC');}, 'empty_data' => null,'empty_value'=> 'Seleccione un curso','required'=> true, 'attr' => array('validation' => 'Empty')))
+            ->add('cursoIngreso','entity',array('class' => 'BackendBundle:Curso','query_builder' => function (EntityRepository $er) {return $er->createQueryBuilder('u')->add('orderBy','u.numOrden');}, 'empty_data' => null,'empty_value'=> 'Seleccione un curso','required'=> true, 'attr' => array('validation' => 'Empty')))
             //->add('curso')
             //->add('grupo')
             ->add('foto', 'file', array('data_class' => null,'required' => false, 'attr' => array( 'class' => 'archivo','size' => 50, 'mimeTypes' => '.png,.jpg,.jpeg' ,'validation' => 'MimeTypes, MaxSize')))

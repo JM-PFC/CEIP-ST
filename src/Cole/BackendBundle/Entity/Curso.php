@@ -46,9 +46,19 @@ class Curso
     private $numGrupos;
 
     /**
-    * @ORM\OneToMany(targetEntity="Imparte", mappedBy="curso", cascade={"remove"})
-    */
-    private $imparte;
+     * @var integer
+     *
+     * @ORM\Column(name="numOrden", type="integer")
+     */
+    private $numOrden;
+
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="ratio", type="integer")
+     */
+    private $ratio;
+
 
     /**
     * @ORM\OneToMany(targetEntity="Grupo", mappedBy="curso", cascade={"remove"})
@@ -59,6 +69,11 @@ class Curso
     * @ORM\OneToMany(targetEntity="Alumno", mappedBy="curso")
     */
     private $alumnos;
+
+    /**
+     * @ORM\OneToMany(targetEntity="Matricula", mappedBy="curso")
+     */
+    private $matricula;
     
     public function __construct()
     {
@@ -247,5 +262,84 @@ class Curso
     public function getAlumnos()
     {
         return $this->alumnos;
+    }
+
+    /**
+     * Add matricula
+     *
+     * @param \Cole\BackendBundle\Entity\Matricula $matricula
+     * @return Curso
+     */
+    public function addMatricula(\Cole\BackendBundle\Entity\Matricula $matricula)
+    {
+        $this->matricula[] = $matricula;
+
+        return $this;
+    }
+
+    /**
+     * Remove matricula
+     *
+     * @param \Cole\BackendBundle\Entity\Matricula $matricula
+     */
+    public function removeMatricula(\Cole\BackendBundle\Entity\Matricula $matricula)
+    {
+        $this->matricula->removeElement($matricula);
+    }
+
+    /**
+     * Get matricula
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getMatricula()
+    {
+        return $this->matricula;
+    }
+
+    /**
+     * Set numOrden
+     *
+     * @param integer $numOrden
+     * @return Curso
+     */
+    public function setNumOrden($numOrden)
+    {
+        $this->numOrden = $numOrden;
+
+        return $this;
+    }
+
+    /**
+     * Get numOrden
+     *
+     * @return integer 
+     */
+    public function getNumOrden()
+    {
+        return $this->numOrden;
+    }
+
+    /**
+     * Set ratio
+     *
+     * @param integer $ratio
+     * @return Curso
+     */
+    public function setRatio($ratio)
+    {
+        $this->ratio = $ratio;
+
+        return $this;
+    }
+
+    /**
+     * Get ratio
+     *
+     * @return integer 
+     */
+    public function getRatio()
+    {
+        return $this->ratio;
     }
 }

@@ -26,7 +26,7 @@ class CursoController extends Controller
     {
         $em = $this->getDoctrine()->getManager();
 
-        $entities = $em->getRepository('BackendBundle:Curso')->findAllByCurso();
+        $entities = $em->getRepository('BackendBundle:Curso')->findAll();
 
         return $this->render('BackendBundle:Curso:index.html.twig', array(
             'entities' => $entities,
@@ -38,7 +38,7 @@ class CursoController extends Controller
     {
         $em = $this->getDoctrine()->getManager();
 
-        $cursos = $em->getRepository('BackendBundle:Curso')->findAllByCurso();
+        $cursos = $em->getRepository('BackendBundle:Curso')->findAll();
 
         return $this->render('BackendBundle:Curso:listaCursos.html.twig', array(
             'cursos' => $cursos,
@@ -60,6 +60,15 @@ class CursoController extends Controller
 
         if ($form->isValid()) {
             $em = $this->getDoctrine()->getManager();
+            //Añadimos el numéro de orden (números de cursos +1)
+            $query = $em->createQueryBuilder()
+                ->select('COUNT(c)') 
+                ->from('BackendBundle:Curso', 'c')
+                ->getQuery();
+
+            $total = $query->getSingleScalarResult();
+            $entity->setNumOrden($total+1);
+            $entity->setRatio(25);
             $em->persist($entity);
             $em->flush();
 
@@ -128,7 +137,7 @@ class CursoController extends Controller
     {
         $em = $this->getDoctrine()->getManager();
 
-        $entities = $em->getRepository('BackendBundle:Curso')->findAllByCurso();
+        $entities = $em->getRepository('BackendBundle:Curso')->findAll();
 
         return $this->render('BackendBundle:Curso:show.html.twig', array(
             'entities' => $entities,
@@ -341,4 +350,94 @@ class CursoController extends Controller
                     'success' => true), 200);
         }
     }
+
+    public function ListarCursosAction()
+    {
+        $em = $this->getDoctrine()->getManager();
+
+        $entities = $em->getRepository('BackendBundle:Curso')->findBy([],array('numOrden'=>'ASC'));
+
+        return $this->render('BackendBundle:Curso:listar.html.twig', array(
+            'entities' => $entities,
+        ));
+    }
+
+    public function OrdenarCursosAction(Request $request)
+    {
+        // if request is XmlHttpRequest (AJAX) but not a POSt, throw an exception
+        if ($request->isXmlHttpRequest() && !$request->isMethod('POST')) {
+            throw new HttpException('XMLHttpRequests/AJAX calls must be POSTed');
+        }
+
+        $i = 1;
+        $em = $this->getDoctrine()->getManager();
+        // Obtenemos cada valor del array con la variable "curso" en $_POST(curso[]=2&curso[]=1....)
+        foreach ($_POST['curso'] as $curso) {
+            // Actualizamos el número de orden de cada curso.
+            $qb = $em->createQueryBuilder();
+            $q = $qb->update('BackendBundle:Curso', 'c')
+                ->set('c.numOrden', $i)
+                ->where('c.id = ?1')
+                ->setParameter(1, $curso)
+                ->getQuery();
+            $q->execute();
+
+            $i++;
+        }
+
+        if ($request->isXmlHttpRequest()) {
+                return new JsonResponse(array(
+                    'message' => 'Success!',
+                    'success' => true), 200);
+        }
+    }
+
+
+    public function RatioCursosAction()
+    {
+        $em = $this->getDoctrine()->getManager();
+
+        $entities = $em->getRepository('BackendBundle:Curso')->findAll();
+
+        return $this->render('BackendBundle:Curso:ratio.html.twig', array(
+            'entities' => $entities,
+        ));
+    }
+
+
+    public function AsignarRatioAction(Request $request)
+    {
+        // if request is XmlHttpRequest (AJAX) but not a POSt, throw an exception
+        if ($request->isXmlHttpRequest() && !$request->isMethod('POST')) {
+            throw new HttpException('XMLHttpRequests/AJAX calls must be POSTed');
+        }
+
+        $curso=$this->get('request')->request->get('curso');
+        $nivel=$this->get('request')->request->get('nivel');
+        $ratio=$this->get('request')->request->get('ratio');
+        
+        $em = $this->getDoctrine()->getEntityManager();
+        $entity = $em->getRepository('BackendBundle:Curso')->findCursoByNivel($curso,$nivel);
+        if (!$entity) {
+            throw $this->createNotFoundException('Unable to find Curso entity.');
+        }
+
+        $em = $this->getDoctrine()->getManager();
+        if($ratio!=="" && $ratio>=15 && $ratio<=35){
+            $entity->setRatio($ratio);     
+        }
+
+        $em->persist($entity);
+        $em->flush();
+        
+        if ($request->isXmlHttpRequest()) {
+                return new JsonResponse(array(
+                    'message' => 'Success!',
+                    'success' => true), 200);
+        }
+    }
+
+
+
+
 }

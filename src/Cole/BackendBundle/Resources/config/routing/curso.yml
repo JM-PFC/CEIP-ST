@@ -18,7 +18,9 @@ curso_new:
 curso_list:
     path:     /list
     defaults: { _controller: "BackendBundle:Curso:listaCursos" }
-
+    options:
+        expose: true
+        
 curso_create:
     path:     /create
     defaults: { _controller: "BackendBundle:Curso:create" }
@@ -45,5 +47,30 @@ curso_delete:
 Asignar_Ngrupos:
     path:     /Asignar_Ngrupos
     defaults: { _controller: "BackendBundle:Curso:AsignarNumeroGrupos" }
+    options:
+        expose: true
+
+Listar_cursos:
+    path:     /Listar_Cursos
+    defaults: { _controller: "BackendBundle:Curso:ListarCursos" }
+    options:
+        expose: true
+
+ordenar_cursos:
+    path:     /Ordenar_Cursos
+    defaults: { _controller: "BackendBundle:Curso:OrdenarCursos" }
+    options:
+        expose: true
+
+ratio_cursos:
+    path:     /Ratio_cursos
+    defaults: { _controller: "BackendBundle:Curso:RatioCursos" }
+    options:
+        expose: true
+
+asignar_ratio:
+    path:     /Asignar_ratio
+    defaults: { _controller: "BackendBundle:Curso:AsignarRatio" }
+    requirements: { _method: post }
     options:
         expose: true

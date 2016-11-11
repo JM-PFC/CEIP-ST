@@ -1,0 +1,275 @@
+{% extends 'BackendBundle:Default:index.html.twig' %}
+
+{% block head %}{% endblock %}
+{% block stylesheets %}{% endblock %}
+    
+{% block javascript %}
+    <script>
+    // Slider de la tabla.
+    $( "#contenedor_ratio_grupos td div[id='slider']" ).each(function() {
+        $(this).empty().slider({
+            range: "min",
+            value: $(this).closest("td").prev().find("input").val(),
+            step: 1,
+            min: 15,
+            max: 35,
+            slide: function (event, ui) {
+                // Se establece el valor del slider al input correspondiente de la file.
+                $(this).closest("td").prev().find("input").val(ui.value);
+                // Se establece la clase modified a los input que tienen valor distinto al inicial.
+                if($(this).closest("td").prev().find("input").val()!=$(this).closest("td").prev().find("input").attr("value")){
+                    $(this).closest("td").prev().find("input").addClass("modified ");
+                }
+                else{
+                    $(this).closest("td").prev().find("input").removeClass("modified ");
+                }
+            }
+        });
+    });
+
+    // Se cambia el valor del slider al cambiar el valor en el input correspondiente de la tabla.
+    $("#contenedor_ratio_grupos input").change(function() {
+        $(this).closest("td").next("td").find("#slider").slider("value", $(this).val());
+    });
+
+    //Se cambia el valor del slider al cambiar el valor en el input correspondiente.
+    $("#registro_ratio .block_insert input").change(function() {
+        // Se establece el min o máx en el caso que se indique otro un valor fuera del rango.
+        div=$(this).prev("div");
+        
+        if($(this).val()<div.slider("option","min")){
+            $(this).val(div.slider("option","min"));
+        }
+        if($(this).val()>div.slider("option","max")){
+            $(this).val(div.slider("option","max"));
+        }
+        div.slider("value", $(this).val());
+
+        div.prev("div").slider("value", $(this).val());
+    });
+
+    //Se cambia el valor del slider al cambiar el valor en el input correspondientede la tabla.
+    $("#contenedor_ratio_grupos  input").change(function() {
+        // Se establece el min o máx en el caso que se indique otro un valor fuera del rango.
+        div=$(this).closest("td").next("td").find("#slider");
+
+        if($(this).val()<div.slider("option","min")){
+            $(this).val(div.slider("option","min"));
+        }
+        if($(this).val()>div.slider("option","max")){
+            $(this).val(div.slider("option","max"));
+        }
+        div.slider("value", $(this).val());
+    });
+
+    // Slider para todos los cursos.
+    $( "#registro_ratio .block_insert #slider1" ).each(function() {
+        $(this).empty().slider({
+            range: "min",
+            value: 15,
+            step: 1,
+            min: 15,
+            max: 35,
+            slide: function (event, ui) {
+                $(this).next("input").val(ui.value);
+                // Se elimina los valores de los otros dos slider.
+                $( "#slider2" ).next("input").val("");
+                $( "#slider3" ).next("input").val("");
+                $( "#slider2" ).slider("value", 0);
+                $( "#slider3" ).slider("value", 0);
+                // Se modifica todos los slider e input de la tabla.
+                $( "#contenedor_ratio_grupos input" ).val(ui.value);
+                $( "#contenedor_ratio_grupos #slider" ).slider("value", ui.value);
+                $("#contenedor_ratio_grupos input").each(function() {
+                    if($(this).val()!=$(this).attr("value")){
+                        $(this).addClass("modified ");
+                    }
+                    else{
+                        $(this).removeClass("modified ");
+                    }
+                });
+            },
+            change: function(event, ui) {
+            // Se ejecuta el código sólo si el input no está vacío (para impedir múltiples eventos "change" con los demás slider).
+              if($(this).next("input").val()!=""){
+                $( "#slider2" ).next("input").val("");
+                $( "#slider3" ).next("input").val("");
+                $( "#slider2" ).slider("value", 0);
+                $( "#slider3" ).slider("value", 0);
+                $( "#contenedor_ratio_grupos input" ).val(ui.value);
+                $( "#contenedor_ratio_grupos #slider" ).slider("value", ui.value);
+                $("#contenedor_ratio_grupos input").each(function() {
+                    if($(this).val()!=$(this).attr("value")){
+                        $(this).addClass("modified ");
+                    }
+                    else{
+                        $(this).removeClass("modified ");
+                    }
+                });
+              }
+            }
+        });
+    });
+    // Slider para Intantil.
+    $( "#registro_ratio .block_insert #slider2" ).each(function() {
+        $(this).empty().slider({
+            range: "min",
+            value: 15,
+            step: 1,
+            min: 15,
+            max: 35,
+            slide: function (event, ui) {
+                $(this).next("input").val(ui.value);
+                $( "#slider1" ).next("input").val("");                
+                $( "#slider1" ).slider("value", 0);
+                 // Se modifica los slider e input de Infantil en la tabla.
+                $( "#contenedor_ratio_grupos td[class='Infantil']" ).next("td").find("input").val(ui.value);
+                $( "#contenedor_ratio_grupos td[class='Infantil']" ).next("td").next("td").find("#slider").slider("value", ui.value);
+                $("#contenedor_ratio_grupos input").each(function() {
+                    if($(this).val()!=$(this).attr("value")){
+                        $(this).addClass("modified ");
+                    }
+                    else{
+                        $(this).removeClass("modified ");
+                    }
+                });
+            },
+            change: function(event, ui) {
+            // Se ejecuta el código sólo si el input no está vacío (para impedir múltiples eventos "change" con los demás slider).
+             if($(this).next("input").val()!=""){
+                $( "#slider1" ).next("input").val("");
+                $( "#slider1" ).slider("value", 0);
+                $( "#contenedor_ratio_grupos td[class='Infantil']" ).next("td").find("input").val(ui.value);
+                $( "#contenedor_ratio_grupos td[class='Infantil']" ).next("td").next("td").find("#slider").slider("value", ui.value);
+                $("#contenedor_ratio_grupos td[class='Infantil']").next("td").find("input").each(function() {
+                    if($(this).val()!=$(this).attr("value")){
+                        $(this).addClass("modified ");
+                    }
+                    else{
+                        $(this).removeClass("modified ");
+                    }
+                });
+              }
+            }
+        });
+    });
+    // Slider para Primaria.
+    $( "#registro_ratio .block_insert #slider3" ).each(function() {
+        $(this).empty().slider({
+            range: "min",
+            value: 15,
+            step: 1,
+            min: 15,
+            max: 35,
+            slide: function (event, ui) {
+                $(this).next("input").val(ui.value);
+                $( "#slider1" ).next("input").val("");                
+                $( "#slider1" ).slider("value", 0);
+                 // Se modifica los slider e input de Infantil en la tabla.
+                $( "#contenedor_ratio_grupos td[class='Primaria']" ).next("td").find("input").val(ui.value);
+                $( "#contenedor_ratio_grupos td[class='Primaria']" ).next("td").next("td").find("#slider").slider("value", ui.value);
+                $("#contenedor_ratio_grupos input").each(function() {
+                    if($(this).val()!=$(this).attr("value")){
+                        $(this).addClass("modified ");
+                    }
+                    else{
+                        $(this).removeClass("modified ");
+                    }
+                });
+            },
+            change: function(event, ui) {
+            // Se ejecuta el código sólo si el input no está vacío (para impedir múltiples eventos "change" con los demás slider).
+                if($(this).next("input").val()!=""){
+                    $( "#slider1" ).next("input").val("");                     
+                    $( "#slider1" ).slider("value", 0);
+                    $( "#contenedor_ratio_grupos td[class='Primaria']" ).next("td").find("input").val(ui.value);
+                    $( "#contenedor_ratio_grupos td[class='Primaria']" ).next("td").next("td").find("#slider").slider("value", ui.value);
+                    $("#contenedor_ratio_grupos td[class='Primaria']").next("td").find("input").each(function() {
+                        if($(this).val()!=$(this).attr("value")){
+                            $(this).addClass("modified ");
+                        }
+                        else{
+                            $(this).removeClass("modified ");
+                        }
+                    });                   
+                }
+            }
+        });
+    });
+
+    </script>
+{% endblock %}
+
+{% block body -%}
+  <div id="registro_ratio" class="contenedor_tabla_no_selec">
+    <div class="parent_no_form">
+    <div class="child">
+      <div class="simple_column_red">
+        <div class="block_insert">
+            <h2>Asignar Nº Alumnos </h2>
+            <p>- Se puede selecionar el mismo nº de alumnos para cada grupo.</p>
+            <div class="center_w85">
+                <span class="span_title">Nº alumnos/grupo en todos los cursos:</span>
+                <div id="slider1" ></div>
+                <input></input></br>
+                <span class="span_title">Nº alumnos/grupo en Infantil:</span>
+                <div id="slider2" ></div>
+                <input></input></br>
+                <span class="span_title">Nº alumnos/grupo en Primaria:</span>
+                <div id="slider3" ></div>
+                <input></input></br>
+            </div>
+            </br>
+            <div id="botones_centrados">
+                <div>
+                    <button id="button_grupos_all">Guardar Todo</button>
+                </div>
+                <div>
+                    <button id="button_grupos_rest">Restablecer</button>
+                </div>
+            </div>
+        </div> 
+      </div>
+      <div>
+       <div class="derecha contenedor_registro" id="contenedor_ratio_grupos">  
+        <div>
+            <div id="cabecera_lista">
+                <h2>Nº alumnos/grupo por curso</h2>
+            </div>
+            <div >
+                <table class="records_list">
+                    <thead>
+                    <tr>
+                        <th>Curso</th>
+                        <th>Nivel</th>
+                        <th>Nº Alumnos</th>
+                        <th></th>
+                    </tr>
+                    </thead>
+                </table>
+                <div class="inner_table">
+                    <table id="lista_color">
+                    {% for entity in entities %}
+                        <tr>
+                            <td>{{ entity.curso }}</td>
+                            <td class="{{ entity.nivel }}">{{ entity.nivel }}</td>
+                            <td>
+                                <input value="{{ entity.ratio }}"></input>
+                            </td>
+                            <td>
+                                <div id="slider"></div>
+                            </td>
+                            <td><button>Guardar</button></td>
+                        </tr>
+                    {% endfor %}
+                    </table>
+                </div>
+            </div>
+        </div>          
+       </div>
+     </div>
+    </div>
+    </div>
+  </div>
+
+    {% endblock %}

@@ -6,7 +6,7 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 
-class CursoType extends AbstractType
+class MatriculaType extends AbstractType
 {
         /**
      * @param FormBuilderInterface $builder
@@ -15,9 +15,8 @@ class CursoType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('nivel')
-            ->add('curso','text',array('label' => 'Curso', 'max_length' => 10,'attr' => array('validation' => 'Empty_')))
-            ->add('numGrupos')
+            ->add('añoAcademico')
+            ->add('fecha')
         ;
     }
     
@@ -27,7 +26,7 @@ class CursoType extends AbstractType
     public function setDefaultOptions(OptionsResolverInterface $resolver)
     {
         $resolver->setDefaults(array(
-            'data_class' => 'Cole\BackendBundle\Entity\Curso'
+            'data_class' => 'Cole\BackendBundle\Entity\Matricula'
         ));
     }
 
@@ -36,6 +35,6 @@ class CursoType extends AbstractType
      */
     public function getName()
     {
-        return 'curso';
+        return 'cole_backendbundle_matricula';
     }
 }

@@ -90,6 +90,12 @@ class AlumnoController extends Controller
             $entity->setGrupo(null);
             $entity->setNumAlum(null);
             $entity->setActivo(true);
+            if(date("n")>=6){
+                $entity->setAñoAcademico(date("Y")."/".(date("Y")+1));
+            }
+            else{
+                $entity->setAñoAcademico((date("Y")-1)."/".date("Y"));
+            }
             $role = $em->getRepository('BackendBundle:Role')->find(1);
             $entity->getResponsable1()->setRole($role);
             $entity->getResponsable2()->setRole($role);
@@ -169,6 +175,7 @@ class AlumnoController extends Controller
             if ($request->isXmlHttpRequest()) {
                 return new JsonResponse(array(
                     'message' => 'Success!',
+                    'alumno' => $entity->getId(),
                     'success' => true), 200);
             }
             return $this->redirect($this->generateUrl('alumno_show', array('id' => $entity->getId())));
@@ -453,10 +460,21 @@ class AlumnoController extends Controller
     {
         $entity = new Alumno();
         $form = $this->createCreateSearchForm($entity);
+
         
         return $this->render('BackendBundle:Alumno:search.html.twig', array(
             'entity' => $entity,
             'form'   => $form->createView(),
+        ));
+    }
+
+    public function SearchOldAction()
+    {
+        $em = $this->getDoctrine()->getManager();
+        $entities = $em->getRepository('BackendBundle:Alumno')->findByActivo(0); //Hay que comprobar que no hayan terminado los estudios.
+        
+        return $this->render('BackendBundle:Alumno:search_old.html.twig', array(
+            'entities' => $entities,
         ));
     }
     
@@ -672,6 +690,193 @@ class AlumnoController extends Controller
                 }
         }
     }
+
+    public function DatosAlumnoAction($id)
+    {
+        $em = $this->getDoctrine()->getManager();
+        $entity = $em->getRepository('BackendBundle:Alumno')->findById($id);
+        return $this->render('BackendBundle:Alumno:datos_alumno.html.twig', array(
+            'entity' => $entity,));
+    }
+
+    public function AntiguosAlumnosPorCursoAction($id)
+    {
+
+        $em = $this->getDoctrine()->getManager();
+        if($id==0){
+            $entities = $em->getRepository('BackendBundle:Alumno')->findByActivo(0); //Hay que comprobar que no hayan terminado los estudios.
+            return $this->render('BackendBundle:Alumno:lista_antiguos_alumnos_busqueda_cursos.html.twig', array(
+            'entities' => $entities,
+            ));
+        }
+        else{
+            $entities= $em->getRepository('BackendBundle:Alumno')->findAntiguosAlumnosPorCurso($id);
+            return $this->render('BackendBundle:Alumno:lista_antiguos_alumnos_busqueda_cursos.html.twig', array(
+            'entities' => $entities,
+            ));
+        }
+    }
+
+
+    public function OldEditAction($id)
+    {
+        $em = $this->getDoctrine()->getManager();
+
+        $entity = $em->getRepository('BackendBundle:Alumno')->find($id);
+
+        if (!$entity) {
+            throw $this->createNotFoundException('Unable to find Alumno entity.');
+        }
+
+        $editForm = $this->createEditForm($entity);
+        $deleteForm = $this->createDeleteForm($id);
+
+        // Se comprueba que existe el archivo.
+        // En caso de perdida se le asigna null para que muestre las imágenes por defecto.
+        $photoDir = $this->container->getParameter('Dir_imagenes_alum');
+        if(!file_exists( $photoDir.$entity->getFoto() ))
+        {
+            $entity->setFoto(null);
+        }
+        
+
+        return $this->render('BackendBundle:Alumno:edit_old.html.twig', array(
+            'entity'      => $entity,
+            'edit_form'   => $editForm->createView(),
+            'delete_form' => $deleteForm->createView(),
+        ));
+    }
+
+    public function OldUpdateAction(Request $request, $id)
+    {
+        $em = $this->getDoctrine()->getManager();
+
+        $entity = $em->getRepository('BackendBundle:Alumno')->find($id);
+
+        if (!$entity) {
+            throw $this->createNotFoundException('Unable to find Alumno entity.');
+        }
+
+        $c = $this->get('request')->request->get('curso');
+        $curso = $em->getRepository('BackendBundle:Curso')->find($c);
+        //Se valida que no matricrule en un curso anterior.
+        $antiguo_curso=$entity->getCurso();
+ 
+        if($antiguo_curso->getNumOrden()>$curso->getNumOrden()){
+                return new JsonResponse(array(
+                    'validate' =>"curso_incorrecto",
+                    'success' => true), 200);
+        }
+        //Se valia que no esté matriculado en el año Académico actual.
+        if(date("n")>=6){
+            if($entity->getAñoAcademico()==date("Y")."/".(date("Y")+1)){
+                return new JsonResponse(array(
+                    'validate' =>"año_incorrecto",
+                    'success' => true), 200);
+            }
+        }
+        else{
+            if($entity->getAñoAcademico()==(date("Y")-1)."/".date("Y")){
+                return new JsonResponse(array(
+                    'validate' =>"año_incorrecto",
+                    'success' => true), 200);
+            }
+        }
+
+        $fileOriginal=$entity->getFoto();
+
+        $deleteForm = $this->createDeleteForm($id);
+        $editForm = $this->createEditForm($entity);
+
+        $editForm->handleRequest($request);
+
+        if ($editForm->isValid()) {
+
+            $estado = $this->get('request')->request->get('estado');
+
+            //Se obtiene la foto subida y se guarda en la carpeta destino, asignandole un nombre único.
+            if($estado=="actual" || $estado=="actualizado"){
+                $file = $entity->getFoto();    
+            }
+            else{
+                $entity->setFoto(null);  
+            }
+
+            if( $estado=="actualizado" && $entity->getFoto()!=null){
+                $fileName = uniqid().'.'.$file->guessExtension();
+                $photoDir = $this->container->getParameter('Dir_imagenes_alum');
+                $file->move($photoDir, $fileName);
+                $entity->setFoto($fileName);
+  
+                // Comprueba que existe el arcivo de la imagen anterior y lo elimina.
+                $dir_file=$photoDir.$fileOriginal;
+                if(is_file( $dir_file )){
+                unlink($dir_file);
+                }
+            }
+            elseif($estado=="actual"){
+                $photoDir = $this->container->getParameter('Dir_imagenes_alum');
+                $dir_file=$photoDir.$fileOriginal;
+
+                if(is_file( $dir_file )){
+                    $entity->setFoto($fileOriginal);
+                }
+                else{
+                    $entity->setFoto(null);
+                }
+            }
+            else
+            {
+                $photoDir = $this->container->getParameter('Dir_imagenes_alum');
+
+                $dir_file=$photoDir.$fileOriginal;
+                if(is_file( $dir_file )){
+                    unlink($dir_file);
+                }
+                $entity->setFoto(NULL);
+            }
+            if($entity->getResponsable2()->getDni() == "" ){
+                $entity->setResponsable2(NULL); 
+            }
+            $entity->setActivo(1);
+            $entity->setCurso($curso);
+            if(date("n")>=6){
+                $entity->setAñoAcademico(date("Y")."/".(date("Y")+1));
+            }
+            else{
+                $entity->setAñoAcademico((date("Y")-1)."/".date("Y"));
+            }
+            
+            $em->persist($entity);
+            $em->flush();
+
+            if ($request->isXmlHttpRequest()) {
+                return new JsonResponse(array(
+                    'message' => 'Success!',
+                    'data' =>$entity->getId(),
+                    'success' => true), 200);
+            }
+
+            return $this->redirect($this->generateUrl('alum_edit', array('id' => $id)));
+        }
+
+        if ($request->isMethod('POST')) {
+            return new JsonResponse(array(
+            'message' => 'Invalid form',
+            'success' => false), 400);
+        }
+
+        return $this->render('BackendBundle:Alumno:edit.html.twig', array(
+            'entity'      => $entity,
+            'edit_form'   => $editForm->createView(),
+            'delete_form' => $deleteForm->createView(),
+        ));
+    }
+
+
+
+
+
 
 
 

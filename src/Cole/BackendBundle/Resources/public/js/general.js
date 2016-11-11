@@ -11,6 +11,9 @@ $(document).ready(function () {
   $("input[id^='edit_año_acamedico']").mask('0000');
   $("input[id^='edit_año_profesional']").mask('00');
   //$("input[type='time']").mask('00:00', {placeholder: "__:__"});  
+  $("#registro_ratio input").mask('00');
+
+
 
   //Se establece el color del botón de confirmación de las notificaciones para usar con swal().
   color="#5A88B6";
@@ -924,26 +927,35 @@ $(document).on('keyup',"input[id$='responsable2_dni']",function(e){
              //form.find("div[id='result']").html("<div id='message'></div>");
              //form.find("div[id='message']").html("<h2> Usuario guardado</h2>").hide();
              //form.find("div[id='message']").fadeIn('slow').delay(5000).fadeOut('slow');
-
-          // Notificación de confirmación.
-          exito.play();
-          new PNotify({
-            text:"Alumno registrado",
-            addclass: "custom",
-            type: "success",
-            shadow: true,
-            hide: true,
-            buttons: {
-            sticker: false,
-            labels:{close: "Cerrar"}
-            },
-            stack: right_Stack,
-            animate: {
-              animate: true,
-              in_class: "fadeInRight",
-              out_class: "fadeOutRight",
+          alumno=response.alumno;
+          $.ajax({
+            type: 'POST',
+            url: Routing.generate('matricular_alumno'),
+            data: {alumno:alumno},
+            dataType: 'json',
+            success: function(response) {
+              // Notificación de confirmación.
+              exito.play();
+              new PNotify({
+                text:"Alumno matriculado",
+                addclass: "custom",
+                type: "success",
+                shadow: true,
+                hide: true,
+                buttons: {
+                sticker: false,
+                labels:{close: "Cerrar"}
+                },
+                stack: right_Stack,
+                animate: {
+                  animate: true,
+                  in_class: "fadeInRight",
+                  out_class: "fadeOutRight",
+                }
+              });
             }
-          });
+          })
+
           event.stopPropagation();   
         },
         error: function (response, desc, err){
@@ -1275,7 +1287,6 @@ $(document).on("submit",".formulario_profesor",function(event){
 $("#dialog-confirm").prev().hide();
 $("#dialog-confirm span").hide();
 
-
   }*/
      
     if(val==0){
@@ -1312,27 +1323,31 @@ $("#dialog-confirm span").hide();
                   url: Routing.generate('asignar_responsable'),
                   data: {id_alumno:id_alumno,id_responsable:id_responsable,responsable:responsable},
                   dataType: 'json',
-                  success: function(response) { 
+                  success: function(response) {
+                  //Se actualiza la información del responsable añadido en los formularios cuyo alumno sea el actual. 
+                  $("form[action*='"+id_alumno+"']").each (function(){
+                  form=$(this); 
                     if(responsable=="responsable1"){
-                      $("#edit_alumno_responsable_dni_1").focus().val(response.data['dni']);
-                      $("#edit_alumno_responsable1_nombre").focus().val(response.data['nombre']);
-                      $("#edit_alumno_responsable1_fechaNacimiento").focus().val(response.data['fechaNacimiento']);
-                      $("#edit_alumno_responsable1_profesion").focus().val(response.data['profesion']);
-                      $("#edit_alumno_responsable1_estadoCivil").focus().val(response.data['estadoCivil']);
-                      $("#edit_alumno_responsable1_movil").focus().val(response.data['movil']);
-                      $("#edit_alumno_responsable1_email").focus().val(response.data['email']); 
+                      form.find("#edit_alumno_responsable_dni_1").focus().val(response.data['dni']);
+                      form.find("#edit_alumno_responsable1_nombre").focus().val(response.data['nombre']);
+                      form.find("#edit_alumno_responsable1_fechaNacimiento").focus().val(response.data['fechaNacimiento']);
+                      form.find("#edit_alumno_responsable1_profesion").focus().val(response.data['profesion']);
+                      form.find("#edit_alumno_responsable1_estadoCivil").focus().val(response.data['estadoCivil']);
+                      form.find("#edit_alumno_responsable1_movil").focus().val(response.data['movil']);
+                      form.find("#edit_alumno_responsable1_email").focus().val(response.data['email']); 
                     }
                     else{
-                      $("#edit_alumno_responsable_dni_2").focus().val(response.data['dni']);
-                      $("#edit_alumno_responsable2_nombre").focus().val(response.data['nombre']);
-                      $("#edit_alumno_responsable2_fechaNacimiento").focus().val(response.data['fechaNacimiento']);
-                      $("#edit_alumno_responsable2_profesion").focus().val(response.data['profesion']);
-                      $("#edit_alumno_responsable2_estadoCivil").focus().val(response.data['estadoCivil']);
-                      $("#edit_alumno_responsable2_movil").focus().val(response.data['movil']);
-                      $("#edit_alumno_responsable2_email").focus().val(response.data['email']); 
+                      form.find("#edit_alumno_responsable_dni_2").focus().val(response.data['dni']);
+                      form.find("#edit_alumno_responsable2_nombre").focus().val(response.data['nombre']);
+                      form.find("#edit_alumno_responsable2_fechaNacimiento").focus().val(response.data['fechaNacimiento']);
+                      form.find("#edit_alumno_responsable2_profesion").focus().val(response.data['profesion']);
+                      form.find("#edit_alumno_responsable2_estadoCivil").focus().val(response.data['estadoCivil']);
+                      form.find("#edit_alumno_responsable2_movil").focus().val(response.data['movil']);
+                      form.find("#edit_alumno_responsable2_email").focus().val(response.data['email']); 
                     }
-                    $("#alumno_edit").find("#noresponsable").addClass("oculto");
-                    $("#alumno_edit").find("#responsable").removeClass("oculto");
+                    form.find("#noresponsable").addClass("oculto");
+                    form.find("#responsable").removeClass("oculto");
+                  });
                   }
                 })  
               }
@@ -1453,10 +1468,16 @@ $("#dialog-confirm span").hide();
       form.find("input[type='file']").val("");
     }
     else{
+      form.find(".columna_foto #actualizada").addClass("modif");
+      form.find(".columna_foto #actualizada").removeClass("oculto");
+      form.find(".columna_foto #actual").addClass("oculto");
+      form.find(".columna_foto #por_defecto").addClass("oculto");
       form.find("input[type='file']").trigger('click');
       //form.find('#actual').addClass("oculto");
     }
+
     comprobarEditForm(form);
+
     event.stopPropagation(); 
   });
   // Se deshabilita los botones del formulario al insertar una nueva foto.
@@ -1478,6 +1499,9 @@ $("#dialog-confirm span").hide();
     var div= $(this).closest("div[id^='tabs-']");
 
     $(div).empty();
+    // Se añade un gif para la espera de la carga del contenido actualizado.
+    $(div).html('<div class="ajaxload"><img src="/Symfony/web/bundles/backend/images/loading.gif"/></div>');
+
     $(div).load(Routing.generate(arr[1]+'_edit', {id:$(this).find("a").attr("id")}));
   });
 
@@ -1641,70 +1665,136 @@ $("#dialog-confirm span").hide();
     // Se comprueba si se ha modificado el valor inicial de algún input.
     form.find("input[type!='file']").each(function(){
       if(($(this).val()!=$(this).attr("value") && $(this).attr("value")!=undefined) || ($(this).val() && $(this).attr("value")==undefined) ){
+        $(this).addClass("modified");
         form.find("button[id$='_submit']").prop("disabled",false);
-        form.find("button[id$='_restablecer']").prop("disabled",false);
+        if(form.find("button[id$='_restablecer']").length){
+          form.find("button[id$='_restablecer']").prop("disabled",false);
+        }
+        else{
+          form.find("button[id$='_rest']").prop("disabled",false);
+        }
         val=1;
-        return false;
+      }
+      else{
+        $(this).removeClass("modified");
       }
     });
     //Se comprueba si se ha cambiado la opción inicial del radio.
-    if(val==0){
       form.find("input[type='radio']").each(function(){
         if($(this).is(':checked') && $(this).attr("checked")!="checked"){
+          $(this).addClass("modified");
           form.find("button[id$='_submit']").prop("disabled",false);
-          form.find("button[id$='_restablecer']").prop("disabled",false);
+          if(form.find("button[id$='_restablecer']").length){
+            form.find("button[id$='_restablecer']").prop("disabled",false);
+          }
+          else{
+            form.find("button[id$='_rest']").prop("disabled",false);
+          }          
           val=1;
-          return false;
+        }
+        else{
+          $(this).removeClass("modified");
         }  
       });
-    }
-    // Se comprueba si se ha modificado la foto inicial.
-    if(val==0){
+      // Se comprueba si se ha modificado la foto inicial.
       // Se actualiza la foto inicial.
-      if(form.find("#actualizada").attr('class')==""){
+      if(form.find("#actualizada").attr('class')=="" || form.find("#actualizada").attr('class')=="modif" ){
+          form.find(".columna_foto div[id!='iconos_foto'] img").addClass("modified");
           form.find("button[id$='_submit']").prop("disabled",false);
-          form.find("button[id$='_restablecer']").prop("disabled",false);
+          if(form.find("button[id$='_restablecer']").length){
+            form.find("button[id$='_restablecer']").prop("disabled",false);
+          }
+          else{
+            form.find("button[id$='_rest']").prop("disabled",false);
+          }
           val=1;
       }
       // Se elimina la foto inicial.
-      if(form.find("#por_defecto").attr('class')=="" && form.find("#actual img").attr("src")!=form.find("#por_defecto img").attr("src") ){
+      else if(form.find("#por_defecto").attr('class')=="" && form.find("#actual img").attr("src")!=form.find("#por_defecto img").attr("src") ){
+          form.find(".columna_foto div[id!='iconos_foto'] img").addClass("modified");
           form.find("button[id$='_submit']").prop("disabled",false);
-          form.find("button[id$='_restablecer']").prop("disabled",false);
+          if(form.find("button[id$='_restablecer']").length){
+            form.find("button[id$='_restablecer']").prop("disabled",false);
+          }
+          else{
+            form.find("button[id$='_rest']").prop("disabled",false);
+          }
           val=1;
       }
+      else{
+        form.find(".columna_foto div[id!='iconos_foto'] img").removeClass("modified");
+      }
 
-    }
-    // Se comprueba si se ha modificado el valor inicial de algún select.
-    if(val==0){
+        // Se comprueba si se ha modificado el valor inicial de algún select.
       form.find("select option:selected").each(function(){
         //$(this).attr("selected")!=undefined
-        if($(this).attr("value")!=$(this).closest("select").attr("seleccionado")){
+        if($(this).attr("value")!=$(this).closest("select").attr("seleccionado") && $(this).closest("select").attr("seleccionado")!=""){
+          $(this).closest("select").addClass("modified");
           form.find("button[id$='_submit']").prop("disabled",false);
-          form.find("button[id$='_restablecer']").prop("disabled",false);
+          if($(this).closest("form").find("button[id$='_restablecer']").length){
+            form.find("button[id$='_restablecer']").prop("disabled",false);
+          }
+          else{
+            form.find("button[id$='_rest']").prop("disabled",false);
+          }
           val=1;
-          return false;
+        }
+        else{
+          $(this).closest("select").removeClass("modified");
         }
       });
-    }
-
+    
     // Se comprueba en el caso del formulario alumno_edit si se ha modificado el valor inicial del textare.
-    if(val==0 && form.attr("id")=="alumno_edit"){
+    if(form.attr("id")=="alumno_edit" || form.attr("id")=="antiguo_alumno_edit"){
       if(form.find("textarea").val()!=form.find("textarea").attr("value")){
+        form.find("textarea").addClass("modified");
         form.find("button[id$='_submit']").prop("disabled",false);
-        form.find("button[id$='_restablecer']").prop("disabled",false);
+        if(form.find("button[id$='_restablecer']").length){
+          form.find("button[id$='_restablecer']").prop("disabled",false);
+        }
+        else{
+          form.find("button[id$='_rest']").prop("disabled",false);
+        }
         val=1;
-        return false;
+      }
+      else{
+        form.find("textarea").removeClass("modified");
       }
     }
     // Si no se ha modificado nada se deshabilita los botones de nuevo.
     if(val==0){
       form.find("button[id$='_submit']").prop("disabled",true);
-      form.find("button[id$='_restablecer']").prop("disabled",true);
+      if(form.find("button[id$='_restablecer']").length){
+        form.find("button[id$='_restablecer']").prop("disabled",true);
+      }
+      else{
+        form.find("button[id$='_rest']").prop("disabled",true);
+      }
+    }
+
+    //Se comprueba la lista de cursos en el formulario de antiguos alumnos.
+    if(form.attr("id")=="antiguo_alumno_edit"){
+      comprobarSelect(form);
     }
 
   }
-  // Se llama a la función de comprobar formulario editado, en el caso que se modifique algún elemento del formulario.
 
+  //Función para comprobar si se ha editado algo el formulario para mostrar los botones de guardar y restablecer.
+  function comprobarSelect(form) {
+    // Se comprueba si se ha modificado el valor inicial de la lista de cursos.
+    lista=form.find("#lista_cursos select")
+    if(lista.find("option:selected").attr("value")==""){
+      form.find("button[id$='_submit']").prop("disabled",true);
+      lista.removeClass("modified");
+    }
+    else{
+      form.find("button[id$='_submit']").prop("disabled",false);
+      form.find("button[id$='_rest']").prop("disabled",false);
+      lista.addClass("modified");
+    }
+  }
+
+  // Se llama a la función de comprobar formulario editado, en el caso que se modifique algún elemento del formulario.
   $(document).on("keyup","#profesor_edit input",function() {
     comprobarEditForm($("#profesor_edit"));
   });
@@ -1731,6 +1821,23 @@ $("#dialog-confirm span").hide();
 
   $(document).on("keyup","#centro_edit input",function() {
     comprobarEditForm($("#centro_edit"));
+  });
+
+  $(document).on("keyup","#antiguo_alumno_edit input",function() {
+    comprobarEditForm($("#antiguo_alumno_edit"));
+  });
+
+  $(document).on("change","#antiguo_alumno_edit input[type='radio']",function() {
+    comprobarEditForm($("#antiguo_alumno_edit"));
+  });
+
+  $(document).on("change","#antiguo_alumno_edit select",function() {
+    comprobarEditForm($("#antiguo_alumno_edit"));
+
+  });
+
+  $(document).on("keyup","#antiguo_alumno_edit textarea",function() {
+    comprobarEditForm($("#antiguo_alumno_edit"));
   });
     
   //Se guarda el formulario alumno editado.
@@ -1910,7 +2017,6 @@ $("#dialog-confirm span").hide();
             if(statusTxt == "error")
               alert("Error: " + xhr.status + ": " + xhr.statusText);
           });
-;
         }
       })
       return false;
@@ -1919,7 +2025,7 @@ $("#dialog-confirm span").hide();
   });
 
 
-  $(document).on('click',"#alumno_edit button[id$='_modal']",function(event){
+  $(document).on('click',"#tabs form[id$='alumno_edit'] button[id$='_modal']",function(event){
     event.preventDefault();
     form= $(this).closest("form");
 
@@ -1931,6 +2037,7 @@ $("#dialog-confirm span").hide();
       $('#padres_dialog form').attr("alumno",alum[5]);
       $( '<div class="ui-widget-overlay ui-front" style="z-index: 99;"></div>' ).insertAfter($(".ui-dialog[aria-describedby='padres_dialog']"));
     }).dialog('open'); 
+
 
   });
 
@@ -1960,11 +2067,15 @@ $("#dialog-confirm span").hide();
           dataType: 'json',
   
           success: function(response) {
+          //Se actualiza la información del responsable añadido en los formularios cuyo alumno sea el actual. 
+          $("form[action*='"+id_alumno+"']").each (function(){
+          form=$(this); 
             // Se borran los valores del segundo responsable y se oculta el formulario.
             form.find("#responsable").addClass("oculto");
             form.find("#responsable input").val("");
             // Se muestra un aviso para indicar que sólo hay un responsable.
             form.find("#noresponsable").removeClass("oculto");
+          });
           }
         })
         swal.close();
@@ -2124,7 +2235,8 @@ $(document).on("blur","input[id='edit_profesor_dni']",function() {
 //////////////////////////////////
 //           Cursos             //
 //////////////////////////////////
-
+  
+  // Se abre la ventana modal de Añadir curso
   $(document).on('click',"#registro_cursos a[id$='_modal']",function(event){
     event.preventDefault();
     var nivel= $(this).attr('id').split('_');
@@ -2135,12 +2247,68 @@ $(document).on("blur","input[id='edit_profesor_dni']",function() {
     }).dialog('open'); 
   });
 
+  // Se abre la ventana modal de Editar curso
   $(document).on('click',"#registro_cursos a[href$='edit']",function(event){
     event.preventDefault();
     var arr= $(this).attr('href').split('/');
     $('#cursos_dialog').load(Routing.generate(arr[4]+"_edit", {id:arr[5]}), function(){
     }).dialog('open'); 
   });
+
+  // Se abre la ventana modal de Ordenar cursos
+  $(document).on('click',"#registro_cursos #ordenar",function(event){
+    event.preventDefault();
+
+    $('#ordenar_cursos_dialog').load(Routing.generate("Listar_cursos"), function(){
+      //Se centra la ventana modal en la pantalla.
+      $('.ui-dialog').position({my: 'center', at: 'center', of: window, collision: 'fit'});
+      //Se abre la ventana modal una vez cargado el contenido.
+      $('#ordenar_cursos_dialog').dialog('open');
+    }); 
+
+  });
+
+  //Función para centrar ventana modal al cambiar el tamaño de la pantalla.
+  $(window).resize(function(event) {
+    $('div[id*="_dialog"]').parent().position({
+        my: 'center',
+        at: 'center',
+        of: window,
+        collision: 'fit'
+    });
+  });
+  $(document).on("click","#ordenar_cursos_dialog #guardar",function(event){
+    event.preventDefault();
+    // Se usa el método serialize de sortable para obtener un array con los id ordenados. 
+    var cursos = $("#ordenar_cursos").sortable("serialize", {attribute: "id"});
+
+    $.ajax({
+      type: 'POST',
+      url: Routing.generate('ordenar_cursos'),
+      data: cursos,
+      dataType: 'json',
+      success: function(response) {      
+        $("#ordenar_cursos_dialog").dialog('close');
+        $("#grupos_curso").update_tab();
+        $("#nuevo_curso").update_tab();
+        $("#asignar_aula").update_tab();
+        $("#lista_cursos select").load(Routing.generate('curso_list'));
+        $("#alumno_cursoIngreso").load(Routing.generate('curso_list'));
+      } 
+    })
+  });
+
+  $(document).on("click","#ordenar_cursos_dialog #restablecer",function(event){
+    event.preventDefault();
+    $('#ordenar_cursos_dialog').load(Routing.generate("Listar_cursos"), function(){
+      //Se centra la ventana modal en la pantalla.
+      $('.ui-dialog').position({my: 'center', at: 'center', of: window, collision: 'fit'});
+      //Se abre la ventana modal una vez cargado el contenido.
+      $('#ordenar_cursos_dialog').dialog('open');
+    });
+  });
+
+
 
   $(document).on("submit","#curso_nuevo",function(event){
     event.preventDefault();
@@ -2361,7 +2529,6 @@ $(document).on("blur","input[id='edit_profesor_dni']",function() {
               url: Routing.generate('Asignar_Ngrupos'),
               data: {curso:curso,nivel:nivel,num_grupos:num_grupos},
               async:false,
-
             })
             // Se actualiza la pestaña de asignar aula.
             $("#asignar_aula").update_tab();
@@ -2446,6 +2613,8 @@ $(document).on("blur","input[id='edit_profesor_dni']",function() {
 
 /*Asignación de aula.*/
 
+
+
   // Se indica el select modificado.
   $(document).on('change',"#aula",function(event){
     if(($(this).val()=="" && $(this).attr("value")=="") || $(this).val()==$(this).attr("value")){
@@ -2470,7 +2639,6 @@ $(document).on("blur","input[id='edit_profesor_dni']",function() {
       url: Routing.generate('asignar_aula'),
       data: {curso:curso,nivel:nivel,letra:letra,aula:aula},
     })
-
   });
 
   // Se quita la marca de los input modificados y actualiza el aula.
@@ -2589,9 +2757,19 @@ $(document).on("blur","input[id='edit_profesor_dni']",function() {
     event.preventDefault();
     form= $(this).closest("form");
     var arr= $('#asignatura_delete').attr('action').split('/');
-    
-    if(confirm("Se va a eliminar la asignatura del sistema.\n\n¿Estas seguro de eliminarla?\n\n")==true)
-    {
+    aviso.play();
+    swal({
+      title: "Eliminación de la asignatura del sistema.",
+      text: "¿Estas seguro de continuar? No podrás deshacer este paso...",
+      type: "warning",
+      showCancelButton: true,
+      cancelButtonText: "Cancelar",
+      confirmButtonColor: color,
+      confirmButtonText: "¡Adelante!",
+      closeOnConfirm: false },
+
+      function(){
+
       $.ajax({
         type: 'DELETE',
         url: Routing.generate(arr[4]+"_delete", {id:arr[5]}),
@@ -2603,9 +2781,11 @@ $(document).on("blur","input[id='edit_profesor_dni']",function() {
         $(tab).load(Routing.generate('asignatura'));
         //$("#tabs #lista_asignaturas").empty();
         //$("#tabs #lista_asignaturas").load(Routing.generate('alumno_listaAsignatura'));
+        swal.close();
         }
       })
     }
+    );
       return false;
   });
 
@@ -3130,7 +3310,14 @@ $(document).on("blur","input[id='edit_profesor_dni']",function() {
       success: function(response) {
         if(response.data!=null)
         {
-          alert("El día y mes introducido ya tiene asignado un festivo en el sistema.");
+          error.play();
+          swal({
+            title: "Día festivo ya asignado",
+            text: 'El día y mes introducido ya tiene asignado un festivo en el sistema.',
+            type: "error",
+            confirmButtonColor: color,
+            html: true
+          });          
           return false;
         }
         else{
@@ -3176,8 +3363,19 @@ $(document).on("blur","input[id='edit_profesor_dni']",function() {
     form= $(this).closest("form");
     var arr= $('#festivos_delete').attr('action').split('/');
     
-    if(confirm("Se va a eliminar el día festivo del sistema.\n\n¿Estas seguro de eliminarlo?\n\n")==true)
-    {
+    aviso.play();
+    swal({
+      title: "Eliminación del día festivo del sistema.",
+      text: "¿Estas seguro de continuar? No podrás deshacer este paso...",
+      type: "warning",
+      showCancelButton: true,
+      cancelButtonText: "Cancelar",
+      confirmButtonColor: color,
+      confirmButtonText: "¡Adelante!",
+      closeOnConfirm: false },
+
+      function(){
+
       $.ajax({
         type: 'DELETE',
         url: Routing.generate(arr[4]+"_delete", {id:arr[5]}),
@@ -3199,9 +3397,11 @@ $(document).on("blur","input[id='edit_profesor_dni']",function() {
             $(div).load(Routing.generate('festivos_por_tipo', {id:tipo}));
           }
           $("#actualizar_calendario").trigger("click");
+          swal.close();
         }
       })
     }
+    );
       return false;
   });
 
@@ -3355,13 +3555,30 @@ $(document).on("blur","input[id='edit_profesor_dni']",function() {
         data: {fecha_ini:fecha_ini.substring(0,9), fecha_fin:fecha_fin.substring(0,9)},
         dataType: 'json',
         success: function(response) {
-          alert("Se ha guardado la fecha de inicio y final del curso.");
+          exito.play();
+          new PNotify({
+            text:"Se ha registrado la fecha de inicio y final del curso.",
+            addclass: "custom",
+            type: "success",
+            shadow: true,
+            hide: true,
+            buttons: {
+            sticker: false,
+            labels:{close: "Cerrar"}
+            },
+            stack: right_Stack,
+            animate: {
+              animate: true,
+              in_class: "fadeInRight",
+              out_class: "fadeOutRight",
+            }
+          });
           // Se añade un gif para la espera de la carga del contenido actualizado.
           $('#asignacion_festivos').html('<div class="ajaxload"><img src="/Symfony/web/bundles/backend/images/loading.gif"/></div>');
           // Se actualiza la pestaña de periodo lectivo.
           $("#curso_dialog div[class='nuevo']").removeClass("nuevo");
-          $("#curso_dialog").dialog('close');
           $("#periodo_lectivo").update_tab();
+          $("#curso_dialog").dialog('close');
         }
       })
     }
@@ -4898,13 +5115,25 @@ $(document).on("click","#registro_equipamientos td a",function(event){
 
         // Se desactivan las horas de reserva del día actual inferiores a la hora actual.
         var f = new Date();
-        if(String(f.getMonth()+1).length==1){
-          d=f.getDate()+"/0"+(f.getMonth()+1)+"/"+f.getFullYear();
+        if(String(f.getDate()).length==1){
+          if(String(f.getMonth()+1).length==1){
+            d="0"+f.getDate()+"/0"+(f.getMonth()+1)+"/"+f.getFullYear();
+          }
+          else{
+            d="0"+f.getDate()+"/"+(f.getMonth()+1)+"/"+f.getFullYear();
+          }
         }
         else{
-          d=f.getDate()+"/"+(f.getMonth()+1)+"/"+f.getFullYear();
+          if(String(f.getMonth()+1).length==1){
+            d=f.getDate()+"/0"+(f.getMonth()+1)+"/"+f.getFullYear();
+          }
+          else{
+            d=f.getDate()+"/"+(f.getMonth()+1)+"/"+f.getFullYear();
+          }
         }
+
         if(d==$("#dia_seleccionado").val()){
+
           container.find("#contenedor_reserva_horas button").each(function(){
             var dt = new Date();
             var time = ('0'+dt.getHours()).slice(-2) + ":" + ('0'+dt.getMinutes()).slice(-2);
@@ -4920,26 +5149,28 @@ $(document).on("click","#registro_equipamientos td a",function(event){
 
   /////////////////////////////////////////////////////
   //  Consulta reservas Instalaciones/Equipamientos  //
-  ////////////////////////////////// //////////////////
+  /////////////////////////////////////////////////////
 
   // Función para comprobar si hay scroll vertical en la pantalla.
   (function($) {
     $.fn.hasScrollBar = function() {
         return this.get(0).scrollHeight > this.height();
     }
-    })(jQuery);
-  });
+  })(jQuery);
 
   // Se muestra la información del profesor al situar el ratón sobre una reserva de un profesor.
   var dia_semana = ["Domingo","Lunes","Martes","Miércoles","Jueves","Viernes","Sábado"];
   //Variable para controlar el retardo de la carga de contenido_info.
-  var hover=0;
   $(document).on("mouseenter","div[id^='consulta_reservas'] .scrollContent tr[id!='centro']", function () {
-    hover=1;
     container= $(this).closest("div[id^='consulta_reservas']");
-    tr=$(this);
 
-    if($(this).attr("id")!="centro"){
+    // Se evita que se muestre el mensaje predeterminado si pasamos de un enlace a otro.
+    container.find(".contenido_info #sin_seleccionar").addClass("oculto");
+
+    hover=1;
+    tr=$(this);
+    //Se comprueba que no es una reserva del centro y que no es un aviso predeterminado.
+    if($(this).attr("id")!="centro" && !$(this).find("td").hasClass("dataTables_empty")){
       container= $(this).closest("div[id^='consulta_reservas']");
 
       from=$(this).find("td:nth-child(3)").attr("data-order").split("/");
@@ -4986,17 +5217,6 @@ $(document).on("click","#registro_equipamientos td a",function(event){
 
   // Se elimina la información mostrada del profesor al quitar el puntero.
   $(document).on("mouseleave","div[id^='consulta_reservas'] .scrollContent tr[id!='centro'] ", function () {
-    hover=0;
-    container= $(this).closest("div[id^='consulta_reservas']");
-
-    container.find(".contenido_info #seleccionado").addClass("oculto");
-    container.find(".contenido_info #seleccionado").empty();
-    container.find(".contenido_info #sin_seleccionar").removeClass("oculto");
-  });
-
-
-  // Se elimina la información mostrada del profesor al quitar el puntero.
-  $(document).on("mouseleave","div[id^='consulta_reservas'] .scrollContent tr[id='centro'] ", function () {
     hover=0;
     container= $(this).closest("div[id^='consulta_reservas']");
 
@@ -5104,6 +5324,416 @@ $(document).on("click","#registro_equipamientos td a",function(event){
     event.stopPropagation();   
   });
 
+  ////////////////////////////////////////////
+  //    Registro Nº de Alumnos en Cursos    //
+  ////////////////////////////////////////////
+
+  // Se quita la marca del input modificado y se actualiza el ratio.
+  $(document).on('click',"#contenedor_ratio_grupos button",function(event){
+    tr=$(this).closest("tr");
+    tr.find("input").removeClass("modified");
+    curso=tr.children('td').slice(0, 2).html();
+    nivel=tr.children('td').slice(1, 2).html();
+    ratio=tr.find("input").val();
+    // Se actualiza el atributo aula de la entidad Grupo.
+    $.ajax({
+      type: 'POST',
+      url: Routing.generate('asignar_ratio'),
+      data: {curso:curso,nivel:nivel,ratio:ratio},
+      success: function() {
+        // Se actualiza el nuevo valor inicial.
+        tr.find("input").attr("value",ratio);
+      }
+    })
+  });
+
+  // Se modifica el estilo de los input modificados.
+  $(document).on("change","#contenedor_ratio_grupos input", function () {
+    if($(this).val()!=$(this).attr("value")){
+      $(this).addClass("modified");
+    }
+    else{
+      $(this).removeClass("modified");
+    }
+  });
+
+  // Se quita la marca de los input modificados y actualizan los ratios modificados.
+  $(document).on('click',"#registro_ratio #button_grupos_all",function(event){
+    $("#contenedor_ratio_grupos input[class='modified']").each(function(){  
+      $(this).closest("tr").find("button").trigger("click");
+    });
+  });
+
+  // Se restablece los valorea iniciales
+  $(document).on("click","#registro_ratio #button_grupos_rest", function () {
+      $("#ratio_curso").update_tab();
+  });
+  // Se eliminar el foco del elemento input al pulsar "Enter".
+  $(document).on("keydown",'#registro_ratio input', function(e){
+    if(e.keyCode == 13)
+    {
+      $(this).blur();
+    }
+  });
+
+  ///////////////////////////////////////////
+  //    Matricula de Antiguos Alumnos      //
+  ////////////////////////////////// ////////
+
+  // Se muestra la información del alumno.
+  $(document).on("mouseenter","#consulta_antiguo_alumno .scrollContent tr", function () {
+
+    // Se evita que se muestre el mensaje predeterminado si pasamos de un enlace a otro.
+    $("#consulta_antiguo_alumno .contenido_info #sin_seleccionar").addClass("oculto");
+    $("#consulta_antiguo_alumno .contenido_info #seleccionado").removeClass("oculto");
+
+    
+    tr=$(this);
+    alumno=$(this).attr("id");
+
+    $.ajax({
+      type: 'POST',
+      url: Routing.generate('datos_imparte'),
+      data: {alumno:alumno},
+      dataType: 'json',
+      success: function(response) {
+        $("#consulta_antiguo_alumno .contenido_info #seleccionado").load(Routing.generate('datos_alumno', {id:tr.attr("id")}), function(){
+
+        });
+      }
+    })
+  });
+
+  // Se elimina la información mostrada del alumno al quitar el puntero.
+  $(document).on("mouseleave","#consulta_antiguo_alumno .scrollContent tr", function () {
+    $("#consulta_antiguo_alumno .contenido_info #seleccionado").addClass("oculto");
+    $("#consulta_antiguo_alumno .contenido_info #seleccionado").empty();
+    $("#consulta_antiguo_alumno .contenido_info #sin_seleccionar").removeClass("oculto");
+  });
+
+
+  // Se evita que se pueda hacer click en los registros que muestran los avisos predeterminados.
+  $(document).on("mouseover"," .dataTable .scrollContent tr td", function () {
+    if($(this).hasClass("dataTables_empty")){
+      $(this).closest("tr").addClass("no_cursor");
+    }
+  });
+/*
+  $(document).on('change','#antiguo_alumno #lista_cursos select',function(event) {
+    event.preventDefault();
+    var curso= $("#antiguo_alumno select").val();
+        $("#antiguo_alumno table tbody").load(Routing.generate('antiguos_alumnos_por_curso', {id:curso}),function(){
+              if(!$("#antiguo_alumno tbody tr td").hasClass("dataTables_empty")){
+
+             if( $('#antiguo_alumno table tbody').get(0).scrollHeight>$('#antiguo_alumno table tbody').height()){
+        $("#old_student thead tr>th:last-child").attr('style', 'width: 11% !important');
+      }
+      else{
+        $("#old_student thead tr>th:last-child").attr('style', 'width: 10% !important');
+      }
+    }
+    else{
+      $("#antiguo_alumno thead tr th").removeClass("sorting_asc");
+    }
+    });
+    // Se vacía el tbody de la tabla.
+    //$('#old_student tbody').empty();
+    //Se elimina todos los registros de la tabla para que no muestre ordenada antes de destruirla.
+    //$('#old_student').DataTable().destroy();
+
+    //$('#antiguo_alumno .dataTables_filter').remove();
+    //if(!$("#antiguo_alumno tbody tr td").hasClass("dataTables_empty")){
+          
+      /*$('#old_student').DataTable( { //on( 'page.dt',   function () { $(".current").prop("disabled", true); } )
+        //"aLengthMenu": [[25, 50, 100, 250, 500, -1], [25, 50, 100, 250, 500, "All"]],
+        "order": [[ 0, "asc" ]],
+        "aLengthMenu": [[-1], [ "All"]],
+        "columnDefs": [ {
+          "targets": 'no-sort',
+          "orderable": false,} ],
+          //"oSearch": {"sSearch": "Initial search"},
+        "language": {
+          "zeroRecords": "Lo siento, no se ha encontrado ningún registro coincidente",
+          "emptyTable": "No hay antiguos alumnos en el sistema",
+          "lengthMenu": "Mostrar _MENU_ entradas",
+          "loadingRecords": "Cargando...",
+          "processing":     "Processando...",
+          "info": "Página _PAGE_ de _PAGES_",
+          "infoEmpty": "No hay registros disponibles",
+          "infoFiltered": "(filtrado de _MAX_ registros)",
+          "search": "Buscar:",
+          "Next": "Siguiente",
+          "paginate": {
+              "previous": "Anterior",
+              "next": "Siguiente"
+          }
+        }
+      });
+
+      $("#antiguo_alumno .dataTables_info").addClass("oculto");
+      $("#antiguo_alumno .dataTables_paginate").addClass("oculto");
+      $("#antiguo_alumno .dataTables_length").addClass("oculto");
+      $('#antiguo_alumno .dataTables_filter').appendTo('#antiguo_alumno #buscador');
+     */   
+      // Se comprueba si existe scrol vertical para ajustar el thead
+     /* if( $('#antiguo_alumno table tbody').get(0).scrollHeight>$('#antiguo_alumno table tbody').height()){
+        $("#old_student thead tr>th:last-child").attr('style', 'width: 11% !important');
+      }
+      else{
+        $("#old_student thead tr>th:last-child").attr('style', 'width: 10% !important');
+      }
+    }
+    else{
+      $("#antiguo_alumno thead tr th").removeClass("sorting_asc");
+    }*/
+
+
+//});
+
+  $(document).on('change','#antiguo_alumno #lista_cursos select',function(event) {
+    curso=$(this).find("option:selected").text().replace("de", "");
+    //Se selecciona el option del select oculto con z-index para filtrar el curso.
+    if($("#antiguo_alumno select[class='2'] option[value='"+curso+"']").length){
+      $("#antiguo_alumno #buscador").removeClass("oculto");
+      // Se selecciona y se muestra con change().
+      $("#antiguo_alumno select[class='2']").val(curso).change();
+    }
+    else if($(this).find("option:selected").text()=="Todos los cursos"){
+      $("#antiguo_alumno #buscador").removeClass("oculto");
+      $("#antiguo_alumno select[class='2']").val("").change();
+    }
+    else{
+      $("#antiguo_alumno tbody").empty();
+      $("#antiguo_alumno tbody").append("<tr class='odd no_cursor'><td class='dataTables_empty'>Actualmente no existe antiguos alumnos para el curso seleccionado</td></tr>");
+      $("#antiguo_alumno thead tr th").removeClass("sorting_asc");
+      $("#antiguo_alumno #buscador").addClass("oculto");
+    }
+  });
+
+
+
+
+  $(document).on("click","#antiguo_alumno td", function(event){ 
+    event.preventDefault();
+    
+    var div= $(this).closest("div[id^='tabs-']");
+
+    //$(div).empty();
+    // Se añade un gif para la espera de la carga del contenido actualizado.
+    //$(div).html('<div class="ajaxload"><img src="/Symfony/web/bundles/backend/images/loading.gif"/></div>');
+
+    $(div).load(Routing.generate('alumno_old_edit', {id:$(this).closest("tr").attr("id")}));
+  });
+
+  $(document).on("click","#antiguo_alumno_rest", function(event){ 
+    event.preventDefault();
+    alum=$(this).closest("form").attr("alum");
+    
+    var div= $(this).closest("div[id^='tabs-']");
+
+    $(div).load(Routing.generate('alumno_old_edit', {id:alum}));
+  });
+
+  $(document).on("click","#antiguo_alumno_rest", function(event){ 
+    event.preventDefault();
+    alum=$(this).closest("form").attr("alum");
+    
+    var div= $(this).closest("div[id^='tabs-']");
+
+    $(div).load(Routing.generate('alumno_old_edit', {id:alum}));
+  });
+
+
+  $(document).on('click',"#antiguo_alumno_buscar", function(event){
+    event.preventDefault();
+    // Se cierra las notificaciones.
+    PNotify.removeAll();
+
+    div=$(this).closest("div[id^='tabs-']");
+    $(div).load(Routing.generate('search_old'));
+  });
+
+
+  //Se guarda el formulario antiguo alumno editado con los nuevos datos de matriculación.
+  $(document).on("submit","#antiguo_alumno_edit",function(event) {
+    event.preventDefault();
+    form= $(this).closest("form");
+
+    var val=0;
+    //Se comprueba si la lista de curso tiene un valor seleccionado.
+    if($("#antiguo_alumno_edit #lista_cursos select").val()==""){
+      $("#antiguo_alumno_edit #lista_cursos select").attr("validated",false);
+      $("#antiguo_alumno_edit #lista_cursos select").addClass("invalid");
+      $("#antiguo_alumno_edit #lista_cursos select").after("<span class='mensaje' style='display: none;'>Debe seleccionar un curso</span>");
+      val=1;
+    }
+    else{
+      $("#antiguo_alumno_edit #lista_cursos select").attr("validated",true);
+    }
+
+
+    // Se recorre los campos del formulario mirando si estan validados o no.
+    form.find(":input[type!='file']").each(function(){
+      //Si no tiene segundo responsable se asigna true al valor de validated para que sean aceptados en la validación.
+      if( $(this).closest("div[id='responsable']").hasClass("oculto")){
+        $(this).attr("validated",true);
+      }
+      if(!$(this).attr("validated") || $(this).attr("validated")==false){
+        if($(this).attr("validation")){
+          validation($(this));
+        }
+      }
+    });
+
+
+    //":input"añade a los input radio,select...
+    form.find(":input").each(function(){
+      if(($(this).attr("validated")=="false")) {
+        //Se muestra el input inválido.
+        $(this).focus();
+        val=1;
+        return false;
+      }       
+    });
+
+    if($("#antiguo_alumno_edit #lista_cursos select").val()==""){
+      $("#antiguo_alumno_edit #lista_cursos select").attr("validated",false);
+      $("#antiguo_alumno_edit #lista_cursos select").addClass("invalid");
+      $("#antiguo_alumno_edit #lista_cursos select").after("<span class='mensaje' style='display: none;'>Debe seleccionar un curso</span>");
+      val=1;
+    }
+    else{
+      $("#antiguo_alumno_edit #lista_cursos select").attr("validated",true);
+    }
+
+    var estado= "";
+
+    if(!form.find("#actual").hasClass("oculto")){
+      estado= "actual";
+    }
+    else if(!form.find("#actualizada").hasClass("oculto")){
+      estado= "actualizado";
+    }
+    else{
+      estado= "eliminado";
+    }
+
+    var curso=form.find("#lista_cursos select").val();
+    
+    var formdata=new FormData($(this)[0]);
+    formdata.append('estado', estado);
+    formdata.append('curso', curso);
+
+    if(val==0){
+      $.ajax({
+        type: 'POST',
+        url: $(this).attr('action'),
+        data: formdata, 
+        dataType: 'json',
+        processData: false,
+        contentType: false,
+        cache: false,
+        success: function(response) {
+
+          if(response.validate){
+            if(response.validate=="curso_incorrecto"){
+              titulo="La matriculación no se ha efectuado";              
+              texto= 'El alumno ya tiene superado el curso seleccionado.';
+            }
+            else{
+              titulo="La matriculación no se ha efectuado";              
+              texto= 'El alumno ya está matriculado en el Año Académico.';
+            }
+            error.play();
+            swal({
+              title: titulo,
+              text: texto,
+              type: "error",
+              html: true,
+              showCancelButton: false,
+              confirmButtonColor: color,
+              closeOnConfirm: true 
+            });
+              return false;
+          }
+
+          alumno=response.data;
+          $.ajax({
+            type: 'POST',
+            url: Routing.generate('matricular_alumno'),
+            data: {alumno:alumno},
+            dataType: 'json',
+            success: function(response) {
+              // Notificación de confirmación.
+
+              div=form.closest("div[id^='tabs-']");
+              $(div).load(Routing.generate('search_old'), function(responseTxt, statusTxt, xhr){
+                if(statusTxt == "success"){
+                  // Notificación de confirmación
+                  exito.play();
+              
+                  new PNotify({
+                    text:"Alumno Matriculado",
+                    addclass: "custom",
+                    type: "success",
+                    shadow: true,
+                    hide: true,
+                    buttons: {
+                    sticker: false,
+                    labels:{close: "Cerrar"}
+                    },
+                    stack: right_Stack,
+                    animate: {
+                      animate: true,
+                      in_class: "fadeInRight",
+                      out_class: "fadeOutRight",
+                    }
+                  });
+                }
+
+                if(statusTxt == "error")
+                  alert("Error: " + xhr.status + ": " + xhr.statusText);
+              });
+            }
+          })
+        } 
+      })
+    }
+  });
+
+  $(document).on('change',"#antiguo_alumno_edit #lista_cursos select",function(event){
+    event.preventDefault();
+    if($(this).val()!=""){
+      $(this).removeClass("invalid");
+      $(this).next().remove();
+      $("#antiguo_alumno_edit #lista_cursos select").attr("validated",true);
+
+    }
+    else{
+      $("#antiguo_alumno_edit #lista_cursos select").attr("validated",false);
+      $("#antiguo_alumno_edit #lista_cursos select").addClass("invalid");
+      $("#antiguo_alumno_edit #lista_cursos select").after("<span class='mensaje' style='display: none;'>Debe seleccionar un curso</span>");
+    }
+    comprobarSelect($("#antiguo_alumno_edit"));
+  });
+
+  $(document).on('blur',"#antiguo_alumno_edit #lista_cursos select",function(event){
+    event.preventDefault();
+    if($(this).val()!=""){
+      $(this).removeClass("invalid");
+      $(this).next().remove();
+      $("#antiguo_alumno_edit #lista_cursos select").attr("validated",true);
+
+    }
+    else{
+      $("#antiguo_alumno_edit #lista_cursos select").attr("validated",false);
+      $("#antiguo_alumno_edit #lista_cursos select").addClass("invalid");
+      $("#antiguo_alumno_edit #lista_cursos select").after("<span class='mensaje' style='display: none;'>Debe seleccionar un curso</span>");
+    }
+  });
+
+
+});
 //alert($('#tabs ul li:eq(0)').outerWidth(true));
 
 

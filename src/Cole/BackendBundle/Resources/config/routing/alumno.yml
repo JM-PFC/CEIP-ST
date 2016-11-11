@@ -40,6 +40,7 @@ alumno_search:
     defaults: { _controller: "BackendBundle:Alumno:search" }
     options:
         expose: true
+
 alumno_listaCursos:
     path:     /alumno/listaCursos
     defaults: { _controller: "BackendBundle:Curso:ListaCursos" }
@@ -82,3 +83,33 @@ alumnos_asignados_grupo:
     options:
         expose: true
 
+search_old:
+    path:     /alumno/old/search
+    defaults: { _controller: "BackendBundle:Alumno:SearchOld" }
+    options:
+        expose: true
+
+datos_alumno:
+    path:     /datos_alumno/{id}
+    defaults: { _controller: "BackendBundle:Alumno:DatosAlumno" }
+    options:
+        expose: true
+
+antiguos_alumnos_por_curso:
+    path:     /antiguos_alumnos_por_curso/{id}
+    defaults: { _controller: "BackendBundle:Alumno:AntiguosAlumnosPorCurso" }
+    options:
+        expose: true
+
+alumno_old_edit:
+    path:     /{id}/old_edit
+    defaults: { _controller: "BackendBundle:Alumno:OldEdit" }
+    options:
+        expose: true
+
+antiguo_alumno_update:
+    path:     /{id}/old_update
+    defaults: { _controller: "BackendBundle:Alumno:OldUpdate" }
+    requirements: { _method: post|put }
+    options:
+        expose: true

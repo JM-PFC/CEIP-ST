@@ -359,10 +359,11 @@ $(document).ready(function () {
         $("#tabs ul li:nth-child("+(tabCounter+1)+")").attr("aria-labelledby",'ui-id-'+tabCounter);
         $("#tabs ul li:nth-child("+(tabCounter+1)+") a").attr("id",'ui-id-'+tabCounter);
         $("#tabs>div:nth-child("+(tabCounter+1)+")").attr("aria-labelledby",'ui-id-'+tabCounter); 
-
+        
+        $("#tabs-"+tabCounter).html('<div class="ajaxload"><img src="/Symfony/web/bundles/backend/images/loading.gif"/></div>');
         // Se selecciona el contenido del div.
 			  $("#tabs-"+tabCounter).load($(this).attr('href'));
-     			
+
         // Se incrementa el contador.
         $('#tabs').data('counter', tabCounter++);
 

@@ -55,6 +55,16 @@ class Grupo
     private $alumnos;
 
     /**
+    * @ORM\OneToMany(targetEntity="Imparte", mappedBy="grupo", cascade={"remove"})
+    */
+    private $imparte;
+
+    /**
+     * @ORM\OneToMany(targetEntity="Matricula", mappedBy="grupo")
+     */
+    private $matricula;
+
+    /**
      * Get id
      *
      * @return integer 

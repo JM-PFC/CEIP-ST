@@ -1,0 +1,81 @@
+[1mdiff --git a/src/Cole/BackendBundle/Controller/AlumnoController.php b/src/Cole/BackendBundle/Controller/AlumnoController.php[m
+[1mindex ffced12..18f2605 100644[m
+[1m--- a/src/Cole/BackendBundle/Controller/AlumnoController.php[m
+[1m+++ b/src/Cole/BackendBundle/Controller/AlumnoController.php[m
+[36m@@ -90,6 +90,12 @@[m [mclass AlumnoController extends Controller[m
+             $entity->setGrupo(null);[m
+             $entity->setNumAlum(null);[m
+             $entity->setActivo(true);[m
+[32m+[m[32m            if(date("n")>=6){[m
+[32m+[m[32m                $entity->setAñoAcademico(date("Y")."/".(date("Y")+1));[m
+[32m+[m[32m            }[m
+[32m+[m[32m            else{[m
+[32m+[m[32m                $entity->setAñoAcademico((date("Y")-1)."/".date("Y"));[m
+[32m+[m[32m            }[m
+             $role = $em->getRepository('BackendBundle:Role')->find(1);[m
+             $entity->getResponsable1()->setRole($role);[m
+             $entity->getResponsable2()->setRole($role);[m
+[36m@@ -169,6 +175,7 @@[m [mclass AlumnoController extends Controller[m
+             if ($request->isXmlHttpRequest()) {[m
+                 return new JsonResponse(array([m
+                     'message' => 'Success!',[m
+[32m+[m[32m                    'alumno' => $entity->getId(),[m
+                     'success' => true), 200);[m
+             }[m
+             return $this->redirect($this->generateUrl('alumno_show', array('id' => $entity->getId())));[m
+[36m@@ -453,12 +460,23 @@[m [mclass AlumnoController extends Controller[m
+     {[m
+         $entity = new Alumno();[m
+         $form = $this->createCreateSearchForm($entity);[m
+[32m+[m
+         [m
+         return $this->render('BackendBundle:Alumno:search.html.twig', array([m
+             'entity' => $entity,[m
+             'form'   => $form->createView(),[m
+         ));[m
+     }[m
+[32m+[m
+[32m+[m[32m    public function SearchOldAction()[m
+[32m+[m[32m    {[m
+[32m+[m[32m        $em = $this->getDoctrine()->getManager();[m
+[32m+[m[32m        $entities = $em->getRepository('BackendBundle:Alumno')->findByActivo(0); //Hay que comprobar que no hayan terminado los estudios.[m
+[32m+[m[41m        [m
+[32m+[m[32m        return $this->render('BackendBundle:Alumno:search_old.html.twig', array([m
+[32m+[m[32m            'entities' => $entities,[m
+[32m+[m[32m        ));[m
+[32m+[m[32m    }[m
+     [m
+     public function ListaCursosAction()[m
+     {[m
+[36m@@ -673,6 +691,193 @@[m [mclass AlumnoController extends Controller[m
+         }[m
+     }[m
+ [m
+[32m+[m[32m    public function DatosAlumnoAction($id)[m
+[32m+[m[32m    {[m
+[32m+[m[32m        $em = $this->getDoctrine()->getManager();[m
+[32m+[m[32m        $entity = $em->getRepository('BackendBundle:Alumno')->findById($id);[m
+[32m+[m[32m        return $this->render('BackendBundle:Alumno:datos_alumno.html.twig', array([m
+[32m+[m[32m            'entity' => $entity,));[m
+[32m+[m[32m    }[m
+[32m+[m
+[32m+[m[32m    public function AntiguosAlumnosPorCursoAction($id)[m
+[32m+[m[32m    {[m
+[32m+[m
+[32m+[m[32m        $em = $this->getDoctrine()->getManager();[m
+[32m+[m[32m        if($id==0){[m
+[32m+[m[32m            $entities = $em->getRepository('BackendBundle:Alumno')->findByActivo(0); //Hay que comprobar que no hayan terminado los estudios.[m
+[32m+[m[32m            return $this->render('BackendBundle:Alumno:lista_antiguos_alumnos_busqueda_cursos.html.twig', array([m
+[32m+[m[32m            'entities' => $entities,[m
+[32m+[m[32m            ));[m
+[32m+[m[32m        }[m
+[32m+[m[32m        else{[m
+[32m+[m[32m            $entities= $em->getRepository('BackendBundle:Alumno')->findAntiguosAlumnosPorCurso($id);[m
+[32m+[m[32m            return $this->render('BackendBundle:Alumno:lista_antiguos_alumnos_busqueda_cursos.html.twig', array([m
+[32m+[m[32m            'entities' => $entities,[m
+[32m+[m[32m            ));[m
+[32m+[m[32m        }[m
+[32m+[m[32m    }[m
+[32m+[m
+[32m+[m
+[32m+[m[32m

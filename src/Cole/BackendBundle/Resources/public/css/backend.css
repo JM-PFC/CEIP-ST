@@ -24,10 +24,6 @@ button:focus{
 	/*color: #334c73;*/
 	background-color: #C3C4C5;
 }
-/*Se elimina el borde punteado al hacer click en un enlace "a"*/
-a:active{
-	outline: none;
-}
 button:hover{
 	background: #b1cce7;
 }
@@ -36,9 +32,30 @@ button:disabled{
    pointer-events: none;
    cursor: default;
 }
+
+#botones_centrados{
+	display: block;
+	width: 100%;
+	overflow:hidden;
+    text-align: center;
+    margin:0 auto;
+    margin-top: 7px;
+}
+#botones_centrados div{
+	display: inline-table;
+	margin: 0 7%;
+}
+#botones_centrados div button{
+	min-width: 100px !important;
+}
+
 a{
     text-decoration: none;
     color: #001F51;
+}
+/*Se elimina el borde punteado al hacer click en un enlace "a"*/
+a:active{
+	outline: none;
 }
 body{
 	background: #EEECEC;
@@ -258,6 +275,7 @@ nav{
 	margin: 0 auto;
 	margin-top: -2px;
 	min-width: 50px;
+	height: 85%;
 }
 .contenedor div a:hover{
 	background: #9FCBE9;
@@ -656,6 +674,7 @@ form label {
     font-family: Verdana,Arial,sans-serif;
 	font-size: 1.2em ;
 	margin-top: 0.5%;
+	margin-left: 2px;
 	height: 20px;
 }
 /*Para el problema de mostrar bien el aviso de error en la pestaña*/
@@ -829,6 +848,7 @@ legend{
 	background: #e4e0e0;
 	border-radius: 3px;
 	margin: 0.5% 3%;
+	padding-left:2px;
 }
 .marco_columna_contenido{
 	width: 81%;
@@ -841,6 +861,7 @@ legend{
 	box-shadow: 0px 1px 5px 0px rgba(0, 0, 0, 1);
 	-webkit-box-shadow: 0px 1px 5px 0px rgba(0, 0, 0, 1);
 	-moz-box-shadow: 0px 1px 5px 0px rgba(0, 0, 0, 1);
+	padding-right: 2px;
 }
 .label_contenido{
 	width: 98%;
@@ -878,7 +899,8 @@ legend{
 	clear: both;
 	height: auto;
 	width: 100%;
-	margin: 10%;
+	/*margin: 10%;*/
+	margin: 5%;
 	font-size: 16px;
 }
 .block_insert h2{
@@ -1026,6 +1048,8 @@ textarea{
 .derecha{
 	float: right;
 	clear: right;
+	margin-left: 3% !important;
+    margin-top: 2% !important;
 }
 select{
 	margin-bottom: 10px;
@@ -1187,7 +1211,7 @@ form button{
     pointer-events: none; 
 }
 #registro_asignaturas .simple_column{
-	width: 24%;
+	width: 28%;
 }
 #registro_asignaturas .block_insert{
 	margin: 10% 5%;
@@ -1197,7 +1221,44 @@ form button{
 	width: 120%;
 }
 #registro_asignaturas #contenedor_registro{
-	width: 35%;
+	width: 33%;
+}
+.ui-dialog #ordenar_cursos li{
+    background: #ffffff none repeat scroll 0 0;
+    border: 1px solid #c5c5c5;
+    border-radius: 5px;
+    color: #454545;
+    font-weight: normal;
+    width: 80%;
+    margin:3px auto;
+    list-style: none;
+    height: 15px;
+    padding: 5px;
+    text-align: center;
+}
+#ordenar_cursos_dialog{
+	overflow: hidden;
+}
+#ordenar_cursos_dialog #content-form{
+	height: auto !important;
+	width: 90%;
+}
+#ordenar_cursos_dialog p{
+	text-align: center;
+}
+.ui-dialog #ordenar_cursos li:hover{
+	background:#D2E1E3;
+	cursor: move !important; 
+}
+.ui-dialog #ordenar_cursos li span{
+	float: left;
+}
+.ui-dialog #ordenar_cursos li p{
+	width: 86%;
+	float: left;
+}
+#ordenar_cursos{
+	display: block;
 }
 #contenedor_registro{
 	width: 32%;
@@ -1265,7 +1326,7 @@ form button{
     background: white;
 }
 #contenedor_registro .inner_table { 
-    max-height: 229px;
+    max-height: 256px;
 }
 .inner_table td span{
 	margin: 0;
@@ -1277,30 +1338,12 @@ form button{
     float: left;
     width: 24%;
 }
-
-#contenedor_registro_Ngrupos {
-    background: white none repeat scroll 0 0;
-    border-radius: 5px;
-    box-shadow: 0 1px 1px 1px rgba(0, 0, 0, 0.5);
-    float: left;
-    font-size: 12px;
-    font-weight: bold;
-    margin-left: 3%;
-    margin-top: 2%;
-    margin-bottom: 10px;
-    overflow: auto;
-    width: 47%;
+#registro_cursos .block_insert{
+	text-align: center;
+	width: 95%;
 }
-#registro_Ngrupos .block_insert{
-    margin-left: 4%;
-    margin-right: 4%;
-    text-align: center;
-}
-#registro_Ngrupos .block_insert p{
-    text-align: justify;
-}
-#registro_Ngrupos .block_insert span{
-	font-weight: bold;
+#registro_cursos .block_insert p{
+	text-align: justify;
 }
 #Ngrupo{
 	text-align: center
@@ -1311,54 +1354,41 @@ form button{
 	min-width: 51px;
     text-align: center
 }
+#contenedor_registro_Ngrupos {
+    width: 47%;
+}
+.contenedor_tabla_no_selec .block_insert{
+    margin-left: 4%;
+    margin-right: 4%;
+    text-align: center;
+}
+.contenedor_tabla_no_selec .block_insert p{
+    text-align: justify;
+}
+.contenedor_tabla_no_selec .block_insert span{
+	font-weight: bold;
+}
+.contenedor_tabla_no_selec{
+	display: block;
+}
 #registro_Ngrupos>div>div>div:nth-child(2){
 	width: 76%;
 	float: left;
 }
-
-#contenedor_registro_Ngrupos h2{
-	text-align: center;
-
-}
-#contenedor_registro_Ngrupos div table{
-	margin: 0 auto;
-	border-collapse: collapse;
-    border-spacing: 0;
-    width: 100%;
-    table-layout: auto;
-}
-
 #contenedor_registro_Ngrupos div table td{
-	margin: 0 auto;
-	min-width: 230px;
-	font-size: 1.2em;
-	font-family: Verdana,Arial,sans-serif !important;
-	background: none;
-	height: 35px;
-    word-wrap: break-word;
     min-width: 30%;
-    text-align: center;
-   	border-bottom: 2px solid #b1cce7;
 }
 #contenedor_registro_Ngrupos div table td:nth-child(1){
 	min-width: 10%;
 }
 #contenedor_registro_Ngrupos div table th{
-	text-align: center;
-	font: 1.3em solid;
-	padding: 3px ;
 	min-width: 24%;
 }
 #contenedor_registro_Ngrupos div table th:nth-child(1){
 	min-width: 7%;
 }
-
-#contenedor_registro_Ngrupos td a { 
-    display: block; 
-}
-#contenedor_registro_Ngrupos .inner_table {
-    max-height: 229px;
-    overflow-y: auto;
+#contenedor_registro_Ngrupos .inner_table{
+	max-height: 244px !important;
 }
 #contenedor_registro_Ngrupos table select {
 	margin-top: 3px;
@@ -1367,88 +1397,100 @@ form button{
 }
 #contenedor_registro_Ngrupos td { 
 	cursor: default;
+	text-align: center;
 }
 #contenedor_asignar_aula {
-    background: white none repeat scroll 0 0;
-    border-radius: 5px;
-    box-shadow: 0 1px 1px 1px rgba(0, 0, 0, 0.5);
-    float: left;
-    font-size: 12px;
-    font-weight: bold;
-    margin-left: 3%;
-    margin-top: 2%;
-    margin-bottom: 10px;
-    overflow: auto;
     width: 47%;
 }
 #asignar_aula>div>div>div:nth-child(2){
 	width: 76%;
 	float: left;
 }
-#asignar_aula .block_insert{
-    margin-left: 4%;
-    margin-right: 4%;
-    text-align: center;
+#contenedor_asignar_aula .inner_table {
+    max-height: 259px !important;
 }
-#asignar_aula .block_insert p{
-    text-align: justify;
-}
-#contenedor_asignar_aula h2{
-	text-align: center;
-}
-#contenedor_asignar_aula div table{
-	margin: 0 auto;
-	border-collapse: collapse;
-    border-spacing: 0;
-    width: 100%;
-    table-layout: auto;
-}
+
 #contenedor_asignar_aula div table td{
-	margin: 0 auto;
-	min-width: 230px;
-	font-size: 1.2em;
-	font-family: Verdana,Arial,sans-serif !important;
-	background: none;
-	height: 35px;
-    word-wrap: break-word;
     min-width: 30%;
-    text-align: center;
-   	border-bottom: 2px solid #b1cce7;
 }
 #contenedor_asignar_aula div table td:nth-child(1){
 	min-width: 30%;
 }
 #contenedor_asignar_aula div table th{
-	text-align: center;
-	font: 1.3em solid;
-	padding: 3px ;
 	min-width: 21%;
 }
 #contenedor_asignar_aula div table th:nth-child(1){
+	min-width: 23%;
+}
+#contenedor_asignar_aula div table th:nth-child(3){
 	min-width: 24%;
 }
 #contenedor_asignar_aula div table th:nth-child(4){
 	text-align: left;
 	padding-left: 5px;
 }
-
-#contenedor_asignar_aula td a { 
-    display: block; 
-}
 #contenedor_asignar_aula td { 
 	cursor: default;
-}
-#contenedor_asignar_aula .inner_table {
-    max-height: 229px;
-    overflow-y: auto;
-}
-#contenedor_asignar_aula table input {
-	width: 40px;
-	text-align: center;
+	text-align: center
 }
 
-#registro_Ngrupos{
+#contenedor_asignar_aula table input {
+	width: 40px;
+}
+#registro_ratio .simple_column_red{
+	width: 39%
+}
+#registro_ratio>div>div>div:nth-child(2){
+	width: 60%;
+	float: left;
+}
+#registro_ratio td {
+    cursor: default;
+    text-align: center;
+}
+#registro_ratio .block_insert p{
+	margin: 0;
+	width: 95%;
+	text-align: left;
+}
+.span_title{
+	margin-left: 15%;
+	margin-top: 10px;
+	text-align: left;
 	display: block;
+}
+#contenedor_ratio_grupos{
+	width: 98%;
+}
+#contenedor_ratio_grupos td{
+	text-align: center;
+}
+#contenedor_ratio_grupos tr th{
+	width: 15%;
+}
+#contenedor_ratio_grupos tr th:nth-child(3){
+	width: 51%;}
+#slider{
+    max-width: 257px;
+    min-width: 200px;
+}
+#slider1,#slider2,#slider3{
+    display: inline-flex;
+    margin: 6px auto 6px 20%;
+    max-width: 257px;
+    min-width: 200px;
+}
+#registro_ratio .block_insert input{
+    display: inline-flex;
+    float: right;
+    margin-right: 20%;
+}
+#registro_ratio h2{
+	text-align: center;
+}
+#registro_ratio input{
+	width: 25px !important;
+	text-align: center;
 }
 #cabecera_lista{
 	background: #b1cce7;
@@ -1494,16 +1536,16 @@ form button{
     height:105px !important;
     border-radius: 5px !important;
 }
-#profesor_edit input[type='file']{
+.edit_profesor input[type='file']{
 	display:none;
 }
-#alumno_edit .m_input{
+.edit_alumno .m_input{
 	width: 60% !important;
 }
-#alumno_edit .s_input{
+.edit_alumno .s_input{
 	width: 25% !important;
 }
-#alumno_edit input[type='file']{
+.edit_alumno input[type='file']{
 	display:none;
 }
 .input_radio div{
@@ -1918,7 +1960,7 @@ float: right;
 #rango_festivos input{
 	width: 38%;
 	text-align: center;
-	    border: medium thin grey;
+	border: medium thin grey;
     border-radius: 5px;
 }
 #contenedor_festivos p{
@@ -1947,19 +1989,26 @@ float: right;
     text-align: center;
     margin:auto;
 }
+#curso_dialog #botones_festivos{
+	width: 100% !important;
+	padding-right: 0 !important;
+}
 #botones_festivos div{
 	display:inline-table;
 	margin: 0 7%;
 }
+#botones_festivos div button{
+	min-width: 100px !important;
+}
 .contenedor_registro{
 	background: white none repeat scroll 0 0;
+	box-shadow: 0 1px 1px 1px rgba(0, 0, 0, 0.5);
     float: left;
     font-size: 12px;
     font-weight: bold;
-    margin-bottom: 10px;
+    margin: 10px 0;
     overflow: auto;
     width: 100%;
-    max-height: 288px;
     border-radius: 5px;
 }
 .contenedor_registro h2{
@@ -1982,7 +2031,7 @@ float: right;
 	height: 30px;
     word-wrap: break-word;
     min-width: 0;
-    text-align: left;
+    text-align: center;
     border-bottom: 2px solid #b1cce7;
     cursor: pointer;
 }
@@ -1992,6 +2041,9 @@ float: right;
 	padding: 3px 5px;
 	min-width: 0;
 }
+#contenedor_calendario .contenedor_registro{
+	margin:0;
+}
 .contenedor_calendario tr:hover { 
 	background: #b1cce7!important;
 	color: white;
@@ -2000,11 +2052,11 @@ float: right;
     display: block; 
 }
 .contenedor_registro .inner_table {
-    max-height: 223px !important;
+    max-height: 256px;
     overflow-y: auto;
 }
 #contenedor_calendario .inner_table{
-	max-height: 230px !important;
+	min-height: 256px !important;
 }
 .Festivos_list tr:hover { 
 	background: #b1cce7!important;
@@ -2471,7 +2523,9 @@ border: 1px solid;
 .registro_equipamientos .block_insert {
 	margin: 10% 5%;
 }
-
+.registro_equipamientos .inner_table {
+    max-height: 247px !important;
+}
 .registro_equipamientos table th:nth-child(1){
 	width: 25px !important;
 }
@@ -2545,9 +2599,10 @@ border: 1px solid;
 	font-weight: bold;
 }
 #registro_horario>div>div>div:nth-child(2){
-	width: 53%;
+	width: 49%;
 	float: left;
 }
+
 #registro_horario .simple_column_red{
 	width: 47%;
 }
@@ -2602,7 +2657,7 @@ border: 1px solid;
     display: block; 
 }
 .contenedor_registro_horario  .inner_table {
-    max-height: 229px;
+    max-height: 192px;
     overflow-y: auto;
 }
 .contenedor_registro_horario table select {
@@ -2621,7 +2676,9 @@ border: 1px solid;
 #nuevo_horario_guardar button{
 	margin-left: 14%; 
 }
-
+#registro_horario{
+	min-height: 52vh;
+}
 #registro_horario .block_insert{
 	margin: 3% 6%;
 }
@@ -2641,7 +2698,6 @@ border: 1px solid;
 	padding: 2px 5px;
 }
 #registro_horario #aviso_error{
-    padding-top: 10px;
     text-align: left;
     min-width:80%;
     margin-left: 3%;
@@ -2881,17 +2937,46 @@ input[id="si"]{
 	}
 
 	.contenedor_principal_reserva #guardar_reserva div button:nth-child(1){
-	float: right;
+		float: right;
+	}
+	#asignar_aula .simple_column_red{
+		width: 20%;
+	}
+	#asignar_aula .block_insert{
+		margin-left: 0;
+	}
+	#asignar_aula > div > div > div:nth-child(2){
+		width: 80%;
+	}
+	#contenedor_asignar_aula div table td:nth-child(1),#contenedor_asignar_aula div table th:nth-child(1){
+		max-width: 45px !important;
+	}
+	#contenedor_asignar_aula div table th:nth-child(1){
+		min-width: 19% !important;
 	}
 
-	/*Registro Asignaturas*/
-	#registro_asignaturas #contenedor_registro{
-		width: 33%;
+	#slider1,#slider2,#slider3{
+    	margin: 6px auto 6px 15%;
 	}
-	#contenedor_registro{
-		margin-left: 5%;
+	#registro_ratio .block_insert input{
+    	margin-right: 15%;
 	}
+	.span_title{
+		margin-left: 10%;
+	}
+	.columna_foto{
+		width: 103px !important;
+	}
+	#antiguo_alumno_edit #edit_alumno_responsable1_estadoCivil{
+		width: 120px;
+	}	
 
+	#antiguo_alumno_edit input[class*="readonly"]{
+		min-width: 105px !important;
+	}
+	#antiguo_alumno_edit input[class*="s_input"]:last-child{
+		min-width: 0 !important;
+	}
 }
 
 .contenedor_principal_reserva div[class="parent_no_form"]{
@@ -2917,7 +3002,6 @@ input[id="si"]{
 	cursor: default;
 }
 
-
 .contenedor_principal_reserva #guardar_reserva button:enabled{
     background-color: #5cb85c;
     border-color: #4cae4c;
@@ -2932,11 +3016,12 @@ input[id="si"]{
 
 .ajaxload img{
 	margin: 20vh 40vw;
+	opacity: 0.5;
 }
 
 
 
-#consulta_instalaciones .contenedor_registro .inner_table,#consulta_equipamientos .contenedor_registro .inner_table {
+.vh45{
     /*max-height: 41vh !important;*/
     max-height: 45vh !important;
     height: 100% !important;
@@ -2953,7 +3038,7 @@ div.tableContainer {
 
 /* Reset overflow value to hidden for all non-IE browsers. */
 html>body div.tableContainer {
-	overflow: hidden;
+	overflow: hidden !important;
 }
 
 /* define width of table. IE browsers only*/
@@ -3022,40 +3107,41 @@ tbody.scrollContent tr.alternateRow td {
 	border-top: 1px solid #DDD;
 	padding: 2px 3px 3px 4px
 }
-table.dataTable.no-footer{
+#tableContainer table .no-footer{
 	border: none !important;
 	border-right: 1px solid #334c73 !important;
 }
-table.dataTable thead th, table.dataTable tbody td{
-	padding: 3px 1% !important;
+#tableContainer table thead th,#tableContainer table tbody td{
+	padding: 3px 1% ;
 }
 
-.dataTable tr th,.dataTable tr td{
-	text-align: center !important;
+#tableContainer  tr th,#tableContainer tr td{
 	width: 10% !important;
 }
-.dataTable tr th[class*="id"],.dataTable tr td[class*="id"]{
+#tableContainer  tr th[class*="id"],#tableContainer tr td[class*="id"]{
 	width: 1% !important;
 	text-align: center;
 }
-.dataTable tr td[class*="id"]{
+#tableContainer  tr td[class*="id"]{
 	background-color: rgba(187, 201, 215, 0.4);
 }
-.dataTable tr th[class*="w_20"],.dataTable tr td[class*="w_20"]{
+#tableContainer  tr th[class*="w_15"],#tableContainer tr td[class*="w_15"]{
 	width: 15% !important;
+}
+.left{
 	text-align: left !important;
 }
-.dataTable tr th[class*="w_12"],.dataTable tr td[class*="w_12"]{
+#tableContainer tr th[class*="w_12"],#tableContainer tr td[class*="w_12"]{
 	width: 12% !important;
 }
-.dataTable thead tr th, .dataTable tbody tr td{
+#tableContainer thead tr th, #tableContainer tbody tr td{
 	min-width: 25px !important;
 }
 
-.dataTable tr th:last-child{
+#tableContainer tr th:last-child{
 	width: 11% !important;
 }
-.dataTable tr td:last-child{
+#consulta_reservas_instalaciones tr td:not(.dataTables_empty):last-child,#consulta_reservas_equipamientos tr td:not(.dataTables_empty):last-child{
 	width: 5% !important;
 	padding: 0 !important;
 }
@@ -3065,9 +3151,10 @@ table.dataTable thead th, table.dataTable tbody td{
 #consulta_reservas_instalaciones tr th:last-child,#consulta_reservas_equipamientos tr th:last-child{
 	width: 5.5% !important;
 }
-#consulta_reservas_instalaciones .scrollContent tr:hover,#consulta_reservas_equipamientos .scrollContent tr:hover{
+.scrollContent tr:hover{
 	background: rgba(51, 76, 115, 0.4);
 }
+
 #consulta_reservas_instalaciones .scrollContent img,#consulta_reservas_equipamientos .scrollContent img{
 	margin: 0 auto;
     max-height:28px;
@@ -3127,6 +3214,10 @@ table.dataTable thead th, table.dataTable tbody td{
 	font-family: Courier,Helvetica,Arial,sans-serif;
 	margin-top: 17vh;
 }
+.no_cursor{
+	pointer-events: none !important ;
+	cursor: none !important;	
+}
 #consulta_reservas_instalaciones .scrollContent tr[class*="no_cursor"],#consulta_reservas_equipamientos .scrollContent tr[class*="no_cursor"]{
 	pointer-events: none !important ;
 	cursor: none !important;
@@ -3139,8 +3230,8 @@ table.dataTable thead th, table.dataTable tbody td{
 	cursor: pointer; 
 	pointer-events: auto;
 }
-#consulta_reservas_instalaciones .scrollContent .dataTables_empty,#consulta_reservas_equipamientos .scrollContent .dataTables_empty{
-	padding-top: 20vh !important;
+.scrollContent .dataTables_empty{
+	padding-top: 18vh !important;
 }
 .swal-wide{
 
@@ -3164,4 +3255,91 @@ table.dataTable thead th, table.dataTable tbody td{
 }
  .sweet-alert table{
 	margin:0 auto;
+}
+.tr_title{
+	background:  red ;
+}
+#lista_cursos select option:last-child{
+ font-weight: bold;
+ border-top: 1px dotted black;
+}
+#antiguo_alumno #lista_cursos{
+	width: 27%;
+	float: left;
+	margin-top: -4px;
+	height: 29px;
+}
+#antiguo_alumno h2{
+	width: 30%;
+}
+#tableContainer table thead th{
+	border-bottom: 1px solid #111;
+}
+#tableContainer table thead th{
+	font-weight: bold;
+}
+#tableContainer table {
+	border-right: 1px solid black;
+	border-bottom: 0 !important;
+}
+
+
+.edit_antiguo_alumno #content-form{
+	width: 78% !important;
+	margin: 0;
+	float: left;
+}
+.edit_antiguo_alumno .columna_foto{
+	width: 120px ;
+	margin-left: 1% !important;
+	margin-right: 1% !important;
+}
+
+.edit_antiguo_alumno .marco_columna_contenido{
+	width: 83% !important;
+	margin-left: 0;
+}
+.clear_b{
+	clear: both;
+}
+
+.edit_antiguo_alumno #botones_form{
+	width: 72%;
+	margin: 0;
+}
+#c_old_student{
+	width: 16%;
+	margin-left: 2% !important;
+	margin-top: 0 !important;
+}
+.edit_antiguo_alumno p{
+	font-size: 15px;
+	margin-bottom: 20px; 
+	text-align: justify;
+}
+
+#antiguo_alumno_submit{
+	margin-top: 40px; 
+	margin-left: 20%;
+	height: 45px;
+}
+
+.edit_antiguo_alumno h2{
+	text-align: center;
+	text-decoration: underline; 
+	margin-bottom: 20px;
+}
+/*Se oculta los select de Datatable*/
+#antiguo_alumno .select_table{
+	position: absolute;
+    left: 0px;
+    top: 0px;
+    z-index: -10;
+}
+
+#antiguo_alumno_edit input[class*="readonly"]{
+	min-width: 125px;
+}
+#antiguo_alumno_edit input[class*="s_input"]:last-child{
+	min-width: 0;
 }

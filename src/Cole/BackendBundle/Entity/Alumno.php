@@ -155,6 +155,18 @@ class Alumno
      * @ORM\JoinColumn(name="grupo", referencedColumnName="id" ,nullable=true)
      */
     private $grupo;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="añoAcademico", type="string", length=30, nullable=true)
+     * @Assert\NotBlank()
+     */
+    private $añoAcademico;
+    /**
+     * @ORM\OneToMany(targetEntity="Matricula", mappedBy="alumno")
+     */
+    private $matricula;
      
      // @Assert\File(mimeTypes={ "image/png","image/jpg" }) 
 
@@ -701,5 +713,68 @@ class Alumno
     public function getCurso()
     {
         return $this->curso;
+    }
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->matricula = new \Doctrine\Common\Collections\ArrayCollection();
+    }
+
+    /**
+     * Add matricula
+     *
+     * @param \Cole\BackendBundle\Entity\Matricula $matricula
+     * @return Alumno
+     */
+    public function addMatricula(\Cole\BackendBundle\Entity\Matricula $matricula)
+    {
+        $this->matricula[] = $matricula;
+
+        return $this;
+    }
+
+    /**
+     * Remove matricula
+     *
+     * @param \Cole\BackendBundle\Entity\Matricula $matricula
+     */
+    public function removeMatricula(\Cole\BackendBundle\Entity\Matricula $matricula)
+    {
+        $this->matricula->removeElement($matricula);
+    }
+
+    /**
+     * Get matricula
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getMatricula()
+    {
+        return $this->matricula;
+    }
+
+    /**
+     * Set añoAcademico
+     *
+     * @param string $añoAcademico
+     * @return Alumno
+     */
+    public function setAñoAcademico($añoAcademico)
+    {
+        $this->añoAcademico = $añoAcademico;
+
+        return $this;
+    }
+
+    /**
+     * Get añoAcademico
+     *
+     * @return string 
+     */
+    public function getAñoAcademico()
+    {
+        return $this->añoAcademico;
     }
 }

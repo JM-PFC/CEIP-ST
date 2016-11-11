@@ -1,0 +1,37 @@
+matricula:
+    path:     /
+    defaults: { _controller: "BackendBundle:Matricula:index" }
+
+matricula_show:
+    path:     /{id}/show
+    defaults: { _controller: "BackendBundle:Matricula:show" }
+
+matricula_new:
+    path:     /new
+    defaults: { _controller: "BackendBundle:Matricula:new" }
+
+matricula_create:
+    path:     /create
+    defaults: { _controller: "BackendBundle:Matricula:create" }
+    requirements: { _method: post }
+
+matricula_edit:
+    path:     /{id}/edit
+    defaults: { _controller: "BackendBundle:Matricula:edit" }
+
+matricula_update:
+    path:     /{id}/update
+    defaults: { _controller: "BackendBundle:Matricula:update" }
+    requirements: { _method: post|put }
+
+matricula_delete:
+    path:     /{id}/delete
+    defaults: { _controller: "BackendBundle:Matricula:delete" }
+    requirements: { _method: post|delete }
+
+matricular_alumno:
+    path:     /matricular_alumno
+    defaults: { _controller: "BackendBundle:Matricula:MatricularAlumno" }
+    requirements: { _method: post }
+    options:
+        expose: true

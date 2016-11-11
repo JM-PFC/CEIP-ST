@@ -31,7 +31,7 @@
         $("#alumno_responsable2_dni").prop("disabled", false);
 
         // Se muestra por defecto la primera pestaña del formulario y se selecciona el primer campo.
-        var sel= $("#tabs div[aria-hidden='false']").attr("id");
+        var sel= $("#tabs ul li a[title='Nuevo Alumno']").closest("li").attr("aria-controls");
 
         if($("#"+sel+" #tab-container li:first").attr("class")=="selected"){
             $("#"+sel+" #content-form-menu").find("[id^='tab']").hide(); // Se oculta todo el contenido.

@@ -1,0 +1,144 @@
+{% extends '::base.html.twig' %}
+
+{% block head %}{% endblock %}
+{% block stylesheets %}{% endblock %}
+
+{% block javascript %}
+<script>
+
+    // Tabla con la opción de ordenar y búsqueda.
+    $('#old_student').DataTable( { //on( 'page.dt',   function () { $(".current").prop("disabled", true); } )
+        //"aLengthMenu": [[25, 50, 100, 250, 500, -1], [25, 50, 100, 250, 500, "All"]],
+                initComplete: function () {
+            this.api().columns().every( function (e) {
+                var column = this;
+                var select = $('<select class="'+e+'"><option value=""></option></select>')
+                    .appendTo('.select_table')
+                    .on( 'change', function () {
+                        var val = $.fn.dataTable.util.escapeRegex(
+                            $(this).val()
+                        );
+ 
+                        column
+                            .search( val ? '^'+val+'$' : '', true, false )
+                            .draw();
+                    } );
+ 
+                column.data().unique().sort().each( function ( d, j ) {
+                    select.append( '<option value="'+d+'">'+d+'</option>' )
+                } );
+                select.append( '<option value="nada">nada</option>' )
+            } );
+        },
+        "order": [[ 0, "asc" ]],
+        "aLengthMenu": [[-1], [ "All"]],
+        "columnDefs": [ {
+            "targets": 'no-sort',
+            "orderable": false,} ],
+        "language": {
+            "zeroRecords": "Lo siento, no se ha encontrado ningún registro coincidente",
+            "emptyTable": "No hay antiguos alumnos en el sistema",
+            "lengthMenu": "Mostrar _MENU_ entradas",
+            "loadingRecords": "Cargando...",
+            "processing":     "Processando...",
+            "info": "Página _PAGE_ de _PAGES_",
+            "infoEmpty": "No hay registros disponibles",
+            "infoFiltered": "(filtrado de _MAX_ registros)",
+            "search": "Buscar:",
+            "Next": "Siguiente",
+            "paginate": {
+                "previous": "Anterior",
+                "next": "Siguiente"
+            }
+        }
+    });
+
+    $("#antiguo_alumno .dataTables_info").addClass("oculto");
+    $("#antiguo_alumno .dataTables_paginate").addClass("oculto");
+    $("#antiguo_alumno .dataTables_length").addClass("oculto");
+    $('#antiguo_alumno .dataTables_filter').appendTo('#antiguo_alumno #buscador');
+    // Se comprueba si existe scrol vertical para ajustar el thead
+    if( $('#antiguo_alumno table tbody').get(0).scrollHeight>$('#antiguo_alumno table tbody').height()){
+        $("#old_student thead tr>th:last-child").attr('style', 'width: 11% !important');
+    }
+    else{
+        $("#old_student thead tr>th:last-child").attr('style', 'width: 10% !important');
+    }
+    
+    $(window).resize(function() {
+        //Se comrpueba si está el div con la tabla para cambiar los estilos.
+        if($('#antiguo_alumno table tbody').length){
+            if($('#antiguo_alumno table tbody').get(0).scrollHeight>$('#antiguo_alumno table tbody').height() ){
+                $("#old_student thead tr>th:last-child").attr('style', 'width: 11% !important');
+            }
+            else{
+                $("#old_student thead tr>th:last-child").attr('style', 'width: 10% !important');
+            }
+        }
+    });
+
+    $("#antiguo_alumno tbody tr td[class='dataTables_empty']").closest("tr").addClass("no_cursor");
+
+</script>
+
+{% endblock %}
+
+{% block body -%}
+    <div id="consulta_antiguo_alumno">
+        <div class="parent_no_form">
+        <div class="child">
+            <div class="contenedor_registro" id="antiguo_alumno" >  
+                <div>
+                    <div id="cabecera_lista">
+                        <div id="lista_cursos">
+                         Último curso: {{render(controller("BackendBundle:Curso:listaCursos"))}}
+                        </div> 
+                        <h2 class="text_cabecera">Antiguos Alumnos</h2>
+                        <div id="buscador"> </div>
+                    </div>
+                    <div id="fondo_azul_osc" class="tabla_con_info">
+                        <div id="tableContainer" class="tableContainer inner_table vh45">
+                            <table id="old_student" class="scrollTable lista_color">
+                                <thead class="fixedHeader">
+                                    <tr>
+                                        {#<th class="id">Id</th>#}
+                                        <th class="w_15 left">Apellidos, Nombre</th>
+                                        <th class="w_12">Curso de ingreso</th>
+                                        <th class="w_12">Último curso</th>
+                                        <th>Último Año</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="scrollContent">
+                                    {% for entity in entities %}
+                                        <tr id="{{entity.id}}">
+                                            <td class="w_15 left">{{ entity.apellido1 ~ " " ~ entity.apellido2 ~ ", " ~ entity.nombre}}</td>
+                                            <td class="w_12">{{ entity.cursoIngreso}}</td>
+                                            <td class="w_12">{{ entity.curso}}</td>
+                                            {#<td data-order="{{ entity.fecha|date('m/d/Y') }}">{{ "2014/2015" }}</td>#}
+
+                                            <td>{{ entity.añoAcademico}}</td>
+                                        </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <div class="info_en_tabla">
+                        <div class="cabecera_info">
+                            Datos Alumno
+                        </div>
+                        <div class="contenido_info">
+                            <div id="sin_seleccionar">
+                                {#<p>Para ver detalles indique una reserva de un profesor</p>#}
+                            </div>
+                            <div id="seleccionado" class="oculto"></div>
+                        </div>             
+                    </div>
+                </div> 
+                <div class="select_table">
+                </div>         
+            </div>
+        </div>
+        </div>
+    </div>
+    {% endblock %}

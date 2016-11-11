@@ -1,0 +1,38 @@
+{% extends 'BackendBundle:Default:index.html.twig' %}
+
+{% block head %}{% endblock %}
+{% block stylesheets %}{% endblock %}
+
+{% block javascript %}
+
+    <script>
+    $( "#ordenar_cursos" ).sortable().disableSelection();
+
+    </script>
+
+{% endblock %}
+
+{% block body -%}
+    <div>
+        <div id="content-form">
+            <p>Ordene los cursos según los niveles.</p>
+            <ul id="ordenar_cursos">
+                {% for entity in entities %}
+                <li id="curso-{{entity.id}}"> {#Se utiliza para el método serialize de sortable. Usar: curso-id, curso_id ó curso=id#}
+                    <span class="ui-icon ui-icon-arrowthick-2-n-s"></span>
+                    <p>{{ entity.curso ~" " ~ entity.nivel }}</p>
+                </li>
+                {% endfor %}
+            </ul>
+        </div>
+        <div id="botones_centrados">
+            <div>
+                <button id="guardar"> Guardar </button>
+            </div>
+            <div>
+                <button id="restablecer"> Restablecer </button>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}

@@ -5,12 +5,26 @@
     
 {% block javascript %}
     <script>
+    if($(window).width() > 1200){
+        if($("#td_inf").hasScrollBar()){
+            $("#contenedor_registro_Ngrupos #table_th_inf th:nth-child(2)").css("min-width","25%");
+            $("#contenedor_registro_Ngrupos #table_th_inf th:nth-child(3)").css("min-width","25%");
+            $("#contenedor_registro_Ngrupos #table_th_inf th:nth-child(4)").css("min-width","23%");
 
+        }
+
+        if($("#td_prim").hasScrollBar()){
+            $("#contenedor_registro_Ngrupos #table_th_prim th:nth-child(2)").css("min-width","25%");
+            $("#contenedor_registro_Ngrupos #table_th_prim th:nth-child(3)").css("min-width","25%");
+            $("#contenedor_registro_Ngrupos #table_th_inf th:nth-child(4)").css("min-width","23%");
+
+        }   
+    }
     </script>
 {% endblock %}
 
 {% block body -%}
-  <div id="registro_Ngrupos">
+  <div id="registro_Ngrupos" class="contenedor_tabla_no_selec">
     <div class="parent_no_form">
     <div class="child">
       <div class="simple_column_red">
@@ -43,7 +57,7 @@
                 <h2>Educación Infantil</h2>
             </div>
             <div >
-                <table class="records_list">
+                <table class="records_list" id="table_th_inf">
                     <thead>
                     <tr>
                         <th></th>
@@ -54,7 +68,7 @@
                     </tr>
                     </thead>
                 </table>
-                <div class="inner_table">
+                <div class="inner_table" id="td_inf">
                     <table id="lista_color">
                     {% for entity in entities %}
                         {% if entity.nivel == "Infantil" %}
@@ -95,7 +109,7 @@
                 <h2>Educación Primaria</h2>
             </div>
             <div >
-                <table class="records_list">
+                <table class="records_list" id="table_th_prim">
                     <thead>
                     <tr>
                         <th></th>
@@ -106,7 +120,7 @@
                     </tr>
                     </thead>
                 </table>
-                <div class="inner_table">
+                <div class="inner_table" id="td_prim">
                     <table id="lista_color">
                     {% for entity in entities %}
                         {% if entity.nivel == "Primaria" %}

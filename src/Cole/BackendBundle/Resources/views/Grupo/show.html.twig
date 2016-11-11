@@ -5,18 +5,56 @@
     
 {% block javascript %}
 <script>
+if($(window).width() > 1200){
     if($("#td_inf").hasScrollBar()){
-        $("#table_th_inf").css("margin-left","-2%");
+        $("#contenedor_asignar_aula div #table_th_inf th:nth-child(1)").attr('style', 'min-width: 24% !important');
+        $("#contenedor_asignar_aula div #table_th_inf th:nth-child(3)").attr('style', 'min-width: 20% !important');
     }
 
     if($("#td_prim").hasScrollBar()){
-        $("#table_th_prim").css("margin-left","-2%");
+        $("#contenedor_asignar_aula div #table_th_prim th:nth-child(1)").attr('style', 'min-width: 24% !important');
+        $("#contenedor_asignar_aula div #table_th_prim th:nth-child(3)").attr('style', 'min-width: 20% !important');
     }
+}
+else{
+    if($("#td_inf").hasScrollBar()){
+        $("#contenedor_asignar_aula div #table_th_inf th:nth-child(1)").attr('style', 'min-width: 23% !important');
+        $("#contenedor_asignar_aula div #table_th_inf th:nth-child(3)").attr('style', 'min-width: 20% !important');
+    }
+
+    if($("#td_prim").hasScrollBar()){
+        $("#contenedor_asignar_aula div #table_th_prim th:nth-child(1)").attr('style', 'min-width: 23% !important');
+        $("#contenedor_asignar_aula div #table_th_prim th:nth-child(3)").attr('style', 'min-width: 20% !important');
+    } 
+}
+$(window).resize(function(event) {
+    if($(window).width() > 1200){
+        if($("#td_inf").hasScrollBar()){
+            $("#contenedor_asignar_aula div #table_th_inf th:nth-child(1)").attr('style', 'min-width: 24% !important');
+            $("#contenedor_asignar_aula div #table_th_inf th:nth-child(3)").attr('style', 'min-width: 20% !important');
+        }
+        if($("#td_prim").hasScrollBar()){
+
+            $("#contenedor_asignar_aula div #table_th_prim th:nth-child(1)").attr('style', 'min-width: 24% !important');
+            $("#contenedor_asignar_aula div #table_th_prim th:nth-child(3)").attr('style', 'min-width: 20% !important');
+        } 
+    }
+    else{
+        if($("#td_inf").hasScrollBar()){
+            $("#contenedor_asignar_aula div #table_th_inf th:nth-child(1)").attr('style', 'min-width: 23% !important');
+            $("#contenedor_asignar_aula div #table_th_inf th:nth-child(3)").attr('style', 'min-width: 20% !important');
+        }
+        if($("#td_prim").hasScrollBar()){
+            $("#contenedor_asignar_aula div #table_th_prim th:nth-child(1)").attr('style', 'min-width: 23% !important');
+            $("#contenedor_asignar_aula div #table_th_prim th:nth-child(3)").attr('style', 'min-width: 20% !important');
+        }  
+    }    
+});
 </script>
 {% endblock %}
 
 {% block body -%}
-    <div id="asignar_aula">
+    <div id="asignar_aula" class="contenedor_tabla_no_selec">
     <div class="parent_no_form">
     <div class="child">
       <div class="simple_column_red">

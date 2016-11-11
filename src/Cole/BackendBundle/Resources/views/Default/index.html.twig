@@ -153,7 +153,7 @@
 							<img src="{{ asset('bundles/backend/images/menu/matricular.png')}}">
 							<span> Nuevo</span>
 						</a>
-						<a id="alumnos_antiguo" title="Antiguo Alumno " href="{{path('padres')}}">
+						<a id="alumnos_antiguo" title="Antiguo Alumno " href="{{path('search_old')}}">
 							<img src="{{ asset('bundles/backend/images/menu/matricular.png')}}">
 							<span> Antiguo</span>
 						</a>
@@ -168,13 +168,17 @@
 						<span> Matrícula Alumnos</span>
 					</div>
 					<div id="segundo">
-						<a title="Ficha Alumno" href="{{path('alumno_search')}}">
+						<a id="ficha_alumno" title="Ficha Alumno" href="{{path('alumno_search')}}">
 							<img src="{{ asset('bundles/backend/images/menu/alumno.png')}}">
 							<span> Ficha </span>
 						</a>
 						<a title="Consulta Alumno" >
 							<img src="{{ asset('bundles/backend/images/menu/consultar.png')}}">
 							<span> Consulta</span>
+						</a>
+						<a  title="Padres" href="{{path('padres')}}">
+							<img src="{{ asset('bundles/backend/images/menu/alumno.png')}}">
+							<span> Padres </span>
 						</a>
 						<span> Información </span>
 					</div>
@@ -199,6 +203,10 @@
 						<a id="grupos_curso" title="Nº grupos/curso" href="{{path('curso_show')}}">
 							<img src="{{ asset('bundles/backend/images/menu/grupo-cursos.png')}}">
 							<span> Grupos <br>por curso </span>
+						</a>
+						<a id="ratio_curso" title="Nº Alumnos/grupo" href="{{path('ratio_cursos')}}">
+							<img src="{{ asset('bundles/backend/images/menu/ratio.png')}}">
+							<span> Alumnos <br>por grupo </span>
 						</a>		
 						<a id="consulta_curso" title="Consulta Curso" href="javascript:void(0);">
 							<img src="{{ asset('bundles/backend/images/menu/consultar.png')}}">

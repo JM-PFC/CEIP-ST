@@ -1,0 +1,16 @@
+{% block body %}
+    {% if entities!= null %}
+    {% for entity in entities %}
+        <tr id="{{entity.id}}">
+            <td class="w_15 left">{{ entity.apellido1 ~ " " ~ entity.apellido2 ~ ", " ~ entity.nombre}}</td>
+            <td class="w_12">{{ entity.cursoIngreso}}</td>
+            <td class="w_12">{{ entity.curso}}</td>
+            <td>{{ entity.añoAcademico}}</td>
+        </tr>
+    {% endfor %}
+    {% else %}
+        <tr class="no_cursor">
+            <td class="dataTables_empty" valign="top" colspan="4">Lo siento, no existe antiguo alumno en el curso seleccionado.</td>
+        </tr>
+    {% endif %}
+{% endblock %}
