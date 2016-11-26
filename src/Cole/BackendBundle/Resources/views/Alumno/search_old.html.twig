@@ -6,7 +6,55 @@
 {% block javascript %}
 <script>
 
-    // Tabla con la opción de ordenar y búsqueda.
+    // Tabla con la opción de ordenar y búsqueda de antiguos alumnos activos.
+    $('#old_student_active').DataTable( { //on( 'page.dt',   function () { $(".current").prop("disabled", true); } )
+        //"aLengthMenu": [[25, 50, 100, 250, 500, -1], [25, 50, 100, 250, 500, "All"]],
+                initComplete: function () {
+            this.api().columns().every( function (e) {
+                var column = this;
+                var select = $('<select class="'+e+'"><option value=""></option></select>')
+                    .appendTo('.select_table_active')
+                    .on( 'change', function () {
+                        var val = $.fn.dataTable.util.escapeRegex(
+                            $(this).val()
+                        );
+ 
+                        column
+                            .search( val ? '^'+val+'$' : '', true, false )
+                            .draw();
+                    } );
+ 
+                column.data().unique().sort().each( function ( d, j ) {
+                    select.append( '<option value="'+d+'">'+d+'</option>' )
+                } );
+                select.append( '<option value="nada">nada</option>' )
+            } );
+        },
+        "order": [[ 0, "asc" ]],
+        "aLengthMenu": [[-1], [ "All"]],
+        "columnDefs": [ {
+            "targets": 'no-sort',
+            "orderable": false,} ],
+        "language": {
+            "zeroRecords": "Lo siento, no se ha encontrado ningún registro coincidente",
+            "emptyTable": "No hay alumnos del curso anterior pendientes para matricular",
+            "lengthMenu": "Mostrar _MENU_ entradas",
+            "loadingRecords": "Cargando...",
+            "processing":     "Processando...",
+            "info": "Página _PAGE_ de _PAGES_",
+            "infoEmpty": "No hay registros disponibles",
+            "infoFiltered": "(filtrado de _MAX_ registros)",
+            "search": "Buscar:",
+            "Next": "Siguiente",
+            "paginate": {
+                "previous": "Anterior",
+                "next": "Siguiente"
+            }
+        }
+    });
+
+
+    // Tabla con la opción de ordenar y búsqueda de antiguos alumnos inactivos.
     $('#old_student').DataTable( { //on( 'page.dt',   function () { $(".current").prop("disabled", true); } )
         //"aLengthMenu": [[25, 50, 100, 250, 500, -1], [25, 50, 100, 250, 500, "All"]],
                 initComplete: function () {
@@ -53,31 +101,36 @@
         }
     });
 
-    $("#antiguo_alumno .dataTables_info").addClass("oculto");
-    $("#antiguo_alumno .dataTables_paginate").addClass("oculto");
-    $("#antiguo_alumno .dataTables_length").addClass("oculto");
-    $('#antiguo_alumno .dataTables_filter').appendTo('#antiguo_alumno #buscador');
+    $("#consulta_antiguo_alumno .dataTables_info").addClass("oculto");
+    $("#consulta_antiguo_alumno .dataTables_paginate").addClass("oculto");
+    $("#consulta_antiguo_alumno .dataTables_length").addClass("oculto");
+    $('#consulta_antiguo_alumno .contenedor_registro').each (function(){ 
+      $(this).find(".dataTables_filter").appendTo($(this).find('#buscador'));
+    });
+
     // Se comprueba si existe scrol vertical para ajustar el thead
-    if( $('#antiguo_alumno table tbody').get(0).scrollHeight>$('#antiguo_alumno table tbody').height()){
-        $("#old_student thead tr>th:last-child").attr('style', 'width: 11% !important');
+    if( $('#consulta_antiguo_alumno table tbody').get(0).scrollHeight>$('#consulta_antiguo_alumno table tbody').height()){
+        $("#consulta_antiguo_alumno table thead tr>th:last-child").attr('style', 'width: 10.5% !important');
     }
     else{
-        $("#old_student thead tr>th:last-child").attr('style', 'width: 10% !important');
+        $("#consulta_antiguo_alumno table thead tr>th:last-child").attr('style', 'width: 9% !important');
     }
     
     $(window).resize(function() {
         //Se comrpueba si está el div con la tabla para cambiar los estilos.
-        if($('#antiguo_alumno table tbody').length){
-            if($('#antiguo_alumno table tbody').get(0).scrollHeight>$('#antiguo_alumno table tbody').height() ){
-                $("#old_student thead tr>th:last-child").attr('style', 'width: 11% !important');
+        if($('#consulta_antiguo_alumno table tbody').length){
+            if($('#consulta_antiguo_alumno table tbody').get(0).scrollHeight>$('#consulta_antiguo_alumno table tbody').height() ){
+                $("#consulta_antiguo_alumno table thead tr>th:last-child").attr('style', 'width: 10.5% !important');
             }
             else{
-                $("#old_student thead tr>th:last-child").attr('style', 'width: 10% !important');
+                $("#consulta_antiguo_alumno table thead tr>th:last-child").attr('style', 'width: 9% !important');
             }
         }
     });
 
-    $("#antiguo_alumno tbody tr td[class='dataTables_empty']").closest("tr").addClass("no_cursor");
+    $("#consulta_antiguo_alumno tbody tr td[class='dataTables_empty']").closest("tr").addClass("no_cursor");
+    $("#antiguo_alumno_activo tbody tr td:contains('Promociona')").css("color","#0B610B");
+    $("#antiguo_alumno_activo tbody tr td:contains('Repite')").css("color","#bc1010");
 
 </script>
 
@@ -87,36 +140,46 @@
     <div id="consulta_antiguo_alumno">
         <div class="parent_no_form">
         <div class="child">
-            <div class="contenedor_registro" id="antiguo_alumno" >  
+            <div class="contenedor_registro antiguo_alumno" id="antiguo_alumno_activo" >  
                 <div>
                     <div id="cabecera_lista">
-                        <div id="lista_cursos">
+                        <div id="lista_cursos" class="lista_activos">
                          Último curso: {{render(controller("BackendBundle:Curso:listaCursos"))}}
-                        </div> 
+                        </div>
                         <h2 class="text_cabecera">Antiguos Alumnos</h2>
+                        <div class="opciones">    
+                            <label class="btn_selected" id="btn_activos" for="activos">Activos</label>
+                            <input type="radio" name="activos" id="activos">
+                            <label for="inactivos" id="btn_inactivos">Inactivos</label>
+                            <input type="radio" name="inactivos" id="inactivos">
+                        </div>
                         <div id="buscador"> </div>
                     </div>
                     <div id="fondo_azul_osc" class="tabla_con_info">
                         <div id="tableContainer" class="tableContainer inner_table vh45">
-                            <table id="old_student" class="scrollTable lista_color">
+                            <table id="old_student_active" class="scrollTable lista_color">
                                 <thead class="fixedHeader">
                                     <tr>
                                         {#<th class="id">Id</th>#}
-                                        <th class="w_15 left">Apellidos, Nombre</th>
-                                        <th class="w_12">Curso de ingreso</th>
-                                        <th class="w_12">Último curso</th>
-                                        <th>Último Año</th>
+                                        <th class="w15 left">Apellidos, Nombre</th>
+                                        <th class="w11">Último curso</th>
+                                        <th class="w11">Año Académido</th>
+                                        <th >Estado</th>
                                     </tr>
                                 </thead>
                                 <tbody class="scrollContent">
-                                    {% for entity in entities %}
-                                        <tr id="{{entity.id}}">
-                                            <td class="w_15 left">{{ entity.apellido1 ~ " " ~ entity.apellido2 ~ ", " ~ entity.nombre}}</td>
-                                            <td class="w_12">{{ entity.cursoIngreso}}</td>
-                                            <td class="w_12">{{ entity.curso}}</td>
+                                    {% for entity in entities_active %}
+                                        <tr id="{{entity.alumno.id}}">
+                                            <td class="w15 left">{{ entity.alumno.apellido1 ~ " " ~ entity.alumno.apellido2 ~ ", " ~ entity.alumno.nombre}}</td>
+                                            <td class="w11">{{ entity.alumno.curso}}</td>
                                             {#<td data-order="{{ entity.fecha|date('m/d/Y') }}">{{ "2014/2015" }}</td>#}
 
-                                            <td>{{ entity.añoAcademico}}</td>
+                                            <td class="w11">{{ entity.alumno.anyoAcademico}}</td>
+                                            {% if entity.promociona %}
+                                            <td >Promociona</td>
+                                            {% else %}
+                                            <td >Repite</td>
+                                            {% endif %}
                                         </tr>
                                     {% endfor %}
                                 </tbody>
@@ -129,15 +192,79 @@
                         </div>
                         <div class="contenido_info">
                             <div id="sin_seleccionar">
-                                {#<p>Para ver detalles indique una reserva de un profesor</p>#}
+                                <p>Para ver detalles seleccione un alumno</p>
                             </div>
                             <div id="seleccionado" class="oculto"></div>
                         </div>             
                     </div>
                 </div> 
-                <div class="select_table">
+                <div class="select_table_active select_ord_datatable">
                 </div>         
             </div>
+
+            {# Antiguos alumnos Inactivos #}
+
+            <div class="contenedor_registro antiguo_alumno oculto" id="antiguo_alumno" >  
+                <div>
+                    <div id="cabecera_lista">
+                        <div id="lista_cursos" class="lista_inactivos">
+                         Último curso: {{render(controller("BackendBundle:Curso:listaCursos"))}}
+                        </div>
+                        <h2 class="text_cabecera">Antiguos Alumnos</h2>
+                        <div class="opciones">    
+                            <label  id="btn_activos" for="activos">Activos</label>
+                            <input type="radio" name="activos" id="activos">
+                            <label class="btn_selected" for="inactivos" id="btn_inactivos">Inactivos</label>
+                            <input type="radio" name="inactivos" id="inactivos">
+                        </div>
+                        <div id="buscador"> </div>
+                    </div>
+                    <div id="fondo_azul_osc" class="tabla_con_info">
+                        <div id="tableContainer" class="tableContainer inner_table vh45">
+                            <table id="old_student" class="scrollTable lista_color">
+                                <thead class="fixedHeader">
+                                    <tr>
+                                        {#<th class="id">Id</th>#}
+                                        <th class="w15 left">Apellidos, Nombre</th>
+                                        <th class="w11">Curso de ingreso</th>
+                                        <th class="w11">Último curso</th>
+                                        <th>Año Académico</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="scrollContent">
+                                {% if entities %}
+                                    {% for entity in entities %}
+                                        <tr id="{{entity.alumno.id}}">
+                                            <td class="w15 left">{{ entity.alumno.apellido1 ~ " " ~ entity.alumno.apellido2 ~ ", " ~ entity.alumno.nombre}}</td>
+                                            <td class="w11">{{ entity.alumno.cursoIngreso}}</td>
+                                            <td class="w11">{{ entity.alumno.curso}}</td>
+                                            {#<td data-order="{{ entity.fecha|date('m/d/Y') }}">{{ "2014/2015" }}</td>#}
+
+                                            <td>{{ entity.alumno.anyoAcademico}}</td>
+                                        </tr>
+                                    {% endfor %}
+                                {% endif %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <div class="info_en_tabla">
+                        <div class="cabecera_info">
+                            Datos Alumno
+                        </div>
+                        <div class="contenido_info">
+                            <div id="sin_seleccionar">
+                                <p>Para ver detalles seleccione un alumno</p>
+                            </div>
+                            <div id="seleccionado" class="oculto"></div>
+                        </div>             
+                    </div>
+                </div> 
+                <div class="select_table select_ord_datatable">
+                </div>         
+            </div>
+
+
         </div>
         </div>
     </div>

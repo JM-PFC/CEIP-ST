@@ -8,6 +8,7 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 
 
 use Cole\BackendBundle\Entity\Matricula;
+use Cole\BackendBundle\Entity\Grupo;
 use Cole\BackendBundle\Form\MatriculaType;
 
 /**
@@ -237,17 +238,17 @@ class MatriculaController extends Controller
         $em = $this->getDoctrine()->getEntityManager();
 
         $alumno=$em->getRepository('BackendBundle:Alumno')->findOneById($alum);
-
         $entity = new Matricula();
 
         $entity->setAlumno($alumno);
         $entity->setCurso($alumno->getCurso());
+        $entity->setGrupo($alumno->getGrupo());
 
         if(date("n")>=6){
-            $entity->setAñoAcademico(date("Y")."/".(date("Y")+1));
+            $entity->setAnyoAcademico(date("Y")." / ".(date("Y")+1));
         }
         else{
-            $entity->setAñoAcademico((date("Y")-1)."/".date("Y"));
+            $entity->setAnyoAcademico((date("Y")-1)." / ".date("Y"));
         }
         $entity->setFecha(new \DateTime("now"));
         
@@ -256,8 +257,31 @@ class MatriculaController extends Controller
         
         if ($request->isXmlHttpRequest()) {
                 return new JsonResponse(array(
-                    'message' => 'Success!',
+                    'curso' => $entity->getCurso()->getId(),
                     'success' => true), 200);
         } 
     }
+
+
+    public function  NumMatriculasAction(Request $request)
+    {
+        // if request is XmlHttpRequest (AJAX) but not a POSt, throw an exception
+        if ($request->isXmlHttpRequest() && !$request->isMethod('POST')) {
+            throw new HttpException('XMLHttpRequests/AJAX calls must be POSTed');
+        }
+
+        $em = $this->getDoctrine()->getEntityManager();
+
+        $num_matriculas=$em->getRepository('BackendBundle:Matricula')->findNumMatriculas();
+
+
+        if ($request->isXmlHttpRequest()) {
+                return new JsonResponse(array(
+                    'matriculas' =>  (int)$num_matriculas[1],
+                    'success' => true), 200);
+        } 
+    }
+
+
+
 }

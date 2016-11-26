@@ -89,6 +89,12 @@ search_old:
     options:
         expose: true
 
+search_multiple:
+    path:     /alumno/multiple/search
+    defaults: { _controller: "BackendBundle:Alumno:SearchMultiple" }
+    options:
+        expose: true
+
 datos_alumno:
     path:     /datos_alumno/{id}
     defaults: { _controller: "BackendBundle:Alumno:DatosAlumno" }
@@ -110,6 +116,13 @@ alumno_old_edit:
 antiguo_alumno_update:
     path:     /{id}/old_update
     defaults: { _controller: "BackendBundle:Alumno:OldUpdate" }
+    requirements: { _method: post|put }
+    options:
+        expose: true
+
+multiple_alumno_update:
+    path:     /{id}/multiple_update
+    defaults: { _controller: "BackendBundle:Alumno:MultipleUpdate" }
     requirements: { _method: post|put }
     options:
         expose: true

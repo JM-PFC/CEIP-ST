@@ -9,6 +9,8 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Cole\BackendBundle\Entity\Alumno;
 use Cole\BackendBundle\Entity\Curso;
 use Cole\BackendBundle\Entity\Grupo;
+use Cole\BackendBundle\Entity\Expediente;
+use Cole\BackendBundle\Entity\Matricula;
 use Cole\BackendBundle\Form\AlumnoType;
 use Cole\BackendBundle\Form\BusquedaAlumnoType;
 
@@ -91,10 +93,10 @@ class AlumnoController extends Controller
             $entity->setNumAlum(null);
             $entity->setActivo(true);
             if(date("n")>=6){
-                $entity->setAñoAcademico(date("Y")."/".(date("Y")+1));
+                $entity->setAnyoAcademico(date("Y")." / ".(date("Y")+1));
             }
             else{
-                $entity->setAñoAcademico((date("Y")-1)."/".date("Y"));
+                $entity->setAnyoAcademico((date("Y")-1)." / ".date("Y"));
             }
             $role = $em->getRepository('BackendBundle:Role')->find(1);
             $entity->getResponsable1()->setRole($role);
@@ -154,11 +156,9 @@ class AlumnoController extends Controller
             $entity->getResponsable1()->setClaveUsuario("prueba: ".substr($entity->getResponsable1()->getDni(), 0, -2).substr($entity->getResponsable1()->getDni(), -1));
             $entity->getResponsable2()->setClaveUsuario("prueba: ".substr($entity->getResponsable2()->getDni(), 0, -2).substr($entity->getResponsable2()->getDni(), -1));
             */
-
-
             //Se obtiene la foto subida yse guarda en la carpeta destino, asignandole un nombre único.
             $file = $entity->getFoto();
-            if($entity->getFoto()!="On" && $entity->getFoto()!="" ){
+            if($entity->getFoto()!="On" && $entity->getFoto()!="" && $entity->getFoto()!="on"){
                 $fileName = uniqid().'.'.$file->guessExtension();
                 $photoDir = $this->container->getParameter('kernel.root_dir').'/../web/uploads/images';
                 $file->move($photoDir, $fileName);
@@ -471,10 +471,26 @@ class AlumnoController extends Controller
     public function SearchOldAction()
     {
         $em = $this->getDoctrine()->getManager();
-        $entities = $em->getRepository('BackendBundle:Alumno')->findByActivo(0); //Hay que comprobar que no hayan terminado los estudios.
-        
+
+        $curso=$em->getRepository('BackendBundle:Curso')->findUltimoCurso();
+        $entities = $em->getRepository('BackendBundle:Expediente')->findNoActivos($curso->getCurso(),$curso->getNivel()); 
+        //Se obtiene los alumnos activos que están promocionados en el curso anterior y aparecen en el expediente.
+        $entities_active = $em->getRepository('BackendBundle:Expediente')->findByActivo();
+
         return $this->render('BackendBundle:Alumno:search_old.html.twig', array(
             'entities' => $entities,
+            'entities_active' => $entities_active,
+            
+        ));
+    }
+
+    public function SearchMultipleAction()
+    {
+        $em = $this->getDoctrine()->getManager();
+        $entities = $em->getRepository('BackendBundle:Expediente')->findByActivo();
+
+        return $this->render('BackendBundle:Alumno:search_multiple.html.twig', array(
+            'entities' => $entities,            
         ));
     }
     
@@ -628,21 +644,20 @@ class AlumnoController extends Controller
 
         $em = $this->getDoctrine()->getEntityManager();
 
+
         $entity = $em->getRepository('BackendBundle:Curso')->findCursoByNivel($curso,$nivel);
         if (!$entity) {
             throw $this->createNotFoundException('Unable to find Curso entity.');
         }
 
         if($num_grupos_ant==2 && $num_grupos==1){
-
             $grupo = $em->getRepository('BackendBundle:Grupo')->findGrupoByLetter($entity,"B");
-            if (!$entity) {
+            if (!$grupo) {
                 throw $this->createNotFoundException('Unable to find Grupo entity.');
             }     
-
-            $alumnos= $em->getRepository('BackendBundle:Alumno')->findAlumnosPorGrupo($grupo);
+            $alumnos= $em->getRepository('BackendBundle:Alumno')->findAlumnosPorCurso_Grupo($entity,$grupo);
             if($alumnos){
-                return new JsonResponse(array('data' =>"No se puede actualizar el número de grupos.\n\nExisten alumnos asignados a (poner curso y grupo).\n\n"), 200);
+                return new JsonResponse(array('data' =>"error"), 200);
             }
             return new JsonResponse(array('data' =>null), 200);
         }
@@ -655,7 +670,7 @@ class AlumnoController extends Controller
 
             $alumnos= $em->getRepository('BackendBundle:Alumno')->findAlumnosPorGrupo($grupo);
             if($alumnos){
-                return new JsonResponse(array('data' =>"No se puede actualizar el número de grupos.\n\nExisten alumnos asignados a (poner curso y grupo).\n\n"), 200);
+                return new JsonResponse(array('data' =>"error"), 200);
             }
             return new JsonResponse(array('data' =>null), 200);
         }
@@ -675,17 +690,17 @@ class AlumnoController extends Controller
             $alumnos_grupo_2= $em->getRepository('BackendBundle:Alumno')->findAlumnosPorGrupo($grupo_2);
 
             if($alumnos_grupo_2 && $alumnos_grupo_3){
-                return new JsonResponse(array('data' =>"No se puede actualizar el número de grupos.\n\nExisten alumnos asignados a (poner curso y grupo B y C).\n\n"), 200);
+                return new JsonResponse(array('data' =>"error"), 200);
             }
 
             else if(!$alumnos_grupo_2 && !$alumnos_grupo_3){
                 return new JsonResponse(array('data' =>null), 200);
             }
             else if($alumnos_grupo_2){
-                return new JsonResponse(array('data' =>"No se puede actualizar el número de grupos.\n\nExisten alumnos asignados a (poner curso y grupo B).\n\n"), 200);
+                return new JsonResponse(array('data' =>"error"), 200);
                 }
-        else{
-                return new JsonResponse(array('data' =>"No se puede actualizar el número de grupos.\n\nExisten alumnos asignados a (poner curso y grupo C).\n\n"), 200);
+            else{
+                return new JsonResponse(array('data' =>"error"), 200);
 
                 }
         }
@@ -717,15 +732,32 @@ class AlumnoController extends Controller
         }
     }
 
-
+    // Formulario Edición de Antiguo Alumno a matricular.
     public function OldEditAction($id)
     {
         $em = $this->getDoctrine()->getManager();
 
         $entity = $em->getRepository('BackendBundle:Alumno')->find($id);
-
         if (!$entity) {
             throw $this->createNotFoundException('Unable to find Alumno entity.');
+        }
+
+        $año_academico=$entity->getAnyoAcademico();
+        if (!$año_academico) {
+            throw $this->createNotFoundException('Unable to find Año Academico in Alumno entity.');
+        }
+
+        // Se comprueba si el alumno está promocionado en el expediente para asignar el nuevo curso a matricular.
+        $expediente=$em->getRepository('BackendBundle:Expediente')->findPorAño($entity,$año_academico);
+        $nuevo_curso=null;
+        if($expediente){
+            $ultimo_curso=$em->getRepository('BackendBundle:Curso')->findCursoByNivel($expediente->getCurso(),$expediente->getNivel());
+            $Orden=$ultimo_curso->getNumOrden();
+            // Si promociona se obtiene el siguiente curso a matricular. Si repite se obtiene el mismo curso.
+            if($expediente->getPromociona()){
+                $Orden++;
+            }
+            $nuevo_curso=$em->getRepository('BackendBundle:Curso')->findOneByNumOrden($Orden);
         }
 
         $editForm = $this->createEditForm($entity);
@@ -742,6 +774,8 @@ class AlumnoController extends Controller
 
         return $this->render('BackendBundle:Alumno:edit_old.html.twig', array(
             'entity'      => $entity,
+            'expediente'  => $expediente,
+            'nuevo_curso' => $nuevo_curso,
             'edit_form'   => $editForm->createView(),
             'delete_form' => $deleteForm->createView(),
         ));
@@ -759,7 +793,7 @@ class AlumnoController extends Controller
 
         $c = $this->get('request')->request->get('curso');
         $curso = $em->getRepository('BackendBundle:Curso')->find($c);
-        //Se valida que no matricrule en un curso anterior.
+        //Se valida que no se matricule en un curso anterior.
         $antiguo_curso=$entity->getCurso();
  
         if($antiguo_curso->getNumOrden()>$curso->getNumOrden()){
@@ -767,18 +801,45 @@ class AlumnoController extends Controller
                     'validate' =>"curso_incorrecto",
                     'success' => true), 200);
         }
-        //Se valia que no esté matriculado en el año Académico actual.
+        // Se hace las comprobaciones según el mes actual.
         if(date("n")>=6){
-            if($entity->getAñoAcademico()==date("Y")."/".(date("Y")+1)){
+            $actual=date("Y")." / ".(date("Y")+1);
+
+            //Se comprueba que no exista ninguna matrícula para el año actual registrada.
+            $exp_alum = $em->getRepository('BackendBundle:Matricula')->findPorAño($entity,$actual);
+            if($exp_alum){
                 return new JsonResponse(array(
+                    'nombre'=>$entity->getNombre()." ".$entity->getApellido1()." ".$entity->getApellido2(),
                     'validate' =>"año_incorrecto",
+                    'success' => true), 200);
+            }
+            //Se comprueba que quedan plazas libre en el curso que se quiere matricular.
+            $num_matriculas = $em->getRepository('BackendBundle:Matricula')->findNumPorCurso($curso,$actual);
+            if($num_matriculas[1]>=(int)$curso->getNumGrupos()*(int)$curso->getRatio()){
+                return new JsonResponse(array(
+                    'nombre'=>$entity->getNombre()." ".$entity->getApellido1()." ".$entity->getApellido2(),
+                    'curso'=>$curso->getCurso()." ".$curso->getNivel(),
+                    'validate' =>"plazas_ocupadas",
                     'success' => true), 200);
             }
         }
         else{
-            if($entity->getAñoAcademico()==(date("Y")-1)."/".date("Y")){
+            $actual=(date("Y")-1)." / ".date("Y");
+
+            //Se comprueba que no exista ninguna matrícula para el año actual registrada.
+            $exp_alum = $em->getRepository('BackendBundle:Matricula')->findPorAño($entity,$actual);
+            if($exp_alum){
                 return new JsonResponse(array(
+                    'nombre'=>$entity->getNombre()." ".$entity->getApellido1()." ".$entity->getApellido2(),
                     'validate' =>"año_incorrecto",
+                    'success' => true), 200);
+            }
+            //Se comprueba que quedan plazas libre en el curso que se quiere matricular.
+            if($num_matriculas[1]>=(int)$curso->getNumGrupos()*(int)$curso->getRatio()){
+                return new JsonResponse(array(
+                    'nombre'=>$entity->getNombre()." ".$entity->getApellido1()." ".$entity->getApellido2(),
+                    'curso'=>$curso->getCurso()." ".$curso->getNivel(),
+                    'validate' =>"plazas_ocupadas",
                     'success' => true), 200);
             }
         }
@@ -838,14 +899,31 @@ class AlumnoController extends Controller
             if($entity->getResponsable2()->getDni() == "" ){
                 $entity->setResponsable2(NULL); 
             }
-            $entity->setActivo(1);
             $entity->setCurso($curso);
+
+            // Se asigna la misma letra del grupo a los alumnos del curso anterior.
+            if($entity->getGrupo() && $alumno->getActivo()){
+                $letra=$entity->getGrupo()->getLetra();
+                $nuevo_grupo=$em->getRepository('BackendBundle:Grupo')->findGrupoByLetter($entity->getCurso(),$letra);
+                if($nuevo_grupo){
+                    $entity->setGrupo($nuevo_grupo);
+                }
+                else{
+                    $entity->setGrupo(null);
+                }
+            }else{
+                $entity->setGrupo(null);
+            }
+
+
             if(date("n")>=6){
-                $entity->setAñoAcademico(date("Y")."/".(date("Y")+1));
+                $entity->setAnyoAcademico(date("Y")." / ".(date("Y")+1));
             }
             else{
-                $entity->setAñoAcademico((date("Y")-1)."/".date("Y"));
+                $entity->setAnyoAcademico((date("Y")-1)." / ".date("Y"));
             }
+            $entity->setActivo(1);
+            $entity->setNumAlum(null);
             
             $em->persist($entity);
             $em->flush();
@@ -875,6 +953,118 @@ class AlumnoController extends Controller
 
 
 
+
+    public function MultipleUpdateAction(Request $request, $id)
+    {
+        $em = $this->getDoctrine()->getManager();
+
+        $entity = $em->getRepository('BackendBundle:Alumno')->find($id);
+
+        if (!$entity) {
+            throw $this->createNotFoundException('Unable to find Alumno entity.');
+        }
+
+        $curso;
+        $c=$entity->getCurso();
+        $año_academico=$entity->getAnyoAcademico();
+
+        $exp_alum = $em->getRepository('BackendBundle:Expediente')->findPorAño($entity,$año_academico);
+        $num_curso=$c->getNumOrden();
+        if($exp_alum->getPromociona()=="Promociona"){
+            $num_curso++;
+            $curso = $em->getRepository('BackendBundle:Curso')->findOneByNumOrden($num_curso);
+        }
+        else{
+            $curso = $em->getRepository('BackendBundle:Curso')->findOneByNumOrden($num_curso);
+        }
+        
+        //Se valida que no se matricule en un curso anterior.
+        $antiguo_curso=$entity->getCurso();
+ 
+        if($antiguo_curso->getNumOrden()>$curso->getNumOrden()){
+                return new JsonResponse(array(
+                    'nombre'=>$entity->getNombre()." ".$entity->getApellido1()." ".$entity->getApellido2(),
+                    'validate' =>"curso_incorrecto",
+                    'success' => true), 200);
+        }
+        // Se hace las comprobaciones según el mes actual.
+        if(date("n")>=6){
+            $actual=date("Y")." / ".(date("Y")+1);
+
+            //Se comprueba que no exista ninguna matrícula para el año actual registrada.
+            $exp_alum = $em->getRepository('BackendBundle:Matricula')->findPorAño($entity,$actual);
+            if($exp_alum){
+                return new JsonResponse(array(
+                    'nombre'=>$entity->getNombre()." ".$entity->getApellido1()." ".$entity->getApellido2(),
+                    'validate' =>"año_incorrecto",
+                    'success' => true), 200);
+            }
+            //Se comprueba que quedan plazas libre en el curso que se quiere matricular.
+
+            $num_matriculas = $em->getRepository('BackendBundle:Matricula')->findNumPorCurso($curso,$actual);
+            if($num_matriculas[1]>=(int)$curso->getNumGrupos()*(int)$curso->getRatio()){
+                return new JsonResponse(array(
+                    'nombre'=>$entity->getNombre()." ".$entity->getApellido1()." ".$entity->getApellido2(),
+                    'curso'=>$curso->getCurso()." ".$curso->getNivel(),
+                    'validate' =>"plazas_ocupadas",
+                    'success' => true), 200);
+            }
+        }
+        else{
+            $actual=(date("Y")-1)." / ".date("Y");
+
+            //Se comprueba que no exista ninguna matrícula para el año actual registrada.
+            $exp_alum = $em->getRepository('BackendBundle:Matricula')->findPorAño($entity,$actual);
+            if($exp_alum){
+                return new JsonResponse(array(
+                    'nombre'=>$entity->getNombre()." ".$entity->getApellido1()." ".$entity->getApellido2(),
+                    'validate' =>"año_incorrecto",
+                    'success' => true), 200);
+            }
+            //Se comprueba que quedan plazas libre en el curso que se quiere matricular.
+            if($num_matriculas[1]>=(int)$curso->getNumGrupos()*(int)$curso->getRatio()){
+                return new JsonResponse(array(
+                    'nombre'=>$entity->getNombre()." ".$entity->getApellido1()." ".$entity->getApellido2(),
+                    'curso'=>$curso->getCurso()." ".$curso->getNivel(),
+                    'validate' =>"plazas_ocupadas",
+                    'success' => true), 200);
+            }
+        }
+
+        $entity->setCurso($curso);
+
+        // Se asigna la misma letra del grupo a los alumnos del curso anterior.
+        if($entity->getGrupo()){
+            $letra=$entity->getGrupo()->getLetra();
+            $nuevo_grupo=$em->getRepository('BackendBundle:Grupo')->findGrupoByLetter($entity->getCurso(),$letra);
+            if($nuevo_grupo){
+                $entity->setGrupo($nuevo_grupo);
+            }
+            else{
+                $entity->setGrupo(null);
+            }
+        }
+
+        if(date("n")>=6){
+            $entity->setAnyoAcademico(date("Y")." / ".(date("Y")+1));
+        }
+        else{
+            $entity->setAnyoAcademico((date("Y")-1)." / ".date("Y"));
+        }
+        $entity->setNumAlum(null);
+            
+        $em->persist($entity);
+        $em->flush();
+
+        if ($request->isXmlHttpRequest()) {
+            return new JsonResponse(array(
+                'message' => 'Success!',
+                'data' =>$entity->getId(),
+                'success' => true), 200);
+        }
+
+        return $this->redirect($this->generateUrl('alum_edit', array('id' => $id)));
+    }
 
 
 

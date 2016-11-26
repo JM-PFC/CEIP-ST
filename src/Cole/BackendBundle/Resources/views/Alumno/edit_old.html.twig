@@ -34,7 +34,9 @@
      $('#antiguo_alumno_edit #padres_dialog').empty();
     });
     // Se deshabilita los botones de guardar y restablecer.
-    $("#antiguo_alumno_submit").prop("disabled",true);
+    if($("#antiguo_alumno_edit").find("#lista_cursos").length){ //Para alumnos activos no se deshabilita.
+      $("#antiguo_alumno_submit").prop("disabled",true);
+    }
     $("#antiguo_alumno_rest").prop("disabled",true);
     // Se añade opciones para que se pueda comprobar cuando modificamos el formulario para volver a mostrar los botones.
     $("#antiguo_alumno_edit #edit_alumno_cursoIngreso option:selected").attr("selected", "selected");
@@ -281,7 +283,17 @@
         </div>
         </fieldset>       
     </div>
-    <div id="c_old_student" class="derecha">
+    {% if expediente %}
+    <div id="c_old_student_active" class="c_old_student derecha">
+      <h2>Antiguo Alumno</h2>
+      <p>- Se debe comprobar que los datos del alumno están actualizados.</p>
+      <label>Curso a matricular</label>
+      <input id="{{nuevo_curso.id }}" value="{{ nuevo_curso.curso ~ " " ~ nuevo_curso.nivel }}" disabled="disabled"></input> 
+
+      {{ form_row(edit_form.submit,{'id':'antiguo_'~edit_form.submit.vars.id, 'label': 'Enviar' }) }}
+    </div>
+    {% else %}
+    <div class="c_old_student derecha">
       <h2>Antiguo Alumno</h2>
       <p>1. Actualizar los datos del alumno.</p>
       <p>2. Seleccionar curso para matricular al alumno:</p>
@@ -291,7 +303,7 @@
 
       {{ form_row(edit_form.submit,{'id':'antiguo_'~edit_form.submit.vars.id, 'label': 'Enviar' }) }}
     </div>
-        
+    {% endif %}   
     <div id="botones_form" class="clear_b">
       <div>
         <button id="antiguo_alumno_rest" type="button" name="antiguo_alumno[rest]" >Restablecer</button>

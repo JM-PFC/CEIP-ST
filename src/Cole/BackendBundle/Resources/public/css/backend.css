@@ -390,12 +390,16 @@ margin: 50px auto;
 #tabs .ui-tabs-nav li{
 	width: 15.6%;
 	margin-right: 1px;
-	height: 31px;
+	height: 29px;
 }
+#tabs .ui-tabs-nav li>a{
+	font-family: "Times New Roman",Arial,sans-serif;
+}
+
 .moving_tabs{
 	width: 2% !important;
 	float: left;
-	height: 31px !important;
+	height: 29px !important;
 	margin-top: 1px;
 	border-bottom: 0 !important;
 }
@@ -411,7 +415,7 @@ margin: 50px auto;
 .prev{
 	height: 15px;
 	width: 15px;
-	margin-left: 2px;
+	margin-left: 3.5px;
 	margin-top: 8px;
 }
 
@@ -489,6 +493,33 @@ margin: 50px auto;
 	
 	.contenido_info #seleccionado h3{
 	padding: 0 3%!important;
+	}
+
+	/*Asignar Grupos*/
+	#asignar_grupos .simple_column_red{
+		margin-right: 0 !important;
+	}
+	#asignar_grupos #lista_cursos{
+		width: 19% !important;
+	}
+	#asignar_grupos .pie_lista div{
+		width: 29.9% !important;
+	}
+	#asignar_grupos .pie_lista p{
+		margin: 2px 8.5% !important;
+	}
+
+	#asignar_grupos #cabecera{
+		width: 45% !important;
+	}
+	#botones_centrados{
+		width: 102% !important;
+	}
+	#contenedor_asignar_grupos{
+		height: 43vh !important;
+	}
+	#asignar_grupos .pie_lista p:nth-child(3){
+		margin: 2px 26% !important;
 	}
 
 }
@@ -686,7 +717,6 @@ label[for="alumno_fechaNacimiento"]{width: 103%}
 
 @media only screen and (max-width: 1250px) {
 	label[for$="_fechaNacimiento"][for^="edit_"]:before{content:'F. Nacimiento'}
-
 }
 @media only screen and (min-width: 1250px) {
 	label[for$="_fechaNacimiento"][for^="edit_"]:before{content:'Fecha Nacimiento'}
@@ -696,6 +726,15 @@ label[for="alumno_fechaNacimiento"]{width: 103%}
 }
 @media only screen and (min-width: 1230px) {
 	label[for^="alumno_res"][for$="_fechaNacimiento"]:before{content:'Fecha Nacimiento'}
+}
+@media only screen and (max-width: 1200px) {
+	#multiples_alumnos table th[id="año_academico"]:before{content:'Año'}
+}
+@media only screen and (min-width: 1200px) {
+	#multiples_alumnos table th[id="año_academico"]:before{content:'Año Académ.'}
+}
+.readonly{
+	text-transform: none !important;
 }
 form input {
     display: inline-block;
@@ -1356,6 +1395,7 @@ form button{
 }
 #contenedor_registro_Ngrupos {
     width: 47%;
+    margin-bottom: 9px !important;
 }
 .contenedor_tabla_no_selec .block_insert{
     margin-left: 4%;
@@ -1494,7 +1534,7 @@ form button{
 }
 #cabecera_lista{
 	background: #b1cce7;
-	box-shadow: 0 1px 1px 1px rgba(0, 0, 0, 0.5);
+	box-shadow: 0 1px 0 1px rgba(0, 0, 0, 0.5);
 	padding: 5px;
 	min-height: 20px;
 }
@@ -1504,7 +1544,7 @@ form button{
 	text-align: right !important;
 }
 #buscador{
-	width: 40%;
+	width: 23%;
 	float: right;
 	font-size: 13px;
 	margin-top: -2px;
@@ -2035,6 +2075,9 @@ float: right;
     border-bottom: 2px solid #b1cce7;
     cursor: pointer;
 }
+#asignacion_festivos .contenedor_registro div table td{
+    text-align: left;
+}
 .contenedor_registro div table th{
 	text-align: center;
 	font: 1.3em solid;
@@ -2054,6 +2097,7 @@ float: right;
 .contenedor_registro .inner_table {
     max-height: 256px;
     overflow-y: auto;
+    z-index: 5;
 }
 #contenedor_calendario .inner_table{
 	min-height: 256px !important;
@@ -2099,7 +2143,7 @@ float: right;
 }
 .Festivos_list div table td:nth-child(1){
 	width: 25% !important;
-	text-align: center;
+	text-align: center !important;
 }
 .Festivos_list div table td:nth-child(2){
 	width: 25% !important;
@@ -2977,6 +3021,20 @@ input[id="si"]{
 	#antiguo_alumno_edit input[class*="s_input"]:last-child{
 		min-width: 0 !important;
 	}
+	/*Elementos cabecera Datatable*/
+	.contenedor_registro .opciones{
+		margin-left: 5% !important;
+	}
+	#buscador{
+		width: 26% !important;
+	}
+
+	#multiples_alumnos table thead tr>th:last-child{
+		width: 10% !important;
+		min-width: 10%!important;
+		padding-left: 16px;
+	}
+
 }
 
 .contenedor_principal_reserva div[class="parent_no_form"]{
@@ -3017,9 +3075,8 @@ input[id="si"]{
 .ajaxload img{
 	margin: 20vh 40vw;
 	opacity: 0.5;
+	border-radius: 25px;
 }
-
-
 
 .vh45{
     /*max-height: 41vh !important;*/
@@ -3116,7 +3173,7 @@ tbody.scrollContent tr.alternateRow td {
 }
 
 #tableContainer  tr th,#tableContainer tr td{
-	width: 10% !important;
+	width: 9% !important;
 }
 #tableContainer  tr th[class*="id"],#tableContainer tr td[class*="id"]{
 	width: 1% !important;
@@ -3125,18 +3182,12 @@ tbody.scrollContent tr.alternateRow td {
 #tableContainer  tr td[class*="id"]{
 	background-color: rgba(187, 201, 215, 0.4);
 }
-#tableContainer  tr th[class*="w_15"],#tableContainer tr td[class*="w_15"]{
-	width: 15% !important;
-}
 .left{
 	text-align: left !important;
 }
-#tableContainer tr th[class*="w_12"],#tableContainer tr td[class*="w_12"]{
-	width: 12% !important;
-}
-#tableContainer thead tr th, #tableContainer tbody tr td{
+/*#tableContainer thead tr th, #tableContainer tbody tr td{
 	min-width: 25px !important;
-}
+}*/
 
 #tableContainer tr th:last-child{
 	width: 11% !important;
@@ -3214,6 +3265,9 @@ tbody.scrollContent tr.alternateRow td {
 	font-family: Courier,Helvetica,Arial,sans-serif;
 	margin-top: 17vh;
 }
+#multiples_alumnos #sin_seleccionar p{
+	margin-top: 14vh;;
+}
 .no_cursor{
 	pointer-events: none !important ;
 	cursor: none !important;	
@@ -3263,23 +3317,23 @@ tbody.scrollContent tr.alternateRow td {
  font-weight: bold;
  border-top: 1px dotted black;
 }
-#antiguo_alumno #lista_cursos{
+.antiguo_alumno #lista_cursos{
 	width: 27%;
 	float: left;
 	margin-top: -4px;
 	height: 29px;
 }
-#antiguo_alumno h2{
-	width: 30%;
+.antiguo_alumno h2{
+	width: 25%;
 }
 #tableContainer table thead th{
 	border-bottom: 1px solid #111;
 }
 #tableContainer table thead th{
-	font-weight: bold;
+	font-weight: normal;
 }
 #tableContainer table {
-	border-right: 1px solid black;
+	border-right: 1px solid grey;
 	border-bottom: 0 !important;
 }
 
@@ -3307,7 +3361,7 @@ tbody.scrollContent tr.alternateRow td {
 	width: 72%;
 	margin: 0;
 }
-#c_old_student{
+.c_old_student{
 	width: 16%;
 	margin-left: 2% !important;
 	margin-top: 0 !important;
@@ -3330,7 +3384,7 @@ tbody.scrollContent tr.alternateRow td {
 	margin-bottom: 20px;
 }
 /*Se oculta los select de Datatable*/
-#antiguo_alumno .select_table{
+.select_ord_datatable{
 	position: absolute;
     left: 0px;
     top: 0px;
@@ -3343,3 +3397,335 @@ tbody.scrollContent tr.alternateRow td {
 #antiguo_alumno_edit input[class*="s_input"]:last-child{
 	min-width: 0;
 }
+.contenedor_registro .opciones input{
+	display: none;
+}
+.contenedor_registro .opciones{
+	width: 155px;
+	float: left;
+	margin-top: -2px;
+	margin-left: 10%;
+}
+.contenedor_registro .opciones label{
+	width: 65px;
+	padding: 3px;
+	text-align: center;
+	display: inline-block;
+	color: black;
+	border: 1px solid #334c73;
+	background: #e4e0e0;
+	font-weight: normal !important;
+	font-size: 13px;
+	cursor: pointer;
+}
+.contenedor_registro .opciones label[for="activos"]{
+	border-radius: 5px 0 0 5px;
+}
+.contenedor_registro .opciones label[for=inactivos]{
+	border-radius: 0 5px 5px 0;
+}
+.btn_selected{
+	background: #334c73 !important;
+	color: white !important;
+}
+.c_old_student label{
+	margin: 0;
+	text-align: center;
+	margin-bottom: 5px;
+}
+.c_old_student input{
+	text-align: center;
+	color: black;
+	width: 85%;
+	background: #b1cce7;
+}
+
+.w11{
+	width: 11% !important;
+	min-width: 11% !important;
+}
+.w15{ 
+	width: 15% !important;
+	min-width: 15% !important;
+}
+.w20{
+	width: 20% !important;
+	min-width: 20% !important;
+}
+#multiples_alumnos table tbody td{
+
+   cursor: default;
+}
+#multiples_alumnos table tbody button{
+	margin-left: 20px;
+}
+#multiples_alumnos table thead input{
+	margin-right: 17px;
+}
+#multiples_alumnos td{
+	z-index: 10 !important;
+}
+#multiples_alumnos  input{
+	z-index: 100 !important;
+}
+
+#multiples_alumnos .info_en_tabla{
+	height: 40vh !important;
+	border-bottom: 1px solid grey;
+	font-family: "Times New Roman",Arial,sans-serif;
+}
+
+#multiples_alumnos .columna_foto,#multiples_alumnos img{
+	margin-top: 0;
+}
+#multiples_alumnos #enviar_select{
+	float: left;
+	width: 17%;
+}
+#multiples_alumnos #enviar_select button{
+	margin:0 auto;
+	display: block;
+	font-size: 1.2em;
+}
+#multiples_alumnos #loading{
+	position: relative;
+	float: left;
+    top: -145px;
+    z-index: 10;
+    height: 0;
+}
+#multiples_alumnos #loading .ajaxload img{
+	margin: 0 36vw !important; 
+}
+.child #loading{
+	position: relative;
+	float: left;
+    top: -190px;
+    z-index: 10;
+    height: 0;
+}
+.child #loading .ajaxload img{
+	margin: 0 41.5vw !important; 
+}
+#asignar_grupos #ordenar_cursos li{
+    background: #ffffff none repeat scroll 0 0 !important;
+    border: 1px solid #c5c5c5;
+    border-radius: 5px;
+    color: #454545;
+    font-weight: normal;
+    width: 85%;
+    margin:3px auto;
+    list-style: none;
+    min-height: 15px;
+    padding: 5px;
+}
+#asignar_grupos #ordenar_cursos{
+	height: 38vh;
+	overflow: auto;
+	margin-top: 2px !important; 
+	padding: 2px 0;
+
+}
+#asignar_grupos #ordenar_cursos:hover{
+	cursor: pointer;
+}
+#asignar_grupos #contenedor_asignar_grupos:not(.container_disabled) ol:hover{
+	cursor: pointer;
+}
+#contenedor_asignar_grupos{
+	width: 24%;
+	margin-left: 1% !important;
+	margin-top: 0.5% !important;
+	height: 45vh;
+	margin: 1px 6px 5px !important;
+}
+#asignar_grupos #ordenar_cursos li p{
+	font-size: 12.5px;
+	font-weight: bold !important;
+	text-align: left;
+}
+#asignar_grupos #cabecera{
+	text-align: center;
+	width: 55%;
+	float: left;
+}
+#contenedor_asignar_grupos ol{
+	height: 39.5vh;
+	display: block;
+	overflow: auto;
+}
+#asignar_grupos #lista_cursos{
+	width: 16%;
+	float: left;
+	height: 30px;
+	margin-top: -2px;
+}
+#asignar_grupos .simple_column_red{
+	clear: both;
+	height: 43vh;
+	margin-top:-2.5%;
+	border-radius: 0 0 5px 5px;
+	margin-right: 6px;
+	margin-top: 2px;
+}
+#asignar_grupos .simple_column_red h4{
+	text-align: center;
+	padding: 3px 0;
+	color: white;
+	background: #334c73;
+	border-radius: 5px 5px 0 0;
+	box-shadow: 0 1px 1px 1px rgba(0, 0, 0, 0.5);
+	padding: 6px 0;
+	min-height: 17px;
+}
+
+#asignar_grupos .simple_column_red h4 p span{
+    background-image: url("../images/menu/ui-icons_ffffff_256x240.png");
+    background-position: 766.9px -47px;
+    height: 16px;
+    left: 5%;
+    position: absolute;
+    width: 11px;
+    -ms-transform: scale(1.2); /* IE 9 */
+  	-webkit-transform: scale(1.2); /* Chrome, Safari, Opera */
+  	transform: scale(1.2);
+
+}
+#asignar_grupos select{
+	font-size: 1em !important;
+}
+#asignar_grupos #contenedor_cursos {
+	border-radius:  0 0  5px 5px;
+	height: 39vh;
+	background: #b1cce7; 
+	box-shadow: 0 1px 1px 1px rgba(0, 0, 0, 0.5);
+	margin-bottom: 5px;
+	margin-top: 2px;
+}
+
+#asignar_grupos #botones_centrados button{
+	min-width: 100px !important;
+	margin: 0 3%;
+}
+#asignar_grupos .pie_lista{
+	display: block;
+	height: 20px;
+	color: white;
+	border-radius: 3px;
+	clear: both;
+	margin-left: 24%;
+}
+#asignar_grupos .pie_lista div{
+	width: 30%;
+    float: left;
+    margin: 0 0.5% 0 1.5%;
+    padding: 0 5px;
+    width: 30%;
+}
+#asignar_grupos .pie_lista p{
+	display: inline-block;
+	background:#334c73;
+	margin:2px 1.5%;
+	padding:0 1px;
+	border-radius: 3px;
+	box-shadow: 0 1px 1px 1px rgba(0, 0, 0, 0.5);
+}
+
+#asignar_grupos .pie_lista span{
+	display: inline-block;
+	min-width: 20px;
+	padding:0 2px;
+	font-weight: bold;
+	color: #fa8258;
+	text-align: center;
+}
+
+#asignar_grupos #btn_generar{
+	float: left;
+	margin-top: -2px;
+}
+.container_disabled{
+	opacity: 0.5;
+}
+#asignar_grupos #cabecera_lista
+{
+	background: #334c73;
+	margin-bottom: 2px;
+	color: white;
+}
+.container_disabled #cabecera_lista{
+	background: #A4A4A4 !important; 
+	height: 22px !important;
+}
+.footer_disabled{
+	opacity: 0.5;
+}
+.footer_disabled p{
+	background: grey !important;
+}
+
+#asignar_grupos #contenedor_cursos p[class*="aviso"] {
+    font-family: Courier,Helvetica,Arial,sans-serif;
+    font-size: 1em;
+    margin-top: 13vh;
+    text-align: center;
+    color: #334c73;
+    font-weight: bold;
+}
+
+
+#asignar_grupos #contenedor_asignar_grupos li {
+    background: #b1cce7 none repeat scroll 0 0;
+    border: 1px solid #c5c5c5;
+    color: #454545;
+    font-size: 1.1em;
+    font-weight: bold;
+    list-style: inside none inside;
+    min-height: 25px;
+    margin: 4px auto;
+    text-align: left;
+    padding: 0 3px;
+}
+#asignar_grupos #contenedor_asignar_grupos li p {
+	padding: 2%;
+}
+#asignar_grupos #contenedor_asignar_grupos li p:not(.nuevo) {
+	width: 86%;
+}
+#asignar_grupos  li p {
+	font-size: 12.5px !important;
+	display: inline-table;
+}
+
+#asignar_grupos  li p:last-child {
+	font-size: 12px !important;
+}
+#asignar_grupos #contenedor_asignar_grupos li[title="Nuevo Alumno"] p:last-child {
+	width: 66% !important;
+}
+.desplazamiento{
+	background: #fa8258  !important;
+	border:	none !important;
+	font-size: 16px !important;
+	border-radius: 5px;
+	width: 300px;
+	list-style: outside none none !important;
+	text-align: center !important;
+}
+.cambio_grupo{
+	background: #5cb85c !important;
+}
+.completo{
+	color: white !important;
+}
+#asignar_grupos .nuevo{
+    color: #bc1010;
+    float: right;
+    font-size: 12px !important;
+    margin-bottom: -5px;
+    margin-top: -5px;
+}
+
+
+
+

@@ -20,6 +20,9 @@ text-rendering: geometricPrecision !important;
 .ui-pnotify.custom .ui-pnotify-title {
 font-weight: bold;
 }
+.ui-pnotify.custom span {
+font-weight: bold;
+}
 .brighttheme-error{
     background: #F78181 !important;
     color: #721C1C !important;

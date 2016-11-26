@@ -44,7 +44,7 @@ class Matricula
      *
      * @ORM\Column(name="añoAcademico", type="string", length=255)
      */
-    private $añoAcademico;
+    private $anyoAcademico;
 
     /**
      * @var \DateTime
@@ -62,29 +62,6 @@ class Matricula
     public function getId()
     {
         return $this->id;
-    }
-
-    /**
-     * Set añoAcademico
-     *
-     * @param string $añoAcademico
-     * @return Matricula
-     */
-    public function setAñoAcademico($añoAcademico)
-    {
-        $this->añoAcademico = $añoAcademico;
-
-        return $this;
-    }
-
-    /**
-     * Get añoAcademico
-     *
-     * @return string 
-     */
-    public function getAñoAcademico()
-    {
-        return $this->añoAcademico;
     }
 
     /**
@@ -177,5 +154,28 @@ class Matricula
     public function getGrupo()
     {
         return $this->grupo;
+    }
+
+    /**
+     * Set anyoAcademico
+     *
+     * @param string $anyoAcademico
+     * @return Matricula
+     */
+    public function setAnyoAcademico($anyoAcademico)
+    {
+        $this->anyoAcademico = $anyoAcademico;
+
+        return $this;
+    }
+
+    /**
+     * Get anyoAcademico
+     *
+     * @return string 
+     */
+    public function getAnyoAcademico()
+    {
+        return $this->anyoAcademico;
     }
 }

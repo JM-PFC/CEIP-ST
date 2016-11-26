@@ -9,7 +9,6 @@ curso_show:
     defaults: { _controller: "BackendBundle:Curso:show" }
     options:
         expose: true
-        
 curso_new:
     path:     /new
     defaults: { _controller: "BackendBundle:Curso:new" }
@@ -20,7 +19,7 @@ curso_list:
     defaults: { _controller: "BackendBundle:Curso:listaCursos" }
     options:
         expose: true
-        
+
 curso_create:
     path:     /create
     defaults: { _controller: "BackendBundle:Curso:create" }

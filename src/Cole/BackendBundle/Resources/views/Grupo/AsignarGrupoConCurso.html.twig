@@ -1,0 +1,535 @@
+{% extends 'BackendBundle:Default:index.html.twig' %}
+
+{% block head %}{% endblock %}
+{% block stylesheets %}{% endblock %}
+    
+{% block javascript %}
+<script>
+
+  //Función para ordelar una lista
+  function OrdenarLista(lista) {
+    var listado = lista;
+    var elementos = listado.children("li").get();
+    elementos.sort(function(a,b) {
+      var A = $(a).text().toUpperCase();
+      var B = $(b).text().toUpperCase();
+      return (A < B) ? -1 : (A > B) ? 1 : 0;
+    });
+    $.each(elementos, function(id, elemento) {
+      listado.append(elemento);
+    });
+  }
+
+
+    function CalcularAlumnos() {
+            $("#asignar_grupos ol").each(function(i){
+                // Se obtiene el número de elementos en la lista y se añade a la variable num.
+                $(this).attr("num",$(this).find("li").length);
+                // Se calcula el número de elementos de cada lista y se muestra en su variable.
+                if($(this).attr("id")=="grupo_A" && !$(this).closest("div[id='contenedor_asignar_grupos']").hasClass("container_disabled")){
+                    footer=$("#footer_A");
+                    footer.find("#niños").html($(this).find("li[sexo='Masculino']").length);
+                    footer.find("#niñas").html($(this).find("li[sexo='Femenino']").length);
+                    footer.find("#total").html($(this).find("li").length);
+                    footer.find("#max").html({{ratio}});
+
+                    if(footer.find("#total").html()==footer.find("#max").html()){
+                        $("#footer_A p:last span").addClass("completo");
+
+                    }
+                    else{
+                        $("#footer_A p:last span").removeClass("completo");
+                    }
+                }
+                else if($(this).attr("id")=="grupo_B" && !$(this).closest("div[id='contenedor_asignar_grupos']").hasClass("container_disabled")){
+                    footer=$("#footer_B");
+                    footer.find("#niños").html($(this).find("li[sexo='Masculino']").length);
+                    footer.find("#niñas").html($(this).find("li[sexo='Femenino']").length);
+                    footer.find("#total").html($(this).find("li").length);
+                    footer.find("#max").html({{ratio}});
+                }
+                else{
+                    footer=$("#footer_C");
+                    footer.find("#niños").html($(this).find("li[sexo='Masculino']").length);
+                    footer.find("#niñas").html($(this).find("li[sexo='Femenino']").length);
+                    footer.find("#total").html($(this).find("li").length);
+                    footer.find("#max").html({{ratio}});
+                }
+
+                if($(this).attr("id")=="ordenar_cursos" && !$(this).find("li").length){
+
+                    $(this).html('<p class="aviso ui-sortable-handle">No existen más alumnos matriculados en este curso</p>');
+                }
+                else{
+                    $(this).find("p[class*='aviso']").remove();
+                }
+            }); 
+    }
+
+    var error = new Audio();
+    error.src = "/Symfony/web/bundles/backend/sounds/error.mp3";
+
+    //Se elimina la opción "todos los cursos" de la lista de cursos.
+    $("#asignar_grupos #lista_cursos select option:last-child" ).remove();
+    
+    //Se impide arrastrar el elemento de aviso.
+    $( "#asignar_grupos  #ordenar_cursos" ).sortable({
+      items: "li"
+    });
+
+    $("#asignar_grupos #botones_centrados button").prop("disabled",false);
+
+    $("#asignar_grupos #ordenar_cursos" ).sortable().disableSelection();
+    
+    $("#asignar_grupos #lista_cursos select option[value='"+{{curso}}+"']").prop('selected', true); 
+    $("#asignar_grupos .simple_column_red h4").html("Alumnos de "+$("#asignar_grupos #lista_cursos select option[value='"+{{curso}}+"']").text());
+
+    if({{num_grupos}}==1){
+        $("#grupo_A").closest("div[id='contenedor_asignar_grupos']").removeClass("container_disabled");
+        $("#footer_A").removeClass("footer_disabled");
+    }
+    else if({{num_grupos}}==2){
+        $("#grupo_A").closest("div[id='contenedor_asignar_grupos']").removeClass("container_disabled");
+        $("#grupo_B").closest("div[id='contenedor_asignar_grupos']").removeClass("container_disabled");
+        
+        $("#footer_A").removeClass("footer_disabled");
+        $("#footer_B").removeClass("footer_disabled");
+    }
+    else{
+        $("#grupo_A").closest("div[id='contenedor_asignar_grupos']").removeClass("container_disabled");
+        $("#grupo_B").closest("div[id='contenedor_asignar_grupos']").removeClass("container_disabled");
+        $("#grupo_C").closest("div[id='contenedor_asignar_grupos']").removeClass("container_disabled");
+
+        $("#footer_A").removeClass("footer_disabled");
+        $("#footer_B").removeClass("footer_disabled");
+        $("#footer_C").removeClass("footer_disabled");
+    }         
+
+    $("#asignar_grupos #btn_generar button").prop("disabled",false);
+
+    $("#asignar_grupos #ordenar_cursos").addClass("connectedSortable");
+    if(!$("#grupo_C").closest("div[id='contenedor_asignar_grupos']").hasClass("container_disabled")){
+        $("#grupo_A").addClass("connectedSortable");
+        $("#grupo_B").addClass("connectedSortable");
+        $("#grupo_C").addClass("connectedSortable");
+        $( "#asignar_grupos #ordenar_cursos, #grupo_A, #grupo_B,#grupo_C" ).sortable({connectWith: ".connectedSortable",
+        start: function(event, ui){
+            // Se modifica el elemento al ser arrastrado.        
+            ui.item.addClass("desplazamiento");
+        },
+        stop: function(event, ui){ 
+            ui.item.removeClass("desplazamiento");
+
+            //Se ordena las listas.
+            OrdenarLista($('#asignar_grupos #ordenar_cursos'));
+            OrdenarLista($('#grupo_A'));
+            OrdenarLista($('#grupo_B'));
+            OrdenarLista($('#grupo_C'));
+
+            lista=ui.item.closest("ol").attr("id").replace("grupo_", "");
+            if(ui.item.attr("grupo") && ui.item.attr("grupo")!=lista){
+                ui.item.addClass("cambio_grupo");
+            }
+            else{
+                ui.item.removeClass("cambio_grupo");
+            }
+
+            CalcularAlumnos();
+        },
+        //Se impide añadir más elementos que el números de alumnos asignado en la columna "ratio" del curso.
+        receive: function(event, ui) {
+            var $this = $(this);
+            if ($this.children('li').length > {{ ratio }} && $this.attr('id') != "ordenar_cursos") {
+                $(ui.sender).sortable('cancel');
+
+                error.play();
+            }
+        }
+        }).disableSelection();
+
+        //Se evita poder desplazar los alumnos que tengan un grupo asignado a la lista de nuevos alumnos.
+        $( "#asignar_grupos #ordenar_cursos" ).sortable({connectWith: "#grupo_A, #grupo_B,#grupo_C",
+        receive: function(event, ui) {
+            var $this = $(this);
+            if (ui.item.attr('grupo')) {
+                $(ui.sender).sortable('cancel');
+
+                error.play();
+            }
+        }
+        }).disableSelection();
+    }
+    else if(!$("#grupo_B").closest("div[id='contenedor_asignar_grupos']").hasClass("container_disabled")){
+        $("#grupo_A").addClass("connectedSortable");
+        $("#grupo_B").addClass("connectedSortable");
+        $( "#ordenar_cursos, #grupo_A, #grupo_B" ).sortable({connectWith: ".connectedSortable",
+        start: function(event, ui){
+            // Se modifica el elemento al ser arrastrado.        
+            ui.item.addClass("desplazamiento");
+        },
+        stop: function(event, ui){ 
+            ui.item.removeClass("desplazamiento");
+
+            //Se ordena las listas.
+            OrdenarLista($('#asignar_grupos #ordenar_cursos'));
+            OrdenarLista($('#grupo_A'));
+            OrdenarLista($('#grupo_B'));
+
+            lista=ui.item.closest("ol").attr("id").replace("grupo_", "");
+            if(ui.item.attr("grupo") && ui.item.attr("grupo")!=lista){
+                ui.item.addClass("cambio_grupo");
+            }
+            else{
+                ui.item.removeClass("cambio_grupo");
+            }
+
+            CalcularAlumnos();         
+        },
+        //Se impide añadir más elementos que el números de alumnos asignado en la columna "ratio" del curso.
+        receive: function(event, ui) {
+            var $this = $(this);
+            if ($this.children('li').length > {{ ratio }} && $this.attr('id') != "ordenar_cursos") {
+                $(ui.sender).sortable('cancel');
+
+                error.play();
+            }
+        }
+         }).disableSelection();
+        //placeholder: "ui-state-highlight"
+    }
+    else{
+        $("#grupo_A").addClass("connectedSortable");
+        $( "#asignar_grupos #ordenar_cursos, #grupo_A" ).sortable({connectWith: ".connectedSortable",
+        start: function(event, ui){
+            // Se modifica el elemento al ser arrastrado.        
+            ui.item.addClass("desplazamiento");
+        },
+        stop: function(event, ui){ 
+            ui.item.removeClass("desplazamiento");
+
+            //Se ordenan las listas.
+            OrdenarLista($('#asignar_grupos #ordenar_cursos'));
+            OrdenarLista($('#grupo_A'));
+
+            lista=ui.item.closest("ol").attr("id").replace("grupo_", "");
+            if(ui.item.attr("grupo") && ui.item.attr("grupo")!=lista){
+                ui.item.addClass("cambio_grupo");
+            }
+            else{
+                ui.item.removeClass("cambio_grupo");
+            }
+
+            CalcularAlumnos();        
+        },
+        //Se impide añadir más elementos que el números de alumnos asignado en la columna "ratio" del curso.
+        receive: function(event, ui) {
+            var $this = $(this);
+            if ($this.children('li').length > {{ ratio }} && $this.attr('id') != "ordenar_cursos") {
+                $(ui.sender).sortable('cancel');
+
+                error.play();
+            }
+        }
+        }).disableSelection();
+    }
+
+    CalcularAlumnos();
+
+      //Se genera las listas con los grupos asignados para los alumnos del curso seleccionado.
+    $(document).on('click',"#asignar_grupos #btn_generar button",function(event){
+        $("#asignar_grupos #loading").html('<div class="ajaxload"><img src="/Symfony/web/bundles/backend/images/loading.gif"/></div>');
+        // Se asiga el único grupo a los alumnnos matriculados.
+        if($("#grupo_B").closest("div[id='contenedor_asignar_grupos']").hasClass("container_disabled")){
+
+            total=$("#asignar_grupos #footer_A #total").html();
+            max=$("#asignar_grupos #footer_A #max").html();
+  
+            $('#asignar_grupos #ordenar_cursos li').each (function(){ 
+                //Se comprueba que no sobre pasa el ratio de alumnos en el curso (aunque se comprueba al matricular).
+                if(parseInt(total)<parseInt(max)){
+                    $(this).appendTo('#grupo_A');
+                    OrdenarLista($('#grupo_A'));
+                    CalcularAlumnos();
+                    total++;
+                }
+            });
+        }
+        //Se asigna los grupos A y B a los alumnos matriculados siguiendo unas condiciones.
+        else if($("#grupo_C").closest("div[id='contenedor_asignar_grupos']").hasClass("container_disabled")){
+            niños=$("#asignar_grupos ").find("li[sexo='Masculino']").length;
+            niñas=$("#asignar_grupos").find("li[sexo='Femenino']").length;
+
+            niños_grupos= parseInt(niños/2); // Otra forma-> niños/2|0
+            niñas_grupos= parseInt(niñas/2);
+
+            niños_A=$("#asignar_grupos #grupo_A li[sexo='Masculino']").length;
+            niñas_A=$("#asignar_grupos #grupo_A li[sexo='Femenino']").length;
+
+            niños_B=$("#asignar_grupos #grupo_B li[sexo='Masculino']").length;
+            niñas_B=$("#asignar_grupos #grupo_B li[sexo='Femenino']").length;
+
+            //Se obtienes los alumnos que faltan para por grupo.
+            niños_faltan_A=parseInt(niños_grupos)-parseInt(niños_A);
+            niñas_faltan_A=parseInt(niñas_grupos)-parseInt(niñas_A);
+
+            niños_faltan_B=parseInt(niños_grupos)-parseInt(niños_B);
+            niñas_faltan_B=parseInt(niñas_grupos)-parseInt(niñas_B);
+
+            niños_nuevos=$("#asignar_grupos #ordenar_cursos li[sexo='Masculino']").length;
+            niñas_nuevos=$("#asignar_grupos #ordenar_cursos li[sexo='Femenino']").length;
+
+            for (var i=niños_faltan_A; i>0; i--) {
+                $("#asignar_grupos #ordenar_cursos li[sexo='Masculino']:first").appendTo('#grupo_A');
+            }
+
+            for (var i=niñas_faltan_A; i>0; i--) {
+                $("#asignar_grupos #ordenar_cursos li[sexo='Femenino']:first").appendTo('#grupo_A');
+            }
+            for (var i=niños_faltan_B; i>0; i--) {
+                $("#asignar_grupos #ordenar_cursos li[sexo='Masculino']:first").appendTo('#grupo_B');
+            }
+
+            for (var i=niñas_faltan_B; i>0; i--) {
+                $("#asignar_grupos #ordenar_cursos li[sexo='Femenino']:first").appendTo('#grupo_B');
+            }
+
+            if($("#asignar_grupos #ordenar_cursos li").length==1){
+
+                if($("#asignar_grupos #grupo_A li").length<$("#asignar_grupos #grupo_B li").length){
+                    $("#asignar_grupos #ordenar_cursos li").appendTo('#grupo_A');
+                }
+                else if($("#asignar_grupos #grupo_A li").length>$("#asignar_grupos #grupo_B li").length){
+                    $("#asignar_grupos #ordenar_cursos li").appendTo('#grupo_B');
+                }
+                else{
+                    $("#asignar_grupos #ordenar_cursos li").appendTo('#grupo_A');
+                }
+            }
+
+            if($("#asignar_grupos #ordenar_cursos li[sexo='Masculino']").length){
+                for (var i=$("#asignar_grupos #ordenar_cursos li[sexo='Masculino']").length; i>0; i--) {
+                    $("#asignar_grupos li[sexo='Masculino']:first").appendTo('#grupo_A');
+                    i--;
+                    if(i>0){
+                        $("#asignar_grupos li[sexo='Masculino']:first").appendTo('#grupo_B');
+                    }
+                }
+            }
+
+            if($("#asignar_grupos #ordenar_cursos li[sexo='Femenino']").length){
+                for (var i=$("#asignar_grupos #ordenar_cursos li[sexo='Femenino']").length; i>0; i--) {
+                    $("#asignar_grupos li[sexo='Femenino']:first").appendTo('#grupo_A');
+                    i--;
+                    if(i>0){
+                        $("#asignar_grupos li[sexo='Femenino']:first").appendTo('#grupo_B');
+                    }
+                }
+            }
+            OrdenarLista($('#grupo_A'));    
+            OrdenarLista($('#grupo_B'));    
+            CalcularAlumnos();
+        }
+        //Se asigna los tres grupos a los alumnos matriculados siguiendo unas condiciones.
+        else{
+            niños=$("#asignar_grupos ").find("li[sexo='Masculino']").length;
+            niñas=$("#asignar_grupos").find("li[sexo='Femenino']").length;
+
+            niños_grupos= parseInt(niños/3); 
+            niñas_grupos= parseInt(niñas/3);
+
+            niños_A=$("#asignar_grupos #grupo_A li[sexo='Masculino']").length;
+            niñas_A=$("#asignar_grupos #grupo_A li[sexo='Femenino']").length;
+
+            niños_B=$("#asignar_grupos #grupo_B li[sexo='Masculino']").length;
+            niñas_B=$("#asignar_grupos #grupo_B li[sexo='Femenino']").length;
+
+            niños_C=$("#asignar_grupos #grupo_C li[sexo='Masculino']").length;
+            niñas_C=$("#asignar_grupos #grupo_C li[sexo='Femenino']").length;
+
+            //Se obtienes los alumnos que faltan para por grupo.
+            niños_faltan_A=parseInt(niños_grupos)-parseInt(niños_A);
+            niñas_faltan_A=parseInt(niñas_grupos)-parseInt(niñas_A);
+
+            niños_faltan_B=parseInt(niños_grupos)-parseInt(niños_B);
+            niñas_faltan_B=parseInt(niñas_grupos)-parseInt(niñas_B);
+
+            niños_faltan_C=parseInt(niños_grupos)-parseInt(niños_C);
+            niñas_faltan_C=parseInt(niñas_grupos)-parseInt(niñas_C);
+
+            niños_nuevos=$("#asignar_grupos #ordenar_cursos li[sexo='Masculino']").length;
+            niñas_nuevos=$("#asignar_grupos #ordenar_cursos li[sexo='Femenino']").length;
+
+            for (var i=niños_faltan_A; i>0; i--) {
+                $("#asignar_grupos #ordenar_cursos li[sexo='Masculino']:first").appendTo('#grupo_A');
+            }
+
+            for (var i=niñas_faltan_A; i>0; i--) {
+                $("#asignar_grupos #ordenar_cursos li[sexo='Femenino']:first").appendTo('#grupo_A');
+            }
+            for (var i=niños_faltan_B; i>0; i--) {
+                $("#asignar_grupos #ordenar_cursos li[sexo='Masculino']:first").appendTo('#grupo_B');
+            }
+
+            for (var i=niñas_faltan_B; i>0; i--) {
+                $("#asignar_grupos #ordenar_cursos li[sexo='Femenino']:first").appendTo('#grupo_B');
+            }
+            for (var i=niños_faltan_C; i>0; i--) {
+                $("#asignar_grupos #ordenar_cursos li[sexo='Masculino']:first").appendTo('#grupo_C');
+            }
+
+            for (var i=niñas_faltan_C; i>0; i--) {
+                $("#asignar_grupos #ordenar_cursos li[sexo='Femenino']:first").appendTo('#grupo_C');
+            }
+
+            if($("#asignar_grupos #ordenar_cursos li").length==1){
+
+                if($("#asignar_grupos #grupo_C li").length<$("#asignar_grupos #grupo_B li").length && $("#asignar_grupos #grupo_C li").length<$("#asignar_grupos #grupo_A li").length){
+                    $("#asignar_grupos #ordenar_cursos li").appendTo('#grupo_C');
+                }
+                else if($("#asignar_grupos #grupo_B li").length<$("#asignar_grupos #grupo_A li").length && $("#asignar_grupos #grupo_B li").length<$("#asignar_grupos #grupo_C li").length){
+                    $("#asignar_grupos #ordenar_cursos li").appendTo('#grupo_B');
+                }
+                else{
+                    $("#asignar_grupos #ordenar_cursos li").appendTo('#grupo_A');
+                }
+            }
+
+            if($("#asignar_grupos #ordenar_cursos li[sexo='Masculino']").length){
+                for (var i=$("#asignar_grupos #ordenar_cursos li[sexo='Masculino']").length; i>0; i--) {
+                    $("#asignar_grupos li[sexo='Masculino']:first").appendTo('#grupo_A');
+                    i--;
+                    if(i>0){
+                        $("#asignar_grupos li[sexo='Masculino']:first").appendTo('#grupo_B');
+                    }
+                    i--;
+                    if(i>0){
+                        $("#asignar_grupos li[sexo='Masculino']:first").appendTo('#grupo_C');
+                    }
+                }
+            }
+
+            if($("#asignar_grupos #ordenar_cursos li[sexo='Femenino']").length){
+                for (var i=$("#asignar_grupos #ordenar_cursos li[sexo='Femenino']").length; i>0; i--) {
+                    $("#asignar_grupos li[sexo='Femenino']:first").appendTo('#grupo_A');
+                    i--;
+                    if(i>0){
+                        $("#asignar_grupos li[sexo='Femenino']:first").appendTo('#grupo_B');
+                    }
+                    i--;
+                    if(i>0){
+                        $("#asignar_grupos li[sexo='Femenino']:first").appendTo('#grupo_C');
+                    }
+                }
+            }
+            OrdenarLista($('#grupo_A'));    
+            OrdenarLista($('#grupo_B'));  
+            OrdenarLista($('#grupo_C'));     
+            CalcularAlumnos();        
+        }
+        $(this).blur();
+        $(this).prop("disabled",true);
+        $("#asignar_grupos #loading").empty();
+  });
+
+</script>
+{% endblock %}
+
+{% block body -%}
+<div id="asignar_grupos" class="contenedor_tabla_no_selec">
+    <div class="parent_no_form">
+        <div class="child">
+            <div id="lista_cursos">
+                {{render(controller("BackendBundle:Curso:listaCursos"))}}
+            </div>
+            <div id="btn_generar">
+                <button disabled="disabled">Generar</button>
+            </div>
+            <h2 id="cabecera">Asignar Grupos</h2>
+                <div class="simple_column_red">
+                    <h4></h4>
+                    <div id="contenedor_cursos">
+                        <ol id="ordenar_cursos">
+                        {% for alumno in alumnos_sin_grupo %}
+                            <li id="curso-{{alumno.alumno.id}}" sexo={{ alumno.alumno.sexo }} title="Nuevo Alumno"> {#Se utiliza para el método serialize de sortable. Usar: curso-id, curso_id ó curso=id#}
+                                <p class="nuevo">Nuevo</p>
+                                <p>{{ alumno.alumno.apellido1 ~ " " ~ alumno.alumno.apellido2 ~ ", " ~ alumno.alumno.nombre }}</p>
+
+                            </li>
+                        {% endfor %}
+                        </ul>
+                    </div>
+                    <div id="botones_centrados">
+                        <button id="button_grupos_all" disabled="disabled">Guardar</button>
+                        <button id="button_grupos_rest" disabled="disabled">Restablecer</button>
+                    </div>
+                </div>                 
+                <div class="derecha contenedor_registro container_disabled" id="contenedor_asignar_grupos">  
+                    <div>
+                        <div id="cabecera_lista">
+                            <h2>Grupo A</h2>
+                        </div>
+                        <div>
+                            <ol id="grupo_A">
+                            {% for alumno in alumnos_A %}   
+                                <li id="curso-{{alumno.alumno.id}}" sexo={{ alumno.alumno.sexo }}  title="Antiguo Alumno" grupo="A"> {#Se utiliza para el método serialize de sortable. Usar: curso-id, curso_id ó curso=id#}
+                                <p>{{ alumno.alumno.apellido1 ~ " " ~ alumno.alumno.apellido2 ~ ", " ~ alumno.alumno.nombre }}</p>
+                                </li>
+                            {% endfor %}     
+                            </ol>
+                        </div>
+                    </div>         
+                </div>
+                <div class="derecha contenedor_registro container_disabled" id="contenedor_asignar_grupos" >  
+                    <div>
+                        <div id="cabecera_lista">
+                            <h2>Grupo B</h2>
+                        </div>
+                        <div>
+                            <ol id="grupo_B">
+                            {% for alumno in alumnos_B %}   
+                                <li id="curso-{{alumno.alumno.id}}" sexo={{ alumno.alumno.sexo }} title="Antiguo Alumno" grupo="B"> {#Se utiliza para el método serialize de sortable. Usar: curso-id, curso_id ó curso=id#}
+                                   <p>{{ alumno.alumno.apellido1 ~ " " ~ alumno.alumno.apellido2 ~ ", " ~ alumno.alumno.nombre }}</p>
+                                </li>
+                            {% endfor %}     
+                            </ol>
+                        </div>
+                    </div>          
+                </div>
+                <div class="derecha contenedor_registro container_disabled" id="contenedor_asignar_grupos" >  
+                    <div>
+                        <div id="cabecera_lista">
+                            <h2>Grupo C</h2>
+                        </div>
+                        <div>
+                            <ol id="grupo_C">
+                            {% for alumno in alumnos_C %}   
+                                <li id="curso-{{alumno.alumno.id}}" sexo={{ alumno.alumno.sexo }} title="Antiguo Alumno" grupo="C"> {#Se utiliza para el método serialize de sortable. Usar: curso-id, curso_id ó curso=id#}
+                                <p>{{ alumno.alumno.apellido1 ~ " " ~ alumno.alumno.apellido2 ~ ", " ~ alumno.alumno.nombre }}</p>
+                                </li>
+                            {% endfor %}     
+                            </ol>
+                        </div>
+                    </div>          
+                </div>
+                <div class="pie_lista">
+                    <div id="footer_A" class="footer_disabled">
+                        <p>Niños:<span id="niños"></span></p>
+                        <p>Niñas:<span id="niñas"></span></p>
+                        <p>Total:<span id="total"></span>/ <span id="max"></span></p>
+                    </div> 
+                    <div id="footer_B" class="footer_disabled">
+                        <p>Niños:<span id="niños"></span></p>
+                        <p>Niñas:<span id="niñas"></span></p>
+                        <p>Total:<span id="total"></span>/ <span id="max"></span></p>
+                    </div> 
+                    <div id="footer_C" class="footer_disabled">
+                        <p>Niños:<span id="niños"></span></p>
+                        <p>Niñas:<span id="niñas"></span></p>
+                        <p>Total:<span id="total"></span>/ <span id="max"></span></p>
+                    </div> 
+                </div>
+            <div id="loading"></div>
+        </div>
+    </div>
+</div>
+    {% endblock %}

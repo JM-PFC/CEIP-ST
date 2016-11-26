@@ -72,19 +72,19 @@
 
         // Se comprueba si existe scrol vertical para ajustar el thead
         if( $('#consulta_reservas_{{ tipo }} table tbody').get(0).scrollHeight>$('#consulta_reservas_{{ tipo }} table tbody').height()){
-            $("#consulta_reserva_{{ tipo }} thead tr>th:last-child").attr('style', 'width: 6.5% !important');
+            $("#consulta_reserva_{{ tipo }} thead tr>th:last-child").attr('style', 'width: 6% !important');
         }
         else{
-            $("#consulta_reserva_{{ tipo }} thead tr>th:last-child").attr('style', 'width: 5.5% !important');
+            $("#consulta_reserva_{{ tipo }} thead tr>th:last-child").attr('style', 'width: 5% !important');
         }
     
         $(window).resize(function() {
 
         if($('#consulta_reservas_{{ tipo }} table tbody').get(0).scrollHeight>$('#consulta_reservas_{{ tipo }} table tbody').height() ){
-            $("#consulta_reserva_{{ tipo }} thead tr>th:last-child").attr('style', 'width: 6.5% !important');
+            $("#consulta_reserva_{{ tipo }} thead tr>th:last-child").attr('style', 'width: 6% !important');
         }
         else{
-            $("#consulta_reserva_{{ tipo }} thead tr>th:last-child").attr('style', 'width: 5.5% !important');
+            $("#consulta_reserva_{{ tipo }} thead tr>th:last-child").attr('style', 'width: 5% !important');
         }
     });
 
@@ -110,8 +110,8 @@
                                 <thead class="fixedHeader">
                                     <tr>
                                         {#<th class="id">Id</th>#}
-                                        <th class="w_15 left">Profesor</th>
-                                        <th class="w_12">Equipamiento</th>
+                                        <th class="w20 left">Profesor</th>
+                                        <th>Equipamiento</th>
                                         <th>Fecha</th>
                                         <th>Hora</th>
                                         <th>Estado</th>
@@ -124,13 +124,13 @@
                                         {% if entity.profesor != null %}
                                         <tr id="{{entity.profesor.id}}"  title="Pulsa para contactar con el profesor">
                                             {#<td class="id">{{ cont }}</td>#}
-                                            <td class="w_15 left">{{ entity.profesor.nombre ~ " " ~ entity.profesor.apellido1 ~ " " ~ entity.profesor.apellido2}}</td>
+                                            <td class="w20 left">{{ entity.profesor.nombre ~ " " ~ entity.profesor.apellido1 ~ " " ~ entity.profesor.apellido2}}</td>
                                         {% else %}
                                         <tr id="centro" class="no_cursor">
-                                            <td class="w_15 left"> Reserva del Centro</td>
+                                            <td class="w20 left"> Reserva del Centro</td>
                                         {% endif %}
-                                            <td class="w_12">{{ entity.equipamiento.nombre}}</td>
-                                            <td data-order="{{ entity.fecha|date('m/d/Y') }}">
+                                            <td class="w11">{{ entity.equipamiento.nombre}}</td>
+                                            <td  data-order="{{ entity.fecha|date('m/d/Y') }}">
                                             {% if entity.fecha|date('m/d/Y') ==  'today'|date('m/d/Y')  %}
                                                 {{ "Hoy" }}
                                             {% elseif entity.fecha|date('m/d/Y') ==  'tomorrow'|date('m/d/Y') %}

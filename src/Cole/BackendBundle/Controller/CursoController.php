@@ -60,6 +60,13 @@ class CursoController extends Controller
 
         if ($form->isValid()) {
             $em = $this->getDoctrine()->getManager();
+            // Se comprueba que no exista el curso en el sistema.
+            $curso = $em->getRepository('BackendBundle:Curso')->findCursoByNivel($entity->getCurso(),$entity->getNivel());
+            if($curso){
+                return new JsonResponse(array(
+                    'error' => 'existe',
+                    'success' => true), 200);
+            }
             //Añadimos el numéro de orden (números de cursos +1)
             $query = $em->createQueryBuilder()
                 ->select('COUNT(c)') 

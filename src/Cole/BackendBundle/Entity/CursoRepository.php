@@ -30,4 +30,14 @@ class CursoRepository extends EntityRepository
 		'SELECT c FROM BackendBundle:Curso c ORDER BY c.numOrden')
 		->getResult();
 	}
+	
+	public function findUltimoCurso()
+	{
+		return $this->getEntityManager()->createQuery(
+		'SELECT c FROM BackendBundle:Curso c WHERE c.numOrden=(SELECT max(co.numOrden) FROM BackendBundle:Curso co)')
+		->setMaxResults(1)
+		->getOneOrNullResult();
+	}
+
+
 }

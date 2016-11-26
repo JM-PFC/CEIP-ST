@@ -36,3 +36,21 @@ asignar_aula:
     defaults: { _controller: "BackendBundle:Grupo:AsignarAula" }
     options:
         expose: true
+
+asignar_grupo:
+    path:     /Asignar_grupo
+    defaults: { _controller: "BackendBundle:Grupo:AsignarGrupo" }
+    options:
+        expose: true
+
+curso_asignar_grupo:
+    path:     /{curso}/asignar_grupo
+    defaults: { _controller: "BackendBundle:Grupo:CursoAsignarGrupo" }
+    options:
+        expose: true
+
+asignar_grupo_update:
+    path:     /asignar_grupo_update
+    defaults: { _controller: "BackendBundle:Grupo:AsignarGrupoUpdate" }
+    options:
+        expose: true

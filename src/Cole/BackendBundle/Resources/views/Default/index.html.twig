@@ -129,9 +129,13 @@
 							<img src="{{ asset('bundles/backend/images/menu/nuevo_profesor.png')}}">
 							<span> Nuevo</span>
 						</a>
-						<a id="profesor_asignar_curso" title="Asignar Curso" href="javascript:void(0);">
+						<a id="profesor_antiguo" title="Antiguo Profesor" href="javascript:void(0);">
+							<img src="{{ asset('bundles/backend/images/menu/nuevo_profesor.png')}}">
+							<span> Antiguo</span>
+						</a>
+						<a id="profesor_asignar_grupo" title="Asignar Grupo" href="javascript:void(0);">
 							<img src="{{ asset('bundles/backend/images/menu/asignar.png')}}">
-							<span> Asignar <br>Curso</span>
+							<span> Asignar <br>Grupo</span>
 						</a>								
 						<span> Registro Profesor</span>
 					</div>
@@ -157,13 +161,13 @@
 							<img src="{{ asset('bundles/backend/images/menu/matricular.png')}}">
 							<span> Antiguo</span>
 						</a>
-						<a id="alumnos_multiple" title="Matrícula Múltiple" href="javascript:void(0);">
+						<a id="alumnos_multiple" title="Matrícula Múltiple" href="{{path('search_multiple')}}">
 							<img src="{{ asset('bundles/backend/images/menu/matricular+.png')}}">
 							<span> Múltiple</span>
 						</a>
-						<a id="alumnos_asignar_curso" title="Asignar Curso" href="javascript:void(0);">
+						<a id="asignar_grupo" title="Asignar Grupos" href="{{path('asignar_grupo')}}">
 							<img src="{{ asset('bundles/backend/images/menu/asignar.png')}}">
-							<span> Asignar <br>Curso</span>
+							<span> Asignar <br>Grupos</span>
 						</a>								
 						<span> Matrícula Alumnos</span>
 					</div>
@@ -176,11 +180,14 @@
 							<img src="{{ asset('bundles/backend/images/menu/consultar.png')}}">
 							<span> Consulta</span>
 						</a>
+						<span> Información </span>
+					</div>
+					<div id="tercero">
 						<a  title="Padres" href="{{path('padres')}}">
 							<img src="{{ asset('bundles/backend/images/menu/alumno.png')}}">
 							<span> Padres </span>
 						</a>
-						<span> Información </span>
+						<span> Contacto </span>
 					</div>
 				</div>
 				<div id="4">

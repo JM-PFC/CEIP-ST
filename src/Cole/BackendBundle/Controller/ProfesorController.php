@@ -99,7 +99,6 @@ class ProfesorController extends Controller
            
                 $file = $entity->getFoto();    
         
-
             if($entity->getFoto()!=null){
                 $fileName = uniqid().'.'.$file->guessExtension();
                 //Dir_imagenes_prof está definido como parámetro en congif.yml

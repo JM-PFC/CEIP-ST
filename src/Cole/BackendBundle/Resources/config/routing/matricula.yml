@@ -35,3 +35,10 @@ matricular_alumno:
     requirements: { _method: post }
     options:
         expose: true
+
+num_matriculas:
+    path:     /num_matriculas
+    defaults: { _controller: "BackendBundle:Matricula:NumMatriculas" }
+    requirements: { _method: post }
+    options:
+        expose: true

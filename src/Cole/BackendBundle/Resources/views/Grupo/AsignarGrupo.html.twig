@@ -1,0 +1,92 @@
+{% extends 'BackendBundle:Default:index.html.twig' %}
+
+{% block head %}{% endblock %}
+{% block stylesheets %}{% endblock %}
+    
+{% block javascript %}
+<script>
+    //Se elimina la opción "todos los cursos" de la listade cursos.
+    $("#asignar_grupos #lista_cursos select option:last-child" ).remove();
+
+    //Se impide arrastrar el elemento de aviso.
+    $( "#asignar_grupos  #ordenar_cursos" ).sortable({
+      items: "li"
+    });
+
+    $("#asignar_grupos #ordenar_cursos" ).sortable().disableSelection();      
+
+
+</script>
+{% endblock %}
+
+{% block body -%}
+<div id="asignar_grupos" class="contenedor_tabla_no_selec">
+    <div class="parent_no_form">
+        <div class="child">
+            <div id="lista_cursos">
+                {{render(controller("BackendBundle:Curso:listaCursos"))}}
+            </div>
+            <div id="btn_generar">
+                <button disabled="disabled">Generar</button>
+            </div>
+            <h2 id="cabecera">Asignar Grupos</h2>
+                <div class="simple_column_red">
+                    <h4><p><span></span>Seleccione un curso</p></h4>
+                    <div id="contenedor_cursos">
+                        <ul id="ordenar_cursos">
+                            <p class="aviso">Para asignar un grupo a los alumnos debe seleccionar un curso de la lista superior</p>
+                        </ul>
+                    </div>
+                    <div id="botones_centrados">
+                        <button id="button_grupos_all" disabled="disabled">Guardar</button>
+                        <button id="button_grupos_rest" disabled="disabled">Restablecer</button>
+                    </div>
+                </div>
+                <div class="derecha contenedor_registro container_disabled" id="contenedor_asignar_grupos">  
+                    <div>
+                        <div id="cabecera_lista">
+                            <h2>Grupo A</h2>
+                            <ul id="grupo_A"></ul>
+                        </div>
+                    </div>         
+                </div>
+
+                <div class="derecha contenedor_registro container_disabled" id="contenedor_asignar_grupos" >  
+                    <div>
+                        <div id="cabecera_lista">
+                        <h2>Grupo B</h2>
+                        <ul id="grupo_B"></ul>
+                        </div>
+                    </div>          
+                </div>
+
+                <div class="derecha contenedor_registro container_disabled" id="contenedor_asignar_grupos" >  
+                    <div>
+                        <div id="cabecera_lista">
+                            <h2>Grupo C</h2>
+                            <ul id="grupo_C"></ul>
+                        </div>
+                    </div>          
+                </div>
+                <div class="pie_lista">
+                    <div id="footer_A" class="footer_disabled">
+                        <p>Niños:<span id="niños"></span></p>
+                        <p>Niñas:<span id="niñas"></span></p>
+                        <p>Total:<span id="total"></span>/ <span id="max"></span></p>
+                    </div> 
+                    <div id="footer_B" class="footer_disabled">
+                        <p>Niños:<span id="niños"></span></p>
+                        <p>Niñas:<span id="niñas"></span></p>
+                        <p>Total:<span id="total"></span>/ <span id="max"></span></p>
+                    </div> 
+                    <div id="footer_C" class="footer_disabled">
+                        <p>Niños:<span id="niños"></span></p>
+                        <p>Niñas:<span id="niñas"></span></p>
+                        <p>Total:<span id="total"></span>/ <span id="max"></span></p>
+                    </div> 
+                </div>
+            <div id="loading"></div>
+        </div>
+    </div>
+</div>
+    {% endblock %}

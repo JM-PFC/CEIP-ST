@@ -8,6 +8,7 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 
 use Cole\BackendBundle\Entity\Grupo;
 use Cole\BackendBundle\Entity\Curso;
+use Cole\BackendBundle\Entity\Matricula;
 use Cole\BackendBundle\Form\GrupoType;
 
 /**
@@ -230,7 +231,8 @@ class GrupoController extends Controller
         $aula=$this->get('request')->request->get('aula');
 
         
-        $em = $this->getDoctrine()->getEntityManager();
+        $em = $this->getDoctrine()->getManager();
+
         $entity = $em->getRepository('BackendBundle:Curso')->findCursoByNivel($curso,$nivel);
         if (!$entity) {
                 throw $this->createNotFoundException('Unable to find Curso entity.');
@@ -241,7 +243,6 @@ class GrupoController extends Controller
                 throw $this->createNotFoundException('Unable to find Curso entity.');
             }
 
-        $em = $this->getDoctrine()->getManager();
         if($aula!==""){
             $grupo->setAula($aula);     
         }else{
@@ -257,6 +258,103 @@ class GrupoController extends Controller
                     'success' => true), 200);
         }
     }
+
+    public function AsignarGrupoAction()
+    {
+        $em = $this->getDoctrine()->getManager();
+
+        $entities = $em->getRepository('BackendBundle:Grupo')->findAllByCurso();
+
+        // Se obtiene el curso académico actual.
+        if(date("n")>=6){
+            $actual=date("Y")." / ".(date("Y")+1);
+        }
+        else{
+            $actual=(date("Y")-1)." / ".date("Y");
+        }
+
+        $alumnos= $em->getRepository('BackendBundle:Matricula')->findOneByAnyoAcademico($actual);
+           return $this->render('BackendBundle:Grupo:AsignarGrupo.html.twig', array(
+            'entities' => $entities,
+            'alumnos' => $alumnos
+        ));
+    }
+
+    public function CursoAsignarGrupoAction($curso)
+    {
+
+        $em = $this->getDoctrine()->getManager();
+
+        $c = $em->getRepository('BackendBundle:Curso')->findOneById($curso);
+
+        $num_grupos=$c->getNumGrupos();
+
+        // Se obtiene el curso académico actual.
+        if(date("n")>=6){
+            $actual=date("Y")." / ".(date("Y")+1);
+        }
+        else{
+            $actual=(date("Y")-1)." / ".date("Y");
+        }
+
+        $alumnos_sin_grupo= $em->getRepository('BackendBundle:Matricula')->findMatriculadosSinGrupo($c,$actual);
+        $alumnos_A= $em->getRepository('BackendBundle:Matricula')->findMatriculadosConGrupo($c,$actual,"A");
+        $alumnos_B= $em->getRepository('BackendBundle:Matricula')->findMatriculadosConGrupo($c,$actual,"B");
+        $alumnos_C= $em->getRepository('BackendBundle:Matricula')->findMatriculadosConGrupo($c,$actual,"C");
+
+           return $this->render('BackendBundle:Grupo:AsignarGrupoConCurso.html.twig', array(
+            'alumnos_A' => $alumnos_A,
+            'alumnos_B' => $alumnos_B,
+            'alumnos_C' =>$alumnos_C,
+            'alumnos_sin_grupo' => $alumnos_sin_grupo,
+            'curso' => $curso,
+            'num_grupos' => $num_grupos,
+            'ratio' => $c->getRatio(),
+        ));
+    }
+
+    public function AsignarGrupoUpdateAction(Request $request)
+    {
+        // if request is XmlHttpRequest (AJAX) but not a POSt, throw an exception
+        if ($request->isXmlHttpRequest() && !$request->isMethod('POST')) {
+            throw new HttpException('XMLHttpRequests/AJAX calls must be POSTed');
+        }
+        
+        $em = $this->getDoctrine()->getEntityManager();
+
+        $alum=$this->get('request')->request->get('alumno');
+        $letra=$this->get('request')->request->get('letra');
+        $alumno=$em->getRepository('BackendBundle:Alumno')->findOneById($alum);
+        if (!$alumno) {
+                throw $this->createNotFoundException('Unable to find Alumno entity.');
+            }
+
+        $grupo=$em->getRepository('BackendBundle:Grupo')->findGrupoByLetter($alumno->getCurso(),$letra);
+
+        $alumno->setGrupo($grupo);
+        $em->persist($alumno);
+
+        $matricula=$em->getRepository('BackendBundle:Matricula')->findPorAño($alumno,$alumno->getAnyoAcademico());
+        if (!$matricula) {
+                throw $this->createNotFoundException('Unable to find Matricula entity.');
+            }
+        $matricula->setGrupo($grupo);
+        $em->persist($matricula);
+
+        $em->flush();
+        
+        if ($request->isXmlHttpRequest()) {
+                return new JsonResponse(array(
+                    'message' => 'Success!',
+                    'success' => true), 200);
+        }
+    }
+
+
+
+
+
+
 
 
 }

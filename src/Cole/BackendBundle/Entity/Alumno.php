@@ -160,9 +160,10 @@ class Alumno
      * @var string
      *
      * @ORM\Column(name="añoAcademico", type="string", length=30, nullable=true)
-     * @Assert\NotBlank()
+     * 
      */
-    private $añoAcademico;
+    private $anyoAcademico;
+
     /**
      * @ORM\OneToMany(targetEntity="Matricula", mappedBy="alumno")
      */
@@ -209,6 +210,11 @@ class Alumno
      * 
      */
     private $activo;
+
+    /**
+    * @ORM\OneToMany(targetEntity="Expediente", mappedBy="alumno", cascade={"remove"})
+    */
+    private $expediente;
 
 
     /**
@@ -776,5 +782,61 @@ class Alumno
     public function getAñoAcademico()
     {
         return $this->añoAcademico;
+    }
+
+    /**
+     * Set anyoAcademico
+     *
+     * @param string $anyoAcademico
+     * @return Alumno
+     */
+    public function setAnyoAcademico($anyoAcademico)
+    {
+        $this->anyoAcademico = $anyoAcademico;
+
+        return $this;
+    }
+
+    /**
+     * Get anyoAcademico
+     *
+     * @return string 
+     */
+    public function getAnyoAcademico()
+    {
+        return $this->anyoAcademico;
+    }
+
+    /**
+     * Add expediente
+     *
+     * @param \Cole\BackendBundle\Entity\Expediente $expediente
+     * @return Alumno
+     */
+    public function addExpediente(\Cole\BackendBundle\Entity\Expediente $expediente)
+    {
+        $this->expediente[] = $expediente;
+
+        return $this;
+    }
+
+    /**
+     * Remove expediente
+     *
+     * @param \Cole\BackendBundle\Entity\Expediente $expediente
+     */
+    public function removeExpediente(\Cole\BackendBundle\Entity\Expediente $expediente)
+    {
+        $this->expediente->removeElement($expediente);
+    }
+
+    /**
+     * Get expediente
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getExpediente()
+    {
+        return $this->expediente;
     }
 }
