@@ -196,6 +196,18 @@
         }
          }).disableSelection();
         //placeholder: "ui-state-highlight"
+
+        //Se evita poder desplazar los alumnos que tengan un grupo asignado a la lista de nuevos alumnos.
+        $( "#asignar_grupos #ordenar_cursos" ).sortable({connectWith: "#grupo_A, #grupo_B",
+        receive: function(event, ui) {
+            var $this = $(this);
+            if (ui.item.attr('grupo')) {
+                $(ui.sender).sortable('cancel');
+
+                error.play();
+            }
+        }
+        }).disableSelection();
     }
     else{
         $("#grupo_A").addClass("connectedSortable");
@@ -225,6 +237,18 @@
         receive: function(event, ui) {
             var $this = $(this);
             if ($this.children('li').length > {{ ratio }} && $this.attr('id') != "ordenar_cursos") {
+                $(ui.sender).sortable('cancel');
+
+                error.play();
+            }
+        }
+        }).disableSelection();
+
+        //Se evita poder desplazar los alumnos que tengan un grupo asignado a la lista de nuevos alumnos.
+        $( "#asignar_grupos #ordenar_cursos" ).sortable({connectWith: "#grupo_A",
+        receive: function(event, ui) {
+            var $this = $(this);
+            if (ui.item.attr('grupo')) {
                 $(ui.sender).sortable('cancel');
 
                 error.play();

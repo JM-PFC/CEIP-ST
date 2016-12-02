@@ -1,0 +1,38 @@
+eventos:
+    path:     /
+    defaults: { _controller: "BackendBundle:Eventos:index" }
+
+eventos_show:
+    path:     /{id}/show
+    defaults: { _controller: "BackendBundle:Eventos:show" }
+
+eventos_new:
+    path:     /new
+    defaults: { _controller: "BackendBundle:Eventos:new" }
+
+eventos_create:
+    path:     /create
+    defaults: { _controller: "BackendBundle:Eventos:create" }
+    requirements: { _method: post }
+    options:
+        expose: true
+
+eventos_edit:
+    path:     /{id}/edit
+    defaults: { _controller: "BackendBundle:Eventos:edit" }
+
+eventos_update:
+    path:     /{id}/update
+    defaults: { _controller: "BackendBundle:Eventos:update" }
+    requirements: { _method: post|put }
+
+eventos_delete:
+    path:     /{id}/delete
+    defaults: { _controller: "BackendBundle:Eventos:delete" }
+    requirements: { _method: post|delete }
+
+obtener_eventos:
+    path:     /obtener_eventos
+    defaults: { _controller: "BackendBundle:Eventos:obtenerEventos" }
+    options:
+        expose: true

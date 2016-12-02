@@ -73,7 +73,11 @@ body{
     user-select: none;
 }
 select{
-	cursor: pointer;b
+	cursor: pointer;
+}
+select:disabled{
+   pointer-events: none;
+   cursor: default;
 }
 
 /* Espacio para menú de administración */
@@ -372,8 +376,8 @@ nav{
 	height: auto;
 }
 #imagen{
-width: 200px;
-margin: 50px auto;
+	width: 200px;
+	margin: 50px auto;
 }
 
 /*Pestañas del contenido*/
@@ -395,7 +399,10 @@ margin: 50px auto;
 #tabs .ui-tabs-nav li>a{
 	font-family: "Times New Roman",Arial,sans-serif;
 }
-
+#tabs .ui-state-disabled{
+    pointer-events: none;
+	cursor: default;	
+}
 .moving_tabs{
 	width: 2% !important;
 	float: left;
@@ -412,7 +419,7 @@ margin: 50px auto;
 	margin-left: -1px; 
 	cursor: pointer; 
 }
-.prev{
+.arrow{
 	height: 15px;
 	width: 15px;
 	margin-left: 3.5px;
@@ -424,7 +431,11 @@ margin: 50px auto;
 	padding: 3% 12% 3% 3%;
 	text-align: center;
 	width: 83%;
-	font-size: 1em;
+	font-size: 1.05em;
+	-ms-text-overflow: ellipsis;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+	overflow: hidden;
 }
 #tabs li .ui-icon-close { 
 	float: left; 
@@ -475,7 +486,7 @@ margin: 50px auto;
 @media only screen and (max-width: 1250px) {
 	#tabs .ui-tabs-nav li a{
 		padding-top: 7px;
-		font-size: 12.5px;
+		font-size: 1.02em;
 	}
 	/*Select Horario escolar*/
 	.select_number{
@@ -1358,7 +1369,6 @@ form button{
     pointer-events: none;
 	cursor: default;
 }
-
 .inner_table {
     max-height: 40.5vh;
     overflow-y: auto;
@@ -2521,8 +2531,10 @@ border: 1px solid;
 	border: 0 !important;
 }
 #tipo_festivos  {
-	padding-left: 10%;
-	width: 30%;
+    float: right;
+	margin-right: 15%;
+    padding-left: 0;
+    width: 30%;
 }
 #lectivos th,#tipo_festivos th{
 	text-align: center;
@@ -2811,7 +2823,7 @@ input[id="si"]{
 	float: left;
 	width: 25%;
 }
-.contenedor_principal_reserva_con_titulo h2{
+.contenedor_principal_con_titulo h2{
 	margin-bottom: 10px;
 	font-size: 1.3em;
 	text-decoration: underline;
@@ -3726,6 +3738,136 @@ tbody.scrollContent tr.alternateRow td {
     margin-top: -5px;
 }
 
+/* Eventos */
+
+.two_big_column_no_form{
+    margin-left: 30px;
+}
+#registrar_evento .two_big_column_no_form{
+	float: left;
+	width: 53%;
+	margin: 0 3%;
+}
+#registrar_evento .tiple_column_no_form{
+	width: 30%;
+}
 
 
+#registrar_evento select{
+	width: 100%;
+	font-size: 1em !important;
+}
+#registrar_evento input:not(".timepicki-input"){
+	width: 95%;
+}
+#registrar_evento textarea{
+	width: 99% !important;
+    height: 26vh;
+	margin-bottom: 0;
+	padding: 0 5px !important;
+}
+#registrar_evento label{
+	display: block;
+    width: 100%;
+    margin-right: 10px;
+	margin-top: 0.5%;
+	margin-left: 2px;
+	height: 20px;
+	font-weight: bold;
+}
+#container_evento>div:first-child{
+	width: 50% !important;
+	margin-right: 10px;
+}
+#container_evento>div:first-child input{
+	width: 95% !important;
+	padding: 0 5px !important;
+	text-transform: none !important;
+}
+#container_evento>div:nth-child(2){
+	width: 19% !important;
+	height: 50px;
+}
+#container_evento>div:nth-child(3){
+    margin-left: 10px;
+    width: 16% !important;
+    z-index: 100;
+}
+#container_evento #hora{ 
+	width: 90% !important;
+	text-align: center;
+}
+#container_evento>div:last-child{
+	width: 98% !important;
+	clear: both;
+	position: relative;
+	display: inline-block;
+	margin-top: -15px;
+}
+.f_left{
+	float: left;
+}
+.f_right{
+	float: right;
+}
+#all_day{
+	display: block;
+	margin-top: 2px
+}
+#all_day input{
+	margin-right: 3px;
 
+}
+/*Cambios para TimePicki en el input de hora en eventos*/
+#registrar_evento .arrow_top{
+	left: 61px !important;
+}
+#registrar_evento .timepicker_wrap{
+	left: -28px !important;
+	background: #e4e0e0;
+	width: 120px;
+}
+#registrar_evento .prev {
+    background-position: 50% -10%;
+    height: 0;
+}
+#registrar_evento .next {
+    background-position: 50% 105%;
+}
+#registrar_evento .prev, #registrar_evento .next {
+	padding: 10px;
+}
+#registrar_evento  .ti_tx, #registrar_evento  .mi_tx{
+    margin: 5px 0;
+}
+#registrar_evento .time_pick{
+	z-index: 1000;
+}
+#registrar_evento .timepicki-input{
+	font-size: 16px !important;
+}
+#registrar_evento .time,#registrar_evento .mins{
+    width: 40px;
+}
+#container_evento{
+    background: #b1cce7 none repeat scroll 0 0;
+    border: 1px solid #aaaaaa;
+    border-radius: 5px;
+    box-shadow: 0 1px 1px 0 rgba(0, 0, 0, 0.5);
+    padding: 5px 10px 10px 10px;
+    height: 38vh;
+    margin-top: 2%;
+}
+.ui-datepicker{
+	box-shadow: 0 1px 1px 0 rgba(0, 0, 0, 0.5);
+
+}
+
+#contenedor_reserva #loading{
+	position: relative;
+	float: left;
+	left: -20px;
+    top: -145px;
+    z-index: 10;
+    height: 0;
+}

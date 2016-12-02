@@ -7,6 +7,8 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 
 use Cole\ColeBundle\Entity\Noticias;
 use Cole\ColeBundle\Form\NoticiasType;
+use Symfony\Component\HttpFoundation\JsonResponse;
+
 
 /**
  * Noticias controller.
@@ -258,6 +260,10 @@ class NoticiasController extends Controller
         return $this->render('ColeBundle:Noticias:noticias.html.twig',
                 array('noticias' => $noticias));
     }
+
+
+    
+
 }
 
 

@@ -13,53 +13,57 @@ logout:
     path:     /logout
 
 BackendBundle_profesor:
-        resource: "@BackendBundle/Resources/config/routing/profesor.yml"
-        prefix:   /profesor
+    resource: "@BackendBundle/Resources/config/routing/profesor.yml"
+    prefix:   /profesor
 
 BackendBundle_padres:
-        resource: "@BackendBundle/Resources/config/routing/padres.yml"
-        prefix:   /padres
+    resource: "@BackendBundle/Resources/config/routing/padres.yml"
+    prefix:   /padres
 
 BackendBundle_alumno:
-        resource: "@BackendBundle/Resources/config/routing/alumno.yml"
-        prefix:   /alumno
+    resource: "@BackendBundle/Resources/config/routing/alumno.yml"
+    prefix:   /alumno
 
 BackendBundle_curso:
-        resource: "@BackendBundle/Resources/config/routing/curso.yml"
-        prefix:   /curso
+    resource: "@BackendBundle/Resources/config/routing/curso.yml"
+    prefix:   /curso
 
 BackendBundle_asignatura:
-        resource: "@BackendBundle/Resources/config/routing/asignatura.yml"
-        prefix:   /asignatura
+    resource: "@BackendBundle/Resources/config/routing/asignatura.yml"
+    prefix:   /asignatura
 
 BackendBundle_grupo:
-        resource: "@BackendBundle/Resources/config/routing/grupo.yml"
-        prefix:   /grupo
+    resource: "@BackendBundle/Resources/config/routing/grupo.yml"
+    prefix:   /grupo
 
 BackendBundle_imparte:
-        resource: "@BackendBundle/Resources/config/routing/imparte.yml"
-        prefix:   /imparte
+    resource: "@BackendBundle/Resources/config/routing/imparte.yml"
+    prefix:   /imparte
 
 BackendBundle_centro:
-        resource: "@BackendBundle/Resources/config/routing/centro.yml"
-        prefix:   /centro
+    resource: "@BackendBundle/Resources/config/routing/centro.yml"
+    prefix:   /centro
 
 BackendBundle_festivos:
-        resource: "@BackendBundle/Resources/config/routing/festivos.yml"
-        prefix:   /festivos
+    resource: "@BackendBundle/Resources/config/routing/festivos.yml"
+    prefix:   /festivos
 
 BackendBundle_equipamiento:
-        resource: "@BackendBundle/Resources/config/routing/equipamiento.yml"
-        prefix:   /equipamiento
+    resource: "@BackendBundle/Resources/config/routing/equipamiento.yml"
+    prefix:   /equipamiento
 
 BackendBundle_reserva:
-        resource: "@BackendBundle/Resources/config/routing/reserva.yml"
-        prefix:   /reserva
+    resource: "@BackendBundle/Resources/config/routing/reserva.yml"
+    prefix:   /reserva
 
 BackendBundle_horario:
-        resource: "@BackendBundle/Resources/config/routing/horario.yml"
-        prefix:   /horario
+    resource: "@BackendBundle/Resources/config/routing/horario.yml"
+    prefix:   /horario
 
 BackendBundle_matricula:
-        resource: "@BackendBundle/Resources/config/routing/matricula.yml"
-        prefix:   /matricula
+    resource: "@BackendBundle/Resources/config/routing/matricula.yml"
+    prefix:   /matricula
+
+BackendBundle_eventos:
+    resource: "@BackendBundle/Resources/config/routing/eventos.yml"
+    prefix:   /eventos

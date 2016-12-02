@@ -6,7 +6,11 @@ noticias_show:
     path:     /{id}/show
     defaults: { _controller: "ColeBundle:Noticias:show" }
 
-
+obtener_eventos:
+    path:     /obtener_eventos
+    defaults: { _controller: "ColeBundle:Noticias:obtenerEventos" }
+    options:
+        expose: true
 
 noticia:
     path:     /{id}
@@ -34,3 +38,4 @@ noticias_delete:
     path:     /{id}/delete
     defaults: { _controller: "ColeBundle:Noticias:delete" }
     requirements: { _method: post|delete }
+    

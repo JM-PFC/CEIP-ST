@@ -4561,11 +4561,11 @@ $(document).on("click","#registro_equipamientos td a",function(event){
 
   // Se deshabilita los días no lectivos en el calendario de reservas. 
   $(document).on('click',"#actualizar_calendario_lectivo",function(event){
-    contenedor=$(this).closest("div[id^='reserva_']");
+    contenedor=$(this).closest("div[class*='general_container']");
 
     event.preventDefault();
     // Retardo para ejecutarlo una vez cargado el datepicker.
-    contenedor.find("#contenedor_reserva #div_leyenda").addClass("oculto"); 
+    contenedor.find("#div_leyenda").addClass("oculto"); 
     // Se elimina los estilos del día actual en el calendario.     
     setTimeout(function() {
       contenedor.find('a.ui-state-highlight').removeClass('ui-state-active');
@@ -4574,18 +4574,18 @@ $(document).on("click","#registro_equipamientos td a",function(event){
     }, 1);
 
     setTimeout(function(){ 
-      mes=contenedor.find("#contenedor_reserva tbody td[data-handler='selectDay']").attr("data-month");
-      año=contenedor.find("#contenedor_reserva tbody td[data-handler='selectDay']").attr("data-year");
+      mes=contenedor.find("tbody td[data-handler='selectDay']").attr("data-month");
+      año=contenedor.find("tbody td[data-handler='selectDay']").attr("data-year");
       mes++;
       if(mes!=10 && mes!=11 && mes!=12){
         mes='0'+mes;
       }
       //Se carga los festivos en la leyenda.
-      contenedor.find("#contenedor_reserva #div_leyenda").empty();
-      contenedor.find("#contenedor_reserva #div_leyenda").load(Routing.generate('festivos_por_mes', {id:mes}));
-      contenedor.find("#contenedor_reserva td a").removeClass("festivo");
+      contenedor.find("#div_leyenda").empty();
+      contenedor.find("#div_leyenda").load(Routing.generate('festivos_por_mes', {id:mes}));
+      contenedor.find("tbody td a").removeClass("festivo");
       //Se eliminan la clases en los enlaces para que inicialmente esten todos habilitados y luego se deshabiliten los festivos correspondientes.
-      contenedor.find("#contenedor_reserva td:not([class*='ui-datepicker-week-end'],[class=' ui-datepicker-unselectable ui-state-disabled '])").attr("class","");
+      contenedor.find("tbody td:not([class*='ui-datepicker-week-end'],[class=' ui-datepicker-unselectable ui-state-disabled '])").attr("class","");
       $.ajax({
         type: 'POST',
         url: Routing.generate('dias_festivos'),
@@ -4596,13 +4596,13 @@ $(document).on("click","#registro_equipamientos td a",function(event){
         setTimeout(function(){
           for (var key in response.data) { 
             // Se añade un enlace en los días festivos deshabilitados del fin de semana, para que luego se encuentre como elemento "a".
-            contenedor.find("#contenedor_reserva .ui-datepicker-calendar td[class=' ui-datepicker-week-end ui-datepicker-unselectable ui-state-disabled '] span").filter(function(){return $(this).text()==response.data[key]["dia"];}).each(function(){  
+            contenedor.find(".ui-datepicker-calendar td[class=' ui-datepicker-week-end ui-datepicker-unselectable ui-state-disabled '] span").filter(function(){return $(this).text()==response.data[key]["dia"];}).each(function(){  
               $( "<a class='ui-state-default' href='javascript:void(0);'>"+response.data[key]["dia"]+"</a>" ).insertAfter( $(this));
               $(this).closest("td").attr("data-month",(mes-1));
               $(this).remove();
             });
 
-            contenedor.find("#contenedor_reserva .ui-datepicker-calendar td[data-month='"+(mes-1)+"'] a:contains('"+response.data[key]["dia"]+"')").each(function(){  
+            contenedor.find(".ui-datepicker-calendar td[data-month='"+(mes-1)+"'] a:contains('"+response.data[key]["dia"]+"')").each(function(){  
               var dato=response.data[key]["dia"];
               var comp= $(this).text();
               // Con :contains se obtiene los días del calendario que contiene en sus dígitos el dato dado.
@@ -4611,37 +4611,37 @@ $(document).on("click","#registro_equipamientos td a",function(event){
                 if(String(comp).length=="1"){
                   $(this).closest("td").addClass("ui-datepicker-unselectable ui-state-disabled");
                   // Se comprueba que el día festivo es un domingo y que el lunes no hay ningún festivo añadido. 
-                  if($(this).closest("td").hasClass("ui-datepicker-week-end") &&  $(this).closest("tr").find("td:last a").text() == $(this).text() && !contenedor.find("#contenedor_reserva #div_leyenda h4[id='"+$(this).closest("tr").next("tr").find("td:nth-child(1) a").text()+"']").length){
+                  if($(this).closest("td").hasClass("ui-datepicker-week-end") &&  $(this).closest("tr").find("td:last a").text() == $(this).text() && !contenedor.find("#div_leyenda h4[id='"+$(this).closest("tr").next("tr").find("td:nth-child(1) a").text()+"']").length){
                     // Mostramos el traspado del festivo al lunes.
                     $(this).closest("tr").next("tr").find("td:nth-child(1) a").closest("td").addClass("ui-datepicker-unselectable ui-state-disabled");
                     $(this).closest("tr").next("tr").find("td:nth-child(1) a").attr("tipo","traslado");
 
                       //Se muestra sólo un traslado del festivo (ya que hay dos elementos con el mismo día).
-                      contenedor.find("#contenedor_reserva #div_leyenda h4[id='"+dato+"']").each(function(){
+                      contenedor.find("#div_leyenda h4[id='"+dato+"']").each(function(){
                         if($(this).next().text().indexOf(" Vacaciones ")<0){
                           $( "<h4 id='"+(dato+1)+"'>"+(dato+1)+"</h4><h4 id='h4_descripcion'>Traslado del Festivo del día "+dato+"</h4>" ).insertAfter( $(this).next());
                         }
                       });
-                    $(this).closest("tr").next("tr").find("td:nth-child(1) a").attr("title",contenedor.find("#contenedor_reserva #div_leyenda h4[id="+ $(this).closest("tr").next("tr").find("td:nth-child(1) a").text()+"]").next("h4").text());
+                    $(this).closest("tr").next("tr").find("td:nth-child(1) a").attr("title",contenedor.find("#div_leyenda h4[id="+ $(this).closest("tr").next("tr").find("td:nth-child(1) a").text()+"]").next("h4").text());
                   }
                 }
               }
               else{
                 $(this).closest("td").addClass("ui-datepicker-unselectable ui-state-disabled");
                 // Se comprueba que el día festivo es un domingo, que el lunes no hay ningún festivo añadido y que el festivo no coincida con el último día del mes. 
-                if($(this).closest("td").hasClass("ui-datepicker-week-end") &&  $(this).closest("tr").find("td:last a").text() == $(this).text() && !contenedor.find("#contenedor_reserva #div_leyenda h4[id='"+$(this).closest("tr").next("tr").find("td:nth-child(1) a").text()+"']").length && contenedor.find("#contenedor_reserva tbody tr:last td:last a").text()!=$(this).text() ){
+                if($(this).closest("td").hasClass("ui-datepicker-week-end") &&  $(this).closest("tr").find("td:last a").text() == $(this).text() && !contenedor.find("#div_leyenda h4[id='"+$(this).closest("tr").next("tr").find("td:nth-child(1) a").text()+"']").length && contenedor.find("tbody tr:last td:last a").text()!=$(this).text() ){
                   // Mostramos el traspado del festivo al lunes.
                   $(this).closest("tr").next("tr").find("td:nth-child(1) a").closest("td").addClass("ui-datepicker-unselectable ui-state-disabled");
                   $(this).closest("tr").next("tr").find("td:nth-child(1) a").attr("tipo","traslado");
 
                   //setTimeout(function(){
                     //Se muestra sólo un traslado del festivo (ya que hay dos elementos con el mismo día).
-                    $("#contenedor_reserva #div_leyenda h4[id='"+dato+"']").each(function(){
+                    contenedor.find("#div_leyenda h4[id='"+dato+"']").each(function(){
                       if($(this).next().text().indexOf(" Vacaciones ")<0){
                         $( "<h4 id='"+(dato+1)+"'>"+(dato+1)+"</h4><h4 id='h4_descripcion'>Traslado del Festivo del día "+dato+"</h4>" ).insertAfter( $(this).next());
                       }
                     });
-                  $(this).closest("tr").next("tr").find("td:nth-child(1) a").attr("title",contenedor.find("#contenedor_reserva #div_leyenda h4[id="+ $(this).closest("tr").next("tr").find("td:nth-child(1) a").text()+"]").next("h4").text());
+                  $(this).closest("tr").next("tr").find("td:nth-child(1) a").attr("title",contenedor.find("#div_leyenda h4[id="+ $(this).closest("tr").next("tr").find("td:nth-child(1) a").text()+"]").next("h4").text());
                   //}, 50);
                 }
               }
@@ -4650,37 +4650,37 @@ $(document).on("click","#registro_equipamientos td a",function(event){
         }, 50);
           // Se comprueba de que existe un día de comienzo/fin de vacaciones.
           if(response.inicio_vacaciones && response.fin_vacaciones){
-            var descripcion_inicio=contenedor.find("#contenedor_reserva #div_leyenda h4[id='"+response.inicio_vacaciones["dia"]+"']").next().text().split(" ");
-            var descripcion_fin=contenedor.find("#contenedor_reserva #div_leyenda h4[id='"+response.fin_vacaciones["dia"]+"']").next().text().split(" ");
+            var descripcion_inicio=contenedor.find("#div_leyenda h4[id='"+response.inicio_vacaciones["dia"]+"']").next().text().split(" ");
+            var descripcion_fin=contenedor.find("#div_leyenda h4[id='"+response.fin_vacaciones["dia"]+"']").next().text().split(" ");
             // Se comprueba que existe ambos días de vacaciones en el mismo mes y que pertenecen al mismo tipo de vacaciones.
             if(descripcion_inicio[3]==descripcion_fin[3]){
               // Se retarda para modificar los días festivos dentro de las vacaciones.
               setTimeout(function(){
-                contenedor.find("#contenedor_reserva .ui-datepicker-calendar td[data-month='"+(mes-1)+"'] a").filter(function(){return $(this).text()==response.inicio_vacaciones["dia"];}).removeClass("festivo");
-                contenedor.find("#contenedor_reserva .ui-datepicker-calendar td[data-month='"+(mes-1)+"'] a").filter(function(){return $(this).text()==response.fin_vacaciones["dia"];}).removeClass("festivo");
+                contenedor.find(".ui-datepicker-calendar td[data-month='"+(mes-1)+"'] a").filter(function(){return $(this).text()==response.inicio_vacaciones["dia"];}).removeClass("festivo");
+                contenedor.find(".ui-datepicker-calendar td[data-month='"+(mes-1)+"'] a").filter(function(){return $(this).text()==response.fin_vacaciones["dia"];}).removeClass("festivo");
                 // Se comprueba si existe al inicio de vacaciones día siguiente con festivo de traslado para eliminarlo.
-                if(contenedor.find("#contenedor_reserva #div_leyenda h4[id='"+(response.inicio_vacaciones["dia"]+1)+"']").next().text().indexOf("Traslado") >= 0){
-                    contenedor.find("#contenedor_reserva #div_leyenda h4[id='"+(response.inicio_vacaciones["dia"]+1)+"']").next().remove();
-                    contenedor.find("#contenedor_reserva #div_leyenda h4[id='"+(response.inicio_vacaciones["dia"]+1)+"']").remove();
-                    contenedor.find("#contenedor_reserva .ui-datepicker-calendar td[data-month='"+(mes-1)+"'] a").filter(function(){return $(this).text()==(response.inicio_vacaciones["dia"]+1);}).removeClass("festivo");                
+                if(contenedor.find("#div_leyenda h4[id='"+(response.inicio_vacaciones["dia"]+1)+"']").next().text().indexOf("Traslado") >= 0){
+                    contenedor.find("#div_leyenda h4[id='"+(response.inicio_vacaciones["dia"]+1)+"']").next().remove();
+                    contenedor.find("#div_leyenda h4[id='"+(response.inicio_vacaciones["dia"]+1)+"']").remove();
+                    contenedor.find(".ui-datepicker-calendar td[data-month='"+(mes-1)+"'] a").filter(function(){return $(this).text()==(response.inicio_vacaciones["dia"]+1);}).removeClass("festivo");                
                 }
                 // Se añade la clase vacaciones a los días correspondientes.
                 for(var i = response.inicio_vacaciones["dia"]; i <= response.fin_vacaciones["dia"]; i++){
-                  contenedor.find("#contenedor_reserva .ui-datepicker-calendar td[data-month='"+(mes-1)+"'] a").filter(function(){return $(this).text()==i;}).closest("td").addClass("ui-datepicker-unselectable ui-state-disabled");;
-                  contenedor.find("#contenedor_reserva #div_leyenda h4[id='"+i+"']").addClass("vacaciones"); 
-                  contenedor.find("#contenedor_reserva .ui-datepicker-calendar td[data-month='"+(mes-1)+"'][class='ui-datepicker-unselectable ui-state-disabled'] a").filter(function(){return $(this).text()==i;}).attr("title",contenedor.find("#contenedor_reserva #div_leyenda h4[class='vacaciones']").next().text().replace("Inicio ",""));
+                  contenedor.find(".ui-datepicker-calendar td[data-month='"+(mes-1)+"'] a").filter(function(){return $(this).text()==i;}).closest("td").addClass("ui-datepicker-unselectable ui-state-disabled");;
+                  contenedor.find("#div_leyenda h4[id='"+i+"']").addClass("vacaciones"); 
+                  contenedor.find(".ui-datepicker-calendar td[data-month='"+(mes-1)+"'][class='ui-datepicker-unselectable ui-state-disabled'] a").filter(function(){return $(this).text()==i;}).attr("title",contenedor.find("#div_leyenda h4[class='vacaciones']").next().text().replace("Inicio ",""));
                 }
                 // Si se repite el día de inicio de vacaciones, se elimina la clase vacaciones en los días de la leyenda que no contiene la información de las vacaciones.
-                if(contenedor.find("#contenedor_reserva #div_leyenda h4[id='"+response.inicio_vacaciones["dia"]+"']").length>1){
-                  contenedor.find("#contenedor_reserva #div_leyenda h4[id='"+response.inicio_vacaciones["dia"]+"']").each(function(){
+                if(contenedor.find("#div_leyenda h4[id='"+response.inicio_vacaciones["dia"]+"']").length>1){
+                  contenedor.find("#div_leyenda h4[id='"+response.inicio_vacaciones["dia"]+"']").each(function(){
                     if($(this).next().text().indexOf(" Vacaciones ")<0){
                       $(this).removeClass("vacaciones");
                     }
                   });
                 }
                 // Si se repite el día de fin de vacaciones, se elimina la clase vacaciones en los días de la leyenda que no contiene la información de las vacaciones.
-                if(contenedor.find("#contenedor_reserva #div_leyenda h4[id='"+response.fin_vacaciones["dia"]+"']").length>1){
-                  contenedor.find("#contenedor_reserva #div_leyenda h4[id='"+response.fin_vacaciones["dia"]+"']").each(function(){
+                if(contenedor.find("#div_leyenda h4[id='"+response.fin_vacaciones["dia"]+"']").length>1){
+                  contenedor.find("#div_leyenda h4[id='"+response.fin_vacaciones["dia"]+"']").each(function(){
                     if($(this).next().text().indexOf(" Vacaciones ")<0){
                       $(this).removeClass("vacaciones");
                     }               
@@ -4691,8 +4691,8 @@ $(document).on("click","#registro_equipamientos td a",function(event){
                     }
                   });
                   // Se modifica el inicio de vacaciones en la leyenda para añadir el día de fin de vacaciones.
-                  contenedor.find("#contenedor_reserva #div_leyenda h4[class='vacaciones']").text(response.inicio_vacaciones["dia"]+"-"+response.fin_vacaciones["dia"]);
-                  contenedor.find("#contenedor_reserva #div_leyenda h4[class='vacaciones']").next().text(contenedor.find("#contenedor_reserva #div_leyenda h4[id='"+response.inicio_vacaciones["dia"]+"'][class='vacaciones']").next().text().replace("Inicio ",""));
+                  contenedor.find("#div_leyenda h4[class='vacaciones']").text(response.inicio_vacaciones["dia"]+"-"+response.fin_vacaciones["dia"]);
+                  contenedor.find("#div_leyenda h4[class='vacaciones']").next().text(contenedor.find("#div_leyenda h4[id='"+response.inicio_vacaciones["dia"]+"'][class='vacaciones']").next().text().replace("Inicio ",""));
                 }
               }, 20);
             }
@@ -4704,28 +4704,28 @@ $(document).on("click","#registro_equipamientos td a",function(event){
             
             setTimeout(function(){
             // Si se repite el día de inicio de vacaciones, se asigna la clase vacaciones al día de inicio de las vacaciones.
-            if(contenedor.find("#contenedor_reserva #div_leyenda h4[id='"+response.inicio_vacaciones["dia"]+"']").length>1){
-              contenedor.find("#contenedor_reserva #div_leyenda h4[id='"+response.inicio_vacaciones["dia"]+"']").each(function(){
+            if(contenedor.find("#div_leyenda h4[id='"+response.inicio_vacaciones["dia"]+"']").length>1){
+              contenedor.find("#div_leyenda h4[id='"+response.inicio_vacaciones["dia"]+"']").each(function(){
                 if($(this).next().text().indexOf(" Vacaciones ")>0){
                   $(this).addClass("vacaciones");   
                 }
               });
               // Se comprueba que el festivo está tras las vacaciones en la leyenda, en caso contrario se modifica.
-              if(contenedor.find("#contenedor_reserva #div_leyenda h4[id='"+response.inicio_vacaciones["dia"]+"'][class='vacaciones']").closest("h4[id='"+response.inicio_vacaciones["dia"]+"']").text()==response.inicio_vacaciones["dia"]){
-                vacaciones=contenedor.find("#contenedor_reserva #div_leyenda h4[id='"+response.inicio_vacaciones["dia"]+"'][class='vacaciones']").next().text();
-                contenedor.find("#contenedor_reserva #div_leyenda h4[id='"+response.inicio_vacaciones["dia"]+"'][class='vacaciones']").next().remove();
-                contenedor.find("#contenedor_reserva #div_leyenda h4[id='"+response.inicio_vacaciones["dia"]+"'][class='vacaciones']").remove();
+              if(contenedor.find("#div_leyenda h4[id='"+response.inicio_vacaciones["dia"]+"'][class='vacaciones']").closest("h4[id='"+response.inicio_vacaciones["dia"]+"']").text()==response.inicio_vacaciones["dia"]){
+                vacaciones=contenedor.find("#div_leyenda h4[id='"+response.inicio_vacaciones["dia"]+"'][class='vacaciones']").next().text();
+                contenedor.find("#div_leyenda h4[id='"+response.inicio_vacaciones["dia"]+"'][class='vacaciones']").next().remove();
+                contenedor.find("#div_leyenda h4[id='"+response.inicio_vacaciones["dia"]+"'][class='vacaciones']").remove();
 
-                $( "<h4 id='"+response.inicio_vacaciones["dia"]+"'class='vacaciones'>"+response.inicio_vacaciones["dia"]+"</h4><h4 id='h4_descripcion'>"+vacaciones+"</h4>" ).insertBefore( contenedor.find("#contenedor_reserva #div_leyenda h4[id='"+response.inicio_vacaciones["dia"]+"'][class!='vacaciones']")); 
+                $( "<h4 id='"+response.inicio_vacaciones["dia"]+"'class='vacaciones'>"+response.inicio_vacaciones["dia"]+"</h4><h4 id='h4_descripcion'>"+vacaciones+"</h4>" ).insertBefore( contenedor.find("#div_leyenda h4[id='"+response.inicio_vacaciones["dia"]+"'][class!='vacaciones']")); 
               }
             }
             else{
-              contenedor.find("#contenedor_reserva #div_leyenda h4[id='"+response.inicio_vacaciones["dia"]+"']").addClass("vacaciones");
+              contenedor.find("#div_leyenda h4[id='"+response.inicio_vacaciones["dia"]+"']").addClass("vacaciones");
             }
             // Se modifica los días desde inicio de vacaciones hasta final de mes puesto que sigue en el siguiente mes.
             for(var i = response.inicio_vacaciones["dia"]; i <= último_día; i++){
-              contenedor.find("#contenedor_reserva .ui-datepicker-calendar td[data-month='"+(mes-1)+"'] a").filter(function(){return $(this).text()==i;}).closest("td").addClass("ui-datepicker-unselectable ui-state-disabled");
-              contenedor.find("#contenedor_reserva .ui-datepicker-calendar td[data-month='"+(mes-1)+"'][class='ui-datepicker-unselectable ui-state-disabled'] a").filter(function(){return $(this).text()==i;}).attr("title",contenedor.find("#contenedor_reserva #div_leyenda h4[class='vacaciones']").next().text().replace("Inicio ",""));
+              contenedor.find(".ui-datepicker-calendar td[data-month='"+(mes-1)+"'] a").filter(function(){return $(this).text()==i;}).closest("td").addClass("ui-datepicker-unselectable ui-state-disabled");
+              contenedor.find(".ui-datepicker-calendar td[data-month='"+(mes-1)+"'][class='ui-datepicker-unselectable ui-state-disabled'] a").filter(function(){return $(this).text()==i;}).attr("title",contenedor.find("#div_leyenda h4[class='vacaciones']").next().text().replace("Inicio ",""));
             }
 
             }, 50);
@@ -4734,28 +4734,28 @@ $(document).on("click","#registro_equipamientos td a",function(event){
 
             setTimeout(function(){
             //Se añade la clase vacaciones, sólo a los elementos de ese día que contiene la información de las vacaciones.
-            if(contenedor.find("#contenedor_reserva #div_leyenda h4[id='"+response.fin_vacaciones["dia"]+"']").length>1){
-              contenedor.find("#contenedor_reserva #div_leyenda h4[id='"+response.fin_vacaciones["dia"]+"']").each(function(){
+            if(contenedor.find("#div_leyenda h4[id='"+response.fin_vacaciones["dia"]+"']").length>1){
+              contenedor.find("#div_leyenda h4[id='"+response.fin_vacaciones["dia"]+"']").each(function(){
                 if($(this).next().text().indexOf(" Vacaciones ")>0){
                   $(this).addClass("vacaciones");   
                 }
               });
               // Se comprueba que el festivo está tras las vacaciones en la leyenda, en caso contrario se modifica.
-              if(contenedor.find("#contenedor_reserva #div_leyenda h4[id='"+response.fin_vacaciones["dia"]+"'][class='vacaciones']").closest("h4[id='"+response.fin_vacaciones["dia"]+"']").text()==response.fin_vacaciones["dia"]){
+              if(contenedor.find("#div_leyenda h4[id='"+response.fin_vacaciones["dia"]+"'][class='vacaciones']").closest("h4[id='"+response.fin_vacaciones["dia"]+"']").text()==response.fin_vacaciones["dia"]){
                 vacaciones=contenedor.find("#div_leyenda h4[id='"+response.fin_vacaciones["dia"]+"'][class='vacaciones']").next().text();
-                contenedor.find("#contenedor_reserva #div_leyenda h4[id='"+response.fin_vacaciones["dia"]+"'][class='vacaciones']").next().remove();
-                contenedor.find("#contenedor_reserva #div_leyenda h4[id='"+response.fin_vacaciones["dia"]+"'][class='vacaciones']").remove();
+                contenedor.find("#div_leyenda h4[id='"+response.fin_vacaciones["dia"]+"'][class='vacaciones']").next().remove();
+                contenedor.find("#div_leyenda h4[id='"+response.fin_vacaciones["dia"]+"'][class='vacaciones']").remove();
 
-                $( "<h4 id='"+response.fin_vacaciones["dia"]+"'class='vacaciones'>"+response.fin_vacaciones["dia"]+"</h4><h4 id='h4_descripcion'>"+vacaciones+"</h4>" ).insertBefore( contenedor.find("#contenedor_reserva #div_leyenda h4[id='"+response.fin_vacaciones["dia"]+"'][class!='vacaciones']")); 
+                $( "<h4 id='"+response.fin_vacaciones["dia"]+"'class='vacaciones'>"+response.fin_vacaciones["dia"]+"</h4><h4 id='h4_descripcion'>"+vacaciones+"</h4>" ).insertBefore( contenedor.find("#div_leyenda h4[id='"+response.fin_vacaciones["dia"]+"'][class!='vacaciones']")); 
               }
             }
             else{
-              contenedor.find("#contenedor_reserva #div_leyenda h4[id='"+response.fin_vacaciones["dia"]+"']").addClass("vacaciones");
+              contenedor.find("#div_leyenda h4[id='"+response.fin_vacaciones["dia"]+"']").addClass("vacaciones");
             }
             // Se modifica los días desde inicio del mes hasta final de vacaciones puesto que sigue en el mes anterior.
             for(var i = response.fin_vacaciones["dia"]; i >= 1; i--){
-              contenedor.find("#contenedor_reserva .ui-datepicker-calendar td[data-month='"+(mes-1)+"'] a").filter(function(){return $(this).text()==i;}).closest("td").addClass("ui-datepicker-unselectable ui-state-disabled");
-              contenedor.find("#contenedor_reserva .ui-datepicker-calendar td[data-month='"+(mes-1)+"'][class='ui-datepicker-unselectable ui-state-disabled']").find("a").filter(function(){return $(this).text()==i;}).attr("title",contenedor.find("#contenedor_reserva #div_leyenda h4[class='vacaciones']").next().text().replace("Fin ",""));
+              contenedor.find(".ui-datepicker-calendar td[data-month='"+(mes-1)+"'] a").filter(function(){return $(this).text()==i;}).closest("td").addClass("ui-datepicker-unselectable ui-state-disabled");
+              contenedor.find(".ui-datepicker-calendar td[data-month='"+(mes-1)+"'][class='ui-datepicker-unselectable ui-state-disabled']").find("a").filter(function(){return $(this).text()==i;}).attr("title",contenedor.find("#div_leyenda h4[class='vacaciones']").next().text().replace("Fin ",""));
             }
             }, 50);
           }
@@ -4763,21 +4763,21 @@ $(document).on("click","#registro_equipamientos td a",function(event){
       })
 
       // Se Comprueba si el último día del mes anterior es un domingo y es festivo, para traspasar el festivo al primer día del mes actual.
-      dia_1=contenedor.find("#contenedor_reserva tbody tr:first td:first a");
+      dia_1=contenedor.find("tbody tr:first td:first a");
       if( dia_1.text() == "1" ){
         // Se obtiene un string con los datos el último día del mes anterior (Ej: Sun Jan 31 2016) .
-        fecha=new Date(dia_1.closest("div").find("div>span:nth-child(2) ").text(), "0"+contenedor.find("#contenedor_reserva tbody tr:first td:first").attr("data-month"), 0).toDateString();
+        fecha=new Date(dia_1.closest("div").find("div>span:nth-child(2) ").text(), "0"+contenedor.find("tbody tr:first td:first").attr("data-month"), 0).toDateString();
         fecha=fecha.split(" ");
         dia_ant=fecha[2];
         // Asignamos a una variable el mes anterior que correcponda. En datepicker aparece el número del mes-1.
-        if(contenedor.find("#contenedor_reserva tbody tr:first td:first").attr("data-month")=="0"){
+        if(contenedor.find("tbody tr:first td:first").attr("data-month")=="0"){
           mes_ant="12";
         }
-        else if(contenedor.find("#contenedor_reserva tbody tr:first td:first").attr("data-month").length=="1"){
-          mes_ant=0+contenedor.find("#contenedor_reserva tbody tr:first td:first").attr("data-month");
+        else if(contenedor.find("tbody tr:first td:first").attr("data-month").length=="1"){
+          mes_ant=0+contenedor.find("tbody tr:first td:first").attr("data-month");
         }
         else{
-          mes_ant=contenedor.find("#contenedor_reserva tbody tr:first td:first").attr("data-month");
+          mes_ant=contenedor.find("tbody tr:first td:first").attr("data-month");
         }
         var MES = ["Enero","Febrero","Marzo","Abril","Mayo","Junio","Julio","Agosto","Septiembre","Octubre","Noviembre","Diciembre"];
         $.ajax({
@@ -4790,7 +4790,7 @@ $(document).on("click","#registro_equipamientos td a",function(event){
             {
               dia_1.closest("td").addClass("ui-datepicker-unselectable ui-state-disabled");
               setTimeout(function(){
-                contenedor.find("#contenedor_reserva #div_leyenda").prepend("<h4 id='"+dia_1.text()+"'>"+dia_1.text()+"</h4><h4 id='h4_descripcion'>Traslado del Festivo del día "+dia_ant+" de "+MES[$("#contenedor_reserva tbody tr:first td:last").attr("data-month")-1]+" </h4>" );
+                contenedor.find("#div_leyenda").prepend("<h4 id='"+dia_1.text()+"'>"+dia_1.text()+"</h4><h4 id='h4_descripcion'>Traslado del Festivo del día "+dia_ant+" de "+MES[contenedor.find("tbody tr:first td:last").attr("data-month")-1]+" </h4>" );
               }, 20);
             }
           }
@@ -4798,17 +4798,17 @@ $(document).on("click","#registro_equipamientos td a",function(event){
       }
       setTimeout(function(){
         // Se actualizan los title de los festivos que aún no tiene el atributo asignado.
-        contenedor.find("#contenedor_reserva #div_leyenda h4[id!='h4_descripcion']").each(function(){
+        contenedor.find("#div_leyenda h4[id!='h4_descripcion']").each(function(){
           dato=$(this).text();
-          if((contenedor.find("#contenedor_reserva .ui-datepicker-calendar td").find("a").filter(function(){return $(this).text()==dato;}).attr("title")!="Vacaciones de Semana Santa" && contenedor.find("#contenedor_reserva .ui-datepicker-calendar td").find("a").filter(function(){return $(this).text()==dato;}).attr("title")!="Vacaciones de Navidad") || (contenedor.find("#contenedor_reserva .ui-datepicker-calendar td").find("a").filter(function(){return $(this).text()==dato;}).attr("title")==undefined) ){
-            contenedor.find("#contenedor_reserva .ui-datepicker-calendar td").find("a").filter(function(){return $(this).text()==dato;}).attr("title",$(this).next("h4").text());
+          if((contenedor.find(".ui-datepicker-calendar td").find("a").filter(function(){return $(this).text()==dato;}).attr("title")!="Vacaciones de Semana Santa" && contenedor.find(".ui-datepicker-calendar td").find("a").filter(function(){return $(this).text()==dato;}).attr("title")!="Vacaciones de Navidad") || (contenedor.find(".ui-datepicker-calendar td").find("a").filter(function(){return $(this).text()==dato;}).attr("title")==undefined) ){
+            contenedor.find(".ui-datepicker-calendar td").find("a").filter(function(){return $(this).text()==dato;}).attr("title",$(this).next("h4").text());
           }
         }); 
         // Se unifica el título de las vacaciones.
-        contenedor.find("#contenedor_reserva .ui-datepicker-calendar td a[title^='Inicio de Vacaciones']").each(function(){
+        contenedor.find(".ui-datepicker-calendar td a[title^='Inicio de Vacaciones']").each(function(){
           $(this).attr("title",$(this).attr("title").replace("Inicio ",""));
         });
-        contenedor.find("#contenedor_reserva .ui-datepicker-calendar td a[title^='Fin de Vacaciones']").each(function(){
+        contenedor.find(".ui-datepicker-calendar td a[title^='Fin de Vacaciones']").each(function(){
           $(this).attr("title",$(this).attr("title").replace("Fin ",""));
         });
       }, 200); 
@@ -4816,7 +4816,7 @@ $(document).on("click","#registro_equipamientos td a",function(event){
   });
 
 
-  $(document).on('click',"#contenedor_reserva_equipamientos button",function(event){  /// cambiar nombre para que sea valido para los dos tipos instalaciones y equipamientos
+  $(document).on('click',"#contenedor_reserva_equipamientos button",function(event){ 
     contenedor= $(this).closest("div[id^='reserva_']");
 
     // Se marca el equipamiento seleccionado.
@@ -4863,7 +4863,7 @@ $(document).on("click","#registro_equipamientos td a",function(event){
   });
 
 
-  $(document).on('click',".contenedor_principal_reserva #reserva_save",function(event){ 
+  $(document).on('click',"div[id^='reserva_'] #reserva_save",function(event){ 
     // Se establece el efecto para la notificación de error en el caso de que se de varias veces seguidas a guardar con algunas opción sin marcar.
     errorPNotify.pause();
     errorPNotify.currentTime=0.0;
@@ -4893,9 +4893,7 @@ $(document).on("click","#registro_equipamientos td a",function(event){
         nombre_contenedor=contenedor.attr("id");
         array=nombre_contenedor.split("_");
         tipo=array[1];
-        // Se actualiza las pestañas de equipamientos o instalaciones
-        $("#consultar_"+tipo).update_tab();
-                
+
         contenedor.find("div[id='contenedor_reserva_equipamientos'] button[class='elected']").trigger("click");
         // Se comrpueba si hay alguna opción sin marcar para mostrar la notificación de error.
         if(response.error.length != 0){
@@ -4930,6 +4928,27 @@ $(document).on("click","#registro_equipamientos td a",function(event){
           return false;
         }
 
+        if(response.message=="festivo"){
+          // Se indica que el día seleccionado es festivo.
+          texto="El día seleccionado <span>no es lectivo</span>, por lo que no se puede realizar la reserva.<br><br>";
+          dia=contenedor.find("#contenedor_reserva a[class*='ui-state-active']").text();
+          mes=contenedor.find("#contenedor_reserva span[class='ui-datepicker-month']").text();
+          anyo=contenedor.find("#contenedor_reserva span[class='ui-datepicker-year']").text();
+          texto+="<p>Día seleccionado: <span>"+dia+" de "+mes+" de "+anyo+"</span></p><br>";
+          motivo=contenedor.find("#contenedor_reserva a[class*='ui-state-active']").attr("title");
+          texto+="<p>Motivo no lectivo:  <span>"+motivo+"</span></p>";
+          
+          error.play();
+          swal({
+            title: "Se ha producido un error en el sistema",
+            text: texto,
+            type: "error",
+            confirmButtonColor: color,
+            closeOnConfirm: false ,
+            html: true
+          });
+          return false;
+        }
         if(response.data.length != 0)
         {
           var texto= 'El equipamiento <span>"'+equipamiento+'"</span> no se puede reservar en las siguientes horas de clase porque ya estan reservadas:<br><br>';
@@ -4967,6 +4986,9 @@ $(document).on("click","#registro_equipamientos td a",function(event){
                 out_class: "fadeOutRight",
               }
              });
+              // Se actualiza las pestañas de equipamientos o instalaciones
+              $("#consultar_"+tipo).update_tab();
+              $("#reservar_"+tipo).update_tab();
             }
             else if(response.message!=0){
               titulo=response.message+ " reservas efectuadas.";
@@ -4989,6 +5011,9 @@ $(document).on("click","#registro_equipamientos td a",function(event){
                 out_class: "fadeOutRight",
               }
              });
+              // Se actualiza las pestañas de equipamientos o instalaciones
+              $("#consultar_"+tipo).update_tab();
+              $("#reservar_"+tipo).update_tab();
             }
             else{
              errorPNotify.play();
@@ -5048,7 +5073,6 @@ $(document).on("click","#registro_equipamientos td a",function(event){
             });
           }
           else{
-
             titulo=response.message+ " reservas efectuadas.";
             exito.play();
 
@@ -5070,27 +5094,9 @@ $(document).on("click","#registro_equipamientos td a",function(event){
               }
             });
           }
-        }
-
-        if(response.message=="festivo"){
-          // Se indica que el día seleccionado es festivo.
-          texto="El día seleccionado <span>no es lectivo</span>, por lo que no se puede realizar la reserva.<br><br>";
-          dia=contenedor.find("#contenedor_reserva a[class*='ui-state-active']").text();
-          mes=contenedor.find("#contenedor_reserva span[class='ui-datepicker-month']").text();
-          anyo=contenedor.find("#contenedor_reserva span[class='ui-datepicker-year']").text();
-          texto+="<p>Día seleccionado: <span>"+dia+" de "+mes+" de "+anyo+"</span></p><br>";
-          motivo=contenedor.find("#contenedor_reserva a[class*='ui-state-active']").attr("title");
-          texto+="<p>Motivo no lectivo:  <span>"+motivo+"</span></p>";
-          
-          error.play();
-          swal({
-            title: "Se ha producido un error en el sistema",
-            text: texto,
-            type: "error",
-            confirmButtonColor: color,
-            closeOnConfirm: false ,
-            html: true
-          });
+          // Se actualiza las pestañas de equipamientos o instalaciones
+          $("#consultar_"+tipo).update_tab();
+          $("#reservar_"+tipo).update_tab();
         }
       }
     })
@@ -5148,7 +5154,7 @@ $(document).on("click","#registro_equipamientos td a",function(event){
           }
         }
 
-        if(d==$("#dia_seleccionado").val()){
+        if(d==container.find("#dia_seleccionado").val()){
 
           container.find("#contenedor_reserva_horas button").each(function(){
             var dt = new Date();
@@ -6124,6 +6130,180 @@ $(document).on("click","#registro_equipamientos td a",function(event){
       div.load(Routing.generate('asignar_grupo'));
     }
   });
+
+
+  ///////////////////////////////////////////
+  //            Asignar Eventos            //
+  ///////////////////////////////////////////
+
+  //Se simula el hacer click en el calendario, haciendo click en un input oculto que contiene el día deleccionado.
+  $(document).on('click',"#registrar_evento #dia_seleccionado",function(e){
+    //Se habilita todos los campos.
+    $("#container_evento :input").prop("disabled",false);
+  });
+
+  //Se habilita el botón guardar cuando todos los campos esten completos.
+  $(document).on('keyup',"#registrar_evento :input",function(e){
+    //Se habilita todos los campos.
+    if($("#registrar_evento #titulo").val()!="" && $("#registrar_evento #descripcion").val()!="" && ($("#registrar_evento #hora").val()!="" || $("#registrar_evento #all_day input").prop('checked'))){
+      $("#registrar_evento #reserva_save").prop("disabled",false);
+    }
+    else{
+      $("#registrar_evento #reserva_save").prop("disabled",true);
+    }
+  });
+
+  //Se habilita el botón guardar cuando todos los campos esten completos.(change)
+  $(document).on('change',"#registrar_evento :input",function(e){
+    //Se habilita todos los campos.
+    if($("#registrar_evento #titulo").val()!="" && $("#registrar_evento #descripcion").val()!="" && ($("#registrar_evento #hora").val()!="" || $("#registrar_evento #all_day input").prop('checked'))){
+      $("#registrar_evento #reserva_save").prop("disabled",false);
+    }
+    else{
+      $("#registrar_evento #reserva_save").prop("disabled",true);
+    }
+  });
+    //Se habilita el botón guardar cuando todos los campos esten completos.(blur)
+    $(document).on('blur',"#registrar_evento :input",function(e){
+    //Se habilita todos los campos.
+    if($("#registrar_evento #titulo").val()!="" && $("#registrar_evento #descripcion").val()!="" && ($("#registrar_evento #hora").val()!="" || $("#registrar_evento #all_day input").prop('checked'))){
+      $("#registrar_evento #reserva_save").prop("disabled",false);
+    }
+    else{
+      $("#registrar_evento #reserva_save").prop("disabled",true);
+    }
+  });
+  //Se eliminar el valor de hora si se marca la opción "Todo el dia".
+  $(document).on('click',"#registrar_evento #all_day input",function(e){
+
+    if(!$(this).prop('checked')){
+      $("#registrar_evento #hora").prop("disabled",false);
+    }
+    else{
+      $("#registrar_evento #hora").val("");
+      $("#registrar_evento #hora").prop("disabled",true);
+    }
+  });
+
+  $(document).on('click',"#registrar_evento #reserva_save",function(e){
+    // Se establece el efecto para la notificación de error en el caso de que se de varias veces seguidas a guardar con algunas opción sin marcar.
+    errorPNotify.pause();
+    errorPNotify.currentTime=0.0;
+    $(".ui-pnotify").remove();
+
+    fecha=$("#registrar_evento #dia_seleccionado").val();
+    if(fecha){
+      fecha= fecha.split("/");
+      fecha= fecha[2]+"-"+fecha[1]+"-"+fecha[0]; 
+    }
+
+    titulo=$("#registrar_evento #titulo").val();
+    categoria=$("#registrar_evento #categoria").val();
+    if($("#registrar_evento #all_day input").prop('checked')){
+      hora="Todo el día";
+    }
+    else{
+      hora=$("#registrar_evento #hora").val();
+    }
+    descripcion=$("#registrar_evento #descripcion").val();
+
+    $.ajax({
+      type: 'POST',
+      url: Routing.generate('eventos_create'),
+      data:{titulo:titulo, categoria:categoria, hora:hora, descripcion:descripcion,fecha:fecha}, 
+      dataType: 'json',
+      success: function(response){
+  
+        // Se comrpueba que no sea  un día festivo.
+        if(response.message=="festivo"){
+          // Se indica que el día seleccionado es festivo.
+          texto="El día seleccionado <span>no es lectivo</span>, por lo que no se puede realizar ningún evento.<br><br>";
+          dia=$("#contenedor_evento a[class*='ui-state-active']").text();
+          mes=$("#contenedor_evento span[class='ui-datepicker-month']").text();
+          anyo=$("#contenedor_evento span[class='ui-datepicker-year']").text();
+          texto+="<p>Día seleccionado: <span>"+dia+" de "+mes+" de "+anyo+"</span></p><br>";
+          motivo=$("#contenedor_evento a[class*='ui-state-active']").attr("title");
+          texto+="<p>Motivo no lectivo:  <span>"+motivo+"</span></p>";
+          
+          error.play();
+          swal({
+            title: "Se ha producido un error en el sistema",
+            text: texto,
+            type: "error",
+            confirmButtonColor: color,
+            closeOnConfirm: false ,
+            html: true
+          });
+        }
+
+        // Se comprueba si hay alguna opción sin marcar para mostrar la notificación de error.
+        if(response.error.length != 0){
+          var texto="";
+          for (var key in response.error) {
+            texto+="<span>"+response.error[key]+"<span><br>";
+          }
+          errorPNotify.play();
+          new PNotify({
+            title: "Debe seleccionar los siguientes datos para registrar el evento:",
+            text:texto,
+            addclass: "custom",
+            type: "error",
+            shadow: true,
+            hide: true,
+            width: "335px",
+            buttons: {
+            sticker: false,
+            labels:{close: "Cerrar"}
+            },
+            stack: left_Stack,
+            animate_speed: "fast",
+            animate: {
+              animate: true,
+              in_class: "fadeInLeft",
+              out_class: "fadeOutLeft",
+            }
+          });
+          return false;
+        }
+        else{
+          exito.play();
+          new PNotify({
+            text:"Evento registrado.",
+            addclass: "custom",
+            type: "success",
+            shadow: true,
+            hide: true,
+            animation: "fade",
+            animate_speed: 'fast',
+            delay: 4000,
+            buttons: {
+              sticker: false,
+              labels:{close: "Cerrar"}
+            },
+            stack: right_Stack,
+            animate: {
+              animate: true,
+              in_class: "fadeInRight",
+              out_class: "fadeOutRight",
+            }
+          });
+          
+          // Se actualiza las pestañas de equipamientos o instalaciones
+          $("#registrar_eventos").update_tab();
+          $("#consultar_eventos").update_tab();
+        }
+      }
+    })
+  });
+
+
+
+
+
+
+
+
+
 
 
 

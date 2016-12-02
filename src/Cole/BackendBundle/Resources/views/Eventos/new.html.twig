@@ -41,28 +41,28 @@
     min=new Date();
   }
 // beforeShowDay: $.datepicker.noWeekends (Para deshabilitar fines de semana)
-  $( "#reserva_{{ tipo }} #dia_reserva_{{ tipo }}" ).datepicker({ minDate: min, maxDate: new Date(fin_a, fin_m-1, fin_d),beforeShowDay: $.datepicker.noWeekends, defaultDate: null,
+  $( "#registrar_evento #dia_evento" ).datepicker({ minDate: min, maxDate: new Date(fin_a, fin_m-1, fin_d),beforeShowDay: $.datepicker.noWeekends, defaultDate: null,
     onChangeMonthYear:function () {
-      $("#reserva_{{ tipo }} #actualizar_calendario_lectivo").trigger("click");
+      $("#registrar_evento #actualizar_calendario_lectivo").trigger("click");
     },    
     onSelect: function (date,inst) {
 
-      d=$("#reserva_{{ tipo }} #contenedor_reserva .ui-datepicker-calendar a[class*='ui-state-active']").text();
-      m=('0'+(parseInt($("#reserva_{{ tipo }} #contenedor_reserva .ui-datepicker-calendar a[class*='ui-state-active']").closest("td").attr("data-month"))+1)).slice(-2);
-      a=$("#reserva_{{ tipo }} #contenedor_reserva .ui-datepicker-calendar a[class*='ui-state-active']").closest("td").attr("data-year");
+      d=$("#registrar_evento #contenedor_evento .ui-datepicker-calendar a[class*='ui-state-active']").text();
+      m=('0'+(parseInt($("#registrar_evento #contenedor_evento .ui-datepicker-calendar a[class*='ui-state-active']").closest("td").attr("data-month"))+1)).slice(-2);
+      a=$("#registrar_evento #contenedor_evento .ui-datepicker-calendar a[class*='ui-state-active']").closest("td").attr("data-year");
       fecha=d+"/"+m+"/"+a;
       // Se evita darle click al día seleccionado.
       if(fecha!=date){
         // Se desactiva el botón de guardar al cambiar de día.
-        $("#reserva_{{ tipo }} #reserva_save").prop("disabled",true);
+        $("#registrar_evento #reserva_save").prop("disabled",true);
 
         // Se establece como falso para impedir el redibujado en la función interna de la libreria jquery-ui (if (inst.inline) {this._updateDatepicker(inst);...})
         inst.inline = false;
         // Se elimina los estilos de la selección existente.
-        $("#reserva_{{ tipo }} #contenedor_reserva .ui-datepicker-calendar .ui-datepicker-current-day").removeClass("ui-datepicker-current-day").children().removeClass("ui-state-active");
-        $("#reserva_{{ tipo }} #contenedor_reserva .ui-datepicker-calendar tbody a[class*='ui-state-active']").removeClass("ui-state-active");
+        $("#registrar_evento #contenedor_evento .ui-datepicker-calendar .ui-datepicker-current-day").removeClass("ui-datepicker-current-day").children().removeClass("ui-state-active");
+        $("#registrar_evento #contenedor_evento .ui-datepicker-calendar tbody a[class*='ui-state-active']").removeClass("ui-state-active");
         // Se busca el enlace seleccionado y se le aplica los estilos.
-        $("#reserva_{{ tipo }} #contenedor_reserva .ui-datepicker-calendar tbody a").each(function(){
+        $("#registrar_evento #contenedor_evento .ui-datepicker-calendar tbody a").each(function(){
           if ($(this).text() == inst.selectedDay) {
             $(this).addClass("ui-state-active");
             $(this).parent().addClass("ui-datepicker-current-day");
@@ -70,13 +70,13 @@
         });
         //Se simula el darle click a un día, guardando el día en un input y haciendo click para capturar el evento en general.js
         dia=date.split("/");
-        $("#reserva_{{ tipo }} #dia_seleccionado").attr("value",date);
-        $("#reserva_{{ tipo }} #dia_seleccionado").trigger("click");
+        $("#registrar_evento #dia_seleccionado").attr("value",date);
+        $("#registrar_evento #dia_seleccionado").trigger("click");
       }
     } 
   });
-  $('#reserva_{{ tipo }} #contenedor_reserva a[class*="ui-state-disabled"]').hide();
-  $("#reserva_{{ tipo }} #actualizar_calendario_lectivo").trigger("click");
+  $('#registrar_evento #contenedor_evento a[class*="ui-state-disabled"]').hide();
+  $("#registrar_evento #actualizar_calendario_lectivo").trigger("click");
   
   // Se comprueba si estan registradas las fechas del curso.
   $.ajax({
@@ -84,9 +84,9 @@
     url: Routing.generate('comprobar_fechas_curso'),
     dataType: 'json',
     success: function(response) {
-      // Se muestra un aviso indicando si falta alguna fecha por registrar y se cierra laopción de reservas.
+      // Se muestra un aviso indicando si falta alguna fecha por registrar y se cierra la opción de añadir eventos.
       if(response.curso==null || response.navidad==null || response.semanasanta==null ){
-        texto="<p class='justificado'>Para poder hacer una reserva debe completar el calendario del curso con las siguientes fechas:</p><br/>";
+        texto="<p class='justificado'>Para poder añadir un evento debe completar el calendario del curso con las siguientes fechas:</p><br/>";
         if(response.curso==null){
           texto+="<h4>Fecha de inicio y fin del curso</h4> <br/>";
         }
@@ -96,12 +96,9 @@
         if(response.semanasanta==null){
           texto+="<h4>Vacaciones de Semana Santa</h4> <br/>";
         }
-        if("{{ tipo }}" == "instalaciones"){
-          titulo="No se pueden reservar las instalaciones";
-        }
-        else{
-          titulo="No se pueden reservar los equipamientos";
-        }
+
+        titulo="No se puede añadir eventos";
+
 
         swal({
           title: titulo,
@@ -125,66 +122,77 @@
       }
     }
   })
+
+    $(".time_element").timepicki({
+    show_meridian:false,
+    min_hour_value:7,
+    max_hour_value:20,
+    step_size_minutes:15,
+    overflow_minutes:true,
+    increase_direction:'up',
+    start_time: ["07", "00"],
+    disable_keyboard_mobile: true});
+    
+  //Se añade el checkbox con la opción "Todo el día" para la hora.
+  $("#hora").after('<div id="all_day"><input type="checkbox" value="" disabled="disabled">Todo el día</input></div>');
+
 </script> 
 
 {% endblock %}
 
 {% block body %}
-  <div id="reserva_{{ tipo }}" class="contenedor_principal_con_titulo general_container">
+  <div id="registrar_evento" class="contenedor_principal_con_titulo general_container">
     <div class="parent_no_form">
       <div class="child">
-        {% if  tipo  == "instalaciones" %}
-          <h2>Reserva de Instalaciones</h2>
-        {% else %}
-          <h2>Reserva de Equipamientos</h2>
-        {% endif %}
+          <h2>Añadir Eventos</h2>
         <div class="contenedor_principal_reserva">
           <div class="tiple_column_no_form">
-          {% if  tipo  == "instalaciones" %}
-            <span>1. Seleccione una instalación:</span>
-          {% else %}
-            <span>1. Seleccione un equipamiento:</span>
-          {% endif %}
+            <span>1. Seleccione una fecha para el evento:</span>
             <div class="parent_no_form">
             <div class="child">
-              <div class="contenedor_reserva" id="contenedor_reserva_equipamientos">
-              {% for entity in entities %}
-                <button>{{ entity.nombre }}</button>
-              {% endfor %}
-              </div>
-            </div>
-            </div>
-          </div>
-          <div class="tiple_column_no_form">
-            <span>2. Seleccione una fecha para la reserva:</span>
-            <div class="parent_no_form">
-            <div class="child">
-              <div class="contenedor_reserva" id="contenedor_reserva">
-                <div id="dia_reserva_{{ tipo }}" class="calendario_lectivos"></div>
+              <div class="contenedor_reserva" id="contenedor_evento">
+                <div id="dia_evento" class="calendario_lectivos"></div>
                 <div id="div_leyenda" class="oculto"></div>
                 <input id="dia_seleccionado" class="oculto"></input>
                 <button id="actualizar_calendario_lectivo" class="oculto"></button>
-                <div id="loading"></div>
               </div>
             </div>
             </div>
           </div>
 
-          <div class="four_column_no_form">
-            <span>3. Seleccione hora para la reserva:</span>
+          <div class="two_big_column_no_form">
+            <span>2. Añada los datos del evento:</span>
             <div class="parent_no_form">
             <div class="child">
-              <div class="contenedor_reserva" id="contenedor_reserva_horas">
-              {% for clase in clases %}
-                <button type="radio" disabled="disabled" clase="{{clase.horaClase}}" min="{{  clase.inicio|date('H:i')}}" ><span>{{ clase.horaClase ~ " Hora " }}</span>{{  "(" ~ clase.inicio|date('H:i') ~ " - " ~ clase.fin|date('H:i') ~ ")" }}</button>
-              {% endfor %}
+              <div id="container_evento"class="contenedor_reserva">
+                <div class="f_left">
+                  <label>Título</label>
+                  <input id="titulo" disabled="disabled" placeholder="Inserte un título breve"></input>                  
+                </div>
+                <div class="f_left">
+                  <label>Categoría</label>
+                  <select id="categoria" disabled="disabled">
+                    <option value="general" selected="selected">General</option>
+                    <option value="infantil">Ed. Infantil</option>
+                    <option value="primaria">Ed. Primaria</option>
+                    <option value="profesor">Profesores</option>
+                  </select>                  
+                </div>
+                <div class="f_left">
+                  <label>Hora</label>
+                  <input id="hora" disabled="disabled" type="text" name="timepicker" class="time_element"></input>
+                </div>
+                <div>
+                  <label>Descripción</label>
+                  <textarea id="descripcion" disabled="disabled"></textarea>                  
+                </div>
               </div>
             </div>
             </div>
           </div>
           <div id="guardar_reserva">
             <div>
-              <button id="reserva_save" disabled="disabled">Reservar</button>
+              <button id="reserva_save" disabled="disabled">Guardar</button>
               {#<button id="reserva_rest" disabled="disabled">Borrar</button>#}
             </div>
           </div>
@@ -194,4 +202,3 @@
   </div>
   </div>
 {% endblock %}
-

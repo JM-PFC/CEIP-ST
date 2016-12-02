@@ -60,7 +60,7 @@ class ReservaController extends Controller
                 $error[]="- Equipamiento";
             }
             if(!$fecha){
-                $error[]="- Fecha";
+                $error[]="- Fecha de la reserva";
             }
             if(!$horas){
                 $error[]="- Horas de reserva";

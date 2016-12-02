@@ -126,3 +126,4 @@ multiple_alumno_update:
     requirements: { _method: post|put }
     options:
         expose: true
+
