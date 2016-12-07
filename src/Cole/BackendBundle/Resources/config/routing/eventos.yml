@@ -20,7 +20,9 @@ eventos_create:
 eventos_edit:
     path:     /{id}/edit
     defaults: { _controller: "BackendBundle:Eventos:edit" }
-
+    options:
+        expose: true
+        
 eventos_update:
     path:     /{id}/update
     defaults: { _controller: "BackendBundle:Eventos:update" }
@@ -30,6 +32,8 @@ eventos_delete:
     path:     /{id}/delete
     defaults: { _controller: "BackendBundle:Eventos:delete" }
     requirements: { _method: post|delete }
+    options:
+        expose: true
 
 obtener_eventos:
     path:     /obtener_eventos

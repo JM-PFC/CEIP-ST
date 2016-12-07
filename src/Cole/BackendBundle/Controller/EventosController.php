@@ -24,12 +24,46 @@ class EventosController extends Controller
     {
         $em = $this->getDoctrine()->getManager();
 
-        $entities = $em->getRepository('BackendBundle:Eventos')->findAll();
+        $entities = $em->getRepository('BackendBundle:Eventos')->findEventosPendientes();
 
         return $this->render('BackendBundle:Eventos:index.html.twig', array(
             'entities' => $entities,
         ));
     }
+
+    protected function getErrorMessages(\Symfony\Component\Form\Form $form, $name) 
+    {
+        $errors = array();
+
+        foreach ($form->getErrors() as $key => $error) {
+            $errors[] = $error->getMessage();
+        }
+
+        foreach ($form->all() as $child) {
+            $type = $child->getConfig()->getType()->getName();
+            if ($child->count()  && ($type !== 'choice')) {
+                $childErrors = $this->getErrorMessages($child, $child->getName());
+                if (sizeof($childErrors)) {
+                    $errors = array_merge($errors, $childErrors);
+                }
+            } else {
+                if (!$child->isValid()) {
+                    if($name=="responsable1" || $name=="responsable2")
+                    {
+                    $errors[$child->getParent()->getParent()->getName().'_'.$name.'_'.$child->getName()] = $this->getErrorMessages($child, $child->getName());
+ 
+                    }
+                    else{
+                    $errors[$name.'_'.$child->getName()] = $this->getErrorMessages($child, $child->getName());
+                    }
+                }
+            }
+        }
+
+        return $errors;
+    }
+
+
     /**
      * Creates a new Eventos entity.
      *
@@ -180,10 +214,20 @@ class EventosController extends Controller
             throw $this->createNotFoundException('Unable to find Eventos entity.');
         }
 
+        $inicio =$em->getRepository('BackendBundle:Centro')->findInicioCurso();
+        $fin =$em->getRepository('BackendBundle:Centro')->findFinCurso();
+
+        $array['inicio_navidad']=$em->getRepository('BackendBundle:Festivos')->findFestivosPorDescripcion("Inicio Vacaciones de Navidad");
+        $array['fin_navidad']=$em->getRepository('BackendBundle:Festivos')->findFestivosPorDescripcion("Fin Vacaciones de Navidad");
+        $array['inicio_semanasanta']=$em->getRepository('BackendBundle:Festivos')->findFestivosPorDescripcion("Inicio Vacaciones de Semana Santa");
+        $array['fin_semanasanta']=$em->getRepository('BackendBundle:Festivos')->findFestivosPorDescripcion("Fin Vacaciones de Semana Santa");
+
         $editForm = $this->createEditForm($entity);
         $deleteForm = $this->createDeleteForm($id);
 
         return $this->render('BackendBundle:Eventos:edit.html.twig', array(
+            'inicio' => $inicio,
+            'fin' => $fin,
             'entity'      => $entity,
             'edit_form'   => $editForm->createView(),
             'delete_form' => $deleteForm->createView(),
@@ -204,7 +248,7 @@ class EventosController extends Controller
             'method' => 'PUT',
         ));
 
-        $form->add('submit', 'submit', array('label' => 'Update'));
+        $form->add('submit', 'submit', array('label' => 'Guardar cambios'));
 
         return $form;
     }
@@ -227,9 +271,23 @@ class EventosController extends Controller
         $editForm->handleRequest($request);
 
         if ($editForm->isValid()) {
+
             $em->flush();
 
+            if ($request->isXmlHttpRequest()) {
+                return new JsonResponse(array(
+                    'message' => 'Success!',
+                    'success' => true), 200);
+            }
+
             return $this->redirect($this->generateUrl('eventos_edit', array('id' => $id)));
+        }
+        //Se le indica el método PUT que es el que tiene en la llamada Ajax.
+        if ($request->isMethod('PUT')) {
+            return new JsonResponse(array(
+            'data' => $this->getErrorMessages($editForm,$editForm->getName()),
+            'message' => 'Invalid form',
+            'success' => false), 400);
         }
 
         return $this->render('BackendBundle:Eventos:edit.html.twig', array(
@@ -244,8 +302,11 @@ class EventosController extends Controller
      */
     public function deleteAction(Request $request, $id)
     {
+        
+/*
         $form = $this->createDeleteForm($id);
         $form->handleRequest($request);
+
 
         if ($form->isValid()) {
             $em = $this->getDoctrine()->getManager();
@@ -260,6 +321,14 @@ class EventosController extends Controller
         }
 
         return $this->redirect($this->generateUrl('eventos'));
+
+        */
+        $em = $this->getDoctrine()->getManager();
+        $query = $em->createQuery('DELETE BackendBundle:Eventos r WHERE r.id = :Id')->setParameter("Id", $id);
+
+        $query->execute();
+        return new JsonResponse(array('success' => true), 200);
+
     }
 
     /**

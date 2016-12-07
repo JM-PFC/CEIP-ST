@@ -764,6 +764,9 @@ form input[type="radio"] {
     width: 20px;
     margin-bottom: 10px;
 }
+form textarea{
+	box-shadow: 0 1px 1px 0px rgba(0, 0, 0, 0.5);
+}
 form label+div label{
 	display: inline;
 }
@@ -1090,10 +1093,11 @@ margin-top: 10%;
 }
 textarea{
 	height: 200px;
-	width: 100%;
+	width: 96%;
 	margin-bottom: 15px;
 	font-size: 12pt !important;
 	resize: none;
+	padding: 0	10px;
 }
 .derecha{
 	float: right;
@@ -1132,7 +1136,7 @@ form button{
 	box-shadow: 0 0px 3px 1.5px red !important;
 }
 .modified{
-	box-shadow: 0 0px 3px 2px #EB7805!important;
+	box-shadow: 0 0px 3px 2px #EB7805;
 }
 .red{
 	color: #A80101;
@@ -1949,10 +1953,13 @@ float: right;
 	color: black;
 
 }
-#calendario a[class*="disabled"] span{
+.ui-datepicker a[class*="disabled"] span{
 	display: none;
 }
-#calendario a[class*="disabled"]{
+.ui-datepicker a{
+	outline: none;
+}
+.ui-datepicker a[class*="disabled"]{
    pointer-events: none;
    cursor: default;
 }
@@ -3215,10 +3222,10 @@ tbody.scrollContent tr.alternateRow td {
 	width: 5.5% !important;
 }
 .scrollContent tr:hover{
-	background: rgba(51, 76, 115, 0.4);
+	background: #96B3BA;
 }
 
-#consulta_reservas_instalaciones .scrollContent img,#consulta_reservas_equipamientos .scrollContent img{
+.scrollContent td img{
 	margin: 0 auto;
     max-height:28px;
     min-width: 20px;
@@ -3292,9 +3299,10 @@ tbody.scrollContent tr.alternateRow td {
 	pointer-events: none !important;
 	cursor: none !important;
 }
-#consulta_reservas_instalaciones .scrollContent tr td img, #consulta_reservas_equipamientos .scrollContent tr td img{
+.scrollContent tr td img,.scrollContent tr td img{
 	cursor: pointer; 
 	pointer-events: auto;
+	margin: 0 5%;
 }
 .scrollContent .dataTables_empty{
 	padding-top: 18vh !important;
@@ -3455,6 +3463,10 @@ tbody.scrollContent tr.alternateRow td {
 .w11{
 	width: 11% !important;
 	min-width: 11% !important;
+}
+.w12{ 
+	width: 12% !important;
+	min-width: 12% !important;
 }
 .w15{ 
 	width: 15% !important;
@@ -3825,7 +3837,8 @@ tbody.scrollContent tr.alternateRow td {
 #registrar_evento .timepicker_wrap{
 	left: -28px !important;
 	background: #e4e0e0;
-	width: 120px;
+	width: 125px;
+	padding-top: 40px;
 }
 #registrar_evento .prev {
     background-position: 50% -10%;
@@ -3848,6 +3861,8 @@ tbody.scrollContent tr.alternateRow td {
 }
 #registrar_evento .time,#registrar_evento .mins{
     width: 40px;
+    margin-top: -30px;
+
 }
 #container_evento{
     background: #b1cce7 none repeat scroll 0 0;
@@ -3871,3 +3886,145 @@ tbody.scrollContent tr.alternateRow td {
     z-index: 10;
     height: 0;
 }
+
+#consultar_eventos .tabla_con_info{
+	width: 100% !important;
+}
+
+#consultar_eventos #tableContainer tr th, #consultar_eventos #tableContainer tr td{
+	width: 6% !important;
+}
+
+#consultar_eventos #tableContainer tr td{
+	padding: 0 1%;
+}
+
+#consultar_eventos .descripcion{
+	display: inherit;
+	text-align: left;
+	font-size: 1.2em;
+	padding: 5px;
+}
+
+.tr_select_descrip{
+	background: #96B3BA  !important;
+}
+.tr_select_descrip+div{
+	border-left: 5px solid #96B3BA  !important;
+	border-right: 5px solid #96B3BA  !important;
+	border-bottom: 5px solid #96B3BA  !important;
+}
+#evento_dialog #content-form{
+	min-height: 400px !important;
+	height: 0px !important;
+	width: 95%;
+	margin: 0 !important;
+}
+#eventos_edit #primera_columna{
+	width: 55%;
+	margin: 0 1%;
+}
+#eventos_edit #segunda_columna{
+	width: 43%;
+	margin: 0;
+}
+#evento_dialog input{
+	width: 94%;
+}
+#evento_dialog textarea{
+	width: 94%;
+}
+#eventos_edit #content-form>div:last-child>div{
+	margin: 0 auto;
+	width: 50%;
+}
+#eventos_edit .ui-datepicker .ui-datepicker-next span{
+ 	top: 0;
+ 	left: 0;
+}
+#eventos_edit .calendario_lectivos > div{
+ 	min-height: 0px;
+}
+#eventos_edit .ui-datepicker .ui-datepicker-title{
+ 	font-size: 1.2em;
+ 	line-height: 1.5em;
+}
+#eventos_edit th span,  #eventos_edit  td a,  #eventos_edit  td span {
+ 	font-size: 1.2em !important;
+}
+#eventos_edit .timepicker_wrap{
+ 	display: block;
+ 	background: none;
+ 	box-shadow: none;
+ 	margin-top: 17px;
+ 	border: 0;
+}
+#eventos_edit .timepicker_wrap .prev,#eventos_edit .timepicker_wrap .next{
+	background: #e4e0e0 url("../js/TimePicki-master/images/arrow.png") no-repeat scroll 0 0;
+	padding: 10px;
+	width: 20px;
+	box-shadow: 0 1px 1px 0px rgba(0, 0, 0, 0.5);
+}
+#eventos_edit .ti_tx, #eventos_edit .mi_tx{
+	margin: 6px 0;
+}
+#eventos_edit .timepicker_wrap .prev:hover,#eventos_edit .timepicker_wrap .next:hover{
+	background: #CCC url("../js/TimePicki-master/images/arrow.png") no-repeat scroll 0 0;
+}
+#eventos_edit .prev {
+    background-position: 50% -13% !important;
+}
+#eventos_edit .next {
+    background-position: 50% 105% !important;
+}
+#eventos_edit #dia_evento {
+	margin-top: 0;
+}
+#eventos_edit #segunda_columna label{
+	text-align: left;
+	margin-left: 8%;
+	width: 80%;
+	clear: both;
+}
+#eventos_edit .ti_tx input, #eventos_edit .mi_tx input {
+	width: 36%;
+}
+#eventos_edit .time, #eventos_edit .mins{
+	margin-top: -32px !important;
+	width: 60px;
+	font-size: 0;
+	margin: 0;
+}
+.mins{
+	float: right !important;
+}
+#eventos_edit .time_pick{
+	height: 115px;
+	width: 50%;
+	float: left;
+	margin-left:15px;
+}
+#eventos_edit fieldset{
+	max-height: 380px;
+}
+
+#eventos_edit #all_day input{
+	width: 0;
+	float: left;
+}
+#eventos_edit #all_day {
+	font-size: 1.2em;
+	margin-top: 16%;
+}
+
+#eventos_edit input:disabled{
+	background: threedlightshadow !important;
+}
+div .disabled{
+	pointer-events: none !important;
+   	cursor: default !important;
+}
+#eventos_edit .mensaje{
+	max-width: 50%;
+}
+

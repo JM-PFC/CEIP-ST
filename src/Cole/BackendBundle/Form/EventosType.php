@@ -15,11 +15,15 @@ class EventosType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('titulo')
-            ->add('descripcion')
-            ->add('fecha')
+            ->add('title','text',array('label' => 'Título','attr' => array('validation' => '')))
+            ->add('description')
+            ->add('description','textarea',array('label' => 'Descripción', 'attr' => array('type'=>'textarea', 'validation' => 'Empty')))
+            ->add('datetime')
             ->add('categoria')
+            ->add('hora')
             ->add('contador')
+            ->add('limpiar', 'button', array('attr' => array('class' => 'limpiar')))
+
         ;
     }
     
@@ -38,6 +42,6 @@ class EventosType extends AbstractType
      */
     public function getName()
     {
-        return 'cole_backendbundle_eventos';
+        return 'eventos';
     }
 }

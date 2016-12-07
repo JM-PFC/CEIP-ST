@@ -3,6 +3,8 @@
 namespace Cole\BackendBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
+
 
 /**
  * Eventos
@@ -25,6 +27,8 @@ class Eventos
      * @var string
      *
      * @ORM\Column(name="title", type="string", length=255)
+     * @Assert\NotBlank()
+     * @Assert\Type("string")
      */
     private $title;
 
@@ -32,6 +36,8 @@ class Eventos
      * @var string
      *
      * @ORM\Column(name="description", type="text")
+     * @Assert\NotBlank()
+     * @Assert\Type("string")
      */
     private $description;
 

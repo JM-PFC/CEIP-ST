@@ -1,16 +1,230 @@
-{% extends '::base.html.twig' %}
+{% extends 'BackendBundle:Default:index.html.twig' %}
 
-{% block body -%}
-    <h1>Eventos edit</h1>
+{% block head %}{% endblock %}
+{% block stylesheets %}{% endblock %}
 
-    {{ form(edit_form) }}
+{% block javascript %}
+   
+  <script> 
+  $("#evento_dialog #categoria option[value="+$("#eventos_categoria").val()+"] ").prop("selected",true);
 
-        <ul class="record_actions">
-    <li>
-        <a href="{{ path('eventos') }}">
-            Back to the list
-        </a>
-    </li>
-    <li>{{ form(delete_form) }}</li>
-</ul>
+  $(document).on('change',"#evento_dialog  #categoria",function(event){
+  		$("#eventos_categoria").val($("#categoria").val());
+	});
+
+  // Se deshabilita los botones de guardar y restablecer.
+  $("#eventos_edit #eventos_submit").prop("disabled",true);
+  $("#eventos_edit #evento_restablecer").prop("disabled",true);
+
+  // Se añade opciones para que se pueda comprobar cuando modificamos el formulario para volver a mostrar los botones.
+  $("#eventos_edit #categoria option:selected").attr("selected", "selected");
+  $("#eventos_edit #eventos_description").attr("value", $("#eventos_edit #eventos_description").val());
+  
+  //Se añade el atributo con el elemento seleccionado a cada select.
+  $("#eventos_edit select option:selected").each(function(){
+    $(this).closest("select").attr("seleccionado", $(this).val());
+  });
+
+
+  
+
+  inicio_d={{ inicio.inicioCurso|date('d') }};
+  inicio_m= {{ inicio.inicioCurso|date('m') }};
+  inicio_a= {{ inicio.inicioCurso|date('Y') }};  
+  fin_d={{ fin.finCurso|date('d') }};
+  fin_m= {{ fin.finCurso|date('m') }};
+  fin_a= {{ fin.finCurso|date('Y') }};
+
+  $.datepicker.regional['es'] = {
+    closeText: 'Cerrar',
+    prevText: '<Ant',
+    nextText: 'Sig>',
+    currentText: 'Hoy',
+    monthNames: ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'],
+    monthNamesShort: ['Ene','Feb','Mar','Abr', 'May','Jun','Jul','Ago','Sep', 'Oct','Nov','Dic'],
+    dayNames: ['Domingo', 'Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado'],
+    dayNamesShort: ['Dom','Lun','Mar','Mié','Juv','Vie','Sáb'],
+    dayNamesMin: ['Do','Lu','Ma','Mi','Ju','Vi','Sá'],
+    weekHeader: 'Sm',
+    dateFormat: 'dd/mm/yy',
+    firstDay: 1,
+    isRTL: false,
+    showMonthAfterYear: false,
+    yearSuffix: ''
+  };
+  
+  $.datepicker.setDefaults($.datepicker.regional['es']);
+
+  if(new Date()<new Date(inicio_a, inicio_m-1, inicio_d)){
+    min=new Date(inicio_a, inicio_m-1, inicio_d);
+  }
+  else{
+    min=new Date();
+  }
+
+  day=$("#eventos_edit #eventos_datetime_date_day option:selected").val();
+  month=$("#eventos_edit #eventos_datetime_date_month option:selected").val();
+  year=$("#eventos_edit #eventos_datetime_date_year option:selected").val();
+  // beforeShowDay: $.datepicker.noWeekends (Para deshabilitar fines de semana)
+  $( "#eventos_edit #dia_evento" ).datepicker({ minDate: min, maxDate: new Date(fin_a, fin_m-1, fin_d),beforeShowDay: $.datepicker.noWeekends, defaultDate: new Date(year, month-1, day),
+    onChangeMonthYear:function () {
+      $("#eventos_edit #actualizar_calendario_lectivo").trigger("click");
+      
+      //Si se selecciona el día inicial se elimina del día seleccionado anteriormente la clase "modified".
+      setTimeout(function(){ 
+        if($("#eventos_edit .ui-datepicker .ui-state-active").text()==$("#eventos_edit  #eventos_datetime_date_day").attr("seleccionado") && parseInt($("#eventos_edit .ui-datepicker .ui-state-active").closest(".data-month"))+1==$("#eventos_edit #eventos_datetime_date_month").attr("seleccionado") ){
+          $("#eventos_edit .ui-datepicker a .modified").removeClass("modified");
+        }
+        else{
+          $("#eventos_edit .ui-state-active").addClass("modified");
+        }
+      },100);
+    },    
+    onSelect: function (date,inst) {
+      d=$("#eventos_edit .ui-datepicker-calendar a[class*='ui-state-active']").text();
+      m=('0'+(parseInt($("#eventos_edit .ui-datepicker-calendar a[class*='ui-state-active']").closest("td").attr("data-month"))+1)).slice(-2);
+      a=$("#eventos_edit .ui-datepicker-calendar a[class*='ui-state-active']").closest("td").attr("data-year");
+      fecha=d+"/"+m+"/"+a;
+      // Se evita darle click al día seleccionado.
+      if(fecha!=date){
+        // Se desactiva el botón de guardar al cambiar de día.
+        $("#eventos_edit #reserva_save").prop("disabled",true);
+
+        // Se establece como falso para impedir el redibujado en la función interna de la libreria jquery-ui (if (inst.inline) {this._updateDatepicker(inst);...})
+        inst.inline = false;
+        // Se elimina los estilos de la selección existente.
+        $("#eventos_edit  .ui-datepicker-calendar .ui-datepicker-current-day").removeClass("ui-datepicker-current-day").children().removeClass("ui-state-active");
+        $("#eventos_edit .ui-datepicker-calendar tbody a[class*='ui-state-active']").removeClass("ui-state-active");
+        // Se busca el enlace seleccionado y se le aplica los estilos.
+        $("#eventos_edit .ui-datepicker-calendar tbody a").each(function(){
+          if ($(this).text() == inst.selectedDay) {
+            $(this).addClass("ui-state-active");
+            $(this).parent().addClass("ui-datepicker-current-day");
+          }
+        });
+        //Se simula el darle click a un día, guardando el día en un input y haciendo click para capturar el evento en general.js
+        dia=date.split("/");
+        $("#eventos_edit #dia_seleccionado").trigger("click");
+      }
+
+      //Se actualiza el select de la fecha.
+      d=$("#eventos_edit .ui-datepicker-calendar a[class*='ui-state-active']").text();
+      m=('0'+(parseInt($("#eventos_edit .ui-datepicker-calendar a[class*='ui-state-active']").closest("td").attr("data-month"))+1)).slice(-2);
+      a=$("#eventos_edit .ui-datepicker-calendar a[class*='ui-state-active']").closest("td").attr("data-year");
+      
+      $("#eventos_edit #eventos_datetime_date_day option[value='"+parseInt(d)+"']").prop("selected",true).change();
+      $("#eventos_edit #eventos_datetime_date_month option[value='"+parseInt(m)+"']").prop("selected",true).change();
+      $("#eventos_edit #eventos_datetime_date_year option[value='"+a+"']").prop("selected",true).change();
+      //Si se selecciona el día inicial se elimina del día seleccionado anteriormente la clase "modified".
+      if($("#eventos_edit .ui-datepicker .ui-datepicker-current-day a").text()==$("#eventos_edit  #eventos_datetime_date_day").attr("seleccionado") && parseInt($("#eventos_edit .ui-datepicker .ui-datepicker-current-day").attr("data-month"))+1==$("#eventos_edit #eventos_datetime_date_month").attr("seleccionado") ){
+        $("#eventos_edit .ui-datepicker .modified").removeClass("modified");
+      }
+    } 
+  });
+  $('#eventos_edit a[class*="ui-state-disabled"]').hide();
+
+  $("#eventos_edit #actualizar_calendario_lectivo").trigger("click");
+
+
+    $("#hora_evento").timepicki({
+    show_meridian:false,
+    min_hour_value:7,
+    max_hour_value:20,
+    step_size_minutes:15,
+    overflow_minutes:true,
+    increase_direction:'up',
+    start_time: ["07", "00"],
+    disable_keyboard_mobile: true});
+    
+    // Se añade el separador de la hora.
+    $("#eventos_edit .timepicker_wrap .time").after(":");
+    
+    //Se elimina el arrow_top que trae por defecto.
+    $("#eventos_edit .arrow_top" ).remove();      
+
+    // Se asigna la hora guardada al timepicki.
+    if($("#eventos_edit #eventos_hora").val()!="Todo el día"){
+      hora=$("#eventos_edit #eventos_hora").val().split(":");
+      $("#eventos_edit .time input").val(hora[0]);
+      $("#eventos_edit .mins input").val(hora[1]);
+      
+      $("#eventos_edit .time input").attr("value",hora[0]);
+      $("#eventos_edit .mins input").attr("value",hora[1]);
+    }
+    else{
+      $("#eventos_edit .time input").val("");
+      $("#eventos_edit .mins input").val("");
+
+      $("#eventos_edit .time input").attr("value","07");
+      $("#eventos_edit .mins input").attr("value","00");
+
+      $("#eventos_edit .mins input").prop("disabled",true);   
+      $("#eventos_edit .time input").prop("disabled",true);
+      $("#eventos_edit .timepicker_wrap div").addClass("disabled");  
+
+      $("#eventos_edit #all_day input").prop('checked',true);  
+    }
+
+  //Se añade el atributo con el elemento seleccionado a cada checkbox para comprobar si se modifica.
+  $("#eventos_edit input[type='checkbox']").each(function(){
+    if($("#eventos_edit #all_day input").is(':checked')){
+      $(this).attr("value", "checked");
+    }
+    else{
+      $(this).attr("value", "");
+    }
+  });
+
+  </script>
+{% endblock %}
+
+{% block body %}
+    {{form_start(edit_form, {'action':path('eventos_update',{'id':entity.id}),'method':'Put','attr':{'class':'edit_evento', 'id':'eventos_edit', novalidate:'novalidate', 'autocomplete':'off'}})}}
+
+        {{ form_errors(edit_form) }}
+    <div >
+    <div id="content-form">
+        <fieldset >
+            <legend>Editar Evento</legend>
+
+                    <div id="primera_columna" class="f_left">
+                        {{ form_row(edit_form.title) }}
+                        <label>Categoría</label>
+                        <select id="categoria">
+                    		<option value="general">General</option>
+                    		<option value="infantil">Ed. Infantil</option>
+                    		<option value="primaria">Ed. Primaria</option>
+                    		<option value="profesor">Profesores</option>
+                  		</select>
+                        {{ form_row(edit_form.description) }}
+                    </div>
+                    <div id="segunda_columna" class="f_left">
+                      
+                      {#Se utiliza el plugin timepicki para mostrar la hora#}
+                      <div id="hora_evento"><label>Hora del evento</label></div>
+
+                      {#Select para marcar la opción "Todo el día"#}
+                      <div id="all_day"><input type="checkbox" value="">Todo el día</input></div>
+
+                      {#Se utiliza el plugin datepicker para cambiar la fecha#}
+                      <label>Fecha del evento</label>
+                    	<div id="dia_evento" class="calendario_lectivos"></div>
+                		  <button id="actualizar_calendario_lectivo" class="oculto"></button>
+                
+                    </div>
+        </fieldset>       
+    </div>
+        
+    <div id="botones_form">
+      {{ form_row(edit_form.submit) }}
+      <div>
+        <button id="evento_restablecer" type="button" name="evento[restablecer]" >Restablecer</button>
+      </div> 
+    </div>
+    <div class="oculto">
+        {{ form_rest(edit_form) }} 
+    </div>
+    </div>
+    {{form_end(edit_form)}}
+
 {% endblock %}

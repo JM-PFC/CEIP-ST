@@ -18,6 +18,13 @@ class EventosRepository extends EntityRepository
 		"SELECT CONCAT(CONCAT(e.title, ' | '), e.hora) AS title, e.description, e.datetime FROM BackendBundle:Eventos e WHERE e.categoria=:categoria ORDER BY e.datetime ASC, e.hora ASC")
 		->setParameters(array(
 			'categoria' => $categoria))
+		->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
+	}
+
+	public function findEventosPendientes()
+	{
+	return $this->getEntityManager()->createQuery(
+		"SELECT e FROM BackendBundle:Eventos e WHERE e.datetime>=CURRENT_DATE() ORDER BY e.datetime ASC, e.hora ASC")
 		->getResult();
 	}
 

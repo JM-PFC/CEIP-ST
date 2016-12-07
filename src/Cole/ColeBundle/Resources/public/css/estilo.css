@@ -717,15 +717,17 @@ fieldset.fsetoculto {
     border-radius: 5px 5px 0 0;
 }
 #calendar .c-event-item{
-    margin: 5px 0 10px 0;
+    margin: 5px !important;
+    padding-left: 0 !important;
 }
 
 #calendar .c-event-item > div{
     white-space: normal;
 }
 #calendar .c-event-item span{
-    padding: 0 3px;
+    padding: 0 8px;
     margin-left: 5px;
+    border-radius: 8px;
     background: #5cb85c;
     white-space: nowrap;
 }
@@ -789,6 +791,8 @@ fieldset.fsetoculto {
     border-radius: 25px;
     margin: 0 2.6%;
     width: 9.1%;
+    text-decoration: underline;
+    font-weight: bold;
 }
 #calendar .c-month {
     width: 82%;
@@ -807,19 +811,17 @@ fieldset.fsetoculto {
     text-align: center;
     opacity: 0.5
 }
-
 #calendar .weekend {
-    background: lightgray;
+    background: lightgray none repeat scroll 0 0;
+    border-radius: 0;
+    margin: 0;
+    width: 14.28%;
 }
 
 .dia_select{
     background: #5cb85c !important;
     color: #001f51 !important;   
 }
-
-
-
-
 .icon {
     background-repeat: no-repeat;
     display: inline-block;
@@ -836,6 +838,15 @@ fieldset.fsetoculto {
 .icon-triangle-1-e {
     background-position: -32px -16px;
 }
+
+.calendar .description{
+    background: #abd0d5;
+    border-top: 1px solid #001f51 !important;
+    padding: 3px;
+    border-radius: 5px;
+}
+
+
 
 
 

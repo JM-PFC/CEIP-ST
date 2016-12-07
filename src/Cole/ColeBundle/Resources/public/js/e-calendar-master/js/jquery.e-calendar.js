@@ -213,9 +213,9 @@
                 });
             }
             for (var i = 16; i <52; i=i+6) {
-                $("#calendar .c-grid>div[class='c-day c-pad-top']:nth-child("+i+")").addClass("weekend");
+                $("#calendar .c-grid>div[class*='c-day c-pad-top']:nth-child("+i+")").addClass("weekend");
                 i++;
-                $("#calendar .c-grid>div[class='c-day c-pad-top']:nth-child("+i+")").addClass("weekend");
+                $("#calendar .c-grid>div[class*='c-day c-pad-top']:nth-child("+i+")").addClass("weekend");
             }
             $("#calendar .c-event-grid .c-event-list").append("<div class='div-over'>(Seleccione un día del calendario)</div>");
         }

@@ -395,7 +395,9 @@
 			}
 
 			function close_timepicki() {
-				ele_next.fadeOut();
+				if(ele_next.prev().attr("id")!="hora_evento"){
+					ele_next.fadeOut();
+				}				
 
 			}
 

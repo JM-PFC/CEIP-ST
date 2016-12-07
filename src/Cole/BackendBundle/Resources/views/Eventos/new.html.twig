@@ -123,7 +123,7 @@
     }
   })
 
-    $(".time_element").timepicki({
+  $(".time_element").timepicki({
     show_meridian:false,
     min_hour_value:7,
     max_hour_value:20,
@@ -131,7 +131,11 @@
     overflow_minutes:true,
     increase_direction:'up',
     start_time: ["07", "00"],
-    disable_keyboard_mobile: true});
+    disable_keyboard_mobile: true
+  });
+
+  //Se añade el separador de la hora.
+  $("#registrar_evento .timepicker_wrap .time").after(":");
     
   //Se añade el checkbox con la opción "Todo el día" para la hora.
   $("#hora").after('<div id="all_day"><input type="checkbox" value="" disabled="disabled">Todo el día</input></div>');

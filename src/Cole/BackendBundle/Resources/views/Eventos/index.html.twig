@@ -1,49 +1,145 @@
 {% extends '::base.html.twig' %}
 
+{% block head %}{% endblock %}
+{% block stylesheets %}{% endblock %}
+
+{% block javascript %}
+<script>
+    // Tabla con la opción de ordenar y búsqueda.
+    $('#consulta_eventos').DataTable( {
+        //"aLengthMenu": [[25, 50, 100, 250, 500, -1], [25, 50, 100, 250, 500, "All"]],
+        "order": [[ 1, "asc" ]],
+        "aLengthMenu": [[ -1], [ "All"]],
+        "columnDefs": [ {
+            "targets": 'no-sort',
+            "orderable": false,} ],
+        "language": {
+            "zeroRecords": "Lo siento, no se ha encontrado ningún registro coincidente",
+            "emptyTable": "Actualmente no hay ningún evento registrado en el sistema",
+            "lengthMenu": "Mostrar _MENU_ entradas",
+            "loadingRecords": "Cargando...",
+            "processing":     "Processando...",
+            "info": "Página _PAGE_ de _PAGES_",
+            "infoEmpty": "No hay registros disponibles",
+            "infoFiltered": "(filtrado de _MAX_ registros)",
+            "search": "Buscar:",
+            "Next": "Siguiente",
+            "paginate": {
+                "previous": "Anterior",
+                "next": "Siguiente"
+            }
+        }
+    });
+
+    $("#consultar_eventos .dataTables_info").addClass("oculto");
+    $("#consultar_eventos .dataTables_paginate").addClass("oculto");
+    $("#consultar_eventos .dataTables_length").addClass("oculto");
+    $('#consultar_eventos .dataTables_filter').appendTo('#consultar_eventos #buscador');
+
+    // Se comprueba si existe scrol vertical para ajustar el thead
+    if( $('#consulta_eventos tbody').get(0).scrollHeight>$('#consulta_eventos tbody').height()){
+        $("#consulta_eventos thead tr>th:nth-child(5)").attr('style', 'width: 6.3% !important');
+    }
+    else{
+        $("#consulta_eventos thead tr>th:nth-child(5)").attr('style', 'width: 5.7% !important');
+    }
+    
+    $(window).resize(function() {
+        if($('#consulta_eventos tbody').get(0).scrollHeight>$('#consulta_eventos tbody').height() ){
+            $("#consulta_eventos thead tr>th:nth-child(5)").attr('style', 'width: 6.3% !important');
+        }
+        else{
+            $("#consulta_eventos thead tr>th:nth-child(5)").attr('style', 'width: 5.7% !important');
+        }
+    });
+
+    $("#consulta_eventos tbody tr td[class='dataTables_empty']").closest("tr").addClass("no_cursor");
+
+    $("#evento_dialog").dialog(
+       {
+        bgiframe: true,
+        autoOpen: false,
+        height: 505,
+        width: 800,
+        modal: true,
+        resizable: false,
+        close: function( event, ui ) {
+        $(".ui-widget-overlay").remove();
+        }
+       }
+    );
+   $('#evento_dialog').on('dialogclose', function(event) {
+     $('#evento_dialog').empty();
+    });
+
+    </script>
+
+{% endblock %}
+
 {% block body -%}
-    <h1>Eventos list</h1>
+    <div id="consultar_eventos">
+        <div class="parent_no_form">
+        <div class="child">
+            <div class="contenedor_registro">  
+                <div>
+                    <div id="cabecera_lista">
+                        <h2 class="text_cabecera">Eventos Pendientes</h2>
+                        <div id="buscador"> </div>
+                    </div>
+                    <div id="fondo_azul_osc" class="tabla_con_info">
+                        <div id="tableContainer" class="tableContainer inner_table vh45">
+                            <table id="consulta_eventos" class="scrollTable lista_color">
+                                <thead class="fixedHeader">
+                                    <tr>
+                                        {#<th class="id">Id</th>#}
+                                        <th class="w12 left">Título</th>
+                                        <th>Fecha</th>
+                                        <th>Hora</th>
+                                        <th>Categoría</th>
+                                        <th class="no-sort">Acciones</th>
+                                        <th class="oculto">Descripción</th>
 
-    <table class="records_list">
-        <thead>
-            <tr>
-                <th>Id</th>
-                <th>Titulo</th>
-                <th>Descripcion</th>
-                <th>Fecha</th>
-                <th>Categoria</th>
-                <th>Contador</th>
-                <th>Actions</th>
-            </tr>
-        </thead>
-        <tbody>
-        {% for entity in entities %}
-            <tr>
-                <td><a href="{{ path('eventos_show', { 'id': entity.id }) }}">{{ entity.id }}</a></td>
-                <td>{{ entity.titulo }}</td>
-                <td>{{ entity.descripcion }}</td>
-                <td>{% if entity.fecha %}{{ entity.fecha|date('Y-m-d H:i:s') }}{% endif %}</td>
-                <td>{{ entity.categoria }}</td>
-                <td>{{ entity.contador }}</td>
-                <td>
-                <ul>
-                    <li>
-                        <a href="{{ path('eventos_show', { 'id': entity.id }) }}">show</a>
-                    </li>
-                    <li>
-                        <a href="{{ path('eventos_edit', { 'id': entity.id }) }}">edit</a>
-                    </li>
-                </ul>
-                </td>
-            </tr>
-        {% endfor %}
-        </tbody>
-    </table>
+                                    </tr>
+                                </thead>
+                                <tbody class="scrollContent">
+                                    {% set cont = 1 %}
+                                    {% for entity in entities %}
+                                        <tr id="{{entity.id}}"  title="Pulsa para ver la descripción del evento">
+                                            <td class="w12 left">{{ entity.title}}</td>
+                                            <td  data-order="{{ entity.datetime|date('m/d/Y') }}">
+                                            {% if entity.datetime|date('m/d/Y') ==  'today'|date('m/d/Y')  %}
+                                                {{ "Hoy" }}
+                                            {% elseif entity.datetime|date('m/d/Y') == 'tomorrow'|date('m/d/Y') %}
+                                                {{"Mañana"}}
+                                            {% else %}
+                                                {{ entity.datetime|date('d/m/Y') }}
+                                            {% endif %}
+                                            </td>
 
-        <ul>
-        <li>
-            <a href="{{ path('eventos_new') }}">
-                Create a new entry
-            </a>
-        </li>
-    </ul>
+                                            {% if entity.hora == "Todo el día" %}
+                                                <td class="hora" hora="{{ entity.hora }}">{{entity.hora}}</td>
+                                            {% else %}
+                                                <td class="hora" hora="{{ entity.hora|date('H:i') }}">{{entity.hora|date('H:i')}}</td>
+                                            {% endif %}
+                                            <td>{{ entity.categoria}}</td>
+                                            <td class="eliminar">
+                                                <img id="editar_0" src="{{ asset('bundles/backend/images/menu/editar0.png') }}">
+                                                <img id="editar_1" title="Editar evento" class="oculto" src="{{ asset('bundles/backend/images/menu/editar1.png') }}">
+                                                <img id="eliminar_0" src="{{ asset('bundles/backend/images/menu/eliminar0.png') }}">
+                                                <img id="eliminar_1" title="Eliminar evento" class="oculto" src="{{ asset('bundles/backend/images/menu/eliminar1.png') }}">
+                                            </td>
+                                            <td class="oculto"> {{ entity.description }}</td>
+                                        </tr>
+                                        {% set cont = cont + 1 %}
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <div id="evento_dialog" title="Editar Evento">
+                </div>          
+            </div>
+        </div>
+        </div>
+    </div>
     {% endblock %}

@@ -29,7 +29,7 @@ class Alumno
      *
      * @ORM\Column(name="nombre", type="string", length=255)    
      * @Assert\NotBlank()
-     * @Assert\Regex(pattern="/^[A-Za-záéíóúÁÉÍÓÚüÜñÑ]{2,}([\s][A-Za-záéíóúÁÉÍÓÚüÜñÑ]+)*$/",message="Contiene caracteres inválidos.")
+     * @Assert\Regex(pattern="/^[A-Za-záéíóúÁÉÍÓÚüÜñÑ]{2,}([\s][A-Za-záéíóúÁÉÍÓÚüÜñÑ]+)*$/",message="Contiene caracteres inválidos o insuficientes.")
      */
     private $nombre;
 
@@ -38,7 +38,7 @@ class Alumno
      *
      * @ORM\Column(name="apellido1", type="string", length=255)
      * @Assert\NotBlank()
-     * @Assert\Regex(pattern="/^[A-Za-záéíóúÁÉÍÓÚüÜñÑ]{2,}([\s][A-Za-záéíóúÁÉÍÓÚüÜñÑ]+)*$/",message="Contiene caracteres inválidos.")
+     * @Assert\Regex(pattern="/^[A-Za-záéíóúÁÉÍÓÚüÜñÑ]{2,}([\s][A-Za-záéíóúÁÉÍÓÚüÜñÑ]+)*$/",message="Contiene caracteres inválidos o insuficientes.")
      */
     private $apellido1;
 
@@ -47,7 +47,7 @@ class Alumno
      *
      * @ORM\Column(name="apellido2", type="string", length=255)
      * @Assert\NotBlank()
-     * @Assert\Regex(pattern="/^[A-Za-záéíóúÁÉÍÓÚüÜñÑ]{2,}([\s][A-Za-záéíóúÁÉÍÓÚüÜñÑ]+)*$/",message="Contiene caracteres inválidos.")
+     * @Assert\Regex(pattern="/^[A-Za-záéíóúÁÉÍÓÚüÜñÑ]{2,}([\s][A-Za-záéíóúÁÉÍÓÚüÜñÑ]+)*$/",message="Contiene caracteres inválidos o insuficientes.")
      */
     private $apellido2;
 

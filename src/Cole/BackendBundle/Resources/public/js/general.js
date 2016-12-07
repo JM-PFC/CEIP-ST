@@ -321,7 +321,7 @@ $(document).ready(function () {
 
   var message = {
     "Empty":"Este campo no puede estar vacío.",
-    "Words":"Contiene caracteres inválidos.",
+    "Words":"Contiene caracteres inválidos ó insuficientes.",
     "Letters":"Este campo no puede contener números.",
     "LetterInitial":"Este campo debe empezar con una letra",
     "Numbers":"Este campo sólo puede contener números",
@@ -984,7 +984,7 @@ $(document).on('keyup',"input[id$='responsable2_dni']",function(e){
                 return false;
               }
             } 
-            alert(response.responseJSON.message);
+            //alert(response.responseJSON.message);
           } 
           else {
             error.play();
@@ -1408,8 +1408,15 @@ $("#dialog-confirm span").hide();
     form= $(this).closest("form");
 
     var arr = form.attr('action').split('/');
-    div=$(this).closest("div[id^='tabs-']");
-    $(div).load(Routing.generate(arr[4]+"_edit", {id:arr[5]}));
+    if($(this).closest(".ui-dialog").length){
+      div=$(this).closest("div[id$='_dialog']");
+      $(div).load(Routing.generate(arr[4]+"_edit", {id:arr[5]}));
+    }
+    else{
+      div=$(this).closest("div[id^='tabs-']");
+      $(div).load(Routing.generate(arr[4]+"_edit", {id:arr[5]})); 
+    }
+
   });
 
   $(document).on('click',"#botones_form button[id$=nuevaFicha]", function(event){
@@ -1662,7 +1669,10 @@ $("#dialog-confirm span").hide();
     var val=0;
     // Se comprueba si se ha modificado el valor inicial de algún input.
     form.find("input[type!='file']").each(function(){
-      if(($(this).val()!=$(this).attr("value") && $(this).attr("value")!=undefined) || ($(this).val() && $(this).attr("value")==undefined) ){
+      //Se omite que se compruebe los inputs de la hora en el formulario de editar eventos si la opción "Todo el día" está activa.
+      if(form.attr("id")=="eventos_edit" && $(this).attr("class")=="timepicki-input" && form.find("#all_day input").is(':checked')){
+      }
+      else if(($(this).val()!=$(this).attr("value") && $(this).attr("value")!=undefined) || ($(this).val() && $(this).attr("value")==undefined) ){
         $(this).addClass("modified");
         form.find("button[id$='_submit']").prop("disabled",false);
         if(form.find("button[id$='_restablecer']").length){
@@ -1677,6 +1687,7 @@ $("#dialog-confirm span").hide();
         $(this).removeClass("modified");
       }
     });
+
     //Se comprueba si se ha cambiado la opción inicial del radio.
       form.find("input[type='radio']").each(function(){
         if($(this).is(':checked') && $(this).attr("checked")!="checked"){
@@ -1694,6 +1705,8 @@ $("#dialog-confirm span").hide();
           $(this).removeClass("modified");
         }  
       });
+
+
       // Se comprueba si se ha modificado la foto inicial.
       // Se actualiza la foto inicial.
       if(form.find("#actualizada").attr('class')=="" || form.find("#actualizada").attr('class')=="modif" ){
@@ -1736,14 +1749,21 @@ $("#dialog-confirm span").hide();
             form.find("button[id$='_rest']").prop("disabled",false);
           }
           val=1;
+          if(form.attr("id")=="eventos_edit"){
+            if($(this).parent().parent().attr("id")=="eventos_datetime_date" ){
+              form.find(".ui-datepicker td a").removeClass("modified");
+              form.find(".ui-datepicker .ui-datepicker-current-day a").addClass("modified");
+            }
+          }
         }
         else{
           $(this).closest("select").removeClass("modified");
+
         }
       });
     
     // Se comprueba en el caso del formulario alumno_edit si se ha modificado el valor inicial del textare.
-    if(form.attr("id")=="alumno_edit" || form.attr("id")=="antiguo_alumno_edit"){
+    if(form.attr("id")=="alumno_edit" || form.attr("id")=="antiguo_alumno_edit" || form.attr("id")=="eventos_edit"){
       if(form.find("textarea").val()!=form.find("textarea").attr("value")){
         form.find("textarea").addClass("modified");
         form.find("button[id$='_submit']").prop("disabled",false);
@@ -1759,6 +1779,30 @@ $("#dialog-confirm span").hide();
         form.find("textarea").removeClass("modified");
       }
     }
+
+    //Se comprueba la opción "Todo el día" del formulario de editar eventos.
+    if(form.attr("id")=="eventos_edit"){
+      if((form.find("#all_day input").attr("value")=="checked" && !form.find("#all_day input").is(':checked')) || (form.find("#all_day input").attr("value")=="" && form.find("#all_day input").is(':checked'))  ){
+          form.find("#all_day input").addClass("modified");
+          form.find("button[id$='_submit']").prop("disabled",false);
+          if(form.find("button[id$='_restablecer']").length){
+            form.find("button[id$='_restablecer']").prop("disabled",false);
+          }
+          else{
+            form.find("button[id$='_rest']").prop("disabled",false);
+          }          
+          val=1;
+      }
+      else{
+        form.find("#all_day input").removeClass("modified");      
+      }
+      //Se elimina la clase modified a los input de la hora en timepicki.
+      if(form.find("#all_day input").is(':checked')){
+        form.find(".time input").removeClass("modified");
+        form.find(".mins input").removeClass("modified");
+      }
+    }
+
     // Si no se ha modificado nada se deshabilita los botones de nuevo.
     if(val==0){
       form.find("button[id$='_submit']").prop("disabled",true);
@@ -1779,6 +1823,7 @@ $("#dialog-confirm span").hide();
       form.find("button[id$='_submit']").prop("disabled",false);
       }
     }
+
   }
 
   //Función para comprobar si se ha editado algo el formulario para mostrar los botones de guardar y restablecer.
@@ -1797,6 +1842,28 @@ $("#dialog-confirm span").hide();
   }
 
   // Se llama a la función de comprobar formulario editado, en el caso que se modifique algún elemento del formulario.
+  
+  $(document).on("keyup","form[id$='_edit'] input",function() {
+    comprobarEditForm($(this).closest("form"));
+  });
+
+  $(document).on("change","form[id$='_edit'] input[type='radio']",function() {
+    comprobarEditForm($(this).closest("form"));
+  });
+
+  $(document).on("change","form[id$='_edit'] select",function() {
+    comprobarEditForm($(this).closest("form"));
+  });
+
+  $(document).on("keyup","form[id$='_edit'] textarea",function() {
+    comprobarEditForm($(this).closest("form"));
+  });
+
+
+
+
+
+/*
   $(document).on("keyup","#profesor_edit input",function() {
     comprobarEditForm($("#profesor_edit"));
   });
@@ -1841,7 +1908,7 @@ $("#dialog-confirm span").hide();
   $(document).on("keyup","#antiguo_alumno_edit textarea",function() {
     comprobarEditForm($("#antiguo_alumno_edit"));
   });
-    
+    */
   //Se guarda el formulario alumno editado.
   $(document).on("submit","#alumno_edit",function(event) {
     event.preventDefault();
@@ -2007,11 +2074,11 @@ $("#dialog-confirm span").hide();
                   sticker: false,
                   labels:{close: "Cerrar"}
                 },
-                stack: left_Stack,
+                stack: right_Stack,
                 animate: {
                   animate: true,
-                  in_class: "fadeInLeft",
-                  out_class: "fadeOutLeft",
+                  in_class: "fadeInRight",
+                  out_class: "fadeOutRight",
                 }
               });
             }
@@ -2157,6 +2224,12 @@ $(document).on("blur","input[id='edit_profesor_dni']",function() {
     }
   }
 
+  //Se muestra la misma foto que tiene inicialmente cuando se quiere añadir otra.
+  $(document).on("click","#icono_añadir",function() {
+    form= $(this).closest("form");
+    form.find("#actualizada img").attr("src",form.find("#actual img").attr("src"));
+  });
+
   //Se comprueba que es válida la foto actualizada del usuario existente.
   $(document).on("change","form[id$='edit'] input[type='file']",function() {
     form= $(this).closest("form");
@@ -2233,6 +2306,8 @@ $(document).on("blur","input[id='edit_profesor_dni']",function() {
       validation($(this));
     }
   });
+
+
 
 //////////////////////////////////
 //           Cursos             //
@@ -2745,8 +2820,6 @@ $(document).on("blur","input[id='edit_profesor_dni']",function() {
       })
       return false;
   });
-
-
 
   $(document).on("submit","#asignatura_edit",function(event){
     event.preventDefault();
@@ -4561,7 +4634,14 @@ $(document).on("click","#registro_equipamientos td a",function(event){
 
   // Se deshabilita los días no lectivos en el calendario de reservas. 
   $(document).on('click',"#actualizar_calendario_lectivo",function(event){
-    contenedor=$(this).closest("div[class*='general_container']");
+    //Se obtiene el contenedor principal según si el calendario está en un formulario o no.
+    if($(this).closest("form"))
+    {
+      contenedor=$(this).closest("form");
+    }
+    else{
+      contenedor=$(this).closest("div[class*='general_container']");
+    }
 
     event.preventDefault();
     // Retardo para ejecutarlo una vez cargado el datepicker.
@@ -5257,22 +5337,26 @@ $(document).on("click","#registro_equipamientos td a",function(event){
 
   });
 
-  // Efecto del icono de eliminar reservas.
-  $(document).on("mouseenter","div[id^='consulta_reservas'] .scrollContent tr td #eliminar_0", function () {
+  // Efecto cambio de iconos de eliminar registros.
+  $(document).on("mouseenter",".scrollContent tr td #eliminar_0", function () {
       $(this).addClass("oculto");
       $(this).next("img").removeClass("oculto");
   });
 
-  $(document).on("mouseleave","div[id^='consulta_reservas'] .scrollContent tr td #eliminar_1", function () {
+  $(document).on("mouseleave",".scrollContent tr td #eliminar_1", function () {
       $(this).addClass("oculto");
       $(this).prev("img").removeClass("oculto");  
   });
 
-  $(document).on("mouseleave","div[id^='consulta_reservas'] .scrollContent tr td:last-child", function () {
+  $(document).on("mouseleave",".scrollContent tr td:last-child", function () {
       $(this).find("#eliminar_1").addClass("oculto");
       $(this).find("#eliminar_0").removeClass("oculto");
   });
 
+  $(document).on("mouseleave",".scrollContent tr", function () {
+      $(this).find("#eliminar_1").addClass("oculto");
+      $(this).find("#eliminar_0").removeClass("oculto");
+  });
 
   //Eliminación de una reserva.
   $(document).on("click","div[id^='consulta_reservas'] .scrollContent tr #eliminar_1", function(event){
@@ -5820,7 +5904,7 @@ $(document).on("click","#registro_equipamientos td a",function(event){
 
     var val=0;
     //Se comprueba si la lista de curso tiene un valor seleccionado.
-    if($("#antiguo_alumno_edit #lista_cursos select").val()==""){
+    if($("#antiguo_alumno_edit #lista_cursos select").val()==null){
       $("#antiguo_alumno_edit #lista_cursos select").attr("validated",false);
       $("#antiguo_alumno_edit #lista_cursos select").addClass("invalid");
       $("#antiguo_alumno_edit #lista_cursos select").after("<span class='mensaje' style='display: none;'>Debe seleccionar un curso</span>");
@@ -5852,16 +5936,6 @@ $(document).on("click","#registro_equipamientos td a",function(event){
         return false;
       }       
     });
-
-    if($("#antiguo_alumno_edit #lista_cursos select").val()==""){
-      $("#antiguo_alumno_edit #lista_cursos select").attr("validated",false);
-      $("#antiguo_alumno_edit #lista_cursos select").addClass("invalid");
-      $("#antiguo_alumno_edit #lista_cursos select").after("<span class='mensaje' style='display: none;'>Debe seleccionar un curso</span>");
-      val=1;
-    }
-    else{
-      $("#antiguo_alumno_edit #lista_cursos select").attr("validated",true);
-    }
 
     var estado= "";
 
@@ -6133,7 +6207,7 @@ $(document).on("click","#registro_equipamientos td a",function(event){
 
 
   ///////////////////////////////////////////
-  //            Asignar Eventos            //
+  //            Registrar Eventos          //
   ///////////////////////////////////////////
 
   //Se simula el hacer click en el calendario, haciendo click en un input oculto que contiene el día deleccionado.
@@ -6288,7 +6362,7 @@ $(document).on("click","#registro_equipamientos td a",function(event){
             }
           });
           
-          // Se actualiza las pestañas de equipamientos o instalaciones
+          // Se actualiza las pestañas de eventos.
           $("#registrar_eventos").update_tab();
           $("#consultar_eventos").update_tab();
         }
@@ -6297,16 +6371,289 @@ $(document).on("click","#registro_equipamientos td a",function(event){
   });
 
 
+  ///////////////////////////////////////////
+  //            Consultar Eventos          //
+  ///////////////////////////////////////////
+
+  //Se abre un formulario de mensajes al profesor al hacer click en el registro de la reserva del profesor.
+  $(document).on("click","#consultar_eventos .scrollContent tr", function () {
+
+      if($(this).hasClass("tr_select_descrip")){
+        $(this).removeClass("tr_select_descrip");
+        $("#consultar_eventos .descripcion").slideUp()
+        $("#consultar_eventos .descripcion").remove();
+      }
+      else{
+        $("#consultar_eventos .tr_select_descrip").removeClass("tr_select_descrip");
+        $("#consultar_eventos .descripcion").remove();
+        $(this).after("<div class='descripcion' style='display: none'>"+$(this).find("td:last").text()+"</div>");
+        $(this).addClass("tr_select_descrip");
+        $("#consultar_eventos .descripcion").slideDown( "fast" );
+      }
+             setTimeout(function(){ 
+
+        if($('#consulta_eventos tbody').get(0).scrollHeight>$('#consulta_eventos tbody').height() ){
+            $("#consulta_eventos thead tr>th:nth-child(5)").attr('style', 'width: 6.3% !important');
+        }
+        else{
+            $("#consulta_eventos thead tr>th:nth-child(5)").attr('style', 'width: 5.7% !important');
+        }
+            },120);
+
+  });
+
+  // Se elimina el estilo del registro seleccionado si hay antes de ordenar la tabla.
+  $(document).on("click","#consultar_eventos th", function () {
+    $("#consultar_eventos .tr_select_descrip").removeClass("tr_select_descrip");
+  });
 
 
+  // Efecto cambio de iconos de editar.
+  $(document).on("mouseenter",".scrollContent tr td #editar_0", function () {
+      $(this).addClass("oculto");
+      $(this).next("img").removeClass("oculto");
+  });
+
+  $(document).on("mouseleave",".scrollContent tr td #editar_1", function () {
+      $(this).addClass("oculto");
+      $(this).prev("img").removeClass("oculto");  
+  });
+
+  $(document).on("mouseleave",".scrollContent tr td:last-child", function () {
+      $(this).find("#editar_1").addClass("oculto");
+      $(this).find("#editar_0").removeClass("oculto");
+  });
+
+  $(document).on("mouseleave",".scrollContent tr", function () {
+      $(this).find("#editar_1").addClass("oculto");
+      $(this).find("#editar_0").removeClass("oculto");
+  });
+
+  //Eliminación de una reserva.
+  $(document).on("click","#consultar_eventos .scrollContent tr #eliminar_1", function(event){
+    event.preventDefault();
+    evento=$(this).closest("tr").attr("id");
+
+    titulo=$(this).closest("tr").find("td:nth-child(1)").text();
+
+    from=$(this).closest("tr").find("td:nth-child(2)").attr("data-order").split("/");
+    fecha= from[2]+"-"+from[0]+"-"+from[1];    
+
+    hora=$(this).closest("tr").find("td:nth-child(3)").attr("hora");
+
+    var aviso = new Audio();
+    aviso.src = "/Symfony/web/bundles/backend/sounds/aviso.mp3";
+    aviso.play();
+    swal({
+      title: "Eliminación del evento",
+      text: "<table><p>Se va a eliminar el siguiente evento, ¿Estas seguro de continuar? <br></p><thead><tr><th>Evento</th><th>Fecha</th><th>Hora</th></tr></thead><tbody><tr><td>"+titulo+"</td><td>"+fecha+"</td><td>"+hora+"</td></tr></tbody><br></p></table>",
+      type: "warning",
+      html: true,
+      showCancelButton: true,
+      cancelButtonText: "Cancelar",
+      customClass: 'swal-wide',
+      confirmButtonColor: color,
+      confirmButtonText: "¡Adelante!",
+      closeOnConfirm: true },
+
+      function(){
+        $.ajax({
+          type: 'DELETE',
+          url: Routing.generate("eventos_delete", {id:evento}),
+          success: function() {
+          // Se actualiza las pestañas de consulta y reserva.   
+            $("#consultar_eventos").update_tab();
+          }
+        })
+      return false;
+      }
+    );
+    //Se detiene la propagación del evento para que no detecte hacer click en el elemento "tr" que lo contiene.
+    event.stopPropagation();   
+  });
+
+// Se abre la ventana modal de Añadir curso
+  $(document).on('click',"#consultar_eventos #editar_1",function(event){
+    event.preventDefault();
+    evento=$(this).closest("tr").attr("id");
+    
+    $('#evento_dialog').load(Routing.generate("eventos_edit", {id:evento}), function(){
+      $('#evento_dialog form').attr("evento",evento );
+    }).dialog('open'); 
+
+    //Se detiene la propagación del evento para que no detecte hacer click en el elemento "tr" que lo contiene.
+    event.stopPropagation(); 
+  });
+
+  ///////////////////////////////////////////
+  //             Editar Eventos            //
+  ///////////////////////////////////////////
+
+  // Se actualiza la hora guardada al cambiar en timepicki
+  $(document).on('click',"#eventos_edit .timepicker_wrap .prev ",function(event){
+    hora=$("#eventos_edit .time input").val();
+    minutos=$("#eventos_edit .mins input").val();
+    $("#eventos_edit #eventos_hora").val(hora+":"+minutos);
+
+    //Se quita la opción "Todo el día" si está marcada.
+    $("#eventos_edit #all_day input").prop("checked", false);
+
+    comprobarEditForm($(this).closest("form"));
+
+  });
+
+  // Se actualiza la hora guardada al cambiar en timepicki.
+  $(document).on('click',"#eventos_edit .timepicker_wrap .next ",function(event){
+    hora=$("#eventos_edit .time input").val();
+    minutos=$("#eventos_edit .mins input").val();
+    $("#eventos_edit #eventos_hora").val(hora+":"+minutos);
+
+    //Se quita la opción "Todo el día" si está marcada.
+    $("#eventos_edit #all_day input").prop("checked", false);
+
+    comprobarEditForm($(this).closest("form"));
+
+  });
+
+  //Se eliminar el valor de hora si se marca la opción "Todo el dia".
+  $(document).on('click',"#eventos_edit #all_day input",function(e){
+
+    if(!$(this).prop('checked')){
+      $("#eventos_edit .mins input").prop("disabled",false);   
+      $("#eventos_edit .time input").prop("disabled",false);
+
+      $("#eventos_edit .timepicker_wrap div").removeClass("disabled");
+
+      $("#eventos_edit .mins input").val($("#eventos_edit .mins input").attr("value"));   
+      $("#eventos_edit .time input").val($("#eventos_edit .time input").attr("value"));    
+    }
+    else{
+      $("#eventos_edit .mins input").prop("disabled",true);   
+      $("#eventos_edit .time input").prop("disabled",true);
+
+      $("#eventos_edit .timepicker_wrap div").addClass("disabled");
+      $("#eventos_edit #eventos_hora").val("Todo el día");
+      
+      $("#eventos_edit .mins input").val("");   
+      $("#eventos_edit .time input").val("");
+
+      $("#eventos_edit .mins input").removeClass("modified");   
+      $("#eventos_edit .time input").removeClass("modified"); 
+    }
+    comprobarEditForm($(this).closest("form"));
+  });
 
 
+  $(document).on("submit","#eventos_edit",function(event) {
+    event.preventDefault();
+    form= $(this).closest("form");
 
+    var val=0;
 
+    // Se recorre los campos del formulario mirando si estan validados o no.
+    form.find(":input[type!='file']").each(function(){
+      if(!$(this).attr("validated") || $(this).attr("validated")==false){
+        if($(this).attr("validation")){
+          validation($(this));
+        }
+      }
+    });
 
+    //":input"añade a los input radio,select...
+    form.find(":input").each(function(){
+      if(($(this).attr("validated")=="false")) {
+        //Se muestra el input inválido.
+        $(this).focus();
+        val=1;
+        return false;
+      }       
+    });
 
+    if(val==0){
+      $.ajax({
+        type: 'PUT',
+        url: $(this).attr('action'),
+        data: $(this).serialize(), 
 
+        success: function(response) {
 
+          // Notificación de confirmación
+          exito.play();
+              
+          new PNotify({
+            text:"Evento actualizado",
+            addclass: "custom",
+            type: "success",
+            shadow: true,
+            hide: true,
+            buttons: {
+              sticker: false,
+              labels:{close: "Cerrar"}
+            },
+            stack: right_Stack,
+            animate: {
+              animate: true,
+              in_class: "fadeInRight",
+              out_class: "fadeOutRight",
+            }
+          });
+          // Se actualiza las pestañas de eventos.
+          $("#registrar_eventos").update_tab();
+          $("#consultar_eventos").update_tab();
+          $("#evento_dialog").dialog('close');
+        },
+        error: function (response, desc, err){
+          if (response.responseJSON && response.responseJSON.message) {
+            //Se elimina las clases de error, para luego añadirlas a los campos que siguen inválidos.
+            form.find(":input").each(function(i){  
+              $(this).prev().find(".error").remove();
+              $(this).next(".mensaje").remove();
+              $(this).removeClass("invalid");
+              //Si tiene alguna validación se le asigna validate: true, para que se vuelva a validar.
+              //En caso contrario se valida con las reglas de validación de Symfony.
+              if($(this).attr("validation")){
+                $(this).attr("validated", true);
+              }
+            });
+            //Se muestra los campos inválidos.        
+            for (var key in response.responseJSON.data) { 
+              form.find(":input[id='"+key+"']").addClass("invalid");
+              form.find(":input[id='"+key+"']").removeClass("modified");
+              //Si tiene alguna validación se le asigna validate: false, para indicar el campo inválido.
+              //En caso contrario se valida con las reglas de validación de Symfony.
+              if($(this).attr("validation")){
+                form.find(":input[id='"+key+"']").attr("validated", false);
+              }
+              form.find(":input[id='"+key+"']").after("<span class='mensaje'>"+response.responseJSON.data[key]+"</span>");
+              if(response.responseJSON.data[key]=="Este valor no debería estar vacío."){
+                form.find(":input[id='"+key+"']").prev().append("<span class='error'>Dato requerido</span>");
+              }
+              else{
+                form.find(":input[id='"+key+"']").prev().append("<span class='error'>Dato inválido</span>");
+              }
+            }
+            //Se muestra el primer campo inválido.
+            for (var key in response.responseJSON.data) { 
+              form.find(":input[id='"+key+"']").focus();
+              return false;
+            }
+          } 
+          else {
+            error.play();
+            swal({
+              title: "Error en el sistema",
+              text: "Se ha producido un error en el sistema, por favor cierra la ventana <span>Editar Evento</span> y vuelva a intentarlo de nuevo.",
+              type: "error",
+              html: true,
+              showCancelButton: false,
+              confirmButtonColor: color,
+              closeOnConfirm: true 
+            });
+          }
+        }
+      })
+    }
+  });
 
 
 

@@ -770,7 +770,6 @@ class AlumnoController extends Controller
         {
             $entity->setFoto(null);
         }
-        
 
         return $this->render('BackendBundle:Alumno:edit_old.html.twig', array(
             'entity'      => $entity,
@@ -915,7 +914,6 @@ class AlumnoController extends Controller
                 $entity->setGrupo(null);
             }
 
-
             if(date("n")>=6){
                 $entity->setAnyoAcademico(date("Y")." / ".(date("Y")+1));
             }
@@ -950,9 +948,6 @@ class AlumnoController extends Controller
             'delete_form' => $deleteForm->createView(),
         ));
     }
-
-
-
 
     public function MultipleUpdateAction(Request $request, $id)
     {
