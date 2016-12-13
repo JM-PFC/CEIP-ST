@@ -1,5 +1,5 @@
 {% for noticia in noticias %}
-	<article class="contenedor_noticia">
+	<article id="recientes" class="contenedor_noticia">
         <div  class="fecha_publicada no-seleccion">
             <div  class="valor_day">{{noticia.fecha| localizeddate('none', 'none', 'none',none , " d ") }}</div>
             <div class="valor_month">{{noticia.fecha| localizeddate('none', 'none', 'none',none , " MMMM ") | slice(1, 3)}}</div>
@@ -8,8 +8,10 @@
     
         <div class="contenido_noticia">
            	{% if noticia.foto != null %}
-               	<div class="imgLiquidFill imgLiquid">
-                    <a href="{{ path('noticia', {'id': noticia.id}) }}"><img src="{{ asset('bundles/cole/images/noticias/'~ noticia.foto)}}" alt="Loulou form Sos Chats Geneva"></a>
+            {% set myArray = noticia.foto|split('.') %}
+            {% set result = myArray[0]|split('_') %}
+               	<div class="imgLiquidFill imgLiquid" style="background-position: 0px -{{ result[1] }}px !important;">
+                    <a href="{{ path('noticia', {'id': noticia.id}) }}"><img src="{{ asset('uploads/noticias/'~ noticia.foto)}}" alt="{{ result[1] }} Imagen de la noticia"></a>
                 </div>
             {% endif %}
             <a href="{{ path('noticia', {'id': noticia.id}) }}"><h2>{{noticia.titulo}}</h2></a>

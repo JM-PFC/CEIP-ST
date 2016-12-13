@@ -86,7 +86,7 @@ class EventosController extends Controller
         $error=array();
 
         // Se comprueba que se han seleccionado todas las opciones para la reserva.
-        if(!$fecha || !$hora || !$titulo || !$categoria  ){
+        if(!$fecha || !$hora || !$titulo || !$descripcion  ){
             if(!$fecha){
                 $error[]="- Fecha del evento";
             }
@@ -303,7 +303,7 @@ class EventosController extends Controller
     public function deleteAction(Request $request, $id)
     {
         
-/*
+    /*
         $form = $this->createDeleteForm($id);
         $form->handleRequest($request);
 
@@ -350,12 +350,10 @@ class EventosController extends Controller
 
     public function obtenerEventosAction()
     {
-
         $entity = new Eventos();
         $em = $this->getDoctrine()->getManager();
 
         $entities = $em->getRepository('BackendBundle:Eventos')->findEventosGenerales("general");
-
 
         //$date = strtotime(date(“Y-m-d H:i:s”));000
         $arr = array(array("title" => '- Event Title 1',"description" => "Morbi leo risus, porta ac consectetur ac, vestibulum at eros.","datetime"=>new \DateTime("now")),
@@ -366,11 +364,25 @@ class EventosController extends Controller
             'data' =>$entities,
             'success' => true), 200);
     }
+    
+    public function contadorEventosAction()
+    {
+        $entity = new Eventos();
+        $em = $this->getDoctrine()->getManager();
 
+        $id=$this->get('request')->request->get('id');
 
+        $entity = $em->getRepository('BackendBundle:Eventos')->findOneById($id);
 
+        $entity->SetContador(((int)$entity->GetContador())+1);
+        $em = $this->getDoctrine()->getManager();
+        $em->persist($entity);
+        $em->flush();
 
-
+        return new JsonResponse(array(
+            'message' => 'Success!',
+            'success' => true), 200);
+    }
 
 
 

@@ -1,15 +1,104 @@
-{% extends '::base.html.twig' %}
+{% extends 'BackendBundle:Default:index.html.twig' %}
 
-{% block body -%}
-    <h1>Nueva Noticia</h1>
+{% block head %}{% endblock %}
+{% block stylesheets %}{% endblock %}
 
-    {{ form(form) }}
+{% block javascript %}
 
-        <ul class="record_actions">
-    <li>
-        <a href="{{ path('noticias') }}">
-            Volver a la lista
-        </a>
-    </li>
-</ul>
+<script>
+  $("#imagen_noticia_dialog").dialog({
+    bgiframe: true,
+    autoOpen: false,
+    height: 550,
+    width: 800,
+    modal: true,
+    resizable: false,
+    close: function( event, ui ) {
+      $(".ui-widget-overlay").remove();
+    }
+  });
+
+  $('#imagen_noticia_dialog').on('dialogclose', function(event) {
+    $('#imagen_noticia_dialog').empty();
+  });
+  
+  $( "#slider-vertical" ).slider({
+    orientation: "vertical",
+    range: "min",
+    min: -180,
+    max: 0,
+    value: -90,
+    slide: function( event, ui ) {
+      //Se actualiza la posición de la imagen que se mostrará en la lista de nocitias.
+      $( "#registrar_noticias #cont_imagen" ).css('background-position', "0px "+ui.value+"px");
+      $( "#registrar_noticias #slider-vertical" ).attr("value", ui.value);
+    }
+
+  });
+</script> 
+
+{% endblock %}
+
+{% block body %}
+  <div id="registrar_noticias" class="contenedor_principal_con_titulo general_container">
+    <div class="parent_no_form">
+      <div class="child">
+          <h2>Añadir Noticias</h2>
+        <div class="main_container">
+          <div class="one_column_no_form">
+            <div class="parent_no_form">
+            <div class="child">
+              <div id="container_noticia">
+                <div class="f_left">
+                  <label>Título</label>
+                  <input id="titulo" placeholder="Inserte un título"></input>              
+                </div>
+                <div>
+                  <label>Categoría</label>
+                  <select id="categoria">
+                    <option value="general" selected="selected">General</option>
+                    <option value="infantil">Ed. Infantil</option>
+                    <option value="primaria">Ed. Primaria</option>
+                    <option value="profesor">Profesores</option>
+                  </select>                  
+                </div>
+				        <div>
+                	<div id="insertar_imagen">
+                  		<label>Imagen</label>
+                  		<button >Insertar Imagen</button>                  
+                	</div>
+                  <div id="mostrar_imagen" class="oculto">
+                    <label>Imagen</label><span>(Utilice el deslizador vertical para ajustar la vista de la imagen en la lista de noticias)</span>
+                      <div id='cont_imagen' class='imgLiquidFill imgLiquid'>
+                        <img id="image_" src='{{ asset('uploads/noticias/uploaded.jpeg')}}' alt='Imagen subida' />
+                      </div>
+                  </div>
+                  <div id="slider-vertical" value="-90" class="oculto"></div>
+                  <div id="cambiar_imagen" class="oculto">
+                      <div id='cont_imagen_mini' class='imgLiquidFill imgLiquid'>
+                        <img id="image_" src='{{ asset('uploads/noticias/uploaded.jpeg')}}' alt='Imagen subida' />
+                      </div>
+                      <button >Cambiar Imagen</button>                  
+                  </div>
+                </div>
+                <div>
+                  <label>Descripción</label>
+                  <textarea id="descripcion"></textarea>                  
+                </div>
+                <div id="imagen_noticia_dialog" title="Añadir Imagen"></div>
+              </div>
+            </div>
+            </div>
+          </div>
+
+          <div class="btn_save">
+            <div>
+              <button id="save" disabled="disabled">Guardar</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  </div>
 {% endblock %}

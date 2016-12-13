@@ -125,6 +125,13 @@
 
   $("#eventos_edit #actualizar_calendario_lectivo").trigger("click");
 
+  //Si el día del evento coincide con el día actual se añade la clase "ui-state-active", ya que se elimina por defecto para no mostrarlo.
+  var d= new Date();
+  setTimeout(function() {
+    if(d.getDate()==$("#eventos_edit  #eventos_datetime_date_day").attr("seleccionado") && d.getMonth()+1==$("#eventos_edit #eventos_datetime_date_month").attr("seleccionado") && d.getFullYear()==$("#eventos_edit #eventos_datetime_date_year").attr("seleccionado") ){
+      $("#eventos_edit .ui-datepicker td[data-month='"+d.getMonth()+"'][data-year='"+d.getFullYear()+"'] a").filter(function(){return $(this).text()==d.getDate();}).addClass("ui-state-active");
+    }
+  }, 100); 
 
     $("#hora_evento").timepicki({
     show_meridian:false,

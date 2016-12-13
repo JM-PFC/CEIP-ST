@@ -2,15 +2,33 @@ noticias:
     path:     /
     defaults: { _controller: "ColeBundle:Noticias:noticias" }
 
+noticias_imagen:
+    path:     /imagen
+    defaults: { _controller: "ColeBundle:Noticias:imagen" }
+    options:
+        expose: true
+
+imagen_create:
+    path:     /imagen_create
+    defaults: { _controller: "ColeBundle:Noticias:imagen_create" }
+    options:
+        expose: true
+
+imagen_delete:
+    path:     /imagen_delete
+    defaults: { _controller: "ColeBundle:Noticias:imagen_delete" }
+    options:
+        expose: true
+
+contador_noticias:
+    path:     /contador_noticias
+    defaults: { _controller: "ColeBundle:Noticias:contadorNoticias" }
+    options:
+        expose: true
+        
 noticias_show:
     path:     /{id}/show
     defaults: { _controller: "ColeBundle:Noticias:show" }
-
-obtener_eventos:
-    path:     /obtener_eventos
-    defaults: { _controller: "ColeBundle:Noticias:obtenerEventos" }
-    options:
-        expose: true
 
 noticia:
     path:     /{id}
@@ -24,6 +42,8 @@ noticias_create:
     path:     /create/
     defaults: { _controller: "ColeBundle:Noticias:create" }
     requirements: { _method: post }
+    options:
+        expose: true
 
 noticias_edit:
     path:     /{id}/edit
@@ -38,4 +58,6 @@ noticias_delete:
     path:     /{id}/delete
     defaults: { _controller: "ColeBundle:Noticias:delete" }
     requirements: { _method: post|delete }
-    
+
+
+

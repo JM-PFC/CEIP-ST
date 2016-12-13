@@ -26,6 +26,8 @@ class Noticias
      * @var string
      *
      * @ORM\Column(name="titulo", type="string", length=255)
+     * @Assert\NotBlank()
+     * @Assert\Type("string")
      */
     private $titulo;
 
@@ -33,6 +35,8 @@ class Noticias
      * @var string
      *
      * @ORM\Column(name="descripcion", type="text")
+     * @Assert\NotBlank()
+     * @Assert\Type("string")
      */
     private $descripcion;
 

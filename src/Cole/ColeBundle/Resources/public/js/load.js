@@ -3,9 +3,10 @@ $(document).ready(function () {
   $('div.usuariologin').click(function() {
     $(this).next().slideToggle();
   });
-
+  ////////////////////////////////////////
+  //       Carrusel de imagenes         //
+  ////////////////////////////////////////
   $('.carrusel > div:gt(0)').hide();
-  		
   setInterval(function(){
   	$('.carrusel > div:first')
   		.fadeOut(1500)
@@ -15,6 +16,24 @@ $(document).ready(function () {
   		.appendTo('.carrusel');
   },4000);
 
+  ////////////////////////////////////////
+  //             Noticias               //
+  ////////////////////////////////////////
+
+  $(".imgLiquidFill").imgLiquid({
+    fill: true,
+    //horizontalAlign: "center",
+    //verticalAlign: "center"
+    horizontalAlign: "center",
+    verticalAlign: "none"
+  });
+
+  $(".more").toggle(function() {
+    $(this).text("Leer menos...").siblings(".complete").show();
+  }, function() {
+    $(this).text("Leer mas...").siblings(".complete").hide();
+  });
+  /*
   $('.story-small img').each(function() {
     var maxWidth = 100; // Max width for the image
     var maxHeight = 100;    // Max height for the image
@@ -40,18 +59,26 @@ $(document).ready(function () {
       height = height * ratio;    // Reset height to match scaled image
     }
   });
+  */
+  
+  //Se incrementa el contador de las noticias.
+  $(document).on('click',".contenido_noticia a",function(event){ 
+    event.preventDefault();
+    href=$(this).attr("href");
+    array=href.split("/");
+    id=array[array.length-1];
+    $.ajax({
+      type: 'POST',
+      url: Routing.generate('contador_noticias'),
+      data:{id:id}, 
+      dataType: 'json',
+      success: function(response){
 
-  $(".imgLiquidFill").imgLiquid({
-    fill: true,
-    horizontalAlign: "center",
-    verticalAlign: "center"
+      }
+    })
   });
 
-  $(".more").toggle(function() {
-    $(this).text("Leer menos...").siblings(".complete").show();
-  }, function() {
-    $(this).text("Leer mas...").siblings(".complete").hide();
-  });
+
 
   ///////////////////////////////////////////
   //         Calendario de Eventos         //
@@ -113,7 +140,33 @@ $(document).ready(function () {
       });
     }
   })
+  //Se añade los arrow a los títulos de los eventos.
+  setTimeout(function() {
+    $(".calendar .c-event-list .title").each (function(){ 
+      $(this).prepend("<div class='arrow-right'></div>");
+    });
 
+    $(".calendar .c-event-list .description").each (function(){ 
+      $(this).attr("style","display: none;");
+    });
+  }, 300); 
+ 
+  $(document).on('click',".calendar .c-event-list .title",function(event){ 
+    event.preventDefault();
+
+    if($(this).find("div").hasClass("arrow-right")){
+      $(this).find("div").addClass("arrow-down");
+      $(this).find("div").removeClass("arrow-right");
+      $(this).next().slideDown("fast");
+    }
+    else{
+      $(this).next().slideUp();
+      $(this).find("div").removeClass("arrow-down");
+      $(this).find("div").addClass("arrow-right");
+    }
+  });
+
+  //Ajustes de estilo en los días con evento en el calendario.
   $(document).on('click',"#calendar .c-day",function(event){ 
     event.preventDefault();
 
@@ -138,7 +191,6 @@ $(document).ready(function () {
     }
   });
 
-
   $(document).on('mouseover',"#calendar .c-day",function(event){ 
     event.preventDefault();
 
@@ -154,17 +206,34 @@ $(document).ready(function () {
   });
 
   $(document).on('mouseover',"#calendar .c-event-item",function(event){ 
-        event.preventDefault();
-        day=$(this).attr("data-event-day");
-
-          $(this).removeClass("c-event-over");
+    event.preventDefault();
+    day=$(this).attr("data-event-day");
+    $(this).removeClass("c-event-over");
   });
 
   $(document).on('mouseover',"#calendar .c-event-list",function(event){ 
-        event.preventDefault();
-        day=$(this).find("div[class='c-event-item']").attr("data-event-day");
+    event.preventDefault();
+    day=$(this).find("div[class='c-event-item']").attr("data-event-day");
+    $("#calendar .c-grid .c-day[data-event-day='"+day+"'] ").removeClass("c-event-over");
+  });
 
-        $("#calendar .c-grid .c-day[data-event-day='"+day+"'] ").removeClass("c-event-over");
+  //Se incrementa el contador al pulsar sobre un título de un evento para ver la información.
+  $(document).on('click',".c-event-item .title",function(event){ 
+    event.preventDefault();
+    if(!$(element).is(":visible")) {
+
+    }
+    id=$(this).attr("data-id");
+
+    $.ajax({
+      type: 'POST',
+      url: Routing.generate('contador_eventos'),
+      data:{id:id}, 
+      dataType: 'json',
+      success: function(response){
+
+      }
+    })
   });
 
 

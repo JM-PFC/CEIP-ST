@@ -7,6 +7,7 @@ button{
 	min-height: 26px;
 	border-radius: 5px;
 	padding: 3px;
+	background: #e4e0e0; 
 }
 button[class*="ui-dialog-titlebar-close"]{
 	min-width: 0;
@@ -22,7 +23,8 @@ button{
 }
 button:focus{
 	/*color: #334c73;*/
-	background-color: #C3C4C5;
+	/*background-color: #C3C4C5;*/
+	text-decoration: underline;
 }
 button:hover{
 	background: #b1cce7;
@@ -563,7 +565,7 @@ nav{
 	display: inline-block;
 }
 .oculto{
-	display: none;
+	display: none !important;
 }
 .visible{
 	visibility: visible;
@@ -609,7 +611,7 @@ tbody tr td{
    border-left: 8px solid #666;
    background-color: #ddd;
    margin: 8px 0;
-   box-shadow: -1px -2px 2px -2px rgba(0, 0, 0, 0.5);
+   box-shadow: -1px -2px 2px -2px rgba(0, 0, 0, 0.5);		
 }
 #tab-container ul li a,
 #tab-container ul li a:visited
@@ -954,7 +956,7 @@ legend{
 	width: 100%;
 	/*margin: 10%;*/
 	margin: 5%;
-	font-size: 16px;
+	font-size: 15px;
 }
 .block_insert h2{
 	margin-bottom: 15px;
@@ -1098,6 +1100,7 @@ textarea{
 	font-size: 12pt !important;
 	resize: none;
 	padding: 0	10px;
+	border-radius: 3px;
 }
 .derecha{
 	float: right;
@@ -1111,6 +1114,7 @@ select{
 	font-family: Verdana,Arial,sans-serif;
 	font-size: 1.2em !important;
 	box-shadow: 0 1px 1px 0px rgba(0, 0, 0, 0.5);
+	padding: 0 3px;
 }
 select option{
 	padding: 0.5px 5px;
@@ -1642,9 +1646,15 @@ form button{
 }
 
 .parent_no_form{
-		display: inline-flex;
+	display: inline-flex;
 	height: 50vh;
 	width: 100%;
+}
+.parent_no_form button{
+	font-size: 1em !important;
+}
+.parent_no_form select{
+	height: 28px;
 }
 .child{
 	margin: auto 0;
@@ -2616,7 +2626,10 @@ border: 1px solid;
 }
 #equipamiento_unidades{
 	width: 8%;
-	text-align: right;
+	text-align: center;
+	height: 24px;
+	margin-left: 5px;
+	margin-top: -4px;
 }
 .edit_equipamiento{
 	background: #b1cce7;
@@ -2665,7 +2678,9 @@ border: 1px solid;
 	width: 49%;
 	float: left;
 }
-
+#registro_horario select{
+	min-width: 60px;
+}
 #registro_horario .simple_column_red{
 	width: 47%;
 }
@@ -2675,7 +2690,6 @@ border: 1px solid;
 }
 .contenedor_registro_horario  h2{
 	text-align: center;
-
 }
 .contenedor_registro_horario  div table{
 	margin: 0 auto;
@@ -2937,30 +2951,45 @@ input[id="si"]{
 	opacity: 0.5;
 	box-shadow: none;
 }
-#guardar_reserva{
+.btn_save{
 	float: left;
 	width: 7%;
 	min-height: 42vh;
     display: inline-flex;
 }
-#guardar_reserva div{
+.btn_save div{
 	margin: auto 0;
 }
+.btn_save button:disabled{
+   pointer-events: none;
+   cursor: default;
+   height: 45px !important;
+margin:120px 9px;
+}
 
-#guardar_reserva button{
-	height: 45px;
+.btn_save button:enabled{
+	height: 45px !important;
 	margin:120px 9px;
+	background-color: #5cb85c;
+    border-color: #4cae4c;
+    color: #fff ;
+    border-radius: 5px;
+}
+
+.btn_save button:enabled:hover{
+    background-color: #449d44;
+    border-color: #398439;
 }
 
 @media only screen and (max-width: 1200px) {
 	.close_tabs button{
 		width: 54px;
 	}
-	#guardar_reserva{
+	.btn_save{
 		width: 100%;
     	display: block;
 	}
-	#guardar_reserva button{
+	.btn_save button{
 		margin: 0 auto;
 	}
 
@@ -3054,6 +3083,17 @@ input[id="si"]{
 		padding-left: 16px;
 	}
 
+	#registrar_evento .contenedor_principal_reserva>div:nth-child(1){
+		width: 31%;
+	}
+
+	#registrar_evento .contenedor_principal_reserva>div:nth-child(2){
+		width: 61%;
+	}
+
+	#registrar_evento .contenedor_principal_reserva>div:nth-child(2) #container_evento{
+		height: 36vh;
+	}
 }
 
 .contenedor_principal_reserva div[class="parent_no_form"]{
@@ -3061,10 +3101,6 @@ input[id="si"]{
 }
 
 #contenedor_reserva_horas button:disabled{
-   pointer-events: none;
-   cursor: default;
-}
-#guardar_reserva button:disabled{
    pointer-events: none;
    cursor: default;
 }
@@ -3336,6 +3372,9 @@ tbody.scrollContent tr.alternateRow td {
 #lista_cursos select option:last-child{
  font-weight: bold;
  border-top: 1px dotted black;
+}
+#consulta_antiguo_alumno .opciones label:not(.btn_selected):hover{
+	background: buttonface;
 }
 .antiguo_alumno #lista_cursos{
 	width: 27%;
@@ -3778,7 +3817,7 @@ tbody.scrollContent tr.alternateRow td {
 	margin-bottom: 0;
 	padding: 0 5px !important;
 }
-#registrar_evento label{
+.general_container label{
 	display: block;
     width: 100%;
     margin-right: 10px;
@@ -3788,7 +3827,7 @@ tbody.scrollContent tr.alternateRow td {
 	font-weight: bold;
 }
 #container_evento>div:first-child{
-	width: 50% !important;
+	width: 56% !important;
 	margin-right: 10px;
 }
 #container_evento>div:first-child input{
@@ -3824,7 +3863,8 @@ tbody.scrollContent tr.alternateRow td {
 }
 #all_day{
 	display: block;
-	margin-top: 2px
+	margin-top: 2px;
+	width: 100px;
 }
 #all_day input{
 	margin-right: 3px;
@@ -4026,5 +4066,146 @@ div .disabled{
 }
 #eventos_edit .mensaje{
 	max-width: 50%;
+}
+
+/* Noticias */
+
+.one_column_no_form{
+	width: 88%;
+	float: left;
+	margin-right: 2%;
+	margin-top: -0.5%;
+}
+.main_container button{
+	min-width: 100px;
+}
+#container_noticia{
+	background: #b1cce7 none repeat scroll 0 0;
+    border: 1px solid #aaaaaa;
+    border-radius: 5px;
+    box-shadow: 0 1px 1px 0 rgba(0, 0, 0, 0.5);
+    padding: 5px 20px 10px 20px;
+    height: 47vh;
+    overflow: auto;
+}
+#container_noticia>div:first-child{
+	width: 83% !important;
+	margin-right: 10px;
+}
+#container_noticia>div:first-child input{
+	width: 90% !important;
+	padding: 0 5px !important;
+	text-transform: none !important;
+	height: 24px;
+}
+#container_noticia>div:nth-child(2) select{
+	font-size: 1em !important;
+}
+#container_noticia>div:nth-child(3){
+	display: inline-flex;
+	width: 100%;
+}
+#container_noticia #insertar_imagen{
+	width: 175px;
+	display: inline;
+	margin: auto 0 auto 0;
+}
+#container_noticia #cont_imagen{
+	width: 710px;
+	height: 180px;
+	border-radius: 3px;
+	margin-top: 5px;
+	background: white;
+	box-shadow: 0 1px 1px 1px rgba(0, 0, 0, 0.5);
+	width: 99%;
+}
+#container_noticia #cont_imagen_mini{
+	width: 180px;
+	height: 100px;
+	border-radius: 3px;
+	margin-top: 5px;
+	box-shadow: 0 1px 1px 1px rgba(0, 0, 0, 0.5);
+	margin-bottom: 20px;
+}
+#mostrar_imagen{
+    float: left;
+    width: 77% !important;
+}
+#container_noticia #cambiar_imagen{
+    float: left;
+    margin: auto 0;
+    width: 175px;
+    text-align: center;
+    margin-left: 2%;
+}
+#container_noticia #slider-vertical{
+    margin-left: 0.5%;
+    height: 180px !important;
+    margin-top: 22px;
+}
+#container_noticia #slider-vertical .ui-slider-handle:hover{
+	cursor: pointer;
+}
+#container_noticia #slider-vertical .ui-widget-header {
+    background: none !important;
+}
+#container_noticia #insertar_imagen label{
+	margin-bottom: 5px; 
+}
+#container_noticia button, #btn_upload button{
+	background: #e4e0e0; 
+}
+#container_noticia button:hover, #btn_upload button:hover{
+	background: buttonface!important; 
+}
+#container_noticia>div:last-child{
+	width: 101% !important;
+	clear: both;
+	position: relative;
+	display: inline-block;
+	margin-top: 15px;
+}
+
+#container_noticia #mostrar_imagen label{
+	float: left;
+	width: 60px;
+	margin-top: 0;
+}
+
+#imagen_noticia_dialog #capa{
+	background: lightgray;
+    left: 134px;
+    margin: 0 auto;
+    position: absolute;
+    top: 51px;
+    height: 304px;
+    width: 532px !important;
+    z-index: 1;
+}
+#imagen_noticia_dialog #upload-image .cr-boundary{
+	border-radius: 5px;
+}
+#imagen_noticia_dialog .container{
+	background: #b1cce7;
+	border-radius: 5px;
+	padding: 10px 0;
+	height: 470px;
+	box-shadow: 0 1px 1px 1px rgba(0, 0, 0, 0.5);
+}
+#imagen_noticia_dialog #btn_file{
+	width: 60%;
+	float: left;
+	margin-left: 80px;
+}
+#imagen_noticia_dialog #btn_file input{
+	max-width: 480px;
+}
+#imagen_noticia_dialog #btn_upload{
+	width: 24%;
+	float: right;
+}
+#imagen_noticia_dialog button{
+	min-width: 90px;
+	padding: 1.5px;
 }
 

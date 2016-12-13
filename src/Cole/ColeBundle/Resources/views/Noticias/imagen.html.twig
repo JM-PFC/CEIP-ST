@@ -1,0 +1,192 @@
+{% extends 'BackendBundle:Default:index.html.twig' %}
+
+{% block head %}{% endblock %}
+{% block stylesheets %}{% endblock %}
+
+{% block javascript %}
+  <script type="text/javascript" src="{{asset("bundles/cole/js/imgLiquid-min.js")}}"></script>
+
+  <script>
+
+</script> 
+
+{% endblock %}
+
+{% block body %}
+  <div class="parent_no_form">
+<div class="child">
+<div class="container">
+  <div class="panel panel-default">
+    <div class="panel-body">
+
+      <div>
+        <div>
+        <div id="capa"></div>
+        <div id="upload-image" style="width: 600px; margin: 0px auto;"></div>
+        </div>
+
+        <div id="btn_file">
+         <input type="file" id="upload">
+        </div>
+        <div id="btn_upload">
+          <button class="btn btn-success upload-result">Aceptar</button>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+</div>
+
+<script type="text/javascript">
+$uploadCrop = $('#upload-image').croppie({
+    enableExif: true,
+    viewport: {
+        width: 530,
+        height: 300,
+        type: 'square'
+    },
+    boundary: {
+        width: 600,
+        height: 370
+    }
+});
+
+
+$('#upload').on('change', function () { 
+  var reader = new FileReader();
+    reader.onload = function (e) {
+      $uploadCrop.croppie('bind', {
+        url: e.target.result
+      }).then(function(){
+        console.log('jQuery bind complete');
+      });
+    }
+
+    reader.readAsDataURL(this.files[0]);
+
+});
+
+
+$('.upload-result').on('click', function (ev) {
+  file=$("#registrar_noticias #cont_imagen img").attr("file");
+  imagen_provisional="";
+  $uploadCrop.croppie('result', {
+    type: 'canvas',
+    size: { width:800 }, //the height will be calculated using the viewport aspect ratio.
+    quality: 1,
+    format:'jpeg'
+  }).then(function (resp) {
+    $.ajax({
+      url: Routing.generate('imagen_delete'),
+      type: "POST",
+      data: {file:file},
+      success: function (data) {
+        $.ajax({
+          url: Routing.generate('imagen_create'),
+          type: "POST",
+          data: {"image":resp},
+          success: function (data) {
+            imagen_provisional=data.file;
+            //Se muestra y se ajusta la imagen subida al contenedor.
+            if($("#registrar_noticias #cont_imagen img").attr("src")){
+              src= $("#registrar_noticias #cont_imagen img").attr("src");
+              src= $("#registrar_noticias #cont_imagen_mini img").attr("src");
+
+              if(src.indexOf("uploaded.jpeg") >= 0){
+                anterior=$("#registrar_noticias #cont_imagen img").attr("file");
+                $("#registrar_noticias #cont_imagen img").attr("file",data.file);
+                change= src.replace("uploaded.jpeg",data.file);
+                $("#registrar_noticias #cont_imagen img").attr("src",change);
+
+                anterior=$("#registrar_noticias #cont_imagen_mini img").attr("file");
+                $("#registrar_noticias #cont_imagen_mini img").attr("file",data.file);
+                change= src.replace("uploaded.jpeg",data.file);
+                $("#registrar_noticias #cont_imagen_mini img").attr("src",change);
+              }
+              else{
+                anterior=$("#registrar_noticias #cont_imagen img").attr("file");
+                $("#registrar_noticias #cont_imagen img").attr("file",data.file);
+                change= src.replace(anterior,data.file);
+                $("#registrar_noticias #cont_imagen img").attr("src",change);
+              
+                anterior=$("#registrar_noticias #cont_imagen_mini img").attr("file");
+                $("#registrar_noticias #cont_imagen_mini img").attr("file",data.file);
+                src= src.replace(anterior,data.file);
+                $("#registrar_noticias #cont_imagen_mini img").attr("src",src);
+              }
+            }
+            $(".imgLiquidFill").imgLiquid();
+          }
+        });
+        $("#insertar_imagen").addClass( "oculto" );
+        $("#mostrar_imagen").removeClass( "oculto" );
+        $("#cambiar_imagen").removeClass( "oculto" );
+        $("#slider-vertical").removeClass( "oculto" );
+        $("#imagen_noticia_dialog").dialog( "close" );
+        $.ajax({
+          url: Routing.generate('imagen_delete'),
+          type: "POST",
+          data: {imagen_provisional:imagen_provisional}
+        });
+      }
+    });
+  });
+});
+</script>
+
+{#
+
+<script type="text/javascript">
+$uploadCrop = $('#upload-demo1').croppie({
+    enableExif: true,
+    viewport: {
+        width: 200,
+        height: 200,
+        type: 'circle'
+    },
+    boundary: {
+        width: 300,
+        height: 300
+    }
+});
+
+
+$('#upload').on('change', function () { 
+  var reader = new FileReader();
+    reader.onload = function (e) {
+      $uploadCrop.croppie('bind', {
+        url: e.target.result
+      }).then(function(){
+        console.log('jQuery bind complete');
+      });
+    }
+
+    reader.readAsDataURL(this.files[0]);
+
+});
+
+
+$('.upload-result').on('click', function (ev) {
+  $uploadCrop.croppie('result', {
+    type: 'canvas',
+    size: 'viewport'
+  }).then(function (resp) {
+    $.ajax({
+      url: Routing.generate('image_create'),
+      type: "POST",
+      data: {"image":resp},
+      success: function (data) {
+        html = '<img src="' + resp + '" />';
+        $("#upload-demo-i").html(html);
+      }
+    });
+  });
+});
+</script>
+  #}
+
+
+
+{% endblock %}

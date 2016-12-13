@@ -5,6 +5,10 @@
 a {
     text-decoration: none;
     color: #001F51;
+    outline: none;
+}
+a:focus {
+    text-decoration: underline;
 }
 
 body {
@@ -617,6 +621,10 @@ fieldset.fsetoculto {
     -moz-box-sizing: border-box;
     -webkit-box-sizing: border-box;
     box-sizing: border-box;
+    border-bottom: 2px solid rgb(51, 76, 115);
+    border-bottom: 2px solid rgba(51, 76, 115, .2);
+    -webkit-background-clip: padding-box; /* for Safari */
+    background-clip: padding-box; /* for IE9+, Firefox 4+, Opera, Chrome */
 }
 .fecha_publicada{
     position: relative;
@@ -633,6 +641,8 @@ fieldset.fsetoculto {
     line-height: 1.2;
     margin-right: 10px;
     font-size: 15px;
+    border-radius: 3px;
+    box-shadow: 2px 2px 1px #888888;
 }
 .valor_day{
     font-size: 30px;
@@ -647,32 +657,57 @@ fieldset.fsetoculto {
     font-size: 14px;
     margin-top: 2px;
 }
+
 .contenido_noticia{
     display: inline-block;
     float: left;
-    width: 90%;
+    width: 100%;
     -moz-box-sizing: border-box;
     -webkit-box-sizing: border-box;
     box-sizing: border-box;
     word-wrap: break-word;
-
 }
+#recientes .contenido_noticia{
+    width: 90%;
+}
+
 .imgLiquidFill{
     position: relative;
     display: block;
     width:100%; 
     height:180px;
     margin-bottom: 10px;
-    border-radius: 3px 3px 3px 3px;
+    border-radius: 3px !important;
+    box-shadow: 2px 2px 5px #888888;
 }
 .img-small{
-    width:130px !important; 
+    width:150px !important; 
     height:130px !important;
     float: left;
     margin-right: 20px;
-    margin-top: 6px;
     margin-bottom: 20px;
-    border-radius: 0px !important;
+    border-radius: 3px !important;
+    background-position: center;/*Se centra la imagen pequeña de la noticia*/
+}
+.normal{
+    width:530px !important; 
+    height:300px !important;
+    margin: 30px auto;
+    border-radius: 3px !important;
+    background-position: center;/*Se centra la imagen pequeña de la noticia*/
+}
+.no_foto{
+    padding-left: 170px;
+}
+.no-seleccion-foto:hover{
+    opacity: 0 !important;
+}
+.no-seleccion:hover{
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    cursor: default;
 }
 .contenido_noticia>div>a:hover{
     width: 100%;
@@ -695,12 +730,6 @@ fieldset.fsetoculto {
 #nuevo{
     margin-top: 10px;
 }
-.contenido_border{
-    padding-bottom: 20px;
-    border-bottom: 1px solid #ececec !important;
-    width: 100%!important;
-}
-
 #calendar{
     clear: both;
     display: inline-block;
@@ -844,6 +873,33 @@ fieldset.fsetoculto {
     border-top: 1px solid #001f51 !important;
     padding: 3px;
     border-radius: 5px;
+}
+
+.arrow-right{
+    width: 0;
+    height: 0;
+    border-top: 5px solid transparent;
+    border-bottom: 5px solid transparent;
+    border-left: 5px solid #001f51;
+    float: left;
+    margin-top: 3px;
+    margin-right: 3px;
+}
+
+.arrow-down{
+    width: 0;
+    height: 0;
+    border-top: 5px solid #001f51;
+    border-right: 5px solid transparent;
+    border-left: 5px solid transparent;
+    float: left;
+    margin-top: 6px;
+    margin-right: 3px;
+}
+
+.calendar .c-event-list .title:hover{
+    pointer-events: auto !important;
+    cursor: pointer !important;
 }
 
 

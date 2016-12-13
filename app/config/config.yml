@@ -108,7 +108,7 @@ parameters:
     Dir_imagenes_prof: %kernel.root_dir%/../web/uploads/images/
     Dir_imagenes_alum: %kernel.root_dir%/../web/uploads/images/
     Dir_imagenes_centro: %kernel.root_dir%/../web/uploads/images/
-
+    Dir_imagenes_noticias: %kernel.root_dir%/../web/uploads/noticias/
 knp_snappy:  
     pdf:
         enabled:    true

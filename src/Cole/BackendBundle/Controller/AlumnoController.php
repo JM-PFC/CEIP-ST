@@ -76,10 +76,10 @@ class AlumnoController extends Controller
      */
     public function createAction(Request $request)
     {
-    // if request is XmlHttpRequest (AJAX) but not a POSt, throw an exception
-    if ($request->isXmlHttpRequest() && !$request->isMethod('POST')) {
-        throw new HttpException('XMLHttpRequests/AJAX calls must be POSTed');
-    }
+        // if request is XmlHttpRequest (AJAX) but not a POSt, throw an exception
+        if ($request->isXmlHttpRequest() && !$request->isMethod('POST')) {
+            throw new HttpException('XMLHttpRequests/AJAX calls must be POSTed');
+        }
 
         $entity = new Alumno();
         $form = $this->createCreateForm($entity);
@@ -356,11 +356,11 @@ class AlumnoController extends Controller
 
             if( $estado=="actualizado" && $entity->getFoto()!=null){
                 $fileName = uniqid().'.'.$file->guessExtension();
-                $photoDir = $this->container->getParameter('Dir_imagenes_alum');
+                $photoDir = $this->container->getParameter('Dir_imagenes_alum'); //Parámetro en config.yml
                 $file->move($photoDir, $fileName);
                 $entity->setFoto($fileName);
   
-                // Comprueba que existe el arcivo de la imagen anterior y lo elimina.
+                // Comprueba que existe el archivo de la imagen anterior y lo elimina.
                 $dir_file=$photoDir.$fileOriginal;
                 if(is_file( $dir_file )){
                 unlink($dir_file);

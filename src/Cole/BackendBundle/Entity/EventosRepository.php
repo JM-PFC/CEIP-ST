@@ -15,7 +15,7 @@ class EventosRepository extends EntityRepository
 	public function findEventosGenerales($categoria)
 	{
 	return $this->getEntityManager()->createQuery(
-		"SELECT CONCAT(CONCAT(e.title, ' | '), e.hora) AS title, e.description, e.datetime FROM BackendBundle:Eventos e WHERE e.categoria=:categoria ORDER BY e.datetime ASC, e.hora ASC")
+		"SELECT CONCAT(CONCAT(e.title, ' | '), e.hora) AS title, e.description, e.datetime, e.id FROM BackendBundle:Eventos e WHERE e.categoria=:categoria ORDER BY e.datetime ASC, e.hora ASC")
 		->setParameters(array(
 			'categoria' => $categoria))
 		->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);

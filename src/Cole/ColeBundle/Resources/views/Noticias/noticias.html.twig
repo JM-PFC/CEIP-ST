@@ -2,20 +2,23 @@
 
 {% block contenido %}
     {% for noticia in noticias %}
-	    <article class="contenedor_noticia ">
-        <div class="contenido_noticia contenido_border">
-            {% if noticia.foto != null %}
-                <div class="imgLiquidFill  img-small imgLiquid">
-                    <a href="{{ path('noticia', {'id': noticia.id}) }}"><img src="{{ asset('bundles/cole/images/noticias/'~ noticia.foto)}}" alt="Loulou form Sos Chats Geneva"></a>
-                </div>
-            {% endif %}
+	  <article class="contenedor_noticia ">
+      {% if noticia.foto != null %}
+        <div class="contenido_noticia">
+            <div class="imgLiquidFill  img-small imgLiquid">
+                <a href="{{ path('noticia', {'id': noticia.id}) }}"><img src="{{ asset('uploads/noticias/'~ noticia.foto)}}" alt="Imagen de la Noticia"></a>
+            </div>
+      {% else %}
+        <div class="contenido_noticia no_foto">
+      {% endif %}
+            
             <a href="{{path('noticia', {'id': noticia.id}) }}"><h2 class=" no-margin ">{{noticia.titulo}}</h2></a>
 
             <span><strong> {{ noticia.fecha | localizeddate('none', 'none', 'none',none , " d 'de' MMMM 'de' Y ',' H:mm'h.'") | capitalize}}</strong></span>                  
                 	
             <p id="nuevo">{{noticia.descripcion|truncate(350,true)| nl2br}}<a class="href_blue" href="{{ path('noticia', {'id': noticia.id}) }}"><strong> [Leer más] </strong></a></p>
         </div>
-        </article>
+    </article>
     {% endfor %}
 {% endblock %}
 

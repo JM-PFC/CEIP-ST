@@ -22,7 +22,7 @@ eventos_edit:
     defaults: { _controller: "BackendBundle:Eventos:edit" }
     options:
         expose: true
-        
+
 eventos_update:
     path:     /{id}/update
     defaults: { _controller: "BackendBundle:Eventos:update" }
@@ -38,5 +38,11 @@ eventos_delete:
 obtener_eventos:
     path:     /obtener_eventos
     defaults: { _controller: "BackendBundle:Eventos:obtenerEventos" }
+    options:
+        expose: true
+
+contador_eventos:
+    path:     /contador_eventos
+    defaults: { _controller: "BackendBundle:Eventos:contadorEventos" }
     options:
         expose: true

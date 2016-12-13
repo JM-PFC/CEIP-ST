@@ -89,9 +89,9 @@ $(document).ready(function () {
     //Se elimina el foco del elemento.
     $(this).blur();
   });
-
-	var num_tabs = $("#tabs ul li").length +1,
-  tabTemplate = "<li style=''><a title='#{title}' href='#{href}' ref='#{ref}'>#{label}</a> <span class='ui-icon ui-icon-close' role='presentation'>Remove Tab</span></li>",
+       
+	var num_tabs = $("#tabs ul li").length +1, //onmousedown='return false;' evita arrastar las pestañas.
+  tabTemplate = "<li style=''><a onmousedown='return false;' title='#{title}' href='#{href}' ref='#{ref}'>#{label}</a> <span class='ui-icon ui-icon-close' role='presentation'>Remove Tab</span></li>",
 	tabs = $( "#tabs" ).tabs();
 
 

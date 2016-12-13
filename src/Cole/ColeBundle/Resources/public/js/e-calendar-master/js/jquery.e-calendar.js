@@ -164,10 +164,11 @@
 
                     //Se modifica la apariencia original de los eventos en la lista.
                     //var hora = $('<div/>').addClass('title')
-//accordion
+
                     var date = lpad(d.getDate(), 2) + '/' + lpad(d.getMonth() + 1, 2) + ' ' + lpad(d.getHours(), 2) + ':' + lpad(d.getMinutes(), 2);
                     var item = $('<div/>').addClass('c-event-item');
-                    var title = $('<div/>').addClass('title').html(date + '  ' + settings.events[i].title + '<br/>');
+                    //Se le añade el valor del id de cada evento para obtener el evento al incrementar contador.
+                    var title = $('<div/>').addClass('title').attr('data-id', settings.events[i].id).html(date + '  ' + settings.events[i].title + '<br/>');
                     var description = $('<div/>').addClass('description').html(settings.events[i].description + '<br/>');
                     item.attr('data-event-day', d.getDate());
                     item.on('mouseover', mouseOverItem).on('mouseleave', mouseLeaveItem);

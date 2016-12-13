@@ -39,7 +39,7 @@
                         <div class="usuariologin">USUARIOS</div>
                         <div  class="caja_login oculto">
                              <div class="bloque_login">
-                                <h2>Área Privada</h2>
+                                <h2 class="no-seleccion">Área Privada</h2>
                                 <form id="login" action="{{ path('login_check') }}" method="post">
                                 <fieldset class="fsetoculto">
                                     <!--usuario:-->
@@ -68,7 +68,7 @@
         <div class="centrado">
          <header>
             <div class="cabecera">
-                <div class="titulo">Colegio de Educación Infantil y Primaria<br> <strong>Santa Teresa</strong><br>Cádiz</div>
+                <div class="titulo no-seleccion" >Colegio de Educación Infantil y Primaria<br> <strong class="no-seleccion">Santa Teresa</strong><br>Cádiz</div>
                 <div class="carrusel ">
                     <img oncopy="alert('\xA9 Imagen propiedad del CEIP SANTA TERESA');return false" oncontextmenu="alert('\xA9 Imagen propiedad del CEIP SANTA TERESA');return false" src="{{ asset('bundles/cole/images/carrusel/mascara.png') }}" alt="">
                     <div><img src="{{ asset('bundles/cole/images/carrusel/image1.jpg') }}" alt=""></div>
@@ -83,7 +83,7 @@
                     <li class="boton_inicio" class="ribbon-content"><a href="{{path('index')}}"> Inicio </a></li>
                     <li class="boton_naranja"><a href="{{path('pagina_estatica', {'pagina':'centro'})}}"> Centro </a>
                         <ul class="submenu">
-                            <li><a href="#"> ¿Quienes somos? </a></li>
+                            <li><a class="no-seleccion" href="#"> ¿Quienes somos? </a></li>
                             <li><a href="#"> Carta del Director </a></li>
                             <li><a href="#"> Historia        </a></li>
                             <li><a href="#"> Instalaciones   </a></li>
@@ -142,9 +142,8 @@
                         </ul>
                     </li>
                 </ul>
-                <div class="migas">
-
-                    <span>
+                <div class="migas ">
+                    <span class="no-seleccion">
                         {% block migas %}
                             {% if inicio.inicioCurso|date('Y') == "-1" %} 
                                 Bienvenidos a nuestra web. 

@@ -17,7 +17,7 @@ class NoticiasRepository extends EntityRepository
 		$em = $this->getEntityManager();
 		$consulta = $em->createQuery('SELECT n FROM ColeBundle:Noticias n WHERE n.categoria = :categoria ORDER BY n.fecha DESC');
 		$consulta->setMaxResults(3);
-		$consulta->setParameter('categoria', 'pública');
+		$consulta->setParameter('categoria', 'general');
 		return $consulta->getResult();
 	}
 

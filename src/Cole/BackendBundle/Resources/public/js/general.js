@@ -13,7 +13,8 @@ $(document).ready(function () {
   //$("input[type='time']").mask('00:00', {placeholder: "__:__"});  
   $("#registro_ratio input").mask('00');
 
-
+  //Se evita arrastar los enlaces del menú.
+  $( ".barra_menu a, .barra_menu li" ).attr("onmousedown","return false;");
 
   //Se establece el color del botón de confirmación de las notificaciones para usar con swal().
   color="#5A88B6";
@@ -24,18 +25,35 @@ $(document).ready(function () {
   var right_Stack = {"dir1": "up", "dir2": "left", "context": $(".contenido_main"), "push": "top", "firstpos1": 20, "firstpos2":20};
   var left_Stack = {"dir1": "up", "dir2": "right", "context": $(".contenido_main"), "push": "top","firstpos1": 20, "firstpos2":20};
   // Se establece las variables con los audios para las notificaciones.
-  var aviso = new Audio();
-  aviso.src = "/Symfony/web/bundles/backend/sounds/aviso.mp3";
-  var ok = new Audio();
-  ok.src = "/Symfony/web/bundles/backend/sounds/ok.mp3"
-  var exito = new Audio();
-  exito.src = "/Symfony/web/bundles/backend/sounds/exito.mp3";
-  var error = new Audio();
-  error.src = "/Symfony/web/bundles/backend/sounds/error.mp3";
-  var errorPNotify = new Audio();
-  errorPNotify.src = "/Symfony/web/bundles/backend/sounds/errorPNotify.mp3";
-  var blocker = new Audio();
-  blocker.src = "/Symfony/web/bundles/backend/sounds/blocker.mp3";
+  if (navigator.userAgent.search("Firefox") >= 0) { //Firefox sólo admite archivos .ogg
+    var aviso = new Audio();
+    aviso.src = "/Symfony/web/bundles/backend/sounds/aviso.ogg";
+    var ok = new Audio();
+    ok.src = "/Symfony/web/bundles/backend/sounds/ok.ogg"
+    var exito = new Audio();
+    exito.src = "/Symfony/web/bundles/backend/sounds/exito.ogg";
+    var error = new Audio();
+    error.src = "/Symfony/web/bundles/backend/sounds/error.ogg";
+    var errorPNotify = new Audio();
+    errorPNotify.src = "/Symfony/web/bundles/backend/sounds/errorPNotify.ogg";
+    var blocker = new Audio();
+    blocker.src = "/Symfony/web/bundles/backend/sounds/blocker.ogg";   
+  }
+  else{
+    var aviso = new Audio();
+    aviso.src = "/Symfony/web/bundles/backend/sounds/aviso.mp3";
+    var ok = new Audio();
+    ok.src = "/Symfony/web/bundles/backend/sounds/ok.mp3"
+    var exito = new Audio();
+    exito.src = "/Symfony/web/bundles/backend/sounds/exito.mp3";
+    var error = new Audio();
+    error.src = "/Symfony/web/bundles/backend/sounds/error.mp3";
+    var errorPNotify = new Audio();
+    errorPNotify.src = "/Symfony/web/bundles/backend/sounds/errorPNotify.mp3";
+    var blocker = new Audio();
+    blocker.src = "/Symfony/web/bundles/backend/sounds/blocker.mp3";
+  }
+
   /////////////////////////////
   // Métodos para validación //
   /////////////////////////////
@@ -6318,7 +6336,7 @@ $(document).on("click","#registro_equipamientos td a",function(event){
           }
           errorPNotify.play();
           new PNotify({
-            title: "Debe seleccionar los siguientes datos para registrar el evento:",
+            title: "Debe completar los siguientes datos para registrar el evento:",
             text:texto,
             addclass: "custom",
             type: "error",
@@ -6380,7 +6398,7 @@ $(document).on("click","#registro_equipamientos td a",function(event){
 
       if($(this).hasClass("tr_select_descrip")){
         $(this).removeClass("tr_select_descrip");
-        $("#consultar_eventos .descripcion").slideUp()
+        $("#consultar_eventos .descripcion").slideUp();
         $("#consultar_eventos .descripcion").remove();
       }
       else{
@@ -6390,16 +6408,14 @@ $(document).on("click","#registro_equipamientos td a",function(event){
         $(this).addClass("tr_select_descrip");
         $("#consultar_eventos .descripcion").slideDown( "fast" );
       }
-             setTimeout(function(){ 
-
+      setTimeout(function(){ 
         if($('#consulta_eventos tbody').get(0).scrollHeight>$('#consulta_eventos tbody').height() ){
             $("#consulta_eventos thead tr>th:nth-child(5)").attr('style', 'width: 6.3% !important');
         }
         else{
             $("#consulta_eventos thead tr>th:nth-child(5)").attr('style', 'width: 5.7% !important');
         }
-            },120);
-
+      },120);
   });
 
   // Se elimina el estilo del registro seleccionado si hay antes de ordenar la tabla.
@@ -6472,7 +6488,7 @@ $(document).on("click","#registro_equipamientos td a",function(event){
     event.stopPropagation();   
   });
 
-// Se abre la ventana modal de Añadir curso
+// Se abre la ventana modal de Editar Evento.
   $(document).on('click',"#consultar_eventos #editar_1",function(event){
     event.preventDefault();
     evento=$(this).closest("tr").attr("id");
@@ -6654,6 +6670,130 @@ $(document).on("click","#registro_equipamientos td a",function(event){
       })
     }
   });
+
+
+  ///////////////////////////////////////////
+  //            Insertar Noticias          //
+  ///////////////////////////////////////////
+
+
+  $(document).on('click',"#insertar_imagen, #cambiar_imagen",function(event){
+    event.preventDefault();
+    $('#imagen_noticia_dialog').load(Routing.generate("noticias_imagen"), function(){
+      $('#btn_file #upload').trigger('click');
+    }).dialog('open'); 
+  }); 
+
+  //Se habilita el botón guardar cuando todos los campos esten completos.
+  $(document).on('keyup',"#registrar_noticias :input",function(e){
+    //Se habilita todos los campos.
+    if($("#registrar_noticias #titulo").val()!="" && $("#registrar_noticias #descripcion").val()!=""){
+      $("#registrar_noticias #save").prop("disabled",false);
+    }
+    else{
+      $("#registrar_noticias #save").prop("disabled",true);
+    }
+  });
+
+  $(document).on('click',"#registrar_noticias #save",function(e){
+    // Se establece el efecto para la notificación de error en el caso de que se de varias veces seguidas a guardar con algunas opción sin marcar.
+    errorPNotify.pause();
+    errorPNotify.currentTime=0.0;
+    $(".ui-pnotify").remove();
+
+    titulo=$("#registrar_noticias #titulo").val();
+    categoria=$("#registrar_noticias #categoria").val();
+    if(!$("#registrar_noticias #mostrar_imagen").hasClass("oculto")){
+      imagen=$("#registrar_noticias #mostrar_imagen img").attr("file");
+      pos=$("#registrar_noticias #slider-vertical").attr("value");
+    }
+    else{
+      imagen=null;
+      pos=null;
+    }
+    descripcion=$("#registrar_noticias #descripcion").val();
+
+    $.ajax({
+      type: 'POST',
+      url: Routing.generate('noticias_create'),
+      data:{titulo:titulo, categoria:categoria, imagen:imagen, pos:pos, descripcion:descripcion}, 
+      dataType: 'json',
+      success: function(response){
+
+        // Se comprueba si hay alguna opción sin marcar para mostrar la notificación de error.
+        if(response.error.length != 0){
+          var texto="";
+          for (var key in response.error) {
+            texto+="<span>"+response.error[key]+"<span><br>";
+          }
+          errorPNotify.play();
+          new PNotify({
+            title: "Debe completar los siguientes datos para registrar la noticia:",
+            text:texto,
+            addclass: "custom",
+            type: "error",
+            shadow: true,
+            hide: true,
+            width: "335px",
+            buttons: {
+            sticker: false,
+            labels:{close: "Cerrar"}
+            },
+            stack: left_Stack,
+            animate_speed: "fast",
+            animate: {
+              animate: true,
+              in_class: "fadeInLeft",
+              out_class: "fadeOutLeft",
+            }
+          });
+          return false;
+        }
+        else{
+          exito.play();
+          new PNotify({
+            text:"Noticia registrada.",
+            addclass: "custom",
+            type: "success",
+            shadow: true,
+            hide: true,
+            animation: "fade",
+            animate_speed: 'fast',
+            delay: 4000,
+            buttons: {
+              sticker: false,
+              labels:{close: "Cerrar"}
+            },
+            stack: right_Stack,
+            animate: {
+              animate: true,
+              in_class: "fadeInRight",
+              out_class: "fadeOutRight",
+            }
+          });
+          
+          // Se actualiza las pestañas de noticias.
+          $("#registrar_noticias").update_tab();
+          $("#consultar_noticias").update_tab();
+        }
+      }
+    })
+  });
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
