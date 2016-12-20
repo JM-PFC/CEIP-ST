@@ -23,6 +23,7 @@ class AppKernel extends Kernel
             new Cole\IntranetBundle\IntranetBundle(),
             //new Ps\PdfBundle\PsPdfBundle(),
             new Knp\Bundle\SnappyBundle\KnpSnappyBundle(),
+            new Stfalcon\Bundle\TinymceBundle\StfalconTinymceBundle(),
         );
 
         if (in_array($this->getEnvironment(), array('dev', 'test'))) {

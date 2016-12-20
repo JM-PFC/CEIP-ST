@@ -101,7 +101,12 @@
             <div class="contenedor_registro" id="consulta_reservas_{{ tipo }}" >  
                 <div>
                     <div id="cabecera_lista">
+                    {% if tipo == "instalaciones" %}
                         <h2 class="text_cabecera">{{ tipo|capitalize }} Reservadas</h2>
+                    {% else %}
+                        <h2 class="text_cabecera">{{ tipo|capitalize }} Reservados</h2>
+                    {% endif %}
+
                         <div id="buscador"> </div>
                     </div>
                     <div id="fondo_azul_osc" class="tabla_con_info">

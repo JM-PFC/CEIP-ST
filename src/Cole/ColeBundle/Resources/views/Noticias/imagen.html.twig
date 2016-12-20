@@ -74,7 +74,7 @@ $('.upload-result').on('click', function (ev) {
   imagen_provisional="";
   $uploadCrop.croppie('result', {
     type: 'canvas',
-    size: { width:800 }, //the height will be calculated using the viewport aspect ratio.
+    size: { width:1000 }, //the height will be calculated using the viewport aspect ratio.
     quality: 1,
     format:'jpeg'
   }).then(function (resp) {
@@ -120,11 +120,12 @@ $('.upload-result').on('click', function (ev) {
             $(".imgLiquidFill").imgLiquid();
           }
         });
-        $("#insertar_imagen").addClass( "oculto" );
-        $("#mostrar_imagen").removeClass( "oculto" );
-        $("#cambiar_imagen").removeClass( "oculto" );
-        $("#slider-vertical").removeClass( "oculto" );
+        $("#insertar_imagen button").prop("disabled", true);
+        $("#imagen_noticia").removeClass( "oculto" );
         $("#imagen_noticia_dialog").dialog( "close" );
+        //Se ajusta a la mitad el desplazamienzo vertical de la nueva imagen.
+        $("#slider-vertical").slider('value', -90);
+
         $.ajax({
           url: Routing.generate('imagen_delete'),
           type: "POST",

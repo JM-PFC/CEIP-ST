@@ -32,9 +32,8 @@
     <div class="child">
       <div class="simple_column_red">
         <div class="block_insert">
-            <h2>Registro Horario Escolar</h2></br>
-            <p>-Seleccione lo datos para generar un nuevo horario:</p>
-            </br>
+            <h2>Registro Horario Escolar</h2>
+            <li>Seleccione lo datos para generar un nuevo horario:</li>
             <div>
                 <span>Total de horas de clases:</span>
                 <select id="total_horas" class="select_number">
@@ -60,11 +59,15 @@
             </div>
 
             <div>
-                <span>Clases después de la comida: 
-                    <input id="no" type="radio" checked="checked" name="alumno[foto]" required="required" >
-                    <label class="required" for="no">No</label>
-                    <input id="si" type="radio" name="alumno[foto]" required="required" >
-                    <label class="required" for="si">Si</label>
+                <span id="selec_comida">Clases después de la comida:
+                    <div> 
+                        <input id="no" type="radio" checked="checked" name="alumno[foto]" required="required" >
+                        <label class="required" for="no">No</label>
+                    </div> 
+                    <div> 
+                        <input id="si" type="radio" name="alumno[foto]" required="required" >
+                        <label class="required" for="si">Si</label>
+                    </div>
                 </span>
                 <span class="disabled">Nº de horas de clase después de la comida:</span>
                 <select id="horas_comida" class="select_number" disabled="">
@@ -74,7 +77,7 @@
                     <option  value="3">3</option>
                 </select>
             </div>
-        </br></br>
+
         <div class="center_button">
             <button id="button_generate" disabled="">Generar Horario</button>
           
@@ -154,7 +157,7 @@
         </div>
        </div>
 
-        <div id="registro_horario_guardar" class="bottons_form">
+        <div id="registro_horario_guardar" class="buttons_form">
             <button disabled="disabled" id="button_horario_all">Guardar Todo</button>
             <button disabled="disabled" id="horario_rest">Restablecer</button>
         </div>

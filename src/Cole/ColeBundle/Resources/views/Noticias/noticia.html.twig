@@ -7,7 +7,7 @@
                 <div class="contenido_noticia">
 
                     <h2>{{entity.titulo}}</h2>
-                    <p>{{entity.descripcion| nl2br}}</p>
+                    <p>{{entity.descripcion|raw|nl2br }}</p>
                     {% if entity.foto != null %}
                         <div class="imgLiquidFill imgLiquid normal">
                         <a class="no-seleccion-foto" ><img src="{{ asset('uploads/noticias/'~ entity.foto)}}" alt="Imagen de la Noticia"></a></div>

@@ -63,10 +63,11 @@ $(document).ready(function () {
   
   //Se incrementa el contador de las noticias.
   $(document).on('click',".contenido_noticia a",function(event){ 
-    event.preventDefault();
+
     href=$(this).attr("href");
     array=href.split("/");
     id=array[array.length-1];
+    
     $.ajax({
       type: 'POST',
       url: Routing.generate('contador_noticias'),

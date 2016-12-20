@@ -16,7 +16,7 @@
 
             <span><strong> {{ noticia.fecha | localizeddate('none', 'none', 'none',none , " d 'de' MMMM 'de' Y ',' H:mm'h.'") | capitalize}}</strong></span>                  
                 	
-            <p id="nuevo">{{noticia.descripcion|truncate(350,true)| nl2br}}<a class="href_blue" href="{{ path('noticia', {'id': noticia.id}) }}"><strong> [Leer más] </strong></a></p>
+            <p id="nuevo">{{noticia.descripcion|striptags|truncate(300,true)|raw|nl2br }}<a class="href_blue" href="{{ path('noticia', {'id': noticia.id}) }}"><strong> [Leer más] </strong></a></p>
         </div>
     </article>
     {% endfor %}

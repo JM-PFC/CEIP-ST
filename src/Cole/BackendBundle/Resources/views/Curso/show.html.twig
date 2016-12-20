@@ -10,14 +10,12 @@
             $("#contenedor_registro_Ngrupos #table_th_inf th:nth-child(2)").css("min-width","25%");
             $("#contenedor_registro_Ngrupos #table_th_inf th:nth-child(3)").css("min-width","25%");
             $("#contenedor_registro_Ngrupos #table_th_inf th:nth-child(4)").css("min-width","23%");
-
         }
 
         if($("#td_prim").hasScrollBar()){
             $("#contenedor_registro_Ngrupos #table_th_prim th:nth-child(2)").css("min-width","25%");
             $("#contenedor_registro_Ngrupos #table_th_prim th:nth-child(3)").css("min-width","25%");
             $("#contenedor_registro_Ngrupos #table_th_inf th:nth-child(4)").css("min-width","23%");
-
         }   
     }
     </script>
@@ -29,9 +27,15 @@
     <div class="child">
       <div class="simple_column_red">
         <div class="block_insert">
-            <h2>Asignar Nº Grupos</h2></br>
-            <p>- Se puede selecionar el mismo nº de grupos para cada curso.</p>
-            </br>
+            <h2>Asignar Nº Grupos</h2>
+            <ul>
+                <li>Para guardar todos los datos a la vez pulse sobre la opción<button class="btn_info">Guardar Todo</button>.</li>
+                <li>Se puede selecionar a la vez el mismo nº de grupos para cada curso en la opción
+                <select class="btn_info">
+                    <option selected="selected" class="oculto" value="0">Nº</option>
+                </select>
+                 inferior.</li>
+            </ul>
             <div class="center_w85">
                 <span>Nº de Grupos:</span>
                 <select id="select_grupos_all" class="select_number">
@@ -41,11 +45,8 @@
                     <option  value="3">3</option>
                 </select>
             </div>
-
-            </br></br>
             <div class="center_w60">
                 <button id="button_grupos_all">Guardar Todo</button>
-                </br></br></br>
                 <button id="button_grupos_rest">Restablecer</button>
             </div>
         </div> 

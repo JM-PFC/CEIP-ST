@@ -13,6 +13,13 @@ button[class*="ui-dialog-titlebar-close"]{
 	min-width: 0;
 	min-height: 0;
 }
+.btn_info{
+	pointer-events: none;
+    cursor: default;
+    height: 20px;
+    padding: 0 3px;
+    font-size: 13px !important;
+}
 /*Se elimina el borde punteado al hacer click en un "button" (Firefox)*/
 button::-moz-focus-inner {
    border: 0;
@@ -704,7 +711,7 @@ form{
     height: 50vh;
     margin-top: 0.5vh;
 }
-form button, .block_insert button, .buttons_form button{
+form button, .block_insert button:not(.btn_info), .buttons_form button{
 	min-width: 100px !important;
 }
 form>div{
@@ -954,24 +961,48 @@ legend{
 	clear: both;
 	height: auto;
 	width: 100%;
-	/*margin: 10%;*/
-	margin: 5%;
+	margin: 0 5% 0 2% !important;
 	font-size: 15px;
 }
 .block_insert h2{
-	margin-bottom: 15px;
+	margin-top: 6%;
+	margin-bottom: 8%;
 	font-size: 1.3em;
-	text-decoration: underline;
+	font-family: Impact,Haettenschweiler,Franklin Gothic Bold,Charcoal,Helvetica Inserat,Bitstream Vera Sans Bold,Arial Black,sans serif;
+	color: #424242;
 }
-.block_insert p span{
+.block_insert ul{
+	margin-bottom: 40px !important;
+	padding-left:20px;
+	background: #b1cce7;
+	box-shadow: 0 1px 1px 1px rgba(0, 0, 0, 0.5);
+	padding: 5px 5px 5px 20px;
+	border-radius: 10px;
+
+}
+.block_insert li, .block_insert p{
+	font-family: Impact,Haettenschweiler,Franklin Gothic Bold,Charcoal,Helvetica Inserat,Bitstream Vera Sans Bold,Arial Black,sans serif;
+	font-size: 14px;
+	text-align: left !important;
+	margin: 10px 0;
+	line-height: 18px;
+}
+.block_insert li span, .block_insert p span{
 	font-style: italic;
 	font-weight: bold;
+}
+.block_insert li img, .block_insert p img{
+	float: none; 
+	margin: -5px 0;
 }
 .block_insert h2 span{
 	background: #b1cce7;
 	padding:3px 5px;
 	border-radius: 5px;
 	box-shadow: 0 1px 1px 1px rgba(0, 0, 0, 0.5);
+}
+.block_insert button{
+	margin: 0 2%!important;
 }
 .double_column{
 	width: 52%;
@@ -1273,10 +1304,11 @@ form button{
 }
 #registro_asignaturas .block_insert{
 	margin: 10% 5%;
+	width: 95%;
 }
 #registro_asignaturas .block_insert h2{
 	font-size: 1.3em;
-	width: 120%;
+	text-align: center;
 }
 #registro_asignaturas #contenedor_registro{
 	width: 33%;
@@ -1399,26 +1431,21 @@ form button{
 	text-align: center;
 	width: 95%;
 }
-#registro_cursos .block_insert p{
-	text-align: justify;
-}
-#Ngrupo{
-	text-align: center
-}
 .select_number{
 	font-size: 1em !important;
 	margin: 3px;
-	min-width: 51px;
-    text-align: center
+	min-width: 53px;
+    text-align: justify;
 }
 #contenedor_registro_Ngrupos {
-    width: 47%;
+    width: 49%;
     margin-bottom: 9px !important;
 }
 .contenedor_tabla_no_selec .block_insert{
     margin-left: 4%;
     margin-right: 4%;
     text-align: center;
+    width: 95%;
 }
 .contenedor_tabla_no_selec .block_insert p{
     text-align: justify;
@@ -1430,8 +1457,20 @@ form button{
 	display: block;
 }
 #registro_Ngrupos>div>div>div:nth-child(2){
-	width: 76%;
+	width: 72%;
 	float: left;
+}
+#registro_Ngrupos .simple_column_red{
+	width: 28%;
+}
+#registro_Ngrupos .block_insert ul{
+	margin-bottom: 20px !important;
+}
+#registro_Ngrupos .block_insert .center_w85{
+	margin-bottom: 10% !important;
+}
+#registro_Ngrupos .derecha{
+	margin-left: 1% !important;
 }
 #contenedor_registro_Ngrupos div table td{
     min-width: 30%;
@@ -1446,12 +1485,14 @@ form button{
 	min-width: 7%;
 }
 #contenedor_registro_Ngrupos .inner_table{
-	max-height: 244px !important;
+	max-height: 265px !important;
 }
 #contenedor_registro_Ngrupos table select {
 	margin-top: 3px;
 	margin-bottom: 3px;
-	font-size: 1em !important
+    font-size: 1em !important;
+    height: 25px !important;
+	text-align: justify;
 }
 #contenedor_registro_Ngrupos td { 
 	cursor: default;
@@ -1464,10 +1505,13 @@ form button{
 	width: 76%;
 	float: left;
 }
+#asignar_aula .block_insert{
+	margin-left: -4px !important;
+	width: 108% !important;
+}
 #contenedor_asignar_aula .inner_table {
     max-height: 259px !important;
 }
-
 #contenedor_asignar_aula div table td{
     min-width: 30%;
 }
@@ -1498,6 +1542,17 @@ form button{
 #registro_ratio .simple_column_red{
 	width: 39%
 }
+#registro_ratio h2{
+	margin-top: 0 !important;
+	margin-bottom: 5px !important;
+}
+#registro_ratio ul{
+	margin-top: 0 !important;
+	margin-bottom: 5px !important;
+}
+#registro_ratio .block_insert{
+	margin-top: 0% !important;
+}
 #registro_ratio>div>div>div:nth-child(2){
 	width: 60%;
 	float: left;
@@ -1509,7 +1564,6 @@ form button{
 #registro_ratio .block_insert p{
 	margin: 0;
 	width: 95%;
-	text-align: left;
 }
 .span_title{
 	margin-left: 15%;
@@ -1650,7 +1704,7 @@ form button{
 	height: 50vh;
 	width: 100%;
 }
-.parent_no_form button{
+.parent_no_form button:not(.btn_info){
 	font-size: 1em !important;
 }
 .parent_no_form select{
@@ -1851,14 +1905,12 @@ float: right;
 #contenedor_festivos{
 	width: 53%;
 	float: left;
-	margin-top: 2%;
 }
 #contenedor_calendario{
 	width: 46%;
 	border-radius: 5px;
 	border: 1px solid #aaaaaa;
 	background: #d2d9e2;
-	margin-top: 2%;
 	height: 290px;
 	box-shadow: 0 1px 1px 0 rgba(0, 0, 0, 0.5);	float: left;
 }
@@ -2077,6 +2129,7 @@ float: right;
     overflow: auto;
     width: 100%;
     border-radius: 5px;
+    margin-bottom: 0px;
 }
 .contenedor_registro h2{
 	text-align: center;
@@ -2578,7 +2631,7 @@ border: 1px solid;
 
 .contenedor_registro_instalaciones{
 	width: 45% !important;
-	margin-left: 12% !important;
+	margin-left: 10% !important;
 
 }
 .contenedor_registro_instalaciones h2{
@@ -2592,9 +2645,20 @@ border: 1px solid;
 }
 .registro_equipamientos .simple_column {
 	width: 34%;
+	text-align: center;
+	margin-left: 2% !important;
 }
 .registro_equipamientos .block_insert {
 	margin: 10% 5%;
+}
+.registro_equipamientos #contenedor_registro{
+	height: 49vh !important;
+}
+.registro_equipamientos .block_insert ul{
+	margin-bottom: 0 !important;
+}
+.registro_equipamientos .block_insert h2{
+	margin: 5% 0 !important;
 }
 .registro_equipamientos .inner_table {
     max-height: 247px !important;
@@ -2657,22 +2721,35 @@ border: 1px solid;
     font-weight: bold;
     margin-left: 3%;
     margin-top: 2%;
-    margin-bottom: 10px;
+    margin-bottom: 20px;
     overflow: auto;
     width: 95%;
     /*min-height:44vh;*/
 }
 #registro_horario .block_insert{
-    margin-left: 4%;
-    margin-right: 4%;
+	margin: 3% 6%;
     text-align: center;
     width: 90%;
+}
+#registro_horario .simple_column_red h2{
+ 	margin-top: 2% !important;
 }
 #registro_horario .block_insert p{
     text-align: justify;
 }
 #registro_horario .block_insert span{
 	font-weight: bold;
+	text-align: left;
+	float: left;
+	margin: 5px;
+	clear: both;
+}
+#registro_horario .block_insert #selec_comida{
+	width: 80%;
+}
+#registro_horario .block_insert span div{
+	float: right;
+	width: 17%;
 }
 #registro_horario>div>div>div:nth-child(2){
 	width: 49%;
@@ -2733,8 +2810,8 @@ border: 1px solid;
 .contenedor_registro_horario  td a { 
     display: block; 
 }
-.contenedor_registro_horario  .inner_table {
-    max-height: 192px;
+.contenedor_registro_horario .inner_table{
+    max-height: 35vh;
     overflow-y: auto;
 }
 .contenedor_registro_horario table select {
@@ -2755,14 +2832,6 @@ border: 1px solid;
 }
 #registro_horario{
 	min-height: 52vh;
-}
-#registro_horario .block_insert{
-	margin: 3% 6%;
-}
-#registro_horario .block_insert span{
-	float: left;
-	margin: 5px;
-	clear: both;
 }
 #registro_horario #aviso_error span{
 	float: left;
@@ -2785,8 +2854,12 @@ border: 1px solid;
 }
 .center_button{
 	clear: both;
-	padding-top: 10px;
+	padding-top: 10%;
 	width: 80%;
+	display: inline-block;
+}
+.center_button button{
+	margin: 0 6% !important;
 }
 #button_generate{
 	margin-right: 15%;
@@ -2845,10 +2918,11 @@ input[id="si"]{
 	width: 25%;
 }
 .contenedor_principal_con_titulo h2{
-	margin-bottom: 10px;
+	margin-bottom: 15px;
 	font-size: 1.3em;
-	text-decoration: underline;
 	text-align: center;
+	font-family: Impact,Haettenschweiler,Franklin Gothic Bold,Charcoal,Helvetica Inserat,Bitstream Vera Sans Bold,Arial Black,sans serif;
+	color: #424242;
 }
 
 .contenedor_reserva{
@@ -2992,7 +3066,10 @@ margin:120px 9px;
 	.btn_save button{
 		margin: 0 auto;
 	}
-
+	#registro_asignaturas .block_insert h2{
+		font-size: 1.2em;
+		text-align: center;
+	}
 	.contenedor_principal_reserva>div:nth-child(1){
 		width: 32%;
 		min-height: 38vh;
@@ -3088,12 +3165,30 @@ margin:120px 9px;
 	}
 
 	#registrar_evento .contenedor_principal_reserva>div:nth-child(2){
-		width: 61%;
+		width: 54%;
 	}
-
+	#registrar_evento .two_big_column_no_form{
+		margin-right: 0 !important;
+	}
+	#registrar_evento .btn_save{
+		width: 10% !important;
+		margin-top: 40px !important;
+		min-height: 0 !important;
+	}
 	#registrar_evento .contenedor_principal_reserva>div:nth-child(2) #container_evento{
 		height: 36vh;
 	}
+
+	#registrar_noticias .one_column_no_form{
+		width: 89% !important;
+		margin-right: 0 !important;
+	}
+	#registrar_noticias .btn_save{
+		width: 10% !important;
+		margin-top: 40px !important;
+		min-height: 0 !important;
+	}
+
 }
 
 .contenedor_principal_reserva div[class="parent_no_form"]{
@@ -3456,20 +3551,20 @@ tbody.scrollContent tr.alternateRow td {
 #antiguo_alumno_edit input[class*="s_input"]:last-child{
 	min-width: 0;
 }
-.contenedor_registro .opciones input{
+.btn_2opciones input{
 	display: none;
 }
-.contenedor_registro .opciones{
+.btn_2opciones{
 	width: 155px;
 	float: left;
 	margin-top: -2px;
 	margin-left: 10%;
 }
-.contenedor_registro .opciones label{
-	width: 65px;
-	padding: 3px;
+.btn_2opciones label{
+	width: 65px !important;
+	padding: 3px !important;
 	text-align: center;
-	display: inline-block;
+	display: inline-block !important;
 	color: black;
 	border: 1px solid #334c73;
 	background: #e4e0e0;
@@ -3477,11 +3572,11 @@ tbody.scrollContent tr.alternateRow td {
 	font-size: 13px;
 	cursor: pointer;
 }
-.contenedor_registro .opciones label[for="activos"]{
-	border-radius: 5px 0 0 5px;
+.btn_2opciones label[for="activos"]{
+	border-radius: 5px 0 0 5px !important;
 }
-.contenedor_registro .opciones label[for=inactivos]{
-	border-radius: 0 5px 5px 0;
+.btn_2opciones label[for=inactivos]{
+	border-radius: 0 5px 5px 0 !important;
 }
 .btn_selected{
 	background: #334c73 !important;
@@ -3861,6 +3956,9 @@ tbody.scrollContent tr.alternateRow td {
 .f_right{
 	float: right;
 }
+.m_top_btn{
+	margin-top: 2px !important;
+}
 #all_day{
 	display: block;
 	margin-top: 2px;
@@ -4089,11 +4187,11 @@ div .disabled{
     overflow: auto;
 }
 #container_noticia>div:first-child{
-	width: 83% !important;
+	width: 59% !important;
 	margin-right: 10px;
 }
 #container_noticia>div:first-child input{
-	width: 90% !important;
+	width: 97% !important;
 	padding: 0 5px !important;
 	text-transform: none !important;
 	height: 24px;
@@ -4101,14 +4199,14 @@ div .disabled{
 #container_noticia>div:nth-child(2) select{
 	font-size: 1em !important;
 }
-#container_noticia>div:nth-child(3){
+#container_noticia>div:nth-child(5){
 	display: inline-flex;
 	width: 100%;
 }
 #container_noticia #insertar_imagen{
-	width: 175px;
 	display: inline;
 	margin: auto 0 auto 0;
+	margin-left: 5px !important;
 }
 #container_noticia #cont_imagen{
 	width: 710px;
@@ -4125,18 +4223,30 @@ div .disabled{
 	border-radius: 3px;
 	margin-top: 5px;
 	box-shadow: 0 1px 1px 1px rgba(0, 0, 0, 0.5);
-	margin-bottom: 20px;
 }
 #mostrar_imagen{
     float: left;
     width: 77% !important;
 }
+#mostrar_imagen span{
+	background: #334c73;
+	padding: 0 6px;
+	color: white;
+	border-radius: 10px;
+}
 #container_noticia #cambiar_imagen{
     float: left;
     margin: auto 0;
-    width: 175px;
+    width: 185px;
     text-align: center;
     margin-left: 2%;
+}
+#container_noticia #cambiar_imagen button{
+   margin-top: 10px;
+   min-width: 75px;
+   float: left;
+   margin-right: 8px;
+   margin-left: 7px;
 }
 #container_noticia #slider-vertical{
     margin-left: 0.5%;
@@ -4149,9 +4259,6 @@ div .disabled{
 #container_noticia #slider-vertical .ui-widget-header {
     background: none !important;
 }
-#container_noticia #insertar_imagen label{
-	margin-bottom: 5px; 
-}
 #container_noticia button, #btn_upload button{
 	background: #e4e0e0; 
 }
@@ -4159,16 +4266,15 @@ div .disabled{
 	background: buttonface!important; 
 }
 #container_noticia>div:last-child{
-	width: 101% !important;
+	width: 100% !important;
 	clear: both;
 	position: relative;
-	display: inline-block;
-	margin-top: 15px;
+	display: block;
 }
 
 #container_noticia #mostrar_imagen label{
 	float: left;
-	width: 60px;
+	width: 110px;
 	margin-top: 0;
 }
 
@@ -4208,4 +4314,72 @@ div .disabled{
 	min-width: 90px;
 	padding: 1.5px;
 }
+/*Editor Tinymce*/
+.mce-tinymce button{
+	background: none !important;
+	min-width: 0 !important;
+}
+.mce-container td{
+	min-width: 0 !important;
+}
+.mce-path{
+	padding: 0 !important;
+}
+.mce-window-head .mce-title{ /*Ocultamos el título de File Manager*/
+	color: white;
+}
+#descripcion_ifr {
+	cursor: pointer !important;
+}
+.mce-container input{
+	text-transform: none !important;
+}
+.mce-widget.mce-tooltip {
+    display: none !important;
+}
 
+#registrar_noticias #capa{
+	background: white;
+	height: 300px !important;
+	width: 100% !important;
+	border: 0.5px solid rgba(0, 0, 0, 0.2) !important;
+}
+#registrar_noticias #menu_capa{
+ 	background-color: #f0f0f0;
+ 	height: 67px !important;
+ 	border-bottom: 0.1px solid rgba(0, 0, 0, 0.2) !important;
+	position: relative;	
+}
+
+#registrar_noticias .btn_2opciones{
+	width: 180px !important;
+	margin-top: 10px !important;
+	margin-left: 0 !important;
+}
+#registrar_noticias .btn_2opciones label{
+	height: 15px !important;
+	margin-top: 5px !important;
+	margin-left: 0 !important;
+	margin-right: 0 !important;
+}
+#registrar_noticias .btn_2opciones img {
+    margin: -2px 2px;
+    max-height: 13px;
+    min-width: 13px;
+}
+#registrar_noticias .btn_2opciones span {
+ font-weight: bold;
+}
+#registrar_noticias h2{
+	margin-bottom: 10px !important;
+	width: 87%;
+}
+#registrar_noticias #container_noticia select{
+	margin-bottom: 0 !important;
+}
+#registrar_noticias #container_noticia>div:not(.editor){
+	margin-bottom: 15px !important;
+}
+#insertar_galeria{
+	margin-left: 5px;
+}

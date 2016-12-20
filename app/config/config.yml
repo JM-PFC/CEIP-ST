@@ -109,6 +109,7 @@ parameters:
     Dir_imagenes_alum: %kernel.root_dir%/../web/uploads/images/
     Dir_imagenes_centro: %kernel.root_dir%/../web/uploads/images/
     Dir_imagenes_noticias: %kernel.root_dir%/../web/uploads/noticias/
+
 knp_snappy:  
     pdf:
         enabled:    true
@@ -117,3 +118,8 @@ knp_snappy:
         options:
             - { name: 'viewport-size', value: ‘1024x768’ }
             - { name: 'page-size', value: 'A4' }
+
+stfalcon_tinymce:
+    include_jquery: true
+    tinymce_jquery: true
+

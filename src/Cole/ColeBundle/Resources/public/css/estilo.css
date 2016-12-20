@@ -598,13 +598,15 @@ fieldset.fsetoculto {
 .aside_columna h3{
     font-size: 1.2em;
     font-family: Helvetica, Arial, sans-serif;
-    
+    border-radius: 0 0 5px 5px;
+    box-shadow: 0 1px 1px 1px rgba(0, 0, 0, 0.5);
     letter-spacing: 0.2px;
     color: #001F51;
     padding: 5px 25px;
     background: #DBE6F1;
     border-top: 1.5px solid blue;
     margin-bottom: 10px;
+    text-align: center;
 }
 .aside_columna p,.aside_columna span{
     font-size: 12px;
@@ -666,6 +668,9 @@ fieldset.fsetoculto {
     -webkit-box-sizing: border-box;
     box-sizing: border-box;
     word-wrap: break-word;
+}
+#recientes .contenido_noticia img{
+    display: none;
 }
 #recientes .contenido_noticia{
     width: 90%;

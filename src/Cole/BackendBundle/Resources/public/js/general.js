@@ -520,7 +520,7 @@ setInterval(function(){
   });
 
   // Transforma el texto con capitalize para guardarlo en la base de datos.
-  $(document).on("keyup",'input:not([class*="text_transform_none"])', function(){
+  $(document).on("keyup",'form input:not([class*="text_transform_none"])', function(){
     var txt = $(this).val();
     $(this).val(txt.replace(/^(.)/g, function($1){ return $1.toUpperCase(); }));
     $(this).css("text-transform", "none");
@@ -6092,7 +6092,7 @@ $(document).on("click","#registro_equipamientos td a",function(event){
     }
   });
   // Se muestra la lista de antiguos alumnos activos.
-  $(document).on('click',"#btn_activos",function(event){
+  $(document).on('click',"#consulta_antiguo_alumno #btn_activos",function(event){
     $("#antiguo_alumno").addClass("oculto");
     $("#antiguo_alumno_activo").removeClass("oculto");
 
@@ -6106,7 +6106,7 @@ $(document).on("click","#registro_equipamientos td a",function(event){
   });
 
   // Se muestra la lista de antiguos alumnos inactivos.
-  $(document).on('click',"#btn_inactivos",function(event){
+  $(document).on('click',"#consulta_antiguo_alumno #btn_inactivos",function(event){
     $("#antiguo_alumno_activo").addClass("oculto");
     $("#antiguo_alumno").removeClass("oculto");
 
@@ -6117,7 +6117,6 @@ $(document).on("click","#registro_equipamientos td a",function(event){
     else{
         $("#antiguo_alumno").find("table thead tr>th:last-child").attr('style', 'width: 9% !important');
     }
-
   });
 
   // Marcar o desmarcar todos los registros de alumnos mostrados en la lista.
@@ -6677,7 +6676,7 @@ $(document).on("click","#registro_equipamientos td a",function(event){
   ///////////////////////////////////////////
 
 
-  $(document).on('click',"#insertar_imagen, #cambiar_imagen",function(event){
+  $(document).on('click',"#insertar_imagen, #cambiar_imagen button[id!='btn_eliminar']",function(event){
     event.preventDefault();
     $('#imagen_noticia_dialog').load(Routing.generate("noticias_imagen"), function(){
       $('#btn_file #upload').trigger('click');
@@ -6685,9 +6684,10 @@ $(document).on("click","#registro_equipamientos td a",function(event){
   }); 
 
   //Se habilita el botón guardar cuando todos los campos esten completos.
-  $(document).on('keyup',"#registrar_noticias :input",function(e){
+  $(document).on('keyup  input ',"#registrar_noticias :input",function(e){
     //Se habilita todos los campos.
-    if($("#registrar_noticias #titulo").val()!="" && $("#registrar_noticias #descripcion").val()!=""){
+
+    if($("#registrar_noticias #titulo").val()!="" && tinyMCE.get('descripcion').getContent()!=""){
       $("#registrar_noticias #save").prop("disabled",false);
     }
     else{
@@ -6696,6 +6696,7 @@ $(document).on("click","#registro_equipamientos td a",function(event){
   });
 
   $(document).on('click',"#registrar_noticias #save",function(e){
+    e.preventDefault();
     // Se establece el efecto para la notificación de error en el caso de que se de varias veces seguidas a guardar con algunas opción sin marcar.
     errorPNotify.pause();
     errorPNotify.currentTime=0.0;
@@ -6711,7 +6712,7 @@ $(document).on("click","#registro_equipamientos td a",function(event){
       imagen=null;
       pos=null;
     }
-    descripcion=$("#registrar_noticias #descripcion").val();
+    descripcion=tinyMCE.get('descripcion').getContent();
 
     $.ajax({
       type: 'POST',
@@ -6780,6 +6781,32 @@ $(document).on("click","#registro_equipamientos td a",function(event){
     })
   });
 
+  //Se elimina la imagen seleccionada para la lista de noticias.
+  $(document).on('click',"#btn_eliminar",function(event){
+    event.preventDefault();
+    $("#insertar_imagen button").prop("disabled", false);
+
+    $("#imagen_noticia").addClass( "oculto" );
+  }); 
+
+  // Se muestra la lista de antiguos alumnos activos.
+  $(document).on('click',"#registrar_noticias #btn_activos",function(event){
+    $("#registrar_noticias #btn_activos").addClass("btn_selected");
+    $("#registrar_noticias #show").removeClass("oculto");
+
+    $("#registrar_noticias #btn_inactivos").removeClass("btn_selected");
+    $("#registrar_noticias #hidden").addClass("oculto");
+
+  });
+
+  // Se muestra la lista de antiguos alumnos inactivos.
+  $(document).on('click',"#registrar_noticias #btn_inactivos",function(event){
+    $("#registrar_noticias #btn_activos").removeClass("btn_selected");
+    $("#registrar_noticias #show").addClass("oculto");
+
+    $("#registrar_noticias #btn_inactivos").addClass("btn_selected");
+    $("#registrar_noticias #hidden").removeClass("oculto");
+  });
 
 
 
@@ -6791,10 +6818,10 @@ $(document).on("click","#registro_equipamientos td a",function(event){
 
 
 
-
-
-
-
+  $(document).on("click","#ff-item-type-all", function(event){ 
+    event.preventDefault();
+  alert("entra");
+  });
 
 
 

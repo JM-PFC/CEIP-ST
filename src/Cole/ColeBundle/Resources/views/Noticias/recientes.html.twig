@@ -10,12 +10,12 @@
            	{% if noticia.foto != null %}
             {% set myArray = noticia.foto|split('.') %}
             {% set result = myArray[0]|split('_') %}
-               	<div class="imgLiquidFill imgLiquid" style="background-position: 0px -{{ result[1] }}px !important;">
+               	<div class="imgLiquidFill imgLiquid" style="background-position: 0px {{ result[1] }}px">
                     <a href="{{ path('noticia', {'id': noticia.id}) }}"><img src="{{ asset('uploads/noticias/'~ noticia.foto)}}" alt="{{ result[1] }} Imagen de la noticia"></a>
                 </div>
             {% endif %}
             <a href="{{ path('noticia', {'id': noticia.id}) }}"><h2>{{noticia.titulo}}</h2></a>
-            <p>{{noticia.descripcion|truncate(300,true)| nl2br}}<a class="href_blue" href="{{ path('noticia', {'id': noticia.id}) }}"> [Leer más]</a></p>
+            <p>{{ noticia.descripcion|striptags|truncate(300,true)|raw|nl2br }}<a class="href_blue" href="{{ path('noticia', {'id': noticia.id}) }}"> [Leer más]</a></p>
         </div>
     </article>
 
