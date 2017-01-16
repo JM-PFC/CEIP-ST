@@ -183,6 +183,13 @@ class ProfesorController extends Controller
         $entity = new Profesor();
         $form   = $this->createCreateForm($entity);
 
+        if (!file_exists($this->container->getParameter('kernel.root_dir').'/../web/uploads/')) {
+            mkdir($this->container->getParameter('kernel.root_dir').'/../web/uploads/', 0777, true);
+        }
+        if (!file_exists($this->container->getParameter('kernel.root_dir').'/../web/uploads/images/')) {
+            mkdir($this->container->getParameter('kernel.root_dir').'/../web/uploads/images/', 0777, true);
+        }
+        
         return $this->render('BackendBundle:Profesor:new.html.twig', array(
             'entity' => $entity,
             'form'   => $form->createView(),

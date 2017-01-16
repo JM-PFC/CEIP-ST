@@ -15,10 +15,14 @@ class NoticiasType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('titulo')
-            ->add('descripcion')
+            ->add('titulo','text',array('label' => 'Título','max_length' => 100, 'attr' => array('placeholder'=>'Inserte un título')))
+            ->add('descripcion','textarea',array('label' => 'Descripción', 'attr' => array('type'=>'textarea', 'validation' => 'Empty')))
+            ->add('fecha')
+            ->add('categoria','choice',array('label' => 'Categoría', 'choices' => array('general' => 'General', 'infantil'=>'Ed. Infantil', 'primaria'=>'Ed. Primaria', 'profesores'=>'Profesores'),'required'=> true,'multiple'=>false))
             ->add('foto')
-            ->add('categoria')
+            ->add('galeria')
+            ->add('contador')
+            ->add('mostrarFoto')                  
         ;
     }
     
@@ -37,6 +41,6 @@ class NoticiasType extends AbstractType
      */
     public function getName()
     {
-        return 'cole_colebundle_noticias';
+        return 'noticias';
     }
 }

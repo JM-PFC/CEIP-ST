@@ -271,7 +271,6 @@ class EventosController extends Controller
         $editForm->handleRequest($request);
 
         if ($editForm->isValid()) {
-
             $em->flush();
 
             if ($request->isXmlHttpRequest()) {

@@ -221,23 +221,51 @@ $(document).ready(function () {
   //Se incrementa el contador al pulsar sobre un título de un evento para ver la información.
   $(document).on('click',".c-event-item .title",function(event){ 
     event.preventDefault();
-    if(!$(element).is(":visible")) {
+    //Se contabiliza cada vez que se abre la descripción del evento.
+    if($(this).find("div").hasClass("arrow-down") && !$(this).hasClass('added') ) {
+      $(this).addClass('added');
 
+      id=$(this).attr("data-id");
+
+      $.ajax({
+        type: 'POST',
+        url: Routing.generate('contador_eventos'),
+        data:{id:id}, 
+        dataType: 'json',
+        success: function(response){
+        }
+      })
     }
-    id=$(this).attr("data-id");
-
-    $.ajax({
-      type: 'POST',
-      url: Routing.generate('contador_eventos'),
-      data:{id:id}, 
-      dataType: 'json',
-      success: function(response){
-
-      }
-    })
   });
 
 
+  $("#gallery").unitegallery({
+    slider_enable_arrows:true,
+    slider_enable_zoom_panel:false,
+    slider_textpanel_enable_title:true,
+    slider_textpanel_bg_opacity:0,
+    gallery_width:550,              //gallery width  
+    gallery_height:350,             //gallery height 
+    slider_control_zoom:false, 
+    slider_scale_mode: "fill", //fill, fit, down.
+    slider_controls_always_on: true,  
+    slider_enable_progress_indicator: false,
+    gallery_autoplay:false,           //true / false - begin slideshow autoplay on start
+    gallery_play_interval: 3000,        //play interval of the slideshow
+    gallery_pause_on_mouseover: true, 
+    slider_textpanel_text_valign:"top",      //middle, top, bottom - text vertical align
+    thumb_width:120,
+    thumb_height:70,
+    thumb_border_color: "#aea703",
+    thumb_over_border_color: "#ded84d",
+    thumb_selected_border_width:4,
+    thumb_selected_border_color: "#ded84d",
+    thumb_round_corners_radius:5,
+    thumb_transition_easing: "linear",
+    strippanel_enable_buttons:false,
+    strippanel_enable_handle:false,
+    theme_enable_hidepanel_button:false,
+  }); 
 
 
 

@@ -9,17 +9,20 @@
     <link href="{{ asset('bundles/cole/css/estilo.css') }}" rel="stylesheet" type="text/css" />
     <link href="{{ asset('bundles/backend/js/jquery-ui/jquery-ui.css') }}" rel="stylesheet" type="text/css" />
     <link href="{{ asset('bundles/cole/js/e-calendar-master/css/jquery.e-calendar.css') }}" rel="stylesheet" type="text/css" />
+    <link href="{{ asset('bundles/cole/js/unitegallery-master/package/unitegallery/css/unite-gallery.css') }}" rel="stylesheet" type="text/css" />
+    <link href="{{ asset('bundles/cole/js/unitegallery-master/package/unitegallery/themes/default/ug-theme-default.css') }}" rel="stylesheet" type="text/css" />
 
 {% endblock %}
-    {% block javascript %}
-        {{parent()}}
-        <script type="text/javascript" src="{{ asset('bundles/cole/js/load.js') }}"></script>
-        <script type="text/javascript" src="{{ asset('bundles/backend/js/jquery-ui/jquery-ui.js') }}"></script>
-
-        <script type="text/javascript" src="{{asset("bundles/cole/js/imgLiquid-min.js")}}"></script>
-        <script type="text/javascript" src="{{asset("bundles/cole/js/e-calendar-master/js/jquery.e-calendar.js")}}"></script>
+{% block javascript %}
+    {{parent()}}
+    <script type="text/javascript" src="{{ asset('bundles/cole/js/load.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('bundles/backend/js/jquery-ui/jquery-ui.js') }}"></script>
+    <script type="text/javascript" src="{{asset('bundles/cole/js/imgLiquid-min.js')}}"></script>
+    <script type="text/javascript" src="{{asset('bundles/cole/js/e-calendar-master/js/jquery.e-calendar.js')}}"></script>
+    <script type="text/javascript" src="{{asset('bundles/cole/js/unitegallery-master/dist/js/unitegallery.min.js')}}"></script>
+    <script type="text/javascript" src="{{asset('bundles/cole/js/unitegallery-master/package/unitegallery/themes/default/ug-theme-default.js')}}"></script>
     <script type="text/javascript" src="{{ asset('bundles/fosjsrouting/js/router.js') }}"></script>
-    <script type="text/javascript" src="{{ path('fos_js_routing_js', {"callback": "fos.Router.setData"}) }}"></script>
+    <script type="text/javascript" src="{{ path('fos_js_routing_js', {'callback': 'fos.Router.setData'}) }}"></script>
   {% endblock %}
 
 {% block body %}

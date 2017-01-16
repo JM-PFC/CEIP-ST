@@ -1485,7 +1485,7 @@ form button{
 	min-width: 7%;
 }
 #contenedor_registro_Ngrupos .inner_table{
-	max-height: 265px !important;
+	max-height: 240px !important;
 }
 #contenedor_registro_Ngrupos table select {
 	margin-top: 3px;
@@ -3433,7 +3433,7 @@ tbody.scrollContent tr.alternateRow td {
 .scrollContent tr td img,.scrollContent tr td img{
 	cursor: pointer; 
 	pointer-events: auto;
-	margin: 0 5%;
+	margin: 0 -5% 0 11%;
 }
 .scrollContent .dataTables_empty{
 	padding-top: 18vh !important;
@@ -3552,7 +3552,7 @@ tbody.scrollContent tr.alternateRow td {
 	min-width: 0;
 }
 .btn_2opciones input{
-	display: none;
+	display: none !important;
 }
 .btn_2opciones{
 	width: 155px;
@@ -3928,7 +3928,7 @@ tbody.scrollContent tr.alternateRow td {
 #container_evento>div:first-child input{
 	width: 95% !important;
 	padding: 0 5px !important;
-	text-transform: none !important;
+	/*text-transform: none !important;*/
 }
 #container_evento>div:nth-child(2){
 	width: 19% !important;
@@ -4029,11 +4029,11 @@ tbody.scrollContent tr.alternateRow td {
 	width: 100% !important;
 }
 
-#consultar_eventos #tableContainer tr th, #consultar_eventos #tableContainer tr td{
+#consultar_eventos #tableContainer tr th, #consultar_eventos #tableContainer tr td ,#consultar_noticias #tableContainer tr th, #consultar_noticias #tableContainer tr td{
 	width: 6% !important;
 }
 
-#consultar_eventos #tableContainer tr td{
+#consultar_eventos #tableContainer tr td, #consultar_noticias #tableContainer tr td{
 	padding: 0 1%;
 }
 
@@ -4150,9 +4150,13 @@ tbody.scrollContent tr.alternateRow td {
 	width: 0;
 	float: left;
 }
+#dia_evento_edit{
+	margin-top: 1% !important;
+}
 #eventos_edit #all_day {
 	font-size: 1.2em;
-	margin-top: 16%;
+	margin-top: 17%;
+	float: left;
 }
 
 #eventos_edit input:disabled{
@@ -4213,9 +4217,10 @@ div .disabled{
 	height: 180px;
 	border-radius: 3px;
 	margin-top: 5px;
+	margin-left: 5px;
 	background: white;
 	box-shadow: 0 1px 1px 1px rgba(0, 0, 0, 0.5);
-	width: 99%;
+	width: 665px;
 }
 #container_noticia #cont_imagen_mini{
 	width: 180px;
@@ -4234,24 +4239,27 @@ div .disabled{
 	color: white;
 	border-radius: 10px;
 }
-#container_noticia #cambiar_imagen{
+#container_noticia #cambiar_imagen, #container_noticia #cambiar_imagen_edit{
     float: left;
     margin: auto 0;
     width: 185px;
     text-align: center;
-    margin-left: 2%;
+    margin-left: 3%;
 }
-#container_noticia #cambiar_imagen button{
+#container_noticia #cambiar_imagen button, #container_noticia #cambiar_imagen_edit button{
    margin-top: 10px;
-   min-width: 75px;
+   min-width: 75px !important;
    float: left;
    margin-right: 8px;
    margin-left: 7px;
 }
 #container_noticia #slider-vertical{
-    margin-left: 0.5%;
+    margin-left: -2.5%;
     height: 180px !important;
     margin-top: 22px;
+}
+#noticias_edit #container_noticia #slider-vertical{
+    margin-left: -1.5% !important;
 }
 #container_noticia #slider-vertical .ui-slider-handle:hover{
 	cursor: pointer;
@@ -4262,7 +4270,7 @@ div .disabled{
 #container_noticia button, #btn_upload button{
 	background: #e4e0e0; 
 }
-#container_noticia button:hover, #btn_upload button:hover{
+#container_noticia button:hover, #btn_upload button:hover, #btn_file button:hover{
 	background: buttonface!important; 
 }
 #container_noticia>div:last-child{
@@ -4291,28 +4299,32 @@ div .disabled{
 #imagen_noticia_dialog #upload-image .cr-boundary{
 	border-radius: 5px;
 }
-#imagen_noticia_dialog .container{
+#imagen_noticia_dialog .container,  #galeria_noticia_dialog .container{
 	background: #b1cce7;
 	border-radius: 5px;
 	padding: 10px 0;
 	height: 470px;
 	box-shadow: 0 1px 1px 1px rgba(0, 0, 0, 0.5);
 }
-#imagen_noticia_dialog #btn_file{
-	width: 60%;
+#imagen_noticia_dialog #btn_file, #galeria_noticia_dialog #btn_file{
+	width: 63%;
 	float: left;
-	margin-left: 80px;
+	margin-left: 90px;
 }
 #imagen_noticia_dialog #btn_file input{
 	max-width: 480px;
+	height: 30px;
+	font-size: 15px !important;
 }
-#imagen_noticia_dialog #btn_upload{
-	width: 24%;
+#imagen_noticia_dialog #btn_upload, #galeria_noticia_dialog #btn_upload{
+	width: 25%;
 	float: right;
 }
-#imagen_noticia_dialog button{
+#imagen_noticia_dialog button, #galeria_noticia_dialog button {
 	min-width: 90px;
-	padding: 1.5px;
+	padding: 1.5px 3px;
+	height: 30px;
+	font-size: 15px !important;
 }
 /*Editor Tinymce*/
 .mce-tinymce button{
@@ -4342,6 +4354,8 @@ div .disabled{
 	background: white;
 	height: 300px !important;
 	width: 100% !important;
+	display: block;
+	clear: both;
 	border: 0.5px solid rgba(0, 0, 0, 0.2) !important;
 }
 #registrar_noticias #menu_capa{
@@ -4351,23 +4365,23 @@ div .disabled{
 	position: relative;	
 }
 
-#registrar_noticias .btn_2opciones{
+#registrar_noticias .btn_2opciones, #noticias_edit .btn_2opciones{
 	width: 180px !important;
 	margin-top: 10px !important;
 	margin-left: 0 !important;
 }
-#registrar_noticias .btn_2opciones label{
+#registrar_noticias .btn_2opciones label, #noticias_edit .btn_2opciones label{
 	height: 15px !important;
 	margin-top: 5px !important;
 	margin-left: 0 !important;
 	margin-right: 0 !important;
 }
-#registrar_noticias .btn_2opciones img {
+#registrar_noticias .btn_2opciones img, #noticias_edit .btn_2opciones img{
     margin: -2px 2px;
     max-height: 13px;
     min-width: 13px;
 }
-#registrar_noticias .btn_2opciones span {
+#registrar_noticias .btn_2opciones span, #noticias_edit .btn_2opciones span {
  font-weight: bold;
 }
 #registrar_noticias h2{
@@ -4382,4 +4396,223 @@ div .disabled{
 }
 #insertar_galeria{
 	margin-left: 5px;
+}
+#registrar_noticias .editor label{
+	display: block;
+	clear: both;
+}
+#galeria_noticia_dialog .thumb {
+    border-radius: 4px;
+    height: 105px;
+    margin: 0 auto;
+    max-width: 100%;
+}
+#galeria_noticia_dialog #marco {
+    background: #586673;
+    border-radius: 5px;
+    height: 390px;
+    margin: 12px auto;
+    width: 90%;
+}
+#galeria_noticia_dialog #contenido {
+    background: #d3d3d3;
+    border: 2px solid #fff;
+    height: 325px;
+    margin: 0 auto 0 33px;
+    position: absolute;
+    top: 84px;
+    width: 622px;
+}
+#galeria_noticia_dialog #list {
+    height: 325px;
+    overflow: auto;
+}
+#galeria_noticia_dialog .cont_img {
+    border: 1px solid black;
+    border-radius: 5px;
+    display: inline-flex;
+    margin: 8px 12px;
+    width: 88%;
+}
+#galeria_noticia_dialog #nombre_galeria{
+	margin-left: 40px;
+}
+#galeria_noticia_dialog #nombre_galeria input{
+	padding: 0 5px;
+}
+#galeria_noticia_dialog #titulo{
+	width: 50%;
+	margin-left: 10px;
+}
+#galeria_noticia_dialog label{
+	font-weight: bold;
+}
+#galeria_noticia_dialog #num{
+    display: inline-block;
+    margin-left: 20px;
+    width: 310px !important;
+}
+#galeria_noticia_dialog #num_imagenes{
+    display: table;
+    font-weight: bold;
+    margin: 0 auto;
+}
+#galeria_noticia_dialog #list li{
+    float: left;
+    height: 37%;
+    list-style-type: none;
+    width: 33%;
+}
+#galeria_noticia_dialog #list li .cont_img:hover{
+	cursor: pointer;
+}
+#galeria_noticia_dialog .ui-state-highlight {
+    border: 1px solid #000;
+    border-radius: 5px;
+    height: 100px !important;
+    margin: 10px;
+    max-width: 180px;
+    background: #BFBCBC !important;
+}
+#galeria_noticia_dialog #list li .eliminar{
+    background: whitesmoke url("../images/menu/ui-icons_334c73_256x240.png") repeat scroll -98px -130px;
+    border: 1px solid black;
+    border-radius: 5px;
+    cursor: pointer;
+    height: 13px;
+    position: relative;
+    right: -174px;
+    top: -111px;
+    width: 13px;
+}
+#galeria_noticia_dialog #list li .eliminar:hover{
+    background: #334c73 url("../images/menu/ui-icons_ffffff_256x240.png") repeat scroll -98px -130px;
+}
+#galeria_noticia_dialog .error{
+	font-weight: bold;
+}
+#registrar_noticias #container_noticia #galeria_noticia, #noticias_edit #container_noticia #galeria_noticia{
+	display: block;
+	clear: both;
+}
+#registrar_noticias #cont_galeria, #noticias_edit #cont_galeria{
+	background: #f0f0f0;
+    border-radius: 3px;
+    box-shadow: 0 1px 1px 1px rgba(0, 0, 0, 0.5);
+    height: 150px;
+    padding: 0 8px;
+    width: 98%;
+}
+#registrar_noticias #galeria_show, #noticias_edit #galeria_show{
+    float: left;
+    height: 96%;
+    margin: 0 8px 0 auto;
+    overflow-x: auto;
+    overflow-y: hidden;
+    position: relative;
+    text-align: left;
+    vertical-align: middle;
+    white-space: nowrap;
+    width: 85%;
+}
+#registrar_noticias #galeria_show div, #noticias_edit #galeria_show div{
+    display: inline-block;
+    margin: 20px 5px;
+    text-align: center;
+    white-space: normal;
+}
+#registrar_noticias #galeria_menu, #noticias_edit #galeria_menu{
+    height: 150px;
+    width: 14%;
+    float: left;
+    border-left: 1px solid grey;
+}
+#registrar_noticias #galeria_menu button {
+	margin: 30px auto !important;
+	display: block;
+}
+ #noticias_edit #galeria_menu button {
+	margin: 30px 12px -5px 12px !important;
+	display: block;
+}
+
+#consultar_noticias .tabla_con_info{
+	width: 100% !important;
+}
+#noticias_edit .editor{
+	display: block;
+	clear: both;
+}
+#noticia_dialog #content-form{
+	min-height: 400px !important;
+	height: 0px !important;
+	width: 97%;
+	margin: 0 !important;
+}
+.mce-open{
+    display: inline !important;
+}
+#noticia_dialog #content-form button:hover{
+	background: buttonface!important; 
+}
+#noticia_dialog #input_titulo{
+	width: 58% !important;
+	margin-right: 10px;
+	margin-top: -2px;
+}
+#noticia_dialog #input_titulo input{
+	width: 93%;
+}
+#insertar_imagen {
+    margin-left: 5px;
+}
+.mce-tinymce{
+	display: block;
+}
+.mce-combobox .mce-btn{
+	font-size: 23px;
+}
+.mce-container button:hover{
+	background: none;
+}
+#noticias_edit .mce-menubar{
+	display: none;
+}
+#noticias_edit #container_noticia{
+	border-radius: none;
+	border: none;
+	box-shadow: none;
+	top: 0 !important;
+	left: 0 !important;
+	padding-top: 0;
+	padding-bottom:2px; 
+	height: 355px !important;
+	padding-left: 20px;
+	overflow-y: scroll;
+	max-width: 930px !important;
+}
+#noticias_edit #container_noticia button{
+margin-left: 5px;
+}
+#noticias_edit #container_noticia > div:nth-child(2) select {
+    font-size: 1.2em !important;
+}
+#noticias_edit .ajaxload img{
+	margin: 16vh 32vw;
+	opacity: 0.5;
+	border-radius: 25px;
+}
+#noticias_edit #mostrar_imagen span {
+    font-size: 14px;
+    padding: 2px 5px;
+    font-weight: normal;
+}
+
+#consultar_noticias #consulta_noticias td:hover {
+cursor: default !important;
+}
+
+.tinymce-content p {
+    padding: 0 !important;
+    margin: 2px 0 !important;
 }

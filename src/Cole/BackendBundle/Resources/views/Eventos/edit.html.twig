@@ -9,7 +9,7 @@
   $("#evento_dialog #categoria option[value="+$("#eventos_categoria").val()+"] ").prop("selected",true);
 
   $(document).on('change',"#evento_dialog  #categoria",function(event){
-  		$("#eventos_categoria").val($("#categoria").val());
+  		$("#eventos_categoria").val($(" #evento_dialog #categoria").val());
 	});
 
   // Se deshabilita los botones de guardar y restablecer.
@@ -66,13 +66,13 @@
   month=$("#eventos_edit #eventos_datetime_date_month option:selected").val();
   year=$("#eventos_edit #eventos_datetime_date_year option:selected").val();
   // beforeShowDay: $.datepicker.noWeekends (Para deshabilitar fines de semana)
-  $( "#eventos_edit #dia_evento" ).datepicker({ minDate: min, maxDate: new Date(fin_a, fin_m-1, fin_d),beforeShowDay: $.datepicker.noWeekends, defaultDate: new Date(year, month-1, day),
+  $( "#eventos_edit #dia_evento_edit" ).datepicker({ minDate: min, maxDate: new Date(fin_a, fin_m-1, fin_d),beforeShowDay: $.datepicker.noWeekends, defaultDate: new Date(year, month-1, day),
     onChangeMonthYear:function () {
       $("#eventos_edit #actualizar_calendario_lectivo").trigger("click");
       
       //Si se selecciona el día inicial se elimina del día seleccionado anteriormente la clase "modified".
       setTimeout(function(){ 
-        if($("#eventos_edit .ui-datepicker .ui-state-active").text()==$("#eventos_edit  #eventos_datetime_date_day").attr("seleccionado") && parseInt($("#eventos_edit .ui-datepicker .ui-state-active").closest(".data-month"))+1==$("#eventos_edit #eventos_datetime_date_month").attr("seleccionado") ){
+        if($("#eventos_edit .ui-datepicker .ui-state-active").text()==$("#eventos_edit  #eventos_datetime_date_day").attr("seleccionado") && parseInt($("#eventos_edit .ui-datepicker .ui-state-active").closest("td").attr("data-month"))+1==$("#eventos_edit #eventos_datetime_date_month").attr("seleccionado") ){
           $("#eventos_edit .ui-datepicker a .modified").removeClass("modified");
         }
         else{
@@ -215,8 +215,8 @@
 
                       {#Se utiliza el plugin datepicker para cambiar la fecha#}
                       <label>Fecha del evento</label>
-                    	<div id="dia_evento" class="calendario_lectivos"></div>
-                		  <button id="actualizar_calendario_lectivo" class="oculto"></button>
+                    	<div id="dia_evento_edit" class="calendario_lectivos"></div>
+                		  <button id="actualizar_calendario_lectivo" class="form oculto"></button>
                 
                     </div>
         </fieldset>       

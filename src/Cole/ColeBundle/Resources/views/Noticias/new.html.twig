@@ -8,7 +8,7 @@
   <script src="{{ asset('bundles/backend/js/tinymce/js/tinymce/tinymce.min.js') }}" type="text/javascript"></script>
 
   <script>
-
+  // Editor: descripción
   tinymce.init({ 
     //selector:'textarea',
     selector:".editor_completo",
@@ -79,6 +79,7 @@
     },
   });
 
+  // Insertar Imagen de la Noticia.
   $("#imagen_noticia_dialog").dialog({
     bgiframe: true,
     autoOpen: false,
@@ -94,7 +95,8 @@
   $('#imagen_noticia_dialog').on('dialogclose', function(event) {
     $('#imagen_noticia_dialog').empty();
   });
-  
+
+  // Deslizador vertical
   $( "#slider-vertical" ).slider({
     orientation: "vertical",
     range: "min",
@@ -106,8 +108,25 @@
       $( "#registrar_noticias #cont_imagen" ).css('background-position', "0px "+ui.value+"px");
       $( "#registrar_noticias #slider-vertical" ).attr("value", ui.value);
     }
-
   });
+
+  // Insertar Galería.
+  $("#galeria_noticia_dialog").dialog({
+    bgiframe: true,
+    autoOpen: false,
+    height: 550,
+    width: 800,
+    modal: true,
+    resizable: false,
+    close: function( event, ui ) {
+      $(".ui-widget-overlay").remove();
+      //Se elimina el contenido de la ventana modal al cerrarla.
+      $("#galeria_noticia_dialog #list li").remove();
+      $('#galeria_noticia_dialog #num_imagenes').empty();
+    }
+  });
+
+
 </script> 
 
 {% endblock %}
@@ -147,13 +166,13 @@
                   <div id="mostrar_imagen" >
                     <label>Imagen Noticia</label><span>Utilice el deslizador vertical para ajustar la vista de la imagen en la lista de noticias</span>
                       <div id='cont_imagen' title="Imagen para la lista de noticias." class='imgLiquidFill imgLiquid'>
-                        <img id="image_" src='{{ asset('uploads/noticias/uploaded.jpeg')}}' alt='Imagen subida' />
+                        <img id="image_" src='' alt='Imagen subida' />
                       </div>
                   </div>
                   <div id="slider-vertical" value="-90"></div>
                   <div id="cambiar_imagen">
                       <div id='cont_imagen_mini' class='imgLiquidFill imgLiquid'>
-                        <img id="image_" src='{{ asset('uploads/noticias/uploaded.jpeg')}}' alt='Imagen subida' />
+                        <img id="image_" src='' alt='Imagen subida' />
                       </div>
                       <button >Cambiar</button>
                       <button id="btn_eliminar">Eliminar</button>
@@ -170,7 +189,15 @@
                 </div>
                 <div id="galeria_noticia" class="oculto">
                   <label>Galería de fotos</label>
-
+                    <div id='cont_galeria'>
+                      <div id='galeria_show'>
+                      
+                      </div>
+                      <div id='galeria_menu'>
+                        <button id="btn_cambiar">Cambiar</button>
+                        <button id="btn_eliminar">Eliminar</button>
+                      </div>
+                    </div>
                 </div>
                 <div class="editor">
                   <label>Descripción</label>
@@ -181,6 +208,7 @@
 
                 </div>
                 <div id="imagen_noticia_dialog" title="Añadir Imagen"></div>
+                <div id="galeria_noticia_dialog" title="Añadir Galería de fotos"></div>
               </div>
             </div>
             </div>

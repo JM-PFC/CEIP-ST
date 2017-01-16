@@ -29,7 +29,8 @@
          <input type="file" id="upload">
         </div>
         <div id="btn_upload">
-          <button class="btn btn-success upload-result">Aceptar</button>
+          <button class="btn-success upload-result">Aceptar</button>
+          <button class="btn-success upload-result-edit_noticia">Aceptar</button>
         </div>
 
       </div>
@@ -40,7 +41,7 @@
 </div>
 
 <script type="text/javascript">
-$uploadCrop = $('#upload-image').croppie({
+$uploadCrop = $('#imagen_noticia_dialog #upload-image').croppie({
     enableExif: true,
     viewport: {
         width: 530,
@@ -54,22 +55,20 @@ $uploadCrop = $('#upload-image').croppie({
 });
 
 
-$('#upload').on('change', function () { 
+$('#imagen_noticia_dialog #upload').on('change', function () { 
   var reader = new FileReader();
-    reader.onload = function (e) {
-      $uploadCrop.croppie('bind', {
-        url: e.target.result
-      }).then(function(){
-        console.log('jQuery bind complete');
+  reader.onload = function (e) {
+    $uploadCrop.croppie('bind', {
+      url: e.target.result
+    }).then(function(){
+      //console.log('jQuery bind complete');
       });
-    }
-
-    reader.readAsDataURL(this.files[0]);
-
+  }
+  reader.readAsDataURL(this.files[0]);
 });
 
-
-$('.upload-result').on('click', function (ev) {
+//Opción para registrar noticias.
+$('#imagen_noticia_dialog .upload-result').on('click', function (ev) {
   file=$("#registrar_noticias #cont_imagen img").attr("file");
   imagen_provisional="";
   $uploadCrop.croppie('result', {
@@ -90,49 +89,102 @@ $('.upload-result').on('click', function (ev) {
           success: function (data) {
             imagen_provisional=data.file;
             //Se muestra y se ajusta la imagen subida al contenedor.
-            if($("#registrar_noticias #cont_imagen img").attr("src")){
-              src= $("#registrar_noticias #cont_imagen img").attr("src");
+            if($("#registrar_noticias #imagen_noticia #cont_imagen img").attr("src")){
               src= $("#registrar_noticias #cont_imagen_mini img").attr("src");
 
-              if(src.indexOf("uploaded.jpeg") >= 0){
-                anterior=$("#registrar_noticias #cont_imagen img").attr("file");
-                $("#registrar_noticias #cont_imagen img").attr("file",data.file);
-                change= src.replace("uploaded.jpeg",data.file);
-                $("#registrar_noticias #cont_imagen img").attr("src",change);
-
-                anterior=$("#registrar_noticias #cont_imagen_mini img").attr("file");
-                $("#registrar_noticias #cont_imagen_mini img").attr("file",data.file);
-                change= src.replace("uploaded.jpeg",data.file);
-                $("#registrar_noticias #cont_imagen_mini img").attr("src",change);
-              }
-              else{
-                anterior=$("#registrar_noticias #cont_imagen img").attr("file");
-                $("#registrar_noticias #cont_imagen img").attr("file",data.file);
+                anterior=$("#registrar_noticias #imagen_noticia #cont_imagen img").attr("file");
+                $("#registrar_noticias #imagen_noticia #cont_imagen img").attr("file",data.file);
                 change= src.replace(anterior,data.file);
-                $("#registrar_noticias #cont_imagen img").attr("src",change);
+                $("#registrar_noticias #imagen_noticia #cont_imagen img").attr("src",change);
               
-                anterior=$("#registrar_noticias #cont_imagen_mini img").attr("file");
-                $("#registrar_noticias #cont_imagen_mini img").attr("file",data.file);
+                anterior=$("#registrar_noticias #imagen_noticia #cont_imagen_mini img").attr("file");
+                $("#registrar_noticias #imagen_noticia #cont_imagen_mini img").attr("file",data.file);
                 src= src.replace(anterior,data.file);
-                $("#registrar_noticias #cont_imagen_mini img").attr("src",src);
-              }
+                $("#registrar_noticias #imagen_noticia #cont_imagen_mini img").attr("src",src);
+              
+            }
+            else{
+                $("#registrar_noticias #imagen_noticia #cont_imagen img").attr("file",data.file);
+                dir= "/Symfony/web/uploads/noticias/"+data.file;
+                $("#registrar_noticias #imagen_noticia #cont_imagen img").attr("src",dir);
+
+                $("#registrar_noticias #imagen_noticia #cont_imagen_mini img").attr("file",data.file);
+                $("#registrar_noticias #imagen_noticia #cont_imagen_mini img").attr("src",dir);
             }
             $(".imgLiquidFill").imgLiquid();
           }
         });
-        $("#insertar_imagen button").prop("disabled", true);
-        $("#imagen_noticia").removeClass( "oculto" );
+        $("#registrar_noticias #insertar_imagen button").prop("disabled", true);
+        setTimeout(function() { 
+          $("#registrar_noticias #imagen_noticia").removeClass( "oculto" );
+        }, 100); 
         $("#imagen_noticia_dialog").dialog( "close" );
         //Se ajusta a la mitad el desplazamienzo vertical de la nueva imagen.
-        $("#slider-vertical").slider('value', -90);
-
-        $.ajax({
-          url: Routing.generate('imagen_delete'),
-          type: "POST",
-          data: {imagen_provisional:imagen_provisional}
-        });
+        $("#registrar_noticias #slider-vertical").slider('value', -90);
       }
     });
+  });
+});
+
+//Opción para editar noticias.
+$('#imagen_noticia_dialog .upload-result-edit_noticia').on('click', function (ev) {
+  file=$("#noticias_edit #cont_imagen img").attr("file");
+  imagen_provisional="";
+  $uploadCrop.croppie('result', {
+    type: 'canvas',
+    size: { width:1000 }, //the height will be calculated using the viewport aspect ratio.
+    quality: 1,
+    format:'jpeg'
+  }).then(function (resp) {
+
+        $.ajax({
+          url: Routing.generate('imagen_create'),
+          type: "POST",
+          data: {"image":resp},
+          success: function (data) {
+            imagen_provisional=data.file;
+            //Se muestra y se ajusta la imagen subida al contenedor.
+            if($("#noticias_edit #imagen_noticia #cont_imagen img").attr("src")){
+              src= $("#noticias_edit #cont_imagen_mini img").attr("src");
+        
+              anterior=$("#noticias_edit #imagen_noticia #cont_imagen img").attr("file");
+   
+              $("#noticias_edit #imagen_noticia #cont_imagen img").attr("file",data.file);
+              change= src.replace(anterior,data.file);
+              $("#noticias_edit #imagen_noticia #cont_imagen img").attr("src",change);
+              anterior=$("#noticias_edit #imagen_noticia #cont_imagen_mini img").attr("file");
+              $("#noticias_edit #imagen_noticia #cont_imagen_mini img").attr("file",data.file);
+              src= src.replace(anterior,data.file);
+              $("#noticias_edit #imagen_noticia #cont_imagen_mini img").attr("src",src);
+            }
+            else{
+
+              $("#noticias_edit #imagen_noticia #cont_imagen img").attr("file",data.file);
+              dir= "/Symfony/web/uploads/noticias/"+data.file;
+              $("#noticias_edit #imagen_noticia #cont_imagen img").attr("src",dir);
+
+              $("#noticias_edit #imagen_noticia #cont_imagen_mini img").attr("file",data.file);
+              $("#noticias_edit #imagen_noticia #cont_imagen_mini img").attr("src",dir);
+            }
+            $(".imgLiquidFill").imgLiquid();
+          }
+        });
+        $("#insertar_imagen_edit button").prop("disabled", true);
+        setTimeout(function() { 
+          $("#noticias_edit #imagen_noticia").removeClass( "oculto" );
+        }, 100); 
+        $("#imagen_noticia_dialog").dialog( "close" );
+        //Se ajusta a la mitad el desplazamienzo vertical de la nueva imagen.
+        $("#noticias_edit #slider-vertical").slider('value', -90);
+
+    /*$.ajax({
+      url: Routing.generate('imagen_delete'),   //Se elimina la anterior imagen una vez se ha actualizado
+      type: "POST",
+      data: {file:file},
+      success: function (data) {
+              }
+    });*/
+
   });
 });
 </script>

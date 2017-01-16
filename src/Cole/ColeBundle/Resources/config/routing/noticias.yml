@@ -2,9 +2,19 @@ noticias:
     path:     /
     defaults: { _controller: "ColeBundle:Noticias:noticias" }
 
+noticias_consultar:
+    path:     /consultar
+    defaults: { _controller: "ColeBundle:Noticias:index" }
+
 noticias_imagen:
     path:     /imagen
     defaults: { _controller: "ColeBundle:Noticias:imagen" }
+    options:
+        expose: true
+
+noticias_galeria:
+    path:     /galeria
+    defaults: { _controller: "ColeBundle:Noticias:galeria" }
     options:
         expose: true
 
@@ -20,12 +30,48 @@ imagen_delete:
     options:
         expose: true
 
+galeria_create:
+    path:     /galeria_create
+    defaults: { _controller: "ColeBundle:Noticias:galeria_create" }
+    options:
+        expose: true
+
+galeria_editar:
+    path:     /galeria_editar
+    defaults: { _controller: "ColeBundle:Noticias:galeria_editar" }
+    options:
+        expose: true
+
+mostrar_galeria_editada:
+    path:     /mostrar_galeria_editada
+    defaults: { _controller: "ColeBundle:Noticias:mostrar_galeria_editada" }
+    options:
+        expose: true
+
+galerias_delete:
+    path:     /galerias_delete
+    defaults: { _controller: "ColeBundle:Noticias:galerias_delete" }
+    options:
+        expose: true
+
+renombrar_galeria:
+    path:     /renombrar_galeria
+    defaults: { _controller: "ColeBundle:Noticias:renombrar_galeria" }
+    options:
+        expose: true
+
+recuperar_galeria:
+    path:     /recuperar_galeria
+    defaults: { _controller: "ColeBundle:Noticias:recuperar_galeria" }
+    options:
+        expose: true
+
 contador_noticias:
     path:     /contador_noticias
     defaults: { _controller: "ColeBundle:Noticias:contadorNoticias" }
     options:
         expose: true
-        
+
 noticias_show:
     path:     /{id}/show
     defaults: { _controller: "ColeBundle:Noticias:show" }
@@ -48,6 +94,8 @@ noticias_create:
 noticias_edit:
     path:     /{id}/edit
     defaults: { _controller: "ColeBundle:Noticias:edit" }
+    options:
+        expose: true
 
 noticias_update:
     path:     /{id}/update
@@ -58,6 +106,7 @@ noticias_delete:
     path:     /{id}/delete
     defaults: { _controller: "ColeBundle:Noticias:delete" }
     requirements: { _method: post|delete }
-
+    options:
+        expose: true
 
 

@@ -37,7 +37,8 @@ body {
 .centrado {
     clear: both;
     position: relative;
-    max-width: 74.0625em;
+    /*max-width: 74.0625em;*/
+    max-width: 70em;
     margin: 0px auto;
 
 }
@@ -586,13 +587,14 @@ fieldset.fsetoculto {
     -moz-box-sizing: border-box;
     -webkit-box-sizing: border-box;
     box-sizing: border-box;
+    margin-left: 10px;
 }
 .contenido, .main aside{
     display: inline-block;
     vertical-align: top;
 }
 .aside_columna{
-    text-align: left;
+    text-align: justify;
     margin-bottom: 25px;
 }
 .aside_columna h3{
@@ -605,7 +607,7 @@ fieldset.fsetoculto {
     padding: 5px 25px;
     background: #DBE6F1;
     border-top: 1.5px solid blue;
-    margin-bottom: 10px;
+    margin: 0 10px 10px 10px;
     text-align: center;
 }
 .aside_columna p,.aside_columna span{
@@ -627,6 +629,9 @@ fieldset.fsetoculto {
     border-bottom: 2px solid rgba(51, 76, 115, .2);
     -webkit-background-clip: padding-box; /* for Safari */
     background-clip: padding-box; /* for IE9+, Firefox 4+, Opera, Chrome */
+    min-height: 160px;
+    max-height: 350px;
+    overflow: hidden;
 }
 .fecha_publicada{
     position: relative;
@@ -701,9 +706,9 @@ fieldset.fsetoculto {
     border-radius: 3px !important;
     background-position: center;/*Se centra la imagen pequeña de la noticia*/
 }
-.no_foto{
+/*.no_foto{
     padding-left: 170px;
-}
+}*/
 .no-seleccion-foto:hover{
     opacity: 0 !important;
 }
@@ -824,7 +829,7 @@ fieldset.fsetoculto {
     background-color: #abd0d5;
     border-radius: 25px;
     margin: 0 2.6%;
-    width: 9.1%;
+    width: 9.05%;
     text-decoration: underline;
     font-weight: bold;
 }
@@ -907,6 +912,14 @@ fieldset.fsetoculto {
     cursor: pointer !important;
 }
 
+#gallery{
+    margin: 50px auto;
+    border-radius: 5px;
+    box-shadow: 2px 2px 5px grey
+}
+#gallery img{
+    
+}
 
 
 

@@ -520,11 +520,14 @@ setInterval(function(){
   });
 
   // Transforma el texto con capitalize para guardarlo en la base de datos.
-  $(document).on("keyup",'form input:not([class*="text_transform_none"])', function(){
+  $(document).on("keyup",'input:not([class*="text_transform_none"])', function(){
     var txt = $(this).val();
     $(this).val(txt.replace(/^(.)/g, function($1){ return $1.toUpperCase(); }));
     $(this).css("text-transform", "none");
-      if($(this).val().length==0){
+      if($(this).val().length==0 && !$(this).attr('placeholder')){
+        $(this).css("text-transform", "capitalize");
+      }
+      else if($(this).val().length==2){
         $(this).css("text-transform", "capitalize");
       }
   });
@@ -1424,6 +1427,18 @@ $("#dialog-confirm span").hide();
   $(document).on('click',"#botones_form button[id$='_restablecer']",function(event){
     event.preventDefault();
     form= $(this).closest("form");
+    //Se recupera el dir original antes de restablecer (se elimina _m del nombre)
+    if(form.attr("id")=="noticias_edit"){
+      titulo=$("#noticias_edit #noticias_galeria").val();
+      $.ajax({
+        type: 'POST',
+        url: Routing.generate('recuperar_galeria'),
+        data:{titulo:titulo}, 
+        dataType: 'json',
+        success: function(response){
+        }
+      });
+    }
 
     var arr = form.attr('action').split('/');
     if($(this).closest(".ui-dialog").length){
@@ -1862,18 +1877,31 @@ $("#dialog-confirm span").hide();
   // Se llama a la función de comprobar formulario editado, en el caso que se modifique algún elemento del formulario.
   
   $(document).on("keyup","form[id$='_edit'] input",function() {
+    //Se omite la validación en editar noticias.
+    if($(this).closest("form").attr("id")=="noticias_edit"){
+      return false;
+    }
     comprobarEditForm($(this).closest("form"));
   });
 
   $(document).on("change","form[id$='_edit'] input[type='radio']",function() {
+    if($(this).closest("form").attr("id")=="noticias_edit"){
+      return false;
+    }
     comprobarEditForm($(this).closest("form"));
   });
 
   $(document).on("change","form[id$='_edit'] select",function() {
+    if($(this).closest("form").attr("id")=="noticias_edit"){
+      return false;
+    }
     comprobarEditForm($(this).closest("form"));
   });
 
   $(document).on("keyup","form[id$='_edit'] textarea",function() {
+    if($(this).closest("form").attr("id")=="noticias_edit"){
+      return false;
+    }
     comprobarEditForm($(this).closest("form"));
   });
 
@@ -2945,7 +2973,7 @@ $(document).on("blur","input[id='edit_profesor_dni']",function() {
   });
   
  
- // Se actualiza el calenndario de festivos
+ // Se actualiza el calendario de festivos
   $(document).on('click',"#actualizar_calendario",function(event){
     event.preventDefault();
     // Retardo para ejecutarlo una vez cargado el datepicker.
@@ -4653,7 +4681,7 @@ $(document).on("click","#registro_equipamientos td a",function(event){
   // Se deshabilita los días no lectivos en el calendario de reservas. 
   $(document).on('click',"#actualizar_calendario_lectivo",function(event){
     //Se obtiene el contenedor principal según si el calendario está en un formulario o no.
-    if($(this).closest("form"))
+    if($(this).hasClass('form'))
     {
       contenedor=$(this).closest("form");
     }
@@ -4720,7 +4748,7 @@ $(document).on("click","#registro_equipamientos td a",function(event){
                           $( "<h4 id='"+(dato+1)+"'>"+(dato+1)+"</h4><h4 id='h4_descripcion'>Traslado del Festivo del día "+dato+"</h4>" ).insertAfter( $(this).next());
                         }
                       });
-                    $(this).closest("tr").next("tr").find("td:nth-child(1) a").attr("title",contenedor.find("#div_leyenda h4[id="+ $(this).closest("tr").next("tr").find("td:nth-child(1) a").text()+"]").next("h4").text());
+                    //$(this).closest("tr").next("tr").find("td:nth-child(1) a").attr("title",contenedor.find("#div_leyenda h4[id="+ $(this).closest("tr").next("tr").find("td:nth-child(1) a").text()+"]").next("h4").text());
                   }
                 }
               }
@@ -5387,7 +5415,8 @@ $(document).on("click","#registro_equipamientos td a",function(event){
     equipamiento=$(this).closest("tr").find("td:nth-child(2)").text();
 
     from=$(this).closest("tr").find("td:nth-child(3)").attr("data-order").split("/");
-    fecha= from[2]+"-"+from[0]+"-"+from[1];    
+    fecha= from[2]+"-"+from[0]+"-"+from[1];
+    fecha_aviso= from[1]+"-"+from[0]+"-"+from[2];   
 
     hora_inicio=$(this).closest("tr").find("td:nth-child(4)").attr("inicio");
     hora_fin=$(this).closest("tr").find("td:nth-child(4)").attr("fin");
@@ -5395,10 +5424,7 @@ $(document).on("click","#registro_equipamientos td a",function(event){
     fin=hora_fin+":00";
 
     nombre_profesor=$(this).closest("tr").find("td:nth-child(1)").text();
-    fecha_aviso=$(this).closest("tr").find("td:nth-child(3)").attr("data-order");
 
-    var aviso = new Audio();
-    aviso.src = "/Symfony/web/bundles/backend/sounds/aviso.mp3";
     aviso.play();
     swal({
       title: "Eliminación de reserva",
@@ -6392,7 +6418,7 @@ $(document).on("click","#registro_equipamientos td a",function(event){
   //            Consultar Eventos          //
   ///////////////////////////////////////////
 
-  //Se abre un formulario de mensajes al profesor al hacer click en el registro de la reserva del profesor.
+  //Se muestra la descripción del evento al hacer click en el registro.
   $(document).on("click","#consultar_eventos .scrollContent tr", function () {
 
       if($(this).hasClass("tr_select_descrip")){
@@ -6452,12 +6478,10 @@ $(document).on("click","#registro_equipamientos td a",function(event){
     titulo=$(this).closest("tr").find("td:nth-child(1)").text();
 
     from=$(this).closest("tr").find("td:nth-child(2)").attr("data-order").split("/");
-    fecha= from[2]+"-"+from[0]+"-"+from[1];    
+    fecha= from[1]+"-"+from[0]+"-"+from[2];    
 
     hora=$(this).closest("tr").find("td:nth-child(3)").attr("hora");
 
-    var aviso = new Audio();
-    aviso.src = "/Symfony/web/bundles/backend/sounds/aviso.mp3";
     aviso.play();
     swal({
       title: "Eliminación del evento",
@@ -6476,7 +6500,7 @@ $(document).on("click","#registro_equipamientos td a",function(event){
           type: 'DELETE',
           url: Routing.generate("eventos_delete", {id:evento}),
           success: function() {
-          // Se actualiza las pestañas de consulta y reserva.   
+          // Se actualiza la pestaña de consulta de eventos..   
             $("#consultar_eventos").update_tab();
           }
         })
@@ -6675,11 +6699,15 @@ $(document).on("click","#registro_equipamientos td a",function(event){
   //            Insertar Noticias          //
   ///////////////////////////////////////////
 
-
-  $(document).on('click',"#insertar_imagen, #cambiar_imagen button[id!='btn_eliminar']",function(event){
+  //Se abre la ventana para insertar la imagen de la noticia.
+  $(document).on('click',"#registrar_noticias #insertar_imagen button, #registrar_noticias #cambiar_imagen button[id!='btn_eliminar']",function(event){
     event.preventDefault();
     $('#imagen_noticia_dialog').load(Routing.generate("noticias_imagen"), function(){
-      $('#btn_file #upload').trigger('click');
+      //Se oculta el botón que corresponde a editar noticias.
+      $('#imagen_noticia_dialog .upload-result-edit_noticia').addClass('oculto');
+      $('#imagen_noticia_dialog .upload-result').removeClass('oculto');
+
+      $('#imagen_noticia_dialog #btn_file #upload').trigger('click');
     }).dialog('open'); 
   }); 
 
@@ -6714,10 +6742,24 @@ $(document).on("click","#registro_equipamientos td a",function(event){
     }
     descripcion=tinyMCE.get('descripcion').getContent();
 
+    if(!$("#registrar_noticias #galeria_noticia").hasClass("oculto")){
+      galeria=$("#registrar_noticias #galeria_noticia").attr("title");
+    }
+    else{
+      galeria=null;
+    }
+    
+    if($("#registrar_noticias #imagen_noticia #btn_activos").hasClass("btn_selected")){
+      show="yes";
+    }
+    else{
+      show="no";
+    }
+    
     $.ajax({
       type: 'POST',
       url: Routing.generate('noticias_create'),
-      data:{titulo:titulo, categoria:categoria, imagen:imagen, pos:pos, descripcion:descripcion}, 
+      data:{titulo:titulo, categoria:categoria, imagen:imagen, galeria:galeria, pos:pos, descripcion:descripcion, show:show}, 
       dataType: 'json',
       success: function(response){
 
@@ -6782,24 +6824,23 @@ $(document).on("click","#registro_equipamientos td a",function(event){
   });
 
   //Se elimina la imagen seleccionada para la lista de noticias.
-  $(document).on('click',"#btn_eliminar",function(event){
+  $(document).on('click',"#registrar_noticias #imagen_noticia #btn_eliminar",function(event){
     event.preventDefault();
-    $("#insertar_imagen button").prop("disabled", false);
+    $("#registrar_noticias #insertar_imagen button").prop("disabled", false);
 
-    $("#imagen_noticia").addClass( "oculto" );
+    $("#registrar_noticias #imagen_noticia").addClass( "oculto" );
   }); 
 
-  // Se muestra la lista de antiguos alumnos activos.
+  // Se activa la imagen en el contenido de la noticia.
   $(document).on('click',"#registrar_noticias #btn_activos",function(event){
     $("#registrar_noticias #btn_activos").addClass("btn_selected");
     $("#registrar_noticias #show").removeClass("oculto");
 
     $("#registrar_noticias #btn_inactivos").removeClass("btn_selected");
     $("#registrar_noticias #hidden").addClass("oculto");
-
   });
 
-  // Se muestra la lista de antiguos alumnos inactivos.
+  // Se oculta la imagen en el contenido de la noticia.
   $(document).on('click',"#registrar_noticias #btn_inactivos",function(event){
     $("#registrar_noticias #btn_activos").removeClass("btn_selected");
     $("#registrar_noticias #show").addClass("oculto");
@@ -6808,21 +6849,823 @@ $(document).on("click","#registro_equipamientos td a",function(event){
     $("#registrar_noticias #hidden").removeClass("oculto");
   });
 
-
-
-
-
-
-
-
-
-
-
-  $(document).on("click","#ff-item-type-all", function(event){ 
+  // Se abre la ventana para añadir galería.
+  $(document).on('click',"#insertar_galeria button",function(event){
     event.preventDefault();
-  alert("entra");
+    $('#galeria_noticia_dialog').load(Routing.generate("noticias_galeria"), function(){
+
+      $('#galeria_noticia_dialog #btn_file #btn_files').trigger('click');
+    }).dialog('open');
+    $.ajax({url: Routing.generate('galerias_delete'),type: "POST"});
+  }); 
+
+  // Se abre la ventana para modificar la galería.
+  $(document).on('click',"#registrar_noticias #galeria_noticia #btn_cambiar",function(event){
+    event.preventDefault();
+    $('#galeria_noticia_dialog').load(Routing.generate("noticias_galeria"), function(){
+      //Se elimina la clase ".upload-result" que guarda la galería añadida. 
+      $('#galeria_noticia_dialog #btn_upload button').removeClass('upload-result');
+      // Se añade la clase ".btn-success" para guardar la galería editada.
+      $('#galeria_noticia_dialog #btn_upload button').addClass('upload-result-edit');
+      //Se añade el título de la galería en el input y como variable para mandarla al servidor.
+      titulo=$("#registrar_noticias #galeria_noticia").attr("title");
+      $("#galeria_noticia_dialog #titulo").val(titulo.replace(/_/g, " "));
+      //Se añade el título como variable para mandarla al servidor.
+      $("#galeria_noticia_dialog #titulo").attr("antiguo",titulo);
+
+      //Se añaden las imágenes de la galería.
+      $("#galeria_noticia #galeria_show div>img").each (function(item){ 
+        array=$(this).attr("src").split("/");
+        $('#galeria_noticia_dialog #contenido ul').append('<li><div class="cont_img"><img class="thumb" id="antiguo" src="'+$(this).attr("src")+'" title="'+array[array.length-1]+'"></img></div><div class="eliminar" title="Eliminar imagen"></div></li>');
+      });
+      //Se indica el número de imágenes.
+      $('#galeria_noticia_dialog #num_imagenes').removeClass("red");
+
+      if($('#galeria_noticia_dialog #list li').length>1){
+        $('#galeria_noticia_dialog #num_imagenes').text($('#galeria_noticia_dialog #list li').length + " imágenes añadidas");
+      }
+      else if($('#galeria_noticia_dialog #list li').length==1) {
+        $('#galeria_noticia_dialog #num_imagenes').text($('#galeria_noticia_dialog #list li').length + " imagen añadida");
+      }
+      else{
+        $('#galeria_noticia_dialog #num_imagenes').empty();
+      }
+
+    }).dialog('open'); 
+  }); 
+
+  //Se elimina la imagen seleccionada.
+  $(document).on('click',"#galeria_noticia_dialog #list .eliminar",function(event){
+    event.preventDefault();
+    $(this).closest("li").remove();
+    if($('#galeria_noticia_dialog #list li').length>1){
+      $('#galeria_noticia_dialog #num_imagenes').text($('#galeria_noticia_dialog #list li').length + " imágenes añadidas");
+    }
+    else if($('#galeria_noticia_dialog #list li').length==1) {
+      $('#galeria_noticia_dialog #num_imagenes').text($('#galeria_noticia_dialog #list li').length + " imagen añadida");
+    }
+    else{
+      $('#galeria_noticia_dialog #num_imagenes').empty();
+    }
+  }); 
+
+  $(document).on('blur',"#galeria_noticia_dialog #titulo",function(e){
+    var filter = /^([A-Za-záéíóúÁÉÍÓÚüÜñÑ0-9]+)([\s][A-Za-záéíóúÁÉÍÓÚüÜñÑ0-9]+)*$/;
+
+    if($(this).val()==""){
+      $("#galeria_noticia_dialog #titulo").next().removeClass("oculto");
+      $("#galeria_noticia_dialog #titulo").next().next().addClass("oculto");
+      $("#galeria_noticia_dialog #titulo").addClass("invalid");    
+    }
+    else if(!filter.test($(this).val())){
+      $("#galeria_noticia_dialog #titulo").next().next().removeClass("oculto");
+      $("#galeria_noticia_dialog #titulo").addClass("invalid");
+    }
+    else{
+      $("#galeria_noticia_dialog #titulo").next().addClass("oculto");
+      $("#galeria_noticia_dialog #titulo").next().next().addClass("oculto");
+      $("#galeria_noticia_dialog #titulo").removeClass("invalid");
+    }
   });
 
+  // Se guarda la galería añadida.
+  $(document).on('click',"#galeria_noticia_dialog .upload-result",function(event){
+    event.preventDefault();
+    val=0;
+    if($("#galeria_noticia_dialog #titulo").val()==""){
+      val=1;
+      $("#galeria_noticia_dialog #titulo").next().removeClass("oculto");
+      $("#galeria_noticia_dialog #titulo").next().next().addClass("oculto");
+      $("#galeria_noticia_dialog #titulo").addClass("invalid");
+      $("#galeria_noticia_dialog #titulo").focus();
+    }
+    else if($("#galeria_noticia_dialog #titulo").hasClass('invalid')){
+      val=1;
+      $("#galeria_noticia_dialog #titulo").next().next().removeClass("oculto");
+      $("#galeria_noticia_dialog #titulo").addClass("invalid");
+      $("#galeria_noticia_dialog #titulo").focus();
+    }
+    else{
+      $("#galeria_noticia_dialog #titulo").next().addClass("oculto");
+      $("#galeria_noticia_dialog #titulo").next().next().addClass("oculto");
+      $("#galeria_noticia_dialog #titulo").removeClass("invalid");
+    }
+
+    if($('#galeria_noticia_dialog #list li').length==0){
+      val=1;
+      $('#galeria_noticia_dialog #num_imagenes').text("Debe añadir alguna imagen a la galería");
+      $('#galeria_noticia_dialog #num_imagenes').addClass("red");
+    }
+    if(!val){
+      nombre=$("#galeria_noticia_dialog #titulo").val();
+      nombre = nombre.replace(/ /g, "_"); //Se añade la opción g(global) para que cambie todas las ocurrencias.
+      var imagenes = new Array();
+      $('#galeria_noticia_dialog #list li').each (function(item){ 
+        array=$(this).find("img").attr("title").split('.');
+        imagenes["Imagen-"+(item+1)+"."+array[array.length-1]]=$(this).find("img").attr("src");
+      });
+      
+      var formdata=new FormData();
+      for (var key in imagenes) {
+        formdata.append(key, imagenes[key]);
+      }
+      formdata.append('nombre', nombre);
+
+      $.ajax({
+        url: Routing.generate('galeria_create'),
+        type: "POST",
+        data: formdata, 
+        dataType: 'json',
+        processData: false,
+        contentType: false,
+        cache: false,
+        success: function (data) {
+          if(data.validate){     
+            error.play();
+            swal({
+              title:"Nombre de la galería asignado",
+              text: 'Ya existe una galería con ese nombre en el sistema.<br>Inserte otro nombre para continuar.',
+              type: "error",
+              html: true,
+              showCancelButton: false,
+              confirmButtonColor: color,
+              closeOnConfirm: true 
+            });
+            return false;
+          }
+
+          $("#registrar_noticias #galeria_noticia #galeria_show div").remove();
+            imagenes=data.imagenes.replace("[", "").replace("]", "").replace(/"/g, "");
+            imagenes=imagenes.split(",");
+            imagenes.forEach(function(item){
+              $("#registrar_noticias #galeria_show").append("<div id='cont_imagen_mini' class='imgLiquidFill imgLiquid'><img src='/Symfony/web/uploads/noticias/galeria/"+data.directory+item+"' alt='Imagen de la galería'/></div>");
+              $(".imgLiquidFill").imgLiquid();
+            });
+
+
+          $("#registrar_noticias #insertar_galeria button").prop("disabled", true);
+          $("#registrar_noticias #galeria_noticia").removeClass( "oculto" );
+          $("#galeria_noticia_dialog").dialog( "close" );
+          //Se muestra el título sin "_"
+          //$("#registrar_noticias #galeria_noticia").attr("title", nombre.replace(/_/g, " "));
+          $("#registrar_noticias #galeria_noticia").attr("title", nombre);
+        }
+      });  
+    }
+  }); 
+
+  // Se guarda la galería editada.
+  $(document).on('click',"#galeria_noticia_dialog .upload-result-edit",function(event){
+    event.preventDefault();
+    val=0;
+    if($("#galeria_noticia_dialog #titulo").val()==""){
+      val=1;
+      $("#galeria_noticia_dialog #titulo").next().removeClass("oculto");
+      $("#galeria_noticia_dialog #titulo").next().next().addClass("oculto");
+      $("#galeria_noticia_dialog #titulo").addClass("invalid");
+      $("#galeria_noticia_dialog #titulo").focus();
+    }
+    else if($("#galeria_noticia_dialog #titulo").hasClass('invalid')){
+      val=1;
+      $("#galeria_noticia_dialog #titulo").next().next().removeClass("oculto");
+      $("#galeria_noticia_dialog #titulo").addClass("invalid");
+      $("#galeria_noticia_dialog #titulo").focus();
+    }
+    else{
+      $("#galeria_noticia_dialog #titulo").next().addClass("oculto");
+      $("#galeria_noticia_dialog #titulo").next().next().addClass("oculto");
+      $("#galeria_noticia_dialog #titulo").removeClass("invalid");
+    }
+
+    if($('#galeria_noticia_dialog #list li').length==0){
+      val=1;
+      $('#galeria_noticia_dialog #num_imagenes').text("Debe añadir alguna imagen a la galería");
+      $('#galeria_noticia_dialog #num_imagenes').addClass("red");
+    }
+    if(!val){
+      nombre=$("#galeria_noticia_dialog #titulo").val();
+      nombre = nombre.replace(/ /g, "_"); //Se añade la opción g(global) para que cambie todas las ocurrencias.
+      antiguo=$("#galeria_noticia_dialog #titulo").attr("antiguo");
+      antiguo = antiguo.replace(/ /g, "_"); //Se añade la opción g(global) para que cambie todas las ocurrencias.
+      var imagenes = new Array();
+      $('#galeria_noticia_dialog #list li').each (function(item){ 
+        if($(this).find("img").attr("id")=="antiguo"){
+          array=$(this).find("img").attr("title").split('.');
+          imagenes["0Imagen-"+(item+1)+"."+array[array.length-1]]=$(this).find("img").attr("src");
+        }else{
+          array=$(this).find("img").attr("title").split('.');
+          imagenes["Imagen-"+(item+1)+"."+array[array.length-1]]=$(this).find("img").attr("src");
+        }
+      });
+      
+      var formdata=new FormData();
+      var array= Array(); //Array que contiene el nombre de las imagenes para mostrar en el contenedor.
+      for (var key in imagenes) {
+        formdata.append(key, imagenes[key]);
+        array.push(key);
+      }
+      formdata.append('nombre', nombre);
+      formdata.append('antiguo', antiguo);
+
+      $.ajax({
+        url: Routing.generate('galeria_editar'),
+        type: "POST",
+        data: formdata, 
+        dataType: 'json',
+        processData: false,
+        contentType: false,
+        cache: false,
+        success: function (data) {   
+          if(data.validate){     
+            error.play();
+            swal({
+              title:"Nombre de la galería asignado",
+              text: 'Ya existe una galería con ese nombre en el sistema.<br>Inserte otro nombre para continuar.',
+              type: "error",
+              html: true,
+              showCancelButton: false,
+              confirmButtonColor: color,
+              closeOnConfirm: true 
+            });
+            return false;
+          }
+
+          $("#registrar_noticias #galeria_noticia #galeria_show div").each (function(){ 
+            this.remove();
+          });
+          galeria=nombre;
+        $.ajax({
+          type: 'POST',
+          url: Routing.generate('mostrar_galeria_editada'),
+          data:{galeria:galeria}, 
+          dataType: 'json',
+          success: function(response){
+            imagenes=response.imagenes.replace("[", "").replace("]", "").replace(/"/g, "");
+            imagenes=imagenes.split(",");
+            imagenes.forEach(function(item){
+              $("#registrar_noticias #galeria_show").append("<div id='cont_imagen_mini' class='imgLiquidFill imgLiquid'><img src='/Symfony/web/uploads/noticias/galeria/"+data.directory+item+"' alt='Imagen de la galería'/></div>");
+              $(".imgLiquidFill").imgLiquid();
+            });
+
+            $("#registrar_noticias #insertar_galeria button").prop("disabled", true);
+            $("#registrar_noticias #galeria_noticia").removeClass( "oculto" );
+            $("#galeria_noticia_dialog").dialog( "close" );
+            //Se muestra el título sin "_"
+            //$("#registrar_noticias #galeria_noticia").attr("title", galeria.replace(/_/g, " "));
+            $("#registrar_noticias #galeria_noticia").attr("title", galeria);
+          }
+        });
+        }
+      });  
+    }
+  }); 
+
+  //Se elimina la galería añadida.
+  $(document).on('click',"#registrar_noticias #galeria_noticia #btn_eliminar",function(event){
+    event.preventDefault();
+    $("#registrar_noticias #insertar_galeria button").prop("disabled", false);
+
+    $("#registrar_noticias #galeria_noticia #galeria_show div").remove();
+    $("#registrar_noticias #galeria_noticia").addClass( "oculto" );
+  }); 
+
+  ///////////////////////////////////////////
+  //           Consultar Noticias          //
+  ///////////////////////////////////////////
+
+  //Eliminación de una reserva.
+  $(document).on("click","#consultar_noticias .scrollContent tr #eliminar_1", function(event){
+    event.preventDefault();
+    noticia=$(this).closest("tr").attr("id");
+
+    titulo=$(this).closest("tr").find("td:nth-child(1)").text();
+
+    from=$(this).closest("tr").find("td:nth-child(2)").attr("data-order").split("/");
+    fecha= from[1]+"-"+from[0]+"-"+from[2];    
+
+    hora=$(this).closest("tr").find("td:nth-child(3)").attr("hora");
+
+
+    aviso.play();
+    swal({
+      title: "Eliminación de noticias",
+      text: "<table><p>Se va a eliminar la siguiente noticia, ¿Estas seguro de continuar? <br></p><thead><tr><th>Noticia</th><th>Fecha</th><th>Hora</th></tr></thead><tbody><tr><td>"+titulo+"</td><td>"+fecha+"</td><td>"+hora+"</td></tr></tbody><br></p></table>",
+      type: "warning",
+      html: true,
+      showCancelButton: true,
+      cancelButtonText: "Cancelar",
+      customClass: 'swal-wide',
+      confirmButtonColor: color,
+      confirmButtonText: "¡Adelante!",
+      closeOnConfirm: true },
+
+      function(){
+        $.ajax({
+          type: 'DELETE',
+          url: Routing.generate("noticias_delete", {id:noticia}),
+          success: function() {
+          // Se actualiza las pestañas de consulta de noticias.   
+            $("#consultar_noticias").update_tab();
+          }
+        })
+      return false;
+      }
+    );
+    //Se detiene la propagación del evento para que no detecte hacer click en el elemento "tr" que lo contiene.
+    event.stopPropagation();   
+  });
+
+// Se abre la ventana modal de Editar Noticias.
+  $(document).on('click',"#consultar_noticias #editar_1",function(event){
+    event.preventDefault();
+    noticia=$(this).closest("tr").attr("id");
+    
+    $('#noticia_dialog').load(Routing.generate("noticias_edit", {id:noticia}), function(){
+      $('#noticia_dialog form').attr("noticia",noticia );
+    }).dialog('open'); 
+
+    //Se detiene la propagación del evento para que no detecte hacer click en el elemento "tr" que lo contiene.
+    event.stopPropagation(); 
+  });
+
+
+  //Se abre la ventana para insertar la imagen de la noticia.
+  $(document).on('click',"#insertar_imagen_edit button, #cambiar_imagen_edit button[id!='btn_eliminar']",function(event){
+    event.preventDefault();
+    $('#imagen_noticia_dialog').load(Routing.generate("noticias_imagen"), function(){
+      //Se oculta el botón que corresponde a registrar noticias.
+      $('#imagen_noticia_dialog .upload-result-edit_noticia').removeClass('oculto');
+      $('#imagen_noticia_dialog .upload-result').addClass('oculto');
+
+      $('#imagen_noticia_dialog #btn_file #upload').trigger('click');
+    }).dialog('open'); 
+  }); 
+
+  //Se elimina la imagen seleccionada para la lista de noticias.
+  $(document).on('click',"#noticias_edit #cambiar_imagen_edit  #btn_eliminar",function(event){
+    event.preventDefault();
+    $("#noticias_edit #insertar_imagen_edit button").prop("disabled", false);
+
+    $("#noticias_edit #imagen_noticia").addClass( "oculto" );
+  /*  titulo=$("#noticias_edit #imagen_noticia #cont_imagen img").attr("file");
+    $.ajax({
+      type: 'POST',
+      url: Routing.generate('imagen_delete'),
+      data:{titulo:titulo}, 
+      dataType: 'json',
+      success: function(response){
+      }
+    });
+*/
+  }); 
+
+  // Se activa la imagen en el contenido de la noticia.
+  $(document).on('click',"#noticias_edit #btn_activos",function(event){
+    $("#noticias_edit #btn_activos").addClass("btn_selected");
+    $("#noticias_edit #show").removeClass("oculto");
+
+    $("#noticias_edit #btn_inactivos").removeClass("btn_selected");
+    $("#noticias_edit #hidden").addClass("oculto");
+  });
+
+  // Se oculta la imagen en el contenido de la noticia.
+  $(document).on('click',"#noticias_edit #btn_inactivos",function(event){
+    $("#noticias_edit #btn_activos").removeClass("btn_selected");
+    $("#noticias_edit #show").addClass("oculto");
+
+    $("#noticias_edit #btn_inactivos").addClass("btn_selected");
+    $("#noticias_edit #hidden").removeClass("oculto");
+  });
+
+  // Se abre la ventana para añadir galería.
+  $(document).on('click',"#noticias_edit #insertar_galeria_edit button",function(event){
+    event.preventDefault();
+    $('#galeria_noticia_dialog').load(Routing.generate("noticias_galeria"), function(){
+      //Se elimina la clase ".upload-result" que guarda la galería añadida. 
+      $('#galeria_noticia_dialog #btn_upload button').removeClass('upload-result');
+      // Se añade la clase ".btn-success" para guardar la galería editada.
+      $('#galeria_noticia_dialog #btn_upload button').addClass('upload-result-edit_noticia');
+
+      $('#galeria_noticia_dialog #btn_file #btn_files').trigger('click');
+    }).dialog('open');
+    $.ajax({url: Routing.generate('galerias_delete'),type: "POST"});
+  }); 
+
+  // Se abre la ventana para modificar la galería.
+  $(document).on('click',"#noticias_edit #galeria_noticia #btn_cambiar",function(event){
+    event.preventDefault();
+    $('#galeria_noticia_dialog').load(Routing.generate("noticias_galeria"), function(){
+      //Se elimina la clase ".upload-result" que guarda la galería añadida. 
+      $('#galeria_noticia_dialog #btn_upload button').removeClass('upload-result');
+      // Se añade la clase ".btn-success" para guardar la galería editada.
+      $('#galeria_noticia_dialog #btn_upload button').addClass('upload-result-edit-edit_noticia');
+      //Se añade el título de la galería en el input y como variable para mandarla al servidor.
+      titulo=$("#noticias_edit #galeria_noticia").attr("title");
+      $("#galeria_noticia_dialog #titulo").val(titulo.replace(/_/g, " "));
+      //Se añade el título como variable para mandarla al servidor.
+      $("#galeria_noticia_dialog #titulo").attr("antiguo",titulo);
+
+      //Se añaden las imágenes de la galería.
+      $("#noticias_edit #galeria_noticia #galeria_show div>img").each (function(item){ 
+        array=$(this).attr("src").split("/");
+        $('#galeria_noticia_dialog #contenido ul').append('<li><div class="cont_img"><img class="thumb" id="antiguo" src="'+$(this).attr("src")+'" title="'+array[array.length-1]+'"></img></div><div class="eliminar" title="Eliminar imagen"></div></li>');
+      });
+      //Se indica el número de imágenes.
+      $('#galeria_noticia_dialog #num_imagenes').removeClass("red");
+
+      if($('#galeria_noticia_dialog #list li').length>1){
+        $('#galeria_noticia_dialog #num_imagenes').text($('#galeria_noticia_dialog #list li').length + " imágenes añadidas");
+      }
+      else if($('#galeria_noticia_dialog #list li').length==1) {
+        $('#galeria_noticia_dialog #num_imagenes').text($('#galeria_noticia_dialog #list li').length + " imagen añadida");
+      }
+      else{
+        $('#galeria_noticia_dialog #num_imagenes').empty();
+      }
+
+
+    }).dialog('open'); 
+  }); 
+
+  // Se guarda la galería añadida.
+  $(document).on('click',"#galeria_noticia_dialog .upload-result-edit_noticia",function(event){
+    event.preventDefault();
+    val=0;
+    if($("#galeria_noticia_dialog #titulo").val()==""){
+      val=1;
+      $("#galeria_noticia_dialog #titulo").next().removeClass("oculto");
+      $("#galeria_noticia_dialog #titulo").next().next().addClass("oculto");
+      $("#galeria_noticia_dialog #titulo").addClass("invalid");
+      $("#galeria_noticia_dialog #titulo").focus();
+    }
+    else if($("#galeria_noticia_dialog #titulo").hasClass('invalid')){
+      val=1;
+      $("#galeria_noticia_dialog #titulo").next().next().removeClass("oculto");
+      $("#galeria_noticia_dialog #titulo").addClass("invalid");
+      $("#galeria_noticia_dialog #titulo").focus();
+    }
+    else{
+      $("#galeria_noticia_dialog #titulo").next().addClass("oculto");
+      $("#galeria_noticia_dialog #titulo").next().next().addClass("oculto");
+      $("#galeria_noticia_dialog #titulo").removeClass("invalid");
+    }
+
+    if($('#galeria_noticia_dialog #list li').length==0){
+      val=1;
+      $('#galeria_noticia_dialog #num_imagenes').text("Debe añadir alguna imagen a la galería");
+      $('#galeria_noticia_dialog #num_imagenes').addClass("red");
+    }
+    if(!val){
+      nombre=$("#galeria_noticia_dialog #titulo").val();
+      nombre = nombre.replace(/ /g, "_"); //Se añade la opción g(global) para que cambie todas las ocurrencias.
+      var imagenes = new Array();
+      $('#galeria_noticia_dialog #list li').each (function(item){ 
+        array=$(this).find("img").attr("title").split('.');
+        imagenes["Imagen-"+(item+1)+"."+array[array.length-1]]=$(this).find("img").attr("src");
+      });
+      
+      var formdata=new FormData();
+      for (var key in imagenes) {
+        formdata.append(key, imagenes[key]);
+      }
+      formdata.append('nombre', nombre);
+
+      $.ajax({
+        url: Routing.generate('galeria_create'),
+        type: "POST",
+        data: formdata, 
+        dataType: 'json',
+        processData: false,
+        contentType: false,
+        cache: false,
+        success: function (data) {
+          if(data.validate){     
+            error.play();
+            swal({
+              title:"Nombre de la galería asignado",
+              text: 'Ya existe una galería con ese nombre en el sistema.<br>Inserte otro nombre para continuar.',
+              type: "error",
+              html: true,
+              showCancelButton: false,
+              confirmButtonColor: color,
+              closeOnConfirm: true 
+            });
+            return false;
+          }
+
+          $("#noticias_edit #galeria_noticia #galeria_show div").remove();
+            imagenes=data.imagenes.replace("[", "").replace("]", "").replace(/"/g, "");
+            imagenes=imagenes.split(",");
+            imagenes.forEach(function(item){
+              $("#noticias_edit #galeria_show").append("<div id='cont_imagen_mini' class='imgLiquidFill imgLiquid'><img src='/Symfony/web/uploads/noticias/galeria/"+data.directory+item+"' alt='Imagen de la galería'/></div>");
+              $(".imgLiquidFill").imgLiquid();
+            });
+
+
+          $("#noticias_edit #insertar_galeria_edit button").prop("disabled", true);
+          $("#noticias_edit #galeria_noticia").removeClass( "oculto" );
+          $("#galeria_noticia_dialog").dialog( "close" );
+          //Se muestra el título sin "_"
+          //$("#noticias_edit #galeria_noticia").attr("title", nombre.replace(/_/g, " "));
+
+          $("#noticias_edit #galeria_noticia").attr("title", nombre);
+        }
+      });  
+    }
+  }); 
+
+  // Se guarda la galería editada.
+  $(document).on('click',"#galeria_noticia_dialog .upload-result-edit-edit_noticia",function(event){
+    event.preventDefault();
+    val=0;
+    if($("#galeria_noticia_dialog #titulo").val()==""){
+      val=1;
+      $("#galeria_noticia_dialog #titulo").next().removeClass("oculto");
+      $("#galeria_noticia_dialog #titulo").next().next().addClass("oculto");
+      $("#galeria_noticia_dialog #titulo").addClass("invalid");
+      $("#galeria_noticia_dialog #titulo").focus();
+    }
+    else if($("#galeria_noticia_dialog #titulo").hasClass('invalid')){
+      val=1;
+      $("#galeria_noticia_dialog #titulo").next().next().removeClass("oculto");
+      $("#galeria_noticia_dialog #titulo").addClass("invalid");
+      $("#galeria_noticia_dialog #titulo").focus();
+    }
+    else{
+      $("#galeria_noticia_dialog #titulo").next().addClass("oculto");
+      $("#galeria_noticia_dialog #titulo").next().next().addClass("oculto");
+      $("#galeria_noticia_dialog #titulo").removeClass("invalid");
+    }
+
+    if($('#galeria_noticia_dialog #list li').length==0){
+      val=1;
+      $('#galeria_noticia_dialog #num_imagenes').text("Debe añadir alguna imagen a la galería");
+      $('#galeria_noticia_dialog #num_imagenes').addClass("red");
+    }
+    if(!val){
+      nombre=$("#galeria_noticia_dialog #titulo").val();
+      nombre = nombre.replace(/ /g, "_"); //Se añade la opción g(global) para que cambie todas las ocurrencias.
+      antiguo=$("#galeria_noticia_dialog #titulo").attr("antiguo");
+      antiguo = antiguo.replace(/ /g, "_"); //Se añade la opción g(global) para que cambie todas las ocurrencias.
+      var imagenes = new Array();
+      $('#galeria_noticia_dialog #list li').each (function(item){ 
+        if($(this).find("img").attr("id")=="antiguo"){
+          array=$(this).find("img").attr("title").split('.');
+          imagenes["0Imagen-"+(item+1)+"."+array[array.length-1]]=$(this).find("img").attr("src");
+        }else{
+          array=$(this).find("img").attr("title").split('.');
+          imagenes["Imagen-"+(item+1)+"."+array[array.length-1]]=$(this).find("img").attr("src");
+        }
+      });
+      
+      var formdata=new FormData();
+      var array= Array(); //Array que contiene el nombre de las imagenes para mostrar en el contenedor.
+      for (var key in imagenes) {
+        formdata.append(key, imagenes[key]);
+        array.push(key);
+      }
+      formdata.append('nombre', nombre);
+      formdata.append('antiguo', antiguo);
+
+      $.ajax({
+        url: Routing.generate('galeria_editar'),
+        type: "POST",
+        data: formdata, 
+        dataType: 'json',
+        processData: false,
+        contentType: false,
+        cache: false,
+        success: function (data) {   
+          if(data.validate){     
+            error.play();
+            swal({
+              title:"Nombre de la galería asignado",
+              text: 'Ya existe una galería con ese nombre en el sistema.<br>Inserte otro nombre para continuar.',
+              type: "error",
+              html: true,
+              showCancelButton: false,
+              confirmButtonColor: color,
+              closeOnConfirm: true 
+            });
+            return false;
+          }
+
+          $("#noticias_edit #galeria_noticia #galeria_show div").each (function(){ 
+            this.remove();
+          });
+          galeria=nombre;
+        $.ajax({
+          type: 'POST',
+          url: Routing.generate('mostrar_galeria_editada'),
+          data:{galeria:galeria}, 
+          dataType: 'json',
+          success: function(response){
+            imagenes=response.imagenes.replace("[", "").replace("]", "").replace(/"/g, "");
+            imagenes=imagenes.split(",");
+            imagenes.forEach(function(item){
+              $("#noticias_edit #galeria_show").append("<div id='cont_imagen_mini' class='imgLiquidFill imgLiquid'><img src='/Symfony/web/uploads/noticias/galeria/"+data.directory+item+"' alt='Imagen de la galería'/></div>");
+              $(".imgLiquidFill").imgLiquid();
+            });
+            
+            $("#noticias_edit #noticias_galeria").val( $("#galeria_noticia_dialog #titulo").val().replace(/ /g, "_") );
+
+            $("#noticias_edit #insertar_galeria_edit button").prop("disabled", true);
+            $("#noticias_edit #galeria_noticia").removeClass( "oculto" );
+            $("#galeria_noticia_dialog").dialog( "close" );
+
+            //Se muestra el título sin "_"
+            //$("#noticias_edit #galeria_noticia").attr("title", galeria.replace(/_/g, " "));
+            $("#noticias_edit #galeria_noticia").attr("title", galeria);
+          }
+        });
+        }
+      });  
+    }
+  }); 
+
+  //Se elimina la galería añadida.
+  $(document).on('click',"#noticias_edit #galeria_noticia #btn_eliminar",function(event){
+    event.preventDefault();
+    $("#insertar_galeria_edit button").prop("disabled", false);
+    $("#noticias_edit #galeria_noticia").attr("title","");
+
+    $("#noticias_edit #galeria_noticia #galeria_show div").remove();
+    $("#noticias_edit #galeria_noticia").addClass( "oculto" );
+
+    $.ajax({url: Routing.generate('galerias_delete'),type: "POST"});
+
+  }); 
+  //Se valida el título de la noticia. (La descripción es validada dentro tinymce)
+  $(document).on("change keyup paste click input propertychange blur cut",'#noticias_edit #noticias_titulo', function(){
+    $("#noticias_edit #input_titulo").find(".error").remove();
+    titulo=$("#noticias_edit #noticias_titulo").val();
+
+    if(titulo==""){
+      $("#noticias_edit #noticias_titulo").prev().append("<span class='error'>Dato Requerido</span>");
+      $("#noticias_edit #noticias_titulo").addClass("invalid");
+      $("#noticias_edit #noticias_titulo").attr("validated",false);
+    }
+    else{
+      $("#noticias_edit #noticias_titulo").removeClass("invalid");
+      $("#noticias_edit #noticias_titulo").attr("validated",true);
+    }
+  });
+
+
+  //Se actualiza la noticia.
+  $(document).on("submit","#noticias_edit",function(event) {
+    event.preventDefault();
+    form= $(this).closest("form");
+
+    // Se establece el efecto para la notificación de error en el caso de que se de varias veces seguidas a guardar con algunas opción sin marcar.
+    errorPNotify.pause();
+    errorPNotify.currentTime=0.0;
+    $(".ui-pnotify").remove();
+
+    if(!$("#noticias_edit #imagen_noticia").hasClass("oculto")){
+      imagen=$("#noticias_edit #mostrar_imagen img").attr("file");
+      pos=$("#noticias_edit #slider-vertical").attr("value");
+    }
+    else{
+      imagen="";
+      pos=null;
+    }
+    
+    if(!$("#noticias_edit #galeria_noticia").hasClass("oculto")){
+      galeria=$("#noticias_edit #galeria_noticia").attr("title").split(' ').join('_');
+    }
+    else{
+      galeria="";
+    }
+    if($("#noticias_edit #imagen_noticia #btn_activos").hasClass("btn_selected")){
+      show="yes";
+    }
+    else{
+      show="no";
+    }
+    
+    titulo=$("#noticias_edit #noticias_titulo").val();
+    descripcion=tinyMCE.get('noticias_descripcion').getContent();  
+
+    var val=0;
+    $("#noticias_edit").find(".error").remove();
+    if(titulo==""){
+      val=1;
+      $("#noticias_edit #noticias_titulo").prev().append("<span class='error'>Dato Requerido</span>");
+      $("#noticias_edit #noticias_titulo").addClass("invalid");
+      $("#noticias_edit #noticias_titulo").attr("validated",false);
+      $("#noticias_edit #noticias_titulo").focus();
+    }
+    else{
+      $("#noticias_edit #noticias_titulo").removeClass("invalid");
+      $("#noticias_edit #noticias_titulo").attr("validated",true);
+    }
+
+    if(descripcion==""){
+      val=1;
+      $("#noticias_edit .editor>label").append("<span class='error'>Dato Requerido</span>");
+      $("#noticias_edit .editor>div").addClass("invalid");
+      $("#noticias_edit #noticias_descripcion").attr("validated",false);
+      if(titulo!=""){
+        tinyMCE.get('noticias_descripcion').focus();
+      }
+    }
+    else{
+      $("#noticias_edit .editor>div").removeClass("invalid");
+      $("#noticias_edit #noticias_descripcion").attr("validated",true);     
+    }
+
+
+    if(val==0){
+      $.ajax({
+        type: 'PUT',
+        url: $(this).attr('action'),
+
+        data: $(this).serialize()+"&imagen="+imagen+"&pos="+pos+"&galeria="+galeria+"&show="+show, 
+ 
+
+        success: function(response) {
+
+          // Notificación de confirmación
+          exito.play();
+              
+          new PNotify({
+            text:"Noticia actualizada",
+            addclass: "custom",
+            type: "success",
+            shadow: true,
+            hide: true,
+            buttons: {
+              sticker: false,
+              labels:{close: "Cerrar"}
+            },
+            stack: right_Stack,
+            animate: {
+              animate: true,
+              in_class: "fadeInRight",
+              out_class: "fadeOutRight",
+            }
+          });
+          // Se actualiza las pestañas de eventos.
+          $("#registrar_noticias").update_tab();
+          $("#consultar_noticias").update_tab();
+          $("#noticia_dialog").dialog('close');
+        },
+        error: function (response, desc, err){
+          if (response.responseJSON && response.responseJSON.message) {
+            //Se elimina las clases de error, para luego añadirlas a los campos que siguen inválidos.
+            form.find(":input").each(function(i){  
+              $(this).prev().find(".error").remove();
+              $(this).next(".mensaje").remove();
+              $(this).removeClass("invalid");
+              //Si tiene alguna validación se le asigna validate: true, para que se vuelva a validar.
+              //En caso contrario se valida con las reglas de validación de Symfony.
+              if($(this).attr("validation")){
+                $(this).attr("validated", true);
+              }
+            });
+            //Se muestra los campos inválidos.        
+            for (var key in response.responseJSON.data) { 
+              form.find(":input[id='"+key+"']").addClass("invalid");
+              form.find(":input[id='"+key+"']").removeClass("modified");
+              //Si tiene alguna validación se le asigna validate: false, para indicar el campo inválido.
+              //En caso contrario se valida con las reglas de validación de Symfony.
+              if($(this).attr("validation")){
+                form.find(":input[id='"+key+"']").attr("validated", false);
+              }
+              form.find(":input[id='"+key+"']").after("<span class='mensaje'>"+response.responseJSON.data[key]+"</span>");
+              if(response.responseJSON.data[key]=="Este valor no debería estar vacío."){
+                form.find(":input[id='"+key+"']").prev().append("<span class='error'>Dato Requerido</span>");
+              }
+              else{
+                form.find(":input[id='"+key+"']").prev().append("<span class='error'>Dato inválido</span>");
+              }
+            }
+            //Se muestra el primer campo inválido.
+            for (var key in response.responseJSON.data) { 
+              form.find(":input[id='"+key+"']").focus();
+              return false;
+            }
+          } 
+          else {
+            error.play();
+            swal({
+              title: "Error en el sistema",
+              text: "Se ha producido un error en el sistema, por favor cierra la ventana <span>Editar Evento</span> y vuelva a intentarlo de nuevo.",
+              type: "error",
+              html: true,
+              showCancelButton: false,
+              confirmButtonColor: color,
+              closeOnConfirm: true 
+            });
+          }
+        }
+      })
+    }
+  });
+
+
+ 
 
 
 

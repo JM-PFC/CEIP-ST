@@ -1,0 +1,139 @@
+{% extends 'BackendBundle:Default:index.html.twig' %}
+
+{% block head %}{% endblock %}
+{% block stylesheets %}{% endblock %}
+
+{% block javascript %}
+<script>
+    // Tabla con la opción de ordenar y búsqueda.
+    $('#consulta_noticias').DataTable( {
+        //"aLengthMenu": [[25, 50, 100, 250, 500, -1], [25, 50, 100, 250, 500, "All"]],
+        "order": [[ 1, "asc" ]],
+        "aLengthMenu": [[ -1], [ "All"]],
+        "columnDefs": [ {
+            "targets": 'no-sort',
+            "orderable": false,} ],
+        "language": {
+            "zeroRecords": "Lo siento, no se ha encontrado ningún registro coincidente",
+            "emptyTable": "Actualmente no hay ningún evento registrado en el sistema",
+            "lengthMenu": "Mostrar _MENU_ entradas",
+            "loadingRecords": "Cargando...",
+            "processing":     "Processando...",
+            "info": "Página _PAGE_ de _PAGES_",
+            "infoEmpty": "No hay registros disponibles",
+            "infoFiltered": "(filtrado de _MAX_ registros)",
+            "search": "Buscar:",
+            "Next": "Siguiente",
+            "paginate": {
+                "previous": "Anterior",
+                "next": "Siguiente"
+            }
+        }
+    });
+
+    $("#consultar_noticias .dataTables_info").addClass("oculto");
+    $("#consultar_noticias .dataTables_paginate").addClass("oculto");
+    $("#consultar_noticias .dataTables_length").addClass("oculto");
+    $('#consultar_noticias .dataTables_filter').appendTo('#consultar_noticias #buscador');
+
+    // Se comprueba si existe scrol vertical para ajustar el thead
+    if( $('#consulta_noticias tbody').get(0).scrollHeight>$('#consulta_noticias tbody').height()){
+        $("#consulta_noticias thead tr>th:nth-child(5)").attr('style', 'width: 6.3% !important');
+    }
+    else{
+        $("#consulta_noticias thead tr>th:nth-child(5)").attr('style', 'width: 5.7% !important');
+    }
+    
+    $(window).resize(function() {
+        if($('#consulta_noticias tbody').get(0).scrollHeight>$('#consulta_noticias tbody').height() ){
+            $("#consulta_noticias thead tr>th:nth-child(5)").attr('style', 'width: 6.3% !important');
+        }
+        else{
+            $("#consulta_noticias thead tr>th:nth-child(5)").attr('style', 'width: 5.7% !important');
+        }
+    });
+
+    $("#consulta_noticias tbody tr td[class='dataTables_empty']").closest("tr").addClass("no_cursor");
+
+    $("#noticia_dialog").dialog(
+       {
+        bgiframe: true,
+        autoOpen: false,
+        height: 505,
+        width: 500,
+        modal: true,
+        resizable: false,
+        close: function( event, ui ) {
+        $(".ui-widget-overlay").remove();
+        }
+       }
+    );
+   $('#noticia_dialog').on('dialogclose', function(event) {
+     $('#noticia_dialog').empty();
+    });
+
+    </script>
+
+{% endblock %}
+
+{% block body -%}
+   <div id="consultar_noticias">
+      <div class="parent_no_form">
+      <div class="child">
+         <div class="contenedor_registro">  
+            <div>
+               <div id="cabecera_lista">
+                  <h2 class="text_cabecera">Noticias de Profesores</h2>
+                  <div id="buscador"> </div>
+               </div>
+               <div id="fondo_azul_osc" class="tabla_con_info">
+                  <div id="tableContainer" class="tableContainer inner_table vh45">
+                     <table id="consulta_noticias" class="scrollTable lista_color">
+                        <thead class="fixedHeader">
+                           <tr>
+                              {#<th class="id">Id</th>#}
+                              <th class="w12 left">Título</th>
+                              <th>Fecha</th>
+                              <th>Hora</th>
+                              <th>Categoría</th>
+                              <th class="no-sort">Acciones</th>
+                              <th class="oculto">Descripción</th>
+                           </tr>
+                        </thead>
+                        <tbody class="scrollContent">
+                           {% set cont = 1 %}
+                           {% for entity in entities %}
+                           <tr id="{{entity.id}}">
+                              <td class="w12 left">{{ entity.titulo}}</td>
+                              <td  data-order="{{ entity.fecha|date('m/d/Y') }}">
+                                 {% if entity.fecha|date('m/d/Y') ==  'today'|date('m/d/Y') %}
+                                    {{ "Hoy" }}
+                                 {% elseif entity.fecha|date('m/d/Y') == 'tomorrow'|date('m/d/Y') %}
+                                    {{"Mañana"}}
+                                 {% else %}
+                                    {{ entity.fecha|date('d/m/Y') }}
+                                 {% endif %}
+                              </td>
+
+                              <td hora="{{ entity.fecha|date('H:i') }}">{{entity.fecha|date('H:i')}}</td>
+                              <td>{{ entity.categoria}}</td>
+                              <td class="eliminar">
+                                 <img id="editar_0" src="{{ asset('bundles/backend/images/menu/editar0.png') }}">
+                                 <img id="editar_1" title="Editar evento" class="oculto" src="{{ asset('bundles/backend/images/menu/editar1.png') }}">
+                                 <img id="eliminar_0" src="{{ asset('bundles/backend/images/menu/eliminar0.png') }}">
+                                 <img id="eliminar_1" title="Eliminar evento" class="oculto" src="{{ asset('bundles/backend/images/menu/eliminar1.png') }}">
+                              </td>
+                              <td class="oculto"> {{ entity.descripcion }}</td>
+                           </tr>
+                           {% set cont = cont + 1 %}
+                           {% endfor %}
+                        </tbody>
+                     </table>
+                  </div>
+               </div>
+               <div id="noticia_dialog" title="Editar Evento"></div>          
+            </div>
+         </div>
+      </div>
+   </div>
+{% endblock %}

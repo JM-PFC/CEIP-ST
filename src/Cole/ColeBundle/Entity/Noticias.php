@@ -56,6 +56,22 @@ class Noticias
     private $foto;
 
     /**
+     * @var boolean
+     *
+     * @ORM\Column(name="mostrarFoto", type="boolean")
+     * 
+     */
+    private $mostrarFoto;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="galeria", type="string", length=255, nullable=true)
+     * 
+     */
+    private $galeria;
+
+    /**
      * @var string
      *
      * @ORM\Column(name="categoria", type="string", length=255)
@@ -66,7 +82,6 @@ class Noticias
      * @var integer
      *
      * @ORM\Column(name="contador", type="integer", nullable=true)
-     * @Assert\Blank()
      */
     private $contador;
 
@@ -226,5 +241,51 @@ class Noticias
     public function getContador()
     {
         return $this->contador;
+    }
+
+    /**
+     * Set galeria
+     *
+     * @param string $galeria
+     * @return Noticias
+     */
+    public function setGaleria($galeria)
+    {
+        $this->galeria = $galeria;
+
+        return $this;
+    }
+
+    /**
+     * Get galeria
+     *
+     * @return string 
+     */
+    public function getGaleria()
+    {
+        return $this->galeria;
+    }
+
+    /**
+     * Set mostrarFoto
+     *
+     * @param boolean $mostrarFoto
+     * @return Noticias
+     */
+    public function setMostrarFoto($mostrarFoto)
+    {
+        $this->mostrarFoto = $mostrarFoto;
+
+        return $this;
+    }
+
+    /**
+     * Get mostrarFoto
+     *
+     * @return boolean 
+     */
+    public function getMostrarFoto()
+    {
+        return $this->mostrarFoto;
     }
 }

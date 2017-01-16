@@ -27,6 +27,7 @@
 	<script type="text/javascript" src="{{ asset('bundles/backend/js/jquery-ui/jquery-ui.js') }}"></script>
 	<script type="text/javascript" src="{{ asset('bundles/backend/js/sweetalert-master/dist/sweetalert.min.js') }}"></script>
 	<script type="text/javascript" src="{{ asset('bundles/backend/js/pnotify/pnotify.custom.min.js') }}"></script>
+  <script type="text/javascript" src="{{asset("bundles/cole/js/imgLiquid-min.js")}}"></script>
 
 	<script type="text/javascript" src="{{ asset('bundles/fosjsrouting/js/router.js') }}"></script>
 	<script type="text/javascript" src="{{ path('fos_js_routing_js', {"callback": "fos.Router.setData"}) }}"></script>
@@ -46,7 +47,6 @@
     	<header>
 			<h2> C.E.I.P SANTA TERESA </h2> 
 			<h3> Área de Administración</h3>
-			
     	</header>
     	<nav class="barra_menu">
 			 <div class="contenedor">
@@ -120,7 +120,7 @@
 							<img src="{{ asset('bundles/backend/images/menu/noticias.png')}}">
 							<span> Registro </span>
 						</a>
-						<a id="consultar_noticias" title="Consulta Noticias" href="{{path('noticias_imagen')}}">
+						<a id="consultar_noticias" title="Consulta Noticias" href="{{path('noticias_consultar')}}">
 							<img src="{{ asset('bundles/backend/images/menu/consultar.png')}}">
 							<span> Consulta </span>
 						</a>

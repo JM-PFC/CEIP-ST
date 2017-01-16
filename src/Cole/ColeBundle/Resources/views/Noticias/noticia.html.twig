@@ -1,16 +1,23 @@
 {% extends  '::frontend.html.twig' %}
-
-
-
 {% block main %}
    <article class="contenedor_noticia">
                 <div class="contenido_noticia">
 
                     <h2>{{entity.titulo}}</h2>
-                    <p>{{entity.descripcion|raw|nl2br }}</p>
-                    {% if entity.foto != null %}
+                    <p>{{entity.descripcion|striptags|raw|nl2br }}</p>
+                    {# Sólo se muestra la imagen si no hay galería #}
+                    {% if entity.foto != null and entity.galeria == null and entity.mostrarFoto == "yes" %}
                         <div class="imgLiquidFill imgLiquid normal">
-                        <a class="no-seleccion-foto" ><img src="{{ asset('uploads/noticias/'~ entity.foto)}}" alt="Imagen de la Noticia"></a></div>
+                        <a class="no-seleccion-foto" ><img src="{{ asset('uploads/noticias/' ~ entity.foto)}}" alt="Imagen de la Noticia"></a></div>
+                    {% endif %}
+                    
+                    {% if entity.galeria != null %}
+                    <div id="gallery" style="display:none;">
+                        {% for imagen in imagenes %}
+                            <img src="{{ asset('uploads/noticias/galeria/' ~ entity.galeria ~ '/' ~ imagen)}}"
+                            data-image="{{ asset('uploads/noticias/galeria/' ~ entity.galeria ~ '/' ~ imagen)}}">
+                        {% endfor %}
+                    </div>
                     {% endif %}
                 </div>
             </article>
