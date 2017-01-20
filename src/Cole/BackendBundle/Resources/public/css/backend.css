@@ -541,7 +541,20 @@ nav{
 	#asignar_grupos .pie_lista p:nth-child(3){
 		margin: 2px 26% !important;
 	}
-
+	#container_noticia>div:first-child{
+	width: 52% !important;
+	}
+	#registrar_noticias #galeria_show, #noticias_edit #galeria_show{
+		width: 84% !important;
+	}
+	#mostrar_imagen span{
+		display: block;
+		clear: both;
+		width: 93%;
+	}
+	#rango_horas{
+		margin-left: 5%;
+	}
 }
 
 /*Contenido*/
@@ -2285,12 +2298,10 @@ float: right;
 #ui-datepicker-div .ui-datepicker-title{
 	line-height: 1em !important;
 }
-#inicio_curso_disable{
+#inicio_curso_disable,#fin_curso_disable{
 	background: #E6E6E6;
 }
-#fin_curso_disable{
-	background: #E6E6E6;
-}
+
 #curso_dialog fieldset{
 	height: 92%;
 }
@@ -2720,8 +2731,8 @@ border: 1px solid;
     font-size: 12px;
     font-weight: bold;
     margin-left: 3%;
-    margin-top: 2%;
-    margin-bottom: 20px;
+    margin-top: 5%;
+    margin-bottom: 17px;
     overflow: auto;
     width: 95%;
     /*min-height:44vh;*/
@@ -2733,6 +2744,7 @@ border: 1px solid;
 }
 #registro_horario .simple_column_red h2{
  	margin-top: 2% !important;
+ 	margin-bottom: 2%;
 }
 #registro_horario .block_insert p{
     text-align: justify;
@@ -2742,6 +2754,39 @@ border: 1px solid;
 	text-align: left;
 	float: left;
 	margin: 5px;
+	clear: both;
+}
+#rango_horas{
+	display: block;
+	float: left;
+	margin-top: 2.5%;
+	width: 47%;
+}
+#rango_horas input{
+	width: 27%;
+	text-align: center;
+	border: medium thin grey;
+    border-radius: 5px;
+    margin: 0 4px;
+}
+#inicio_horario_disable, #fin_horario_disable{
+	background: #E6E6E6;
+}
+#registro_horario #horario_centro{
+	float: left;
+	margin-bottom: 7% !important;
+	width: 47%;
+}
+#registro_horario  #horario_centro span{
+	float: none !important;
+	font-weight: normal !important;
+	font-size: 0.9em;
+	padding: 1px 5px;
+}
+#registro_horario  .center_button{
+	padding-top: 5%;
+}
+#registro_horario  .block_insert li{
 	clear: both;
 }
 #registro_horario .block_insert #selec_comida{
@@ -2811,7 +2856,7 @@ border: 1px solid;
     display: block; 
 }
 .contenedor_registro_horario .inner_table{
-    max-height: 35vh;
+    max-height: 30vh;
     overflow-y: auto;
 }
 .contenedor_registro_horario table select {
@@ -3461,6 +3506,12 @@ tbody.scrollContent tr.alternateRow td {
  .sweet-alert table{
 	margin:0 auto;
 }
+ .sweet-alert li{
+	margin-left: 50px;
+	text-align: left;
+}
+
+
 .tr_title{
 	background:  red ;
 }
@@ -4091,11 +4142,12 @@ tbody.scrollContent tr.alternateRow td {
  	font-size: 1.2em !important;
 }
 #eventos_edit .timepicker_wrap{
- 	display: block;
+ 	display: block !important;
  	background: none;
  	box-shadow: none;
  	margin-top: 17px;
  	border: 0;
+ 	opacity: 1 !important;
 }
 #eventos_edit .timepicker_wrap .prev,#eventos_edit .timepicker_wrap .next{
 	background: #e4e0e0 url("../js/TimePicki-master/images/arrow.png") no-repeat scroll 0 0;
@@ -4191,7 +4243,7 @@ div .disabled{
     overflow: auto;
 }
 #container_noticia>div:first-child{
-	width: 59% !important;
+	width: 59% ;
 	margin-right: 10px;
 }
 #container_noticia>div:first-child input{
@@ -4220,7 +4272,8 @@ div .disabled{
 	margin-left: 5px;
 	background: white;
 	box-shadow: 0 1px 1px 1px rgba(0, 0, 0, 0.5);
-	width: 665px;
+	width: 94%;
+	max-width: 670px;
 }
 #container_noticia #cont_imagen_mini{
 	width: 180px;
@@ -4616,3 +4669,73 @@ cursor: default !important;
     padding: 0 !important;
     margin: 2px 0 !important;
 }
+
+#horario_centro_dialog fieldset{
+	max-height: 270px;
+	min-height: 270px;
+}
+#horario_centro_dialog .addregistro{
+	height: 45px;
+	margin: 10px 25px 0 25px;
+}
+
+#horario_centro_dialog .timepicki_colum{
+    float: left;
+    height: 140px;
+    width: 50%;
+    text-align: center;
+    font-weight: bold;
+}
+#horario_centro_dialog .timepicker_wrap{
+    background: rgba(0, 0, 0, 0) none repeat scroll 0 0;
+    border: 0 none;
+    box-shadow: none;
+    display: block !important;
+    margin-left: 31px;
+    margin-top: 15px;
+    position: relative;
+    opacity: 1 !important;
+
+}
+#horario_centro_dialog .time, #horario_centro_dialog .mins{
+	margin: 0;
+	margin-top: -34px !important;
+}
+#horario_centro_dialog .prev,#horario_centro_dialog .next{
+	background: #e4e0e0 url("../js/TimePicki-master/images/arrow.png") no-repeat scroll 0 0;
+	padding: 10px;
+	width: 20px;
+	box-shadow: 0 1px 1px 0px rgba(0, 0, 0, 0.5);
+}
+#horario_centro_dialog .ti_tx, #horario_centro_dialog .mi_tx{
+	margin: 10px 0;
+}
+#horario_centro_dialog .timepicker_wrap .prev:hover,#horario_centro_dialog .timepicker_wrap .next:hover{
+	background: #CCC url("../js/TimePicki-master/images/arrow.png") no-repeat scroll 0 0;
+}
+#horario_centro_dialog .prev {
+    background-position: 50% -13% !important;
+}
+#horario_centro_dialog .next {
+    background-position: 50% 105% !important;
+}
+#horario_centro_dialog label {
+    margin-bottom: 30px;
+}
+#horario_centro_dialog #botones_form button{
+    font-size: 1em !important;
+    margin: 6px 30px;
+    min-width: 109px;
+}
+#horario_centro_dialog .ti_tx input, #horario_centro_dialog .mi_tx input{
+	font-size: 0.9em;
+}
+#horario_centro_dialog #aviso_error{
+    clear: both;
+    display: inline-block ;
+    margin: 15px 53px;
+}
+#horario_centro_dialog #content-form{
+	height: 0;
+}
+

@@ -39,3 +39,9 @@ registrar_fecha_curso:
     defaults: { _controller: "BackendBundle:Centro:fechaCurso" }
     options:
         expose: true
+
+registrar_horario_centro:
+    path:     /registrar_horario_centro
+    defaults: { _controller: "BackendBundle:Centro:horarioCentro" }
+    options:
+        expose: true

@@ -5,23 +5,57 @@
     
 {% block javascript %}
     <script>
-        if($("#contenedor_registro_horario #lista_color tbody tr").length==0){
-            $("#contenedor_registro_horario #aviso_horario").removeClass("oculto");
-        }
-        else{
-            $("#contenedor_registro_horario #aviso_horario").addClass("oculto");
-        }
+    if($("#contenedor_registro_horario #lista_color tbody tr").length==0){
+        $("#contenedor_registro_horario #aviso_horario").removeClass("oculto");
+    }
+    else{
+        $("#contenedor_registro_horario #aviso_horario").addClass("oculto");
+    }
 
-        $("#contenedor_registro_horario").find("input").each(function(i){
-            $(this).attr("tabindex",i+1);
-        });
+    $("#contenedor_registro_horario").find("input").each(function(i){
+        $(this).attr("tabindex",i+1);
+    });
 
-        $("#contenedor_registro_horario").find("input").each (function(){
-            $(this).attr("val_ini",$(this).val());
-        });
+    $("#contenedor_registro_horario").find("input").each (function(){
+        $(this).attr("val_ini",$(this).val());
+    });
 
+    $("#horario_centro_dialog").dialog({
+    bgiframe: true,
+    autoOpen: false,
+    height: 395,
+    width: 470,
+    modal: true,
+    resizable: false,
+    close: function( event, ui ) {
+      // Se comprueba si no hay horario del centro registrado. En caso de que no exista se cierra la pestaña al cerrar la ventana para obligar a registrarlo.   
+      if($("#horario_centro_dialog>div").hasClass("nuevo")){     
+          div=$(".contenido_main").find("div[id^='tabs-'][style='display: block']");
+          $(" li[aria-controls='"+div.attr("id")+"'] span").trigger("click");
+      }
+      $("#horario_centro_dialog").empty();
+    }
+  });
 
+    //Si el horario está registrado se asigna al input.
+    if({{inicio|json_encode()|raw}}!=null){
+        $("#registro_horario #inicio_horario_disable").val({{ inicio|json_encode()|raw }});
+        $("#registro_horario #fin_horario_disable").val({{ fin|json_encode()|raw }});
+    }
 
+  // Se comprueba si existe horario del centro registrado, sino se obliga a registrarlo.
+  if($("#inicio_horario_disable").val()=="" && $("#fin_horario_disable").val()==""){
+    $('#horario_centro_dialog').load(Routing.generate("edit_horario_centro"), function(){
+    }).dialog('open'); 
+  }
+    if(!$("#registro_horario #aviso_horario").hasClass('oculto')){
+        //Se oculta la cabecera de la tabla si no hay horario escolar.
+        $("#contenedor_registro_horario table th").addClass("oculto");
+        //Se muestra el borde inferior de la cabecera.
+        $("#contenedor_registro_horario .inner_table").css("margin-top", "2px");
+        //Se oculta el div con los botones de la tabla.
+        $("#registro_horario #registro_horario_guardar").addClass('oculto');
+    }
 
     </script>
 {% endblock %}
@@ -33,6 +67,13 @@
       <div class="simple_column_red">
         <div class="block_insert">
             <h2>Registro Horario Escolar</h2>
+            <div>
+              <h2 id="horario_centro"><span >Horario del centro:</span></h2>
+
+              <div id="rango_horas">
+                De <input id="inicio_horario_disable"  title="Pulsa para modificar el horario del centro"></input> a <input id="fin_horario_disable"   title="Pulsa para modificar el horario del centro"></input>h.
+              </div>
+            </div>
             <li>Seleccione lo datos para generar un nuevo horario:</li>
             <div>
                 <span>Total de horas de clases:</span>
@@ -170,12 +211,15 @@
 
     </div>
     </div>
-            <div id="aviso_error" class="oculto"> 
+        <div id="aviso_error" class="oculto"> 
             <span>*</span>
-            <span>Debe introducir una hora válida en horario escolar (08:00-18:00h.) y que esté comprendida entre la hora anterior y posterior.</span>
+            <span>Debe introducir una hora válida en horario del centro ({{inicio}}-{{fin}}h.) y que esté comprendida entre la hora anterior y posterior.</span>
         </div>  
   </div>
 
-    {% endblock %}
+
+  <div id="horario_centro_dialog" title="Asignación del horario del centro">
+
+{% endblock %}
 
 

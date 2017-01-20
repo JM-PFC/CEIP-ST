@@ -38,7 +38,7 @@ class NoticiasController extends Controller
         //Se restablece o se elimina los directorios acabados en _m (directorios creados en editar noticia)
         foreach (glob($Dir."*_m") as $D_m) {
           if(file_exists($D_m.'/')){
-            $D=substr($D_m, 0, -3);
+            $D=substr($D_m, 0, -2);
 
             if (!file_exists($D.'/')) {
                 rename($D_m.'/', $D.'/');
@@ -682,7 +682,7 @@ class NoticiasController extends Controller
         
         $time=time();
         
-        if (file_exists($this->container->getParameter('kernel.root_dir').'/../web/uploads/noticias/galeria/'.$antiguo.'/')) {
+        if (file_exists($this->container->getParameter('kernel.root_dir').'/../web/uploads/noticias/galeria/'.$titulo.'/')) {
         return new JsonResponse(array(
             'validate' => 'existe',
             'success' => true), 200);

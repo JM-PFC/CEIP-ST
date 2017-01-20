@@ -27,9 +27,11 @@ horario_update:
     requirements: { _method: post|put }
 
 horario_delete:
-    path:     /{id}/delete
+    path:     /horario_delete
     defaults: { _controller: "BackendBundle:Horario:delete" }
     requirements: { _method: post|delete }
+    options:
+        expose: true
 
 nuevo_horario:
     path:     /nuevo_horario
@@ -46,5 +48,17 @@ editar_horario:
 horario_escolar_actual:
     path:     /horario_escolar_actual
     defaults: { _controller: "BackendBundle:Horario:HorarioEscolarActual" }
+    options:
+        expose: true
+
+edit_horario_centro:
+    path:     /edit_horario_centro
+    defaults: { _controller: "BackendBundle:Horario:RegistrarHorarioCentro" }
+    options:
+        expose: true
+
+comprobaciones_horario_nuevo:
+    path:     /comprobaciones_horario_nuevo
+    defaults: { _controller: "BackendBundle:Horario:ComprobacionesHorarioNuevo" }
     options:
         expose: true

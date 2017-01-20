@@ -6,7 +6,7 @@
             <div class="valor_year">{{noticia.fecha| localizeddate('none', 'none', 'none',none , "Y")}}</div>
         </div>
     
-        <div class="contenido_noticia">
+        <div class="contenido_noticia pre_footer">
            	{% if noticia.foto != null %}
             {% set myArray = noticia.foto|split('.') %}
             {% set result = myArray[0]|split('_') %}
@@ -15,7 +15,39 @@
                 </div>
             {% endif %}
             <a href="{{ path('noticia', {'id': noticia.id}) }}"><h2>{{noticia.titulo}}</h2></a>
-            <p>{{ noticia.descripcion|striptags|truncate(300,true)|raw|nl2br }}<a class="href_blue" href="{{ path('noticia', {'id': noticia.id}) }}"> <strong> [Read More] </strong></a></p>
+            {% set paragraphs = noticia.descripcion|striptags|truncate(300,true)|raw|nl2br %}
+            
+            {% set paragraphs = paragraphs|split('<br />') %}
+
+            {% set summary = "" %}
+            {% set cont = 90 %}
+            {% set type = "" %}
+            
+            {% if paragraphs|length == 1 %}
+                {% set summary =  paragraphs[0] %}
+                {% if summary|length <= 300 %}
+                    {% set type = "" %}
+                {% else %}
+                    {% set type = "anything" %}
+                {% endif %}
+            {% else %}
+                {% for i in 1..(paragraphs|length) %}
+
+                {% if summary|length + cont + paragraphs[i-1]|length  <= 500 %}
+                    {% set summary = summary  ~ "<br>" ~ paragraphs[i-1] %}
+                    {% set cont = cont + 90 %}
+                {% else %}
+                    {% set type = "anything" %}
+                {% endif %}
+               {% endfor %}
+            {% endif %}
+
+            {% if type != "" %}
+                <p>{{ summary|striptags|truncate(300,true)|raw|nl2br }}<a class="href_blue" href="{{ path('noticia', {'id': noticia.id}) }}"> <strong> [Leer más] </strong></a></p>
+            {% else %}
+                <p>{{ summary|striptags|truncate(300,true)|raw|nl2br }}<a class="href_blue" href="{{ path('noticia', {'id': noticia.id}) }}"></a></p>
+            {% endif %}
+
         </div>
     </article>
 

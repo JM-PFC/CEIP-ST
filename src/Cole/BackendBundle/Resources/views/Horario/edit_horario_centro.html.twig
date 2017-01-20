@@ -1,0 +1,133 @@
+{% extends 'BackendBundle:Default:index.html.twig' %}
+
+{% block head %}{% endblock %}
+{% block stylesheets %}{% endblock %}
+
+{% block javascript %}
+
+  <script>
+    $("#horario_centro_dialog  #aviso_error").hide();
+
+    $("#horario_centro_dialog #horario_inicio_centro").timepicki({
+    show_meridian:false,
+    min_hour_value:7,
+    max_hour_value:9,
+    step_size_minutes:15,
+    overflow_minutes:true,
+    increase_direction:'up',
+    start_time: ["07", "00"],
+    disable_keyboard_mobile: true});
+
+    $("#horario_centro_dialog #horario_fin_centro").timepicki({
+    show_meridian:false,
+    min_hour_value:14,
+    max_hour_value:19,
+    step_size_minutes:15,
+    overflow_minutes:true,
+    increase_direction:'up',
+    start_time: ["07", "00"],
+    disable_keyboard_mobile: true});
+    // Se añade el separador de la hora.
+    $("#horario_centro_dialog .timepicker_wrap .time").after(":");
+    
+    //Se elimina el arrow_top que trae por defecto.
+    $("#horario_centro_dialog .arrow_top" ).remove();    
+
+
+  $(document).on("click","#horario_centro_dialog .prev",function(event){
+    event.preventDefault();
+    if($(this).next().find("input").val()=="01" && $(this).parent().attr("class")=="time"){
+      valor=0;
+      if($(this).closest(".timepicki_colum").attr("id")=="inicio"){
+        valor="07";
+      }
+      else{
+        valor="14";
+      }
+      $(this).next().find("input").val(valor);
+    }
+  });
+
+  $(document).on("click","#horario_centro_dialog .next",function(event){
+    event.preventDefault();
+    if($(this).prev().find("input").val()=="" && $(this).closest(".timepicker_wrap ").find("div").attr("class")=="time"){
+      valor;
+      if($(this).closest(".timepicki_colum").attr("id")=="inicio"){
+        valor="09";
+      }
+      else{
+        valor="20";
+      }
+      $(this).next().find("input").val(valor);
+    }
+  });
+
+
+      // Se asigna la hora guardada al timepicki.
+    if({{inicio|json_encode()|raw}}!=null){
+
+      h_inicio={{inicio|json_encode()|raw}};
+      h_fin={{fin|json_encode()|raw}};
+      inicio=h_inicio.split(":");
+      fin=h_fin.split(":");
+      $("#horario_centro_dialog #inicio .time input").val(inicio[0]);
+      $("#horario_centro_dialog #inicio .mins input").val(inicio[1]);
+      
+      $("#horario_centro_dialog #fin .time input").val(fin[0]);
+      $("#horario_centro_dialog #fin .mins input").val(fin[1]);
+    }
+
+    $("#horario_centro_dialog  #horario_inicio_centro").attr("value",{{inicio|json_encode()|raw}} );
+    $("#horario_centro_dialog  #horario_fin_centro").attr("value",{{fin|json_encode()|raw}} );
+  </script>
+
+{% endblock %}
+
+{% block body -%}
+
+  {% if inicio == null %}
+  <div class="nuevo">
+  {% else %} 
+  <div>
+  {% endif %}
+    <div class="width100">
+    	<div id="content-form">
+        	<fieldset >
+            <legend> Horario del centro </legend>
+            <div id="" class="addregistro" >
+              {% if inicio == null %} 
+                <p>Para continuar debe añadir el horario del centro:</p>
+              {% else %}
+                <p>Selecciona la hora que quiera modificar:</p>     
+              {% endif %} 
+            </div>
+
+            {#Se utiliza el plugin timepicki para mostrar la hora#}
+            <div id="inicio"class="timepicki_colum">
+              <label>Hora de apertura</label>
+              <input id="horario_inicio_centro" class="oculto"></input>
+            </div>
+            <div id="fin" class="timepicki_colum">
+              <label>Hora de cierre</label>
+              <input id="horario_fin_centro" class="oculto"></input>
+            </div>
+
+            <div id="aviso_error">
+              <span>*</span>
+              <span>Se debe seleccionar los datos que faltan.</span>                  
+            </div>
+
+        	</fieldset>
+    	</div>  
+        <div id="botones_form">
+            <div>
+                <button id="button_hora_centro">Guardar</button>
+            </div>
+            <div>
+                <button id="button_hora_centro_rest">Restablecer</button>
+            </div>
+        </div>
+    </div>
+  </div>
+
+{% endblock %}

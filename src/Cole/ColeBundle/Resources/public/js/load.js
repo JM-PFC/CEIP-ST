@@ -269,7 +269,9 @@ $(document).ready(function () {
 
 
 
-
+if($(".main .contenido_noticia").hasClass('pre_footer')){
+  $("#pre_footer").removeClass('oculto');
+}
 
 });
 

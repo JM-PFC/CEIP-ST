@@ -252,4 +252,26 @@ class CentroController extends Controller
         return new JsonResponse(array('message' => 'Success!','success' => true), 200);
 
     }
+
+
+    public function horarioCentroAction()
+    {
+        $em = $this->getDoctrine()->getEntityManager();
+
+        $inicio=$this->get('request')->request->get('inicio');
+        $fin=$this->get('request')->request->get('fin');
+
+        $centro =$em->getRepository('BackendBundle:Centro')->findCentro();
+
+        $centro->setInicioHorario($inicio);
+        $centro->setFinHorario($fin);
+        
+        $em->persist($centro);
+
+        $em->flush();
+        return new JsonResponse(array('message' => 'Success!','success' => true), 200);
+    }
+
+
+    
 }

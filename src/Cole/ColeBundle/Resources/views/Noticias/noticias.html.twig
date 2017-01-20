@@ -15,8 +15,38 @@
             <a href="{{path('noticia', {'id': noticia.id}) }}"><h2 class=" no-margin ">{{noticia.titulo}}</h2></a>
 
             <span><strong> {{ noticia.fecha | localizeddate('none', 'none', 'none',none , " d 'de' MMMM 'de' Y '-' H:mm'h.'") | capitalize}}</strong></span>                  
-                	
-            <p id="nuevo">{{noticia.descripcion|striptags|truncate(300,true)|raw|nl2br }}<a class="href_blue" href="{{ path('noticia', {'id': noticia.id}) }}"><strong> [Leer más] </strong></a></p>
+            {% set paragraphs = noticia.descripcion|striptags|truncate(300,true)|raw|nl2br %}
+            
+            {% set paragraphs = paragraphs|split('<br />') %}
+
+            {% set summary = "" %}
+            {% set cont = 90 %}
+            {% set type = "" %}
+            
+            {% if paragraphs|length == 1 %}
+                {% set summary =  paragraphs[0] %}
+                {% if summary|length <= 300 %}
+                    {% set type = "" %}
+                {% else %}
+                    {% set type = "anything" %}
+                {% endif %}
+            {% else %}
+                {% for i in 1..(paragraphs|length) %}
+
+                {% if summary|length + cont + paragraphs[i-1]|length  <= 500 %}
+                    {% set summary = summary  ~ "<br>" ~ paragraphs[i-1] %}
+                    {% set cont = cont + 90 %}
+                {% else %}
+                    {% set type = "anything" %}
+                {% endif %}
+               {% endfor %}
+            {% endif %}
+            {# En el caso de que una descripción tenga menos de 300 caracteres nos e mostraría la opción "Leer más", para ello usamos la variable type anterior.#}
+            {% if type != "" %}
+                <p>{{ summary|striptags|truncate(300,true)|raw|nl2br }}<a class="href_blue" href="{{ path('noticia', {'id': noticia.id}) }}"> <strong> [Leer más] </strong></a></p>
+            {% else %}
+                <p>{{ summary|striptags|truncate(300,true)|raw|nl2br }}<a class="href_blue" href="{{ path('noticia', {'id': noticia.id}) }}"></a></p>
+            {% endif %}
         </div>
     </article>
     {% endfor %}

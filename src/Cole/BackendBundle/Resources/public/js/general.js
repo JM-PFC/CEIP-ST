@@ -10,7 +10,7 @@ $(document).ready(function () {
   $("input[id^='año_profesional']").mask('00');
   $("input[id^='edit_año_acamedico']").mask('0000');
   $("input[id^='edit_año_profesional']").mask('00');
-  //$("input[type='time']").mask('00:00', {placeholder: "__:__"});  
+  $("input[type='time']").mask('00:00', {placeholder: "__:__"});  
   $("#registro_ratio input").mask('00');
 
   //Se evita arrastar los enlaces del menú.
@@ -3889,8 +3889,13 @@ $(document).on("blur","input[id='edit_profesor_dni']",function() {
       h_act=$(tab).val().split(':');
       tab_next=parseInt($(tab).attr("tabindex"))+1;
       h_next=$(div_actual).find("input[tabindex="+tab_next+"]").val().split(':');
-        
-      if((h_act[0]>h_next[0] && h_next[0]!="" )||((h_act[0]==h_next[0]) && (h_act[1]>=h_next[1])&& h_next[1]!="") ){
+
+      min=$("#registro_horario #inicio_horario_disable").val();
+      inicio=min.split(":");
+      max=$("#registro_horario #fin_horario_disable").val();
+      fin=max.split(":");
+
+      if((h_act[0]<inicio[0] || h_act[0]>fin[0])||(h_act[0]>h_next[0] && h_next[0]!="" )||((h_act[0]==h_next[0]) && (h_act[1]>=h_next[1])&& h_next[1]!="") ){
         $(tab).removeClass("modified");
         $(tab).addClass("invalid");
       }
@@ -3919,11 +3924,15 @@ $(document).on("blur","input[id='edit_profesor_dni']",function() {
     // Se valida el último input.
     else if($(tab).attr("tabindex")%2==0){
       h_act=$(tab).val().split(':');
-
       tab_prev=parseInt($(tab).attr("tabindex"))-1;
       h_prev=$(div_actual).find("input[tabindex="+tab_prev+"]").val().split(':');
+      
+      min=$("#registro_horario #inicio_horario_disable").val();
+      inicio=min.split(":");
+      max=$("#registro_horario #fin_horario_disable").val();
+      fin=max.split(":");
 
-      if((h_act[0]<h_prev[0] && h_prev[0]!="") ||((h_act[0]==h_prev[0]) && (h_act[1]<=h_prev[1]) && h_prev[1]!="")){
+      if((h_act[0]<inicio[0] || h_act[0]>fin[0] || ( h_act[0]==fin[0] && h_act[1]>fin[1] ))||(h_act[0]<h_prev[0] && h_prev[0]!="") ||((h_act[0]==h_prev[0]) && (h_act[1]<=h_prev[1]) && h_prev[1]!="")){
         $(tab).removeClass("modified");
         $(tab).addClass("invalid");
       }
@@ -4003,6 +4012,11 @@ $(document).on("blur","input[id='edit_profesor_dni']",function() {
   // Se ejecuta al pulsar una tecla en los input de horario escolar.
   $(document).on('keyup',"#registro_horario div[id$='_horario'] input",function(e){
     div_actual=$(this).closest("div[id$='_horario']");
+    min=$("#registro_horario #inicio_horario_disable").val();
+    max=$("#registro_horario #fin_horario_disable").val();
+    inicio=min.split(":");
+    fin=max.split(":");
+
     // Se elimina el placeholder para que no aparezca al borrar el valor del input.
     //$(this).attr('placeholder','');
     // Se ejecuta al introducir una hora completa en un input.Si se pulsa borrar se ignora.
@@ -4014,7 +4028,7 @@ $(document).on("blur","input[id='edit_profesor_dni']",function() {
       }
       // Se valida en línea la hora introducida.
       val=$(this).val().split(':');
-      if((val[0]<08 || val[0]>18) || (val[1]<00 || val[1]>59)){
+      if((val[0]<inicio[0] || val[0]>fin[0]) || (val[1]<00 || val[1]>59)){
         $(this).removeClass("modified");
         $(this).addClass("invalid");
         $(this).closest("tr").find("td>span").removeClass("oculto");
@@ -4116,7 +4130,7 @@ $(document).on("blur","input[id='edit_profesor_dni']",function() {
     }
   });
 
-  // Se obliga a introducir valores entre 08:00-18:00 para no validar.
+  // Se obliga a introducir valores entre 07:00-19:00 que son los límites permitidos a elegir.
   $(document).on('keydown',"#registro_horario div[id$='_horario'] input",function(e){
     // Se asigna una máscara según el primer valor introducido.
     if($(this).val().trim().length>0 && $(this).val().trim().length<5 && e.keyCode != 8){
@@ -4131,11 +4145,12 @@ $(document).on("blur","input[id='edit_profesor_dni']",function() {
         $(this).unmask();
         // Máscara para las horas que empiezan por "1"(10:00-18:00).
         $(this).mask('AB:CD',
-        {'translation': {A: {pattern: /[0-1]/}, B: {pattern: /[0-8]/}, C: {pattern: /[0-5]/}, D: {pattern: /[0-9]/}},
+        {'translation': {A: {pattern: /[0-1]/}, B: {pattern: /[0-9]/}, C: {pattern: /[0-5]/}, D: {pattern: /[0-9]/}},
         placeholder: "__:__"});
       }
     }
   });
+
 
   // Se oculta el placeholder en el input seleccionado.    
   $(document).on("focus","#registro_horario div[id$='_horario'] input",function(event){
@@ -4212,6 +4227,7 @@ $(document).on("blur","input[id='edit_profesor_dni']",function() {
     //Se muestra el panel de guardar inicial.
     $("#nuevo_horario_guardar").addClass("oculto");
     $("#registro_horario_guardar").removeClass("oculto"); 
+    $("#registro_horario #aviso_error").addClass("oculto");
 
     //Se restablece el valor inicial de cada input, simulando el pulsar restablecer horario actual.
     $("#horario_rest").trigger("click");
@@ -4292,18 +4308,361 @@ $(document).on("blur","input[id='edit_profesor_dni']",function() {
       cont++;
     });
     cadena=cadena.slice(0,-1);
+
+    // Se comprueba si la tabla imparte y reserva estan vacía. 
+    // En caso contrario, se avisa delos cambios antes de actualizar el horario.
+        
     $.ajax({
       type: 'POST',
-      url: Routing.generate('nuevo_horario'),
-      data: {cadena:cadena,cont:cont},
+      url: Routing.generate('comprobaciones_horario_nuevo'),
       success: function(response) {
-          // Se muestra el calendario actual actualizado.
-          $("#aviso_horario").addClass("oculto");
-          $("#registro_horario_guardar #horario_rest").prop("disabled",false);
-          $("#registro_horario_guardar #horario_rest").trigger("click");
-          $("#nuevo_horario_guardar #button_horario_rest").trigger("click");    
+        if(response.imparte=="" && response.reserva=="")
+        {
+          //Se actualiza sin aviso puesto que no modifica nada en el sistema.
+          $.ajax({
+            type: 'POST',
+            url: Routing.generate('nuevo_horario'),
+            data: {cadena:cadena,cont:cont},
+            success: function(response) {
+              // Notificación de confirmación
+              exito.play();
+              
+              new PNotify({
+                text:"Horario Escolar registrado",
+                addclass: "custom",
+                type: "success",
+                shadow: true,
+                hide: true,
+                buttons: {
+                  sticker: false,
+                  labels:{close: "Cerrar"}
+                },
+                stack: right_Stack,
+                animate: {
+                  animate: true,
+                  in_class: "fadeInRight",
+                  out_class: "fadeOutRight",
+                }
+              });
+              
+              // Se muestra el calendario actual actualizado.
+              $("#registro_horario_guardar #horario_rest").prop("disabled",false);
+              $("#registro_horario_guardar #horario_rest").trigger("click");
+              $("#nuevo_horario_guardar #button_horario_rest").trigger("click");
+
+              //Se muestra la tabla del nuevo horario escolar.  
+              $("#contenedor_registro_horario table th").removeClass("oculto");
+              $("#aviso_horario").addClass("oculto");  
+            } 
+          })
         }
+        else{
+          aviso.play();
+          texto='<p class="justificado">Se recomienda asignar el Horario Escolar antes del comienzo del curso para no efectuar cambios en el sistema. Si desea realizar la asignación ahora, debe saber que se realizarán los siguientes cambios en el sistema:</p><br>';
+          
+          if(response.reserva!=""){
+            texto=texto+"<li><span>Eliminación de las reservas de instalaciones o equipamientos registradas en el sistema.</span></li></br>";
+          }
+          if(response.imparte!=""){
+            texto=texto+"<li><span>Eliminación de las asignaciones de profesores en los cursos.</span></li></br>";
+          }
+          texto=texto+"¿Estas seguro de continuar? No podrás deshacer este paso...";
+          swal({
+            title: "Registro del Horario Escolar en el sistema.",
+            text: texto,
+            type: "warning",
+            showCancelButton: true,
+            html: true,
+            cancelButtonText: "Cancelar",
+            confirmButtonColor: color,
+            confirmButtonText: "¡Adelante!",
+            closeOnConfirm: true },
+
+            function(){
+              $.ajax({
+                type: 'POST',
+                url: Routing.generate('nuevo_horario'),
+                data: {cadena:cadena,cont:cont},
+                success: function(response) {
+
+                  // Notificación de confirmación
+                  exito.play();
+              
+                  new PNotify({
+                    text:"Horario Escolar registrado",
+                    addclass: "custom",
+                    type: "success",
+                    shadow: true,
+                    hide: true,
+                    buttons: {
+                      sticker: false,
+                      labels:{close: "Cerrar"}
+                    },
+                    stack: right_Stack,
+                    animate: {
+                      animate: true,
+                      in_class: "fadeInRight",
+                      out_class: "fadeOutRight",
+                    }
+                  });
+                  // Se muestra el calendario actual actualizado.
+                  $("#aviso_horario").addClass("oculto");
+                  $("#registro_horario_guardar #horario_rest").prop("disabled",false);
+                  $("#registro_horario_guardar #horario_rest").trigger("click");
+                  $("#nuevo_horario_guardar #button_horario_rest").trigger("click");    
+                }
+              })
+            }
+          );
+        }
+      }
     })
+  });
+
+  //Se abre la ventana modal para registrar horario del centro
+  $(document).on("click","#registro_horario #inicio_horario_disable",function(event){
+    event.preventDefault();
+    //Se comprueba si existe horario escolar para mostrar aviso de modificaciones.
+    if(!$("#registro_horario #aviso_horario").hasClass('oculto')){
+        $('#horario_centro_dialog').load(Routing.generate("edit_horario_centro"), function(){
+        }).dialog('open');
+    }
+    else
+    {
+    $.ajax({
+      type: 'POST',
+      url: Routing.generate('comprobaciones_horario_nuevo'),
+      success: function(response) {
+        aviso.play();
+        texto='<p class="justificado">Se recomienda asignar el horario del entro antes del comienzo del curso para no efectuar cambios en el sistema. Si desea realizar la asignación ahora, debe saber que se realizarán los siguientes cambios en el sistema:</p><br>';
+          
+        texto=texto+"<li><span>Eliminación del Horario Escolar actual.</span></li></br>";
+
+        if(response.reserva!=""){
+          texto=texto+"<li><span>Eliminación de las reservas de instalaciones o equipamientos registradas en el sistema.</span></li></br>";
+        }
+        if(response.imparte!=""){
+          texto=texto+"<li><span>Eliminación de las asignaciones de profesores en los cursos.</span></li></br>";
+        }
+        texto=texto+"¿Estas seguro de continuar? No podrás deshacer este paso...";
+        swal({
+          title: "Asignación del horario del centro.",
+          text: texto,
+          type: "warning",
+          showCancelButton: true,
+          html: true,
+          cancelButtonText: "Cancelar",
+          confirmButtonColor: color,
+          confirmButtonText: "¡Adelante!",
+          closeOnConfirm: true },
+
+          function(){
+            $('#horario_centro_dialog').load(Routing.generate("edit_horario_centro"), function(){
+            }).dialog('open');
+          }
+        );
+      }
+    })
+    }
+  });
+
+  //Se abre la ventana modal para registrar horario del centro.
+  $(document).on("click","#registro_horario #fin_horario_disable",function(event){
+    event.preventDefault();
+    //Se comprueba si existe horario escolar para mostrar aviso de modificaciones.
+    if(!$("#registro_horario #aviso_horario").hasClass('oculto')){
+        $('#horario_centro_dialog').load(Routing.generate("edit_horario_centro"), function(){
+        }).dialog('open');
+    }
+    else
+    {
+    $.ajax({
+      type: 'POST',
+      url: Routing.generate('comprobaciones_horario_nuevo'),
+      success: function(response) {
+        aviso.play();
+        texto='<p class="justificado">Se recomienda asignar el horario del centro antes del comienzo del curso para no efectuar cambios en el sistema. Si desea realizar la asignación ahora, debe saber que se realizarán los siguientes cambios en el sistema:</p><br>';
+          
+        texto=texto+"<li><span>Eliminación del horario escolar actual.</span></li></br>";
+
+        if(response.reserva!=""){
+          texto=texto+"<li><span>Eliminación de las reservas de instalaciones o equipamientos registradas en el sistema.</span></li></br>";
+        }
+        if(response.imparte!=""){
+          texto=texto+"<li><span>Eliminación de las asignaciones de profesores en los cursos.</span></li></br>";
+        }
+        texto=texto+"¿Estas seguro de continuar? No podrás deshacer este paso...";
+        swal({
+          title: "Asignar Horario del Centro.",
+          text: texto,
+          type: "warning",
+          showCancelButton: true,
+          html: true,
+          cancelButtonText: "Cancelar",
+          confirmButtonColor: color,
+          confirmButtonText: "¡Adelante!",
+          closeOnConfirm: true },
+
+          function(){
+            $('#horario_centro_dialog').load(Routing.generate("edit_horario_centro"), function(){
+            }).dialog('open');
+          }
+        );
+      }
+    })
+    }
+  });
+
+  //Se restablece la ventana modal.
+  $(document).on("click","#button_hora_centro_rest",function(event){
+    $('#horario_centro_dialog').load(Routing.generate("edit_horario_centro"), function(){
+    }).dialog('open');
+  });
+
+  // Se valida los input al cambiar en timepicki.
+  $(document).on('click',"#horario_centro_dialog .timepicker_wrap .prev ",function(event){
+    elem=$(this).next().find("input");
+    setTimeout(function(){
+    //Se valida sólo el input modificado. 
+    $("#horario_centro_dialog  #aviso_error").hide();
+      if(elem.val()!=""){
+        elem.removeClass('error_guardar');
+      }
+      else{
+        elem.addClass('error_guardar');
+      }
+    
+    //Se comprueba si hay algún error para ocultar el aviso.
+    $("#horario_centro_dialog  #aviso_error").hide();
+
+    $("#horario_centro_dialog .time_pick .timepicker_wrap  input").each(function(index, el) {
+      if($(this).hasClass('error_guardar')){
+        $("#horario_centro_dialog  #aviso_error").show();
+      }
+    });
+    },100);
+  });
+
+  // Se valida los input al cambiar en timepicki.
+  $(document).on('click',"#horario_centro_dialog .timepicker_wrap .next ",function(event){
+    elem=$(this).prev().find("input");
+    setTimeout(function(){ 
+    //Si se muestra error entonces comprobamos todoslos valores.  
+    if($("#horario_centro_dialog  #aviso_error").is(':visible')){
+      //Se valida todos los datos puesto que en este caso al modificar un los minutos puede cambiar las horas.
+      $("#horario_centro_dialog .time_pick .timepicker_wrap input").each(function(index, el) {
+        if($(this).val()!=""){
+          $(this).removeClass('error_guardar');
+        }
+        else{
+          $(this).addClass('error_guardar');
+        }
+      });
+    }
+    //Se comprueba si hay algún error para ocultar el aviso.
+    $("#horario_centro_dialog  #aviso_error").hide();
+
+    $("#horario_centro_dialog .time_pick .timepicker_wrap input").each(function(index, el) {
+      if($(this).hasClass('error_guardar')){
+        $("#horario_centro_dialog  #aviso_error").show();
+      }
+    });
+    },100);
+  });
+
+  //Se guarda el horario del centro.
+  $(document).on('click',"#horario_centro_dialog #button_hora_centro",function(event){
+    event.preventDefault();
+
+    $("#horario_centro_dialog  #aviso_error").hide();
+
+    $("#horario_centro_dialog .timepicker_wrap input").each(function(){
+      $(this).removeClass("error_guardar");
+
+      if($(this).val()==""){
+        $(this).addClass("error_guardar");
+      }  
+    });
+
+    if($("#horario_centro_dialog input").hasClass("error_guardar")){
+      $("#horario_centro_dialog  #aviso_error").show();
+    }
+    else{
+      $("#curso_dialog  #aviso_error").hide();
+
+      inicio= $("#horario_centro_dialog #horario_inicio_centro").val();
+      fin= $("#horario_centro_dialog #horario_fin_centro").val(); 
+
+      ini_anterior=$("#horario_centro_dialog #horario_inicio_centro").attr("value");
+      fin_anterior=$("#horario_centro_dialog #horario_fin_centro").attr("value");
+   
+      if(inicio==ini_anterior && fin==fin_anterior){
+          $("#horario_centro_dialog ").dialog('close');
+          return false;
+      }
+
+      $.ajax({
+        type: 'POST',
+        url: Routing.generate('registrar_horario_centro'),
+        data: "inicio="+inicio+"&fin="+fin,
+        success: function(response) {
+
+          $.ajax({
+            type: 'POST',
+            url: Routing.generate('horario_delete'),
+            success: function(response) {
+              $("#registrar_horario_academico").update_tab();
+            }
+          })
+
+          exito.play();
+          new PNotify({
+            text:"Se ha registrado el horario del centro.",
+            addclass: "custom",
+            type: "success",
+            shadow: true,
+            hide: true,
+            buttons: {
+            sticker: false,
+            labels:{close: "Cerrar"}
+            },
+            stack: right_Stack,
+            animate: {
+              animate: true,
+              in_class: "fadeInRight",
+              out_class: "fadeOutRight",
+            }
+          });
+          //Se muestra un aviso si se elimina el horario escolar anterior.
+          if($("#registro_horario #aviso_horario").hasClass('oculto')){
+            new PNotify({
+              text:"Se ha eliminado el horario escolar anterior.",
+              addclass: "custom",
+              type: "notice",
+              shadow: true,
+              hide: true,
+              buttons: {
+              sticker: false,
+              labels:{close: "Cerrar"}
+              },
+              stack: right_Stack,
+              animate: {
+                animate: true,
+                in_class: "fadeInRight",
+                out_class: "fadeOutRight",
+              }
+            });
+          }
+
+          // Se actualiza la pestaña de registrar horario escolar.
+          $("#horario_centro_dialog  div[class='nuevo']").removeClass("nuevo");
+          $("#horario_centro_dialog ").dialog('close');
+        },error: function (response, desc, err){
+            alert(desc);
+            alert(err);
+            }
+      })
+    }
   });
 
   //////////////////////////////////

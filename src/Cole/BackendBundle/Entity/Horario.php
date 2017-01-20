@@ -43,12 +43,12 @@ class Horario
     private $fin;
 
     /**
-     * @ORM\OneToMany(targetEntity="Reserva", mappedBy="horario")
+     * @ORM\OneToMany(targetEntity="Reserva", mappedBy="horario", cascade={"remove"})
      */
     private $reserva;
 
     /**
-    * @ORM\OneToMany(targetEntity="Imparte", mappedBy="horario")
+    * @ORM\OneToMany(targetEntity="Imparte", mappedBy="horario",cascade={"remove"})
     */
     private $imparte;
 

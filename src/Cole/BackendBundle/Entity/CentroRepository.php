@@ -29,6 +29,16 @@ class CentroRepository extends EntityRepository
 		->getOneOrNullResult();
 	}
 
+	public function findCentro()
+	{
+		return $this->getEntityManager()->createQuery(
+			'SELECT c FROM BackendBundle:Centro c')
+		->setMaxResults(1)
+		->getOneOrNullResult();
+	}
+
+
+
 
 
 }

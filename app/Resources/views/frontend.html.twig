@@ -185,8 +185,38 @@
 {% endblock %}
 {% block footer %}
         <footer>
-            <div class="centrado">
-                <span> &copy; {{ 'now' | date('Y') }} - CEIP SANTA TERESA - Av. Duque de Nájera, 1. 11002 Cádiz - Tlf:956243336<span><br>
+            <div id="bg_white"></div>
+            <div class="centrado oculto" id="pre_footer">
+                <div id="redes_sociales">
+                <div class=" col-rs">
+                    <div class="region">
+                        <h2 class="block-title">
+                            Siguenos en Facebook
+                            <span class="icon_facebook icono"></span>
+                        </h2>
+                        <div class="content">
+                            <div class="view view-clone-of-tweets view-id-clone_of_tweets view-display-id-block_1 view-dom-id-5887fdeaf2adb317258c9c68782d7fd6">
+                            </div>
+                        </div>
+                    </div> 
+                </div>
+                <div class=" col-rs">
+                    <div class="region region-page-bottom-middle">
+                        <h2 class="block-title">
+                            Siguenos en Twitter
+                            <span class="icon_twitter icono"></span>
+                        </h2>
+                        <div class="content">
+                            <div class="view view-clone-of-tweets view-id-clone_of_tweets view-display-id-block_1 view-dom-id-5887fdeaf2adb317258c9c68782d7fd6">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                </div>
+            </div>
+
+            <div class="footer_wrapper">
+                <span>  CEIP SANTA TERESA - Av. Duque de Nájera, 1. 11002 Cádiz - Tlf:956243336 - &copy; {{ 'now' | date('Y') }}<span><br>
                 <a href="#">Mapa del sitio</a> ·
                 <a href="#">Contacto</a> ·
                 <a href="#">Privacidad</a> ·

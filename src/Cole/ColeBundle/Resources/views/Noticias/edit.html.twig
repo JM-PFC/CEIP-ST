@@ -212,8 +212,20 @@
 
     }, 100); 
   }
+ if($("#noticias_edit #noticias_mostrarFoto").is(':checked')){
+  $("#noticias_edit #btn_activos").addClass('btn_selected');
+  $("#noticias_edit #btn_inactivos").removeClass('btn_selected');
+  
+  $("#noticias_edit #btn_activos #show").removeClass('oculto');
+  $("#noticias_edit #btn_inactivos #hidden").addClass('oculto');
+ }
+ else{
+  $("#noticias_edit #btn_activos").removeClass('btn_selected');
+  $("#noticias_edit #btn_inactivos").addClass('btn_selected');
 
-
+  $("#noticias_edit #btn_activos #show").addClass('oculto');
+  $("#noticias_edit #btn_inactivos #hidden").removeClass('oculto');
+ }
 
   </script>
 {% endblock %}

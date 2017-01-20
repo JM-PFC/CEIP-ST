@@ -106,6 +106,20 @@ class Centro
      */
     private $finCurso;
 
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="inicioHorario", type="string", length=255, nullable=true)
+     */
+    private $inicioHorario;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="finHorario", type="string", length=255, nullable=true)
+     */
+    private $finHorario;
+
 
     /**
      * Get id
@@ -345,5 +359,53 @@ class Centro
     public function getFinCurso()
     {
         return $this->finCurso;
+    }
+
+
+
+    /**
+     * Set inicioHorario
+     *
+     * @param string $inicioHorario
+     * @return Centro
+     */
+    public function setInicioHorario($inicioHorario)
+    {
+        $this->inicioHorario = $inicioHorario;
+
+        return $this;
+    }
+
+    /**
+     * Get inicioHorario
+     *
+     * @return string 
+     */
+    public function getInicioHorario()
+    {
+        return $this->inicioHorario;
+    }
+
+    /**
+     * Set finHorario
+     *
+     * @param string $finHorario
+     * @return Centro
+     */
+    public function setFinHorario($finHorario)
+    {
+        $this->finHorario = $finHorario;
+
+        return $this;
+    }
+
+    /**
+     * Get finHorario
+     *
+     * @return string 
+     */
+    public function getFinHorario()
+    {
+        return $this->finHorario;
     }
 }

@@ -585,17 +585,17 @@
               <h2><span>Curso </span><span id="año_inicio">{{ inicio.inicioCurso|date('Y') }}</span> <span> / </span><span id="año_fin"> {{ fin.finCurso|date('Y') }}</span></h2>
             {% endif %}  
 
-              <div id="rango_festivos">Del <input id="inicio_curso_disable" value="{{ inicio.inicioCurso| localizeddate('none', 'none', 'none',none , "d ")}}{{ inicio.inicioCurso| localizeddate('none', 'none', 'none',none , "MMMM")| capitalize }}"></input> al <input id="fin_curso_disable"  value="{{ fin.finCurso| localizeddate('none', 'none', 'none',none , "d ")}}{{ fin.finCurso| localizeddate('none', 'none', 'none',none , "MMMM")| capitalize }}"></input>
+              <div id="rango_festivos">Del <input id="inicio_curso_disable" value="{{ inicio.inicioCurso| localizeddate('none', 'none', 'none',none , "d ")}}{{ inicio.inicioCurso| localizeddate('none', 'none', 'none',none , "MMMM")| capitalize }}" title="Pulsa para modificar la fecha del curso"></input> al <input id="fin_curso_disable"  value="{{ fin.finCurso| localizeddate('none', 'none', 'none',none , "d ")}}{{ fin.finCurso| localizeddate('none', 'none', 'none',none , "MMMM")| capitalize }}" title="Pulsa para modificar la fecha del curso"></input>
               </div>
             </div>
             <div>
               <h2><span>Vacaciones Navidad</span></h2>
-              <div id="rango_festivos">Del <input id="inicio_navidad" value="{% if data.inicio_navidad is not null %}{{ data.inicio_navidad.dia }} {{ data.inicio_navidad.mes }}{% endif %}"></input> al <input id="fin_navidad" value="{% if data.fin_navidad is not null %}{{ data.fin_navidad.dia }} {{ data.fin_navidad.mes }}{% endif %}"></input>
+              <div id="rango_festivos">Del <input id="inicio_navidad" value="{% if data.inicio_navidad is not null %}{{ data.inicio_navidad.dia }} {{ data.inicio_navidad.mes }}{% endif %}" title="Pulsa para modificar la fecha de las vacaciones de Navidad"></input> al <input id="fin_navidad" value="{% if data.fin_navidad is not null %}{{ data.fin_navidad.dia }} {{ data.fin_navidad.mes }}{% endif %}" title="Pulsa para modificar la fecha de las vacaciones de Navidad"></input>
               </div>
             </div>
             <div>
               <h2><span>Semana Santa</span></h2>
-              <div id="rango_festivos">Del <input id="inicio_semanasanta" value="{% if data.inicio_semanasanta is not null %}{{ data.inicio_semanasanta.dia }} {{ data.inicio_semanasanta.mes }}{% endif %}"></input> al <input id="fin_semanasanta" value="{% if data.fin_semanasanta is not null %}{{ data.fin_semanasanta.dia }} {{ data.fin_semanasanta.mes }}{% endif %}"></input>
+              <div id="rango_festivos">Del <input id="inicio_semanasanta" value="{% if data.inicio_semanasanta is not null %}{{ data.inicio_semanasanta.dia }} {{ data.inicio_semanasanta.mes }}{% endif %}" title="Pulsa para modificar la fecha de las vacaciones de Semana Santa"></input> al <input id="fin_semanasanta" value="{% if data.fin_semanasanta is not null %}{{ data.fin_semanasanta.dia }} {{ data.fin_semanasanta.mes }}{% endif %}" title="Pulsa para modificar la fecha de las vacaciones de Semana Santa"></input>
               </div>     
             </div>
             <div id="botones_festivos" class="buttons_form">

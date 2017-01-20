@@ -7,6 +7,8 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\JsonResponse;
 
 use Cole\BackendBundle\Entity\Horario;
+use Cole\BackendBundle\Entity\Reserva;
+use Cole\BackendBundle\Entity\Imparte;
 use Cole\BackendBundle\Form\HorarioType;
 
 /**
@@ -95,10 +97,13 @@ class HorarioController extends Controller
     public function showAction()
     {
         $em = $this->getDoctrine()->getManager();
+        $centro =$em->getRepository('BackendBundle:Centro')->findCentro();
 
         $entities = $em->getRepository('BackendBundle:Horario')->findAll();
            return $this->render('BackendBundle:Horario:show.html.twig', array(
             'entities' => $entities,
+            'inicio' => $centro->getInicioHorario(),
+            'fin' => $centro->getFinHorario()
         ));
     }
 
@@ -178,24 +183,27 @@ class HorarioController extends Controller
      * Deletes a Horario entity.
      *
      */
-    public function deleteAction(Request $request, $id)
+    public function deleteAction(Request $request)
     {
-        $form = $this->createDeleteForm($id);
-        $form->handleRequest($request);
-
-        if ($form->isValid()) {
-            $em = $this->getDoctrine()->getManager();
-            $entity = $em->getRepository('BackendBundle:Horario')->find($id);
-
-            if (!$entity) {
-                throw $this->createNotFoundException('Unable to find Horario entity.');
-            }
-
-            $em->remove($entity);
-            $em->flush();
+        // if request is XmlHttpRequest (AJAX) but not a POSt, throw an exception
+        if ($request->isXmlHttpRequest() && !$request->isMethod('POST')) {
+            throw new HttpException('XMLHttpRequests/AJAX calls must be POSTed');
         }
+        
+        $em = $this->getDoctrine()->getEntityManager();
+        $entities = $em->getRepository('BackendBundle:Horario')->findAll();
+        if ($entities) {
+            foreach ($entities  as $entity ) {
+                $em->remove($entity);
+            }
+        }
+        $em->flush();
 
-        return $this->redirect($this->generateUrl('horario'));
+        if ($request->isXmlHttpRequest()) {
+                return new JsonResponse(array(
+                    'message' => 'Success!',
+                    'success' => true), 200);
+        } 
     }
 
     /**
@@ -293,6 +301,7 @@ class HorarioController extends Controller
         }
     }
 
+
     public function HorarioEscolarActualAction()
     {
 
@@ -303,4 +312,39 @@ class HorarioController extends Controller
             'entities' => $entities,
             ));
     }
+
+    public function RegistrarHorarioCentroAction()
+    {
+        $em = $this->getDoctrine()->getManager();
+
+        $centro =$em->getRepository('BackendBundle:Centro')->findCentro();
+
+        return $this->render('BackendBundle:Horario:edit_horario_centro.html.twig', array(
+            'inicio' => $centro->getInicioHorario(),
+            'fin' => $centro->getFinHorario()
+            ));
+    }
+
+
+    public function ComprobacionesHorarioNuevoAction()
+    {
+        $em = $this->getDoctrine()->getManager();
+        $num_imparte="";
+
+        $imparte=$em->getRepository('BackendBundle:Imparte')->findAll();
+
+        if ($imparte) {
+            $num_imparte="hay";
+        }
+
+        $num_reserva="";
+        $reserva=$em->getRepository('BackendBundle:Reserva')->findAll();
+
+        if ($reserva) {
+             $num_reserva="hay";
+        }
+
+        return new JsonResponse(array('imparte' => $num_imparte,'reserva' => $num_reserva, 'success' => true), 200);
+    }
+
 }
