@@ -23,6 +23,17 @@
     <script type="text/javascript" src="{{asset('bundles/cole/js/unitegallery-master/package/unitegallery/themes/default/ug-theme-default.js')}}"></script>
     <script type="text/javascript" src="{{ asset('bundles/fosjsrouting/js/router.js') }}"></script>
     <script type="text/javascript" src="{{ path('fos_js_routing_js', {'callback': 'fos.Router.setData'}) }}"></script>
+    <script>
+    
+    $.ajax({
+        type: 'POST',
+        url: Routing.generate('datos_footer'),
+        success: function(response){
+            $("#datos_centro").text(response.nombre+" - "+response.direccion+" - "+response.cp+" "+response.localidad+ " - "+response.telefono);
+        }
+    })
+    </script>
+
   {% endblock %}
 
 {% block body %}
@@ -216,7 +227,7 @@
             </div>
 
             <div class="footer_wrapper">
-                <span>  CEIP SANTA TERESA - Av. Duque de Nájera, 1. 11002 Cádiz - Tlf:956243336 - &copy; {{ 'now' | date('Y') }}<span><br>
+                <span id="datos_centro">  </span><br>
                 <a href="#">Mapa del sitio</a> ·
                 <a href="#">Contacto</a> ·
                 <a href="#">Privacidad</a> ·

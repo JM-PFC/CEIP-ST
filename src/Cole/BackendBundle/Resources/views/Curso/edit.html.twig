@@ -9,6 +9,10 @@
         $("#curso_nivel").prop('readonly', true); //input sólo lectura
         $("#curso_edit form").attr("id","curso_delete");
 
+        // Se muestra "Actualizar" cuando se edita algún valor. "Eliminar" siempre visible. 
+        $("#curso_edit #curso_submit").prop("disabled",true);
+        $("#curso_edit #curso_delete button").attr("id","edit_delete_form"); 
+
     </script>
 
 {% endblock %}

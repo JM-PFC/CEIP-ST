@@ -30,6 +30,21 @@ class CentroController extends Controller
             'entities' => $entities,
         ));
     }
+    public function horariosAtencionAction()
+    {
+        $em = $this->getDoctrine()->getManager();
+
+        $centro =$em->getRepository('BackendBundle:Centro')->findCentro();
+
+        return $this->render('BackendBundle:Centro:horariosAtencion.html.twig', array(
+            'inicio' => $centro->getInicioHorario(),
+            'fin' => $centro->getFinHorario(),
+            'h_secretaria' => $centro->getHSecretaria(),
+            'h_direccion' => $centro->getHDireccion(),
+            'h_estudios' => $centro->getHEstudios(),
+        ));
+    }
+
     /**
      * Creates a new Centro entity.
      *
@@ -272,6 +287,29 @@ class CentroController extends Controller
         return new JsonResponse(array('message' => 'Success!','success' => true), 200);
     }
 
+    public function registrarHorariosAtencionAction()
+    {
+        $em = $this->getDoctrine()->getManager();
+        $tipo=$this->get('request')->request->get('tipo');
+        $horario=$this->get('request')->request->get('contenido');
+
+        $centro =$em->getRepository('BackendBundle:Centro')->findCentro();
+
+        if($tipo=="secretaria"){
+            $centro->setHSecretaria($horario);
+        }
+        else if($tipo=="direccion"){
+            $centro->setHDireccion($horario);
+        }
+        else{
+            $centro->setHEstudios($horario);    
+        }
+        
+        $em->persist($centro);
+
+        $em->flush();
+        return new JsonResponse(array('message' => 'Success!','success' => true), 200);
+    }
 
     
 }

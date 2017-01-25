@@ -6,48 +6,89 @@
 {% block javascript %}
 <script>
 if($(window).width() > 1200){
-    if($("#td_inf").hasScrollBar()){
-        $("#contenedor_asignar_aula div #table_th_inf th:nth-child(1)").attr('style', 'min-width: 24% !important');
-        $("#contenedor_asignar_aula div #table_th_inf th:nth-child(3)").attr('style', 'min-width: 20% !important');
-    }
-
-    if($("#td_prim").hasScrollBar()){
-        $("#contenedor_asignar_aula div #table_th_prim th:nth-child(1)").attr('style', 'min-width: 24% !important');
-        $("#contenedor_asignar_aula div #table_th_prim th:nth-child(3)").attr('style', 'min-width: 20% !important');
-    }
-}
-else{
-    if($("#td_inf").hasScrollBar()){
+    // Se comprueba si existe scrol vertical para ajustar el thead
+    if( $('#td_inf #lista_color tbody').height()>$('#td_inf').height()){
         $("#contenedor_asignar_aula div #table_th_inf th:nth-child(1)").attr('style', 'min-width: 23% !important');
         $("#contenedor_asignar_aula div #table_th_inf th:nth-child(3)").attr('style', 'min-width: 20% !important');
     }
-
-    if($("#td_prim").hasScrollBar()){
+    else{
+        $("#contenedor_asignar_aula div #table_th_inf th:nth-child(1)").attr('style', 'min-width: 23% !important');
+        $("#contenedor_asignar_aula div #table_th_inf th:nth-child(3)").attr('style', 'min-width: 23% !important');
+    }
+        // Se comprueba si existe scrol vertical para ajustar el thead
+    if( $('#td_prim #lista_color tbody').height()>$('#td_prim').height()){
         $("#contenedor_asignar_aula div #table_th_prim th:nth-child(1)").attr('style', 'min-width: 23% !important');
         $("#contenedor_asignar_aula div #table_th_prim th:nth-child(3)").attr('style', 'min-width: 20% !important');
-    } 
-}
-$(window).resize(function(event) {
-    if($(window).width() > 1200){
-        if($("#td_inf").hasScrollBar()){
-            $("#contenedor_asignar_aula div #table_th_inf th:nth-child(1)").attr('style', 'min-width: 24% !important');
-            $("#contenedor_asignar_aula div #table_th_inf th:nth-child(3)").attr('style', 'min-width: 20% !important');
-        }
-        if($("#td_prim").hasScrollBar()){
-
-            $("#contenedor_asignar_aula div #table_th_prim th:nth-child(1)").attr('style', 'min-width: 24% !important');
-            $("#contenedor_asignar_aula div #table_th_prim th:nth-child(3)").attr('style', 'min-width: 20% !important');
-        } 
     }
     else{
-        if($("#td_inf").hasScrollBar()){
+
+        $("#contenedor_asignar_aula div #table_th_prim th:nth-child(1)").attr('style', 'min-width: 23% !important');
+        $("#contenedor_asignar_aula div #table_th_prim th:nth-child(3)").attr('style', 'min-width: 23% !important');
+    }
+}
+else{
+    // Se comprueba si existe scrol vertical para ajustar el thead
+    if( $('#td_inf #lista_color tbody').height()>$('#td_inf').height()){
+        $("#contenedor_asignar_aula div #table_th_inf th:nth-child(1)").attr('style', 'min-width: 23% !important');
+        $("#contenedor_asignar_aula div #table_th_inf th:nth-child(3)").attr('style', 'min-width: 20% !important');
+    }
+    else{
+        $("#contenedor_asignar_aula div #table_th_inf th:nth-child(1)").attr('style', 'min-width: 23% !important');
+        $("#contenedor_asignar_aula div #table_th_inf th:nth-child(3)").attr('style', 'min-width: 23% !important');
+    }
+        // Se comprueba si existe scrol vertical para ajustar el thead
+    if( $('#td_prim #lista_color tbody').height()>$('#td_prim').height()){
+        $("#contenedor_asignar_aula div #table_th_prim th:nth-child(1)").attr('style', 'min-width: 23% !important');
+        $("#contenedor_asignar_aula div #table_th_prim th:nth-child(3)").attr('style', 'min-width: 20% !important');
+    }
+    else{
+
+        $("#contenedor_asignar_aula div #table_th_prim th:nth-child(1)").attr('style', 'min-width: 20% !important');
+        $("#contenedor_asignar_aula div #table_th_prim th:nth-child(3)").attr('style', 'min-width: 22% !important');
+    }
+}
+
+$(window).resize(function(event) {
+    if($(window).width() > 1200){
+        // Se comprueba si existe scrol vertical para ajustar el thead
+        if( $('#td_inf #lista_color tbody').height()>$('#td_inf').height()){
             $("#contenedor_asignar_aula div #table_th_inf th:nth-child(1)").attr('style', 'min-width: 23% !important');
             $("#contenedor_asignar_aula div #table_th_inf th:nth-child(3)").attr('style', 'min-width: 20% !important');
         }
-        if($("#td_prim").hasScrollBar()){
+        else{
+            $("#contenedor_asignar_aula div #table_th_inf th:nth-child(1)").attr('style', 'min-width: 23% !important');
+            $("#contenedor_asignar_aula div #table_th_inf th:nth-child(3)").attr('style', 'min-width: 23% !important');
+        }
+        
+        // Se comprueba si existe scrol vertical para ajustar el thead
+        if( $('#td_prim #lista_color tbody').height()>$('#td_prim').height()){
             $("#contenedor_asignar_aula div #table_th_prim th:nth-child(1)").attr('style', 'min-width: 23% !important');
             $("#contenedor_asignar_aula div #table_th_prim th:nth-child(3)").attr('style', 'min-width: 20% !important');
-        }  
+        }
+        else{
+            $("#contenedor_asignar_aula div #table_th_prim th:nth-child(1)").attr('style', 'min-width: 23% !important');
+            $("#contenedor_asignar_aula div #table_th_prim th:nth-child(3)").attr('style', 'min-width: 23% !important');
+        }
+    }
+    else{
+        // Se comprueba si existe scrol vertical para ajustar el thead
+        if( $('#td_inf #lista_color tbody').height()>$('#td_inf').height()){
+            $("#contenedor_asignar_aula div #table_th_inf th:nth-child(1)").attr('style', 'min-width: 23% !important');
+            $("#contenedor_asignar_aula div #table_th_inf th:nth-child(3)").attr('style', 'min-width: 20% !important');
+        }
+        else{
+            $("#contenedor_asignar_aula div #table_th_inf th:nth-child(1)").attr('style', 'min-width: 23% !important');
+            $("#contenedor_asignar_aula div #table_th_inf th:nth-child(3)").attr('style', 'min-width: 23% !important');
+        }
+        // Se comprueba si existe scrol vertical para ajustar el thead
+        if( $('#td_prim #lista_color tbody').height()>$('#td_prim').height()){
+            $("#contenedor_asignar_aula div #table_th_prim th:nth-child(1)").attr('style', 'min-width: 23% !important');
+            $("#contenedor_asignar_aula div #table_th_prim th:nth-child(3)").attr('style', 'min-width: 20% !important');
+        }
+        else{
+            $("#contenedor_asignar_aula div #table_th_prim th:nth-child(1)").attr('style', 'min-width: 20% !important');
+            $("#contenedor_asignar_aula div #table_th_prim th:nth-child(3)").attr('style', 'min-width: 22% !important');
+        }
     }    
 });
 </script>

@@ -14,3 +14,9 @@ pagina_estatica:
 index:
     path:     /
     defaults: { _controller: ColeBundle:Default:index }
+
+datos_footer:
+    path: /datos_footer
+    defaults: { _controller: ColeBundle:Default:datosFooter }
+    options:
+        expose: true

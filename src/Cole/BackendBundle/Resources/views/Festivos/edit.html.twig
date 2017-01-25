@@ -9,7 +9,6 @@
         if($("#festivos_tipo").val()!="" && $("#festivos_edit").attr("tipo")!=""){
             $("#tipo_festivo").removeClass("oculto");
             $("#tipo_festivo select option[value='"+$("#festivos_tipo").val()+"']").prop('selected',true);
-
         }
         else if($("#festivos_tipo").val()!=""){
             $("#festivos_tipo").prop('readonly', true); //input sólo lectura
@@ -22,7 +21,6 @@
 
         if($("#festivos_dia").val().length=="1"){
             $("#dia_festivo select option[value='0"+$("#festivos_dia").val()+"']").prop('selected',true);
-
             //$("#dia_festivo select option:not('0"+$("#festivos_dia").val()+"')").attr('disabled',true);
             //$("#mes_festivo select option:not('0"+$("#festivos_dia").val()+"')").attr('disabled',true);
         }
@@ -36,6 +34,10 @@
         $("#mes_festivo select option[value='"+$("#festivos_numMes").val()+"']").prop('selected',true);
 
         $("#festivos_edit form").attr("id","festivos_delete");
+
+        $("#tipo_festivo select").attr("seleccionado",$("#tipo_festivo select").val());
+        $("#mes_festivo select").attr("seleccionado",$("#mes_festivo select").val());
+        $("#dia_festivo select").attr("seleccionado",$("#dia_festivo select").val());
 
     </script>
 

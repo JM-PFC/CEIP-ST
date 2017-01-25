@@ -24,6 +24,9 @@ $(document).ready(function () {
   // Se establece la pila de los avisos de PNotify
   var right_Stack = {"dir1": "up", "dir2": "left", "context": $(".contenido_main"), "push": "top", "firstpos1": 20, "firstpos2":20};
   var left_Stack = {"dir1": "up", "dir2": "right", "context": $(".contenido_main"), "push": "top","firstpos1": 20, "firstpos2":20};
+  var left_Stack_dialog = {"dir1": "up", "dir2": "right", "context": $("body"), "push": "top","firstpos1": 20, "firstpos2":30};
+  var right_Stack_dialog = {"dir1": "up", "dir2": "left", "context": $("body"), "push": "top", "firstpos1": 20, "firstpos2":40};
+
   // Se establece las variables con los audios para las notificaciones.
   if (navigator.userAgent.search("Firefox") >= 0) { //Firefox sólo admite archivos .ogg
     var aviso = new Audio();
@@ -2062,84 +2065,6 @@ $("#dialog-confirm span").hide();
     }
   });
 
-  $(document).on("submit","#centro_edit",function(event) {
-    event.preventDefault();
-    form= $(this).closest("form");
-
-    var val=0;
-    // Se recorre los campos del formulario mirando si estan validados o no.
-    form.find(":input[type!='file']").each(function(){
-      if(!$(this).attr("validated") || $(this).attr("validated")==false){
-        if($(this).attr("validation")){
-          validation($(this));
-        }
-      }
-    });
-
-    //":input"añade a los input radio,select...
-    form.find(":input").each(function(){
-      if(($(this).attr("validated")=="false")) {
-        //Se muestra el input inválido.
-        $(this).focus();
-        val=1;
-        return false;
-      }       
-    });
-
-    if(val==0){
-
-      $.ajax({
-        type: 'PUT',
-        url: $(this).attr('action'),
-        data:$(this).serialize(), 
-  
-        success: function() {
-
-        var arr = form.attr('action').split('/');
-        tab=$(".contenido_main").find("div[aria-hidden='false']");
-        $(tab).load(Routing.generate('centro_edit', {id:arr[5]}), function(responseTxt, statusTxt, xhr){
-            if(statusTxt == "success"){
-              form= $("#centro_edit");
-
-              // Antiguo aviso de confirmación
-              //form.find("div[id='message']").remove();
-              //form.find("div[id='result']").html("<div id='message'></div>");
-              //form.find("div[id='message']").html("<h2> Datos actualizados</h2>").hide();
-              //form.find("div[id='message']").fadeIn('fast').delay(5000).fadeOut('slow');
-
-              // Notificación de confirmación.
-              exito.play();
-
-              new PNotify({
-                text:"Datos actualizados",
-                addclass: "custom",
-                type: "success",
-                shadow: true,
-                hide: true,
-                buttons: {
-                  sticker: false,
-                  labels:{close: "Cerrar"}
-                },
-                stack: right_Stack,
-                animate: {
-                  animate: true,
-                  in_class: "fadeInRight",
-                  out_class: "fadeOutRight",
-                }
-              });
-            }
-
-            if(statusTxt == "error")
-              alert("Error: " + xhr.status + ": " + xhr.statusText);
-          });
-        }
-      })
-      return false;
- 
-    }
-  });
-
-
   $(document).on('click',"#tabs form[id$='alumno_edit'] button[id$='_modal']",function(event){
     event.preventDefault();
     form= $(this).closest("form");
@@ -2353,11 +2278,265 @@ $(document).on("blur","input[id='edit_profesor_dni']",function() {
     }
   });
 
+  //////////////////////////////////
+  //           Centro             //
+  //////////////////////////////////
+
+  //Se actualiza los datos del centro
+  $(document).on("submit","#centro_edit",function(event) {
+    event.preventDefault();
+    form= $(this).closest("form");
+
+    var val=0;
+    // Se recorre los campos del formulario mirando si estan validados o no.
+    form.find(":input[type!='file']").each(function(){
+      if(!$(this).attr("validated") || $(this).attr("validated")==false){
+        if($(this).attr("validation")){
+          validation($(this));
+        }
+      }
+    });
+
+    //":input"añade a los input radio,select...
+    form.find(":input").each(function(){
+      if(($(this).attr("validated")=="false")) {
+        //Se muestra el input inválido.
+        $(this).focus();
+        val=1;
+        return false;
+      }       
+    });
+
+    if(val==0){
+
+      $.ajax({
+        type: 'PUT',
+        url: $(this).attr('action'),
+        data:$(this).serialize(), 
+  
+        success: function() {
+
+        var arr = form.attr('action').split('/');
+        tab=$(".contenido_main").find("div[aria-hidden='false']");
+        $(tab).load(Routing.generate('centro_edit', {id:arr[5]}), function(responseTxt, statusTxt, xhr){
+            if(statusTxt == "success"){
+              form= $("#centro_edit");
+
+              // Antiguo aviso de confirmación
+              //form.find("div[id='message']").remove();
+              //form.find("div[id='result']").html("<div id='message'></div>");
+              //form.find("div[id='message']").html("<h2> Datos actualizados</h2>").hide();
+              //form.find("div[id='message']").fadeIn('fast').delay(5000).fadeOut('slow');
+
+              // Notificación de confirmación.
+              exito.play();
+
+              new PNotify({
+                text:"Datos actualizados",
+                addclass: "custom",
+                type: "success",
+                shadow: true,
+                hide: true,
+                buttons: {
+                  sticker: false,
+                  labels:{close: "Cerrar"}
+                },
+                stack: right_Stack,
+                animate: {
+                  animate: true,
+                  in_class: "fadeInRight",
+                  out_class: "fadeOutRight",
+                }
+              });
+            }
+
+            if(statusTxt == "error")
+              alert("Error: " + xhr.status + ": " + xhr.statusText);
+          });
+        }
+      })
+      return false;
+    }
+  });
+
+  //Se abre la ventana modal para asignar horarios de atención del centro.
+  $(document).on('click',"#centro_edit #horarios_atencion",function(event){
+    event.preventDefault();
+   
+    $('#horarios_atencion_dialog').load(Routing.generate("horarios_atencion"), function(){
+
+    }).dialog('open'); 
+  });
+
+  //Se cierra la ventana modal de horarios de atención del centro.
+  $(document).on('click',"#horarios_atencion_dialog #button_hora_centro",function(event){
+    event.preventDefault();
+   
+    $('#horarios_atencion_dialog').dialog('close');
+    $('#horarios_atencion_dialog').empty();
+  });
 
 
-//////////////////////////////////
-//           Cursos             //
-//////////////////////////////////
+  function actualizarContenido(horario,div) {
+    array=horario.split("|");
+
+    $(div).find("#show div[id*='hora_']>div>span").remove();
+
+    if(horario==""){
+      $(div).find("#show div[id*='hora_']>div").append('<span class="no_horario">Actualmente no existe ningún horario de contacto establecido.</span');
+    }
+    else{      
+      if(array[0].indexOf("-")>0){
+        array[0]=reemplazarDatos(array[0]);
+        $(div).find("#show div[id*='hora_']>div").append('<span class="dias">De '+array[0]+'</span');
+      }
+      else{
+        array[0]=reemplazarDatos(array[0]);
+        $(div).find("#show div[id*='hora_']>div").append('<span class="dias">'+array[0]+'</span');
+      }
+
+      if(array[1].indexOf("/")>0){
+        array[1]=array[1].replace("/","  /  ");
+        array[1]=array[1].replace(/-/g,"h. - ");
+        $(div).find("#show div[id*='hora_']>div").append('<span class="horas">'+array[1]+'</span');
+      }
+      else{
+        array[1]=array[1].replace("-"," - ");
+        $(div).find("#show div[id*='hora_']>div").append('<span class="horas">'+array[1]+'</span');
+      }
+    }
+  }
+  //Se guarda el nuevo horario en la base de datos.
+  $(document).on('click',"#horarios_atencion_dialog .guardar",function(event){
+    id=$(this).closest("div").prev().prev();
+
+    // Se obtiene el horario.
+    contenido="";
+    id.find("#list_added>span[class!='title']").each(function(index, el) {
+      contenido+=$(this).find(".color_day").text();
+      contenido+="|";
+      contenido+=$(this).find(".color_hours").text();
+      contenido+="*";
+    });
+    contenido=contenido.substring(0,contenido.length-1);
+    contenido=contenido.replace(/ /g,"");
+    
+    // Se guarda el horario.
+    if(contenido==""){
+      id.find(".vacio").removeClass('oculto');
+      id.next().next().find(".guardar").prop('disabled',true);
+      errorPNotify.play();
+      new PNotify({
+        title: "Debe añadir un horario.",
+        addclass: "custom",
+        type: "error",
+        shadow: true,
+        hide: true,
+        width: "335px",
+        buttons: {
+          sticker: false,
+          labels:{close: "Cerrar"}
+        },
+        stack: left_Stack_dialog,
+        animate_speed: "fast",
+        animate: {
+          animate: true,
+          in_class: "fadeInLeft",
+          out_class: "fadeOutLeft",
+        }
+      });
+    }
+    else{
+      tipo=id.attr("id");
+      $.ajax({
+        type: 'POST',
+        url: Routing.generate('registrar_horario_atencion'),
+        data:{tipo:tipo, contenido:contenido}, 
+        dataType: 'json',
+        success: function(response){
+          exito.play();
+          new PNotify({
+            text:"Nuevo horario registrado.",
+            addclass: "custom",
+            type: "success",
+            shadow: true,
+            hide: true,
+            animation: "fade",
+            animate_speed: 'fast',
+            delay: 4000,
+            buttons: {
+              sticker: false,
+              labels:{close: "Cerrar"}
+            },
+            stack: right_Stack_dialog,
+            animate: {
+              animate: true,
+              in_class: "fadeInRight",
+              out_class: "fadeOutRight",
+            }
+          });
+          actualizarContenido(contenido,id);
+          id.next().next().find(".volver").click();
+        }
+      })
+    }
+  });
+  // Se elimina el horario actual de la base de datos.
+  $(document).on('click',"#horarios_atencion_dialog .eliminar",function(event){
+    id=$(this).closest("div").prev();
+    aviso.play();
+    swal({
+      title: "Eliminación del horario de atención.",
+      text: "¿Estas seguro de continuar? No podrás deshacer este paso...",
+      type: "warning",
+      showCancelButton: true,
+      cancelButtonText: "Cancelar",
+      confirmButtonColor: color,
+      confirmButtonText: "¡Adelante!",
+      closeOnConfirm: true },
+
+      function(){
+
+      tipo=id.attr("id");
+      contenido="";
+      $.ajax({
+        type: 'POST',
+        url: Routing.generate('registrar_horario_atencion'),
+        data:{tipo:tipo, contenido:contenido}, 
+        dataType: 'json',
+        success: function(response){
+          exito.play();
+          new PNotify({
+            text:"Horario de atención eliminado.",
+            addclass: "custom",
+            type: "success",
+            shadow: true,
+            hide: true,
+            animation: "fade",
+            animate_speed: 'fast',
+            delay: 4000,
+            buttons: {
+              sticker: false,
+              labels:{close: "Cerrar"}
+            },
+            stack: right_Stack_dialog,
+            animate: {
+              animate: true,
+              in_class: "fadeInRight",
+              out_class: "fadeOutRight",
+            }
+          });
+          actualizarContenido(contenido,id);
+        }
+      })
+    }
+    );
+    return false;
+  });
+
+  //////////////////////////////////
+  //           Cursos             //
+  //////////////////////////////////
   
   // Se abre la ventana modal de Añadir curso
   $(document).on('click',"#registro_cursos a[id$='_modal']",function(event){
@@ -7941,7 +8120,6 @@ $(document).on("click","#registro_equipamientos td a",function(event){
         url: $(this).attr('action'),
 
         data: $(this).serialize()+"&imagen="+imagen+"&pos="+pos+"&galeria="+galeria+"&show="+show, 
- 
 
         success: function(response) {
 

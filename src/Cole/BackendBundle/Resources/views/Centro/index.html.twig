@@ -4,6 +4,20 @@
 {% block stylesheets %}{% endblock %}
 
 {% block javascript %}
+  <script>
+    $("#horarios_atencion_dialog").dialog({
+    bgiframe: true,
+    autoOpen: false,
+    height: 590,
+    width: 1000,
+    modal: true,
+    resizable: false,
+    close: function( event, ui ) {
+      $("#horarios_atencion_dialog").empty();
+    }
+  });
+
+  </script>
 {% endblock %}
 
 {% block body -%}
@@ -11,6 +25,6 @@
         {{render(controller("BackendBundle:Centro:edit",{ 'id': 1 }))}}
     {% else %}
         {{render(controller("BackendBundle:Centro:new"))}}
-
     {% endif %}
+    <div id="horarios_atencion_dialog" title="Horarios de atención del centro"></div>
 {% endblock %}

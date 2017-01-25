@@ -120,6 +120,27 @@ class Centro
      */
     private $finHorario;
 
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="h_secretaria", type="string", length=255, nullable=true)
+     */
+    private $h_secretaria;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="h_direccion", type="string", length=255, nullable=true)
+     */
+    private $h_direccion;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="h_estudios", type="string", length=255, nullable=true)
+     */
+    private $h_estudios;
+
 
     /**
      * Get id
@@ -407,5 +428,74 @@ class Centro
     public function getFinHorario()
     {
         return $this->finHorario;
+    }
+
+    /**
+     * Set h_secretaria
+     *
+     * @param string $hSecretaria
+     * @return Centro
+     */
+    public function setHSecretaria($hSecretaria)
+    {
+        $this->h_secretaria = $hSecretaria;
+
+        return $this;
+    }
+
+    /**
+     * Get h_secretaria
+     *
+     * @return string 
+     */
+    public function getHSecretaria()
+    {
+        return $this->h_secretaria;
+    }
+
+    /**
+     * Set h_direccion
+     *
+     * @param string $hDireccion
+     * @return Centro
+     */
+    public function setHDireccion($hDireccion)
+    {
+        $this->h_direccion = $hDireccion;
+
+        return $this;
+    }
+
+    /**
+     * Get h_direccion
+     *
+     * @return string 
+     */
+    public function getHDireccion()
+    {
+        return $this->h_direccion;
+    }
+
+    /**
+     * Set h_estudios
+     *
+     * @param string $hEstudios
+     * @return Centro
+     */
+    public function setHEstudios($hEstudios)
+    {
+        $this->h_estudios = $hEstudios;
+
+        return $this;
+    }
+
+    /**
+     * Get h_estudios
+     *
+     * @return string 
+     */
+    public function getHEstudios()
+    {
+        return $this->h_estudios;
     }
 }

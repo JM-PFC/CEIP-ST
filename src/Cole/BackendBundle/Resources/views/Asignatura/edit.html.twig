@@ -7,6 +7,9 @@
     <script>
         $("#asignatura_tipo").prop('readonly', true); //input sólo lectura
         $("#asignatura_edit form").attr("id","asignatura_delete");
+        // Se muestra "Actualizar" cuando se edita algún valor. "Eliminar" siempre visible. 
+        $("#asignatura_edit #asignatura_submit").prop("disabled",true);
+        $("#asignatura_edit #asignatura_delete button").attr("id","edit_delete_form"); 
     </script>
 {% endblock %}
 

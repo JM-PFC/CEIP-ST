@@ -6,79 +6,78 @@
 {% block javascript %}
 <script>
 
-
-    function changeRecord(){
-        // Se actualiza el estado de la reserva.
-        $("#consulta_reserva_{{ tipo }}").find("td").filter(function(){return $(this).text().trim()=="Hoy";}).next("td").each(function(){
-            var now = new Date();
-            var outStr = now.getHours()+':'+now.getMinutes();
-            if(Date.parse('01/01/2016 '+$(this).attr("inicio")+':00') > Date.parse('01/01/2016 '+outStr+':00')){
-                $(this).next("td").text("Pendiente");
-            }
-            else if(Date.parse('01/01/2016 '+$(this).attr("fin")+':00') < Date.parse('01/01/2016 '+outStr+':00')){
-                $(this).next("td").text("Finalizado");
-            }
-            else{
-                $(this).next("td").text("En uso");
-            }
-        });
-        // Se cambia los estilos para los registros  de reservas en uso o finalizadas.
-        $("#consulta_reservas_{{ tipo }} tbody tr td:contains('Finalizado')").closest("tr").css({"background-color":"rgba(0, 0, 0, 0.2)","border-top":"1px solid #ffffff","border-bottom":"1px solid #ffffff"});
-        $("#consulta_reservas_{{ tipo }} tbody tr td:contains('Finalizado')").css("color","#bc1010");
-        $("#consulta_reservas_{{ tipo }} tbody tr td:contains('En uso')").css("color","#0B610B");
-
-        // Se elimina la opción de eliminar reserva para las reservas en uso o finalizadas.
-        $("#consulta_reservas_{{ tipo }} tbody tr td:contains('En uso')").closest("tr").find("td:last-child img").remove();
-        $("#consulta_reservas_{{ tipo }} tbody tr td:contains('Finalizado')").closest("tr").find("td:last-child img").remove();
-        // Se elimina el evento de puntero en todos los registros de reservas finalizadas.
-        $("#consulta_reservas_{{ tipo }} tbody tr td:contains('Finalizado')").closest("tr").css("pointer-events","none");
-
-    }
-    // Se llama a la función anterior casa 5 segundos.
-    changeRecord();
-    setInterval(changeRecord, 5000);
-
-        // Tabla con la opción de ordenar y búsqueda.
-        $('#consulta_reserva_{{ tipo }}').DataTable( { //on( 'page.dt',   function () { $(".current").prop("disabled", true); } )
-             //"aLengthMenu": [[25, 50, 100, 250, 500, -1], [25, 50, 100, 250, 500, "All"]],
-            "order": [[ 2, "asc" ]],
-            "aLengthMenu": [[ -1], [ "All"]],
-            "columnDefs": [ {
-                "targets": 'no-sort',
-                "orderable": false,} ],
-            "language": {
-                "zeroRecords": "Lo siento, no se ha encontrado ningún registro coincidente",
-                "emptyTable": "Actualmente no hay ninguna reserva registrada en el sistema",
-
-                "lengthMenu": "Mostrar _MENU_ entradas",
-                "loadingRecords": "Cargando...",
-                "processing":     "Processando...",
-                "info": "Página _PAGE_ de _PAGES_",
-                "infoEmpty": "No hay registros disponibles",
-                "infoFiltered": "(filtrado de _MAX_ registros)",
-                "search": "Buscar:",
-                "Next": "Siguiente",
-                "paginate": {
-                    "previous": "Anterior",
-                    "next": "Siguiente"
-                }
-            }
-        } );
-
-        $("#consulta_reservas_{{ tipo }} .dataTables_info").addClass("oculto");
-        $("#consulta_reservas_{{ tipo }} .dataTables_paginate").addClass("oculto");
-        $("#consulta_reservas_{{ tipo }} .dataTables_length").addClass("oculto");
-        $('#consulta_reservas_{{ tipo }} .dataTables_filter').appendTo('#consulta_reservas_{{ tipo }} #buscador');
-
-        // Se comprueba si existe scrol vertical para ajustar el thead
-        if( $('#consulta_reservas_{{ tipo }} table tbody').get(0).scrollHeight>$('#consulta_reservas_{{ tipo }} table tbody').height()){
-            $("#consulta_reserva_{{ tipo }} thead tr>th:last-child").attr('style', 'width: 6% !important');
+function changeRecord(){
+    // Se actualiza el estado de la reserva.
+    $("#consulta_reserva_{{ tipo }}").find("td").filter(function(){return $(this).text().trim()=="Hoy";}).next("td").each(function(){
+        var now = new Date();
+        var outStr = now.getHours()+':'+now.getMinutes();
+        if(Date.parse('01/01/2016 '+$(this).attr("inicio")+':00') > Date.parse('01/01/2016 '+outStr+':00')){
+            $(this).next("td").text("Pendiente");
+        }
+        else if(Date.parse('01/01/2016 '+$(this).attr("fin")+':00') < Date.parse('01/01/2016 '+outStr+':00')){
+            $(this).next("td").text("Finalizado");
         }
         else{
-            $("#consulta_reserva_{{ tipo }} thead tr>th:last-child").attr('style', 'width: 5% !important');
+            $(this).next("td").text("En uso");
         }
+    });
     
-        $(window).resize(function() {
+    // Se cambia los estilos para los registros  de reservas en uso o finalizadas.
+    $("#consulta_reservas_{{ tipo }} tbody tr td:contains('Finalizado')").closest("tr").css({"background-color":"rgba(0, 0, 0, 0.2)","border-top":"1px solid #ffffff","border-bottom":"1px solid #ffffff"});
+    $("#consulta_reservas_{{ tipo }} tbody tr td:contains('Finalizado')").css("color","#bc1010");
+    $("#consulta_reservas_{{ tipo }} tbody tr td:contains('En uso')").css("color","#0B610B");
+
+    // Se elimina la opción de eliminar reserva para las reservas en uso o finalizadas.
+    $("#consulta_reservas_{{ tipo }} tbody tr td:contains('En uso')").closest("tr").find("td:last-child img").remove();
+    $("#consulta_reservas_{{ tipo }} tbody tr td:contains('Finalizado')").closest("tr").find("td:last-child img").remove();
+    // Se elimina el evento de puntero en todos los registros de reservas finalizadas.
+    $("#consulta_reservas_{{ tipo }} tbody tr td:contains('Finalizado')").closest("tr").css("pointer-events","none");
+}
+// Se llama a la función anterior casa 5 segundos.
+changeRecord();
+setInterval(changeRecord, 5000);
+
+    // Tabla con la opción de ordenar y búsqueda.
+    $('#consulta_reserva_{{ tipo }}').DataTable( { //on( 'page.dt',   function () { $(".current").prop("disabled", true); } )
+        //"aLengthMenu": [[25, 50, 100, 250, 500, -1], [25, 50, 100, 250, 500, "All"]],
+        "order": [[ 2, "asc" ]],
+        "aLengthMenu": [[ -1], [ "All"]],
+        "columnDefs": [ {
+            "targets": 'no-sort',
+            "orderable": false,} ],
+        "language": {
+            "zeroRecords": "Lo siento, no se ha encontrado ningún registro coincidente",
+            "emptyTable": "Actualmente no hay ninguna reserva registrada en el sistema",
+
+            "lengthMenu": "Mostrar _MENU_ entradas",
+            "loadingRecords": "Cargando...",
+            "processing":     "Processando...",
+            "info": "Página _PAGE_ de _PAGES_",
+            "infoEmpty": "No hay registros disponibles",
+            "infoFiltered": "(filtrado de _MAX_ registros)",
+            "search": "Buscar:",
+            "Next": "Siguiente",
+            "paginate": {
+                "previous": "Anterior",
+                "next": "Siguiente"
+            }
+        }
+    } );
+
+    $("#consulta_reservas_{{ tipo }} .dataTables_info").addClass("oculto");
+    $("#consulta_reservas_{{ tipo }} .dataTables_paginate").addClass("oculto");
+    $("#consulta_reservas_{{ tipo }} .dataTables_length").addClass("oculto");
+    $('#consulta_reservas_{{ tipo }} .dataTables_filter').appendTo('#consulta_reservas_{{ tipo }} #buscador');
+
+    // Se comprueba si existe scrol vertical para ajustar el thead
+    if( $('#consulta_reservas_{{ tipo }} table tbody').get(0).scrollHeight>$('#consulta_reservas_{{ tipo }} table tbody').height()){
+        $("#consulta_reserva_{{ tipo }} thead tr>th:last-child").attr('style', 'width: 6% !important');
+    }
+    else{
+        $("#consulta_reserva_{{ tipo }} thead tr>th:last-child").attr('style', 'width: 5% !important');
+    }
+    
+    $(window).resize(function() {
 
         if($('#consulta_reservas_{{ tipo }} table tbody').get(0).scrollHeight>$('#consulta_reservas_{{ tipo }} table tbody').height() ){
             $("#consulta_reserva_{{ tipo }} thead tr>th:last-child").attr('style', 'width: 6% !important');

@@ -13,41 +13,41 @@
 {% endblock %}
 
 {% block body-%}
-    {{form_start(edit_form, {'action':path('centro_update',{'id':entity.id}),'method':'PUT','attr':{ 'id':'centro_edit',novalidate:'novalidate', 'autocomplete':'off'}})}}
+  {{form_start(edit_form, {'action':path('centro_update',{'id':entity.id}),'method':'PUT','attr':{ 'id':'centro_edit',novalidate:'novalidate', 'autocomplete':'off'}})}}
 
-    {{ form_errors(edit_form) }}
-    <div>
-      <div id="content-form">
+  {{ form_errors(edit_form) }}
+  <div>
+    <div id="content-form">
       <fieldset class="ajustada no_border">
-        <div></div>
+      <div></div>
 
-        <div class="marco_columna_contenido marco_margin_left">
+      <div class="marco_columna_contenido marco_margin_left">
 
         <div class="columna_contenido">
           <div class="block-one">
-            <h3 class="label_contenido">Datos del Centro</h3>
-            <img id="img_centro" src="/Symfony/web/bundles/backend/images/logo_trans.png" alt="logo del colegio">
-            <div class="big_column">
-              {{ form_row(edit_form.nombre,{'id':'edit_'~edit_form.nombre.vars.id }) }}
-              {{ form_row(edit_form.direccion,{'id':'edit_'~edit_form.direccion.vars.id }) }}
-              {{ form_row(edit_form.localidad,{'id':'edit_'~edit_form.localidad.vars.id }) }}
-              {{ form_row(edit_form.provincia,{'id':'edit_'~edit_form.provincia.vars.id }) }}
-
-           </div>
-            <div class="big_column">
-              {{ form_row(edit_form.cp,{'id':'edit_'~edit_form.cp.vars.id }) }}
-              {{ form_row(edit_form.telefono,{'id':'edit_'~edit_form.telefono.vars.id }) }}
-              {{ form_row(edit_form.email,{'id':'edit_'~edit_form.email.vars.id }) }}
-              {{ form_row(edit_form.web,{'id':'edit_'~edit_form.web.vars.id }) }}
-
-            </div>
-  
+            <div class="parent_no_form">
+              <div class="child">
+                <h3 class="label_contenido">Datos del Centro</h3>
+                <img id="img_centro" src="/Symfony/web/bundles/backend/images/logo_trans.png" alt="logo del colegio">
+                <div class="big_column">
+                  {{ form_row(edit_form.nombre,{'id':'edit_'~edit_form.nombre.vars.id }) }}
+                  {{ form_row(edit_form.direccion,{'id':'edit_'~edit_form.direccion.vars.id }) }}
+                  {{ form_row(edit_form.localidad,{'id':'edit_'~edit_form.localidad.vars.id }) }}
+                  {{ form_row(edit_form.provincia,{'id':'edit_'~edit_form.provincia.vars.id }) }}
+                </div>
+                <div class="big_column">
+                  <button id="horarios_atencion" class="responsable_modal" title="Asignar horarios de atención del centro">Horarios de atención del centro</button>
+                  {{ form_row(edit_form.cp,{'id':'edit_'~edit_form.cp.vars.id }) }}
+                  {{ form_row(edit_form.telefono,{'id':'edit_'~edit_form.telefono.vars.id }) }}
+                  {{ form_row(edit_form.email,{'id':'edit_'~edit_form.email.vars.id }) }}
+                  {{ form_row(edit_form.web,{'id':'edit_'~edit_form.web.vars.id }) }}
+                </div>
+              </div>
+            </div> 
           </div>
         </div> 
-
       </div>
- 
-  </fieldset >
+      </fieldset >
     </div>
     <div id="botones_form">
         {{ form_row(edit_form.submit,{'id':'edit_'~edit_form.submit.vars.id }) }}
@@ -55,14 +55,11 @@
         <button id="editar_centro_restablecer" type="button" name="editar_centro[restablecer]" >Restablecer</button>
       </div> 
     </div>
-
-        
     <div class="oculto">
         {{ form_row(edit_form.limpiar) }}
     </div>
-
     <div id="result"></div>
-    </div>
+  </div>
+  {{form_end(edit_form)}}
 
-   {{form_end(edit_form)}}
 {% endblock %}

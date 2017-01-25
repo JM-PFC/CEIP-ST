@@ -45,3 +45,15 @@ registrar_horario_centro:
     defaults: { _controller: "BackendBundle:Centro:horarioCentro" }
     options:
         expose: true
+
+horarios_atencion:
+    path:     /horarios_atencion
+    defaults: { _controller: "BackendBundle:Centro:horariosAtencion" }
+    options:
+        expose: true
+
+registrar_horario_atencion:
+    path:     /registrar_horarios_atencion
+    defaults: { _controller: "BackendBundle:Centro:registrarHorariosAtencion" }
+    options:
+        expose: true

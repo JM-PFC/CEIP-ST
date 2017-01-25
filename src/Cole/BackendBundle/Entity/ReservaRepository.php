@@ -93,7 +93,7 @@ class ReservaRepository extends EntityRepository
 	public function findByEquipamiento($equipamiento) 
 	{
 		return $this->getEntityManager()->createQuery(
-			'SELECT r FROM BackendBundle:Reserva r  WHERE r.equipamiento=:equipamiento')
+			'SELECT r FROM BackendBundle:Reserva r  WHERE r.equipamiento=:equipamiento and r.fecha>=CURRENT_DATE()')
 		->setParameters(array(
 			'equipamiento' => $equipamiento))
 		->getResult();

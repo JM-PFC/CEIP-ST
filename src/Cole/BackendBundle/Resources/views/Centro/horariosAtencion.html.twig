@@ -1,0 +1,922 @@
+{% extends 'BackendBundle:Default:index.html.twig' %}
+
+{% block head %}{% endblock %}
+{% block stylesheets %}{% endblock %}
+
+{% block javascript %}
+
+<script>
+  // Se asigna la hora guardada al timepicki.
+  h_inicio={{inicio|json_encode()|raw}};
+  h_fin={{fin|json_encode()|raw}};
+  h_secretaria={{h_secretaria|json_encode()|raw}};
+  h_direccion={{h_direccion|json_encode()|raw}};
+  h_estudios={{h_estudios|json_encode()|raw}};
+
+  function reemplazarDatos(array) {
+    array=array.replace("L","Lunes");
+    array=array.replace("M","Martes");
+    array=array.replace("X","Miércoles");
+    array=array.replace("J","Jueves");
+    array=array.replace("V","Viernes");
+    array=array.replace(/,/g," | ");
+    array=array.replace("-"," a ");
+    return array;
+  }
+
+  function actualizarContenido(horario,div) {
+    array=horario.split("|");
+
+    if(array[0].indexOf("-")>0){
+    array[0]=reemplazarDatos(array[0]);
+    $(div).find("#show div[id*='hora_']>div").append('<span class="dias">De '+array[0]+'</span');
+    }
+    else{
+    array[0]=reemplazarDatos(array[0]);
+    $(div).find("#show div[id*='hora_']>div").append('<span class="dias">'+array[0]+'</span');
+    }
+
+    if(array[1].indexOf("/")>0){
+      array[1]=array[1].replace("/","  /  ");
+      array[1]=array[1].replace(/-/g,"h. - ");
+      $(div).find("#show div[id*='hora_']>div").append('<span class="horas">'+array[1]+'</span');
+    }
+    else{
+      array[1]=array[1].replace("-"," - ");
+      $(div).find("#show div[id*='hora_']>div").append('<span class="horas">'+array[1]+'</span');
+    }
+  }
+
+  if(h_secretaria==""){
+    $("#horarios_atencion_dialog #secretaria #show div[id*='hora_']>div").append('<span  class="no_horario">Actualmente no existe ningún horario de contacto establecido.</span');
+  }
+  else if(h_secretaria.indexOf("*")>0){
+    arr=h_secretaria.split("*");
+    for (var i = 0; i<arr.length; i++) {
+      actualizarContenido(arr[i],$("#horarios_atencion_dialog #secretaria"));
+    }
+  }
+  else{
+    actualizarContenido(h_secretaria,$("#horarios_atencion_dialog #secretaria"));
+  }
+
+  if(h_direccion==""){
+    $("#horarios_atencion_dialog #direccion #show div[id*='hora_']>div").append('<span class="no_horario">Actualmente no existe ningún horario de contacto establecido.</span');
+  }
+  else if(h_direccion.indexOf("*")>0){
+    arr=h_direccion.split("*");
+    for (var i = 0; i<arr.length; i++) {
+      actualizarContenido(arr[i],$("#horarios_atencion_dialog #direccion"));
+    }
+  }
+  else{
+    actualizarContenido(h_direccion,$("#horarios_atencion_dialog #direccion"));
+  }
+
+  if(h_estudios==""){
+    $("#horarios_atencion_dialog #direccion #show div[id*='hora_']>div").append('<span class="no_horario">Actualmente no existe ningún horario de contacto establecido.</span');
+  }
+  else if(h_estudios.indexOf("*")>0){
+    arr=h_estudios.split("*");
+    for (var i = 0; i<arr.length; i++) {
+      actualizarContenido(arr[i],$("#horarios_atencion_dialog #estudios"));
+    }
+  }
+  else{
+    actualizarContenido(h_estudios,$("#horarios_atencion_dialog #estudios"));
+  }
+
+
+  $("#horario_centro_dialog  #aviso_error").hide();
+
+  $("#horarios_atencion_dialog #hora_inicio").timepicki({
+    show_meridian:false,
+    min_hour_value:9,
+    max_hour_value:14,
+    step_size_minutes:15,
+    overflow_minutes:true,
+    increase_direction:'up',
+    start_time: ["10", "00"],
+    disable_keyboard_mobile: true
+  });
+
+  $("#horarios_atencion_dialog #hora_fin").timepicki({
+    show_meridian:false,
+    min_hour_value:9,
+    max_hour_value:14,
+    step_size_minutes:15,
+    overflow_minutes:true,
+    increase_direction:'up',
+    start_time: ["10", "00"],
+    disable_keyboard_mobile: true
+  });
+
+  $("#horarios_atencion_dialog #hora_ini_1").timepicki({
+    show_meridian:false,
+    min_hour_value:9,
+    max_hour_value:14,
+    step_size_minutes:15,
+    overflow_minutes:true,
+    increase_direction:'up',
+    start_time: ["10", "00"],
+    disable_keyboard_mobile: true
+  });
+
+  $("#horarios_atencion_dialog #hora_fin_1").timepicki({
+    show_meridian:false,
+    min_hour_value:9,
+    max_hour_value:14,
+    step_size_minutes:15,
+    overflow_minutes:true,
+    increase_direction:'up',
+    start_time: ["11", "00"],
+    disable_keyboard_mobile: true
+  });
+
+  $("#horarios_atencion_dialog #hora_ini_2").timepicki({
+    show_meridian:false,
+    min_hour_value:9,
+    max_hour_value:14,
+    step_size_minutes:15,
+    overflow_minutes:true,
+    increase_direction:'up',
+    start_time: ["12", "00"],
+    disable_keyboard_mobile: true
+  });
+
+  $("#horarios_atencion_dialog #hora_fin_2").timepicki({
+    show_meridian:false,
+    min_hour_value:9,
+    max_hour_value:14,
+    step_size_minutes:15,
+    overflow_minutes:true,
+    increase_direction:'up',
+    start_time: ["13", "00"],
+    disable_keyboard_mobile: true
+  });
+  // Se añade el separador de la hora.
+  $("#horarios_atencion_dialog .timepicker_wrap .time").after(":");
+    
+  //Se elimina el arrow_top que trae por defecto.
+  $("#horarios_atencion_dialog #cont_simple  .arrow_top" ).remove();    
+
+  //Se establece por defecto el valor inicial del input al hacer click en la botón.
+  $(document).on("click","#horarios_atencion_dialog .prev",function(event){
+    event.preventDefault();
+    if($(this).next().find("input").val()=="01" && $(this).parent().attr("class")=="time"){
+      valor=0;
+      if($(this).closest(".timepicki_colum").attr("id")=="inicio"){
+        valor="10";
+      }
+      else{
+        valor="12";
+      }
+      $(this).next().find("input").val(valor);
+    }
+  });
+
+  //Opciones con los botones.
+  $(document).on('click',"#horarios_atencion_dialog .nuevo",function(event){
+    id=$(this).closest("div").prev();
+    id.find("#edit").removeClass('oculto');
+    id.find("#show").addClass('oculto');
+    id.next().addClass('oculto');
+    id.next().next().removeClass('oculto');
+  });
+
+  $(document).on('click',"#horarios_atencion_dialog .volver",function(event){
+    id=$(this).closest("div").prev().prev();
+    id.find("#edit").addClass('oculto');
+    id.find("#show").removeClass('oculto');
+    id.next().removeClass('oculto');
+    id.next().next().addClass('oculto');
+    //Se restablece el contenedor.
+    restablecerDatos(id);
+    id.find("#list_added span[class!='title']").remove();
+  });
+
+
+
+  //Opciones con las pestañas de opción.
+  $(document).on('click',"#horarios_atencion_dialog #selec",function(event){
+    id=$(this).closest(".container_add");
+    id.find("#tipo #cabecera label").addClass('btn_not_select');
+    id.find(this).removeClass('btn_not_select');
+    id.find("#rango").addClass('oculto');
+    id.find("#seleccion").removeClass('oculto');
+    cont=$(this).closest(".container_add");
+    comprobarDatos(cont);
+  });
+
+  $(document).on('click',"#horarios_atencion_dialog #por_rango",function(event){
+    id=$(this).closest(".container_add");
+    id.find("#tipo #cabecera label").addClass('btn_not_select');
+    id.find(this).removeClass('btn_not_select');
+    id.find("#seleccion").addClass('oculto');
+    id.find("#rango").removeClass('oculto');
+    cont=$(this).closest(".container_add");
+    comprobarDatos(cont);
+  });
+
+  $(document).on('click',"#horarios_atencion_dialog #simple",function(event){
+    id=$(this).closest(".container_add");
+    id.find("#contenido #cabecera label").addClass('btn_not_select');
+    id.find(this).removeClass('btn_not_select');
+    id.find("#cont_multiple").addClass('oculto');
+    id.find("#cont_simple").removeClass('oculto');
+    cont=$(this).closest(".container_add");
+    comprobarDatos(cont);
+  });
+
+   $(document).on('click',"#horarios_atencion_dialog #multiple",function(event){
+    id=$(this).closest(".container_add");
+    id.find("#contenido #cabecera label").addClass('btn_not_select');
+    id.find(this).removeClass('btn_not_select');
+    id.find("#cont_simple").addClass('oculto');
+    id.find("#cont_multiple").removeClass('oculto');
+    cont=$(this).closest(".container_add");
+    comprobarDatos(cont);
+  });
+  //Se elimina el horario selecionado.
+  $(document).on('click',"#horarios_atencion_dialog #list_added span span",function(event){
+    cont=$(this).closest(".container_add");
+
+    $(this).parent().remove();
+    //Se comprueba si estan los datos seleccionados mostrar "Añadir".
+    comprobarDatos(cont);
+    if(cont.find("#list_added>span").length<2){
+      cont.next().next().find(".guardar").prop("disabled",true);
+    }
+  });
+
+  //Se deshabilita los valores en los select de rango según la opción seleccionada en el otro.
+  $(document).on('change',"#horarios_atencion_dialog #dia_inicio",function(event){
+    id=$(this).next("select");
+    id.find("option").prop("disabled", false); 
+    valor=$(this).val();
+
+    id.find("option").each(function(){
+      if($(this).attr("value")==valor){
+       id.find("option[value='"+$(this).attr("value")+"']").prop("disabled", true);  
+        return false;
+      }
+      id.find("option[value='"+$(this).attr("value")+"']").prop("disabled", true);  
+    });
+  });
+
+  $(document).on('change',"#horarios_atencion_dialog #dia_fin",function(event){
+    id=$(this).prev("select");
+    id.find("option").prop("disabled", true); 
+    valor=$(this).val();
+
+    id.find("option").each(function(){
+      if($(this).attr("value")==valor){
+        return false;
+      }
+      id.find("option[value='"+$(this).attr("value")+"']").prop("disabled", false);  
+    });
+  });
+  //Función para comprobar si estan todos los datos necesario para poder añadir un nuevo horario.
+  function comprobarDatos(div) {
+    //Seleccion - simple
+    if(!$(div).find("#seleccion").hasClass('oculto') && !$(div).find(" #cont_simple").hasClass('oculto')){
+      if($(div).find("#hora_inicio").val()!="" && $(div).find("#hora_fin").val()!="" && $(div).find("#tipo input:checkbox:checked").length > 0 && $(div).find("#list_added>span").length<4){
+          $(div).find("#add").removeClass('disab');
+      }
+      else{
+          $(div).find("#add").addClass('disab');
+      }
+    } //Seleccion - multiple
+    else if(!$(div).find("#seleccion").hasClass('oculto') && $(div).find("#cont_simple").hasClass('oculto')){
+      if($(div).find("#hora_ini_1").val()!="" && $(div).find("#hora_fin_1").val()!="" && $(div).find("#hora_ini_2").val()!="" && $(div).find("#hora_fin_2").val()!="" && $(div).find("#tipo input:checkbox:checked").length > 0 && $(div).find("#list_added>span").length<4){
+          $(div).find("#add").removeClass('disab');
+      }
+      else{
+          $(div).find("#add").addClass('disab');
+      }
+
+    } //Rango - simple
+    else if($(div).find("#seleccion").hasClass('oculto') && !$(div).find("#cont_simple").hasClass('oculto')){
+
+      if($(div).find("#hora_inicio").val()!="" && $(div).find("#hora_fin").val()!="" && $(div).find("#tipo #dia_inicio option:selected").val()!="" && $(div).find("#tipo #dia_fin option:selected").val()!="" && $(div).find("#list_added>span").length<4){
+          $(div).find("#add").removeClass('disab');
+      }
+      else{
+          $(div).find("#add").addClass('disab');
+      }
+
+    } //Rango - multiple
+    else{
+      if($(div).find("#hora_ini_1").val()!="" && $(div).find("#hora_fin_1").val()!="" && $(div).find("#hora_ini_2").val()!="" && $(div).find("#hora_fin_2").val()!="" && $(div).find("#tipo #dia_inicio option:selected").val()!="" && $(div).find("#tipo #dia_fin option:selected").val()!="" && $(div).find("#list_added>span").length<4){
+          $(div).find("#add").removeClass('disab');
+      }
+      else{
+          $(div).find("#add").addClass('disab');
+      }
+    }
+  }
+
+  //Se comprueba cuando estan todas las opciones marcadas para mostrar ĺa opción de añadir.
+  $(document).on('change',"#horarios_atencion_dialog #tipo input",function(event){
+    cont=$(this).closest(".container_add");
+    comprobarDatos(cont);
+  });
+
+  $(document).on('change',"#horarios_atencion_dialog #tipo select",function(event){
+    cont=$(this).closest(".container_add");
+    comprobarDatos(cont);
+  });
+
+  $(document).on('click',"#horarios_atencion_dialog #contenido .prev",function(event){
+    cont=$(this).closest(".container_add");
+    setTimeout(function() {
+      comprobarDatos(cont);
+    }, 100); 
+  });
+  $(document).on('click',"#horarios_atencion_dialog #contenido .next",function(event){
+    cont=$(this).closest(".container_add");
+    setTimeout(function() {
+      comprobarDatos(cont);
+    }, 100); 
+  });
+  $(document).on('blur',"#horarios_atencion_dialog #cont_multiple .timepicker_wrap ",function(event){
+    cont=$(this).closest(".container_add");
+    setTimeout(function() {
+      comprobarDatos(cont);
+    }, 200); 
+  });
+
+  function obtenerHorario(div) {
+    horario="";
+    //Seleccion - simple
+    if(!$(div).find("#seleccion").hasClass('oculto') && !$(div).find("#cont_simple").hasClass('oculto')){
+      //Se añade los días al horario.
+      if($(div).find("#tipo input:checkbox:checked").length<5){
+        $(div).find("#tipo input:checkbox:checked").each(function() {
+          horario+=$(this).val()+",";
+        });
+        horario=horario.substring(0,horario.length-1);
+      }
+      else{
+        horario="L-V"
+      }
+      horario+=" | ";
+      //Se añade las horas al horario.
+      hora_inicio=$(div).find("#hora_inicio").val();
+      hora_fin=$(div).find("#hora_fin").val();
+
+      horario+=hora_inicio+"h. - "+hora_fin+"h.";
+
+      return(horario);
+
+    } //Seleccion - multiple
+    else if(!$(div).find("#seleccion").hasClass('oculto') && $(div).find("#cont_simple").hasClass('oculto')){
+
+      //Se añade los días al horario.
+      if($(div).find("#tipo input:checkbox:checked").length<5){
+        $(div).find("#tipo input:checkbox:checked").each(function() {
+          horario+=$(this).val()+",";
+        });
+        horario=horario.substring(0,horario.length-1);
+      }
+      else{
+        horario="L-V"
+      }
+
+      horario+=" | ";
+      //Se añade las horas al horario.
+      hora_ini_1=$(div).find("#hora_ini_1").val();
+      hora_fin_1=$(div).find("#hora_fin_1").val();
+      hora_ini_2=$(div).find("#hora_ini_2").val();
+      hora_fin_2=$(div).find("#hora_fin_2").val();
+
+      horario+=hora_ini_1+"-"+hora_fin_1+"h. / "+hora_ini_2+"-"+hora_fin_2+"h.";
+
+      return(horario);
+
+    } //Rango - simple
+    else if($(div).find("#seleccion").hasClass('oculto') && !$(div).find("#cont_simple").hasClass('oculto')){
+
+      //Se añade los días al horario.
+      dia_inicio=$(div).find("#dia_inicio").val();
+      dia_fin=$(div).find("#dia_fin").val();
+
+      horario+=dia_inicio+"-"+dia_fin+" | ";
+
+      //Se añade las horas al horario.
+      hora_inicio=$(div).find("#hora_inicio").val();
+      hora_fin=$(div).find("#hora_fin").val();
+
+      horario+=hora_inicio+"h. - "+hora_fin+"h.";
+
+      return(horario);
+
+    } //Rango - multiple
+    else{
+      //Se añade los días al horario.
+      dia_inicio=$(div).find("#dia_inicio").val();
+      dia_fin=$(div).find("#dia_fin").val();
+
+      horario+=dia_inicio+"-"+dia_fin+" | ";
+
+      //Se añade las horas al horario.
+      hora_ini_1=$(div).find("#hora_ini_1").val();
+      hora_fin_1=$(div).find("#hora_fin_1").val();
+      hora_ini_2=$(div).find("#hora_ini_2").val();
+      hora_fin_2=$(div).find("#hora_fin_2").val();
+
+      horario+=hora_ini_1+"-"+hora_fin_1+"h. / "+hora_ini_2+"-"+hora_fin_2+"h.";
+
+      return(horario);
+
+    }
+  }
+
+
+  function restablecerDatos(div) {
+ 
+    $(div).find("input[type!='checkbox']").val(""); 
+    $(div).find("select").val("");
+    $(div).find("#tipo input:checkbox:checked").each(function() {
+      $(this).prop('checked', false);         
+    });
+    $(div).find("#selec").click();
+    $(div).find("#simple").click();
+
+    $(div).find(".vacio").addClass('oculto');
+  }
+
+  //Se añade un nuevo horario al contenedor seleccionado.
+  $(document).on('click',"#horarios_atencion_dialog #add span",function(event){
+    cont=$(this).closest(".container_add");
+    cont.find(".vacio").addClass("oculto");
+
+    if($(this).parent().next().find("#list_added>span").length<4){
+      horario=obtenerHorario(cont);
+      array=horario.split("|");
+      cont.find("#list_added").append('<span><p class="color_day">'+array[0]+'</p><p class="color_hours">'+array[1]+'</p><span></span></span>');
+      //Se deshabilita la opción de "Añadir" si hay 4 horarios añadidos.
+      if(cont.find("#list_added>span").length==4){
+        cont.find("#add").addClass('disab');
+      }
+      restablecerDatos(cont);
+      cont.next().next().find(".guardar").prop("disabled",false);
+    }
+  });
+  
+
+
+</script>
+{% endblock %}
+
+{% block body -%}
+  <div>
+    <div class="width100">
+    	<div id="content-form">
+        	<fieldset >
+            <legend> Horarios de atención del centro </legend>
+            <div id="formularios">
+              <div class="colum">
+                <div id="secretaria" class="container_add">
+                  <p>Secretaría</p>
+                  <div id="show">
+                    <div>
+                      <h4>Horario de Atención</h4>
+                      <div id="hora_secretaria"> 
+                        <div class="container"></div>
+                      </div>
+                      <div class="block_insert">
+                        <ul>
+                          <li>Pulse sobre<button class="btn_info">Nuevo</button>para <span>añadir</span> un nuevo horario.</li>
+                          <li>Pulse sobre<button class="btn_info">Eliminar</button>para <span>eliminar</span> el horario actual.</li>
+                        </ul>            
+                      </div>
+                    </div>
+                  </div>
+                  <div id="edit" class="oculto">
+                  <div id="dias">
+                    <h3>1. Seleccione días de la semana.</h3>
+                    <div id="tipo">
+                      <div id="cabecera">
+                        <label id="selec">Selección</label>
+                        <label id="por_rango" class="btn_not_select">Rango</label>
+                      </div>
+                      <div id="seleccion">
+                        <div class="checkbox">
+                          <label><input type="checkbox" name="lunes" value="L"> L</label>
+                        </div>
+                        <div class="checkbox">
+                          <label><input type="checkbox" name="martes" value="M"> M</label>
+                        </div>
+                        <div class="checkbox">
+                          <label><input type="checkbox" name="miercoles" value="X"> X</label>
+                        </div>
+                        <div class="checkbox">
+                          <label><input type="checkbox" name="jueves" value="J"> J</label>
+                        </div>
+                        <div class="checkbox">
+                          <label><input type="checkbox" name="viernes" value="V"> V</label>
+                        </div>
+                      </div>
+                      <div id="rango" class="oculto">
+                      De <select id="dia_inicio">
+                        <option value="" selected="selected">Elegir día</option>
+                        <option value="L">Lunes</option>
+                        <option value="M">Martes</option>
+                        <option value="X">Miércoles</option>
+                        <option value="J">Jueves</option>
+                        <option value="V">Viernes</option>
+                      </select>
+                      a <select id="dia_fin">
+                        <option value="" selected="selected">Elegir día</option>
+                        <option value="L">Lunes</option>
+                        <option value="M">Martes</option>
+                        <option value="X">Miércoles</option>
+                        <option value="J">Jueves</option>
+                        <option value="V">Viernes</option>
+                      </select >
+                      </div>
+                    </div>
+                  </div>
+                  <div id="horas">
+                    <h3>2. Seleccione el rango de horas.</h3>
+                    <div id="contenido">
+                      <div id="cabecera">
+                        <label id="simple">Simple</label>
+                        <label id="multiple" class="btn_not_select">Múltiple</label>
+                      </div>
+                      <div id="cont_simple">
+                        <div id="inicio"class="timepicki_colum">
+                          <input id="hora_inicio" class="oculto"></input>
+                        </div>
+                        <div class="guion">-</div>
+                        <div id="fin" class="timepicki_colum">
+                          <input id="hora_fin" class="oculto"></input>
+                        </div>
+                        <div class="label">
+                          <label>Inicio</label>
+                          <label>Fin</label>                     
+                        </div>
+                      </div>
+                      <div id="cont_multiple" class="oculto">
+                        <div>
+                          <h4>1º</h4>
+                          <div>
+                            <div id="ini_1" class="timepicki_colum">
+                              <input id="hora_ini_1"></input>
+                            </div>
+                          </div>
+                          <div class="guion">-</div>
+                          <div>
+                            <div id="fin_1" class="timepicki_colum">
+                              <input id="hora_fin_1" ></input>
+                            </div>
+                          </div>
+                        </div>
+                        <div>
+                          <h4>2º</h4>
+                          <div>
+                            <div id="ini_2" class="timepicki_colum">
+                              <input id="hora_ini_2"></input>
+                            </div>
+                          </div>
+                          <div class="guion">-</div>
+                          <div>
+                            <div id="fin_2" class="timepicki_colum">
+                              <input id="hora_fin_2" ></input>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="label">
+                          <label>Inicio</label>
+                          <label>Fin</label>                     
+                        </div>
+                      </div> 
+                    </div>
+                  </div>
+                  <div id="add" class="disab">
+                    <span>
+                      <img src="{{ asset('bundles/backend/images/menu/flecha_w.png')}}"> 
+                      Añadir
+                      <img src="{{ asset('bundles/backend/images/menu/flecha_w.png')}}">
+                    </span>
+                  </div>
+                  <div class="container_save">
+                    <div id="list_added">
+                      <span class="title">Horarios seleccionados</span>
+                      <p class="vacio oculto">No existe ningún horario</p>
+                    </div>
+                  </div>
+                </div>
+                </div>
+                <div id="horarios_atencion_show">
+                  <button class="nuevo">Nuevo</button>
+                  <button class="eliminar" >Eliminar</button>
+                </div>
+                <div id="horarios_atencion_save" class="oculto">
+                  <button class="guardar" disabled="disabled">Guardar</button>
+                  <button class="volver">Volver</button>
+                </div>
+              </div>
+              <div class="colum">
+                <div id="direccion" class="container_add">
+                  <p>Dirección</p>
+
+                  <div id="show">
+                    <div>
+                      <h4>Horario de Atención</h4>
+                      <div id="hora_direccion"> 
+                        <div class="container"></div>
+                      </div>
+                      <div class="block_insert">
+                        <ul>
+                          <li>Pulse sobre<button class="btn_info">Nuevo</button>para <span>añadir</span> un nuevo horario.</li>
+                          <li>Pulse sobre<button class="btn_info">Eliminar</button>para <span>eliminar</span> el horario actual.</li>
+                        </ul>            
+                      </div>
+                    </div>
+                  </div>
+
+                  <div id="edit" class="oculto">
+                   <div id="dias">
+                    <h3>1. Seleccione días de la semana.</h3>
+                    <div id="tipo">
+                      <div id="cabecera">
+                        <label id="selec">Selección</label>
+                        <label id="por_rango" class="btn_not_select">Rango</label>
+                      </div>
+                      <div id="seleccion">
+                        <div class="checkbox">
+                          <label><input type="checkbox" name="lunes" value="L"> L</label>
+                        </div>
+                        <div class="checkbox">
+                          <label><input type="checkbox" name="martes" value="M"> M</label>
+                        </div>
+                        <div class="checkbox">
+                          <label><input type="checkbox" name="miercoles" value="X"> X</label>
+                        </div>
+                        <div class="checkbox">
+                          <label><input type="checkbox" name="jueves" value="J"> J</label>
+                        </div>
+                        <div class="checkbox">
+                          <label><input type="checkbox" name="viernes" value="V"> V</label>
+                        </div>
+                      </div>
+                      <div id="rango" class="oculto">
+                      De <select id="dia_inicio">
+                        <option value="" selected="selected">Elegir día</option>
+                        <option value="L">Lunes</option>
+                        <option value="M">Martes</option>
+                        <option value="X">Miércoles</option>
+                        <option value="J">Jueves</option>
+                        <option value="V">Viernes</option>
+                      </select >
+                      a <select id="dia_fin">
+                        <option value="" selected="selected">Elegir día</option>
+                        <option value="L">Lunes</option>
+                        <option value="M">Martes</option>
+                        <option value="X">Miércoles</option>
+                        <option value="J">Jueves</option>
+                        <option value="V">Viernes</option>
+                      </select >
+                      </div>
+                    </div>
+                  </div>
+                  <div id="horas">
+                    <h3>2. Seleccione el rango de horas.</h3>
+                    <div id="contenido">
+                      <div id="cabecera">
+                        <label id="simple">Simple</label>
+                        <label id="multiple" class="btn_not_select">Múltiple</label>
+                      </div>
+                      <div id="cont_simple">
+                        <div id="inicio"class="timepicki_colum">
+                          <input id="hora_inicio" class="oculto"></input>
+                        </div>
+                        <div class="guion">-</div>
+                        <div id="fin" class="timepicki_colum">
+                          <input id="hora_fin" class="oculto"></input>
+                        </div>
+                        <div class="label">
+                          <label>Inicio</label>
+                          <label>Fin</label>                     
+                        </div>
+                      </div>
+                      <div id="cont_multiple" class="oculto">
+                        <div>
+                          <h4>1º</h4>
+                          <div>
+                            <div id="ini_1" class="timepicki_colum">
+                              <input id="hora_ini_1"></input>
+                            </div>
+                          </div>
+                          <div class="guion">-</div>
+                          <div>
+                            <div id="fin_1" class="timepicki_colum">
+                              <input id="hora_fin_1" ></input>
+                            </div>
+                          </div>
+                        </div>
+                        <div>
+                          <h4>2º</h4>
+                          <div>
+                            <div id="ini_2" class="timepicki_colum">
+                              <input id="hora_ini_2"></input>
+                            </div>
+                          </div>
+                          <div class="guion">-</div>
+                          <div>
+                            <div id="fin_2" class="timepicki_colum">
+                              <input id="hora_fin_2" ></input>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="label">
+                          <label>Inicio</label>
+                          <label>Fin</label>                     
+                        </div>
+                      </div> 
+                    </div>
+                  </div>
+                  <div id="add" class="disab">
+                    <span>
+                      <img src="{{ asset('bundles/backend/images/menu/flecha_w.png')}}"> 
+                      Añadir
+                      <img src="{{ asset('bundles/backend/images/menu/flecha_w.png')}}">
+                    </span>
+                  </div>
+                  <div class="container_save">
+                    <div id="list_added">
+                      <span class="title">Horarios seleccionados</span>
+                      <p class="vacio oculto">No existe ningún horario</p>
+                    </div>
+                  </div>
+                 </div>
+                </div>
+                <div id="horarios_atencion_show">
+                  <button class="nuevo">Nuevo</button>
+                  <button class="eliminar" >Eliminar</button>
+                </div>
+                <div id="horarios_atencion_save" class="oculto">
+                  <button class="guardar" disabled="disabled">Guardar</button>
+                  <button class="volver">Volver</button>
+                </div>  
+              </div>
+              <div class="colum">
+                <div id="estudios" class="container_add">
+                  <p>Jefatura de Estudios</p>
+                  <div id="show">
+                    <div>
+                      <h4>Horario de Atención</h4>
+                      <div id="hora_estudios"> 
+                        <div class="container"></div>
+                      </div>
+                      <div class="block_insert">
+                        <ul>
+                          <li>Pulse sobre<button class="btn_info">Nuevo</button>para <span>añadir</span> un nuevo horario.</li>
+                          <li>Pulse sobre<button class="btn_info">Eliminar</button>para <span>eliminar</span> el horario actual.</li>
+                        </ul>            
+                      </div>
+                    </div>
+                  </div>
+                  
+                  <div id="edit" class="oculto">
+                   <div id="dias">
+                    <h3>1. Seleccione días de la semana.</h3>
+                    <div id="tipo">
+                      <div id="cabecera">
+                        <label id="selec">Selección</label>
+                        <label id="por_rango" class="btn_not_select">Rango</label>
+                      </div>
+                      <div id="seleccion">
+                        <div class="checkbox">
+                          <label><input type="checkbox" name="lunes" value="L"> L</label>
+                        </div>
+                        <div class="checkbox">
+                          <label><input type="checkbox" name="martes" value="M"> M</label>
+                        </div>
+                        <div class="checkbox">
+                          <label><input type="checkbox" name="miercoles" value="X"> X</label>
+                        </div>
+                        <div class="checkbox">
+                          <label><input type="checkbox" name="jueves" value="J"> J</label>
+                        </div>
+                        <div class="checkbox">
+                          <label><input type="checkbox" name="viernes" value="V"> V</label>
+                        </div>
+                      </div>
+                      <div id="rango" class="oculto">
+                      De <select id="dia_inicio">
+                        <option value="" selected="selected">Elegir día</option>
+                        <option value="L">Lunes</option>
+                        <option value="M">Martes</option>
+                        <option value="X">Miércoles</option>
+                        <option value="J">Jueves</option>
+                        <option value="V">Viernes</option>
+                      </select >
+                      a <select id="dia_fin">
+                        <option value="" selected="selected">Elegir día</option>
+                        <option value="L">Lunes</option>
+                        <option value="M">Martes</option>
+                        <option value="X">Miércoles</option>
+                        <option value="J">Jueves</option>
+                        <option value="V">Viernes</option>
+                      </select >
+                      </div>
+                    </div>
+                  </div>
+                  <div id="horas">
+                    <h3>2. Seleccione el rango de horas.</h3>
+                    <div id="contenido">
+                      <div id="cabecera">
+                        <label id="simple">Simple</label>
+                        <label id="multiple" class="btn_not_select">Múltiple</label>
+                      </div>
+                      <div id="cont_simple">
+                        <div id="inicio"class="timepicki_colum">
+                          <input id="hora_inicio" class="oculto"></input>
+                        </div>
+                        <div class="guion">-</div>
+                        <div id="fin" class="timepicki_colum">
+                          <input id="hora_fin" class="oculto"></input>
+                        </div>
+                        <div class="label">
+                          <label>Inicio</label>
+                          <label>Fin</label>                     
+                        </div>
+                      </div>
+                      <div id="cont_multiple" class="oculto">
+                        <div>
+                          <h4>1º</h4>
+                          <div>
+                            <div id="ini_1" class="timepicki_colum">
+                              <input id="hora_ini_1"></input>
+                            </div>
+                          </div>
+                          <div class="guion">-</div>
+                          <div>
+                            <div id="fin_1" class="timepicki_colum">
+                              <input id="hora_fin_1" ></input>
+                            </div>
+                          </div>
+                        </div>
+                        <div>
+                          <h4>2º</h4>
+                          <div>
+                            <div id="ini_2" class="timepicki_colum">
+                              <input id="hora_ini_2"></input>
+                            </div>
+                          </div>
+                          <div class="guion">-</div>
+                          <div>
+                            <div id="fin_2" class="timepicki_colum">
+                              <input id="hora_fin_2" ></input>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="label">
+                          <label>Inicio</label>
+                          <label>Fin</label>                     
+                        </div>
+                      </div> 
+                    </div>
+                  </div>
+                  <div id="add" class="disab">
+                    <span>
+                      <img src="{{ asset('bundles/backend/images/menu/flecha_w.png')}}"> 
+                      Añadir
+                      <img src="{{ asset('bundles/backend/images/menu/flecha_w.png')}}">
+                    </span>
+                  </div>
+                  <div class="container_save">
+                    <div id="list_added">
+                      <span class="title">Horarios seleccionados</span>
+                      <p class="vacio oculto">No existe ningún horario</p>
+                    </div>
+                  </div>
+                 </div>  
+                </div>
+                <div id="horarios_atencion_show">
+                  <button class="nuevo">Nuevo</button>
+                  <button class="eliminar" >Eliminar</button>
+                </div>
+                <div id="horarios_atencion_save" class="oculto">
+                  <button class="guardar" disabled="disabled">Guardar</button>
+                  <button class="volver">Volver</button>
+                </div>
+              </div>
+            <div>  
+        	</fieldset>
+    	</div>  
+        <div id="botones_form">
+            <div>
+                <button id="button_hora_centro">Aceptar</button>
+            </div>
+            {#<div>
+                <button id="button_hora_centro_rest">Restablecer</button>
+            </div>#}
+        </div>
+    </div>
+  </div>
+
+{% endblock %}

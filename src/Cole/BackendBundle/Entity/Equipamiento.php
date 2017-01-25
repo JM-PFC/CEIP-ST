@@ -43,7 +43,7 @@ class Equipamiento
     private $tipo;
 
     /**
-     * @ORM\OneToMany(targetEntity="Reserva", mappedBy="equipamiento")
+     * @ORM\OneToMany(targetEntity="Reserva", mappedBy="equipamiento", cascade={"remove"})
      */
     private $reserva;
 
