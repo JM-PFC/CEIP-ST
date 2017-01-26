@@ -175,28 +175,6 @@
     }
   });
 
-  //Opciones con los botones.
-  $(document).on('click',"#horarios_atencion_dialog .nuevo",function(event){
-    id=$(this).closest("div").prev();
-    id.find("#edit").removeClass('oculto');
-    id.find("#show").addClass('oculto');
-    id.next().addClass('oculto');
-    id.next().next().removeClass('oculto');
-  });
-
-  $(document).on('click',"#horarios_atencion_dialog .volver",function(event){
-    id=$(this).closest("div").prev().prev();
-    id.find("#edit").addClass('oculto');
-    id.find("#show").removeClass('oculto');
-    id.next().removeClass('oculto');
-    id.next().next().addClass('oculto');
-    //Se restablece el contenedor.
-    restablecerDatos(id);
-    id.find("#list_added span[class!='title']").remove();
-  });
-
-
-
   //Opciones con las pestañas de opción.
   $(document).on('click',"#horarios_atencion_dialog #selec",function(event){
     id=$(this).closest(".container_add");
@@ -433,42 +411,32 @@
   }
 
 
-  function restablecerDatos(div) {
- 
-    $(div).find("input[type!='checkbox']").val(""); 
-    $(div).find("select").val("");
-    $(div).find("#tipo input:checkbox:checked").each(function() {
-      $(this).prop('checked', false);         
-    });
-    $(div).find("#selec").click();
-    $(div).find("#simple").click();
 
-    $(div).find(".vacio").addClass('oculto');
-  }
-
-  //Se añade un nuevo horario al contenedor seleccionado.
-  $(document).on('click',"#horarios_atencion_dialog #add span",function(event){
-    cont=$(this).closest(".container_add");
-    cont.find(".vacio").addClass("oculto");
-
-    if($(this).parent().next().find("#list_added>span").length<4){
-      horario=obtenerHorario(cont);
-      array=horario.split("|");
-      cont.find("#list_added").append('<span><p class="color_day">'+array[0]+'</p><p class="color_hours">'+array[1]+'</p><span></span></span>');
-      //Se deshabilita la opción de "Añadir" si hay 4 horarios añadidos.
-      if(cont.find("#list_added>span").length==4){
-        cont.find("#add").addClass('disab');
-      }
-      restablecerDatos(cont);
-      cont.next().next().find(".guardar").prop("disabled",false);
-    }
-  });
   
+  $(document).on("mouseover","#horarios_atencion_dialog #arrow_next", function () {
+    $("#horarios_atencion_dialog #arrow_next").addClass("oculto");
+    $("#horarios_atencion_dialog #arrow_next_1").removeClass("oculto");
+  });
+
+  $(document).on("mouseout","#horarios_atencion_dialog #arrow_next_1", function () {
+    $("#horarios_atencion_dialog #arrow_next").removeClass("oculto");
+    $("#horarios_atencion_dialog #arrow_next_1").addClass("oculto");
+  });
+
+  $(document).on("mouseover","#horarios_atencion_dialog #arrow_prev", function () {
+    $("#horarios_atencion_dialog #arrow_prev").addClass("oculto");
+    $("#horarios_atencion_dialog #arrow_prev_1").removeClass("oculto");
+  });
+
+  $(document).on("mouseout","#horarios_atencion_dialog #arrow_prev_1", function () {
+    $("#horarios_atencion_dialog #arrow_prev").removeClass("oculto");
+    $("#horarios_atencion_dialog #arrow_prev_1").addClass("oculto");
+  });
+
 
 
 </script>
 {% endblock %}
-
 {% block body -%}
   <div>
     <div class="width100">
@@ -476,7 +444,13 @@
         	<fieldset >
             <legend> Horarios de atención del centro </legend>
             <div id="formularios">
-              <div class="colum">
+              <div>
+                <img id="arrow_prev" src="{{ asset('bundles/backend/images/menu/previous-arrow.png')}}">
+                <img id="arrow_prev_1" src="{{ asset('bundles/backend/images/menu/previous-arrow_1.png')}}" class="oculto">
+              </div>
+
+              <div>
+              <div id="1" class="colum" >
                 <div id="secretaria" class="container_add">
                   <p>Secretaría</p>
                   <div id="show">
@@ -618,7 +592,7 @@
                   <button class="volver">Volver</button>
                 </div>
               </div>
-              <div class="colum">
+              <div id="2" class="colum" style="display: none;">
                 <div id="direccion" class="container_add">
                   <p>Dirección</p>
 
@@ -762,7 +736,7 @@
                   <button class="volver">Volver</button>
                 </div>  
               </div>
-              <div class="colum">
+              <div id="3" class="colum" style="display: none;">
                 <div id="estudios" class="container_add">
                   <p>Jefatura de Estudios</p>
                   <div id="show">
@@ -905,12 +879,17 @@
                   <button class="volver">Volver</button>
                 </div>
               </div>
+              </div>
+              <div> 
+                <img id="arrow_next" src="{{ asset('bundles/backend/images/menu/next-arrow.png')}}">
+                <img id="arrow_next_1" src="{{ asset('bundles/backend/images/menu/next-arrow_1.png')}}" class="oculto">
+              </div>
             <div>  
         	</fieldset>
     	</div>  
         <div id="botones_form">
             <div>
-                <button id="button_hora_centro">Aceptar</button>
+                <button id="button_hora_centro">Cerrar</button>
             </div>
             {#<div>
                 <button id="button_hora_centro_rest">Restablecer</button>

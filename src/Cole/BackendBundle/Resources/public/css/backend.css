@@ -1951,10 +1951,10 @@ float: right;
     padding-left: 5px;
 }
 #horarios_atencion_dialog .colum{
-	width: 30%;
-	margin:0 1.5%;
+	width: 62%;
+	margin:0 4%;
 	float: left;
-	height: 410px;
+	height: 440px;
 }
 #horarios_atencion_dialog .container_add{
 	height: 400px;
@@ -2365,7 +2365,34 @@ z-index: 100000000000000000000000000000000;
 #horarios_atencion_dialog .block_insert span {
 	display: inline !important;
 }
+#horarios_atencion_dialog #formularios>div:nth-child(1)  img ,#horarios_atencion_dialog #formularios>div:nth-child(3)  img{
+	width: 40px;
+	height: 40px;
+	float: left;
+	margin-top: 42%;
+}
+#horarios_atencion_dialog #formularios>div:nth-child(1) img ,#horarios_atencion_dialog #formularios>div:nth-child(3) img {
+	cursor: pointer !important;
+}
+#horarios_atencion_dialog #formularios>div:nth-child(1) img:active {
+	width: 37px;
+	height: 37px;
+	margin-left: 28px;
+}
 
+#horarios_atencion_dialog #formularios>div:nth-child(3) img:active {
+	width: 37px;
+	height: 37px;
+}
+#horarios_atencion_dialog #formularios>div:nth-child(1) img{
+	margin-left: 25px;
+}
+#horarios_atencion_dialog #formularios{
+	width: 100%;
+	height: 300px;
+	margin: 0 auto;
+	display: block;
+}
 
 
 #contenedor_festivos{

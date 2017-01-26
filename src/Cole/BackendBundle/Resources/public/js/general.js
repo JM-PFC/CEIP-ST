@@ -2534,6 +2534,123 @@ $(document).on("blur","input[id='edit_profesor_dni']",function() {
     return false;
   });
 
+  //Se cambia de opción en la ventana modal de horarios de atención.
+  $(document).on("click","#horarios_atencion_dialog #arrow_next_1", function () {
+  $("#horarios_atencion_dialog #formularios img").css( 'pointer-events', 'none' );
+    div=$("#horarios_atencion_dialog #formularios>div>div:visible").attr("id");
+
+   if(div==1){
+      $("#horarios_atencion_dialog #1").hide("slide",{ direction: "left" }, 300, function() 
+      { 
+        $("#horarios_atencion_dialog #2").show("slide", { direction: "right" }, 300, function() 
+        { 
+          $("#horarios_atencion_dialog #formularios img").css( 'pointer-events', 'auto' );
+        });
+      });
+    }
+    else if(div==2){
+      $("#horarios_atencion_dialog #2").hide("slide",{ direction: "left" }, 300, function() 
+      { 
+        $("#horarios_atencion_dialog #3").show("slide", { direction: "right" }, 300, function() 
+        { 
+          $("#horarios_atencion_dialog #formularios img").css( 'pointer-events', 'auto' );
+        });
+      });
+    }
+    else{
+      $("#horarios_atencion_dialog #3").hide("slide",{ direction: "left" }, 300, function() 
+      { 
+        $("#horarios_atencion_dialog #1").show("slide", { direction: "right" }, 300, function() 
+        { 
+          $("#horarios_atencion_dialog #formularios img").css( 'pointer-events', 'auto' );
+        });
+      });
+    }
+  });
+
+  $(document).on("click","#horarios_atencion_dialog #arrow_prev_1", function () {
+    $("#horarios_atencion_dialog #formularios img").css( 'pointer-events', 'none' );
+    div=$("#horarios_atencion_dialog #formularios>div>div:visible").attr("id");
+
+   if(div==1){
+      $("#horarios_atencion_dialog #1").hide("slide",{ direction: "right" }, 300, function() 
+      { 
+        $("#horarios_atencion_dialog #3").show("slide", { direction: "left" }, 300, function(){ 
+          $("#horarios_atencion_dialog #formularios img").css( 'pointer-events', 'auto' );
+        });
+      });
+    }
+    else if(div==2){
+      $("#horarios_atencion_dialog #2").hide("slide",{ direction: "right" }, 300, function() 
+      { 
+        $("#horarios_atencion_dialog #1").show("slide", { direction: "left" }, 300, function(){ 
+          $("#horarios_atencion_dialog #formularios img").css( 'pointer-events', 'auto' );
+        });
+      });
+    }
+    else{
+      $("#horarios_atencion_dialog #3").hide("slide",{ direction: "right" }, 300, function() 
+      { 
+        $("#horarios_atencion_dialog #2").show("slide", { direction: "left" }, 300, function() {
+          $("#horarios_atencion_dialog #formularios img").css( 'pointer-events', 'auto' );
+        });
+      });
+    }
+  });
+
+
+  function restablecerDatos(div) {
+ 
+    $(div).find("input[type!='checkbox']").val(""); 
+    $(div).find("select").val("");
+    $(div).find("#tipo input:checkbox:checked").each(function() {
+      $(this).prop('checked', false);         
+    });
+    $(div).find("#selec").click();
+    $(div).find("#simple").click();
+    $(div).next().next().find(".guardar").prop("disabled",true);
+
+    $(div).find(".vacio").addClass('oculto');
+  }
+
+  //Se añade un nuevo horario al contenedor seleccionado.
+  $(document).on('click',"#horarios_atencion_dialog #add span",function(event){
+    cont=$(this).closest(".container_add");
+    cont.find(".vacio").addClass("oculto");
+
+    if($(this).parent().next().find("#list_added>span").length<4){
+      horario=obtenerHorario(cont);
+      array=horario.split("|");
+      cont.find("#list_added").append('<span><p class="color_day">'+array[0]+'</p><p class="color_hours">'+array[1]+'</p><span></span></span>');
+      //Se deshabilita la opción de "Añadir" si hay 4 horarios añadidos.
+      if(cont.find("#list_added>span").length==4){
+        cont.find("#add").addClass('disab');
+      }
+      restablecerDatos(cont);
+      cont.next().next().find(".guardar").prop("disabled",false);
+    }
+  });
+
+  //Opciones con los botones.
+  $(document).on('click',"#horarios_atencion_dialog .nuevo",function(event){
+    id=$(this).closest("div").prev();
+    id.find("#edit").removeClass('oculto');
+    id.find("#show").addClass('oculto');
+    id.next().addClass('oculto');
+    id.next().next().removeClass('oculto');
+  });
+
+  $(document).on('click',"#horarios_atencion_dialog .volver",function(event){
+    id=$(this).closest("div").prev().prev();
+    id.find("#edit").addClass('oculto');
+    id.find("#show").removeClass('oculto');
+    id.next().removeClass('oculto');
+    id.next().next().addClass('oculto');
+    //Se restablece el contenedor.
+    restablecerDatos(id);
+    id.find("#list_added span[class!='title']").remove();
+  });
+
   //////////////////////////////////
   //           Cursos             //
   //////////////////////////////////
