@@ -4,15 +4,168 @@
 {% block stylesheets %}{% endblock %}
 
 {% block javascript %}
+ <script>
+    $("#busqueda_alumno_limpiar").prop("disabled",true);
+     // Tabla con la opción de ordenar y búsqueda de antiguos alumnos activos.
+    $('#busqueda_alumno #student_active').DataTable( { //on( 'page.dt',   function () { $(".current").prop("disabled", true); } )
+        //"aLengthMenu": [[25, 50, 100, 250, 500, -1], [25, 50, 100, 250, 500, "All"]],
+        /*Opción para deshabialitar de filtrar  en alguna columna.
+        "aoColumnDefs": [
+            { "bSearchable": false, "aTargets": [1,2] }
+        ],
+        */
+        initComplete: function () {
+            this.api().columns().every( function (e) {
+                var column = this;
+                var select = $('<select class="'+e+'"><option value=""></option></select>')
+                    .appendTo('.select_table_active')
+                    .on( 'change', function () {
+                        var val = $.fn.dataTable.util.escapeRegex(
+                            $(this).val()
+                        );
+ 
+                        column
+                            .search( val ? '^'+val+'$' : '', true, false )
+                            .draw();
+                    } );
+ 
+                column.data().unique().sort().each( function ( d, j ) {
+                    select.append( '<option value="'+d+'">'+d+'</option>' )
+                } );
+                select.append( '<option value="nada">nada</option>' )
+            } );
+
+            //$('#busqueda_alumno .dataTables_scrollBody thead').addClass('oculto');
+        },
+        "order": [[ 0, "asc" ]],
+        "sScrollY": "260px",
+        "bAutoWidth": false,
+        "bScrollCollapse": true,
+        "aLengthMenu": [[-1], [ "All"]],
+        "columnDefs": [ {
+            "targets": 'no-sort',
+            "orderable": false,} ],
+        "language": {
+            "zeroRecords": "Lo siento, no se ha encontrado ningún registro coincidente",
+            "emptyTable": "No se han matriculado los alumnos del curso selecdcionado",
+            "lengthMenu": "Mostrar _MENU_ entradas",
+            "loadingRecords": "Cargando...",
+            "processing":     "Processando...",
+            "info": "Página _PAGE_ de _PAGES_",
+            "infoEmpty": "No hay registros disponibles",
+            "infoFiltered": "(filtrado de _MAX_ registros)",
+            "search": "Buscar:",
+            "Next": "Siguiente",
+            "paginate": {
+                "previous": "Anterior",
+                "next": "Siguiente"
+            }
+        }
+    });
+
+
+    // Tabla con la opción de ordenar y búsqueda de antiguos alumnos inactivos.
+    $('#busqueda_alumno #student_no_active').DataTable( { //on( 'page.dt',   function () { $(".current").prop("disabled", true); } )
+        //"aLengthMenu": [[25, 50, 100, 250, 500, -1], [25, 50, 100, 250, 500, "All"]],
+                initComplete: function () {
+            this.api().columns().every( function (e) {
+                var column = this;
+                var select = $('<select class="'+e+'"><option value=""></option></select>')
+                    .appendTo('.select_table')
+                    .on( 'change', function () {
+                        var val = $.fn.dataTable.util.escapeRegex(
+                            $(this).val()
+                        );
+ 
+                        column
+                            .search( val ? '^'+val+'$' : '', true, false )
+                            .draw();
+                    } );
+ 
+                column.data().unique().sort().each( function ( d, j ) {
+                    select.append( '<option value="'+d+'">'+d+'</option>' )
+                } );
+                select.append( '<option value="nada">nada</option>' )
+            } );
+        },
+        "order": [[ 0, "asc" ]],
+        "sScrollY": "260px",
+        //"table-layout": "fixed",
+        "bAutoWidth": false,
+        "bScrollCollapse": true,
+        "aLengthMenu": [[-1], [ "All"]],
+        "columnDefs": [ {
+            "targets": 'no-sort',
+            "orderable": false,} ],
+        "language": {
+            "zeroRecords": "Lo siento, no se ha encontrado ningún registro coincidente",
+            "emptyTable": "No hay antiguos alumnos en el sistema",
+            "lengthMenu": "Mostrar _MENU_ entradas",
+            "loadingRecords": "Cargando...",
+            "processing":     "Processando...",
+            "info": "Página _PAGE_ de _PAGES_",
+            "infoEmpty": "No hay registros disponibles",
+            "infoFiltered": "(filtrado de _MAX_ registros)",
+            "search": "Buscar:",
+            "Next": "Siguiente",
+            "paginate": {
+                "previous": "Anterior",
+                "next": "Siguiente"
+            }
+        }
+    });
+
+    $("#busqueda_alumno .dataTables_info").addClass("oculto");
+    $("#busqueda_alumno .dataTables_paginate").addClass("oculto");
+    $("#busqueda_alumno .dataTables_length").addClass("oculto");
+    $('#busqueda_alumno .contenedor_registro').each (function(){ 
+      $(this).find(".dataTables_filter").appendTo($(this).find('#buscador'));
+    });   
+    $("#busqueda_alumno #buscador").addClass('oculto');
 
 
 
+  $(document).on("keyup","#busqueda_alumno .block_search input",function(event) {
+    event.preventDefault();
+
+    form= $(this).closest("form");
+    filtro="";
+    if($("#busqueda_alumno_nombre").val()!=""){
+      filtro+=$("#busqueda_alumno_nombre").val()+" ";
+    }
+
+    if($("#busqueda_alumno .activos").hasClass('oculto')){
+       //Se busca el contenido en la primera columna 
+      var table = $('#busqueda_alumno #student_no_active').DataTable();
+      table.column( 0 ).search(  filtro ).draw();    
+    }
+    else{
+       //Se busca el contenido en la primera columna 
+      var table = $('#busqueda_alumno #student_active').DataTable();
+      table.column( 0 ).search(  filtro ).draw();    
+    }
+    //Se oculta la segunda cabecera que aparece al utilizar el scroll
+    $('#busqueda_alumno .dataTables_scrollBody thead').addClass('oculto');
+
+    //Se muestra/oculta el botón de limpiar búsqueda.
+    $("#busqueda_alumno_limpiar").prop("disabled",false);
+
+    if($(this).val()==""){
+        $("#busqueda_alumno_limpiar").prop("disabled",true);
+    }
+    //Se busca el contenido en cualqeuier columna.
+    //$("#busqueda_alumno #buscador input").val(filtro);
+    //$("#busqueda_alumno #buscador input").keyup();
+  });
+
+ </script>
 {% endblock %}
 
 {% block body %}
   <div id="buscador_alumno">
-    {{form_start(form, {'action':path('alumno_search'),'method':'POST','attr':{'class':'formulario_busqueda_alumno', 'id':'busqueda_alumno', novalidate:'novalidate', 'autocomplete':'off'}})}}
+    {{form_start(form, {'action':path('alumno_search'),'method':'POST','attr':{'class':'formulario_busqueda_alumno', 'id':'busqueda_alumno','tipo':'alumnos', novalidate:'novalidate', 'autocomplete':'off'}})}}
     <div class="double_column">
+        <h2>Búsqueda de Alumnos</h2>
         <p>Seleccione un método de búsqueda para el alumno:</p>
         <div>
             <div class="block_search">
@@ -22,29 +175,124 @@
                 </div> 
             </div> 
             <div class="block_search">
-                <h2 class="h2_label"><span>Búsqueda por Nombre</span></h2>
+                <h2 class="h2_label"><span>Búsqueda por Nombre o Apellidos</span></h2>
                 {{ form_row(form.nombre) }}
-                {{ form_row(form.apellido1) }}
-                {{ form_row(form.apellido2) }}
+                {#
+                    {{ form_row(form.apellido1) }}
+                    {{ form_row(form.apellido2) }}
+                #}
+                <div class=".dis_block">
+                    {{ form_row(form.limpiar,{'attr': {'class': 'limpiar_busqueda'}}) }}
+                    <div class="oculto">
+                        {{ form_row(form.submit) }}
+                    </div>
+                </div>
+            </div>
         </div>
-        </div>
-        <div>
+        {#
         <div class="block_search">
                 {{ form_row(form.submit) }}
             <div class=".dis_block">
                 {{ form_row(form.limpiar) }}
             </div>
         </div>
-        </div>   
+        #}  
             
     </div>
+  
+{#
         <div class="derecha" id="contenedor_lista">  
             <div >
-            <div id="cabecera_lista">
-
-            </div>          
+                <div id="cabecera_lista"></div>          
             </div>
         </div>
+    #}
+
+            <div class="contenedor_registro activos derecha" id="contenedor_lista" >  
+                <div>
+                    <div id="cabecera_lista">
+                        <h2 class="text_cabecera">Alumnos del centro</h2>
+                        <div class="opciones btn_2opciones">    
+                            <label class="btn_selected" id="btn_activos" for="activos">Activos</label>
+                            <input type="radio" name="activos" id="activos">
+                            <label for="inactivos" id="btn_inactivos">Inactivos</label>
+                            <input type="radio" name="inactivos" id="inactivos">
+                        </div>
+                        <div id="buscador"> </div>
+                    </div>
+                    <div id="fondo_azul_osc" class="tabla_con_info">
+                        <div id="tableContainer" class="tableContainer inner_table vh45">
+                            <table id="student_active" class="scrollTable lista_color">
+                                <thead class="fixedHeader">
+                                    <tr>
+                                        <th class="w30 left">Apellidos, Nombre</th>
+                                        <th class="w11">Curso</th>
+                                        <th class="w11">Grupo</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="scrollContent">
+                                    {% for entity in entities_active %}
+                                        <tr id="{{ entity.id }}">
+                                            <td class="w30 left">{{ entity.apellido1 ~ " " ~ entity.apellido2 ~ ", " ~ entity.nombre}}</td>
+                                            <td class="w11">{{ entity.curso}}</td>
+                                            {% if entity.grupo != null %}
+                                                <td class="w11">{{ entity.grupo.letra}}</td>
+                                            {% else %}
+                                                <td class="w11">-</td>
+                                            {% endif %}
+                                        </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div> 
+                <div class="select_table_active select_ord_datatable">
+                </div>         
+            </div>
+
+            {# Antiguos alumnos Inactivos #}
+
+            <div class="contenedor_registro derecha  inactivos oculto" id="contenedor_lista" >  
+                <div>
+                    <div id="cabecera_lista">
+                        <h2 class="text_cabecera">Alumnos del centro</h2>
+                        <div class="btn_2opciones">    
+                            <label  id="btn_activos" for="activos">Activos</label>
+                            <input type="radio" name="activos" id="activos">
+                            <label class="btn_selected" for="inactivos" id="btn_inactivos">Inactivos</label>
+                            <input type="radio" name="inactivos" id="inactivos">
+                        </div>
+                        <div id="buscador"> </div>
+                    </div>
+                    <div id="fondo_azul_osc" class="tabla_con_info">
+                        <div id="tableContainer" class="tableContainer inner_table vh45">
+                            <table id="student_no_active" class="scrollTable lista_color">
+                                <thead class="fixedHeader">
+                                    <tr>
+                                        <th class="w25 left">Apellidos, Nombre</th>
+                                        <th class="w11">Último curso</th>
+                                        <th class="w11">Año Académico</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="scrollContent">
+                                {% if entities %}
+                                    {% for entity in entities %}
+                                        <tr id="{{ entity.id }}">
+                                            <td class="w25 left">{{ entity.apellido1 ~ " " ~ entity.apellido2 ~ ", " ~ entity.nombre}}</td>
+                                            <td class="w11">{{ entity.curso}}</td>
+                                            <td class="w11">{{ entity.anyoAcademico}}</td>
+                                        </tr>
+                                    {% endfor %}
+                                {% endif %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div> 
+                <div class="select_table select_ord_datatable">
+                </div>         
+            </div>
   </div>     
 
 {% endblock %}

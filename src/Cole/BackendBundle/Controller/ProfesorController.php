@@ -404,10 +404,16 @@ class ProfesorController extends Controller
     {
         $entity = new Profesor();
         $form = $this->createCreateSearchForm($entity);
-        
+        $em = $this->getDoctrine()->getManager();
+
+        $entities = $em->getRepository('BackendBundle:Profesor')->findByActivo(0);
+        $entities_active = $em->getRepository('BackendBundle:Profesor')->findByActivo(1);
+
         return $this->render('BackendBundle:Profesor:search.html.twig', array(
             'entity' => $entity,
             'form'   => $form->createView(),
+            'entities' => $entities,
+            'entities_active' => $entities_active,
         ));
     }
 

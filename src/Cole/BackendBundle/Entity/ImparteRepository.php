@@ -35,4 +35,14 @@ class ImparteRepository extends EntityRepository
 		->getOneOrNullResult();
 	}
 
+	//Se obtiene los profesores que tienen asignado un curso.
+    //$entities_active = $em->getRepository('BackendBundle:Imparte')->findAsignaciones();
+	
+	public function findAsignaciones()
+	{
+		return $this->getEntityManager()->createQuery(
+		'SELECT i FROM BackendBundle:Imparte i INNER JOIN i.grupo g INNER JOIN g.curso c GROUP BY i.profesor, c.id')
+		->getResult();
+	}
+
 }

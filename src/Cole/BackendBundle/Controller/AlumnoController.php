@@ -467,10 +467,18 @@ class AlumnoController extends Controller
         $entity = new Alumno();
         $form = $this->createCreateSearchForm($entity);
 
+        $em = $this->getDoctrine()->getManager();
+        
+        $curso=$em->getRepository('BackendBundle:Curso')->findUltimoCurso();
+        $entities = $em->getRepository('BackendBundle:Alumno')->findByActivo(0);
+        //Se obtiene los alumnos activos que están promocionados en el curso anterior y aparecen en el expediente.
+        $entities_active = $em->getRepository('BackendBundle:Alumno')->findByActivo(1);
         
         return $this->render('BackendBundle:Alumno:search.html.twig', array(
             'entity' => $entity,
             'form'   => $form->createView(),
+            'entities' => $entities,
+            'entities_active' => $entities_active,
         ));
     }
 
@@ -481,7 +489,7 @@ class AlumnoController extends Controller
         $curso=$em->getRepository('BackendBundle:Curso')->findUltimoCurso();
         $entities = $em->getRepository('BackendBundle:Expediente')->findNoActivos($curso->getCurso(),$curso->getNivel()); 
         //Se obtiene los alumnos activos que están promocionados en el curso anterior y aparecen en el expediente.
-        $entities_active = $em->getRepository('BackendBundle:Expediente')->findByActivo();
+        $entities_active = $em->getRepository('BackendBundle:Expediente')->findByActivo($curso->getCurso(),$curso->getNivel());
 
         return $this->render('BackendBundle:Alumno:search_old.html.twig', array(
             'entities' => $entities,
@@ -493,7 +501,8 @@ class AlumnoController extends Controller
     public function SearchMultipleAction()
     {
         $em = $this->getDoctrine()->getManager();
-        $entities = $em->getRepository('BackendBundle:Expediente')->findByActivo();
+        $curso=$em->getRepository('BackendBundle:Curso')->findUltimoCurso();
+        $entities = $em->getRepository('BackendBundle:Expediente')->findByActivo($curso->getCurso(),$curso->getNivel());
 
         return $this->render('BackendBundle:Alumno:search_multiple.html.twig', array(
             'entities' => $entities,            
@@ -747,14 +756,24 @@ class AlumnoController extends Controller
         if (!$entity) {
             throw $this->createNotFoundException('Unable to find Alumno entity.');
         }
-
+        /*
         $año_academico=$entity->getAnyoAcademico();
         if (!$año_academico) {
             throw $this->createNotFoundException('Unable to find Año Academico in Alumno entity.');
         }
+        */
+        $curso_anterior;
+        // Se obtiene el año académico del curso anterior según el mes actual.
+        if(date("n")>=6){
+            $curso_anterior=(date("Y")-1)." / ".date("Y");
+        }
+        else{
+            $curso_anterior=(date("Y")-2)." / ".(date("Y")-1);
+        }
 
         // Se comprueba si el alumno está promocionado en el expediente para asignar el nuevo curso a matricular.
-        $expediente=$em->getRepository('BackendBundle:Expediente')->findPorAño($entity,$año_academico);
+        // Si tiene registro en el año académico anterior, se le asigna el curso automáticamente,sino debe elegir uno de lalista.
+        $expediente=$em->getRepository('BackendBundle:Expediente')->findPorAño($entity,$curso_anterior);
         $nuevo_curso=null;
         if($expediente){
             $ultimo_curso=$em->getRepository('BackendBundle:Curso')->findCursoByNivel($expediente->getCurso(),$expediente->getNivel());
@@ -840,6 +859,8 @@ class AlumnoController extends Controller
                     'success' => true), 200);
             }
             //Se comprueba que quedan plazas libre en el curso que se quiere matricular.
+            $num_matriculas = $em->getRepository('BackendBundle:Matricula')->findNumPorCurso($curso,$actual);
+            //Se comprueba que quedan plazas libre en el curso que se quiere matricular.
             if($num_matriculas[1]>=(int)$curso->getNumGrupos()*(int)$curso->getRatio()){
                 return new JsonResponse(array(
                     'nombre'=>$entity->getNombre()." ".$entity->getApellido1()." ".$entity->getApellido2(),
@@ -907,7 +928,7 @@ class AlumnoController extends Controller
             $entity->setCurso($curso);
 
             // Se asigna la misma letra del grupo a los alumnos del curso anterior.
-            if($entity->getGrupo() && $alumno->getActivo()){
+            if($entity->getGrupo() && $entity->getActivo()){
                 $letra=$entity->getGrupo()->getLetra();
                 $nuevo_grupo=$em->getRepository('BackendBundle:Grupo')->findGrupoByLetter($entity->getCurso(),$letra);
                 if($nuevo_grupo){

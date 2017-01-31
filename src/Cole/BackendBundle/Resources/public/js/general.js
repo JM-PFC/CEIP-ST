@@ -57,6 +57,23 @@ $(document).ready(function () {
     blocker.src = "/Symfony/web/bundles/backend/sounds/blocker.mp3";
   }
 
+
+  // Se convierte los caracteres con acentos a los mismos sin acentos en la busqueda de DataTable().
+  jQuery.fn.DataTable.ext.type.search.string = function ( data ) {
+    return ! data ?
+        '' :
+        typeof data === 'string' ?
+            data
+                .replace( /\n/g, ' ' )
+                .replace( /[áâàä]/g, 'a' )
+                .replace( /[éêèë]/g, 'e' )
+                .replace( /[íîìï]/g, 'i' )
+                .replace( /[óôòö]/g, 'o' )
+                .replace( /[úûùü]/g, 'u' )
+                .replace( /ç/g, 'c' ) :
+            data;
+  };
+
   /////////////////////////////
   // Métodos para validación //
   /////////////////////////////
@@ -1029,59 +1046,6 @@ $(document).on('keyup',"input[id$='responsable2_dni']",function(e){
       return false;
   });
 
-  $(document).on("submit",".formulario_busqueda_alumno",function(event) {
-    event.preventDefault();
-    form= $(this).closest("form");
-
-    form.find("#contenedor_lista span").remove();
-
-    var val=0;
-    // Se recorre los campos del formulario mirando si estan validados o no.
-    form.find(":input").each(function(){
-      if(!$(this).attr("validated") || !$(this).attr("validated")==false){
-        if($(this).attr("validation")){
-          validation($(this));
-        }
-      }
-    });
-
-    //":input"añade a los input radio,select...
-    form.find(":input").each(function(){
-      if(($(this).attr("validated")=="false")) {
-        //Se muestra el input inválido.
-        $(this).focus();
-        val=1;
-        return false;
-      }       
-    });
-          
-
-    if(val==0){
-      var nombre_profesor= $("#busqueda_alumno_nombre").val();
-      var apellido1_profesor= $("#busqueda_alumno_apellido1").val();
-      var apellido2_profesor= $("#busqueda_alumno_apellido2").val();
-      $.ajax({
-        type: 'POST',
-        url: Routing.generate('comprobar_alumno'),
-        data: {nombre:nombre_profesor, apellido1:apellido1_profesor, apellido2:apellido2_profesor },
-        dataType: 'json',
-        success: function(response) {
-      
-          if(response.data!=null)
-          {
-            div=$("#buscador_alumno").closest("div[id^='tabs-']");
-            $(div).empty();
-            $(div).load(Routing.generate('alumno_edit', {id:response.data}));
-            }
-          else{
-            form.find("#contenedor_lista").empty();
-            form.find("#contenedor_lista").append("<span >No se ha encontrado el alumno</span>");
-            }   
-        } 
-      })
-    }
-  });
-
 
 $(document).on("submit",".formulario_profesor",function(event){
     event.preventDefault();
@@ -1210,58 +1174,7 @@ $(document).on("submit",".formulario_profesor",function(event){
       return false;
   });
 
-  $(document).on("submit",".formulario_busqueda_profesor",function(event) {
-    event.preventDefault();
-    form= $(this).closest("form");
 
-    form.find("#contenedor_lista span").remove();
-
-    var val=0;
-    // Se recorre los campos del formulario mirando si estan validados o no.
-    form.find(":input").each(function(){
-      if(!$(this).attr("validated") || !$(this).attr("validated")==false){
-        if($(this).attr("validation")){
-          validation($(this));
-        }
-      }
-    });
-
-    //":input"añade a los input radio,select...
-    form.find(":input").each(function(){
-      if(($(this).attr("validated")=="false")) {
-        //Se muestra el input inválido.
-        $(this).focus();
-        val=1;
-        return false;
-      }       
-    });
-          
-
-    if(val==0){
-      var nombre_profesor= $("#busqueda_profesor_nombre").val();
-      var apellido1_profesor= $("#busqueda_profesor_apellido1").val();
-      var apellido2_profesor= $("#busqueda_profesor_apellido2").val();
-      $.ajax({
-        type: 'POST',
-        url: Routing.generate('comprobar_profesor'),
-        data: {nombre:nombre_profesor, apellido1:apellido1_profesor, apellido2:apellido2_profesor },
-        dataType: 'json',
-        success: function(response) {
-      
-          if(response.data!=null)
-          {
-            div=$("#buscador_profesor").closest("div[id^='tabs-']");
-            $(div).empty();
-            $(div).load(Routing.generate('profesor_edit', {id:response.data}));
-            }
-          else{
-            form.find("#contenedor_lista").empty();
-            form.find("#contenedor_lista").append("<span >No se ha encontrado el profesor</span>"); 
-          }   
-        } 
-      })
-    }
-  });
 
 
   $(document).on("submit","#padres_nuevo",function(event){
@@ -1528,10 +1441,12 @@ $("#dialog-confirm span").hide();
     form.find("#botones_form button[id$='_restablecer']").prop("disabled",false); 
     
   });
+
+
 /////////////////////////////////
 // Busqueda en los formularios //
 /////////////////////////////////
-
+  
   $(document).on("click","#contenedor_lista td", function(event){ 
     event.preventDefault();
     form= $(this).closest("form");
@@ -1543,30 +1458,158 @@ $("#dialog-confirm span").hide();
     // Se añade un gif para la espera de la carga del contenido actualizado.
     $(div).html('<div class="ajaxload"><img src="/Symfony/web/bundles/backend/images/loading.gif"/></div>');
 
-    $(div).load(Routing.generate(arr[1]+'_edit', {id:$(this).find("a").attr("id")}));
+    $(div).load(Routing.generate(arr[1]+'_edit', {id:$(this).closest("tr").attr("id")}));
   });
 
-  //Cambios en formularios de busqueda
-  $(document).on('change','#busqueda_profesor select',function() {
+  // Se muestra la lista de alumnos o profesores activos.
+  $(document).on('click',"form[id^='busqueda_'] #btn_activos",function(event){
+    event.preventDefault();
     form= $(this).closest("form");
 
-    form.find("#contenedor_lista span").remove();     
-    var curso= form.find("select").val();
+    form.find(".activos").removeClass("oculto");
+    form.find(".inactivos").addClass("oculto");
+
+    //Se restablece el buscador y la lista según la opción marcada en el select(o mostrar todo si no hay opción).
+    form.find("#buscador input").val("");
+    form.find("#buscador input").keyup();
     
-    form.find("#contenedor_lista").load(Routing.generate('profesores_por_curso', {id:curso}));
+    form.find(".block_search input").val("");
+    form.find(".block_search input").keyup();
   });
 
-  $(document).on('change','#busqueda_alumno select',function() {
+  // Se muestra la lista de alumnos o profesores inactivos.
+  $(document).on('click',"form[id^='busqueda_'] #btn_inactivos",function(event){
+    event.preventDefault();
     form= $(this).closest("form");
 
+    form.find(".activos").addClass("oculto");
+    form.find(".inactivos").removeClass("oculto");
+
+    //Se restablece el buscador y la lista según la opción marcada en el select(o mostrar todo si no hay opción).
+    form.find("#buscador input").val("");
+    form.find("#buscador input").keyup();
+
+    form.find(".block_search input").val("");
+    form.find(".block_search input").keyup();
+  });
+  //Búsqueda por curso
+  $(document).on('change','form[id^="busqueda_"] #lista_cursos select',function() {
+    form= $(this).closest("form");
+    select=$(this);
+
     form.find("#contenedor_lista span").remove();     
-    var curso= form.find("select").val();
+
+    curso=$(this).find("option:selected").text().replace("de", "");
+
+    //Se elimina el contenido de la búsqueda si había.
+    form.find(".block_search input").val("");
+    form.find(".block_search input").keyup();
     
-    form.find("#contenedor_lista").load(Routing.generate('alumnos_por_curso', {id:curso}));
+    //Se elimina el contenido del buscador cuando se selecciona un curso para la búsqueda.
+    form.find("#buscador input").val(""); 
+    form.find("#buscador input").keyup(); 
+    
+    //Se define el valor el select correspondiente al último curso .
+    id=1;
+
+    valor=form.find("#lista_cursos select option:selected").val();
+
+    // Se modifica el valor en las dos listas.
+    if(form.find(".activos select option:selected").val()!= form.find(".inactivos select option:selected").val()){
+      form.find("#lista_cursos select").val(valor).change();
+    }
+  
+    form.find(".contenedor_registro").each(function(){
+      // Se selecciona el option del select oculto con z-index para filtrar el curso.
+      if($(this).find("select[class='"+id+"'] option[value='"+curso+"']").length){   
+        // Se selecciona y se muestra con change().
+        $(this).find("select[class='"+id+"']").val(curso).change();
+      }
+      else if(select.find("option:selected").text()=="Todos los cursos" || select.find("option:selected").text()=="Mostrar todo"){
+        $(this).find("select[class='"+id+"']").val("").change();
+      }
+      else{
+        $(this).find("tbody").empty();
+        $(this).find("tbody").append("<tr class='odd no_cursor'><td class='dataTables_empty'>Actualmente no se han asignado "+form.attr("tipo")+" en el curso seleccionado</td></tr>");
+        $(this).find("thead tr th").removeClass("sorting_asc");
+      }
+    });
+
+    //Se muestra el botón de limpiar búsqueda.
+    form.find(".limpiar_busqueda").prop("disabled",false);
   });
 
 
 
+  $(document).on("click",".limpiar_busqueda",function(event) {
+    event.preventDefault();
+    form=$(this).closest("form");
+
+    //Se limpia el contenido de los input con la función limpiar definida anteriormente.
+
+    //Se muestra toda la lista al limpiar el filtro en buscador que esá oculto.
+    form.find("#lista_cursos select").val("0").change();// Se muestra la lista completa.
+    form.find("#lista_cursos select").val("").change();// Se restablece el valor inicial del select. 
+    form.find(".block_search input").val("");// Se elimina el valor del input.
+    form.find(".block_search input").keyup(); // Se elimina la busqueda.
+    $(this).prop("disabled",true);
+  });
+
+
+/*
+  $(document).on("submit",".formulario_busqueda_profesor",function(event) {
+    event.preventDefault();
+    form= $(this).closest("form");
+
+    form.find("#contenedor_lista span").remove();
+
+    var val=0;
+    // Se recorre los campos del formulario mirando si estan validados o no.
+    form.find(":input").each(function(){
+      if(!$(this).attr("validated") || !$(this).attr("validated")==false){
+        if($(this).attr("validation")){
+          validation($(this));
+        }
+      }
+    });
+
+    //":input"añade a los input radio,select...
+    form.find(":input").each(function(){
+      if(($(this).attr("validated")=="false")) {
+        //Se muestra el input inválido.
+        $(this).focus();
+        val=1;
+        return false;
+      }       
+    });
+          
+
+    if(val==0){
+      var nombre_profesor= $("#busqueda_profesor_nombre").val();
+      var apellido1_profesor= $("#busqueda_profesor_apellido1").val();
+      var apellido2_profesor= $("#busqueda_profesor_apellido2").val();
+      $.ajax({
+        type: 'POST',
+        url: Routing.generate('comprobar_profesor'),
+        data: {nombre:nombre_profesor, apellido1:apellido1_profesor, apellido2:apellido2_profesor },
+        dataType: 'json',
+        success: function(response) {
+      
+          if(response.data!=null)
+          {
+            div=$("#buscador_profesor").closest("div[id^='tabs-']");
+            $(div).empty();
+            $(div).load(Routing.generate('profesor_edit', {id:response.data}));
+            }
+          else{
+            form.find("#contenedor_lista").empty();
+            form.find("#contenedor_lista").append("<span >No se ha encontrado el profesor</span>"); 
+          }   
+        } 
+      })
+    }
+  });
+*/
 //////////////////////////////////
 // Formularios de actualización //
 //////////////////////////////////
@@ -6301,7 +6344,13 @@ $(document).on("click","#registro_equipamientos td a",function(event){
   $(document).on('change','#consulta_antiguo_alumno #lista_cursos select',function(event) {
     div=$(this).closest("div[class*='antiguo_alumno']");
     curso=$(this).find("option:selected").text().replace("de", "");
-    id;
+
+    //Se elimina el contenido del buscador cuando se selecciona un curso para la búsqueda.
+    div.find("#buscador input").val(""); 
+    div.find("#buscador input").keyup(); 
+
+    id=1;
+    //Se asigna el select correspondiente al último curso según la tabla mostrada.
     if($(this).parent().attr("class")=="lista_activos"){
       id=1;
     }
@@ -6310,24 +6359,25 @@ $(document).on("click","#registro_equipamientos td a",function(event){
     }
 
     valor=div.find("#lista_cursos select option:selected").val();
+    // Se modifica el valor en las dos listas.
     if($(".lista_activos select option:selected").val()!= $(".lista_inactivos select option:selected").val()){
       $("#consulta_antiguo_alumno #lista_cursos select").val(valor).change();
     }
-    //Se selecciona el option del select oculto con z-index para filtrar el curso.
+    // Se selecciona el option del select oculto con z-index para filtrar el curso.
     if(div.find("select[class='"+id+"'] option[value='"+curso+"']").length){
-      div.find("#buscador").removeClass("oculto");
+      div.find("#buscador input").prop("disabled",false);    
       // Se selecciona y se muestra con change().
       div.find("select[class='"+id+"']").val(curso).change();
     }
     else if($(this).find("option:selected").text()=="Todos los cursos"){
-      div.find("#buscador").removeClass("oculto");
+      div.find("#buscador input").prop("disabled",false);
       div.find("select[class='"+id+"']").val("").change();
     }
     else{
       div.find("tbody").empty();
       div.find("tbody").append("<tr class='odd no_cursor'><td class='dataTables_empty'>Actualmente no existe antiguos alumnos para el curso seleccionado</td></tr>");
       div.find("thead tr th").removeClass("sorting_asc");
-      div.find("#buscador").addClass("oculto");
+      div.find("#buscador input").prop("disabled",true);
     }
     //Se cambia los estilos según el scroll vertical.
     if( div.find('table tbody').get(0).scrollHeight>div.find('table tbody').height()){
@@ -6344,22 +6394,25 @@ $(document).on("click","#registro_equipamientos td a",function(event){
     curso=$(this).find("option:selected").text().replace("de", "");
     valor=div.find("#lista_cursos select option:selected").val();
 
+    //Se elimina el contenido del buscador cuando se selecciona un curso para la búsqueda.
+    div.find("#buscador input").val(""); 
+    div.find("#buscador input").keyup(); 
 
     //Se selecciona el option del select oculto con z-index para filtrar el curso.
     if(div.find("select[class='1'] option[value='"+curso+"']").length){
-      div.find("#buscador").removeClass("oculto");
+      div.find("#buscador input").prop("disabled",false);
       // Se selecciona y se muestra con change().
       div.find("select[class='1']").val(curso).change();
     }
     else if($(this).find("option:selected").text()=="Todos los cursos"){
-      div.find("#buscador").removeClass("oculto");
+      div.find("#buscador input").prop("disabled",false);
       div.find("select[class='1']").val("").change();
     }
     else{
       div.find("tbody").empty();
       div.find("tbody").append("<tr class='odd no_cursor'><td class='dataTables_empty'>Actualmente no existe alumnos para el curso seleccionado</td></tr>");
       div.find("thead tr th").removeClass("sorting_asc");
-      div.find("#buscador").addClass("oculto");
+      div.find("#buscador input").prop("disabled",true);
     }
       //Se cambia los estilos según el scroll vertical.
     if( div.find('table tbody').get(0).scrollHeight>div.find('table tbody').height()){
@@ -6603,7 +6656,7 @@ $(document).on("click","#registro_equipamientos td a",function(event){
 
     var val=0;
     //Se comprueba si la lista de curso tiene un valor seleccionado.
-    if($("#antiguo_alumno_edit #lista_cursos select").val()==null){
+    if( $("#antiguo_alumno_edit #lista_cursos").length>0 && $("#antiguo_alumno_edit #lista_cursos select").val()==null){
       $("#antiguo_alumno_edit #lista_cursos select").attr("validated",false);
       $("#antiguo_alumno_edit #lista_cursos select").addClass("invalid");
       $("#antiguo_alumno_edit #lista_cursos select").after("<span class='mensaje' style='display: none;'>Debe seleccionar un curso</span>");

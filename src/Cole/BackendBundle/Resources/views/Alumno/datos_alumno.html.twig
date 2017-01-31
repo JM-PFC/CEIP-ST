@@ -13,10 +13,12 @@
   <div>
 
     <h3>Responsables:</h3>
-    <p> - {{ entity.responsable1.nombre }}</p> {#Se añade el contenido mediante javascript#}
-    {% if entity.responsable2 %}
-    <p> - {{ entity.responsable2.nombre }}</p> {#Se añade el contenido mediante javascript#}
-    {% endif %}
+    <ul>
+      <li> {{ entity.responsable1.nombre }}</li> {#Se añade el contenido mediante javascript#}
+      {% if entity.responsable2 %}
+      <li> {{ entity.responsable2.nombre }}</li> {#Se añade el contenido mediante javascript#}
+      {% endif %}
+    </ul>
 
     </div>
 {% endfor %}

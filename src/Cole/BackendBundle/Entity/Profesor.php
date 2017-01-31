@@ -180,6 +180,14 @@ class Profesor implements UserInterface, \Serializable
     private $fechaAlta;
 
     /**
+     * @var \DateTime
+     *
+     * @ORM\Column(name="fecha_baja", type="datetime", nullable=true)
+     *
+     */
+    private $fechaBaja;
+    
+    /**
      * @var string
      *
      * @ORM\Column(name="foto", type="string", length=255, nullable=true)
@@ -233,6 +241,14 @@ class Profesor implements UserInterface, \Serializable
      * 
      */
     private $perfilProfesional;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="nivel", type="string", length=10)
+     * @Assert\NotBlank()
+     */
+    private $nivel;
 
     /**
      * @var boolean
@@ -894,5 +910,51 @@ class Profesor implements UserInterface, \Serializable
     public function getReserva()
     {
         return $this->reserva;
+    }
+
+    /**
+     * Set nivel
+     *
+     * @param string $nivel
+     * @return Profesor
+     */
+    public function setNivel($nivel)
+    {
+        $this->nivel = $nivel;
+
+        return $this;
+    }
+
+    /**
+     * Get nivel
+     *
+     * @return string 
+     */
+    public function getNivel()
+    {
+        return $this->nivel;
+    }
+
+    /**
+     * Set fechaBaja
+     *
+     * @param \DateTime $fechaBaja
+     * @return Profesor
+     */
+    public function setFechaBaja($fechaBaja)
+    {
+        $this->fechaBaja = $fechaBaja;
+
+        return $this;
+    }
+
+    /**
+     * Get fechaBaja
+     *
+     * @return \DateTime 
+     */
+    public function getFechaBaja()
+    {
+        return $this->fechaBaja;
     }
 }

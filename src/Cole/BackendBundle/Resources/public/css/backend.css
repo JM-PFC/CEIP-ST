@@ -556,6 +556,10 @@ nav{
 	#rango_horas{
 		margin-left: 5%;
 	}
+	#consulta_antiguo_alumno .btn_2opciones{
+		margin-left: 4%;
+	}
+
 }
 
 /*Contenido*/
@@ -1075,7 +1079,6 @@ margin-top: 10%;
 	clear: right;
 	height: auto;
 	width: 98%;
-	
 }
 .block-one input[type="file"]{
 	width: 100px;
@@ -1273,9 +1276,12 @@ form button{
     width: 100%;
     table-layout: auto;
 }
-#contenedor_lista div table tr{
+#contenedor_lista div table tbody tr{
 	border-bottom: 2px solid #b1cce7;
 	border-top: 2px solid #b1cce7;
+}
+.dataTables_wrapper.no-footer .dataTables_scrollBody{
+	border-bottom: none !important;
 }
 #contenedor_lista div table td{
 	margin: 0 auto;
@@ -1291,11 +1297,8 @@ form button{
 #contenedor_lista div table th{
 	text-align: center;
 	font: 1.2em solid;
-	border-bottom: 2px solid #b1cce7;
-	border-top: 2px solid #b1cce7;
 	padding: 3px ;
 	min-width: 49%;
-
 }
 #lista{
 	height: 86%;
@@ -1307,12 +1310,81 @@ form button{
 }
 #contenedor_lista tr:hover { 
 	background: #b1cce7!important;
-	color: white;
 }
 #contenedor_lista td a { 
     display: block;
     pointer-events: none; 
 }
+.double_column{
+	width: 45%;
+}
+.double_column>h2{
+	margin-top: 2%;
+	margin-bottom: 4%;
+	font-size: 1.7em;
+	font-family: Impact,Haettenschweiler,Franklin Gothic Bold,Charcoal,Helvetica Inserat,Bitstream Vera Sans Bold,Arial Black,sans serif;
+	color: #424242;
+	text-align: center;
+}
+#busqueda_alumno .double_column>div, #busqueda_profesor .double_column>div{
+	width: 100%;
+}
+#busqueda_alumno .block_search, #busqueda_profesor .block_search{
+	margin-left: 4%;
+	margin-top: 5%;
+}
+
+#busqueda_alumno .block_search > div > div > button, #busqueda_profesor .block_search > div > div > button{
+	margin-top: 3%;
+}
+
+#busqueda_alumno .btn_2opciones, #busqueda_profesor  .btn_2opciones{
+	float: right;
+}
+#busqueda_alumno .btn_2opciones label, #busqueda_profesor  .btn_2opciones label{
+	margin: 0;
+	padding: 2px !important;
+	height: 18px;
+	font-size: 14px;
+}
+#busqueda_alumno #tableContainer table, #busqueda_profesor #tableContainer table{
+	border: none;
+}
+#busqueda_alumno .tabla_con_info, #busqueda_profesor .tabla_con_info{
+	width: 100% !important;
+}
+#busqueda_alumno .contenedor_registro, #busqueda_profesor .contenedor_registro{
+	width: 60% !important;
+	margin-left: 0 !important;
+}
+#busqueda_alumno #contenedor_lista div table tr, #busqueda_profesor #contenedor_lista div table tr{
+	border-top: none;
+}
+#busqueda_alumno #contenedor_lista div table tbody tr[class*="odd"], #busqueda_profesor #contenedor_lista div table tbody tr[class*="odd"]{
+	border-bottom: none;
+}
+#busqueda_alumno #contenedor_lista div table tbody tr[role="row"], #busqueda_profesor #contenedor_lista div table tbody tr[role="row"]{
+	border-bottom: 2px solid #b1cce7 !important;
+}
+
+#busqueda_profesor #contenedor_lista, #busqueda_profesor #contenedor_lista{
+	width: 60% !important;
+	margin-left: 0 !important;
+}
+#busqueda_alumno tbody.scrollContent,#busqueda_profesor tbody.scrollContent{
+	height: auto;
+}
+#busqueda_profesor #lista_cursos select{
+	min-width: 150px;
+	text-align: center;
+}
+.dataTables_scrollBody .fixedHeader{
+	display: none;
+}
+
+
+
+
 #registro_asignaturas .simple_column{
 	width: 28%;
 }
@@ -1379,9 +1451,7 @@ form button{
 #contenedor_registro h2{
 	text-align: center;
 	margin-left: 25px;
-
 }
-
 #contenedor_registro div table{
 	margin: 0 auto;
 	border-collapse: collapse;
@@ -1402,7 +1472,6 @@ form button{
     border-bottom: 2px solid #b1cce7;
     cursor: pointer;
 }
-
 #registro_asignaturas #contenedor_registro div table td{
 	font-size: 1.2em;
     min-width: 66%;
@@ -1852,8 +1921,16 @@ select>option[value=""]{
 .short input{
 	text-align: center;
 }
+#rama{
+	margin-left: 4% !important; 
+}
+
 #profesor_nuevo #tab3 div[class="short"] input{
 	padding: 0px !important;
+	text-align: center;
+}
+#profesor_nivel{
+	min-width: 160px;
 	text-align: center;
 }
 .add_registro{
@@ -3280,7 +3357,7 @@ border: 1px solid;
 #registro_horario  #horario_centro span{
 	float: none !important;
 	font-weight: normal !important;
-	font-size: 0.9em;
+	font-size: 0.8em;
 	padding: 1px 5px;
 }
 #registro_horario  .center_button{
@@ -3859,6 +3936,10 @@ tbody.scrollContent tr.alternateRow td {
 	border-top: 1px solid #DDD;
 	padding: 2px 3px 3px 4px
 }
+.scrollContent tr{
+	display: table;
+	width: 100%;
+}
 #tableContainer table .no-footer{
 	border: none !important;
 	border-right: 1px solid #334c73 !important;
@@ -3942,10 +4023,14 @@ tbody.scrollContent tr.alternateRow td {
 	margin: 5px auto;
 	margin-bottom: 10px;
 }
-.contenido_info #seleccionado p{
+.contenido_info #seleccionado ul{
+	padding: 0;
+	margin: 0 0 0 30px;
+}
+.contenido_info #seleccionado li{
 	color: #334c73;
-	padding:0 10%;
-	font-size: 1.2em;
+	padding:0;
+	font-size: 15px;
 	margin: 4px 0;
 	margin-bottom: 5px;
 }
@@ -3978,7 +4063,7 @@ tbody.scrollContent tr.alternateRow td {
 .scrollContent tr td img,.scrollContent tr td img{
 	cursor: pointer; 
 	pointer-events: auto;
-	margin: 0 -5% 0 11%;
+	margin: 0 -3% 0 7%;
 }
 .scrollContent .dataTables_empty{
 	padding-top: 18vh !important;
@@ -4019,20 +4104,25 @@ tbody.scrollContent tr.alternateRow td {
  font-weight: bold;
  border-top: 1px dotted black;
 }
+#asignar_grupos #lista_cursos select option:last-child{
+ font-weight: normal;
+ border-top: none;
+}
 #consulta_antiguo_alumno .btn_2opciones label:not(.btn_selected):hover{
 	background: buttonface;
 }
 .antiguo_alumno #lista_cursos{
-	width: 27%;
+	width: 28%;
 	float: left;
 	margin-top: -4px;
 	height: 29px;
 }
 .antiguo_alumno h2{
-	width: 25%;
+	width: 24%;
 }
 #tableContainer table thead th{
 	border-bottom: 1px solid #111;
+	border-top: none !important;
 }
 #tableContainer table thead th{
 	font-weight: normal;
@@ -4144,7 +4234,12 @@ tbody.scrollContent tr.alternateRow td {
 	width: 85%;
 	background: #b1cce7;
 }
-
+.dataTables_scrollHead{
+	background: #334c73;
+}
+.fixedHeader thead th {
+	border-bottom: 1px solid #111;
+}
 .w11{
 	width: 11% !important;
 	min-width: 11% !important;
@@ -4161,6 +4256,18 @@ tbody.scrollContent tr.alternateRow td {
 	width: 20% !important;
 	min-width: 20% !important;
 }
+.w25{
+	width: 25% !important;
+	min-width: 25% !important;
+}
+.w30{
+	width: 30% !important;
+	min-width: 30% !important;
+}
+.w35{
+	width: 35% !important;
+	min-width: 35% !important;
+}
 #multiples_alumnos table tbody td{
 
    cursor: default;
@@ -4170,6 +4277,7 @@ tbody.scrollContent tr.alternateRow td {
 }
 #multiples_alumnos table thead input{
 	margin-right: 17px;
+	vertical-align:middle;
 }
 #multiples_alumnos td{
 	z-index: 10 !important;
@@ -4177,13 +4285,11 @@ tbody.scrollContent tr.alternateRow td {
 #multiples_alumnos  input{
 	z-index: 100 !important;
 }
-
 #multiples_alumnos .info_en_tabla{
 	height: 40vh !important;
 	border-bottom: 1px solid grey;
 	font-family: "Times New Roman",Arial,sans-serif;
 }
-
 #multiples_alumnos .columna_foto,#multiples_alumnos img{
 	margin-top: 0;
 }
@@ -4206,6 +4312,7 @@ tbody.scrollContent tr.alternateRow td {
 #multiples_alumnos #loading .ajaxload img{
 	margin: 0 36vw !important; 
 }
+
 .child #loading{
 	position: relative;
 	float: left;

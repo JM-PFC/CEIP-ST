@@ -15,10 +15,11 @@ class BusquedaProfesorType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('nombre','text',array('label' => 'Nombre', 'max_length' => 30,'attr' => array('validation' => 'Empty, Words')))
-            ->add('apellido1','text',array('label' => 'Primer Apellido', 'max_length' => 30,'attr' => array('validation' => 'Empty, Words')))
-            ->add('apellido2','text',array('label' => 'Segundo Apellido','max_length' => 30, 'attr' => array('validation' => 'Empty, Words')))
-            ->add('limpiar', 'button', array('attr' => array('class' => 'limpiar')))
+            //->add('nombre','text',array('label' => 'Nombre', 'max_length' => 30,'attr' => array('validation' => 'Empty, Words')))
+            //->add('apellido1','text',array('label' => 'Primer Apellido', 'max_length' => 30,'attr' => array('validation' => 'Empty, Words')))
+            //->add('apellido2','text',array('label' => 'Segundo Apellido','max_length' => 30, 'attr' => array('validation' => 'Empty, Words')))
+            ->add('nombre','text',array('label' => 'Nombre o Apellidos', 'max_length' => 100))
+            ->add('limpiar', 'button', array('label' => 'Limpiar Búsqueda','attr' => array('class' => 'limpiar')))
         ;
     }
     

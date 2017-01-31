@@ -24,7 +24,7 @@ class ExpedienteRepository extends EntityRepository
 		->getOneOrNullResult();
 	}
 
-	public function findByActivo()
+	public function findByActivo($curso,$nivel)
 	{
         if(date("n")>=6){
             $actual=date("Y")." / ".(date("Y")+1);
@@ -33,9 +33,11 @@ class ExpedienteRepository extends EntityRepository
             $actual=(date("Y")-1)." / ".date("Y");
         }
 	return $this->getEntityManager()->createQuery(
-			'SELECT e,a FROM BackendBundle:Expediente e INNER JOIN e.alumno a INNER JOIN a.curso c WHERE a.activo=1  and e.curso=c.curso  and e.nivel=c.nivel and e.anyo_Academico=a.anyoAcademico and Not e.anyo_Academico=:actual')
+			'SELECT e,a FROM BackendBundle:Expediente e INNER JOIN e.alumno a INNER JOIN a.curso c WHERE a.activo=1  and e.curso=c.curso  and e.nivel=c.nivel and e.anyo_Academico=a.anyoAcademico and NOT(e.curso=:curso and e.nivel=:nivel and e.promociona=1) and Not e.anyo_Academico=:actual')
 		->setParameters(array(
-			'actual' => $actual))
+			'actual' => $actual,
+			'curso' => $curso,
+			'nivel' => $nivel))
 		->getResult();
 	}
 
@@ -43,7 +45,7 @@ class ExpedienteRepository extends EntityRepository
 	{
 
 	return $this->getEntityManager()->createQuery(
-			'SELECT a,e FROM BackendBundle:Expediente e INNER JOIN e.alumno a  WHERE a.activo=0  and NOT (e.curso=:curso and e.nivel=:nivel)')
+			'SELECT a,e FROM BackendBundle:Expediente e INNER JOIN e.alumno a  WHERE a.activo=0  and NOT(e.curso=:curso and e.nivel=:nivel and e.promociona=1)')
 		->setParameters(array(
 			'curso' => $curso,
 			'nivel' => $nivel))

@@ -25,10 +25,10 @@
         $("#profesor_nuevo #tab2 div[class='child']>div:nth-child(2) input").each (function(){ 
             $(this).prop("disabled",false);
         });
-        $("#profesor_nuevo #tab3 input").each (function(){ 
+        $("#profesor_nuevo #tab3 input[type='text']").each (function(){ 
             $(this).prop("disabled",true);
         });
-        $("#profesor_nuevo #tab3 div[class='child']>div:nth-child(2) input").each (function(){ 
+        $("#profesor_nuevo #tab3 div[class='child']>div:nth-child(2) input[type='text']").each (function(){ 
             $(this).prop("disabled",false);
         });
 
@@ -194,6 +194,9 @@
             <legend>Perfil Profesional</legend>
             <div class="parent">
             <div class="child">
+                <div id="rama">
+                    {{ form_row(form.nivel) }}
+                </div>
                 <div>
                     <label class="long">Últimas Instituciones donde ha enseñado</label>
                     <label class="medium">Localidad</label>
@@ -254,20 +257,6 @@
                     </div>
                     <div class="short">
                         <input  id="año_profesional16" validation="Numbers"></input>
-                    </div>
-                </div>
-                <div>
-                    <div class="long">
-                        <input id="perfil_profesional17"  validation="Words"></input>
-                    </div>
-                    <div class="medium">
-                        <input id="perfil_profesional18"  validation="Words"></input>
-                    </div>
-                    <div class="medium">
-                        <input  id="perfil_profesional19" validation="Words"></input>
-                    </div>
-                    <div class="short">
-                        <input  id="año_profesional20" validation="Numbers"></input>
                     </div>
                 </div>
             </div> 

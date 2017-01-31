@@ -46,13 +46,6 @@ class Asignatura
     private $tipo;
 
     /**
-     * @var string
-     *
-     * @ORM\Column(name="libro", type="string", length=255, nullable=true)
-     */
-    private $libro;
-
-    /**
     * @ORM\OneToMany(targetEntity="Imparte", mappedBy="asignatura")
     */
     private $imparte;
@@ -117,30 +110,6 @@ class Asignatura
     public function getAbreviatura()
     {
         return $this->abreviatura;
-    }
-
-
-    /**
-     * Set libro
-     *
-     * @param string $libro
-     * @return Asignatura
-     */
-    public function setLibro($libro)
-    {
-        $this->libro = $libro;
-
-        return $this;
-    }
-
-    /**
-     * Get libro
-     *
-     * @return string 
-     */
-    public function getLibro()
-    {
-        return $this->libro;
     }
 
     /**

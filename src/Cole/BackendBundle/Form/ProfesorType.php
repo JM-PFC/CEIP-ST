@@ -32,6 +32,8 @@ class ProfesorType extends AbstractType
             ->add('foto', 'file', array('data_class' => null,'required' => false, 'attr' => array( 'class' => 'archivo','size' => 50, 'mimeTypes' => '.png,.jpg,.jpeg','validation' => 'MimeTypes, MaxSize')))
             ->add('perfilAcademico', 'textarea',array('label' => 'Observaciones:', 'max_length' => 1200, 'attr' => array('type'=>'textarea', 'validation' => 'Words')))
             ->add('perfilProfesional', 'textarea',array('label' => 'Observaciones:', 'max_length' => 1200, 'attr' => array('type'=>'textarea', 'validation' => 'Words')))
+            ->add('nivel', 'choice', array('label' => 'Profesor de:','choices' => array('Infantil' => 'Infantil', 'Primaria'=>'Primaria'), 'empty_data' => null,'empty_value'=> 'Seleccione un nivel','required'=> true, 'multiple'=>false, 'attr' => array('validation' => 'Empty')))
+
             //->add('username')
             //->add('password')
             //->add('salt')
