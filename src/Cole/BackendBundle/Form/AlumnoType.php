@@ -36,7 +36,7 @@ class AlumnoType extends AbstractType
             //->add('numAlum')
             ->add('grupoSangre','choice',array('empty_value'=> 'Seleccione una opción','label' => 'Grupo Sanguíneo', 'choices' => array('A+' => 'A+', 'A-'=>'A-', 'B+'=>'B+', 'B-'=>'B-','AB+'=>'AB+','AB-'=>'AB-','0+'=>'0+','0-'=>'0-'),'required'=> false,'multiple'=>false))
 
-            ->add('observaciones', 'textarea',array('label' => 'Observaciones:', 'max_length' => 500, 'attr' => array('type'=>'textarea', 'validation' => 'LetterInitial')))
+            ->add('observaciones', 'textarea',array('label' => 'Observaciones:', 'max_length' => 500, 'attr' => array('type'=>'textarea')))
             //->add('activo')
             //->add('responsable1')
             //->add('responsable2')

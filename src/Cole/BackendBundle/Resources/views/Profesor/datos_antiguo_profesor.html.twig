@@ -10,16 +10,16 @@
     {% endif %}
   {% endif %}
   </div>
+  <div class="old_t_data">
+    <h3>Nivel:</h3> 
+    <span>{{ entity.nivel }}</span> 
+
+    <h3>Fecha de Alta:</h3>
+    <span>{{ entity.fechaAlta|date("d-m-Y") }}</span> 
+
+    {% if entity.fechaBaja %}
+    <h3>Fecha de Baja:</h3>
+    <span>{{ entity.fechaBaja|date("d-m-Y") }}</span>   
+    {% endif %}
   <div>
-
-    <h3>Grupo impartido:</h3>
-    <ul>
-      <li id="grupo"> </li> {#Se añade el contenido mediante javascript#}
-    </ul>
-    <h3>Asignatura impartida:</h3>
-      <ul>
-      <li id="asignatura"></li> {#Se añade el contenido mediante javascript#}
-    </ul>
-
 {% endfor %}
-

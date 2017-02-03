@@ -33,6 +33,9 @@ class ProfesorType extends AbstractType
             ->add('perfilAcademico', 'textarea',array('label' => 'Observaciones:', 'max_length' => 1200, 'attr' => array('type'=>'textarea', 'validation' => 'Words')))
             ->add('perfilProfesional', 'textarea',array('label' => 'Observaciones:', 'max_length' => 1200, 'attr' => array('type'=>'textarea', 'validation' => 'Words')))
             ->add('nivel', 'choice', array('label' => 'Profesor de:','choices' => array('Infantil' => 'Infantil', 'Primaria'=>'Primaria'), 'empty_data' => null,'empty_value'=> 'Seleccione un nivel','required'=> true, 'multiple'=>false, 'attr' => array('validation' => 'Empty')))
+            ->add('fechaAlta','date',array('label' => 'Fecha Alta', 'max_length' => 10,'widget' => 'single_text','format' => 'dd/MM/yyyy'))
+            ->add('fechaBaja','date',array('label' => 'Fecha Baja', 'max_length' => 10,'widget' => 'single_text','format' => 'dd/MM/yyyy'))
+            ->add('observaciones', 'textarea',array('label' => 'Observaciones:', 'max_length' => 500, 'attr' => array('type'=>'textarea')))
 
             //->add('username')
             //->add('password')

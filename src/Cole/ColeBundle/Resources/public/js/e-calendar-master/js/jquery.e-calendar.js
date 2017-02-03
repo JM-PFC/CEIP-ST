@@ -206,10 +206,10 @@
                     hora=$(this).text().split("| ");
                     $(this).text(hora[0]);
                     if(hora[1]=="Todo el día"){
-                        $(this).append(" |<span>"+ hora[1] +" </span>");
+                        $(this).append("<span>"+ hora[1] +" </span>");
                     }
                     else{
-                        $(this).append(" |<span>"+ hora[1] +" h. </span>");
+                        $(this).append("<span>"+ hora[1] +" h. </span>");
                     }
                 });
             }

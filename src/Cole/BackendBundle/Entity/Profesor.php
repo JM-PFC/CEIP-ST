@@ -251,6 +251,14 @@ class Profesor implements UserInterface, \Serializable
     private $nivel;
 
     /**
+     * @var string
+     *
+     * @ORM\Column(name="observaciones", type="string", length=500, nullable=true)
+     * 
+     */
+    private $observaciones;
+
+    /**
      * @var boolean
      *
      * @ORM\Column(name="activo", type="boolean")
@@ -956,5 +964,28 @@ class Profesor implements UserInterface, \Serializable
     public function getFechaBaja()
     {
         return $this->fechaBaja;
+    }
+
+    /**
+     * Set observaciones
+     *
+     * @param string $observaciones
+     * @return Profesor
+     */
+    public function setObservaciones($observaciones)
+    {
+        $this->observaciones = $observaciones;
+
+        return $this;
+    }
+
+    /**
+     * Get observaciones
+     *
+     * @return string 
+     */
+    public function getObservaciones()
+    {
+        return $this->observaciones;
     }
 }

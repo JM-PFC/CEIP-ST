@@ -11,6 +11,7 @@ profesor_new:
     defaults: { _controller: "BackendBundle:Profesor:new" }
     options:
         expose: true
+
 profesor_create:
     path:     /create
     defaults: { _controller: "BackendBundle:Profesor:create" }
@@ -69,5 +70,35 @@ profesores_por_curso:
 datos_profesor:
     path:     /datos_profesor/{id}
     defaults: { _controller: "BackendBundle:Profesor:DatosProfesor" }
+    options:
+        expose: true
+
+datos_antiguo_profesor:
+    path:     /datos_antiguo_profesor/{id}
+    defaults: { _controller: "BackendBundle:Profesor:DatosAntiguoProfesor" }
+    options:
+        expose: true
+
+search_old_teacher:
+    path:     /profesor/old/search
+    defaults: { _controller: "BackendBundle:Profesor:SearchOld" }
+    options:
+        expose: true
+
+show_baja_profesor:
+    path:     /profesor/bajas
+    defaults: { _controller: "BackendBundle:Profesor:ShowBaja" }
+    options:
+        expose: true
+
+baja_profesor:
+    path:     /profesor/baja
+    defaults: { _controller: "BackendBundle:Profesor:BajaProfesor" }
+    options:
+        expose: true
+
+alta_profesor:
+    path:     /profesor/alta
+    defaults: { _controller: "BackendBundle:Profesor:AltaProfesor" }
     options:
         expose: true

@@ -46,6 +46,12 @@
     $("#alumno_edit select option:selected").each(function(){
       $(this).closest("select").attr("seleccionado", $(this).val());
     });
+
+    //Se asigna la imagen por defecto a la actualizada si no hay imagen actual, para que al actualizar no se muestre el contenedo rvacío.
+    if(!$("#alumno_edit #actual img").attr("src").indexOf("SinFoto") >= 0)
+    {
+      $("#alumno_edit #actualizada img").attr("src",$("#alumno_edit #actual img").attr("src"));
+    }
    </script>
 
 {% endblock %}

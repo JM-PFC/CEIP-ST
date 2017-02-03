@@ -1,0 +1,173 @@
+{% extends '::base.html.twig' %}
+
+{% block head %}{% endblock %}
+{% block stylesheets %}{% endblock %}
+
+{% block javascript %}
+<script>
+
+    // Tabla con la opción de ordenar y búsqueda de antiguos profesores.
+    $('#delete_teacher').DataTable( { //on( 'page.dt',   function () { $(".current").prop("disabled", true); } )
+        //"aLengthMenu": [[25, 50, 100, 250, 500, -1], [25, 50, 100, 250, 500, "All"]],
+                initComplete: function () {
+            this.api().columns().every( function (e) {
+                var column = this;
+                var select = $('<select class="'+e+'"><option value=""></option></select>')
+                    .appendTo('.select_table_delete_teacher')
+                    .on( 'change', function () {
+                        var val = $.fn.dataTable.util.escapeRegex(
+                            $(this).val()
+                        );
+ 
+                        column
+                            .search( val ? '^'+val+'$' : '', true, false )
+                            .draw();
+                    } );
+ 
+                column.data().unique().sort().each( function ( d, j ) {
+                    select.append( '<option value="'+d+'">'+d+'</option>' )
+                } );
+                select.append( '<option value="nada">nada</option>' )
+            } );
+        },
+        "order": [[ 0, "asc" ]],
+        "aLengthMenu": [[-1], [ "All"]],
+        "columnDefs": [ {
+            "targets": 'no-sort',
+            "orderable": false,} ],
+        "language": {
+            "zeroRecords": "Lo siento, no se ha encontrado ningún registro coincidente",
+            "emptyTable": "Actualmente no hay profesores antiguos en el sistema",
+            "lengthMenu": "Mostrar _MENU_ entradas",
+            "loadingRecords": "Cargando...",
+            "processing":     "Processando...",
+            "info": "Página _PAGE_ de _PAGES_",
+            "infoEmpty": "No hay registros disponibles",
+            "infoFiltered": "(filtrado de _MAX_ registros)",
+            "search": "Buscar:",
+            "Next": "Siguiente",
+            "paginate": {
+                "previous": "Anterior",
+                "next": "Siguiente"
+            }
+        }
+    });
+
+
+    $("#baja_profesor .dataTables_info").addClass("oculto");
+    $("#baja_profesor .dataTables_paginate").addClass("oculto");
+    $("#baja_profesor .dataTables_length").addClass("oculto");
+    $('#baja_profesor .contenedor_registro').each (function(){ 
+      $(this).find(".dataTables_filter").appendTo($(this).find('#buscador'));
+    });
+
+    $("#baja_profesor tbody tr td[class='dataTables_empty']").closest("tr").addClass("no_cursor");
+
+
+        // Se comprueba si existe scrol vertical para ajustar el thead
+    if( $('#baja_profesor table tbody').get(0).scrollHeight>$('#baja_profesor table tbody').height()){
+        $("#baja_profesor table thead tr>th:last-child").attr('style', 'width: 10% !important');
+        $("#baja_profesor table thead tr>th:last-child").attr('style', 'padding-rigth: 10px !important');
+        $("#baja_profesor table thead tr>th:nth-child(4)").attr('style', 'padding-left: 30px !important');
+
+    }
+    else{
+        $("#baja_profesor table thead tr>th:last-child").attr('style', 'width: 9% !important');
+    }
+    
+    $(window).resize(function() {
+        //Se comrpueba si está el div con la tabla para cambiar los estilos.
+        if($('#baja_profesor table tbody').length){
+            // Estilo para ventana mayor de 1200.
+            if($(window).width()>1200){
+                if($('#baja_profesor table tbody').get(0).scrollHeight>$('#baja_profesor table tbody').height() ){
+                    $("#baja_profesor table thead tr>th:last-child").attr('style', 'width: 10% !important');
+                    $("#baja_profesor table thead tr>th:last-child").attr('style', 'padding-rigth: 10px !important');
+                    $("#baja_profesor table thead tr>th:nth-child(4)").attr('style', 'padding-left: 30px !important');
+                }
+                else{
+                    $("#baja_profesor table thead tr>th:last-child").attr('style', 'width: 9% !important');
+                }
+            }// Estilo para ventana menor de 1200.
+            else{
+                if($('#baja_profesor table tbody').get(0).scrollHeight>$('#baja_profesor table tbody').height() ){
+                    $("#baja_profesor table thead tr>th:last-child").attr('style', 'width: 10% !important');
+                    $("#baja_profesor table thead tr>th:last-child").attr('style', 'padding-rigth: 10px !important');
+                    $("#baja_profesor table thead tr>th:nth-child(4)").attr('style', 'padding-left: 10px !important');
+                }
+                else{
+                    $("#baja_profesor table thead tr>th:last-child").attr('style', 'width: 9% !important');
+                }
+            }
+        }
+    });
+
+</script>
+
+{% endblock %}
+
+{% block body -%}
+    <div id="baja_profesor" class="tabla_con_seleccion">
+        <div class="parent_no_form">
+        <div class="child">
+            <div class="contenedor_registro" >  
+                <div>
+                    <div id="cabecera_lista">
+                        <div id="lista_cursos">
+                        </div>
+                        <h2 class="text_cabecera">Baja de Profesores</h2>
+                        <div id="buscador"> </div>
+                    </div>
+                    <div id="fondo_azul_osc" class="tabla_con_info">
+                        <div id="tableContainer" class="tableContainer inner_table vh45">
+                            <table id="delete_teacher" class="scrollTable lista_color">
+                                <thead class="fixedHeader">
+                                    <tr>
+                                        <th class="w11">Dni</th>
+                                        <th class="w25 left">Nombre y Apellidos</th>
+                                        <th class="w11">Nivel</th>
+                                        <th class="w11">Fecha Alta</th>
+                                        <th class=" w11 no-sort">Acción</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="scrollContent">
+                                    {% for entity in entities %}
+                                        <tr id="{{entity.id}}">
+                                            <td class="w11">{{ entity.dni}}</td>
+                                            <td class="w25 left">{{ entity.nombre ~ " " ~ entity.apellido1 ~ " " ~ entity.apellido2}}</td>
+                                            <td class="w11">{{ entity.nivel}}</td>
+                                            <td class="w11">{{ entity.fechaAlta|date("d-m-Y")}}</td>
+                                            <td class="w11">
+                                                <input type="checkbox" name="checkbox-{{entity.id}}" id="checkbox-{{entity.id}}">
+                                                <button id="{{entity.id}}">Dar Baja</button>
+                                            </td>
+                                        </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                        <div id="loading"></div>
+                    </div>
+                    <div class="info_en_tabla">
+                        <div class="cabecera_info">
+                            Datos del Profesor
+                        </div>
+                        <div class="contenido_info">
+                            <div id="sin_seleccionar">
+                                <p>Para ver detalles seleccione un profesor</p>
+                            </div>
+                            <div id="seleccionado" class="oculto"></div>
+                        </div>             
+                    </div>
+                    <div id="enviar_select">
+                        <button disabled="disabled" >Dar Baja la selección</button>
+                    </div>
+                </div> 
+                <div class="select_table_delete_teacher select_ord_datatable">
+                </div>         
+            </div>
+
+        </div>
+        </div>
+    </div>
+    {% endblock %}

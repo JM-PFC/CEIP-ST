@@ -2,90 +2,13 @@
 {% block javascript %}
   {{ parent() }}
 
-<script>
-setTimeout(function(){ 
-        
-  h_secretaria={{h_secretaria|json_encode()|raw}};
-  h_direccion={{h_direccion|json_encode()|raw}};
-  h_estudios={{h_estudios|json_encode()|raw}};
-
-  function reemplazarDatos(array) {
-    array=array.replace("L","Lunes");
-    array=array.replace("M","Martes");
-    array=array.replace("X","Miércoles");
-    array=array.replace("J","Jueves");
-    array=array.replace("V","Viernes");
-    array=array.replace(/,/g," | ");
-    array=array.replace("-"," a ");
-    return array;
-  }
-
-  function mostrarContenido(horario,div) {
-    array=horario.split("|");
-
-    if(array[0].indexOf("-")>0){
-      array[0]=reemplazarDatos(array[0]);
-      $(div).append('<span class="dias">De '+array[0]+'</span');
-    }
-    else{
-      array[0]=reemplazarDatos(array[0]);
-      $(div).append('<span class="dias">'+array[0]+'</span');
-    }
-
-    if(array[1].indexOf("/")>0){
-      array[1]=array[1].replace("/","  /  ");
-      array[1]=array[1].replace(/-/g,"h. - ");
-      $(div).append('<span class="horas">'+array[1]+'</span');
-    }
-    else{
-      array[1]=array[1].replace("-"," - ");
-      $(div).append('<span class="horas">'+array[1]+'</span');
-    }
-  }
-
-  if(h_secretaria!=""){
-    if(h_secretaria.indexOf("*")>0){
-      arr=h_secretaria.split("*");
-      for (var i = 0; i<arr.length; i++) {
-        mostrarContenido(arr[i],$(".main .aside_columna #cont_secretaria"));
-      }
-    }
-    else{
-      mostrarContenido(h_secretaria,$(".main .aside_columna #cont_secretaria"));
-    }
-  }
-
-
-  if(h_direccion!=""){
-    if(h_direccion.indexOf("*")>0){
-      arr=h_direccion.split("*");
-      for (var i = 0; i<arr.length; i++) {
-        mostrarContenido(arr[i],$(".main .aside_columna #cont_direccion"));
-      }
-    }
-    else{
-      mostrarContenido(h_direccion,$(".main .aside_columna #cont_direccion"));
-    }
-  }
-
-  if(h_estudios!=""){
-    if(h_estudios.indexOf("*")>0){
-      arr=h_estudios.split("*");
-      for (var i = 0; i<arr.length; i++) {
-        mostrarContenido(arr[i],$(".main .aside_columna #cont_estudios"));
-      }
-    }
-    else{
-      mostrarContenido(h_estudios,$(".main .aside_columna #cont_estudios"));
-    }
-  }
-},100);
-</script>
 {% endblock %}
 
 {% block main %}
         <section class="contenido">
-            {% block contenido %}{{render (controller('ColeBundle:Noticias:NoticiasRecientes'))}}{% endblock %}
+            {% block contenido %}
+              {{render (controller('ColeBundle:Noticias:NoticiasRecientes'))}}
+            {% endblock %}
         </section>
 
         <aside>
@@ -94,20 +17,8 @@ setTimeout(function(){
               <div id="calendar"></div>
             </article>
         {% block aside %}
-        {% if h_secretaria != null or h_direccion != null or h_estudios != null %}
-            <article class="aside_columna">
-                <h3>Horarios de Atención</h3>
-                {% if h_secretaria != null %}
-                  <p id="cont_secretaria"><strong>Secretaría:</strong></p>
-                {% endif %}
-                {% if h_direccion != null %}
-                  <p id="cont_direccion"><strong>Dirección:</strong></p>
-                {% endif %}
-                {% if h_estudios != null %}
-                  <p id="cont_estudios"><strong>Jefatura de Estudios:</strong></p>
-                {% endif %}
-            </article>
-        {% endif %}
+          {{render (controller('ColeBundle:Cole:HorariosAtencion'))}}
+
             <article class="aside_columna">
                 <h3>Sobre nosotros</h3>
                 <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Eveniet esse, provident architecto dolores odit eius repellendus ex, aut voluptate natus, in officiis! Odio labore, earum, excepturi quod temporibus voluptatem provident. ...</p>

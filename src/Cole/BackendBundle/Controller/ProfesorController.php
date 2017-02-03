@@ -7,6 +7,9 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\JsonResponse;
 
 use Cole\BackendBundle\Entity\Profesor;
+use Cole\BackendBundle\Entity\Reserva;
+use Cole\BackendBundle\Entity\Imparte;
+use Cole\BackendBundle\Entity\Grupo;
 use Cole\BackendBundle\Form\ProfesorType;
 use Cole\BackendBundle\Form\BusquedaProfesorType;
 
@@ -417,6 +420,29 @@ class ProfesorController extends Controller
         ));
     }
 
+    public function SearchOldAction()
+    {
+        $em = $this->getDoctrine()->getManager();
+
+        $entities = $em->getRepository('BackendBundle:Profesor')->findByActivo(0);
+        $entities_active = $em->getRepository('BackendBundle:Profesor')->findByActivo(1);
+
+        return $this->render('BackendBundle:Profesor:search_old.html.twig', array(
+            'entities' => $entities,
+            'entities_active' => $entities_active
+        ));
+    }
+    public function ShowBajaAction()
+    {
+        $em = $this->getDoctrine()->getManager();
+
+        $entities = $em->getRepository('BackendBundle:Profesor')->findByActivo(1);
+
+        return $this->render('BackendBundle:Profesor:show_bajas.html.twig', array(
+            'entities' => $entities,
+        ));
+    }
+
 
     public function ComprobarProfesorAction()
     {
@@ -483,5 +509,76 @@ class ProfesorController extends Controller
         return $this->render('BackendBundle:Profesor:datos_profesor.html.twig', array(
             'entity' => $entity,));
     }
+
+    public function DatosAntiguoProfesorAction($id)
+    {
+        $em = $this->getDoctrine()->getManager();
+        $entity = $em->getRepository('BackendBundle:Profesor')->findById($id);
+        return $this->render('BackendBundle:Profesor:datos_antiguo_profesor.html.twig', array(
+            'entity' => $entity,));
+    }
+
+    public function AltaProfesorAction()
+    {
+        $profesores=$this->get('request')->request->get('array');
+
+        $em = $this->getDoctrine()->getManager();
+
+        foreach ($profesores as $profesor ) {
+            $entity = $em->getRepository('BackendBundle:Profesor')->find($profesor);
+
+            if (!$entity) {
+                throw $this->createNotFoundException('Unable to find Profesor entity.');
+            }
+
+            $contenido=$entity->getObservaciones();
+            $contenido=$contenido."\n- Alta del antiguo profesor  |  Alta anterior: ".$entity->getFechaAlta()->format("d-m-Y")
+            ."      Baja anterior: ".$entity->getFechaBaja()->format("d-m-Y");
+            $entity->setObservaciones($contenido);
+            $entity->setFechaBaja(null);
+            $entity->setFechaAlta(new \DateTime("now"));
+            $entity->setActivo(true);
+
+            $em->persist($entity);                 
+            $em->flush();
+        }
+        return new JsonResponse(array('message' => 'Success!','success' => true), 200);
+    }
+
+    public function BajaProfesorAction()
+    {
+        $profesores=$this->get('request')->request->get('array');
+
+        $em = $this->getDoctrine()->getManager();
+
+        foreach ($profesores as $profesor ) {
+            $entity = $em->getRepository('BackendBundle:Profesor')->find($profesor);
+
+            if (!$entity) {
+                throw $this->createNotFoundException('Unable to find Profesor entity.');
+            }
+
+            $query = $em->createQuery('DELETE BackendBundle:Imparte i WHERE i.profesor = :Id')->setParameter("Id", $entity->getId());
+            $query->execute();
+
+            $query = $em->createQuery('DELETE BackendBundle:Reserva r WHERE r.profesor = :Id')->setParameter("Id", $entity->getId());
+            $query->execute();
+
+            $grupo = $em->getRepository('BackendBundle:Grupo')->findOneByProfesor($entity->getId());
+            if ($grupo) {
+                $grupo->setProfesor(null);
+                $em->persist($grupo);  
+            }
+
+            $entity->setFechaBaja(new \DateTime("now"));
+            $entity->setActivo(false);
+
+            $em->persist($entity);                 
+            $em->flush();
+        }
+        return new JsonResponse(array('message' => 'Success!','success' => true), 200);
+    }
+
+
 
 }

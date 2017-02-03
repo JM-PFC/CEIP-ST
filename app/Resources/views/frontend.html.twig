@@ -29,7 +29,18 @@
         type: 'POST',
         url: Routing.generate('datos_footer'),
         success: function(response){
+            //Se Asigna los datos del pie de página.
             $("#datos_centro").text(response.nombre+" - "+response.direccion+" - "+response.cp+" "+response.localidad+ " - "+response.telefono);
+
+            //Si hay curso asignado se muestra debajo del menú.
+            if(response.inicio==-1){
+                $("#curso").remove();
+            }
+            else{
+                $("#no_curso").remove();
+                $("#año_inicio").append(response.inicio);
+                $("#año_fin").append(response.fin);
+            }
         }
     })
     </script>
@@ -116,20 +127,19 @@
                                     <li><a href="#"> Convivencia </a></li>
                                     <li><a href="#"> Recicla</a></li>
                                     <li><a href="#"> Actuación Pedagógica</a></li>
-                                    <li><a href="#"> Proyecto Educativo </a></li>
-                                    <li><a href="#"> Proyecto Educativo </a></li>
                                 </ul>
                             </li>
                         </ul>
                     </li>
                     {#<li class="boton_amarillo"><a href="{{path('pagina_estatica', {'pagina':'noticias'})}}"> Noticias </a>#}
                     <li class="boton_amarillo"><a href="{{path('noticias')}}"> Noticias </a>
-
+                        {#
                         <ul class="submenu">
                             <li><a href="#"> General</a></li>
                             <li><a href="#"> Infantil</a></li>
                             <li><a href="#"> Primaria</a></li>
                         </ul>
+                        #}
                     </li>
                     <li class="boton_rojo"><a href="{{path('pagina_estatica', {'pagina':'otros-servicios'})}}"> Servicios </a>
                         <ul class="submenu">
@@ -141,7 +151,6 @@
                     <li class="boton_verde"><a href="{{path('pagina_estatica', {'pagina':'oficina-virtual'})}}"> Oficina Virtual </a>
                         <ul class="submenu">
                             <li><a href="#"> Contacto y Horarios</a></li>
-                            <li><a href="#"> Petición de Instalaciones</a></li>
                             <li><a href="#"> Calendarios</a></li>
                             <li><a href="#"> Vuelta al Cole (año)</a></li>
                             <li><a href="#"> Escolarización (año)</a></li>
@@ -159,10 +168,13 @@
                 <div class="migas ">
                     <span class="no-seleccion">
                         {% block migas %}
-                            {% if inicio.inicioCurso|date('Y') == "-1" %} 
-                                Bienvenidos a nuestra web. 
-                            {% else %}
-                                Bienvenidos a nuestra web - Curso escolar <span id="año_inicio"> {{ inicio.inicioCurso|date('Y') }} </span>/<span id="año_fin"> {{ fin.finCurso|date('Y') }}</span>
+                            <div id="no_curso">Bienvenidos a nuestra web. </div>
+                            <div id="curso">Curso escolar 
+                                <span id="año_inicio"></span>
+                                /
+                                <span id="año_fin"></span>
+                            </div>
+   
                             {#
                             {% if 'now'|date("m") =="8" %}
                                 Bienvenidos al curso escolar {{ "now" | localizeddate('none', 'none', 'none',none , "Y") | capitalize}}/{{ "now+1year" | localizeddate('none', 'none', 'none',none , "Y") | capitalize}}.
@@ -170,7 +182,6 @@
      
                                 Bienvenidos al curso escolar {{ "now-1year" | localizeddate('none', 'none', 'none',none , "Y") | capitalize}}/{{ "now" | localizeddate('none', 'none', 'none',none , "Y") | capitalize}}.
                             #}
-                        {% endif %}
                         {% endblock %}
                     </span>
                     <span class="no-seleccion"> {{ "now" | localizeddate('none', 'none', 'none',none , "cccc, d 'de' MMMM 'de' Y") | capitalize}}</span> 
@@ -206,7 +217,15 @@
                             <span class="icon_facebook icono"></span>
                         </h2>
                         <div class="content">
-                            <div class="view view-clone-of-tweets view-id-clone_of_tweets view-display-id-block_1 view-dom-id-5887fdeaf2adb317258c9c68782d7fd6">
+                            {#Contenido con la info de facebook#}
+                            <div class="fb-page" 
+                                data-href="https://www.facebook.com/mariateresa.leon.35/"
+                                data-width="380"
+                                height="219" 
+                                data-hide-cover="false"
+                                data-adapt-container-width="true"
+                                data-show-facepile="true" 
+                                data-show-posts="false">
                             </div>
                         </div>
                     </div> 
@@ -218,12 +237,17 @@
                             <span class="icon_twitter icono"></span>
                         </h2>
                         <div class="content">
-                            <div class="view view-clone-of-tweets view-id-clone_of_tweets view-display-id-block_1 view-dom-id-5887fdeaf2adb317258c9c68782d7fd6">
-                            </div>
+                            {#Contenido con la info de twiter#}
+                            <a class = "twitter-timeline"
+                                data-height="219"
+                                data-chrome="nofooter,noheader"
+                                Href = "https://twitter.com/steresaleon">
+                            </a>
                         </div>
                     </div>
                 </div>
                 </div>
+            </div>
             </div>
 
             <div class="footer_wrapper">
@@ -234,4 +258,30 @@
                 <a href="#">Sobre nosotros</a>
             </div>
         </footer>
+
+        {# Plugins para insercción de facebook #}
+<script>(function(d, s, id) {
+  var js, fjs = d.getElementsByTagName(s)[0];
+  if (d.getElementById(id)) return;
+  js = d.createElement(s); js.id = id;
+  js.src = "//connect.facebook.net/es_ES/sdk.js#xfbml=1&version=v2.8";
+  fjs.parentNode.insertBefore(js, fjs);
+}(document, 'script', 'facebook-jssdk'));</script>
+
+{# Plugins para insercción de Twiter #}
+<script>window.twttr = (function(d, s, id) {
+  var js, fjs = d.getElementsByTagName(s)[0],
+    t = window.twttr || {};
+  if (d.getElementById(id)) return t;
+  js = d.createElement(s);
+  js.id = id;
+  js.src = "https://platform.twitter.com/widgets.js";
+  fjs.parentNode.insertBefore(js, fjs);
+
+  t._e = [];
+  t.ready = function(f) {
+    t._e.push(f);
+  };
+  return t;
+}(document, "script", "twitter-wjs"));</script>
 {% endblock %}

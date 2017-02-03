@@ -150,6 +150,9 @@ $(document).ready(function () {
     $(".calendar .c-event-list .description").each (function(){ 
       $(this).attr("style","display: none;");
     });
+
+    $("#calendar .c-event").attr("title","Pulse para ver eventos del día.");
+    $("#calendar .c-event-list .title").attr("title","Pulse para ver descripción.");
   }, 300); 
  
   $(document).on('click',".calendar .c-event-list .title",function(event){ 
@@ -166,7 +169,14 @@ $(document).ready(function () {
       $(this).find("div").addClass("arrow-right");
     }
   });
+  // Efecto cambio color de iconos de eventos.
+  $(document).on("mouseenter",".calendar .c-event-list .title", function () {
+    $(this).find("span").css("background", "#fa8258");
+  });
 
+  $(document).on("mouseleave",".calendar .c-event-list .title", function () {
+    $(this).find("span").css("background", "#5cb85c");
+  });
   //Ajustes de estilo en los días con evento en el calendario.
   $(document).on('click',"#calendar .c-day",function(event){ 
     event.preventDefault();

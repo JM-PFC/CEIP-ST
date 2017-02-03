@@ -11,19 +11,7 @@ class DefaultController extends Controller
     {
         $em = $this->getDoctrine()->getManager();
 
-        $inicio =$em->getRepository('BackendBundle:Centro')->findInicioCurso();
-        $fin =$em->getRepository('BackendBundle:Centro')->findFinCurso();
-
-        $centro =$em->getRepository('BackendBundle:Centro')->findCentro();
-
-
-        return $this->render('ColeBundle:Default:index.html.twig', array(
-            'inicio' => $inicio,
-            'fin' => $fin,
-            'h_secretaria'=> $centro->getHSecretaria(),
-            'h_direccion'=> $centro->getHDireccion(),
-            'h_estudios'=> $centro->getHEstudios(),
-            ));
+        return $this->render('ColeBundle:Default:index.html.twig');
     }
 
     public function datosFooterAction()
@@ -38,6 +26,9 @@ class DefaultController extends Controller
             'localidad'=> $centro->getLocalidad(),
             'cp'=> $centro->getCp(),
             'telefono'=> $centro->getTelefono(),
+            //Devuelvo el año de inicio y fin del curso para mostrar el curso actual debajo del menú.
+            'inicio' => $centro->getInicioCurso()->format('Y'),
+            'fin' => $centro->getFinCurso()->format('Y'),
             'success' => true), 200);
     }
 }

@@ -1725,11 +1725,11 @@ $("#dialog-confirm span").hide();
                   sticker: false,
                   labels:{close: "Cerrar"}
                 },
-                stack: left_Stack,
+                stack: right_Stack,
                 animate: {
                   animate: true,
-                  in_class: "fadeInLeft",
-                  out_class: "fadeOutLeft",
+                  in_class: "fadeInRight",
+                  out_class: "fadeOutRight",
                 }
               });
             }
@@ -1841,8 +1841,8 @@ $("#dialog-confirm span").hide();
         }
       });
     
-    // Se comprueba en el caso del formulario alumno_edit si se ha modificado el valor inicial del textare.
-    if(form.attr("id")=="alumno_edit" || form.attr("id")=="antiguo_alumno_edit" || form.attr("id")=="eventos_edit"){
+    // Se comprueba si el formulario tiene textarea y si se ha modificado el valor inicial.
+    if(form.find("textarea")){
       if(form.find("textarea").val()!=form.find("textarea").attr("value")){
         form.find("textarea").addClass("modified");
         form.find("button[id$='_submit']").prop("disabled",false);
@@ -2090,11 +2090,11 @@ $("#dialog-confirm span").hide();
                   sticker: false,
                   labels:{close: "Cerrar"}
                 },
-                stack: left_Stack,
+                stack: right_Stack,
                 animate: {
                   animate: true,
-                  in_class: "fadeInLeft",
-                  out_class: "fadeOutLeft",
+                  in_class: "fadeInRight",
+                  out_class: "fadeOutRight",
                 }
               });
             }
@@ -2241,7 +2241,12 @@ $(document).on("blur","input[id='edit_profesor_dni']",function() {
   //Se muestra la misma foto que tiene inicialmente cuando se quiere añadir otra.
   $(document).on("click","#icono_añadir",function() {
     form= $(this).closest("form");
-    form.find("#actualizada img").attr("src",form.find("#actual img").attr("src"));
+    if(!form.find("#actual").hasClass('oculto')){
+      form.find("#actualizada img").attr("src",form.find("#actual img").attr("src"));
+    }
+    else if(!form.find("#por_defecto").hasClass('oculto')){
+      form.find("#actualizada img").attr("src",form.find("#por_defecto img").attr("src"));
+    }
   });
 
   //Se comprueba que es válida la foto actualizada del usuario existente.
@@ -6435,24 +6440,25 @@ $(document).on("click","#registro_equipamientos td a",function(event){
     $(div).load(Routing.generate('alumno_old_edit', {id:$(this).closest("tr").attr("id")}));
   });
 
-  // Se habilita/deshabilita el botón enviar selecionados.
-  $(document).on("change","#multiples_alumnos input:checkbox", function(event){ 
+  // Se habilita/deshabilita el botón enviar selecionados del contenedor correspodiente.
+  $(document).on("change",".dataTable input:checkbox", function(event){ 
+    cont=$(this).closest(".contenedor_registro");
     event.preventDefault();
     valor=0;
-    $("#multiples_alumnos td input:checkbox").each (function(){ 
+    cont.find("td input:checkbox").each (function(){ 
       // Se comprueba si hay algún registro seleccionado
       if( $(this).is(':checked') ) {
-        $("#multiples_alumnos #enviar_select button").prop("disabled", false);
+        cont.find(" #enviar_select button").prop("disabled", false);
         valor=1;
         return false;
       }
     });
     if(!valor){
-      $("#multiples_alumnos #enviar_select button").prop("disabled", true);
+      cont.find(" #enviar_select button").prop("disabled", true);
     }
   });
 
-  //Se selecciona el checkbox del alumno.
+  //Se selecciona el checkbox del alumno si se da al input, y se registra la matrícula si se da al botón.
   $(document).on("click","#multiples_alumnos td", function(event){ 
     event.preventDefault();
     input=$(this).closest("tr").find("td input");
@@ -6528,6 +6534,29 @@ $(document).on("click","#registro_equipamientos td a",function(event){
             data: {alumno:alumno},
             dataType: 'json',
             success: function(response) {
+
+            //Se muestra aviso si se pulsa en enviar uno sólo (input no checked)
+            if(!input.is(':checked') ){
+              exito.play();
+
+              new PNotify({
+                text:"Matrícula registrada.",
+                addclass: "custom",
+                type: "success",
+                shadow: true,
+                hide: true,
+                buttons: {
+                  sticker: false,
+                  labels:{close: "Cerrar"}
+                },
+                stack: right_Stack,
+                animate: {
+                  animate: true,
+                  in_class: "fadeInRight",
+                  out_class: "fadeOutRight",
+                }
+              }); 
+            }
               // Se actualiza la lista de antiguos alumnos y la pestaña de asignar grupo.
               $("#alumnos_antiguo").update_tab();
               $("#asignar_grupo").update_tab();
@@ -6604,9 +6633,14 @@ $(document).on("click","#registro_equipamientos td a",function(event){
           matriculas_registradas= parseInt(num_matriculas) - parseInt(num_matriculas_inicial);
           if(matriculas_registradas){
             exito.play();
-              
+            if(contador>1){
+              texto=matriculas_registradas+"/"+contador+" matrículas registradas.";
+            }
+            else if(contador==1 && matriculas_registradas==1 ){
+              texto="Matrícula registrada.";
+            }
             new PNotify({
-              text:matriculas_registradas+"/"+contador+" matriculas registradas",
+              text:texto,
               addclass: "custom",
               type: "success",
               shadow: true,
@@ -6622,6 +6656,27 @@ $(document).on("click","#registro_equipamientos td a",function(event){
                 out_class: "fadeOutRight",
               }
             }); 
+          }
+          else{
+            errorPNotify.play();
+
+             new PNotify({
+              text:'No se ha registrado ninguna matrícula',
+              addclass: "custom",
+              type: "error",
+              shadow: true,
+              hide: true,
+              buttons: {
+              sticker: false,
+              labels:{close: "Cerrar"}
+              },
+              stack: right_Stack,
+              animate: {
+                animate: true,
+                in_class: "fadeInRight",
+                out_class: "fadeOutRight",
+              }
+            });
           }
         }
       })
@@ -6865,6 +6920,328 @@ $(document).on("click","#registro_equipamientos td a",function(event){
           $(this).prop("checked",false);
       });
     }
+  });
+
+  ///////////////////////////////////////////
+  //           Antiguos profesores         //
+  ///////////////////////////////////////////
+
+  $(document).on('click',"#consulta_antiguo_profesor #old_teacher tbody td",function(event){
+    event.preventDefault();
+    input=$(this).closest("tr").find("td:last-child input");
+    //Se desactiva seleccionar cuando hay selección en la otra tabla.
+    if(input.is(":disabled")){
+      return false;
+    }
+
+    if(!$(event.target).is('input')){
+
+      if(input.is(':checked') ){
+        input.prop("checked",false);
+      }
+      else{
+        input.prop("checked",true);
+      }
+    }
+    else{
+      //Retardo para poder mostar el input seleccionado.
+      setTimeout(function(){
+        if(input.is(':checked') ){
+          input.prop("checked",false);
+        }
+        else{
+          input.prop("checked",true);
+        }
+      }, 5);
+    }
+        // Se habilita/deshabilita el botón enviar selecionados.
+        if( $("#consulta_antiguo_profesor #old_teacher td input").is(':checked') ) {
+          $("#consulta_antiguo_profesor #baja").addClass("oculto");
+          $("#consulta_antiguo_profesor .baja_active").removeClass("oculto");
+          $("#consulta_antiguo_profesor #alta").addClass("oculto");
+          $("#consulta_antiguo_profesor .alta_limpiar").removeClass("oculto");
+          $("#consulta_antiguo_profesor #old_teacher_no_active tbody td input").each (function(){ 
+            $(this).prop("disabled",true);
+          });
+        } 
+        else {
+          $("#consulta_antiguo_profesor #baja").addClass("oculto");
+          $("#consulta_antiguo_profesor .baja_disable").removeClass("oculto");
+          $("#consulta_antiguo_profesor #alta").addClass("oculto");
+          $("#consulta_antiguo_profesor .alta_disable").removeClass("oculto");
+          $("#consulta_antiguo_profesor #old_teacher_no_active tbody td input").each (function(){ 
+            $(this).prop("disabled",false);
+          });
+        }
+  });
+
+
+  $(document).on('click',"#consulta_antiguo_profesor #old_teacher_no_active tbody td",function(event){
+    event.preventDefault();
+    input=$(this).closest("tr").find("td:first-child input");
+    
+    //Se desactiva seleccionar cuando hay selección en la otra tabla.
+    if(input.is(":disabled")){
+      return false;
+    }
+
+    if(!$(event.target).is('input')){
+
+      if(input.is(':checked') ){
+        input.prop("checked",false);
+      }
+      else{
+        input.prop("checked",true);
+      }
+    }
+    else{
+      //Retardo para poder mostar el input seleccionado.
+      setTimeout(function(){
+        if(input.is(':checked') ){
+          input.prop("checked",false);
+        }
+        else{
+          input.prop("checked",true);
+        }
+      }, 5);
+    }
+    // Se habilita/deshabilita el botón enviar selecionados.
+    if( $("#consulta_antiguo_profesor #old_teacher_no_active td input").is(':checked') ) {
+          $("#consulta_antiguo_profesor #alta").addClass("oculto");
+          $("#consulta_antiguo_profesor .alta_active").removeClass("oculto");
+          $("#consulta_antiguo_profesor #baja").addClass("oculto");
+          $("#consulta_antiguo_profesor .baja_limpiar").removeClass("oculto");
+      $("#consulta_antiguo_profesor #old_teacher tbody td input").each (function(){ 
+        $(this).prop("disabled",true);
+      });
+    } 
+    else {
+          $("#consulta_antiguo_profesor #alta").addClass("oculto");
+          $("#consulta_antiguo_profesor .alta_disable").removeClass("oculto");
+          $("#consulta_antiguo_profesor #baja").addClass("oculto");
+          $("#consulta_antiguo_profesor .baja_disable").removeClass("oculto");
+      $("#consulta_antiguo_profesor #old_teacher tbody td input").each (function(){ 
+        $(this).prop("disabled",false);
+      });
+    }
+  });
+  //Se limpia la selección al pulsar el botón correspondiente.
+  $(document).on("click","#consulta_antiguo_profesor .baja_limpiar button", function () {
+    $("#consulta_antiguo_profesor #old_teacher_no_active tbody td input:checked").each (function(){ 
+       //Se realiza el evento en el td ya que en input haría click dos veces.
+       $(this).closest("td").click();
+    });
+  });
+
+  $(document).on("click","#consulta_antiguo_profesor .alta_limpiar button", function () {
+    $("#consulta_antiguo_profesor #old_teacher tbody td input:checked").each (function(){ 
+      $(this).closest("td").click();
+    });
+  });
+
+  //Se muestra la info del profesor al colocar el cursor.
+  $(document).on("mouseenter","#consulta_antiguo_profesor .scrollContent tr", function(){
+    // Se evita que se muestre el mensaje predeterminado si pasamos de un enlace a otro.
+    $("#consulta_antiguo_profesor .contenido_info #sin_seleccionar").addClass("oculto");
+
+    //Se comprueba que no es un aviso predeterminado.
+    if(!$(this).find("td").hasClass("dataTables_empty")){
+
+      $("#consulta_antiguo_profesor .contenido_info #seleccionado").load(Routing.generate('datos_antiguo_profesor', {id:$(this).attr("id")}), function(){
+        $("#consulta_antiguo_profesor .contenido_info #seleccionado").removeClass("oculto");
+        $("#consulta_antiguo_profesor .contenido_info #sin_seleccionar").addClass("oculto");     
+      });
+    }
+    else{
+      $("#consulta_antiguo_profesor .contenido_info #seleccionado").empty();
+      $("#consulta_antiguo_profesor .contenido_info #seleccionado").addClass("oculto");
+      $("#consulta_antiguo_profesor .contenido_info #sin_seleccionar").removeClass("oculto");
+    }
+  });
+
+  // Se elimina la información mostrada del profesor al quitar el puntero.
+  $(document).on("mouseleave","#consulta_antiguo_profesor .scrollContent tr", function () {
+    $("#consulta_antiguo_profesor .contenido_info #seleccionado").addClass("oculto");
+    $("#consulta_antiguo_profesor .contenido_info #seleccionado").empty();
+    $("#consulta_antiguo_profesor .contenido_info #sin_seleccionar").removeClass("oculto");
+  });
+
+  //Se realiza la nueva alta del profesor.
+  $(document).on("click","#consulta_antiguo_profesor .alta_active button", function(event) {
+    event.preventDefault();
+    var array= Array(); 
+    $("#consulta_antiguo_profesor #old_teacher_no_active tbody td input:checked").each (function(){ 
+      //alert($(this).closest("tr").find("#nivel").text());
+      array.push($(this).closest("tr").attr("id"));
+    });
+
+    if(array.length==1){
+      nombre="";
+      nivel="";
+    $("#consulta_antiguo_profesor #old_teacher_no_active tbody td input:checked").each (function(){ 
+      nombre=$(this).closest("tr").find("td:nth-child(2)").text();
+      nivel=$(this).closest("tr").find("#nivel").text();
+    });
+
+      //titulo="<table><p>Se va a registrar el alta del antiguo profesor X, ¿Estas seguro de continuar? <br></p><thead><tr><th>Evento</th><th>Fecha</th><th>Hora</th></tr></thead><tbody><tr><td>"+titulo+"</td><td>"+fecha+"</td><td>"+hora+"</td></tr></tbody><br></p></table>",
+      titulo="<table><p>Se va a registrar el alta del antiguo profesor:<br></p><thead><tr><th>Nombre</th><th>Nivel</th></tr></thead><tbody><tr><td>"+nombre+"</td><td>"+nivel+"</td></tr></tbody><br></p></table><br>¿Estas seguro de continuar?";
+    }
+    else{
+      titulo="<table class='max_h_table_swall'><p>Se va a registrar el alta de los antiguos profesores:<br></p><thead><tr><th>Nombre</th><th>Nivel</th></tr></thead><tbody>";
+      $("#consulta_antiguo_profesor #old_teacher_no_active tbody td input:checked").each (function(){ 
+        nombre=$(this).closest("tr").find("td:nth-child(2)").text();
+        nivel=$(this).closest("tr").find("#nivel").text();
+        titulo+="<tr><td>"+nombre+"</td><td>"+nivel+"</td></tr>";
+       });
+      titulo+="</tbody><br></p></table><br>¿Estas seguro de continuar?";
+    }
+
+    aviso.play();
+    swal({
+      title: "Alta de Profesores",
+      text: titulo,
+      type: "warning",
+      html: true,
+      showCancelButton: true,
+      cancelButtonText: "Cancelar",
+      customClass: 'swal-wide',
+      confirmButtonColor: color,
+      confirmButtonText: "¡Adelante!",
+      closeOnConfirm: true },
+
+      function(){
+
+        $.ajax({
+          type: 'POST',
+          url: Routing.generate('alta_profesor'),
+          data: {array:array},
+          dataType: 'json',
+          success: function(response) {
+            if(array.length==1){
+              texto="Alta registrada.";
+            }else{
+              texto=array.length+" altas registradas.";
+            }
+
+            // Notificación de confirmación
+            exito.play();
+            
+            new PNotify({
+              text:texto,
+              addclass: "custom",
+              type: "success",
+              shadow: true,
+              hide: true,
+              buttons: {
+                sticker: false,
+                labels:{close: "Cerrar"}
+              },
+              stack: right_Stack,
+              animate: {
+                animate: true,
+                in_class: "fadeInRight",
+                out_class: "fadeOutRight",
+              }
+            });
+
+            // Se actualiza todas las pestañas con tablas de profesores.
+            $("#profesor_antiguo").update_tab();
+            $("#ficha_profesor").update_tab();
+            $("#consultar_equipamientos").update_tab();
+            $("#consultar_instalaciones").update_tab();
+            ////Añadir más: profesor_asignar_grupo, mensaje profesores...
+          }
+        })
+      }
+    );
+  });
+  //Se realiza la baja del profesor.
+  $(document).on("click","#consulta_antiguo_profesor .baja_active button", function(event)  {
+    event.preventDefault();
+    var array= Array(); 
+    $("#consulta_antiguo_profesor #old_teacher tbody td input:checked").each (function(){ 
+      //alert($(this).closest("tr").find("#nivel").text());
+      array.push($(this).closest("tr").attr("id"));
+    });
+
+    if(array.length==1){
+      nombre="";
+      nivel="";
+    $("#consulta_antiguo_profesor #old_teacher tbody td input:checked").each (function(){ 
+      nombre=$(this).closest("tr").find("td:nth-child(2)").text();
+      nivel=$(this).closest("tr").find("#nivel").text();
+    });
+
+      //titulo="<table><p>Se va a registrar el alta del antiguo profesor X, ¿Estas seguro de continuar? <br></p><thead><tr><th>Evento</th><th>Fecha</th><th>Hora</th></tr></thead><tbody><tr><td>"+titulo+"</td><td>"+fecha+"</td><td>"+hora+"</td></tr></tbody><br></p></table>",
+      titulo="<table><p>Se va a registrar la baja del siguiente profesor:<br></p><thead><tr><th>Nombre</th><th>Nivel</th></tr></thead><tbody><tr><td>"+nombre+"</td><td>"+nivel+"</td></tr></tbody><br></p></table><br><span>AVISO: Si el profesor está asignado a un grupo o es tutor, se eliminará automáticamente esa asignación y no se podrá recuperar.</span><br><br>¿Estas seguro de continuar?";
+    }
+    else{
+      titulo="<table class='max_h_table_swall'><p>Se va a registrar la baja de los siguientes profesores:<br></p><thead><tr><th>Nombre</th><th>Nivel</th></tr></thead><tbody>";
+      $("#consulta_antiguo_profesor #old_teacher tbody td input:checked").each (function(){ 
+        nombre=$(this).closest("tr").find("td:nth-child(2)").text();
+        nivel=$(this).closest("tr").find("#nivel").text();
+        titulo+="<tr><td>"+nombre+"</td><td>"+nivel+"</td></tr>";
+       });
+      titulo+="</tbody><br></p></table><br><span>AVISO: Si algún profesor está asignado a un grupo o es tutor, se eliminará automáticamente esa asignación y no se podrá recuperar.</span><br><br>¿Estas seguro de continuar?";
+    }
+
+    aviso.play();
+    swal({
+      title: "Baja de Profesores",
+      text: titulo,
+      type: "warning",
+      html: true,
+      showCancelButton: true,
+      cancelButtonText: "Cancelar",
+      customClass: 'swal-wide',
+      confirmButtonColor: color,
+      confirmButtonText: "¡Adelante!",
+      closeOnConfirm: true },
+
+      function(){
+        $.ajax({
+          type: 'POST',
+          url: Routing.generate('baja_profesor'),
+          data: {array:array},
+          dataType: 'json',
+          success: function(response) {
+            if(array.length==1){
+              texto="Baja registrada.";
+            }else{
+              texto=array.length+" bajas registradas.";
+            }
+
+            // Notificación de confirmación
+            exito.play();
+            
+            new PNotify({
+              text:texto,
+              addclass: "custom",
+              type: "success",
+              shadow: true,
+              hide: true,
+              buttons: {
+                sticker: false,
+                labels:{close: "Cerrar"}
+              },
+              stack: right_Stack,
+              animate: {
+                animate: true,
+                in_class: "fadeInRight",
+                out_class: "fadeOutRight",
+              }
+            });
+
+            // Se actualiza todas las pestañas con tablas de profesores.
+            $("#profesor_antiguo").update_tab();
+            $("#ficha_profesor").update_tab();
+            $("#consultar_equipamientos").update_tab();
+            $("#consultar_instalaciones").update_tab();
+            ////Añadir más: profesor_asignar_grupo, mensaje profesores...
+          }
+        })
+      }
+    );
   });
 
   ///////////////////////////////////////////

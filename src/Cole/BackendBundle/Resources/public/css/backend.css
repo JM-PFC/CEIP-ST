@@ -21,6 +21,46 @@ button[class*="ui-dialog-titlebar-close"]{
     padding: 0 3px;
     font-size: 13px !important;
 }
+.btn_primary {
+    background-color: #337ab7;
+    border-color: #2e6da4;
+    color: #fff;
+}
+.btn_primary:hover {
+    background-color: #286090;
+    border-color: #204d74;
+    color: #fff;
+}
+.btn_success:enabled{
+    background-color: #5cb85c;
+    border-color: #4cae4c;
+    color: #fff ;
+    border-radius: 5px;
+}
+.btn_success:enabled:hover{
+    background-color: #449d44;
+    border-color: #398439;
+}
+.btn_danger {
+    background-color: #d9534f;
+    border-color: #d43f3a;
+    color: #fff;
+}
+.btn_danger:hover {
+    background-color: #c9302c;
+    border-color: #ac2925;
+    color: #fff;
+}
+.btn_warning {
+    background-color: #f0ad4e;
+    border-color: #eea236;
+    color: #fff;
+}
+.btn_warning:hover {
+    background-color: #ec971f;
+    border-color: #d58512;
+    color: #fff;
+}
 /*Se elimina el borde punteado al hacer click en un "button" (Firefox)*/
 button::-moz-focus-inner {
    border: 0;
@@ -29,7 +69,7 @@ button::-moz-focus-inner {
 button{
    outline:none;
 }
-button:focus{
+form #botones_form button:focus{
 	/*color: #334c73;*/
 	/*background-color: #C3C4C5;*/
 	text-decoration: underline;
@@ -302,6 +342,7 @@ nav{
 	margin: 0 auto;
 	min-width: 30px;
 	max-height: 30px;
+	border-radius: 5px;
 }
 .contenedor div a span{
 	margin-top: -4px;
@@ -1308,6 +1349,9 @@ form button{
 #lista_color tr:nth-child(2n),.lista_color tr:nth-child(2n)  { 
 	background: #dae6f2;
 }
+#lista_color tbody tr[role="row"],.lista_color tbody tr[role="row"] { 
+	border-bottom: 2px solid #b1cce7;
+}
 #contenedor_lista tr:hover { 
 	background: #b1cce7!important;
 }
@@ -1707,7 +1751,7 @@ form button{
 #buscador label{
 	float: right;
 }
-#buscador input{
+#buscador input, #buscador_activo input{
 	padding: 1px 3px;
 	margin-left: 5px;
 }
@@ -1733,6 +1777,29 @@ form button{
 }
 .edit_profesor input[type='file']{
 	display:none;
+}
+.datos_registro{
+	display: inline-block;
+	width: 100%;
+}
+#edit_profesor_nivel{
+	min-width: 110px;
+	text-align: center;
+}
+#edit_profesor_fechaAlta, #edit_profesor_fechaBaja{
+	margin-top: 3px;
+}
+#profesor_edit #imparte{
+	min-width: 150px;
+	margin-top: 20px;
+}
+#profesor_edit #imparte button{
+	padding: 4px;
+}
+.datos_registro div{
+	width: 100px;
+	float: left;
+	margin-right: 7%;
 }
 .edit_alumno .m_input{
 	width: 60% !important;
@@ -2334,6 +2401,15 @@ z-index: 100000000000000000000000000000000;
 	font-weight: bold;
 	box-shadow: 0 1px 1px 0 rgba(0, 0, 0, 0.5);	
 }
+#horarios_atencion_dialog #add span:hover{
+	background: #3F5F93;
+}
+#horarios_atencion_dialog #add span:active{
+	margin-top: 2px;
+	height: 19px;
+	box-shadow: none;
+}
+
 #horarios_atencion_dialog #add:not(.disab) span:hover{
 	cursor: pointer;
 }
@@ -3965,9 +4041,7 @@ tbody.scrollContent tr.alternateRow td {
 	min-width: 25px !important;
 }*/
 
-#tableContainer tr th:last-child{
-	width: 11% !important;
-}
+
 #consulta_reservas_instalaciones tr td:not(.dataTables_empty):last-child,#consulta_reservas_equipamientos tr td:not(.dataTables_empty):last-child{
 	width: 5% !important;
 	padding: 0 !important;
@@ -3979,7 +4053,7 @@ tbody.scrollContent tr.alternateRow td {
 	width: 5.5% !important;
 }
 .scrollContent tr:hover{
-	background: #96B3BA;
+	background: #b1cce7;
 }
 
 .scrollContent td img{
@@ -4010,7 +4084,7 @@ tbody.scrollContent tr.alternateRow td {
 	margin: 0 auto;
 	padding: 3px 0;
 	text-align: center;
-	font-family: solid;
+	font-family: Arial;
 }
 .contenido_info{
 	border-top: 1px solid black;
@@ -4038,6 +4112,7 @@ tbody.scrollContent tr.alternateRow td {
 	padding: 0 10%;
 	margin: 0 0;
 	margin-top: 5px;
+	clear: left;
 }
 .contenido_info #sin_seleccionar p{
 	text-align: center;
@@ -4052,6 +4127,20 @@ tbody.scrollContent tr.alternateRow td {
 	pointer-events: none !important ;
 	cursor: none !important;	
 }
+
+.old_t_data h3{
+	padding: 0 2% !important;
+	float: left;
+	font-size: 1.2em;
+}
+.old_t_data span{
+	float: left;
+	margin-left: 2%;
+	color: #334c73;
+	margin-top: 5px;
+	font-size: 1.2em;
+}
+
 #consulta_reservas_instalaciones .scrollContent tr[class*="no_cursor"],#consulta_reservas_equipamientos .scrollContent tr[class*="no_cursor"]{
 	pointer-events: none !important ;
 	cursor: none !important;
@@ -4095,7 +4184,11 @@ tbody.scrollContent tr.alternateRow td {
 	margin-left: 50px;
 	text-align: left;
 }
-
+.max_h_table_swall{
+	max-height: 200px !important;
+	display: inline-block;
+	overflow: auto;
+}
 
 .tr_title{
 	background:  red ;
@@ -4268,51 +4361,122 @@ tbody.scrollContent tr.alternateRow td {
 	width: 35% !important;
 	min-width: 35% !important;
 }
-#multiples_alumnos table tbody td{
-
+#multiples_alumnos table tbody td, .tabla_con_seleccion table tbody td{
    cursor: default;
 }
-#multiples_alumnos table tbody button{
+#multiples_alumnos table tbody button, .tabla_con_seleccion table tbody button{
 	margin-left: 20px;
 }
-#multiples_alumnos table thead input{
+#multiples_alumnos table thead input, .tabla_con_seleccion table thead input{
 	margin-right: 17px;
 	vertical-align:middle;
 }
-#multiples_alumnos td{
+#multiples_alumnos td, .tabla_con_seleccion td{
 	z-index: 10 !important;
 }
-#multiples_alumnos  input{
+#multiples_alumnos  input, .tabla_con_seleccion  input{
 	z-index: 100 !important;
 }
-#multiples_alumnos .info_en_tabla{
+#multiples_alumnos .info_en_tabla,.tabla_con_seleccion .info_en_tabla{
 	height: 40vh !important;
 	border-bottom: 1px solid grey;
 	font-family: "Times New Roman",Arial,sans-serif;
 }
-#multiples_alumnos .columna_foto,#multiples_alumnos img{
+#multiples_alumnos .columna_foto,#multiples_alumnos img,.tabla_con_seleccion .columna_foto,#consulta_antiguo_profesor img{
 	margin-top: 0;
 }
-#multiples_alumnos #enviar_select{
+#multiples_alumnos #enviar_select, .tabla_con_seleccion #enviar_select{
 	float: left;
 	width: 17%;
+	margin-top: 2px;
 }
-#multiples_alumnos #enviar_select button{
+#multiples_alumnos #enviar_select button, .tabla_con_seleccion #enviar_select button{
 	margin:0 auto;
 	display: block;
 	font-size: 1.2em;
 }
-#multiples_alumnos #loading{
+#multiples_alumnos #loading, .tabla_con_seleccion #loading{
 	position: relative;
 	float: left;
     top: -145px;
     z-index: 10;
     height: 0;
 }
-#multiples_alumnos #loading .ajaxload img{
+#multiples_alumnos #loading .ajaxload img, .tabla_con_seleccion #loading .ajaxload img{
 	margin: 0 36vw !important; 
 }
+.tabla_con_seleccion .contenido_info #sin_seleccionar p{
+	margin-top: 15vh;
+}
+#consulta_antiguo_profesor .tabla_con_info{
+	width: 41.5% !important;
+	float: left;
+}
+#consulta_antiguo_profesor .info_en_tabla{
+	width: 16.78% !important;
+	float: left;
+	border-left: 1px solid grey;
+	border-right: 1px solid grey;
+}
+#consulta_antiguo_profesor #tableContainer table{
+	border: none;
+}
+#consulta_antiguo_profesor .text_cabecera{
+	width: 32%;
+}
+input[type="checkbox"]:hover{
+	cursor: pointer;
+}
 
+#consulta_antiguo_profesor tbody td input{
+	z-index: 100 !important;
+}
+#consulta_antiguo_profesor #buscador_activo{
+	float: left;
+	font-size: 13px;
+    margin-top: -2px;
+    width: 26%;
+}
+#consulta_antiguo_profesor .cabecera_info{
+	padding: 3.5px 0;
+}
+#consulta_antiguo_profesor #baja, #consulta_antiguo_profesor #alta{
+	height: 11%;
+	text-align: center;
+	font-size: 1em;
+}
+#consulta_antiguo_profesor #baja button{
+	margin-top: 1%;
+	padding-left: 5%;
+}
+#consulta_antiguo_profesor #alta button{
+	padding-right: 5%;
+}
+#consulta_antiguo_profesor #baja button, #consulta_antiguo_profesor #alta button{
+	min-width: 100px
+}
+#consulta_antiguo_profesor #baja img,#consulta_antiguo_profesor #alta img{
+	width: 9px;
+	margin: 0 2px;
+}
+#consulta_antiguo_profesor .baja_disable img,#consulta_antiguo_profesor .alta_disable img{
+	opacity: 0.5;
+}
+
+#consulta_antiguo_profesor .contenido_info{
+	border-top: 1px solid grey;
+	border-bottom: 1px solid grey;
+	height: 68.7%;
+}
+#consulta_antiguo_profesor  .contenido_info #sin_seleccionar p{
+	margin-top: 40%;
+}
+#consulta_antiguo_profesor #alta button{
+	margin-top: 1%;
+}
+#consulta_antiguo_profesor .scrollContent{
+	height: 37vh;
+}
 .child #loading{
 	position: relative;
 	float: left;

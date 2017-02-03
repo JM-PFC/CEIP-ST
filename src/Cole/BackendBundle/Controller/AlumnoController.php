@@ -1043,6 +1043,8 @@ class AlumnoController extends Controller
                     'validate' =>"año_incorrecto",
                     'success' => true), 200);
             }
+
+            $num_matriculas = $em->getRepository('BackendBundle:Matricula')->findNumPorCurso($curso,$actual);
             //Se comprueba que quedan plazas libre en el curso que se quiere matricular.
             if($num_matriculas[1]>=(int)$curso->getNumGrupos()*(int)$curso->getRatio()){
                 return new JsonResponse(array(

@@ -578,10 +578,10 @@ fieldset.fsetoculto {
     font-size: 0.8em;
     margin-top: 45px;
     padding-top: 10px;
-
+    min-height: 190px;
 }
 .contenido{
-    width: 69%;
+    width: 68.5%;
     float: left;
     -moz-box-sizing: border-box;
     -webkit-box-sizing: border-box;
@@ -660,7 +660,9 @@ fieldset.fsetoculto {
    border-radius: 5px 5px 0 0;
    font-family: serif;
 }
-
+.aside_twiter>div{
+    padding: 0 3%;
+}
 /*Noticias portada*/
 
 .contenedor_noticia{
@@ -686,7 +688,7 @@ fieldset.fsetoculto {
     float: left;
     background-color: #001F51 !important;
     color: #FFF !important;
-    width: 40px;
+    width: 5.5%;
     height: 145px;
     background-image: url("../images/mascara_publicada.png");
     background-repeat: no-repeat;
@@ -728,9 +730,8 @@ fieldset.fsetoculto {
     display: none;
 }
 #recientes .contenido_noticia{
-    width: 90%;
+    width: 89%;
 }
-
 .imgLiquidFill{
     position: relative;
     display: block;
@@ -811,7 +812,7 @@ fieldset.fsetoculto {
 }
 
 #calendar .c-event-item > div{
-    white-space: normal;
+    white-space: pre-wrap;
 }
 #calendar .c-event-item span{
     padding: 0 8px;
@@ -931,7 +932,7 @@ fieldset.fsetoculto {
 .calendar .description{
     background: #abd0d5;
     border-top: 1px solid #001f51 !important;
-    padding: 3px;
+    padding: 10px;
     border-radius: 5px;
 }
 
