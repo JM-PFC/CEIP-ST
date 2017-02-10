@@ -141,12 +141,12 @@
 							<img src="{{ asset('bundles/backend/images/menu/asignar.png')}}">
 							<span> Asignar <br>Grupo</span>
 						</a>		
-						{#
+						
 						<a id="baja_profesor" title="Baja del Profesor" href="{{path('show_baja_profesor')}}">
 							<img src="{{ asset('bundles/backend/images/menu/baja_profesor.png')}}">
 							<span> Baja </span>
 						</a>
-						#}						
+												
 						<span> Registro Profesor</span>
 					</div>
 					<div>
@@ -209,7 +209,11 @@
 						<a title="Registro Asignatura" href="{{path('asignatura')}}">
 							<img src="{{ asset('bundles/backend/images/menu/asignaturas.png')}}">
 							<span> Registro </span>
-						</a>					
+						</a>	
+						<a id="asignaturas_cursos" title="Asignaturas por curso" href="{{path('asignaturas_cursos')}}">
+							<img src="{{ asset('bundles/backend/images/menu/asigCursos.png')}}">
+							<span> Asignaturas<br>por curso</span>
+						</a>				
 						<a title="Consulta Asignatura" href="{{path('asignatura_show')}}">
 							<img src="{{ asset('bundles/backend/images/menu/consultar.png')}}">
 							<span> Consulta </span>

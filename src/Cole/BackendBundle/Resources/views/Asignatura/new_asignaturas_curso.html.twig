@@ -1,0 +1,188 @@
+{% extends 'BackendBundle:Default:index.html.twig' %}
+
+{% block head %}{% endblock %}
+{% block stylesheets %}{% endblock %}
+
+{% block javascript %}
+  <script>
+  //Se comprueba si hay asignaturas asignadas inicialmente para hacer las modificaciones correspondientes.
+  if($("#asignatura_curso_dialog #contenedor_asignaturas li[tipo='Troncal']").size()>0){
+    $("#asignatura_curso_dialog #contenedor_asignaturas .aviso").addClass('oculto');
+    $("#asignatura_curso_dialog #contenedor_asignaturas #cabecera_troncal").removeClass('oculto');
+    //Se modifica de la lista de asignaturas todas las que estan asigandas.
+    $("#asignatura_curso_dialog #contenedor_asignaturas li[tipo='Troncal']").each(function(){
+      id=$(this).attr("id");
+      valor=$(this).find("input").val();
+      $("#asignatura_curso_dialog #lista_troncal button[id='"+id+"']").addClass('elected');
+      $("#asignatura_curso_dialog #lista_asignaturas button[id='"+id+"']").addClass('asignada');
+      $("#asignatura_curso_dialog #lista_asignaturas button[id='"+id+"']").attr('valor',valor);
+
+    });
+    //Si estan todas las aignaturas seleccionada se deshabilita el botón "todas".
+    if($("#asignatura_curso_dialog #lista_troncal button:not(.elected)").size()==0){
+      $("#asignatura_curso_dialog #lista_troncal").next().addClass('disabled');
+    }
+
+  }
+
+  if($("#asignatura_curso_dialog #contenedor_asignaturas li[tipo='Específica']").size()>0){
+    $("#asignatura_curso_dialog #contenedor_asignaturas .aviso").addClass('oculto');
+    $("#asignatura_curso_dialog #contenedor_asignaturas #cabecera_especifica").removeClass('oculto');
+    //Se modifica de la lista de asignaturas todas las que estan asigandas.
+    $("#asignatura_curso_dialog #contenedor_asignaturas li[tipo='Específica']").each(function(){
+      id=$(this).attr("id");
+      valor=$(this).find("input").val();
+      $("#asignatura_curso_dialog #lista_especifica button[id='"+id+"']").addClass('elected');
+      $("#asignatura_curso_dialog #lista_asignaturas button[id='"+id+"']").addClass('asignada');
+      $("#asignatura_curso_dialog #lista_asignaturas button[id='"+id+"']").attr('valor',valor);
+    });
+    //Si estan todas las aignaturas seleccionada se deshabilita el botón "todas".
+    if($("#asignatura_curso_dialog #lista_especifica button:not(.elected)").size()==0){
+      $("#asignatura_curso_dialog #lista_especifica").next().addClass('disabled');
+    }
+  }
+  //Se asigna una lista al curso.
+  $(document).on('click',"#asignatura_curso_dialog #lista_troncal button",function(event){
+    event.preventDefault();
+    id=$(this).attr("id");
+    tipo=$(this).attr("tipo");
+
+    $(this).addClass('elected');
+    if($("#asignatura_curso_dialog #contenedor_asignaturas li[id='"+id+"']").size()==0){
+      if($(this).hasClass('asignada')){
+        $('<li id="'+id+'"tipo="'+tipo+'" estado="asignada"><p>'+$(this).attr("title")+'</p><input type="number" min="1" max="9" valor="'+$(this).attr("valor")+'"></input><img src="/Symfony/web/bundles/backend/images/menu/eliminar.png"></li>').insertBefore($("#asignatura_curso_dialog #cabecera_especifica"));
+      }else{
+        $('<li id="'+id+'"tipo="'+tipo+'" estado="nueva"><p>'+$(this).attr("title")+'</p><input type="number" min="1" max="9"></input><img src="/Symfony/web/bundles/backend/images/menu/eliminar.png"></li>').insertBefore($("#asignatura_curso_dialog #cabecera_especifica"));
+      }
+
+    }
+    $("#asignatura_curso_dialog #contenedor_asignaturas #cabecera_troncal").removeClass('oculto');
+    $("#asignatura_curso_dialog #contenedor_asignaturas .aviso").addClass('oculto');
+    //Se habilita los botones "guardar" y "restablecer".
+    $("#asignatura_curso_dialog #asignaturas_curso_submit").prop("disabled",false);
+    $("#asignatura_curso_dialog #asignaturas_curso_restablecer").prop("disabled",false);
+  });
+
+  $(document).on('click',"#asignatura_curso_dialog #lista_especifica button",function(event){
+    event.preventDefault();
+    id=$(this).attr("id");
+    tipo=$(this).attr("tipo");
+
+    $(this).addClass('elected');
+    if($("#asignatura_curso_dialog #contenedor_asignaturas li[id='"+id+"']").size()==0){
+      if($(this).hasClass('asignada')){
+        $("#asignatura_curso_dialog #contenedor_asignaturas ul").append('<li id="'+id+'"tipo="'+tipo+'" estado="asignada"><p>'+$(this).attr("title")+'</p><input type="number" min="1" max="9" valor="'+$(this).attr("valor")+'"></input><img src="/Symfony/web/bundles/backend/images/menu/eliminar.png"></li>');
+      }else{
+        $("#asignatura_curso_dialog #contenedor_asignaturas ul").append('<li id="'+id+'"tipo="'+tipo+'" estado="nueva"><p>'+$(this).attr("title")+'</p><input type="number" min="1" max="9"></input><img src="/Symfony/web/bundles/backend/images/menu/eliminar.png"></li>');
+      }
+    }
+    $("#asignatura_curso_dialog #contenedor_asignaturas #cabecera_especifica").removeClass('oculto');
+    $("#asignatura_curso_dialog #contenedor_asignaturas .aviso").addClass('oculto');
+    //Se habilita los botones "guardar" y "restablecer".
+    $("#asignatura_curso_dialog #asignaturas_curso_submit").prop("disabled",false);
+    $("#asignatura_curso_dialog #asignaturas_curso_restablecer").prop("disabled",false);
+  });
+
+  //Se elimina la lista asignada al curso
+  $(document).on('click',"#asignatura_curso_dialog #contenedor_asignaturas img",function(event){
+    event.preventDefault();
+    id=$(this).closest("li").attr("id");
+    tipo=$(this).closest("li").attr("tipo");
+    //Se habilita los botones "guardar" y "restablecer".
+    $("#asignatura_curso_dialog #asignaturas_curso_submit").prop("disabled",false);
+    $("#asignatura_curso_dialog #asignaturas_curso_restablecer").prop("disabled",false);
+
+    $("#asignatura_curso_dialog #lista_asignaturas button[id='"+id+"']").removeClass('elected');
+    $("#asignatura_curso_dialog #lista_asignaturas button[id='"+id+"']").closest("div").next().removeClass('disabled');
+    $(this).closest("li").remove();
+
+    //Se comprueba si no hay más asignaturas de un tipo para eliminar la cabecera de ese tipo(ol). 
+    if($("#asignatura_curso_dialog #contenedor_asignaturas li[tipo='"+tipo+"']").size()==0){
+      if(tipo=="Troncal"){
+        $("#asignatura_curso_dialog #contenedor_asignaturas #cabecera_troncal").addClass('oculto');
+      }
+      else{
+        $("#asignatura_curso_dialog #contenedor_asignaturas #cabecera_especifica").addClass('oculto');
+      }
+
+      if($("#asignatura_curso_dialog #contenedor_asignaturas li").size()==0){
+        $("#asignatura_curso_dialog #contenedor_asignaturas .aviso").removeClass('oculto');
+      }
+    }
+    //Se oculta el aviso de error si no quedan elementos con input vacíos.
+    if($("#asignatura_curso_dialog #contenedor_asignaturas li input[class='invalid']").size()==0){
+      $("#asignatura_curso_dialog #aviso_error").addClass('oculto');
+    }
+  });
+
+  </script>
+{% endblock %}
+
+{% block body -%}
+    <fieldset id="{{curso.id}}">
+      <legend>Asignación de asignaturas de {{curso.curso ~ " " ~ curso.nivel}}</legend>
+      <div id="lista_asignaturas" class="w40 f_left tcenter b_right">
+        <span>1. Seleccione las <strong>asignaturas</strong>:</span>
+        <div class="w50 f_left">
+          <h4>Troncales</h4>
+          <div class="lista_asig" id="lista_troncal">
+            {% for troncal in troncales %}
+              <button id="{{troncal.id}}" tipo="{{troncal.tipo}}" title="{{troncal.nombre }}">{{ troncal.Abreviatura }}</button>
+            {% endfor %}
+          </div>
+          <button class="button_all" id="all_troncales" title="Selecciona todas las asignaturas troncales">Todas</button>
+        </div>
+        <div class="w50 f_left">
+          <h4>Específicas</h4>
+          <div class="lista_asig" id="lista_especifica">
+            {% for especifica in especificas %}
+              <button id="{{especifica.id}}" tipo="{{especifica.tipo}}" title="{{especifica.nombre }}">{{ especifica.Abreviatura }}</button>
+            {% endfor %}
+          </div>
+           <button class="button_all"   id="all_especificas" title="Selecciona todas las asignaturas específicas">Todas</button>
+        </div>
+      </div>
+      <div class="w59 f_left  tcenter">
+        <span>2. Seleccione el <strong>Nº de módulos</strong> semanales para cada asignatura:</span>
+        <div id="contenedor_asignaturas">
+          <h4 id="titulo_curso">Asignaturas de <strong>{{" " ~ curso.curso ~ " " ~ curso.nivel}}</strong></h4>
+          <div>
+            <ul>
+              <p class="aviso">No hay asignaturas asignadas para este curso</p>
+              <ol id="cabecera_troncal" class="oculto">Troncales</ol>
+                {% for entity in entities_troncales %}
+                  <li id="{{ entity.asignatura.id }}" tipo="{{ entity.asignatura.tipo }}" estado="asignada">
+                    <p>{{ entity.asignatura.nombre }}</p>
+                    <input type="number" min="1" max="9" value="{{ entity.numModulos }}" valor="{{ entity.numModulos }}"></input>
+                    <img src="/Symfony/web/bundles/backend/images/menu/eliminar.png">
+                  </li>
+                {% endfor %}
+              <ol id="cabecera_especifica" class="oculto">Específicas</ol>
+                {% for entity in entities_especificas %}
+                  <li id="{{ entity.asignatura.id }}" tipo="{{ entity.asignatura.tipo }}" estado="asignada">
+                    <p>{{ entity.asignatura.nombre }}</p>
+                    <input type="number" min="1" max="9" value="{{ entity.numModulos }}"></input>
+                    <img src="/Symfony/web/bundles/backend/images/menu/eliminar.png">
+                  </li>
+                {% endfor %}
+            </ul>
+          </div>
+        </div>
+        <div id="aviso_error" class="oculto">
+          <span></span>
+          <span>Falta por asignar el Nº de módulos en alguna asignatura. </span>
+        </div>
+      </div>
+
+
+    </fieldset> 
+
+    <div class="dialog_button">
+      <div>
+        <button id="asignaturas_curso_submit" disabled="" type="button">Guardar</button>
+      </div>
+      <div>
+        <button id="asignaturas_curso_restablecer" disabled="" type="button">Restablecer</button>
+      </div>
+    </div>
+{% endblock %}

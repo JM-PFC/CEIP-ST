@@ -7,6 +7,8 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
+use Cole\BackendBundle\Entity\Asignaturas_cursos;
+
 /**
  * Curso
  *
@@ -74,6 +76,11 @@ class Curso
      * @ORM\OneToMany(targetEntity="Matricula", mappedBy="curso")
      */
     private $matricula;
+
+    /**
+    * @ORM\OneToMany(targetEntity="AsignaturasCursos", mappedBy="curso", cascade={"remove"})
+    */
+    private $asignaturas_cursos;
     
     public function __construct()
     {
@@ -341,5 +348,48 @@ class Curso
     public function getRatio()
     {
         return $this->ratio;
+    }
+
+    /**
+     * Add asignaturas_cursos
+     *
+     * @param \Cole\BackendBundle\Entity\AsignaturasCursos $asignaturasCursos
+     * @return Curso
+     */
+    public function addAsignaturasCurso(\Cole\BackendBundle\Entity\AsignaturasCursos $asignaturasCursos)
+    {
+        $this->asignaturas_cursos[] = $asignaturasCursos;
+
+        return $this;
+    }
+
+    /**
+     * Remove asignaturas_cursos
+     *
+     * @param \Cole\BackendBundle\Entity\AsignaturasCursos $asignaturasCursos
+     */
+    public function removeAsignaturasCurso(\Cole\BackendBundle\Entity\AsignaturasCursos $asignaturasCursos)
+    {
+        $this->asignaturas_cursos->removeElement($asignaturasCursos);
+    }
+
+    /**
+     * Get asignaturas_cursos
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getAsignaturasCursos()
+    {
+        return $this->asignaturas_cursos;
+    }
+
+    /**
+     * Get asignaturas_curso
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getAsignaturasCurso()
+    {
+        return $this->asignaturas_curso;
     }
 }

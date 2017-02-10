@@ -36,3 +36,27 @@ asignatura_delete:
     requirements: { _method: post|delete }
     options:
         expose: true
+
+asignaturas_cursos:
+    path:     /asignaturas_cursos
+    defaults: { _controller: "BackendBundle:Asignatura:asignaturasCursos" }
+    options:
+        expose: true
+
+asignaturas_curso_new:
+    path:     /asignaturas_curso/{id}/new
+    defaults: { _controller: "BackendBundle:Asignatura:AsignaturasCursoNew" }
+    options:
+        expose: true
+
+comprobar_asignaturas:
+    path:     /comprobar_asignaturas
+    defaults: { _controller: "BackendBundle:Asignatura:ComprobarAsignaturas" }
+    options:
+        expose: true
+
+asignar_asignaturas_curso:
+    path:     /asignar_asignaturas_curso
+    defaults: { _controller: "BackendBundle:Asignatura:AsignarAsignaturasCurso" }
+    options:
+        expose: true

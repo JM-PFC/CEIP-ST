@@ -175,12 +175,35 @@ $(document).ready(function () {
 
   function validateDni(field) {
     var filter = /(^([X-Zx-z]{1})([0-9]{7})([-]?)([A-Za-z]{1})$)|((^[0-9]{8})[-]?([A-Za-z]{1}$))/;
+
+    var numero;
+    var letr;
+    var letra;
+    var expresion_regular_dni;
     if (!filter.test($(field).val())) {
       $(field).prev().append("<span class='error'>Dato inválido</span>");
-      return false
+      return false;
     }
+    //Se compriba que la letra del NIF sea la correcta.
     else{
-      return true;
+      //Se le quita el separador para pasar el dni.
+      dni=$(field).val().replace("-","");
+
+      numero = dni.substr(0,dni.length-1);
+      letr = dni.substr(dni.length-1,1);
+      numero = numero % 23;
+      //Se crea una string con las letras del abecedario ( sin la ñ) en ese orden.
+      letra='TRWAGMYFPDXBNJZSQVHLCKET';
+      //Se coge un substring de un solo caracter de esa cadena de letras que empiece en la posición marcada 
+      // por el número que conseguimos al hacer la operación de módulo anterior.
+      letra=letra.substring(numero,numero+1);
+      if (letra!=letr.toUpperCase()) {
+        $(field).prev().append("<span class='error'>Dato inválido</span>");
+        return false;
+      }else{
+        return true;
+      }
+
     }
   }
 
@@ -2823,6 +2846,7 @@ $(document).on("blur","input[id='edit_profesor_dni']",function() {
         $("#button_grupos_rest").trigger("click");
 
         $("#asignar_aula").update_tab();
+        $("#asignaturas_cursos").update_tab();
 
         },
         error: function (response, desc, err){
@@ -2933,6 +2957,7 @@ $(document).on("blur","input[id='edit_profesor_dni']",function() {
                   $("#button_grupos_rest").trigger("click");
 
                   $("#asignar_aula").update_tab();
+                  $("#asignaturas_cursos").update_tab();
                 }
               })
               swal.close();
@@ -3267,6 +3292,151 @@ $(document).on("blur","input[id='edit_profesor_dni']",function() {
     );
       return false;
   });
+
+
+//////////////////////////////////
+//     Asignaturas por curso    //
+//////////////////////////////////
+
+  $(document).on('click',"#asignaturas_cursos a[id$='_modal']",function(event){
+    event.preventDefault();
+    var curso= $(this).closest("h2").text();
+    var id=$(this).closest("div").attr("curso");
+
+    $.ajax({
+      type: 'POST',
+      url: Routing.generate('comprobar_asignaturas'),
+      success: function(response) {
+        // Si no hay asignaturas registradas muestra un aviso.
+        if(response.data==null){
+          error.play(); 
+          swal({
+            title:"No se pueden asignar asignaturas",
+            text: 'Actualmente no hay asignaturas registrada en el sistema',
+            type: "error",
+            html: true,
+            showCancelButton: false,
+            confirmButtonColor: color,
+            closeOnConfirm: true 
+          });
+        }
+        else{
+          $('#asignatura_curso_dialog').load(Routing.generate("asignaturas_curso_new", {id:id}), function(){
+          }).dialog('open'); 
+        }
+      }
+    })
+  });
+  //Se asigna todas las asignaturas troncales al curso.
+  $(document).on('click',"#asignatura_curso_dialog #all_troncales",function(event){
+    event.preventDefault();
+    $("#asignatura_curso_dialog #lista_troncal button").click();
+    $(this).addClass('disabled');
+  });
+  //Se asigna todas las asignaturas específicas al curso.
+  $(document).on('click',"#asignatura_curso_dialog #all_especificas",function(event){
+    event.preventDefault();
+    $("#asignatura_curso_dialog #lista_especifica button").click();
+    $(this).addClass('disabled');
+  });
+
+  $(document).on('click',"#asignatura_curso_dialog #asignaturas_curso_restablecer",function(event){
+    event.preventDefault();
+    $("#asignaturas_cursos #contenedor_registro:not(.oculto) img").click();
+  });
+
+  $(document).on('click',"#asignatura_curso_dialog #asignaturas_curso_submit",function(event){
+    event.preventDefault();
+
+    var nuevas = new Object();
+    var asignadas = new Object();
+    var eliminadas = Array();
+
+    var valor=0;
+    // Se valida que ningún input esté vacío. Si hay algún input vacío no se realiza nada.
+    $("#asignatura_curso_dialog #contenedor_asignaturas li input").each(function(){ 
+      if($(this).val()==""){
+        $(this).addClass("invalid");
+        valor=1;
+      }
+    });
+
+    if(valor==1){
+      $("#asignatura_curso_dialog #aviso_error").removeClass('oculto');
+      return false;
+    }
+    // Se obtienen las asignaturas nuevas.(Insertar)
+    $("#asignatura_curso_dialog #contenedor_asignaturas li[estado='nueva']").each(function(){
+      id=$(this).attr("id");
+      valor=$(this).find("input").val();
+
+      nuevas[id] = valor;
+    });
+
+    // Se obtienen las asignaturas que ya estaban asignadas pero el número de módulos ha sido modificado.(Actualizar)
+    $("#asignatura_curso_dialog #contenedor_asignaturas li[estado='asignada']").each(function(){
+      id=$(this).attr("id");
+      valor=$(this).find("input").val();
+
+      if(valor!=$(this).find("input").attr("valor")){
+        asignadas[id] = valor;
+      }
+    });
+
+    // Se obtienen las asignaturas que han sido eliminadas y que estan asignadas al curso.(Eliminar)
+    $("#asignatura_curso_dialog #lista_asignaturas button[class*='asignada']").each(function(){
+      id=$(this).attr("id");
+
+      if($("#asignatura_curso_dialog #contenedor_asignaturas li[id='"+id+"']").size()==0){
+        eliminadas.push(id);
+      }
+    });
+    curso=$("#asignatura_curso_dialog fieldset").attr("id");
+
+    $.ajax({
+      type: 'POST',
+      url: Routing.generate('asignar_asignaturas_curso'),
+      data: {curso:curso, nuevas:nuevas, asignadas:asignadas, eliminadas:eliminadas},
+      dataType: 'json',
+      success: function(response) {
+        // Si no hay asignaturas registradas muestra un aviso.
+       if(response.data==null){
+          alert("no hay asignaturas");//Cambiar aviso    No se ha realizado ningún cambio/////////////////////////////
+        }
+     
+
+          //Añadir avisos: se han registrados tantos nuevos, se han eliminado tantos y se han actualizado tantos.
+        $('#asignatura_curso_dialog').dialog('close');
+        $("#asignaturas_cursos").update_tab();
+        //añadir más
+      }
+    })
+
+
+  });
+
+  //Se validan los input que se modifican.
+  $(document).on('keyup change',"#asignatura_curso_dialog #contenedor_asignaturas li input",function(event){
+    event.preventDefault();
+    //Se habilita los botones "guardar" y "restablecer".
+    $("#asignatura_curso_dialog #asignaturas_curso_submit").prop("disabled",false);
+    $("#asignatura_curso_dialog #asignaturas_curso_restablecer").prop("disabled",false);
+
+    if($(this).val()!=""){
+      $(this).removeClass('invalid');
+    }
+    else{
+      $(this).addClass('invalid');
+      $("#asignatura_curso_dialog #aviso_error").removeClass('oculto');
+      //Se deshabilita el botón de "guardar".
+      $("#asignatura_curso_dialog #asignaturas_curso_submit").prop("disabled",true);
+    }
+
+    if($("#asignatura_curso_dialog #contenedor_asignaturas li input[class='invalid']").size()==0){
+      $("#asignatura_curso_dialog #aviso_error").addClass('oculto');
+    }
+  });
+
 
 //////////////////////////////////
 //       Periodo Lectivo        //
@@ -4778,7 +4948,7 @@ $(document).on("blur","input[id='edit_profesor_dni']",function() {
       url: Routing.generate('comprobaciones_horario_nuevo'),
       success: function(response) {
         aviso.play();
-        texto='<p class="justificado">Se recomienda asignar el horario del entro antes del comienzo del curso para no efectuar cambios en el sistema. Si desea realizar la asignación ahora, debe saber que se realizarán los siguientes cambios en el sistema:</p><br>';
+        texto='<p class="justificado">Se recomienda asignar el horario del centro antes del comienzo del curso para no efectuar cambios en el sistema. Si desea realizar la asignación ahora, debe saber que se realizarán los siguientes cambios en el sistema:</p><br>';
           
         texto=texto+"<li><span>Eliminación del Horario Escolar actual.</span></li></br>";
 

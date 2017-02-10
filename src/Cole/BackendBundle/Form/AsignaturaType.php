@@ -18,7 +18,6 @@ class AsignaturaType extends AbstractType
             ->add('nombre','text',array('label' => 'Nombre', 'attr' => array('validation' => 'Empty_')))
             ->add('tipo')
             ->add('abreviatura','text',array('label' => 'Abreviatura', 'attr' => array('validation' => 'Empty_')))
-            ->add('libro')
         ;
     }
     

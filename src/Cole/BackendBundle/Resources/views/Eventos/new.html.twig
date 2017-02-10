@@ -6,6 +6,15 @@
 {% block javascript %}
 
   <script>
+  // Se establece las variables con los audios para las notificaciones.
+  if (navigator.userAgent.search("Firefox") >= 0) { //Firefox sólo admite archivos .ogg
+    var error = new Audio();
+    error.src = "/Symfony/web/bundles/backend/sounds/error.ogg";
+  }
+  else{
+    var error = new Audio();
+    error.src = "/Symfony/web/bundles/backend/sounds/error.mp3";
+  }
 
   inicio_d={{ inicio.inicioCurso|date('d') }};
   inicio_m= {{ inicio.inicioCurso|date('m') }};
@@ -99,7 +108,7 @@
 
         titulo="No se puede añadir eventos";
 
-
+        error.play(); 
         swal({
           title: titulo,
           text: texto,

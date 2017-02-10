@@ -9,6 +9,10 @@ button{
 	padding: 3px;
 	background: #e4e0e0; 
 }
+.ui-dialog-content button{
+	font-size: 14px !important;
+	min-width: 100px !important;
+}
 button[class*="ui-dialog-titlebar-close"]{
 	min-width: 0;
 	min-height: 0;
@@ -77,7 +81,9 @@ form #botones_form button:focus{
 button:hover{
 	background: #b1cce7;
 }
-
+.buttonface:hover{
+	background: buttonface!important; 
+}
 button:disabled{
    pointer-events: none;
    cursor: default;
@@ -496,6 +502,7 @@ nav{
 #tabs li .ui-icon-close:hover { 
 	background-image: url("../images/menu/ui-icons_334c73_256x240.png");
 	background-position: -32px -192px;
+	cursor: pointer;
 }
 .ui-dialog-titlebar-close:hover{
 	background: #bc1010 !important;
@@ -763,6 +770,23 @@ tbody tr td{
 	display:inline-table;
 	float: none !important;
 }
+
+.dialog_button{
+	display: inline-block;
+	width: 50%;
+	margin-left: 25%;
+}
+.dialog_button div{
+	width: 50%;
+	float: left;
+	display: inline;
+	text-align: center;
+}
+.dialog_button button{
+	height: 30px;
+	margin: 0 auto !important;
+	margin-top: 5px!important;
+}
 form{
     font: normal bold 12px Verdana, Arial;
     width: 100%;
@@ -900,6 +924,10 @@ legend{
 	color: #334c73;
 	font-size: 1.2em;
 
+}
+.ui-dialog legend{
+	font-size: 15px;
+	font-weight: bold;
 }
 .izquierda>div{
 	float: left;
@@ -1181,7 +1209,7 @@ margin-top: 10%;
 	font-size: 1.2em;
 	padding-left: 5px;
 	display: inline-block !important;
-}
+} 
 textarea{
 	height: 200px;
 	width: 96%;
@@ -1218,7 +1246,7 @@ form button{
 }
 #botones_form button{
 	margin: 5px 50px;
-	font-size: 1.2em !important;
+	font-size: 1.2em;
 	min-width: 135px;
 }
 .invalid{
@@ -1425,10 +1453,6 @@ form button{
 .dataTables_scrollBody .fixedHeader{
 	display: none;
 }
-
-
-
-
 #registro_asignaturas .simple_column{
 	width: 28%;
 }
@@ -1436,12 +1460,196 @@ form button{
 	margin: 10% 5%;
 	width: 95%;
 }
-#registro_asignaturas .block_insert h2{
+#registro_asignaturas .block_insert h2,#asignaturas_cursos .block_insert>h2{
 	font-size: 1.3em;
 	text-align: center;
 }
 #registro_asignaturas #contenedor_registro{
 	width: 33%;
+	min-height: 216px;
+}
+#asignaturas_cursos #contenedor_registro{
+	width: 50%;
+	min-height: 300px;
+	margin-left: 0 !important;
+}
+#asignaturas_cursos #contenedor_registro div table th, #asignaturas_cursos #contenedor_registro div table td{
+	width: 25%;
+	min-width: 25%;
+}
+#asignaturas_cursos #contenedor_registro div table th:first-child, #asignaturas_cursos #contenedor_registro div table td:first-child{
+	width: 45%;
+	min-width: 45%;
+}
+#asignaturas_cursos #contenedor_registro div table td:first-child:not(.dataTables_empty){
+	text-align: left;
+	margin-left: 20px;
+}
+#asignaturas_cursos button[class*="elected"]{
+	pointer-events: none;
+	cursor: default;
+	border: 2px inset;
+}
+#asignaturas_cursos .cabecera_lista{
+    background: #334c73 none repeat scroll 0 0;
+    border-radius: 5px 5px 0 0;
+    color: white;
+    font-weight: bold;
+    height: 25px;
+    padding-top: 5px;
+    text-align: center;
+    vertical-align: middle;
+    box-shadow: 0 1px 1px 1px rgba(0, 0, 0, 0.5);
+    margin-bottom: 5px;
+}
+#asignaturas_cursos .contenido_lista{
+    margin: 0 auto;
+    max-height: 270px;
+    overflow: auto;
+    text-align: center;
+}
+#asignaturas_cursos .contenido_lista button{
+	margin: 7% 0;
+}
+#asignaturas_cursos .dataTables_empty{
+	padding-top: 80px !important;
+	border: none;
+}
+#asignatura_curso_dialog button{
+	min-width: 120px;
+	display: block;
+	margin: 10% auto;
+	margin-left: 37px;
+}
+#asignatura_curso_dialog span{
+	margin-top: 15px;
+	margin-bottom: 15px;
+	display: block;
+}
+#asignatura_curso_dialog h4{
+	width: 50%;
+	margin: 5px auto;
+	text-decoration: underline;
+}
+#asignatura_curso_dialog fieldset{
+	height: 403px;
+}
+#asignatura_curso_dialog fieldset>div{
+	height: 370px;
+}
+#asignatura_curso_dialog fieldset>div>div>div{
+	overflow: auto;
+}
+#asignatura_curso_dialog .list_asig{
+	max-height: 255px;
+	min-height: 200px;
+}
+#asignatura_curso_dialog #contenedor_asignaturas{
+    display: block;
+    margin: 0 auto;
+    width: 90%;
+}
+#asignatura_curso_dialog .elected,#asignatura_curso_dialog #contenedor_asignaturas tr {
+    cursor: default;
+    pointer-events: none;
+}
+#asignaturas_cursos #lista_asignaturas tr {
+    cursor: default !important;
+    pointer-events: none !important;
+}
+#asignatura_curso_dialog #contenedor_asignaturas h4{
+    background: #334c73 none repeat scroll 0 0;
+    border-radius: 5px 5px 0 0;
+    box-shadow: 0 1px 1px 1px rgba(0, 0, 0, 0.5);
+    color: white;
+    min-height: 17px;
+    padding: 6px 0;
+    text-align: center;
+    margin: 0 !important;
+    width: 100%;
+    text-decoration: none;
+}
+#asignatura_curso_dialog #contenedor_asignaturas h4 strong{
+	margin-left: 3px;
+	color: #fa8258;
+}
+#asignatura_curso_dialog #contenedor_asignaturas>div{
+    background: #b1cce7 none repeat scroll 0 0;
+    border-radius: 0 0 5px 5px;
+    box-shadow: 0 1px 1px 1px rgba(0, 0, 0, 0.5);
+    height: 260px;
+    margin-top: 2px;
+}
+#asignatura_curso_dialog #contenedor_asignaturas .aviso{
+    color: #334c73;
+    font-family: Courier,Helvetica,Arial,sans-serif;
+    font-size: 1em;
+    font-weight: bold;
+    margin-top: 110px;
+    text-align: center;
+    width: 100%;
+}
+
+#asignatura_curso_dialog #contenedor_asignaturas li{
+    border-bottom: 1px dashed #334c73;
+    list-style: none inside none;
+    padding: 1px 0;
+    font-size: 14px;
+}
+#asignatura_curso_dialog #contenedor_asignaturas li:hover{
+    background: #dae6f2;
+}
+
+#asignatura_curso_dialog #contenedor_asignaturas ol{
+	background: #4D769F;
+    color: white;
+    margin-top: -1px;
+    padding: 3px 0;
+}
+#asignatura_curso_dialog #contenedor_asignaturas p{
+	width: 70%;
+	text-align: left;
+	display: inline-block;
+}
+#asignatura_curso_dialog #contenedor_asignaturas input{
+	height: 25px;
+	width: 35px;
+	text-align: center;
+}
+#asignatura_curso_dialog #contenedor_asignaturas img{
+	width: 15px;
+	height: 15px;
+	margin-left: 30px;
+	vertical-align: middle;
+}
+#asignatura_curso_dialog #contenedor_asignaturas img:hover{
+	cursor: pointer;
+}
+
+#asignatura_curso_dialog #aviso_error span:nth-child(2){
+	width: 90% !important;
+	margin: 0 auto !important;
+	margin-top: 10px !important;
+	font-size: 14px !important;
+}
+#asignatura_curso_dialog .button_all{
+    background: #b1cce7;
+}
+#asignatura_curso_dialog .button_all:hover{
+    background: #4D769F;
+    color: white;
+}
+#asignatura_curso_dialog .disabled{
+    background: none !important;
+}
+.lista_cursos{
+	min-height: 300px;
+	background: #b1cce7;
+	width: 10%;
+	border-radius: 5px;
+	box-shadow: 0 1px 1px 1px rgba(0, 0, 0, 0.5);
+	float: left;
+	margin: 2% 5%;
 }
 .ui-dialog #ordenar_cursos li{
     background: #ffffff none repeat scroll 0 0;
@@ -3764,10 +3972,6 @@ margin:120px 9px;
 	.btn_save button{
 		margin: 0 auto;
 	}
-	#registro_asignaturas .block_insert h2{
-		font-size: 1.2em;
-		text-align: center;
-	}
 	.contenedor_principal_reserva>div:nth-child(1){
 		width: 32%;
 		min-height: 38vh;
@@ -5510,3 +5714,18 @@ cursor: default !important;
 	height: 0;
 }
 
+.w40{
+	width: 40%;
+}
+.w50{
+	width: 50%;
+}
+.w59{
+	width: 59%;
+}
+.tcenter{
+	text-align: center;
+}
+.b_right{
+	border-right: 2px solid #aaaaaa;
+}

@@ -1,0 +1,14 @@
+{% for entity in entity %}
+	<tr id="{{ entity.asignatura.id }}">
+  	<td>{{ entity.asignatura.nombre }}</td>
+  	<td>{{ entity.asignatura.tipo}}</td>
+  	<td>{{ entity.numModulos }}</td>
+	</tr>
+
+{% else %}
+	<tr class="odd no_cursor">
+		<td class="dataTables_empty">Este curso no tiene asignaturas asignadas</td>
+	</tr>
+{% endfor %}
+
+

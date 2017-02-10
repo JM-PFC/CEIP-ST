@@ -66,8 +66,16 @@
             }); 
     }
 
-    var error = new Audio();
-    error.src = "/Symfony/web/bundles/backend/sounds/error.mp3";
+    // Se establece las variables con los audios para las notificaciones.
+    if (navigator.userAgent.search("Firefox") >= 0) { //Firefox sólo admite archivos .ogg
+        var error = new Audio();
+        error.src = "/Symfony/web/bundles/backend/sounds/error.ogg";
+    }
+    else{
+        var error = new Audio();
+        error.src = "/Symfony/web/bundles/backend/sounds/error.mp3";
+    }
+
 
     //Se elimina la opción "todos los cursos" de la lista de cursos.
     $("#asignar_grupos #lista_cursos select option:last-child" ).remove();
