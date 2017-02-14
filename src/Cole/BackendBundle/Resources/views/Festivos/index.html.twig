@@ -220,6 +220,14 @@
     minDate: new Date(inicio_a, 11, 1),
     maxDate: new Date(anyo_f_navidad, mes_f_navidad, dia_f_navidad),
     beforeShow: function() { 
+      //Se elimina las fechas de semana santa si al eliminar una fecha de S.S. no se borra la otra automáticamente. (Se usa por prevenir, aunque no se dará el caso puesto que no se puede acceder desde un input a otro en este caso)
+      if(($("#asignacion_festivos #inicio_semanasanta").val()=="" || $("#asignacion_festivos #fin_semanasanta").val()=="") && ($("#asignacion_festivos #inicio_semanasanta").hasClass('modified') || $("#asignacion_festivos #fin_semanasanta").hasClass('modified'))){
+        $("#asignacion_festivos #inicio_semanasanta").val("");
+        $("#asignacion_festivos #inicio_semanasanta").addClass('modified');
+        $("#asignacion_festivos #fin_semanasanta").val("");
+        $("#asignacion_festivos #fin_semanasanta").addClass('modified');
+      }
+      
       var dato = $("#inicio_navidad").val();
       var data1 = $("#fin_navidad").datepicker('getDate');
 
@@ -303,7 +311,13 @@
     minDate: new Date(anyo_i_navidad, mes_i_navidad, dia_i_navidad),
     maxDate: new Date(fin_a, 0, 31),
     beforeShow: function() { 
-
+      //Se elimina las fechas de semana santa si al eliminar una fecha de S.S. no se borra la otra automáticamente. (Se usa por prevenir, aunque no se dará el caso puesto que no se puede acceder desde un input a otro en este caso)
+      if(($("#asignacion_festivos #inicio_semanasanta").val()=="" || $("#asignacion_festivos #fin_semanasanta").val()=="") && ($("#asignacion_festivos #inicio_semanasanta").hasClass('modified') || $("#asignacion_festivos #fin_semanasanta").hasClass('modified'))){
+        $("#asignacion_festivos #inicio_semanasanta").val("");
+        $("#asignacion_festivos #inicio_semanasanta").addClass('modified');
+        $("#asignacion_festivos #fin_semanasanta").val("");
+        $("#asignacion_festivos #fin_semanasanta").addClass('modified');
+      }
       var dato = $("#fin_navidad").val();
       var data1 = $("#inicio_navidad").val().split(" ");
 
@@ -418,6 +432,14 @@
     minDate: new Date(fin_a, 2, 1),
     maxDate: new Date(anyo_f_semanasanta, mes_f_semanasanta, dia_f_semanasanta),
     beforeShow: function() { 
+      //Se elimina las fechas de navidad si al eliminar una fecha de navidad no se borra la otra automáticamente.(cuando se deja un input de navidad y se selecciona directamente un input de semana santa)
+      if(($("#asignacion_festivos #inicio_navidad").val()=="" || $("#asignacion_festivos #fin_navidad").val()=="") && ($("#asignacion_festivos #inicio_navidad").hasClass('modified') || $("#asignacion_festivos #fin_navidad").hasClass('modified'))){
+        $("#asignacion_festivos #inicio_navidad").val("");
+        $("#asignacion_festivos #inicio_navidad").addClass('modified');
+        $("#asignacion_festivos #fin_navidad").val("");
+        $("#asignacion_festivos #fin_navidad").addClass('modified');
+      }
+
       var dato = $("#inicio_semanasanta").val();
       var data1 = $("#fin_semanasanta").datepicker('getDate');
 
@@ -480,6 +502,15 @@
     minDate: new Date(anyo_i_semanasanta, mes_i_semanasanta, dia_i_semanasanta),
     maxDate: new Date(fin_a, 3, 30),
     beforeShow: function() { 
+
+      //Se elimina las fechas de navidad si al eliminar una fecha de navidad no se borra la otra automáticamente.(cuando se deja un input de navidad y se selecciona directamente un input de semana santa)
+      if(($("#asignacion_festivos #inicio_navidad").val()=="" || $("#asignacion_festivos #fin_navidad").val()=="") && ($("#asignacion_festivos #inicio_navidad").hasClass('modified') || $("#asignacion_festivos #fin_navidad").hasClass('modified'))){
+        $("#asignacion_festivos #inicio_navidad").val("");
+        $("#asignacion_festivos #inicio_navidad").addClass('modified');
+        $("#asignacion_festivos #fin_navidad").val("");
+        $("#asignacion_festivos #fin_navidad").addClass('modified');
+      }
+
       var dato = $("#fin_semanasanta").val();
       var data1 = $("#inicio_semanasanta").val().split(" ");
 
@@ -628,8 +659,6 @@
             </div>
 
            <form action="{{ path('calendariopdf') }}" title="Calendario del Curso en PDF"><button id="calendario_completo" >Calendario Curso</button></form>
-
-
           </div>
 
         </div>

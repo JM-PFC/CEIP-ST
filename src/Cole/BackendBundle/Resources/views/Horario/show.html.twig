@@ -74,57 +74,136 @@
                 De <input id="inicio_horario_disable"  title="Pulsa para modificar el horario del centro"></input> a <input id="fin_horario_disable"   title="Pulsa para modificar el horario del centro"></input>h.
               </div>
             </div>
-            <li>Seleccione lo datos para generar un nuevo horario:</li>
+            <li>Seleccione los datos para generar un nuevo horario:</li>
             <div>
-                <span>Total de horas de clases:</span>
-                <select id="total_horas" class="select_number">
-                    <option selected="selected" class="oculto" value="0">Nº</option>
-                    <option  value="5" >5</option>
-                    <option  value="6">6</option>
-                    <option  value="7">7</option>
-                    <option  value="8">8</option>
-                    <option  value="9">9</option>
-                    <option  value="10">10</option>
-                </select>
-            </div>
-            <div>
-                <span>Nº de clases antes del recreo:</span>
-                <select id="horas_recreo" class="select_number">
-                    <option selected="selected" class="oculto" value="0">Nº</option>
-                    <option  value="1">1</option>
-                    <option  value="2">2</option>
-                    <option  value="3">3</option>
-                    <option  value="4">4</option>
-                    <option  value="5">5</option>
-                </select>
-            </div>
 
-            <div>
-                <span id="selec_comida">Clases después de la comida:
-                    <div> 
-                        <input id="no" type="radio" checked="checked" name="alumno[foto]" required="required" >
-                        <label class="required" for="no">No</label>
-                    </div> 
-                    <div> 
-                        <input id="si" type="radio" name="alumno[foto]" required="required" >
-                        <label class="required" for="si">Si</label>
+                <div class="div_change">
+                    <div class="head_change">
+                        <label id="one">Automático</label>
+                        <label id="two" class="btn_not_select">Manual</label>
                     </div>
-                </span>
-                <span class="disabled">Nº de horas de clase después de la comida:</span>
-                <select id="horas_comida" class="select_number" disabled="">
-                    <option selected="selected" class="oculto" value="0">Nº</option>
-                    <option  value="1">1</option>
-                    <option  value="2">2</option>
-                    <option  value="3">3</option>
-                </select>
+                    <div id="cont_one">
+                      <div>
+                        <span>Hora de inicio de clases:</span>
+                        <select id="inicio_clase" class="select_number">
+                            <option  class="oculto" value="0">Hora</option>
+                            <option  value="08:00" >8:00 h.</option>
+                            <option  value="08:15">8:15 h.</option>
+                            <option  value="08:30">8:30 h.</option>
+                            <option  value="08:45">8:45 h.</option>
+                            <option selected="selected" value="09:00">9:00 h.</option>
+                            <option  value="09:15">9:15 h.</option>
+                            <option  value="09:30">9:30 h.</option>
+                        </select>
+                      </div>
+                      <div>
+                        <span>Total de módulos del día:</span>
+                        <select id="total_horas_auto" class="select_number">
+                            <option  class="oculto" value="0">Nº</option>
+                            <option  value="5" >5</option>
+                            <option  selected="selected" value="6">6</option>
+                            <option  value="7">7</option>
+                            <option  value="8">8</option>
+                            <option  value="9">9</option>
+                            <option  value="10">10</option>
+                        </select>
+                      </div>
+                      <div>
+                        <span>Nº de módulos antes del recreo:</span>
+                        <select id="horas_recreo_auto" class="select_number">
+                            <option  class="oculto" value="0">Nº</option>
+                            <option  value="1">1</option>
+                            <option  value="2">2</option>
+                            <option  value="3">3</option>
+                            <option  selected="selected" value="4">4</option>
+                            <option  value="5">5</option>
+                        </select>
+                      </div>
+                      <div id="tiempo">
+                        <div>
+                            <span>Duración de módulos:</span>
+                            <select id="tiempo_modulo" class="select_number">
+                                <option  class="oculto" value="0">Tiempo</option>
+                                <option  value="30">30 min.</option>
+                                <option  value="35">35 min.</option>
+                                <option  value="40">40 min.</option>
+                                <option selected="selected"  value="45">45 min.</option>
+                                <option  value="50">50 min.</option>
+                                <option  value="55">55 min.</option>
+                                <option  value="60">60 min.</option>
+                            </select>
+                        </div>
+                        <div>
+                            <span>Duración del recreo:</span>
+                            <select id="tiempo_recreo" class="select_number">
+                                <option  class="oculto" value="0">Tiempo</option>
+                                <option  value="20">20 min.</option>
+                                <option  value="25">25 min.</option>
+                                <option  selected="selected"  value="30">30 min.</option>
+                                <option  value="35">35 min.</option>
+                                <option  value="40">40 min.</option>
+                            </select>   
+                        </div>
+                      </div>
+                    </div>
+                    <div id="cont_two" class="oculto">
+                      <div>
+                        <span>Total de módulos del día:</span>
+                        <select id="total_horas" class="select_number">
+                            <option selected="selected" class="oculto" value="0">Nº</option>
+                            <option  value="5" >5</option>
+                            <option  value="6">6</option>
+                            <option  value="7">7</option>
+                            <option  value="8">8</option>
+                            <option  value="9">9</option>
+                            <option  value="10">10</option>
+                        </select>
+                      </div>
+                      <div>
+                        <span>Nº de módulos antes del recreo:</span>
+                        <select id="horas_recreo" class="select_number">
+                            <option selected="selected" class="oculto" value="0">Nº</option>
+                            <option  value="1">1</option>
+                            <option  value="2">2</option>
+                            <option  value="3">3</option>
+                            <option  value="4">4</option>
+                            <option  value="5">5</option>
+                        </select>
+                      </div>
+
+                      <div>
+                        <span id="selec_comida">Módulos después de la comida:
+                            <div class="input_select">
+                                <div> 
+                                    <input id="no" type="radio" checked="checked" name="alumno[foto]" required="required" >
+                                    <label class="required" for="no">No</label>
+                                </div> 
+                                <div> 
+                                    <input id="si" type="radio" name="alumno[foto]" required="required" >
+                                    <label class="required" for="si">Si</label>
+                                </div> 
+                            </div>
+                    
+                        </span>
+                        <span class="disabled">Nº de módulos después de la comida:</span>
+                        <select id="horas_comida" class="select_number" disabled="">
+                            <option selected="selected" class="oculto" value="0">Nº</option>
+                            <option  value="1">1</option>
+                            <option  value="2">2</option>
+                            <option  value="3">3</option>
+                        </select>
+                      </div>
+                    </div>
+                </div>
             </div>
-
-        <div class="center_button">
-            <button id="button_generate" disabled="">Generar Horario</button>
-          
-            <button id="button_rest" disabled="">Borrar opciones</button>
-        </div>
-
+            <div id="button_one" class="center_button">
+                <button id="button_auto_generate">Generar Horario</button>
+                <button id="button_auto_rest">Borrar opciones</button>
+            </div>
+            <div id="button_two" class="center_button oculto">
+                <button id="button_generate" disabled="">Generar Horario</button>
+                <button id="button_rest" disabled="">Borrar opciones</button>
+            </div>
         </div> 
       </div>
       <div>
@@ -138,16 +217,16 @@
                     <thead>
                     <tr>
                         <th></th>
-                        <th>Hora de clase</th>
+                        <th>Módulos</th>
                         <th>Inicio</th>
                         <th>Fin</th>
-                        <th></th>
+                        {#<th></th>#}
                     </tr>
                     </thead>
                 </table>
                 <div class="inner_table">
                     <table id="lista_color">
-                    <p id="aviso_horario" class="oculto">No se ha establecido ningún horario escolar.<br> <br>Por favor, introduzca los datos necesarios para generar un nuevo horario y complete las horas de clase.
+                    <p id="aviso_horario" class="oculto">No se ha establecido ningún horario escolar.<br> <br>Por favor, introduzca los datos necesarios para generar un nuevo horario y complete los módulos del día.
                     </p>    
                     {% for entity in entities %}
                         <tr>
@@ -155,7 +234,7 @@
                             <td>{{ entity.horaClase }}</td>
                             <td><input type="time" value="{{ entity.inicio|date('H:i') }}" step="1"> </input></td>
                             <td><input type="time"  value="{{ entity.fin|date('H:i') }}" step="1"> </input></td>
-                            <td><button disabled="disabled">Guardar</button></td>
+                            {#<td><button disabled="disabled" >Guardar</button></td>#}
                         </tr>
                     {% endfor %}
                     </table>
@@ -173,7 +252,7 @@
                     <thead>
                     <tr>
                         <th></th>
-                        <th>Hora de clase</th>
+                        <th>Módulos</th>
                         <th>Inicio</th>
                         <th>Fin</th>
                         <th></th>
@@ -199,7 +278,7 @@
        </div>
 
         <div id="registro_horario_guardar" class="buttons_form">
-            <button disabled="disabled" id="button_horario_all">Guardar Todo</button>
+            <button disabled="disabled" id="button_horario_all">Guardar</button>
             <button disabled="disabled" id="horario_rest">Restablecer</button>
         </div>
         <div id="nuevo_horario_guardar" class="oculto buttons_form">

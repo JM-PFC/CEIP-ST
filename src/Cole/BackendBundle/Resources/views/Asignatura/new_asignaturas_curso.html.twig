@@ -161,7 +161,7 @@
                 {% for entity in entities_especificas %}
                   <li id="{{ entity.asignatura.id }}" tipo="{{ entity.asignatura.tipo }}" estado="asignada">
                     <p>{{ entity.asignatura.nombre }}</p>
-                    <input type="number" min="1" max="9" value="{{ entity.numModulos }}"></input>
+                    <input type="number" min="1" max="9" value="{{ entity.numModulos }}" valor="{{ entity.numModulos }}"></input>
                     <img src="/Symfony/web/bundles/backend/images/menu/eliminar.png">
                   </li>
                 {% endfor %}

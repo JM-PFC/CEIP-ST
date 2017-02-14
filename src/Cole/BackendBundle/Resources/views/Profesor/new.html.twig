@@ -8,6 +8,16 @@
     <script >
         // Asígnamos un valor por defecto al input radio de los formularios de creación.
         $("form[id$='nuevo'] input[id$='_sexo_0']").attr("checked","checked");
+
+        $(document).on("change",'#profesor_nuevo #profesor_horas', function(){
+            if($(this).val()<22.5){
+                $("#profesor_nuevo #profesor_horasLectivas").attr("max",$(this).val());
+                if($("#profesor_nuevo #profesor_horasLectivas").val()>$(this).val()){
+                    $("#profesor_nuevo #profesor_horasLectivas").val($(this).val());
+                }
+            }
+
+        });
         
         // Se muestra por defecto la primera pestaña del formulario y se selecciona el primer campo.
         var sel= $("#tabs div[aria-hidden='false']").attr("id");
@@ -25,28 +35,40 @@
         $("#profesor_nuevo #tab2 div[class='child']>div:nth-child(2) input").each (function(){ 
             $(this).prop("disabled",false);
         });
-        $("#profesor_nuevo #tab3 input[type='text']").each (function(){ 
+        $("#profesor_nuevo #tab3 #perfil input").each (function(){ 
             $(this).prop("disabled",true);
         });
-        $("#profesor_nuevo #tab3 div[class='child']>div:nth-child(2) input[type='text']").each (function(){ 
+        $("#profesor_nuevo #tab3 #perfil>div:nth-child(2) input").each (function(){ 
             $(this).prop("disabled",false);
         });
 
+        //Se comprueba que los datos de una fila están completos para deshabilitar la siguiente.
         $(document).on("keyup",'#profesor_nuevo #tab2 input', function(){
             var val=0;
             $(this).parent("div").parent("div").find("input").each (function(){ 
                 if( !$(this).val() ) {
-
                     val=1;                
                 }
             });
-            if(val==0){ // mirar porque sale el div dsiguiente de la misma fila
+            if(val==0){
                 $(this).parent("div").parent("div").next("div").find("input").each (function(){ 
                     $(this).prop("disabled",false);
                 });
             }
         });
-
+        $(document).on("keyup",'#profesor_nuevo #tab3 #perfil input', function(){
+            var val=0;
+            $(this).parent("div").parent("div").find("input").each (function(){ 
+                if( !$(this).val() ) {
+                    val=1;                
+                }
+            });
+            if(val==0){ 
+                $(this).parent("div").parent("div").next("div").find("input").each (function(){ 
+                    $(this).prop("disabled",false);
+                });
+            }
+        });
     </script>
 
 {% endblock %}
@@ -194,9 +216,12 @@
             <legend>Perfil Profesional</legend>
             <div class="parent">
             <div class="child">
-                <div id="rama">
-                    {{ form_row(form.nivel) }}
-                </div>
+              <div id="rama">
+                  {{ form_row(form.nivel) }}
+                  {{ form_row(form.horas,{'attr':{'class':'input_horas'} , 'value' : 37.5}) }}
+                  {{ form_row(form.horasLectivas,{'attr':{'class':'input_horas'} , 'value' : 22.5}) }}
+              </div>
+              <div id="perfil">
                 <div>
                     <label class="long">Últimas Instituciones donde ha enseñado</label>
                     <label class="medium">Localidad</label>
@@ -259,6 +284,7 @@
                         <input  id="año_profesional16" validation="Numbers"></input>
                     </div>
                 </div>
+              </div>
             </div> 
             </div>
             </fieldset> 

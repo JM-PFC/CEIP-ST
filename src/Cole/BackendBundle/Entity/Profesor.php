@@ -251,6 +251,22 @@ class Profesor implements UserInterface, \Serializable
     private $nivel;
 
     /**
+     *
+     * @ORM\Column(name="horas", type="decimal", precision=3, scale=1)
+     * @Assert\Range(min=15, max=40)
+     * @Assert\NotBlank()
+     */
+    private $horas;
+
+    /**
+     *
+     * @ORM\Column(name="lectivas", type="decimal", precision=3, scale=1)
+     * @Assert\Range(min=15, max=40)
+     * @Assert\NotBlank()
+     */
+    private $horasLectivas;
+
+    /**
      * @var string
      *
      * @ORM\Column(name="observaciones", type="string", length=500, nullable=true)
@@ -987,5 +1003,51 @@ class Profesor implements UserInterface, \Serializable
     public function getObservaciones()
     {
         return $this->observaciones;
+    }
+
+    /**
+     * Set horas
+     *
+     * @param string $horas
+     * @return Profesor
+     */
+    public function setHoras($horas)
+    {
+        $this->horas = $horas;
+
+        return $this;
+    }
+
+    /**
+     * Get horas
+     *
+     * @return string 
+     */
+    public function getHoras()
+    {
+        return (float)$this->horas;
+    }
+
+    /**
+     * Set horasLectivas
+     *
+     * @param string $horasLectivas
+     * @return Profesor
+     */
+    public function setHorasLectivas($horasLectivas)
+    {
+        $this->horasLectivas = $horasLectivas;
+
+        return $this;
+    }
+
+    /**
+     * Get horasLectivas
+     *
+     * @return string 
+     */
+    public function getHorasLectivas()
+    {
+        return (float)$this->horasLectivas;
     }
 }

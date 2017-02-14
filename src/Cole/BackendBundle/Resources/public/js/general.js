@@ -1110,7 +1110,7 @@ $(document).on("submit",".formulario_profesor",function(event){
     });
 
     // Se guarda el contenido del perfil Profesional en su variable.   
-    $(this).find("#tab3 :input").each(function(){
+    $(this).find("#tab3 #perfil :input").each(function(){
       if(($(this).val()=="")) {
         perfilProf+="~";
       }
@@ -1124,7 +1124,9 @@ $(document).on("submit",".formulario_profesor",function(event){
     $("#profesor_perfilProfesional").val(perfilProf); 
           
     var formdata=new FormData($(this)[0])
-
+    //Se le pasa el valor de las horas de jornada laboral manualmente por el problema de representar decimales en input number.
+    formdata.append('horas',$("#profesor_horas").val());
+    formdata.append('lectivas', $("#profesor_horasLectivas").val());
     if(val==0){
       $.ajax({
         type: 'POST',
@@ -1637,140 +1639,12 @@ $("#dialog-confirm span").hide();
 // Formularios de actualización //
 //////////////////////////////////
 
-  $(document).on("submit","#profesor_edit",function(event) {
-    event.preventDefault();
-    form= $(this).closest("form");
-
-    var perfilAcad='';
-    var perfilProf='';
-    // Se guarda el contenido del perfil Académico en su variable.   
-    form.find("div[id='perfil_acad'] :input").each(function(){
-      if(($(this).val()=="")) {
-        perfilAcad+="~";
-      }
-      else{
-        perfilAcad+=$(this).val();
-      }
-      perfilAcad+="|";
-    });
-
-    // Se guarda el contenido del perfil Profesional en su variable.   
-    form.find("div[id='perfil_prof'] :input").each(function(){
-      if(($(this).val()=="")) {
-        perfilProf+="~";
-      }
-      else{
-        perfilProf+=$(this).val();
-      }
-      perfilProf+="|";
-    });
-
-    $("#edit_profesor_perfilAcademico").val(perfilAcad);     
-    $("#edit_profesor_perfilProfesional").val(perfilProf); 
-
-    var val=0;
-    // Se recorre los campos del formulario mirando si estan validados o no.
-    form.find(":input[type!='file']").each(function(){
-
-      if(($(this).attr("id")!="edit_profesor_perfilAcademico" && $(this).attr("id")!="edit_profesor_perfilProfesional")&&(!$(this).attr("validated") || $(this).attr("validated")==false)){
-        if($(this).attr("validation")){
-          validation($(this));
-        }
-      }
-    });
-
-    //":input"añade a los input radio,select...
-    form.find(":input").each(function(){
-      if(($(this).attr("validated")=="false")) {
-        //Se muestra el input inválido.
-        $(this).focus();
-        val=1;
-        return false;
-      }       
-    });
-
-    var estado= "";
-
-    if(!form.find("#actual").hasClass("oculto")){
-      estado= "actual";
-    }
-    else if(!form.find("#actualizada").hasClass("oculto")){
-      estado= "actualizado";
-    }
-    else{
-      estado= "eliminado";
-    }
-          
-    var formdata=new FormData($(this)[0]);
-    formdata.append('estado', estado);
-
-    if(val==0){
-      $.ajax({
-        type: 'POST',
-        url: $(this).attr('action'),
-        data: formdata, 
-        dataType: 'json',
-        processData: false,
-        contentType: false,
-        cache: false,
-        success: function(response) {
-      
-          $("#icono_restablecer").addClass("disable");
-          //Hay que actualizar la pestaña que contiene la tabla de profesores.
-
-          $("#consultar_instalaciones").update_tab();
-          //Función para retrasar la ejecución siguiente.
-          //setTimeout(function(){ 
-          //  $("#editar_profesor_restablecer").trigger('click');
-          //}, 6000);
-
-          var arr = form.attr('action').split('/');
-          div=form.closest("div[id^='tabs-']");
-          $(div).load(Routing.generate('profesor_edit', {id:arr[5]}), function(responseTxt, statusTxt, xhr){
-            if(statusTxt == "success"){
-              form= $("#profesor_edit");
-              // Antiguo aviso de confirmación
-              //form.find("div[id='message']").remove();
-              //form.find("div[id='result']").html("<div id='message'></div>");
-              //form.find("div[id='message']").html("<h2> Datos actualizados</h2>").hide();
-              //form.find("div[id='message']").fadeIn('fast').delay(5000).fadeOut('slow');
-
-              // Notificación de confirmación.
-              exito.play();
-
-              new PNotify({
-                text:"Datos actualizados",
-                addclass: "custom",
-                type: "success",
-                shadow: true,
-                hide: true,
-                buttons: {
-                  sticker: false,
-                  labels:{close: "Cerrar"}
-                },
-                stack: right_Stack,
-                animate: {
-                  animate: true,
-                  in_class: "fadeInRight",
-                  out_class: "fadeOutRight",
-                }
-              });
-            }
-
-            if(statusTxt == "error")
-              alert("Error: " + xhr.status + ": " + xhr.statusText);
-          });
-        } 
-      })
- 
-    }
-  });
-
   // Función para comprobar si se ha editado algo el formulario para mostrar los botones de guardar y restablecer.
   function comprobarEditForm(form) {
     var val=0;
     // Se comprueba si se ha modificado el valor inicial de algún input.
     form.find("input[type!='file']").each(function(){
+
       //Se omite que se compruebe los inputs de la hora en el formulario de editar eventos si la opción "Todo el día" está activa.
       if(form.attr("id")=="eventos_edit" && $(this).attr("class")=="timepicki-input" && form.find("#all_day input").is(':checked')){
       }
@@ -1945,7 +1819,7 @@ $("#dialog-confirm span").hide();
 
   // Se llama a la función de comprobar formulario editado, en el caso que se modifique algún elemento del formulario.
   
-  $(document).on("keyup","form[id$='_edit'] input",function() {
+  $(document).on("change keyup paste click input blur cut","form[id$='_edit'] input",function() {
     //Se omite la validación en editar noticias.
     if($(this).closest("form").attr("id")=="noticias_edit"){
       return false;
@@ -1967,14 +1841,12 @@ $("#dialog-confirm span").hide();
     comprobarEditForm($(this).closest("form"));
   });
 
-  $(document).on("keyup","form[id$='_edit'] textarea",function() {
+  $(document).on("change keyup paste click input blur cut","form[id$='_edit'] textarea",function() {
     if($(this).closest("form").attr("id")=="noticias_edit"){
       return false;
     }
     comprobarEditForm($(this).closest("form"));
   });
-
-
 
 
 
@@ -2143,8 +2015,138 @@ $("#dialog-confirm span").hide();
       $('#padres_dialog form').attr("alumno",alum[5]);
       $( '<div class="ui-widget-overlay ui-front" style="z-index: 99;"></div>' ).insertAfter($(".ui-dialog[aria-describedby='padres_dialog']"));
     }).dialog('open'); 
+  });
 
+  $(document).on("submit","#profesor_edit",function(event) {
+    event.preventDefault();
+    form= $(this).closest("form");
 
+    var perfilAcad='';
+    var perfilProf='';
+    // Se guarda el contenido del perfil Académico en su variable.   
+    form.find("div[id='perfil_acad'] :input").each(function(){
+      if(($(this).val()=="")) {
+        perfilAcad+="~";
+      }
+      else{
+        perfilAcad+=$(this).val();
+      }
+      perfilAcad+="|";
+    });
+
+    // Se guarda el contenido del perfil Profesional en su variable.   
+    form.find("div[id='perfil_prof'] :input").each(function(){
+      if(($(this).val()=="")) {
+        perfilProf+="~";
+      }
+      else{
+        perfilProf+=$(this).val();
+      }
+      perfilProf+="|";
+    });
+
+    $("#edit_profesor_perfilAcademico").val(perfilAcad);     
+    $("#edit_profesor_perfilProfesional").val(perfilProf); 
+
+    var val=0;
+    // Se recorre los campos del formulario mirando si estan validados o no.
+    form.find(":input[type!='file']").each(function(){
+
+      if(($(this).attr("id")!="edit_profesor_perfilAcademico" && $(this).attr("id")!="edit_profesor_perfilProfesional")&&(!$(this).attr("validated") || $(this).attr("validated")==false)){
+        if($(this).attr("validation")){
+          validation($(this));
+        }
+      }
+    });
+
+    //":input"añade a los input radio,select...
+    form.find(":input").each(function(){
+      if(($(this).attr("validated")=="false")) {
+        //Se muestra el input inválido.
+        $(this).focus();
+        val=1;
+        return false;
+      }       
+    });
+
+    var estado= "";
+
+    if(!form.find("#actual").hasClass("oculto")){
+      estado= "actual";
+    }
+    else if(!form.find("#actualizada").hasClass("oculto")){
+      estado= "actualizado";
+    }
+    else{
+      estado= "eliminado";
+    }
+          
+    var formdata=new FormData($(this)[0]);
+    formdata.append('estado', estado);
+    //Se le pasa el valor de las horas de jornada laboral manualmente por el problema de representar decimales en input number.
+    formdata.append('horas',$("#edit_profesor_horas").val());
+    formdata.append('lectivas', $("#edit_profesor_horasLectivas").val());
+
+    if(val==0){
+      $.ajax({
+        type: 'POST',
+        url: $(this).attr('action'),
+        data: formdata, 
+        dataType: 'json',
+        processData: false,
+        contentType: false,
+        cache: false,
+        success: function(response) {
+      
+          $("#icono_restablecer").addClass("disable");
+          //Hay que actualizar la pestaña que contiene la tabla de profesores.
+
+          $("#consultar_instalaciones").update_tab();
+          //Función para retrasar la ejecución siguiente.
+          //setTimeout(function(){ 
+          //  $("#editar_profesor_restablecer").trigger('click');
+          //}, 6000);
+
+          var arr = form.attr('action').split('/');
+          div=form.closest("div[id^='tabs-']");
+          $(div).load(Routing.generate('profesor_edit', {id:arr[5]}), function(responseTxt, statusTxt, xhr){
+            if(statusTxt == "success"){
+              form= $("#profesor_edit");
+              // Antiguo aviso de confirmación
+              //form.find("div[id='message']").remove();
+              //form.find("div[id='result']").html("<div id='message'></div>");
+              //form.find("div[id='message']").html("<h2> Datos actualizados</h2>").hide();
+              //form.find("div[id='message']").fadeIn('fast').delay(5000).fadeOut('slow');
+
+              // Notificación de confirmación.
+              exito.play();
+
+              new PNotify({
+                text:"Datos actualizados",
+                addclass: "custom",
+                type: "success",
+                shadow: true,
+                hide: true,
+                buttons: {
+                  sticker: false,
+                  labels:{close: "Cerrar"}
+                },
+                stack: right_Stack,
+                animate: {
+                  animate: true,
+                  in_class: "fadeInRight",
+                  out_class: "fadeOutRight",
+                }
+              });
+            }
+
+            if(statusTxt == "error")
+              alert("Error: " + xhr.status + ": " + xhr.statusText);
+          });
+        } 
+      })
+ 
+    }
   });
 
   $(document).on('click',"#eliminar_responsable",function(event){
@@ -2205,7 +2207,10 @@ $(document).on("blur","input[id='profesor_dni']",function() {
           form.find("input[id$='profesor_dni']").addClass("invalid");   
           form.find("input[id$='profesor_dni']").attr("validated", false);
           form.find("input[id$='profesor_dni']").after("<span class='mensaje'>Este DNI ya existe en el sistema.</span>");
-          form.find("input[id$='profesor_dni']").prev().append("<span class='error'>Dato inválido</span>");
+          //Se comprueba que no exista el aviso de error para no repetirlo.
+          if(!form.find("input[id$='profesor_dni']").prev().find('span[class="error"]')){
+            form.find("input[id$='profesor_dni']").prev().append("<span class='error'>Dato inválido</span>");
+          }
           form.find("input[id$='profesor_nombre']").focus();
           if(form.find("input[id$='profesor_nombre']").val()==''){
             form.find("input[id$='profesor_nombre']").removeClass("invalid");
@@ -2237,7 +2242,10 @@ $(document).on("blur","input[id='edit_profesor_dni']",function() {
           form.find("input[id$='profesor_dni']").addClass("invalid");   
           form.find("input[id$='profesor_dni']").attr("validated", false);
           form.find("input[id$='profesor_dni']").after("<span class='mensaje'>Este DNI ya existe en el sistema.</span>");
-          form.find("input[id$='profesor_dni']").prev().append("<span class='error'>Dato inválido</span>");
+          //Se comprueba que no exista el aviso de error para no repetirlo.
+          if(!form.find("input[id$='profesor_dni']").prev().find('span[class="error"]')){
+            form.find("input[id$='profesor_dni']").prev().append("<span class='error'>Dato inválido</span>");
+          }
           form.find("input[id$='profesor_nombre']").focus();
           if(form.find("input[id$='profesor_nombre']").val()==''){
             form.find("input[id$='profesor_nombre']").removeClass("invalid");
@@ -3391,6 +3399,30 @@ $(document).on("blur","input[id='edit_profesor_dni']",function() {
         eliminadas.push(id);
       }
     });
+    //Si no existe cambios no se avisa.
+    if($.isEmptyObject(nuevas) && $.isEmptyObject(asignadas) && $.isEmptyObject(eliminadas)){
+      $('#asignatura_curso_dialog').dialog('close');
+      errorPNotify.play();
+
+      new PNotify({
+        text:'No hay modificaciones de asignaturas para este curso.',
+        addclass: "custom",
+        type: "error",
+        shadow: true,
+        hide: true,
+        buttons: {
+          sticker: false,
+          labels:{close: "Cerrar"}
+        },
+        stack: right_Stack,
+        animate: {
+          animate: true,
+          in_class: "fadeInRight",
+          out_class: "fadeOutRight",
+        }
+      });
+      return false;
+    }
     curso=$("#asignatura_curso_dialog fieldset").attr("id");
 
     $.ajax({
@@ -3399,20 +3431,11 @@ $(document).on("blur","input[id='edit_profesor_dni']",function() {
       data: {curso:curso, nuevas:nuevas, asignadas:asignadas, eliminadas:eliminadas},
       dataType: 'json',
       success: function(response) {
-        // Si no hay asignaturas registradas muestra un aviso.
-       if(response.data==null){
-          alert("no hay asignaturas");//Cambiar aviso    No se ha realizado ningún cambio/////////////////////////////
-        }
-     
-
-          //Añadir avisos: se han registrados tantos nuevos, se han eliminado tantos y se han actualizado tantos.
         $('#asignatura_curso_dialog').dialog('close');
         $("#asignaturas_cursos").update_tab();
         //añadir más
       }
     })
-
-
   });
 
   //Se validan los input que se modifican.
@@ -4006,7 +4029,7 @@ $(document).on("blur","input[id='edit_profesor_dni']",function() {
       } 
     })
   });
-
+  //Eliminación de festivos.
   $(document).on("click","#festivos_delete button",function(event){
     event.preventDefault();
     form= $(this).closest("form");
@@ -4058,8 +4081,6 @@ $(document).on("blur","input[id='edit_profesor_dni']",function() {
   $(document).on('change',"#contenedor_festivos input[type!='radio']",function(event){
     $(this).removeClass("invalid");
     $(this).removeClass("modified");
-
- 
  
     if($(this).val().toString()==$(this).attr("value")+" " || $(this).val().toString()==$(this).attr("value")){
       $(this).removeClass("modified");
@@ -4085,29 +4106,30 @@ $(document).on("blur","input[id='edit_profesor_dni']",function() {
     }
   });
 
-    $(document).on('keyup',"#contenedor_festivos input[type!='radio']",function(e){
-      e.preventDefault();
+  $(document).on('keyup',"#contenedor_festivos input[type!='radio']",function(e){
+    e.preventDefault();
 
-      var festivo= $(this).attr("id").split("_"); 
-      //Se elimina el valor de los inputs al presionar una tecla diferente al tabulador y Enter.
-      if(e.keyCode == 9 || e.keyCode == 13)
-      {
-        if(festivo[0]=="inicio"){
-          $("#fin_"+festivo[1]).focus();
-        }
-        else{
-          $("#inicio_"+festivo[1]).focus();
-        }
-      }      
-      else{
-        $(this).val("");
-        dia=$("#ui-datepicker-div").find("a[class*='ui-state-active']");
-        dia.removeClass("ui-state-active ui-state-hover");
+    var festivo= $(this).attr("id").split("_"); 
+    //Se elimina el valor de los inputs al presionar una tecla diferente al tabulador y Enter.
+    if(e.keyCode == 9 || e.keyCode == 13)
+    {
+      if(festivo[0]=="inicio"){
+        $("#fin_"+festivo[1]).focus();
       }
+      else{
+        $("#inicio_"+festivo[1]).focus();
+      }
+    }      
+    else{
+      $(this).val("");
+      dia=$("#ui-datepicker-div").find("a[class*='ui-state-active']");
+      dia.removeClass("ui-state-active ui-state-hover");
+    }
   });
 
-
   $(document).on('click',"#button_festivos_all",function(event){
+    //Retardo por si se da el caso de modificar sólo un input de vacaciones y le damos a guardar sin antes actualizarse el otro input.
+   setTimeout(function(){
     if($("#contenedor_festivos input[type!='radio'][class*='modified']").length==0){
       return false;
     }
@@ -4154,6 +4176,63 @@ $(document).on("blur","input[id='edit_profesor_dni']",function() {
         })
       }
     });
+    
+    var texto="";
+
+    if($("#asignacion_festivos #inicio_navidad").hasClass('modified')||$("#asignacion_festivos #fin_navidad").hasClass('modified')){
+      if($("#asignacion_festivos #inicio_navidad").attr("value")==""){
+        texto+="<span>- Vacaciones de Navidad <strong>registrada</strong><span><br>";
+      }
+      else{
+        if($("#asignacion_festivos #inicio_navidad").val()!=""){
+          texto+="<span>- Vacaciones de Navidad <strong>actualizada</strong><span><br>";
+        }
+        else{
+          texto+="<span>- Vacaciones de Navidad <strong>eliminada</strong><span><br>";
+        }
+      }
+    }
+
+    if($("#asignacion_festivos #inicio_semanasanta").hasClass('modified')||$("#asignacion_festivos #fin_semanasanta").hasClass('modified')){
+      if($("#asignacion_festivos #inicio_semanasanta").attr("value")==""){
+        texto+="<span>- Vacaciones de Semana Santa <strong>registrada</strong><span><br>";
+      }
+      else{
+        if($("#asignacion_festivos #inicio_semanasanta").val()!=""){
+          texto+="<span>- Vacaciones de Semana Santa <strong>actualizada</strong><span><br>";
+        }
+        else{
+          texto+="<span>- Vacaciones de Semana Santa <strong>eliminada</strong><span><br>";
+        }
+      }
+    }
+    // Se establece el efecto para la notificación de error en el caso de que se de varias veces seguidas a guardar con algunas opción sin marcar.
+    errorPNotify.pause();
+    errorPNotify.currentTime=0.0;
+    $(".ui-pnotify").remove();
+
+    exito.play();
+    new PNotify({
+      title:texto,
+      addclass: "custom",
+      type: "success",
+      shadow: true,
+      hide: true,
+      width: "420px",
+      buttons: {
+        sticker: false,
+        labels:{close: "Cerrar"}
+      },
+      stack: right_Stack,
+      animate: {
+        animate: true,
+        in_class: "fadeInRight",
+        out_class: "fadeOutRight",
+      }
+    });
+    return false;
+
+   },200);
   });
 
   // Se actualiza la pestaña de periodo lectivo.
@@ -4163,7 +4242,6 @@ $(document).on("blur","input[id='edit_profesor_dni']",function() {
       $(this).removeClass("modified");
     });
   });
-
 
   $(document).on('click',"#button_fecha_curso_rest",function(event){
     $("#fin_curso_disable").trigger("click");
@@ -4258,7 +4336,7 @@ $(document).on("blur","input[id='edit_profesor_dni']",function() {
   $(document).on("click","button[title='Close']",function(event){
     event.preventDefault()
     if($(this).closest("div").next().attr("id")=="curso_dialog" && $(this).closest("div").next().children('div').attr("id")=="nuevo"){
-      $("#tabs ul li[aria-selected='true'] span").trigger("click")
+      $("#tabs ul li[aria-selected='true'] span").trigger("click");
     }
   }); 
 
@@ -4278,10 +4356,72 @@ $(document).on("blur","input[id='edit_profesor_dni']",function() {
       $(this).addClass("error_guardar");
     }  
   });
+  //Se valida que estan registradas las fechas de vacaciones cuando se genera el PDF del calendario del curso.
+  $(document).on("click","#asignacion_festivos #calendario_completo",function(event){
+      // Se establece el efecto para la notificación de error en el caso de que se de varias veces seguidas a guardar con algunas opción sin marcar.
+      errorPNotify.pause();
+      errorPNotify.currentTime=0.0;
+      $(".ui-pnotify").remove();
+      
+      if(($("#asignacion_festivos #inicio_navidad").val()=="" && !$("#asignacion_festivos #inicio_navidad").hasClass('modified')) || ($("#asignacion_festivos #inicio_semanasanta").val()=="" && !$("#asignacion_festivos #inicio_semanasanta").hasClass('modified'))){
+        var texto="";
+        if(($("#asignacion_festivos #inicio_navidad").val()=="" && !$("#asignacion_festivos #inicio_navidad").hasClass('modified')) && ($("#asignacion_festivos #inicio_semanasanta").val()=="" && !$("#asignacion_festivos #inicio_semanasanta").hasClass('modified'))){
+          texto+="<span>Vacaciones de Navidad<span><br><span>Vacaciones de Semana Santa<span><br>";
+        }
+        else if($("#asignacion_festivos #inicio_navidad").val()=="" && !$("#asignacion_festivos #inicio_navidad").hasClass('modified')){
+          texto+="<strong>Vacaciones de Navidad<strong><br>";
+        }
+        else{
+          texto+="<span>Vacaciones de Semana Santa<span><br>";
+        }
+        errorPNotify.play();
+        new PNotify({
+          title: "Debe seleccionar las siguientes fechas para continuar:",
+          text:texto,
+          addclass: "custom",
+          type: "error",
+          shadow: true,
+          hide: true,
+          width: "335px",
+          buttons: {
+            sticker: false,
+            labels:{close: "Cerrar"}
+          },
+          stack: left_Stack,
+          animate_speed: "fast",
+          animate: {
+              animate: true,
+              in_class: "fadeInLeft",
+              out_class: "fadeOutLeft",
+          }
+        });
+        return false;
+      }
+  }); 
 
   //////////////////////////////////
   //        Horario Clase         //
   //////////////////////////////////
+
+  $(document).on("click","#one",function(event){
+    div=$(this).closest(".div_change");
+    div.find("#cont_one").removeClass('oculto');
+    div.find("#cont_two").addClass('oculto');
+    div.find("#one").removeClass('btn_not_select');
+    div.find("#two").addClass('btn_not_select');
+    div.closest(".block_insert").find("#button_one").removeClass('oculto');
+    div.closest(".block_insert").find("#button_two").addClass('oculto');
+
+  });
+  $(document).on("click","#two",function(event){
+    div=$(this).closest(".div_change");
+    div.find("#cont_one").addClass('oculto');
+    div.find("#cont_two").removeClass('oculto');
+    div.find("#one").addClass('btn_not_select');
+    div.find("#two").removeClass('btn_not_select');
+    div.closest(".block_insert").find("#button_one").addClass('oculto');
+    div.closest(".block_insert").find("#button_two").removeClass('oculto');
+  });
 
   $(document).on("click","#registro_horario #button_generate",function(event){
     // Se vacia el contenedor para el nuevo horario.
@@ -4320,7 +4460,7 @@ $(document).on("blur","input[id='edit_profesor_dni']",function() {
       }
       contenido='<tr><td><span class="oculto">*</span>';
       contenido+='</td>';
-      contenido+='<td>'+i+'ª';
+      contenido+='<td>'+i+'º';
       contenido+='</td>';
       contenido+='<td><input type="time" step="1"> </input>';
       contenido+='</td>';
@@ -4358,6 +4498,205 @@ $(document).on("blur","input[id='edit_profesor_dni']",function() {
     $("#nuevo_horario_guardar").removeClass("oculto");
     $("#registro_horario_guardar").addClass("oculto");
   });
+
+  //Se genera y se guarda automáticamente el horario con módulos de la misma duración.
+  $(document).on("click","#registro_horario #button_auto_generate",function(event){
+    //Se valida que la duración del día esté dentro del horario del centro.
+
+    if($("#registro_horario #inicio_clase option:selected").val() < $("#registro_horario #inicio_horario_disable").val()){
+      // Se establece el efecto para la notificación de error en el caso de que se de varias veces seguidas a guardar con algunas opción sin marcar.
+      errorPNotify.pause();
+      errorPNotify.currentTime=0.0;
+      $(".ui-pnotify").remove();
+        
+      errorPNotify.play();
+
+      new PNotify({
+        text:'La hora de inicio de las clases no puede ser anterior a la hora de apertura del centro.',
+        addclass: "custom",
+        type: "error",
+        shadow: true,
+        hide: true,
+        buttons: {
+          sticker: false,
+          labels:{close: "Cerrar"}
+        },
+        stack: right_Stack,
+        animate: {
+          animate: true,
+          in_class: "fadeInRight",
+          out_class: "fadeOutRight",
+        }
+      });
+      return false;
+    }
+    else{
+      num_modulos=parseInt($("#registro_horario #total_horas_auto option:selected").val());
+      duracion_modulos=parseInt($("#registro_horario #tiempo_modulo option:selected").val());
+      duracion_recreo=parseInt($("#registro_horario #tiempo_recreo option:selected").val());
+
+      total=(num_modulos*duracion_modulos)+duracion_recreo;
+
+      array_inicio_clases=$("#registro_horario #inicio_clase option:selected").val().split(":");
+      array_cierre_centro=$("#registro_horario #fin_horario_disable").val().split(":");
+
+      inicio_clases=(parseInt(array_inicio_clases[0])*60)+parseInt(array_inicio_clases[1]);
+      cierre_centro=(parseInt(array_cierre_centro[0])*60)+parseInt(array_cierre_centro[1]);
+      permitido=cierre_centro-inicio_clases;
+
+      if(permitido<total){
+        // Se establece el efecto para la notificación de error en el caso de que se de varias veces seguidas a guardar con algunas opción sin marcar.
+        errorPNotify.pause();
+        errorPNotify.currentTime=0.0;
+        $(".ui-pnotify").remove();
+
+        errorPNotify.play();
+
+        new PNotify({
+          text:'Las horas del horario seleccionado sobrepasa el horario del centro.',
+          addclass: "custom",
+          type: "error",
+          shadow: true,
+          hide: true,
+          buttons: {
+            sticker: false,
+            labels:{close: "Cerrar"}
+          },
+          stack: right_Stack,
+          animate: {
+            animate: true,
+            in_class: "fadeInRight",
+            out_class: "fadeOutRight",
+          }
+        });
+        return false;
+      }
+    }
+
+
+    // Se vacia el contenedor para el nuevo horario.
+    $("#contenedor_nuevo_horario tbody").empty();
+
+    // Se oculta el aviso de error por si estaba mostrado.
+    $("#registro_horario #aviso_error").addClass("oculto");
+
+    // Se añade las filas con cada hora de clase con los horarios en el nuevo contenedor.
+    for (var i = 1; i <= $("#total_horas_auto").val(); i++) {
+      // Se añade el horario de recreo.
+      if(parseInt($("#horas_recreo_auto").val())+1 == i){
+        cont='<tr><td><span class="oculto">*</span>';
+        cont+='</td>';
+        cont+='<td>RECREO';
+        cont+='</td>';
+        cont+='<td><input type="time" step="1"> </input>';
+        cont+='</td>';
+        cont+='<td><input type="time" step="1"> </input>';
+        cont+='</td>';
+        cont+='</tr>';
+        $("#contenedor_nuevo_horario tbody:last-child").append(cont);
+      }
+      contenido='<tr><td><span class="oculto">*</span>';
+      contenido+='</td>';
+      contenido+='<td>'+i+'º';
+      contenido+='</td>';
+      contenido+='<td><input type="time" step="1"> </input>';
+      contenido+='</td>';
+      contenido+='<td><input type="time" step="1"> </input>';
+      contenido+='</td>';
+      contenido+='</tr>';
+      $("#contenedor_nuevo_horario tbody:last-child").append(contenido);
+    }
+    tabindex=1;
+    $("#contenedor_nuevo_horario").find(":input").each(function(i){
+      $(this).attr("tabindex",tabindex);
+      tabindex++;
+    });
+    // Se añade el valor a todos los input de forma automática sumando la duración de cada módulo a los input pares.
+    valor=$("#registro_horario #inicio_clase option:selected").val();
+    $("#contenedor_nuevo_horario input:first").val(valor);
+
+    $("#contenedor_nuevo_horario input").each(function(i=1){
+      horas=0;
+      minutos=0;
+      //Se comprueba si es el segundo input del recreo para sumarle la duración del recreo.
+      if(i-1==($("#registro_horario #horas_recreo_auto option:selected").val())*2){
+        array=valor.split(":");
+        horas=parseInt(array[0]);
+
+        minutos=parseInt(array[1]);
+        minutos+=parseInt($("#registro_horario #tiempo_recreo option:selected").val());
+        if(minutos>=60){
+          minutos-=60;
+          horas+=1;
+        }
+        valor=('0'+horas).slice(-2)+":"+('0'+minutos).slice(-2);
+      }
+      else{
+        if(i%2)
+        {
+          array=valor.split(":");
+          horas=parseInt(array[0]);
+
+          minutos=parseInt(array[1]);
+          minutos+=parseInt($("#registro_horario #tiempo_modulo option:selected").val());
+          if(minutos>=60){
+            minutos-=60;
+            horas+=1;
+          }
+          valor=('0'+horas).slice(-2)+":"+('0'+minutos).slice(-2);
+        }
+      }
+      $(this).val(valor);
+    });
+
+    //Se guarda el horario nuevo automáticamente sin mostrar.
+    $("#registro_horario #button_horario_save").click();
+  });
+
+  $(document).on("click","#registro_horario #button_rest",function(event){
+    // Se restablece el valor inicial de cada select y se desactiva el botón.
+    $("#registro_horario .block_insert select").prop('selectedIndex',0);
+    $("#button_rest").prop("disabled", true);
+    $("#button_generate").prop("disabled", true);
+  });
+
+    $(document).on("click","#registro_horario #button_auto_rest",function(event){
+    // Se elimina los valores de cada select y se desactiva el botón.
+    $("#registro_horario .block_insert select").prop('selectedIndex',0);
+    $("#button_auto_rest").prop("disabled", true);
+    $("#button_auto_generate").prop("disabled", true);
+  });
+
+  $(document).on('change',"#registro_horario .div_change #cont_two select",function(event){
+    $("#button_rest").prop("disabled", false);
+    // Se desactiva la primera opción del select.
+    $(this).find("option:eq('0')").prop("disabled", true);
+    // Se comprueba que todos los select activos tienen un valor para activar el botón de generar nuevo horario.
+    $("#registro_horario .div_change #cont_two").find("select:enabled").each (function(){
+      if($(this).val()==0 || $(this).val()==null){
+        $("#button_generate").prop("disabled", true);  
+        return false;
+      }
+      $("#button_generate").prop("disabled", false);  
+    });
+  });
+
+    $(document).on('change',"#registro_horario .div_change #cont_one select",function(event){
+    $("#button_auto_rest").prop("disabled", false);
+    // Se desactiva la primera opción del select.
+    $(this).find("option:eq('0')").prop("disabled", true);
+    // Se comprueba que todos los select activos tienen un valor para activar el botón de generar nuevo horario.
+    $("#registro_horario .div_change #cont_one").find("select:enabled").each (function(){
+      if($(this).val()==0 || $(this).val()==null){
+        $("#button_auto_generate").prop("disabled", true);  
+        return false;
+      }
+      $("#button_auto_generate").prop("disabled", false);  
+    });
+  });
+
+
+
 
   // Se ejecuta al soltar una tecla introducida en los input pares.
   $(document).on('keyup',"#contenedor_nuevo_horario input:odd",function(event){
@@ -4689,27 +5028,6 @@ $(document).on("blur","input[id='edit_profesor_dni']",function() {
       $(this).val($(this).val()+":");
     }
   });
-
-  $(document).on("click","#registro_horario #button_rest",function(event){
-    // Se restablece el valor inicial de cada select y desactivamos el botón.
-    $("#registro_horario .block_insert select").prop('selectedIndex',0);
-    $("#button_rest").prop("disabled", true);
-    $("#button_generate").prop("disabled", true);
-  });
-
-  $(document).on('change',"#registro_horario .block_insert select",function(event){
-    $("#button_rest").prop("disabled", false);
-    // Se desactiva la primera opción del select.
-    $(this).find("option:eq('0')").prop("disabled", true);
-    // Se comprueba que todos los select activos tienen un valor para activar el botón de generar nuevo horario.
-    $("#registro_horario .block_insert").find("select:enabled").each (function(){
-      if($(this).val()==0 || $(this).val()==null){
-        $("#button_generate").prop("disabled", true);  
-        return false;
-      }
-      $("#button_generate").prop("disabled", false);  
-    });
-  });
   
   $(document).on("click","#button_horario_clear",function(event){
     // Se restablece el valor inicial de cada input, se elimina la clase invalid en todos los input y se oculta los * en cada fila.
@@ -4838,6 +5156,11 @@ $(document).on("blur","input[id='edit_profesor_dni']",function() {
             url: Routing.generate('nuevo_horario'),
             data: {cadena:cadena,cont:cont},
             success: function(response) {
+              // Se establece el efecto para la notificación de error en el caso de que se de varias veces seguidas a guardar con algunas opción sin marcar.
+              errorPNotify.pause();
+              errorPNotify.currentTime=0.0;
+              $(".ui-pnotify").remove();
+              
               // Notificación de confirmación
               exito.play();
               

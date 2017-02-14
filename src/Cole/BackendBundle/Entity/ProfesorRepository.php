@@ -27,4 +27,18 @@ class ProfesorRepository extends EntityRepository
 		->getResult();
 	}
 
+
+		public function findComprobarUnidades($horario, $equipamiento, $fecha) 
+	{
+		return $this->getEntityManager()->createQuery(
+			'SELECT COUNT(r) FROM BackendBundle:Reserva r WHERE r.equipamiento=:equipamiento  
+			and r.fecha=:fecha and r.horario=:horaClase')
+		->setParameters(array(
+			'equipamiento' => $equipamiento,
+			'horaClase' => $horario,
+			'fecha' => $fecha))
+		->setMaxResults(1)
+		->getOneOrNullResult();
+	}
+
 }

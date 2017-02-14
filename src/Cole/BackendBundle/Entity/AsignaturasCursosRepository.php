@@ -52,6 +52,6 @@ class AsignaturasCursosRepository extends EntityRepository
 		->setMaxResults(1)
 		->getOneOrNullResult();
 	}
-	
+
 
 }

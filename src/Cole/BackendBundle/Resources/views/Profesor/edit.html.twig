@@ -5,6 +5,13 @@
 {% block javascript %}
   
   <script> 
+    
+    $("#edit_profesor_horasLectivas").attr("title","Horas Lectivas sin contar las 2.5 horas del Recreo");
+    $("#edit_profesor_horasLectivas").prev().text("Horas Lectivas");
+    //Se evita poder cortar o pegar datos en los inpur de las horasde trabajo.
+    $(document).on("paste cut",".datos_registro input",function() {
+      return false;
+    });
 
     var arr_perfilAcad = $("#edit_profesor_perfilAcademico").val().split("|");     
     var arr_perfilProf= $("#edit_profesor_perfilProfesional").val().split("|");
@@ -35,8 +42,7 @@
     $("#editar_profesor_restablecer").prop("disabled",true);
 
     //Se deshabilita las fechas de alta y baja. (input sólo lectura)
-    $("#profesor_edit .datos_registro input").prop('readonly', true); 
-    $("#profesor_edit .datos_registro input").prop('readonly', true); 
+    $("#profesor_edit .datos_registro input[type!='number']").prop('readonly', true); 
 
     // Se elimina el contenido de la etiqueta de fecha de nacimiento para que muestre bien el aviso de error(se añade con css).
     $("label[for^='edit_'][for$='_fechaNacimiento']").text("");
@@ -46,6 +52,11 @@
     {
       $("#profesor_edit #actualizada img").attr("src",$("#profesor_edit #actual img").attr("src"));
     }
+    //Se reemplaza el separador en el valor de las horas de jornada laboral para el problema de representarlo en input number y se de nuevo el nuevo valor.
+    $("#edit_profesor_horas").val($("#edit_profesor_horas").attr("value").replace(",","."));
+    $("#edit_profesor_horasLectivas").val($("#edit_profesor_horasLectivas").attr("value").replace(",","."));
+    $("#edit_profesor_horas").attr("value",$("#edit_profesor_horas").attr("value").replace(",","."));
+    $("#edit_profesor_horasLectivas").attr("value",$("#edit_profesor_horasLectivas").attr("value").replace(",","."));
 
    </script>
 
@@ -290,11 +301,16 @@
               <h3 class="label_contenido">Datos de Interés<span> (Información adicional sobre el profesor)</span></h3>
               <div class="datos_registro">
                 {{ form_row(edit_form.nivel,{'id':'edit_'~edit_form.nivel.vars.id }) }}
-                {{ form_row(edit_form.fechaAlta,{'id':'edit_'~edit_form.fechaAlta.vars.id }) }}
-                {{ form_row(edit_form.fechaBaja,{'id':'edit_'~edit_form.fechaBaja.vars.id }) }}
+                {{ form_row(edit_form.horas,{'id':'edit_'~edit_form.horas.vars.id }) }}
+                {{ form_row(edit_form.horasLectivas,{'id':'edit_'~edit_form.horasLectivas.vars.id }) }}
                 <div id="imparte">
                   <button type="button">Cursos que imparte</button>
                 </div>
+              </div>
+              <div class="datos_registro">
+                {{ form_row(edit_form.fechaAlta,{'id':'edit_'~edit_form.fechaAlta.vars.id }) }}
+                {{ form_row(edit_form.fechaBaja,{'id':'edit_'~edit_form.fechaBaja.vars.id }) }}
+
               </div>
               <div class=" block-one">
               {{ form_row(edit_form.observaciones,{'id':'edit_'~edit_form.observaciones.vars.id }) }}

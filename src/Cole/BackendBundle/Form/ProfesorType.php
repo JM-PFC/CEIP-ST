@@ -36,7 +36,9 @@ class ProfesorType extends AbstractType
             ->add('fechaAlta','date',array('label' => 'Fecha Alta', 'max_length' => 10,'widget' => 'single_text','format' => 'dd/MM/yyyy'))
             ->add('fechaBaja','date',array('label' => 'Fecha Baja', 'max_length' => 10,'widget' => 'single_text','format' => 'dd/MM/yyyy'))
             ->add('observaciones', 'textarea',array('label' => 'Observaciones:', 'max_length' => 500, 'attr' => array('type'=>'textarea')))
-
+            ->add('observaciones', 'textarea',array('label' => 'Observaciones:', 'max_length' => 500, 'attr' => array('type'=>'textarea')))
+            ->add('horas','integer', array('label' => 'Jornada Laboral','required' => true,'attr' => array('min' => 15,'max' => 40,'step' => 0.5)))
+            ->add('horasLectivas','integer', array('label' => 'Horas lectivas (sin contar las 2.5 horas del Recreo)','required' => true,'attr' => array('min' => 5,'max' => 22.5,'step' => 0.5)))
             //->add('username')
             //->add('password')
             //->add('salt')

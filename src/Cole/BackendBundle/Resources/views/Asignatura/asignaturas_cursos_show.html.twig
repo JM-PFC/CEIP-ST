@@ -30,7 +30,7 @@
 
     $("#asignaturas_cursos #contenedor_registro[idcurso='1']").removeClass('oculto');
     $("#asignaturas_cursos button[id='1']").addClass('elected');
-
+    //Efecto del botón pulsado en la lista.
     $(document).on('click',"#asignaturas_cursos .contenido_lista button",function(event){
         event.preventDefault();
         id=$(this).attr("id");
@@ -39,6 +39,54 @@
         $(this).addClass('elected');
         $("#asignaturas_cursos #contenedor_registro[idcurso='"+id+"']").removeClass('oculto');
     });
+
+    //Comprobacón de existencia de cursos.
+    if($("#asignaturas_cursos .contenido_lista button").size()==0){
+
+        // Se establece las variables con los audios para las notificaciones.
+        if (navigator.userAgent.search("Firefox") >= 0) { //Firefox sólo admite archivos .ogg
+            var error = new Audio();
+            error.src = "/Symfony/web/bundles/backend/sounds/error.ogg";
+        }
+        else{
+            var error = new Audio();
+            error.src = "/Symfony/web/bundles/backend/sounds/error.mp3";
+        }
+        error.play();
+          swal({
+            title: "Cursos no registrados",
+            text: 'Actualmente no existe ningún curso registrado en el sistema. Para poder asignar las asignaturas debe registrar un curso.',
+            type: "error",
+            confirmButtonColor: color,
+            html: true
+          });          
+        $("#tabs ul li[aria-selected='true'] span").trigger("click");
+    }
+    
+    //Comprobacón de existencia de asignaturas.
+    if({{numAsignaturas|json_encode()|raw}}==0){
+
+        // Se establece las variables con los audios para las notificaciones.
+        if (navigator.userAgent.search("Firefox") >= 0) { //Firefox sólo admite archivos .ogg
+            var error = new Audio();
+            error.src = "/Symfony/web/bundles/backend/sounds/error.ogg";
+        }
+        else{
+            var error = new Audio();
+            error.src = "/Symfony/web/bundles/backend/sounds/error.mp3";
+        }
+        error.play();
+          swal({
+            title: "Asignaturas no registradas",
+            text: 'Actualmente no existen asignaturas registrada en el sistema. Debe registrar las asignaturas para poder asignarlas.',
+            type: "error",
+            confirmButtonColor: color,
+            html: true
+          });          
+        $("#tabs ul li[aria-selected='true'] span").trigger("click");
+    }
+
+
     </script>
 {% endblock %}
 

@@ -76,6 +76,8 @@ class ProfesorController extends Controller
     // if request is XmlHttpRequest (AJAX) but not a POSt, throw an exception
       if ($request->isXmlHttpRequest() && !$request->isMethod('POST')) {
         throw new HttpException('XMLHttpRequests/AJAX calls must be POSTed');}
+        $horas=$this->get('request')->request->get('horas');
+        $lectivas=$this->get('request')->request->get('lectivas');
 
         $entity = new Profesor();
         $form = $this->createCreateForm($entity);
@@ -109,6 +111,8 @@ class ProfesorController extends Controller
                 $file->move($photoDir, $fileName);
                 $entity->setFoto($fileName);
             }
+            $entity->setHoras($horas);
+            $entity->setHorasLectivas($lectivas);
 
             $em = $this->getDoctrine()->getManager();
             $em->persist($entity);
@@ -279,6 +283,8 @@ class ProfesorController extends Controller
     public function updateAction(Request $request, $id)
     {
         $em = $this->getDoctrine()->getManager();
+        $horas=$this->get('request')->request->get('horas');
+        $lectivas=$this->get('request')->request->get('lectivas');
 
         $entity = $em->getRepository('BackendBundle:Profesor')->find($id);
 
@@ -338,6 +344,8 @@ class ProfesorController extends Controller
                 }
                 $entity->setFoto(NULL);
             }
+            $entity->setHoras($horas);
+            $entity->setHorasLectivas($lectivas);
             $em->flush();
 
             if ($request->isXmlHttpRequest()) {

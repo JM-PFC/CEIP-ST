@@ -35,10 +35,12 @@ class AsignaturaController extends Controller
     public function asignaturasCursosAction()
     {
         $em = $this->getDoctrine()->getManager();
+        $asignaturas= $em->getRepository('BackendBundle:Asignatura')->findNumAsignaturas();
 
         $entities = $em->getRepository('BackendBundle:Curso')->findBy(array('nivel'=>'Primaria'),array('numOrden'=>'ASC'));
         return $this->render('BackendBundle:Asignatura:asignaturas_cursos_show.html.twig', array(
             'entities' => $entities,
+            'numAsignaturas' => (int)$asignaturas[1]
         ));
     }
 
@@ -127,12 +129,13 @@ class AsignaturaController extends Controller
         $entities_troncales = $em->getRepository('BackendBundle:AsignaturasCursos')->findAsignaturasTroncalesCurso($id);
         $entities_especificas = $em->getRepository('BackendBundle:AsignaturasCursos')->findAsignaturasEspecificasCurso($id);
         $curso= $em->getRepository('BackendBundle:Curso')->findOneById($id);
+
         return $this->render('BackendBundle:Asignatura:new_asignaturas_curso.html.twig', array(
             'troncales' => $troncales,
             'especificas' => $especificas,
             'entities_troncales' => $entities_troncales,
             'entities_especificas' => $entities_especificas,
-            'curso' => $curso
+            'curso' => $curso,
         ));
     }
     

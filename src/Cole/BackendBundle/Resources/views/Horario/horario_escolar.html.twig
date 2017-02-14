@@ -6,7 +6,7 @@
         <td>{{entity.horaClase}}</td>
         <td><input type="time" value="{{ entity.inicio|date('H:i') }}" step="1"> </input></td>
         <td><input type="time"  value="{{ entity.fin|date('H:i') }}" step="1"> </input></td>
-        <td><button disabled="disabled">Guardar</button></td>
+        {#<td><button disabled="disabled">Guardar</button></td>#}
     </tr>
 {% endfor %}
 </tbody>

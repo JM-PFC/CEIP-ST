@@ -12,4 +12,11 @@ use Doctrine\ORM\EntityRepository;
  */
 class AsignaturaRepository extends EntityRepository
 {
+	public function findNumAsignaturas()
+	{
+	return $this->getEntityManager()->createQuery(
+		'SELECT	COUNT(a) FROM BackendBundle:Asignatura a ')
+		->setMaxResults(1)
+		->getOneOrNullResult();
+	}
 }
