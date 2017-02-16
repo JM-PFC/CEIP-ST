@@ -17,8 +17,6 @@
 
     $('#registro_instalaciones #equipamiento_unidades').addClass("oculto");
     $('#instalación_tipo').val("Instalación");
-
-
     </script>
 {% endblock %}
 
@@ -37,7 +35,71 @@
         </div> 
       </div>
 
-      <div class="derecha contenedor_registro contenedor_registro_instalaciones" id="contenedor_registro">  
+      <div class="derecha contenedor_registro contenedor_registro_instalaciones aulas" id="contenedor_registro">  
+        <div>
+            <div id="cabecera_lista">
+                <h2>Aulas del centro</h2>
+            </div>
+            <div id="lista_instalaciones">
+                <table class="records_list">
+                    <thead>
+                    <tr>
+                        <th>
+                            <a id="cerrar_aula_edit" class="oculto" title="Cancelar Edición del Aula" href="javascript:void(0);">
+                                <img id="img_1" class="exit_edit" src="{{ asset('bundles/backend/images/menu/cruz_azul.png')}}">
+                                <img id="img_2" class="exit_edit oculto" src="{{ asset('bundles/backend/images/menu/cruz_celeste.png')}}">
+                            </a>
+                        </th>
+                        <th id="datos_instalación">
+                            {{render(controller("BackendBundle:Equipamiento:new"))}}
+                        </th>
+                        <th class="oculto">
+                            <a id="aula_delete" title="Eliminar Aula" href="javascript:void(0);">
+                                <img id="img_1" class="add_registro " src="{{ asset('bundles/backend/images/menu/delete2.png')}}">
+                                <img id="img_2" class="add_registro oculto" src="{{ asset('bundles/backend/images/menu/delete_hover2.png')}}">
+                            </a>
+                        </th>
+                        <th>
+                            <a id="aula_new" title="Añadir Aula" href="javascript:void(0);">
+                                <img id="img_1" class="add_registro " src="{{ asset('bundles/backend/images/menu/añadir_azul.png')}}">
+                                <img id="img_2" class="add_registro oculto" src="{{ asset('bundles/backend/images/menu/añadir_celeste.png')}}">
+                            </a>
+                        </th>
+                        <th class="oculto">
+                            <a id="aula_edit"  title="Actualizar Aula" href="javascript:void(0);">
+                                <img id="img_1" class="add_registro" src="{{ asset('bundles/backend/images/menu/actualizar_azul2.png')}}">
+                                <img id="img_2" class="add_registro oculto" src="{{ asset('bundles/backend/images/menu/actualizar_celeste2.png')}}">
+                            </a>
+                        </th>
+                    </tr>
+                    </thead>
+                </table>
+                <div class="inner_table">
+                    <table>
+                    {% set var = 0 %}
+                    {% for entity in entities %}
+                        {% if entity.tipo == "Aula" %}
+                        {% set var = 1 %}
+                        <tr>
+                            <td><a cargar-href="off" href="{{ path('equipamiento_edit', { 'id': entity.id }) }}">{{ entity.nombre }}</a></td>
+                        </tr>
+                        {% endif %}
+                    {% endfor %}
+                    {% if var == 0 %}
+                    <tbody>
+                        <tr class="odd no_cursor">
+                            <td class="dataTables_empty">No hay aulas registradas</td>
+                        </tr>
+                    </tbody>
+                    {% endif %}
+
+                    </table>
+                </div>
+            </div>
+        </div>          
+      </div>
+
+      <div class="derecha contenedor_registro contenedor_registro_instalaciones instalaciones" id="contenedor_registro">  
         <div>
             <div id="cabecera_lista">
                 <h2>Instalaciones del centro</h2>
@@ -78,13 +140,22 @@
                 </table>
                 <div class="inner_table">
                     <table>
+                    {% set var = 0 %}
                     {% for entity in entities %}
                         {% if entity.tipo == "Instalación" %}
+                        {% set var = 1 %}
                         <tr>
                             <td><a cargar-href="off" href="{{ path('equipamiento_edit', { 'id': entity.id }) }}">{{ entity.nombre }}</a></td>
                         </tr>
                         {% endif %}
                     {% endfor %}
+                    {% if var == 0 %}
+                    <tbody>
+                        <tr class="odd no_cursor">
+                            <td class="dataTables_empty">No hay instalaciones registradas</td>
+                        </tr>
+                    </tbody>
+                    {% endif %}
                     </table>
                 </div>
             </div>

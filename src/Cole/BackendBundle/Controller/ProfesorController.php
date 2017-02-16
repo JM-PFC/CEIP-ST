@@ -478,7 +478,7 @@ class ProfesorController extends Controller
         return new JsonResponse(array('data' =>null), 200);
     }
 
-        public function ComprobarDniProfesorEditadoAction()
+    public function ComprobarDniProfesorEditadoAction()
     {
         $dni=$this->get('request')->request->get('dni');
         $id=$this->get('request')->request->get('id');

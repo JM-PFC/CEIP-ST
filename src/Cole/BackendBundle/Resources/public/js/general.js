@@ -184,8 +184,10 @@ $(document).ready(function () {
       $(field).prev().append("<span class='error'>Dato inválido</span>");
       return false;
     }
-    //Se compriba que la letra del NIF sea la correcta.
+    //Se comprueba que la letra del NIF sea la correcta.
     else{
+      /*  Hay que descomentar ésto para que compruebe la letra del DNI (cuando acabemos)!!!!!!!!!!!!!!!!
+
       //Se le quita el separador para pasar el dni.
       dni=$(field).val().replace("-","");
 
@@ -203,6 +205,9 @@ $(document).ready(function () {
       }else{
         return true;
       }
+
+      Hay que borrar el return siguiente cuando al descomentar esto*/  
+        return true;
 
     }
   }
@@ -2148,6 +2153,42 @@ $("#dialog-confirm span").hide();
  
     }
   });
+  //Se comprueba que el DNI no existe en el sistema si se modifica a un responsable.
+  $(document).on("blur","input[id^='edit_alumno_responsable_dni_']",function() {
+    form= $(this).closest("form");
+    input=$(this);
+    input_name=$(this).closest("div").next().find("input");
+
+    var arr = form.attr('action').split('/');
+
+    if($(this).val()!=''){
+      var dni=$(this).val();
+      var dni_anterior=$(this).attr("value");
+      $.ajax({
+        type: 'POST',
+        url: Routing.generate('comprobar_dni_padre_editado'),
+        data: {dni:dni, dni_anterior:dni_anterior},
+        dataType: 'json',
+        success: function(response) {   
+          if(response.data!=null){
+            input.addClass("invalid");   
+            input.attr("validated", false);
+            input.after("<span class='mensaje'>Este DNI ya existe en el sistema.</span>");
+            //Se comprueba que no exista el aviso de error para no repetirlo.
+              input.prev().find("span").remove();
+              input.prev().append("<span class='error'>Dato inválido</span>");
+
+            input_name.focus();
+            if(input_name.val()==''){
+              input_name.removeClass("invalid");
+              input_name.prev().find(".error").remove();
+              input_name.next(".mensaje").remove();         
+            }
+          }
+        }  
+      })
+    }
+  });
 
   $(document).on('click',"#eliminar_responsable",function(event){
     event.preventDefault();
@@ -2977,7 +3018,9 @@ $(document).on("blur","input[id='edit_profesor_dni']",function() {
     return false;
   });
 
-/*Registro de Nº de grupos por curso.*/
+  //////////////////////////////////
+  //    Nº de grupos por curso    //
+  //////////////////////////////////
 
   // Se indica el select modificado.
   $(document).on('change',"#Ngrupo",function(event){
@@ -3125,9 +3168,9 @@ $(document).on("blur","input[id='edit_profesor_dni']",function() {
   });
 
 
-/*Asignación de aula.*/
-
-
+  //////////////////////////////////
+  //         Asignar Aula         //
+  //////////////////////////////////
 
   // Se indica el select modificado.
   $(document).on('change',"#aula",function(event){
@@ -3138,35 +3181,100 @@ $(document).on("blur","input[id='edit_profesor_dni']",function() {
       $(this).addClass("modified");
     }
   });
+  // Se muestra la lista de aulas disponibles para asignar a un grupo.
+  $(document).on('click',"#contenedor_asignar_aula input",function(event){
+    event.preventDefault();
+    tr=$(this).closest("tr");
 
-  // Se quita la marca del input modificado y se actualiza el aula.
-  $(document).on('click',"#contenedor_asignar_aula button",function(event){
-    $(this).closest("tr").find("input").removeClass("modified");
-    curso=$(this).closest("tr").children('td').slice(0, 2).html();
-    nivel=$(this).closest("tr").children('td').slice(1, 2).html();
-    letra=$(this).closest("tr").children('td').slice(2, 3).html();
-    aula=$(this).closest("tr").find("input").val();
+    $('#aulas_dialog').load(Routing.generate("Listar_aulas"), function(){
+      //Se centra la ventana modal en la pantalla.
+      $('.ui-dialog').position({my: 'center', at: 'center', of: window, collision: 'fit'});
+      //Se abre la ventana modal una vez cargado el contenido.
+      $("#aulas_dialog #curso").append(tr.find("td:nth-child(1)").text()+" de "+tr.find("td:nth-child(2)").text()+" - Grupo "+tr.find("td:nth-child(3)").text());
+      $("#aulas_dialog #content-form div").attr("grupo",tr.attr("id"));
+      //Se elmina de la ventana modal todas las aulas ocupadas.
+      $("#asignar_aula .contenedor_registro input[class='asig']").each(function(i){  
+        id=$(this).attr("id");
+        $("#aulas_dialog button[id='"+id+"']").remove();
+      });
 
-    // Se actualiza el atributo aula de la entidad Grupo.
-    $.ajax({
-      type: 'POST',
-      url: Routing.generate('asignar_aula'),
-      data: {curso:curso,nivel:nivel,letra:letra,aula:aula},
-    })
+      if($("#aulas_dialog #content-form button").size()==0){
+        $("#aulas_dialog #content-form p").remove();
+        $("#aulas_dialog #content-form").append("<p class='vacio'>No quedan más aulas disponibles</p>");
+      }
+      $('#aulas_dialog').dialog('open');
+    }); 
   });
 
-  // Se quita la marca de los input modificados y actualiza el aula.
-  $(document).on('click',"#asignar_aula #button_grupos_all",function(event){
-    $("#contenedor_asignar_aula input[class='modified']").each(function(){  
-      $(this).closest("tr").find("button").trigger("click");
-    });
+  // Se asigna el aula al grupo seleccionado.
+  $(document).on('click',"#aulas_dialog #content-form button",function(event){
+
+      grupo=$(this).closest("div").attr("grupo");
+      aula=$(this).attr("id");
+
+      // Se actualiza el atributo aula de la entidad Grupo.
+      $.ajax({
+        type: 'POST',
+        url: Routing.generate('asignar_aula'),
+        data: {grupo:grupo,aula:aula},
+        success: function(response) {
+          $("#aulas_dialog").dialog('close');
+          $("#asignar_aula").update_tab();
+          $("#asignar_aula #vaciar").prop("disabled",false);
+        }
+      })
   });
 
-  // Se actualiza la pestaña de asignar aula.
-  $(document).on('click',"#asignar_aula #button_grupos_rest",function(event){
-    div=$(this).closest("div[id^='tabs-']");
-    $(div).load(Routing.generate("grupo_show"));
+  $(document).on('click',"#aulas_dialog #cancelar",function(event){
+    $("#aulas_dialog").dialog('close');
   });
+
+  $(document).on('click',"#asignar_aula #vaciar",function(event){
+    aviso.play();
+    swal({
+      title: "Eliminación de asignaciones de aulas.",
+      text: "<p class='justificado'>Se eliminarán todas las asignaciones de aulas de los grupos.</p></br>¿Estas seguro de continuar? No podrás deshacer este paso...",
+      type: "warning",
+      showCancelButton: true,
+      cancelButtonText: "Cancelar",
+      html: true,
+      confirmButtonColor: color,
+      confirmButtonText: "¡Adelante!",
+      closeOnConfirm: true },
+      function(){
+        $.ajax({
+          type: 'POST',
+          url: Routing.generate('vaciar_aulas'),
+          success: function(response) {
+            $("#asignar_aula").update_tab();
+          }
+        })
+      }
+    );
+  });
+
+  // Se elimina el aula asignada al grupo seleccionado.
+  $(document).on('click',"#contenedor_asignar_aula img",function(event){
+      grupo=$(this).closest("tr").attr("id");
+      aula=null;
+
+      // Se actualiza el atributo aula de la entidad Grupo.
+      $.ajax({
+        type: 'POST',
+        url: Routing.generate('asignar_aula'),
+        data: {grupo:grupo,aula:aula},
+        success: function(response) {
+          $("#aulas_dialog").dialog('close');
+          $("#asignar_aula").update_tab();
+
+          //Se deshabilita el botón de vaciar aulas cuando no hay ninguna asignada.
+          if($("#contenedor_asignar_aula input[value!='']").size()==0){
+            $("#asignar_aula #vaciar").prop("disabled",true);
+          }
+        }
+      })
+  });
+
 
   // Se hace click en toda la fila de la tabla.
   $(document).on('click',".contenedor_registro .inner_table td",function(event){
@@ -5106,27 +5214,25 @@ $(document).on("blur","input[id='edit_profesor_dni']",function() {
     }
   });
 
-  $(document).on("click","#contenedor_registro_horario tbody button",function(event){
-    $(this).closest("tr").find("input").removeClass("modified");
-    clase=$(this).closest("tr").children('td').slice(1, 2).html();
-    hora_ini=$(this).closest("tr").children('td').slice(2, 3).find("input").attr("value");
-    hora_fin=$(this).closest("tr").children('td').slice(3, 4).find("input").attr("value");
-    ini=hora_ini+":00";
-    fin=hora_fin+":00";
-    // Se actualiza las horas modificadas en la entidad Horario.
-    $.ajax({
-      type: 'POST',
-      url: Routing.generate('editar_horario'),
-      data: {clase:clase,ini:ini,fin:fin},        
-    })
-  });
-
   // Se quita la marca de los input modificados y se guarda los valores en la base de datos.
   $(document).on('click',"#registro_horario_guardar #button_horario_all",function(event){
 
     $("#contenedor_registro_horario input[class='modified']").each(function(){  
-      $(this).closest("tr").find("button").trigger("click");
+      $(this).closest("tr").find("input").removeClass("modified");
+      clase=$(this).closest("tr").children('td').slice(1, 2).html();
+      hora_ini=$(this).closest("tr").children('td').slice(2, 3).find("input").attr("value");
+      hora_fin=$(this).closest("tr").children('td').slice(3, 4).find("input").attr("value");
+      ini=hora_ini+":00";
+      fin=hora_fin+":00";
+      // Se actualiza las horas modificadas en la entidad Horario.
+      $.ajax({
+        type: 'POST',
+        url: Routing.generate('editar_horario'),
+        data: {clase:clase,ini:ini,fin:fin},        
+      })
     });
+    $("#registro_horario #registro_horario_guardar #button_horario_all").prop("disabled",true);
+    $("#registro_horario #registro_horario_guardar #horario_rest").prop("disabled",true);
   });
 
   $(document).on('click',"#button_horario_save",function(event){
@@ -5506,12 +5612,12 @@ $(document).on("blur","input[id='edit_profesor_dni']",function() {
   //        Instalaciones         //
   //////////////////////////////////
 
-  $(document).on("focus","#instalación_nombre",function(event){
+  $(document).on("focus","#registro_instalaciones .instalaciones #instalación_nombre",function(event){
     event.preventDefault();
-      $("#instalación_nombre").removeClass("invalid_placeholder");
+      $("#registro_instalaciones .instalaciones #instalación_nombre").removeClass("invalid_placeholder");
   });
 
-  $(document).on("blur","#instalación_nombre",function(event){
+  $(document).on("blur","#registro_instalaciones .instalaciones #instalación_nombre",function(event){
     event.preventDefault();
     if($(this).val()==""){
       $(this).addClass("invalid_placeholder");
@@ -5521,19 +5627,31 @@ $(document).on("blur","input[id='edit_profesor_dni']",function() {
     }
   });
 
-  $(document).on("click","#instalación_new",function(event){
+  $(document).on("click","#registro_instalaciones .instalaciones #instalación_new",function(event){
     event.preventDefault();
 
-    if($("#instalación_nombre").val()==""){
-      $("#instalación_nombre").addClass("invalid_placeholder");
+    if($("#registro_instalaciones .instalaciones #instalación_nombre").val()==""){
+      $("#registro_instalaciones .instalaciones #instalación_nombre").addClass("invalid_placeholder");
     }
     else{
       $.ajax({
         type: 'POST',
-        url: $("#instalación_nueva").attr('action'),
-        data:$("#instalación_nueva").serialize(), 
+        url: $("#registro_instalaciones .instalaciones #instalación_nueva").attr('action'),
+        data:$("#registro_instalaciones .instalaciones #instalación_nueva").serialize(), 
         dataType: 'json',
         success: function(response) {
+          //Validación de existencia
+          if(response.error){
+            error.play();
+            swal({
+              title: "Instalación registrada en el sistema",
+              text: 'La instalación introducida ya está registrada en el sistema.',
+              type: "error",
+              confirmButtonColor: color,
+              html: true
+            });
+            return false;
+          }
           // Se actualiza las pestañas de instalaciones.
           $("#registrar_instalaciones").update_tab();
           $("#reservar_instalaciones").update_tab();
@@ -5542,48 +5660,62 @@ $(document).on("blur","input[id='edit_profesor_dni']",function() {
     }
   });
 
-  $(document).on("click","#registro_instalaciones td a",function(event){
-    $("#instalación_nombre").attr('placeholder',' ');
-
-    $("#registro_instalaciones td a").closest("tr").removeClass("edit_equipamiento");
-    $(this).closest("tr").addClass("edit_equipamiento");
-    $("#datos_instalación").load($(this).attr("href"), function(){
-      $("#instalación_nombre").attr('placeholder','Inserte el nombre para actualizar la instalación');
-    });
-    $("#cerrar_instalación_edit").removeClass("oculto");
-    $("#instalación_delete").closest("th").removeClass("oculto");
-    $("#instalación_edit").closest("th").removeClass("oculto");
-    $("#instalación_new").closest("th").addClass("oculto");
-    $("#instalación_nombre").removeClass("invalid_placeholder");
-    $("#instalación_nombre").val($(this).text());
-  });
-
-  $(document).on("click","#cerrar_instalación_edit",function(event){
-    $("#registro_instalaciones td a").closest("tr").removeClass("edit_equipamiento");
-    $("#datos_instalación").load(Routing.generate('equipamiento_new'));
-
-    $("#cerrar_instalación_edit").addClass("oculto");
-    $("#instalación_delete").closest("th").addClass("oculto");
-    $("#instalación_edit").closest("th").addClass("oculto");
-    $("#instalación_new").closest("th").removeClass("oculto");
-    $("#instalación_nombre").val("");
-    $("#instalación_nombre").removeClass("invalid_placeholder");
-    $("#instalación_nombre").attr('placeholder','Inserte el nombre para añadir nueva instalación');
-    $("#datos_instalación").removeClass("oculto");
-  });
-
-  $(document).on("click","#instalación_edit",function(event){
+  $(document).on("click","#registro_instalaciones .instalaciones td a",function(event){
     event.preventDefault();
 
-    if($("#instalación_nombre").val()==""){
-      $("#instalación_nombre").addClass("invalid_placeholder");
+    $("#registro_instalaciones .instalaciones #instalación_nombre").attr('placeholder',' ');
+
+    $("#registro_instalaciones .instalaciones td a").closest("tr").removeClass("edit_equipamiento");
+    $(this).closest("tr").addClass("edit_equipamiento");
+    $("#registro_instalaciones .instalaciones  #datos_instalación").load($(this).attr("href"), function(){
+      $("#registro_instalaciones .instalaciones #instalación_nombre").attr('placeholder','Inserte nombre para actualizar');
+    });
+    $("#registro_instalaciones .instalaciones #cerrar_instalación_edit").removeClass("oculto");
+    $("#registro_instalaciones .instalaciones #instalación_delete").closest("th").removeClass("oculto");
+    $("#registro_instalaciones .instalaciones #instalación_edit").closest("th").removeClass("oculto");
+    $("#registro_instalaciones .instalaciones #instalación_new").closest("th").addClass("oculto");
+    $("#registro_instalaciones .instalaciones #instalación_nombre").removeClass("invalid_placeholder");
+    $("#registro_instalaciones .instalaciones #instalación_nombre").val($(this).text());
+  });
+
+  $(document).on("click","#registro_instalaciones .instalaciones #cerrar_instalación_edit",function(event){
+    $("#registro_instalaciones .instalaciones td a").closest("tr").removeClass("edit_equipamiento");
+    $(".instalaciones #datos_instalación").load(Routing.generate('equipamiento_new'));
+
+    $("#registro_instalaciones .instalaciones #cerrar_instalación_edit").addClass("oculto");
+    $("#registro_instalaciones .instalaciones #instalación_delete").closest("th").addClass("oculto");
+    $("#registro_instalaciones .instalaciones #instalación_edit").closest("th").addClass("oculto");
+    $("#registro_instalaciones .instalaciones #instalación_new").closest("th").removeClass("oculto");
+    $("#registro_instalaciones .instalaciones #instalación_nombre").val("");
+    $("#registro_instalaciones .instalaciones #instalación_nombre").removeClass("invalid_placeholder");
+    $("#registro_instalaciones .instalaciones #instalación_nombre").attr('placeholder','Inserte nueva instalación');
+    $("#registro_instalaciones .instalaciones #datos_instalación").removeClass("oculto");
+  });
+
+  $(document).on("click","#registro_instalaciones .instalaciones #instalación_edit",function(event){
+    event.preventDefault();
+
+    if($("#registro_instalaciones .instalaciones #instalación_nombre").val()==""){
+      $("#registro_instalaciones .instalaciones #instalación_nombre").addClass("invalid_placeholder");
     }
     else{
       $.ajax({
         type: 'PUT',
-        url: $("#instalación_editar").attr('action'),
-        data:$("#instalación_editar").serialize(), 
+        url: $("#registro_instalaciones .instalaciones #instalación_editar").attr('action'),
+        data:$("#registro_instalaciones .instalaciones #instalación_editar").serialize(), 
         success: function(response) {
+          //Validación de existencia
+          if(response.error){
+            error.play();
+            swal({
+              title: "Instalación registrada en el sistema",
+              text: 'La instalación introducida ya está registrada en el sistema.',
+              type: "error",
+              confirmButtonColor: color,
+              html: true
+            });
+            return false;
+          }
           // Se actualiza las pestañas de instalaciones.
           $("#registrar_instalaciones").update_tab();
           $("#reservar_instalaciones").update_tab();
@@ -5593,12 +5725,12 @@ $(document).on("blur","input[id='edit_profesor_dni']",function() {
     }
   });
 
-  $(document).on("click","#instalación_delete",function(event){
+  $(document).on("click","#registro_instalaciones .instalaciones #instalación_delete",function(event){
     event.preventDefault();
     form= $(this).closest("th").prev().find("div[id='equipamiento_eliminar'] form");
 
     var arr= form.attr('action').split('/');
-    equipamiento=$("#instalación_nombre").val();
+    equipamiento=$(" #registro_instalaciones .instalaciones#instalación_nombre").val();
     aviso.play();
     swal({
       title: "Eliminación de la instalación del sistema.",
@@ -5649,9 +5781,146 @@ $(document).on("blur","input[id='edit_profesor_dni']",function() {
       })
       }
     );
-    /*
-    if(confirm("Se va a eliminar la instalación del sistema.\n\n¿Estas seguro de eliminarla?\n\n")==true)
-    {
+      return false;
+  });
+
+  //////////////////////////////////
+  //             Aulas            //
+  //////////////////////////////////
+
+  $(document).on("focus","#registro_instalaciones .aulas #aula_nombre",function(event){
+    event.preventDefault();
+      $("#registro_instalaciones #aula_nombre").removeClass("invalid_placeholder");
+  });
+
+  $(document).on("blur","#registro_instalaciones #aula_nombre",function(event){
+    event.preventDefault();
+    if($(this).val()==""){
+      $(this).addClass("invalid_placeholder");
+    }
+    else{
+      $(this).removeClass("invalid_placeholder");
+    }
+  });
+
+  $(document).on("click","#registro_instalaciones #aula_new",function(event){
+    event.preventDefault();
+
+    if($("#registro_instalaciones #aula_nombre").val()==""){
+      $("#registro_instalaciones #aula_nombre").addClass("invalid_placeholder");
+    }
+    else{
+      $.ajax({
+        type: 'POST',
+        url: $("#registro_instalaciones #aula_nueva").attr('action'),
+        data:$("#registro_instalaciones #aula_nueva").serialize(), 
+        dataType: 'json',
+        success: function(response) {
+          //Validación de existencia
+          if(response.error){
+            error.play();
+            swal({
+              title: "Aula registrada en el sistema",
+              text: 'Esta aula ya se encuentra registrada en el sistema.',
+              type: "error",
+              confirmButtonColor: color,
+              html: true
+            });
+            return false;
+          }
+          // Se actualiza las pestañas de instalaciones y asignar aulas.
+          $("#registrar_instalaciones").update_tab();
+          $("#asignar_aula").update_tab();
+        }
+      })
+    }
+  });
+
+  $(document).on("click","#registro_instalaciones .aulas td a",function(event){
+    event.preventDefault();
+
+    $("#registro_instalaciones #aula_nombre").attr('placeholder',' ');
+
+    $("#registro_instalaciones .aulas td a").closest("tr").removeClass("edit_equipamiento");
+    $(this).closest("tr").addClass("edit_equipamiento");
+
+    $("#cerrar_aula_edit").removeClass("oculto");
+    $("#registro_instalaciones #aula_delete").closest("th").removeClass("oculto");
+    $("#registro_instalaciones #aula_edit").closest("th").removeClass("oculto");
+    $("#registro_instalaciones #aula_new").closest("th").addClass("oculto");
+    $("#registro_instalaciones #aula_nombre").removeClass("invalid_placeholder");
+    $("#registro_instalaciones #aula_nombre").val($(this).text());
+    $("#registro_instalaciones .aulas #datos_instalación").load($(this).attr("href"), function(){
+      $("#registro_instalaciones .aulas #aula_nombre").attr('placeholder','Inserte nuevo nombre');
+    });
+  });
+
+  $(document).on("click","#cerrar_aula_edit",function(event){
+    $("#registro_instalaciones .aulas td a").closest("tr").removeClass("edit_equipamiento");
+    $("#registro_instalaciones .aulas #datos_instalación").load(Routing.generate('equipamiento_new'));
+
+    $("#cerrar_aula_edit").addClass("oculto");
+    $("#registro_instalaciones #aula_delete").closest("th").addClass("oculto");
+    $("#registro_instalaciones #aula_edit").closest("th").addClass("oculto");
+    $("#registro_instalaciones #aula_new").closest("th").removeClass("oculto");
+    $("#registro_instalaciones #aula_nombre").val("");
+    $("#registro_instalaciones #aula_nombre").removeClass("invalid_placeholder");
+    $("#registro_instalaciones #aula_nombre").attr('placeholder','Inserte nueva aula');
+    $("#registro_instalaciones .aulas #datos_instalación").removeClass("oculto");
+  });
+
+  $(document).on("click","#registro_instalaciones #aula_edit",function(event){
+    event.preventDefault();
+
+    if($("#registro_instalaciones #aula_nombre").val()==""){
+      $("#registro_instalaciones #aula_nombre").addClass("invalid_placeholder");
+    }
+    else{
+      $.ajax({
+        type: 'PUT',
+        url: $("#registro_instalaciones #aula_editar").attr('action'),
+        data:$("#registro_instalaciones #aula_editar").serialize(), 
+        success: function(response) {
+          //Validación de existencia
+          if(response.error){
+            error.play();
+            swal({
+              title: "Aula registrada en el sistema",
+              text: 'Esta aula ya se encuentra registrada en el sistema.',
+              type: "error",
+              confirmButtonColor: color,
+              html: true
+            });
+            return false;
+          }
+
+          // Se actualiza las pestañas de instalaciones y asignar aulas.
+          $("#registrar_instalaciones").update_tab();
+          $("#asignar_aula").update_tab();
+        }
+      })
+    }
+  });
+
+  $(document).on("click","#registro_instalaciones #aula_delete",function(event){
+    event.preventDefault();
+    form= $(this).closest("th").prev().find("div[id='equipamiento_eliminar'] form");
+
+    var arr= form.attr('action').split('/');
+    equipamiento=$("#registro_instalaciones #aula_nombre").val();
+    aviso.play();
+    swal({
+      title: "Eliminación del aula del sistema.",
+      text: "¿Estas seguro de continuar? No podrás deshacer este paso...",
+      type: "warning",
+      showCancelButton: true,
+      cancelButtonText: "Cancelar",
+      confirmButtonColor: color,
+      confirmButtonText: "¡Adelante!",
+      closeOnConfirm: false },
+
+      function(){
+
       $.ajax({
         type: 'POST',
         url: Routing.generate('equipamiento_reservado'),
@@ -5662,15 +5931,14 @@ $(document).on("blur","input[id='edit_profesor_dni']",function() {
         success: function(response) {
           // Si no hay alumnos asignados al curso se puede eliminar.
           if(response.data!=null){ 
-            alert('La instalación: "'+equipamiento+'" no se puede eliminar porque está reservada. Debe eliminar las reservas de la instalación para poder eliminarla.');
-          /* 
-            tr.find("select").addClass("modified");
-            tr.find("select").addClass("error_guardar");
-            tr.find("select").removeClass("modified");
-            $("#registro_Ngrupos #aviso_error").removeClass("oculto");
-            tr.find("span").removeClass("oculto");
-            //alert(response.data);
-            tr.find("select").val(num_grupos_ant);
+            error.play();
+            swal({
+            title: "La eliminación no se ha efectuado",
+            text: '<p class="justificado">El aula <span>"'+equipamiento+'"</span> no se puede eliminar porque está reservada. Debe eliminar las reservas de la instalación para poder eliminarla.</p>',
+            type: "error",
+            confirmButtonColor: color,
+            html: true
+             });
           }
           else{
             $.ajax({
@@ -5679,17 +5947,20 @@ $(document).on("blur","input[id='edit_profesor_dni']",function() {
               data: form.serialize(),
         
               success: function() {
-                // Se actualiza las pestañas de equipamientos.
+                // Se actualiza las pestañas de instalaciones y asignar aulas.
                 $("#registrar_instalaciones").update_tab();
-                $("#reservar_instalaciones").update_tab();
+                $("#asignar_aula").update_tab();
               }
             })
+            swal.close();
           }
         }
       })
-    }*/
-      return false;
+      }
+    );
+    return false;
   });
+
 
 
   //////////////////////////////////
@@ -5745,6 +6016,19 @@ $(document).on("blur","input[id='edit_profesor_dni']",function() {
         data:$("#equipamiento_nueva").serialize(), 
         dataType: 'json',
         success: function(response) {
+          //Validación de existencia
+          if(response.error){
+            error.play();
+            swal({
+              title: "Equipamiento registrado en el sistema",
+              text: 'El equipamiento introducido ya está registrado en el sistema.',
+              type: "error",
+              confirmButtonColor: color,
+              html: true
+            });
+            return false;
+          }
+
           // Se actualiza las pestañas de equipamientos.
           $("#registrar_equipamientos").update_tab();
           $("#reservar_equipamientos").update_tab();
@@ -5801,6 +6085,18 @@ $(document).on("click","#registro_equipamientos td a",function(event){
         url: $("#equipamiento_editar").attr('action'),
         data:$("#equipamiento_editar").serialize(), 
         success: function(response) {
+          //Validación de existencia
+          if(response.error){
+            error.play();
+            swal({
+              title: "Equipamiento registrado en el sistema",
+              text: 'El equipamiento introducido ya está registrado en el sistema.',
+              type: "error",
+              confirmButtonColor: color,
+              html: true
+            });
+            return false;
+          }
           // Se actualiza las pestañas de equipamientos.
           $("#registrar_equipamientos").update_tab();
           $("#reservar_equipamientos").update_tab();
@@ -7052,7 +7348,10 @@ $(document).on("click","#registro_equipamientos td a",function(event){
             }
               // Se actualiza la lista de antiguos alumnos y la pestaña de asignar grupo.
               $("#alumnos_antiguo").update_tab();
-              $("#asignar_grupo").update_tab();
+              //Se actualiza la pestaña de asignar grupos si está abierta y tiene seleccionado el curso actualizado.
+              if($("#asignar_grupos #lista_cursos select option:selected").attr("value")==response.curso){
+                $("#asignar_grupo").update_tab();   
+              }
 
               div=input.closest("div[id^='tabs-']");
               $(div).load(Routing.generate('search_multiple'));
@@ -7127,7 +7426,7 @@ $(document).on("click","#registro_equipamientos td a",function(event){
           if(matriculas_registradas){
             exito.play();
             if(contador>1){
-              texto=matriculas_registradas+"/"+contador+" matrículas registradas.";
+              texto=matriculas_registradas+" / "+contador+" matrículas registradas.";
             }
             else if(contador==1 && matriculas_registradas==1 ){
               texto="Matrícula registrada.";
@@ -7333,6 +7632,10 @@ $(document).on("click","#registro_equipamientos td a",function(event){
                       out_class: "fadeOutRight",
                     }
                   });
+                  //Se actualiza la pestaña de asignar grupos si está abierta y tiene seleccionado el curso actualizado.
+                  if($("#asignar_grupos #lista_cursos select option:selected").attr("value")==response.curso){
+                    $("#asignar_grupo").update_tab();   
+                  }
                 }
 
                 if(statusTxt == "error")

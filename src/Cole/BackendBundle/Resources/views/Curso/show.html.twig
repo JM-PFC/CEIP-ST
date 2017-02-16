@@ -5,19 +5,87 @@
     
 {% block javascript %}
     <script>
-    if($(window).width() > 1200){
-        if($("#td_inf").hasScrollBar()){
-            $("#contenedor_registro_Ngrupos #table_th_inf th:nth-child(2)").css("min-width","23%");
-            $("#contenedor_registro_Ngrupos #table_th_inf th:nth-child(3)").css("min-width","25%");
-            $("#contenedor_registro_Ngrupos #table_th_inf th:nth-child(4)").css("min-width","24%");
-        }
-
-        if($("#td_prim").hasScrollBar()){
-            $("#contenedor_registro_Ngrupos #table_th_prim th:nth-child(2)").css("min-width","23%");
-            $("#contenedor_registro_Ngrupos #table_th_prim th:nth-child(3)").css("min-width","25%");
-            $("#contenedor_registro_Ngrupos #table_th_inf th:nth-child(4)").css("min-width","24%");
-        }   
+  // Estilos al mostrar la página
+  if($(window).width() > 1200){
+    // Se comprueba si existe scrol vertical para ajustar el thead
+    if( $('#td_inf #lista_color tbody').height()>$('#td_inf').height()){
+        $("#contenedor_registro_Ngrupos div #table_th_inf th:nth-child(2)").attr('style', 'min-width: 23% !important');
     }
+    else{
+        $("#contenedor_registro_Ngrupos div #table_th_inf th:nth-child(2)").attr('style', 'min-width: 25% !important');
+    }
+        // Se comprueba si existe scrol vertical para ajustar el thead
+    if( $('#td_prim #lista_color tbody').height()>$('#td_prim').height()){
+        $("#contenedor_registro_Ngrupos div #table_th_prim th:nth-child(2)").attr('style', 'min-width: 21% !important');
+        $("#contenedor_registro_Ngrupos div #table_th_prim th:nth-child(4)").attr('style', 'min-width: 29% !important');
+    }
+    else{
+        $("#contenedor_registro_Ngrupos div #table_th_prim th:nth-child(2)").attr('style', 'min-width: 23% !important');
+        $("#contenedor_registro_Ngrupos div #table_th_prim th:nth-child(4)").attr('style', 'min-width: 29% !important');
+    }
+  }
+  else{
+    // Se comprueba si existe scrol vertical para ajustar el thead
+    if( $('#td_inf #lista_color tbody').height()>$('#td_inf').height()){
+        $("#contenedor_registro_Ngrupos div #table_th_inf th:nth-child(2)").attr('style', 'min-width: 22% !important');
+        $("#contenedor_registro_Ngrupos div #table_th_inf th:nth-child(4)").attr('style', 'min-width: 29% !important');
+    }
+    else{
+        $("#contenedor_registro_Ngrupos div #table_th_inf th:nth-child(2)").attr('style', 'min-width: 22% !important');
+        $("#contenedor_registro_Ngrupos div #table_th_inf th:nth-child(4)").attr('style', 'min-width: 29% !important');
+    }
+        // Se comprueba si existe scrol vertical para ajustar el thead
+    if( $('#td_prim #lista_color tbody').height()>$('#td_prim').height()){
+        $("#contenedor_registro_Ngrupos div #table_th_prim th:nth-child(2)").attr('style', 'min-width: 20% !important');
+        $("#contenedor_registro_Ngrupos div #table_th_prim th:nth-child(4)").attr('style', 'min-width: 29% !important');
+    }
+    else{
+        $("#contenedor_registro_Ngrupos div #table_th_prim th:nth-child(2)").attr('style', 'min-width: 20% !important');
+        $("#contenedor_registro_Ngrupos div #table_th_prim th:nth-child(4)").attr('style', 'min-width: 29% !important');
+    }
+  }
+  // Estilos al cambiar el tamaño de la pantalla.
+  $(window).resize(function(event) {
+    if($(window).width() > 1200){
+        // Se comprueba si existe scrol vertical para ajustar el thead
+        if( $('#td_inf #lista_color tbody').height()>$('#td_inf').height()){
+            $("#contenedor_registro_Ngrupos div #table_th_inf th:nth-child(2)").attr('style', 'min-width: 23% !important');
+        }
+        else{
+            $("#contenedor_registro_Ngrupos div #table_th_inf th:nth-child(2)").attr('style', 'min-width: 25% !important');
+        }
+        
+        // Se comprueba si existe scrol vertical para ajustar el thead
+        if( $('#td_prim #lista_color tbody').height()>$('#td_prim').height()){
+            $("#contenedor_registro_Ngrupos div #table_th_prim th:nth-child(2)").attr('style', 'min-width: 21% !important');
+            $("#contenedor_registro_Ngrupos div #table_th_prim th:nth-child(4)").attr('style', 'min-width: 29% !important');
+        }
+        else{
+            $("#contenedor_registro_Ngrupos div #table_th_prim th:nth-child(2)").attr('style', 'min-width: 23% !important');
+            $("#contenedor_registro_Ngrupos div #table_th_prim th:nth-child(4)").attr('style', 'min-width: 29% !important');
+        }
+    }
+    else{
+        // Se comprueba si existe scrol vertical para ajustar el thead
+        if( $('#td_inf #lista_color tbody').height()>$('#td_inf').height()){
+            $("#contenedor_registro_Ngrupos div #table_th_inf th:nth-child(2)").attr('style', 'min-width: 22% !important');
+            $("#contenedor_registro_Ngrupos div #table_th_inf th:nth-child(4)").attr('style', 'min-width: 29% !important');
+        }
+        else{
+            $("#contenedor_registro_Ngrupos div #table_th_inf th:nth-child(2)").attr('style', 'min-width: 22% !important');
+            $("#contenedor_registro_Ngrupos div #table_th_inf th:nth-child(4)").attr('style', 'min-width: 29% !important');
+        }
+        // Se comprueba si existe scrol vertical para ajustar el thead
+        if( $('#td_prim #lista_color tbody').height()>$('#td_prim').height()){
+            $("#contenedor_registro_Ngrupos div #table_th_prim th:nth-child(2)").attr('style', 'min-width: 20% !important');
+            $("#contenedor_registro_Ngrupos div #table_th_prim th:nth-child(4)").attr('style', 'min-width: 29% !important');
+        }
+        else{
+            $("#contenedor_registro_Ngrupos div #table_th_prim th:nth-child(2)").attr('style', 'min-width: 20% !important');
+            $("#contenedor_registro_Ngrupos div #table_th_prim th:nth-child(4)").attr('style', 'min-width: 29% !important');
+        }
+    }    
+  });
     </script>
 {% endblock %}
 
@@ -45,7 +113,7 @@
                     <option  value="3">3</option>
                 </select>
             </div>
-            <div class="center_w60">
+            <div>
                 <button id="button_grupos_all">Guardar Todo</button>
                 <button id="button_grupos_rest">Restablecer</button>
             </div>

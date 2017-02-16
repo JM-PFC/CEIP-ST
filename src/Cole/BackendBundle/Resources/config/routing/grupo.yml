@@ -37,6 +37,12 @@ asignar_aula:
     options:
         expose: true
 
+vaciar_aulas:
+    path:     /vaciar_aulas
+    defaults: { _controller: "BackendBundle:Grupo:VaciarAulas" }
+    options:
+        expose: true
+
 asignar_grupo:
     path:     /Asignar_grupo
     defaults: { _controller: "BackendBundle:Grupo:AsignarGrupo" }

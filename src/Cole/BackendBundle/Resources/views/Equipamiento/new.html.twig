@@ -29,15 +29,25 @@
         $("#equipamiento_nueva").attr("id","instalación_nueva");
         $("#instalación_nueva #equipamiento_nombre").attr("placeholder","Inserte el nombre para añadir nueva instalación");
                 */
-        $("#tabs div[aria-hidden='false'] #equipamiento_nueva").attr("id","instalación_nueva");
+        // Tabla de instalaciones
+        $("#tabs div[aria-hidden='false'] .instalaciones #equipamiento_nueva").attr("id","instalación_nueva");
+        $(".instalaciones #instalación_nueva #equipamiento_nombre").attr("id","instalación_nombre");
+        $(".instalaciones #instalación_nueva #equipamiento_unidades").attr("id","instalación_unidades");
+        $(".instalaciones #instalación_nueva #equipamiento_tipo").attr("id","instalación_tipo");
+        $(".instalaciones #instalación_nueva #instalación_nombre").attr("placeholder","Inserte una nueva instalación");
+        $(".instalaciones #instalación_nueva #instalación_unidades").val(1);
+        $(".instalaciones #instalación_nueva #instalación_tipo").val("Instalación");
+        $(".instalaciones #instalación_unidades").addClass("oculto");
 
-        $("#instalación_nueva #equipamiento_nombre").attr("id","instalación_nombre");
-        $("#instalación_nueva #equipamiento_unidades").attr("id","instalación_unidades");
-        $("#instalación_nueva #equipamiento_tipo").attr("id","instalación_tipo");
-        $("#instalación_nueva #instalación_nombre").attr("placeholder","Inserte el nombre para añadir nueva instalación");
-        $("#instalación_nueva #instalación_unidades").val(1);
-        $("#instalación_nueva #instalación_tipo").val("Instalación");
-        $("#instalación_unidades").addClass("oculto");
+        // Tabla de aulas
+        $("#tabs div[aria-hidden='false'] .aulas #equipamiento_nueva").attr("id","aula_nueva");
+        $(".aulas #aula_nueva #equipamiento_nombre").attr("id","aula_nombre");
+        $(".aulas #aula_nueva #equipamiento_unidades").attr("id","aula_unidades");
+        $(".aulas #aula_nueva #equipamiento_tipo").attr("id","aula_tipo");
+        $(".aulas #aula_nueva #aula_nombre").attr("placeholder","Inserte una nueva aula");
+        $(".aulas #aula_nueva #aula_unidades").val(1);
+        $(".aulas #aula_nueva #aula_tipo").val("Aula");
+        $(".aulas #aula_unidades").addClass("oculto");
 
         $('#registro_instalaciones .contenedor_registro_instalaciones input').focus(function(){
             $(this).data('placeholder',$(this).attr('placeholder')).attr('placeholder','');

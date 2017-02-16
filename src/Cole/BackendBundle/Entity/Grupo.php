@@ -31,9 +31,8 @@ class Grupo
     private $letra;
 
     /**
-     * @var string
-     *
-     * @ORM\Column(name="aula", type="string", length=10, nullable=true)
+     * @ORM\OneToOne(targetEntity="Equipamiento", inversedBy="grupo")
+     * @ORM\JoinColumn(name="id_aula", referencedColumnName="id")
      */
     private $aula;
 
@@ -95,29 +94,6 @@ class Grupo
     public function getLetra()
     {
         return $this->letra;
-    }
-
-    /**
-     * Set aula
-     *
-     * @param string $aula
-     * @return Grupo
-     */
-    public function setAula($aula)
-    {
-        $this->aula = $aula;
-
-        return $this;
-    }
-
-    /**
-     * Get aula
-     *
-     * @return string 
-     */
-    public function getAula()
-    {
-        return $this->aula;
     }
 
     /**
@@ -183,7 +159,7 @@ class Grupo
         return $this->curso;
     }
 
-        public function __toString()
+    public function __toString()
     {
         return $this->getLetra();
     }
@@ -242,5 +218,61 @@ class Grupo
     public function getAlumnos()
     {
         return $this->alumnos;
+    }
+
+    /**
+     * Set aula
+     *
+     * @param \Cole\BackendBundle\Entity\Equipamiento $aula
+     * @return Grupo
+     */
+    public function setAula(\Cole\BackendBundle\Entity\Equipamiento $aula = null)
+    {
+        $this->aula = $aula;
+
+        return $this;
+    }
+
+    /**
+     * Get aula
+     *
+     * @return \Cole\BackendBundle\Entity\Equipamiento 
+     */
+    public function getAula()
+    {
+        return $this->aula;
+    }
+
+    /**
+     * Add matricula
+     *
+     * @param \Cole\BackendBundle\Entity\Matricula $matricula
+     * @return Grupo
+     */
+    public function addMatricula(\Cole\BackendBundle\Entity\Matricula $matricula)
+    {
+        $this->matricula[] = $matricula;
+
+        return $this;
+    }
+
+    /**
+     * Remove matricula
+     *
+     * @param \Cole\BackendBundle\Entity\Matricula $matricula
+     */
+    public function removeMatricula(\Cole\BackendBundle\Entity\Matricula $matricula)
+    {
+        $this->matricula->removeElement($matricula);
+    }
+
+    /**
+     * Get matricula
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getMatricula()
+    {
+        return $this->matricula;
     }
 }

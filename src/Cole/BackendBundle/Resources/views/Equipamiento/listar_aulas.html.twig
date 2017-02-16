@@ -1,0 +1,32 @@
+{% extends 'BackendBundle:Default:index.html.twig' %}
+
+{% block head %}{% endblock %}
+{% block stylesheets %}{% endblock %}
+
+{% block javascript %}
+
+    <script>
+
+    </script>
+
+{% endblock %}
+
+{% block body -%}
+    <div>
+        <div id="content-form">
+            <h3><strong id="curso"></strong></h3>
+            <p>Seleccione el aula disponible que quiera asignar al grupo.</p>
+            <div>
+                {% for entity in entities %}
+                <button id="{{entity.id}}">{{ entity.nombre }}</button>
+                {% endfor %}
+            </div>
+        </div>
+        <div id="botones_centrados">
+            <div>
+                <button id="cancelar">Cancelar </button>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}

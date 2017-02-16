@@ -8,7 +8,7 @@
     <script >
         // Asígnamos un valor por defecto al input radio de los formularios de creación.
         $("form[id$='nuevo'] input[id$='_sexo_0']").attr("checked","checked");
-
+        //Se reajusta el máximo permitido de horas lectivas cuando la jornada laboral se establece más pequeña que las horas lectivas.
         $(document).on("change",'#profesor_nuevo #profesor_horas', function(){
             if($(this).val()<22.5){
                 $("#profesor_nuevo #profesor_horasLectivas").attr("max",$(this).val());
@@ -16,7 +16,6 @@
                     $("#profesor_nuevo #profesor_horasLectivas").val($(this).val());
                 }
             }
-
         });
         
         // Se muestra por defecto la primera pestaña del formulario y se selecciona el primer campo.
@@ -67,6 +66,27 @@
                 $(this).parent("div").parent("div").next("div").find("input").each (function(){ 
                     $(this).prop("disabled",false);
                 });
+            }
+        });
+
+        //Se restablecer el valor inicial de los dos input de jornada laboral si se deja en vacío el primero.
+        //El segundo depende del primero porque cuando el primero disminuye se ajusta el segundo al mínimo posible.
+        $(document).on("change blur","#profesor_nuevo #profesor_horas",function() {
+            if($(this).val()==""){
+                $(this).val($(this).attr("value"));
+                $("#profesor_nuevo #profesor_horasLectivas").val($("#profesor_nuevo #profesor_horasLectivas").attr("value"));
+            }
+        });
+        //Se restablecer el valor inicial del segundo input de jornada laboral si se deja en vacío.
+        $(document).on("change blur","#profesor_nuevo #profesor_horasLectivas",function() {
+            if($(this).val()==""){
+                $(this).val($(this).attr("value"));
+            }
+        });
+        //Sólo se permite usar 2 de las feclas del teclado.
+        $(document).on("keypress cut paste","#profesor_nuevo #rama input",function(event) {
+            if(event.keyCode !=38 && event.keyCode!=40 ){
+                event.preventDefault();
             }
         });
     </script>

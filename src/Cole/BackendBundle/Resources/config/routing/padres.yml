@@ -48,3 +48,8 @@ obtenerdatos_responsable:
     options:
         expose: true
 
+comprobar_dni_padre_editado:
+    path:     /comprobar_dni_padre_editado
+    defaults: { _controller: "BackendBundle:Padres:ComprobarDniPadreEditado" }
+    options:
+        expose: true

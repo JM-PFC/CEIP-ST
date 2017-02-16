@@ -61,6 +61,14 @@ class EquipamientoController extends Controller
 
         if ($form->isValid()) {
             $em = $this->getDoctrine()->getManager();
+            // Se comprueba que no exista el equipamiento/instalación en el sistema.
+            $equipamiento = $em->getRepository('BackendBundle:Equipamiento')->findOneBy(array('nombre'=>$entity->getNombre(),'tipo'=>$entity->getTipo()));
+            if($equipamiento){
+                return new JsonResponse(array(
+                    'error' => 'existe',
+                    'success' => true), 200);
+            }
+
             $em->persist($entity);
             $em->flush();
 
@@ -203,6 +211,14 @@ class EquipamientoController extends Controller
         $editForm->handleRequest($request);
 
         if ($editForm->isValid()) {
+        // Se comprueba que no exista el equipamiento/instalación en el sistema.
+        $equipamiento = $em->getRepository('BackendBundle:Equipamiento')->findOneBy(array('nombre'=>$entity->getNombre(),'tipo'=>$entity->getTipo()));
+        if($equipamiento){
+            return new JsonResponse(array(
+                'error' => 'existe',
+                'success' => true), 200);
+        }
+            
             $em->flush();
 
             return $this->redirect($this->generateUrl('equipamiento_edit', array('id' => $id)));
@@ -225,10 +241,16 @@ class EquipamientoController extends Controller
 
         if ($form->isValid()) {
             $em = $this->getDoctrine()->getManager();
-            $entity = $em->getRepository('BackendBundle:Equipamiento')->find($id);
 
+            $entity = $em->getRepository('BackendBundle:Equipamiento')->find($id);
             if (!$entity) {
                 throw $this->createNotFoundException('Unable to find Equipamiento entity.');
+            }
+            //Se elimina la asignación de grupo si existe antes de eliminar un aula.
+            $grupo = $em->getRepository('BackendBundle:Grupo')->findOneByAula($entity);
+            if($entity->getTipo()=="Aula" && $grupo){
+                $grupo->SetAula(NULL);
+                $em->persist($grupo);
             }
 
             $em->remove($entity);
@@ -253,5 +275,16 @@ class EquipamientoController extends Controller
             ->add('submit', 'submit', array('label' => 'Delete'))
             ->getForm()
         ;
+    }
+
+    public function ListarAulasAction()
+    {
+        $em = $this->getDoctrine()->getManager();
+
+        $entities = $em->getRepository('BackendBundle:Equipamiento')->findBy(array('tipo'=>'Aula'),array('nombre'=>'ASC'));
+
+        return $this->render('BackendBundle:Equipamiento:listar_aulas.html.twig', array(
+            'entities' => $entities,
+        ));
     }
 }

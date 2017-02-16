@@ -1,5 +1,5 @@
 equipamiento:
-    path:     /
+    path:     /equipamientos
     defaults: { _controller: "BackendBundle:Equipamiento:index" }
     options:
         expose: true
@@ -40,5 +40,11 @@ equipamiento_delete:
     path:     /{id}/delete
     defaults: { _controller: "BackendBundle:Equipamiento:delete" }
     requirements: { _method: post|delete }
+    options:
+        expose: true
+
+Listar_aulas:
+    path:     /Listar_Aulas
+    defaults: { _controller: "BackendBundle:Equipamiento:ListarAulas" }
     options:
         expose: true

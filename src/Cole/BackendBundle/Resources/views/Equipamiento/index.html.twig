@@ -78,8 +78,10 @@
                 </table>
                 <div class="inner_table">
                     <table>
+                    {% set var = 0 %}
                     {% for entity in entities %}
                         {% if entity.tipo == "Equipamiento" %}
+                        {% set var = 1 %}
                         <tr>
                             <td><a cargar-href="off" href="{{ path('equipamiento_edit', { 'id': entity.id }) }}">{{ entity.nombre }}</a></td>
                             {% if entity.unidades > 1 %}
@@ -90,6 +92,13 @@
                         </tr>
                         {% endif %}
                     {% endfor %}
+                    {% if var == 0 %}
+                    <tbody>
+                        <tr class="odd no_cursor">
+                            <td class="dataTables_empty">No hay equipaciones registradas</td>
+                        </tr>
+                    </tbody>
+                    {% endif %}
                     </table>
                 </div>
             </div>

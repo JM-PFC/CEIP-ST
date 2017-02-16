@@ -47,6 +47,10 @@ class Equipamiento
      */
     private $reserva;
 
+    /**
+     * @ORM\OneToOne(targetEntity="Grupo", mappedBy="aula")
+     */
+    private $grupo;
 
     /**
      * Get id
@@ -166,4 +170,29 @@ class Equipamiento
     {
         return $this->reserva;
     }
+
+    /**
+     * Set grupo
+     *
+     * @param \Cole\BackendBundle\Entity\Grupo $grupo
+     * @return Equipamiento
+     */
+    public function setGrupo(\Cole\BackendBundle\Entity\Grupo $grupo = null)
+    {
+        $this->grupo = $grupo;
+
+        return $this;
+    }
+
+    /**
+     * Get grupo
+     *
+     * @return \Cole\BackendBundle\Entity\Grupo 
+     */
+    public function getGrupo()
+    {
+        return $this->grupo;
+    }
+
+    
 }

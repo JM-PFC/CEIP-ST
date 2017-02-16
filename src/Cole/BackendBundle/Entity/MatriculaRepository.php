@@ -46,8 +46,16 @@ class MatriculaRepository extends EntityRepository
 
 	public function findNumMatriculas()
 	{
+		if(date("n")>=6){
+            $actual=date("Y")." / ".(date("Y")+1);
+        }
+        else{
+            $actual=(date("Y")-1)." / ".date("Y");
+        }
 	return $this->getEntityManager()->createQuery(
-		'SELECT COUNT(m) FROM BackendBundle:Matricula m')//Se deberia buscar matriculas de éste año.
+		'SELECT COUNT(m) FROM BackendBundle:Matricula m WHERE m.anyoAcademico=:actual')
+		->setParameters(array(
+			'actual' => $actual))
 		->setMaxResults(1)
 		->getOneOrNullResult();
 	}

@@ -5,92 +5,103 @@
     
 {% block javascript %}
 <script>
-if($(window).width() > 1200){
+  // Estilos al mostrar la página
+  if($(window).width() > 1200){
     // Se comprueba si existe scrol vertical para ajustar el thead
     if( $('#td_inf #lista_color tbody').height()>$('#td_inf').height()){
-        $("#contenedor_asignar_aula div #table_th_inf th:nth-child(1)").attr('style', 'min-width: 23% !important');
-        $("#contenedor_asignar_aula div #table_th_inf th:nth-child(3)").attr('style', 'min-width: 20% !important');
+        $("#contenedor_asignar_aula div #table_th_inf th:nth-child(1)").attr('style', 'min-width: 27% !important');
+        $("#contenedor_asignar_aula div #table_th_inf th:nth-child(3)").attr('style', 'min-width: 18% !important');
     }
     else{
-        $("#contenedor_asignar_aula div #table_th_inf th:nth-child(1)").attr('style', 'min-width: 23% !important');
-        $("#contenedor_asignar_aula div #table_th_inf th:nth-child(3)").attr('style', 'min-width: 23% !important');
+        $("#contenedor_asignar_aula div #table_th_inf th:nth-child(1)").attr('style', 'min-width: 29% !important');
     }
         // Se comprueba si existe scrol vertical para ajustar el thead
     if( $('#td_prim #lista_color tbody').height()>$('#td_prim').height()){
-        $("#contenedor_asignar_aula div #table_th_prim th:nth-child(1)").attr('style', 'min-width: 23% !important');
-        $("#contenedor_asignar_aula div #table_th_prim th:nth-child(3)").attr('style', 'min-width: 20% !important');
+        $("#contenedor_asignar_aula div #table_th_prim th:nth-child(1)").attr('style', 'min-width: 26% !important');
+        $("#contenedor_asignar_aula div #table_th_prim th:nth-child(3)").attr('style', 'min-width: 18% !important');
     }
     else{
 
-        $("#contenedor_asignar_aula div #table_th_prim th:nth-child(1)").attr('style', 'min-width: 23% !important');
-        $("#contenedor_asignar_aula div #table_th_prim th:nth-child(3)").attr('style', 'min-width: 23% !important');
+        $("#contenedor_asignar_aula div #table_th_prim th:nth-child(1)").attr('style', 'min-width: 28% !important');
     }
-}
-else{
+  }
+  else{
     // Se comprueba si existe scrol vertical para ajustar el thead
     if( $('#td_inf #lista_color tbody').height()>$('#td_inf').height()){
-        $("#contenedor_asignar_aula div #table_th_inf th:nth-child(1)").attr('style', 'min-width: 23% !important');
-        $("#contenedor_asignar_aula div #table_th_inf th:nth-child(3)").attr('style', 'min-width: 20% !important');
+        $("#contenedor_asignar_aula div #table_th_inf th:nth-child(1)").attr('style', 'min-width: 27% !important');
+        $("#contenedor_asignar_aula div #table_th_inf th:nth-child(3)").attr('style', 'min-width: 18.5% !important');
     }
     else{
-        $("#contenedor_asignar_aula div #table_th_inf th:nth-child(1)").attr('style', 'min-width: 23% !important');
-        $("#contenedor_asignar_aula div #table_th_inf th:nth-child(3)").attr('style', 'min-width: 23% !important');
+        $("#contenedor_asignar_aula div #table_th_inf th:nth-child(1)").attr('style', 'min-width: 27% !important');
     }
         // Se comprueba si existe scrol vertical para ajustar el thead
     if( $('#td_prim #lista_color tbody').height()>$('#td_prim').height()){
-        $("#contenedor_asignar_aula div #table_th_prim th:nth-child(1)").attr('style', 'min-width: 23% !important');
-        $("#contenedor_asignar_aula div #table_th_prim th:nth-child(3)").attr('style', 'min-width: 20% !important');
+        $("#contenedor_asignar_aula div #table_th_prim th:nth-child(1)").attr('style', 'min-width: 27% !important');
+        $("#contenedor_asignar_aula div #table_th_prim th:nth-child(3)").attr('style', 'min-width: 18.5% !important');
     }
     else{
 
-        $("#contenedor_asignar_aula div #table_th_prim th:nth-child(1)").attr('style', 'min-width: 20% !important');
-        $("#contenedor_asignar_aula div #table_th_prim th:nth-child(3)").attr('style', 'min-width: 22% !important');
+        $("#contenedor_asignar_aula div #table_th_prim th:nth-child(1)").attr('style', 'min-width: 26% !important');
     }
-}
-
-$(window).resize(function(event) {
+  }
+  // Estilos al cambiar el tamaño de la pantalla.
+  $(window).resize(function(event) {
     if($(window).width() > 1200){
         // Se comprueba si existe scrol vertical para ajustar el thead
         if( $('#td_inf #lista_color tbody').height()>$('#td_inf').height()){
-            $("#contenedor_asignar_aula div #table_th_inf th:nth-child(1)").attr('style', 'min-width: 23% !important');
-            $("#contenedor_asignar_aula div #table_th_inf th:nth-child(3)").attr('style', 'min-width: 20% !important');
+            $("#contenedor_asignar_aula div #table_th_inf th:nth-child(1)").attr('style', 'min-width: 27% !important');
+            $("#contenedor_asignar_aula div #table_th_inf th:nth-child(3)").attr('style', 'min-width: 18% !important');
         }
         else{
-            $("#contenedor_asignar_aula div #table_th_inf th:nth-child(1)").attr('style', 'min-width: 23% !important');
-            $("#contenedor_asignar_aula div #table_th_inf th:nth-child(3)").attr('style', 'min-width: 23% !important');
+            $("#contenedor_asignar_aula div #table_th_inf th:nth-child(1)").attr('style', 'min-width: 29% !important');
         }
         
         // Se comprueba si existe scrol vertical para ajustar el thead
         if( $('#td_prim #lista_color tbody').height()>$('#td_prim').height()){
-            $("#contenedor_asignar_aula div #table_th_prim th:nth-child(1)").attr('style', 'min-width: 23% !important');
-            $("#contenedor_asignar_aula div #table_th_prim th:nth-child(3)").attr('style', 'min-width: 20% !important');
+            $("#contenedor_asignar_aula div #table_th_prim th:nth-child(1)").attr('style', 'min-width: 26% !important');
+            $("#contenedor_asignar_aula div #table_th_prim th:nth-child(3)").attr('style', 'min-width: 18% !important');
         }
         else{
-            $("#contenedor_asignar_aula div #table_th_prim th:nth-child(1)").attr('style', 'min-width: 23% !important');
-            $("#contenedor_asignar_aula div #table_th_prim th:nth-child(3)").attr('style', 'min-width: 23% !important');
+            $("#contenedor_asignar_aula div #table_th_prim th:nth-child(1)").attr('style', 'min-width: 28% !important');
         }
     }
     else{
         // Se comprueba si existe scrol vertical para ajustar el thead
         if( $('#td_inf #lista_color tbody').height()>$('#td_inf').height()){
-            $("#contenedor_asignar_aula div #table_th_inf th:nth-child(1)").attr('style', 'min-width: 23% !important');
-            $("#contenedor_asignar_aula div #table_th_inf th:nth-child(3)").attr('style', 'min-width: 20% !important');
+            $("#contenedor_asignar_aula div #table_th_inf th:nth-child(1)").attr('style', 'min-width: 27% !important');
+            $("#contenedor_asignar_aula div #table_th_inf th:nth-child(3)").attr('style', 'min-width: 18.5% !important');
         }
         else{
-            $("#contenedor_asignar_aula div #table_th_inf th:nth-child(1)").attr('style', 'min-width: 23% !important');
-            $("#contenedor_asignar_aula div #table_th_inf th:nth-child(3)").attr('style', 'min-width: 23% !important');
+            $("#contenedor_asignar_aula div #table_th_inf th:nth-child(1)").attr('style', 'min-width: 27% !important');
         }
         // Se comprueba si existe scrol vertical para ajustar el thead
         if( $('#td_prim #lista_color tbody').height()>$('#td_prim').height()){
-            $("#contenedor_asignar_aula div #table_th_prim th:nth-child(1)").attr('style', 'min-width: 23% !important');
-            $("#contenedor_asignar_aula div #table_th_prim th:nth-child(3)").attr('style', 'min-width: 20% !important');
+            $("#contenedor_asignar_aula div #table_th_prim th:nth-child(1)").attr('style', 'min-width: 27% !important');
+            $("#contenedor_asignar_aula div #table_th_prim th:nth-child(3)").attr('style', 'min-width: 18.5% !important');
         }
         else{
-            $("#contenedor_asignar_aula div #table_th_prim th:nth-child(1)").attr('style', 'min-width: 20% !important');
-            $("#contenedor_asignar_aula div #table_th_prim th:nth-child(3)").attr('style', 'min-width: 22% !important');
+            $("#contenedor_asignar_aula div #table_th_prim th:nth-child(1)").attr('style', 'min-width: 26% !important');
         }
+    }
+
+  });
+
+    $("#aulas_dialog").dialog(
+       {
+        bgiframe: true,
+        autoOpen: false,
+        width: 500,
+        modal: true,
+        resizable: false,
+       }
+    );
+    $('#aulas_dialog').on('dialogclose', function(event) {
+        $('#aulas_dialog').empty();
+    });
+    //Se deshabilita el botón de vaciar aulas cuando no hay ninguna asignada.
+    if($("#contenedor_asignar_aula input[value!='']").size()==0){
+        $("#asignar_aula #vaciar").prop("disabled",true);
     }    
-});
 </script>
 {% endblock %}
 
@@ -102,12 +113,13 @@ $(window).resize(function(event) {
         <div class="block_insert">
             <h2>Asignar Aula</h2>
             <ul>
-                <li>Para guardar todos los datos a la vez pulse sobre la opción<button class="btn_info">Guardar Todo</button>.</li>
+
+                <li>Para <span>añadir</span> el aula a un grupo pulse sobre el espacio asignado en el grupo correspondiente y seleccione un aula disponible.</li>
+                <li>Para <span>eliminar</span> una asignación de aula de un grupo pulse sobre el icono de eliminar <img id="img_1" class="add_registro" src="/Symfony/web/bundles/backend/images/menu/eliminar.png"> del grupo correspondiente.</li>
+                <li>Para <span>Vaciar</span> todas las aulas a la vez pulse sobre la opción<button class="btn_info">Vaciar Aulas</button>.</li>
             </ul>
-            <div class="center_w60">
-                <button id="button_grupos_all">Guardar Todo</button>
-                </br></br></br>
-                <button id="button_grupos_rest">Restablecer</button>
+            <div>
+                <button id="vaciar">Vaciar Aulas</button>
             </div>
         </div> 
       </div>
@@ -133,16 +145,25 @@ $(window).resize(function(event) {
                     <table id="lista_color">
                     {% for entity in entities %}
                         {% if entity.curso.nivel == "Infantil" %}
-                        <tr>
+                        <tr id="{{ entity.id }}">
                             <td>{{entity.curso.curso}}</td>
                             <td>{{entity.curso.nivel }}</td>
                             <td>{{entity.letra}}</td>
                             <td>
-                                <input value="{{entity.aula}}" id="aula">
-                                    
-                                </input>
+                                {% if entity.aula != NULL %}
+                                <input  value="{{ entity.aula.nombre }}" id="{{ entity.aula.id }}" class="asig" disabled=""></input>
+                                {% else %}
+                                <input  value=""></input>
+                                {% endif %}
                             </td>
-                            <td><button>Guardar</button></td>
+                            {#<td><button>Guardar</button></td>#}
+                           <td>
+                                {% if entity.aula != null %}
+                                <img title="Eliminar aula del grupo" src="/Symfony/web/bundles/backend/images/menu/eliminar.png" alt="Icono de eliminar">
+                                {% else %}
+                                <img class="oculto" src="/Symfony/web/bundles/backend/images/menu/eliminar.png" alt="Icono de eliminar">
+                                {% endif %}
+                            </td>
                         </tr>
                         {% endif %}
                     {% endfor %}
@@ -173,15 +194,25 @@ $(window).resize(function(event) {
                     <table id="lista_color">
                     {% for entity in entities %}
                         {% if entity.curso.nivel  == "Primaria" %}
-                        <tr>
+                        <tr id="{{ entity.id }}">
                             <td>{{ entity.curso.curso}}</td>
                             <td>{{ entity.curso.nivel }}</td>
                             <td>{{ entity.letra}}</td>
                             <td>
-                                <input  value="{{ entity.aula }}" id="aula">
-                                </input>
+                                {% if entity.aula != null %}
+                                <input  value="{{ entity.aula.nombre }}" id="{{ entity.aula.id }}"  class="asig" disabled=""></input>
+                                {% else %}
+                                <input  value=""></input>
+                                {% endif %}
                             </td>
-                            <td><button>Guardar</button></td>
+                            {#<td><button>Guardar</button></td>#}
+                            <td>
+                                {% if entity.aula != null %}
+                                <img title="Eliminar aula del grupo" src="/Symfony/web/bundles/backend/images/menu/eliminar.png" alt="Icono de eliminar">
+                                {% else %}
+                                <img class="oculto" src="/Symfony/web/bundles/backend/images/menu/eliminar.png" alt="Icono de eliminar">
+                                {% endif %}
+                            </td>
                         </tr>
                         {% endif %}
                     {% endfor %}
@@ -191,6 +222,9 @@ $(window).resize(function(event) {
         </div>          
        </div>
       </div>
+
+      <div id="aulas_dialog" title="Asignación de Aulas"></div>
+
     </div>
     </div>
     </div>

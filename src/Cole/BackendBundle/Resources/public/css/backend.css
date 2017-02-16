@@ -504,7 +504,8 @@ nav{
 	background-position: -32px -192px;
 	cursor: pointer;
 }
-.ui-dialog-titlebar-close:hover{
+/*Estilo para el botón de  cerrar ("X") en la ventana de diálogo*/
+.ui-dialog .ui-dialog-titlebar .ui-state-hover{
 	background: #bc1010 !important;
 }
 .ui-dialog-titlebar-close:hover .ui-icon{
@@ -1470,6 +1471,9 @@ form button{
 	font-size: 1.3em;
 	text-align: center;
 }
+#asignaturas_cursos .block_insert>h2{
+	margin-bottom: 16% !important;
+}
 #registro_asignaturas #contenedor_registro{
 	width: 33%;
 	min-height: 216px;
@@ -1843,42 +1847,102 @@ form button{
     width: 47%;
 }
 #asignar_aula>div>div>div:nth-child(2){
-	width: 76%;
+	width: 70%;
 	float: left;
+}
+#asignar_aula .simple_column_red{
+    width: 30%;
 }
 #asignar_aula .block_insert{
 	margin-left: -4px !important;
-	width: 108% !important;
+	width: 100% !important;
+}
+#asignar_aula .block_insert ul{
+	margin-bottom: 25px !important;
 }
 #contenedor_asignar_aula .inner_table {
     max-height: 259px !important;
 }
 #contenedor_asignar_aula div table td{
-    min-width: 30%;
+    min-width: 19%;
 }
 #contenedor_asignar_aula div table td:nth-child(1){
 	min-width: 30%;
 }
-#contenedor_asignar_aula div table th{
-	min-width: 21%;
+#contenedor_asignar_aula div table td:nth-child(1),#contenedor_asignar_aula div table th:nth-child(1){
+	max-width: 45px !important;
 }
 #contenedor_asignar_aula div table th:nth-child(1){
-	min-width: 23%;
+	min-width: 19% !important;
 }
-#contenedor_asignar_aula div table th:nth-child(3){
-	min-width: 24%;
-}
-#contenedor_asignar_aula div table th:nth-child(4){
-	text-align: left;
-	padding-left: 5px;
+#contenedor_asignar_aula div table th{
+	min-width: 19%;
 }
 #contenedor_asignar_aula td { 
 	cursor: default;
 	text-align: center
 }
-
+#contenedor_asignar_aula img{
+	width: 15px;
+	height: 15px;
+	cursor: pointer;
+	vertical-align: middle;
+}
 #contenedor_asignar_aula table input {
-	width: 40px;
+	width: 60px;
+	text-align: center;
+	color: #334c73;
+}
+#aulas_dialog h3{
+	text-align: center;
+	color: #334c73;
+	font-family: Helvetica;
+	padding: 10px 0 20px 0;
+	font-weight: normal;
+}
+#aulas_dialog h3 strong{
+    background: #334c73 none repeat scroll 0 0;
+    border-radius: 5px;
+    color: white;
+    display: inline-block;
+    font-family: "Comic Sans MS";
+    font-weight: normal;
+    padding: 0 5px;
+}
+#aulas_dialog #content-form>p{
+	margin-bottom: 20px;
+	text-align: center;
+	width: 95%;
+}
+#aulas_dialog #content-form div{
+	display: block;
+	width: 95%;
+	margin: 0 auto;
+	max-height:160px;
+	overflow: auto;
+}
+#aulas_dialog #content-form div>button{
+	background: white;
+	width: 100px;
+	border-radius: 5px;
+	float: left;
+	margin: 7px 18px;
+	padding: 2px;
+	text-align: center;
+	cursor: pointer;
+	font-weight: bold;
+}
+#aulas_dialog #content-form div>button:hover{
+	background: #e4e0e0;
+}
+#aulas_dialog #content-form div>button:active{
+	background: #334c73;
+	color: white;
+}
+#aulas_dialog #content-form .vacio{
+	margin-top: 19%;
+	color: #A80101;
+	font-size: 17px;
 }
 #registro_ratio .simple_column_red{
 	width: 39%
@@ -2217,6 +2281,8 @@ select>option[value=""]{
 #rama div{
 	float: left; 
 	margin-right: 2%;
+}
+#rama div:first-child{
 	width: 190px;
 }
 
@@ -2830,10 +2896,6 @@ z-index: 100000000000000000000000000000000;
 #calendario{
 	height: 235px;
 }
-#div_table_botones {
-	margin: 0 auto;
-}
-
 #div_table_botones td{
 	background: none;
 	float: left;
@@ -3586,7 +3648,27 @@ border: 1px solid;
 #registro_equipamientos #contenedor_registro div table td{
 	min-width: 75%;
 }
-
+#registro_instalaciones .simple_column{
+	width: 27% !important;
+}
+#registro_instalaciones .aulas{
+	width: 28% !important;
+	margin-left: 4% !important;
+}
+#registro_instalaciones .instalaciones{
+	width: 35% !important;
+	margin-left: 3% !important;
+}
+#registro_instalaciones .dataTables_empty, #registro_equipamientos .dataTables_empty{
+	padding-top: 80px !important;
+	border: none;
+}
+#registro_instalaciones #contenedor_registro{
+	margin-top: 3% !important;
+}
+#registro_instalaciones form input{
+	width: 94% !important;
+}
 .equipamiento_form{
 	height: 25px;
 }
@@ -4067,22 +4149,12 @@ margin:120px 9px;
 	.contenedor_principal_reserva #guardar_reserva div button:nth-child(1){
 		float: right;
 	}
-	#asignar_aula .simple_column_red{
-		width: 20%;
-	}
 	#asignar_aula .block_insert{
 		margin-left: 0;
 	}
 	#asignar_aula > div > div > div:nth-child(2){
-		width: 80%;
+		width: 70%;
 	}
-	#contenedor_asignar_aula div table td:nth-child(1),#contenedor_asignar_aula div table th:nth-child(1){
-		max-width: 45px !important;
-	}
-	#contenedor_asignar_aula div table th:nth-child(1){
-		min-width: 19% !important;
-	}
-
 	#slider1,#slider2,#slider3{
     	margin: 6px auto 6px 15%;
 	}
@@ -4118,6 +4190,7 @@ margin:120px 9px;
 		min-width: 10%!important;
 		padding-left: 16px;
 	}
+	
 
 	#registrar_evento .contenedor_principal_reserva>div:nth-child(1){
 		width: 31%;
@@ -4146,6 +4219,9 @@ margin:120px 9px;
 		width: 10% !important;
 		margin-top: 40px !important;
 		min-height: 0 !important;
+	}
+	.botones{
+		width: 117% !important;
 	}
 
 }
@@ -4643,8 +4719,8 @@ tbody.scrollContent tr.alternateRow td {
 	border-bottom: 1px solid grey;
 	font-family: "Times New Roman",Arial,sans-serif;
 }
-#multiples_alumnos .columna_foto,#multiples_alumnos img,.tabla_con_seleccion .columna_foto,#consulta_antiguo_profesor img{
-	margin-top: 0;
+#multiples_alumnos .columna_foto,#multiples_alumnos img,.tabla_con_seleccion .columna_foto{
+	margin-top: 5px;
 }
 #multiples_alumnos #enviar_select, .tabla_con_seleccion #enviar_select{
 	float: left;
@@ -5129,6 +5205,7 @@ input[type="checkbox"]:hover{
 
 .tr_select_descrip{
 	background: #96B3BA  !important;
+	border-bottom: 2px solid #96B3BA !important;
 }
 .tr_select_descrip+div{
 	border-left: 5px solid #96B3BA  !important;

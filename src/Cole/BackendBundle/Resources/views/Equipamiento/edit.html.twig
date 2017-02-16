@@ -23,17 +23,25 @@
         });
     }
     else{
-
-        $("#tabs div[aria-hidden='false'] #equipamiento_editar").attr("id","instalación_editar");
-
-        $("#instalación_editar #equipamiento_nombre").attr("id","instalación_nombre");
-        $("#instalación_editar #equipamiento_unidades").attr("id","instalación_unidades");
-        $("#instalación_editar #equipamiento_tipo").attr("id","instalación_tipo");
-        $("#instalación_editar #instalación_nombre").attr("placeholder","Inserte el nombre para añadir nueva instalación");
-        $("#instalación_editar #instalación_unidades").val(1);
-        $("#instalación_editar #instalación_tipo").val("Instalación");
-        $("#instalación_unidades").addClass("oculto");
-
+        // Tabla de instalaciones
+        $("#tabs div[aria-hidden='false'] .instalaciones #equipamiento_editar").attr("id","instalación_editar");
+        $(".instalaciones #instalación_editar #equipamiento_nombre").attr("id","instalación_nombre");
+        $(".instalaciones #instalación_editar #equipamiento_unidades").attr("id","instalación_unidades");
+        $(".instalaciones #instalación_editar #equipamiento_tipo").attr("id","instalación_tipo");
+        $(".instalaciones #instalación_editar #instalación_nombre").attr("placeholder","Inserte nombre para actualizar");
+        $(".instalaciones #instalación_editar #instalación_unidades").val(1);
+        $(".instalaciones #instalación_editar #instalación_tipo").val("Instalación");
+        $(".instalaciones #instalación_unidades").addClass("oculto");
+     
+        // Tabla de aulas
+        $("#tabs div[aria-hidden='false'] .aulas #equipamiento_editar").attr("id","aula_editar");
+        $(".aulas #aula_editar #equipamiento_nombre").attr("id","aula_nombre");
+        $(".aulas #aula_editar #equipamiento_unidades").attr("id","aula_unidades");
+        $(".aulas #aula_editar #equipamiento_tipo").attr("id","aula_tipo");
+        $(".aulas #aula_editar #aula_nombre").attr("placeholder","Inserte nuevo nombre");
+        $(".aulas #aula_editar #aula_unidades").val(1);
+        $(".aulas #aula_editar #aula_tipo").val("Aula");
+        $(".aulas #aula_unidades").addClass("oculto");
 
         $('#registro_instalaciones .contenedor_registro_instalaciones input').focus(function(){
             $(this).data('placeholder',$(this).attr('placeholder')).attr('placeholder','');

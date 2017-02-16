@@ -225,31 +225,54 @@ class GrupoController extends Controller
             throw new HttpException('XMLHttpRequests/AJAX calls must be POSTed');
         }
 
-        $letra=$this->get('request')->request->get('letra');
-        $curso=$this->get('request')->request->get('curso');
-        $nivel=$this->get('request')->request->get('nivel');
+
+        $grupo=$this->get('request')->request->get('grupo');
         $aula=$this->get('request')->request->get('aula');
 
-        
         $em = $this->getDoctrine()->getManager();
 
-        $entity = $em->getRepository('BackendBundle:Curso')->findCursoByNivel($curso,$nivel);
-        if (!$entity) {
-                throw $this->createNotFoundException('Unable to find Curso entity.');
-            }
-
-        $grupo = $em->getRepository('BackendBundle:Grupo')->findGrupoByLetter($entity,$letra);
+        $grupo = $em->getRepository('BackendBundle:Grupo')->findOneById($grupo);
         if (!$grupo) {
-                throw $this->createNotFoundException('Unable to find Curso entity.');
+                throw $this->createNotFoundException('Unable to find Grupo entity.');
+            }
+        if($aula!=null){
+            $aula = $em->getRepository('BackendBundle:Equipamiento')->findOneById($aula);
+            if (!$aula ) {
+                throw $this->createNotFoundException('Unable to find Aula entity.');
             }
 
-        if($aula!==""){
-            $grupo->setAula($aula);     
-        }else{
-            $grupo->setAula(NULL);     
+            $grupo->setAula($aula); 
+        }
+        else{
+            $grupo->setAula(NULL);
+        }
+    
+        $em->persist($grupo);
+        $em->flush();
+        
+        if ($request->isXmlHttpRequest()) {
+                return new JsonResponse(array(
+                    'message' => 'Success!',
+                    'success' => true), 200);
+        }
+    }
+
+    public function VaciarAulasAction(Request $request)
+    {
+        // if request is XmlHttpRequest (AJAX) but not a POSt, throw an exception
+        if ($request->isXmlHttpRequest() && !$request->isMethod('POST')) {
+            throw new HttpException('XMLHttpRequests/AJAX calls must be POSTed');
         }
 
-        $em->persist($grupo);
+        $em = $this->getDoctrine()->getManager();
+
+        $grupos = $em->getRepository('BackendBundle:Grupo')->findAll();
+
+        foreach ($grupos as $grupo) {
+            $grupo->setAula(NULL);
+            $em->persist($grupo);
+        }
+
         $em->flush();
         
         if ($request->isXmlHttpRequest()) {

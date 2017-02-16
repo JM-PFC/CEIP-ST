@@ -361,10 +361,23 @@ class PadresController extends Controller
         else{
            return new JsonResponse(array(
                'success' => false),200);
-
         }
     }
+    
+    public function ComprobarDniPadreEditadoAction()
+    {
+        $dni=$this->get('request')->request->get('dni');
+        $dni_anterior=$this->get('request')->request->get('dni_anterior');
 
+        $em = $this->getDoctrine()->getEntityManager();
+        $responsable = $em->getRepository('BackendBundle:Padres')->findOneByDni($dni_anterior);
+
+        $busqueda = $em->getRepository('BackendBundle:Padres')->findOneByDni($dni);
+        if($busqueda && $busqueda->getId()!= $responsable->getId()){
+            return new JsonResponse(array('data' =>$busqueda->getDni()), 200);
+        }
+        return new JsonResponse(array('data' =>null), 200);
+    }
 
 
     public function obtenerdatosresponsableAction()
