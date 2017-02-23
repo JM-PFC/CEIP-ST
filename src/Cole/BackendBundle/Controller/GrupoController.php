@@ -374,8 +374,61 @@ class GrupoController extends Controller
     }
 
 
+    public function TutorGrupoAction()
+    {
+        $em = $this->getDoctrine()->getManager();
 
+        $entities = $em->getRepository('BackendBundle:Grupo')->findAllByCurso();
+        $profesores = $em->getRepository('BackendBundle:Profesor')->findByActivo(1);
 
+           return $this->render('BackendBundle:Grupo:tutor_grupo.html.twig', array(
+            'entities' => $entities,
+            'profesores' => $profesores
+        ));
+    }
+
+    public function AsignarTutorGrupoAction()
+    {
+        $em = $this->getDoctrine()->getManager();
+
+        $asignaciones=$this->get('request')->request->get('asignaciones');
+        $eliminados=$this->get('request')->request->get('eliminados');
+
+        $data=1;
+        if($asignaciones==null && $eliminados==null){
+            $data=null;
+            return new JsonResponse(array('data' => $data), 200);
+        }
+
+        if($asignaciones){
+          foreach ($asignaciones as $grupo => $id ) {
+            $grupo = $em->getRepository('BackendBundle:Grupo')->findOneById($grupo);
+            if (!$grupo) {
+                throw $this->createNotFoundException('Unable to find Grupo entity.');
+            }
+            $profesor = $em->getRepository('BackendBundle:Profesor')->findOneById($id);
+            if (!$profesor) {
+                throw $this->createNotFoundException('Unable to find Profesor entity.');
+            }
+            $grupo->setProfesor($profesor);
+            $em->persist($grupo);
+          }   
+        }
+
+        if($eliminados){
+          foreach ($eliminados as $grupo ) {
+            $grupo = $em->getRepository('BackendBundle:Grupo')->findOneById($grupo);
+            if (!$grupo) {
+                throw $this->createNotFoundException('Unable to find Grupo entity.');
+            }
+
+            $grupo->setProfesor(null);
+            $em->persist($grupo);
+          }  
+        }
+        $em->flush();
+        return new JsonResponse(array('data' => $data,'success' => true), 200);
+    }
 
 
 

@@ -760,29 +760,7 @@ class Alumno
     {
         return $this->matricula;
     }
-
-    /**
-     * Set añoAcademico
-     *
-     * @param string $añoAcademico
-     * @return Alumno
-     */
-    public function setAñoAcademico($añoAcademico)
-    {
-        $this->añoAcademico = $añoAcademico;
-
-        return $this;
-    }
-
-    /**
-     * Get añoAcademico
-     *
-     * @return string 
-     */
-    public function getAñoAcademico()
-    {
-        return $this->añoAcademico;
-    }
+ 
 
     /**
      * Set anyoAcademico

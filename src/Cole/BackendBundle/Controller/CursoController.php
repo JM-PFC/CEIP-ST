@@ -240,6 +240,24 @@ class CursoController extends Controller
             if (!$entity) {
                 throw $this->createNotFoundException('Unable to find Curso entity.');
             }
+            /* Para validad si hay alumnos matriculados en el curso actual si finalmente hace falta 
+            comprobarlo desde la tabla y no desde el campos curso de la tabla Alumno
+
+            if(date("n")>=6){
+                $actual=date("Y")." / ".(date("Y")+1);
+            }
+            else{
+                $actual=(date("Y")-1)." / ".date("Y");
+            }
+
+            $matriculas=$em->getRepository('BackendBundle:Matricula')->findNumPorCurso($entity,$actual);
+
+            if($matriculas){
+            return new JsonResponse(array(
+                    'validate' =>"matricula",
+                    'success' => true), 200);
+            }
+            */
 
             $em->remove($entity);
             $em->flush();

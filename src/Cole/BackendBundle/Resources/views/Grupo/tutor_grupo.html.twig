@@ -1,0 +1,382 @@
+{% extends 'BackendBundle:Default:index.html.twig' %}
+
+{% block head %}{% endblock %}
+{% block stylesheets %}{% endblock %}
+    
+{% block javascript %}
+    <script>
+
+    //Comprobacón de existencia de profesores.
+    if($("#tutor_grupos .lista_profesores li").size()==0){
+
+        // Se establece las variables con los audios para las notificaciones.
+        if (navigator.userAgent.search("Firefox") >= 0) { //Firefox sólo admite archivos .ogg
+            var error = new Audio();
+            error.src = "/Symfony/web/bundles/backend/sounds/error.ogg";
+        }
+        else{
+            var error = new Audio();
+            error.src = "/Symfony/web/bundles/backend/sounds/error.mp3";
+        }
+        error.play();
+          swal({
+            title: "Profesores no registrados",
+            text: 'Actualmente no existe ningún profesor registrado en el sistema. Para poder asignar los tutores debe registrar a los profesores.',
+            type: "error",
+            confirmButtonColor: color,
+            html: true
+          });          
+        $("#tabs ul li[aria-selected='true'] span").trigger("click");
+    }
+    
+    //Comprobacón de existencia de cursos.
+
+
+
+    // Tabla con la opción de ordenar y búsqueda de antiguos profesores.
+    $('#prof_infantil').DataTable( { //on( 'page.dt',   function () { $(".current").prop("disabled", true); } )
+        //"aLengthMenu": [[25, 50, 100, 250, 500, -1], [25, 50, 100, 250, 500, "All"]],
+                initComplete: function () {
+            this.api().columns().every( function (e) {
+                var column = this;
+                var select = $('<select class="'+e+'"><option value=""></option></select>')
+                    .appendTo('.select_table_tutor_grupos')
+                    .on( 'change', function () {
+                        var val = $.fn.dataTable.util.escapeRegex(
+                            $(this).val()
+                        );
+ 
+                        column
+                            .search( val ? '^'+val+'$' : '', true, false )
+                            .draw();
+                    } );
+ 
+                column.data().unique().sort().each( function ( d, j ) {
+                    select.append( '<option value="'+d+'">'+d+'</option>' )
+                } );
+                select.append( '<option value="nada">nada</option>' )
+            } );
+        },
+        "order": [[ 1, "asc" ]],
+        "aLengthMenu": [[-1], [ "All"]],
+        "columnDefs": [ {
+            "targets": 'no-sort',
+            "orderable": false,} ],
+        "language": {
+            "zeroRecords": "No se ha encontrado ningún registro coincidente",
+            "emptyTable": "No hay profesores de infantil en el sistema",
+            "lengthMenu": "Mostrar _MENU_ entradas",
+            "loadingRecords": "Cargando...",
+            "processing":     "Processando...",
+            "info": "Página _PAGE_ de _PAGES_",
+            "infoEmpty": "No hay registros disponibles",
+            "infoFiltered": "(filtrado de _MAX_ registros)",
+            "search": "Buscar:",
+            "Next": "Siguiente",
+            "paginate": {
+                "previous": "Anterior",
+                "next": "Siguiente"
+            }
+        }
+    });
+
+    // Tabla con la opción de ordenar y búsqueda de antiguos profesores.
+    $('#prof_primaria').DataTable( { //on( 'page.dt',   function () { $(".current").prop("disabled", true); } )
+        //"aLengthMenu": [[25, 50, 100, 250, 500, -1], [25, 50, 100, 250, 500, "All"]],
+                initComplete: function () {
+            this.api().columns().every( function (e) {
+                var column = this;
+                var select = $('<select class="'+e+'"><option value=""></option></select>')
+                    .appendTo('.select_table_tutor_grupos')
+                    .on( 'change', function () {
+                        var val = $.fn.dataTable.util.escapeRegex(
+                            $(this).val()
+                        );
+ 
+                        column
+                            .search( val ? '^'+val+'$' : '', true, false )
+                            .draw();
+                    } );
+ 
+                column.data().unique().sort().each( function ( d, j ) {
+                    select.append( '<option value="'+d+'">'+d+'</option>' )
+                } );
+                select.append( '<option value="nada">nada</option>' )
+            } );
+        },
+        "order": [[ 1, "asc" ]],
+        "aLengthMenu": [[-1], [ "All"]],
+        "columnDefs": [ {
+            "targets": 'no-sort',
+            "orderable": false,} ],
+        "language": {
+            "zeroRecords": "No se ha encontrado ningún registro coincidente",
+            "emptyTable": "No hay profesores de primaria en el sistema",
+            "lengthMenu": "Mostrar _MENU_ entradas",
+            "loadingRecords": "Cargando...",
+            "processing":     "Processando...",
+            "info": "Página _PAGE_ de _PAGES_",
+            "infoEmpty": "No hay registros disponibles",
+            "infoFiltered": "(filtrado de _MAX_ registros)",
+            "search": "Buscar:",
+            "Next": "Siguiente",
+            "paginate": {
+                "previous": "Anterior",
+                "next": "Siguiente"
+            }
+        }
+    });
+
+    $("#tutor_grupos .dataTables_info").addClass("oculto");
+    $("#tutor_grupos .dataTables_paginate").addClass("oculto");
+    $("#tutor_grupos .dataTables_length").addClass("oculto");
+
+    $("#tutor_grupos #prof_infantil_filter").appendTo($("#tutor_grupos #buscador_inf"));
+    $("#tutor_grupos #prof_primaria_filter").appendTo($("#tutor_grupos #buscador_prim"));
+
+    $("#tutor_grupos tbody tr td[class='dataTables_empty']").closest("tr").addClass("no_cursor");
+
+        $( "#sortable,.sortable" ).sortable({connectWith: ".sortable",
+            helper: "clone",
+            appendTo: "#tutor_grupos",
+            zIndex: 10000,
+            placeholder: "ui-state-highligh",
+        start: function(event, ui){
+            // Se modifica el elemento al ser arrastrado.        
+            ui.helper.addClass("desplazamiento_tutor");
+            ui.item.closest("ul").addClass('sortable');
+        },
+        stop: function(event, ui){ 
+            ui.item.removeClass("desplazamiento");
+            
+            lista=ui.item.attr("id");
+            if(ui.item.closest('#lista_grupos').size()){
+                $("#tutor_grupos .lista_profesores tr[id='"+lista+"']").addClass('oculto');
+                ui.item.closest("td").find('img').removeClass('oculto');
+                ui.item.closest("ul").removeClass('sortable');
+
+                $("#tutor_grupos #tutor_guardar").prop("disabled",false);
+                $("#tutor_grupos #tutor_rest").prop("disabled",false);
+
+            }
+            else{
+               ui.item.appendTo("#tutor_grupos tr[id='"+lista+"'] ul");
+            }
+
+            $("#tutor_grupos td[class*='placeholder_list_table_td']").addClass('placeholder_list_table_td_mod');
+            $("#tutor_grupos td[class*='placeholder_list_table_td']").attr('title', 'Nuevo Tutor Añadido');
+
+            $("#tutor_grupos td[class*='placeholder_list_table_td']").removeClass('placeholder_list_table_td');
+            $("#tutor_grupos ul[class*='placeholder_list_table_td']").removeClass('placeholder_list_table_td');
+            $("#tutor_grupos th[class*='placeholder_list_table_th']").removeClass('placeholder_list_table_th');
+
+            if(ui.item.closest('td').attr("id") && ui.item.closest('td').attr("id")==ui.item.attr("id")){
+                ui.item.closest("td").addClass('back_asignado');
+                ui.item.closest("td").removeClass('back_modificado');
+                ui.item.closest("td").removeClass('placeholder_list_table_td_mod');
+                ui.item.closest("td").attr('title', 'Tutor asignado');
+            }
+            else{
+                ui.item.closest("td").addClass('back_modificado');
+            }
+            //Se comprueba si hay modificación para mostrar los botones.
+            $("#tutor_grupos #tutor_guardar").prop("disabled",true);
+            $("#tutor_grupos #tutor_rest").prop("disabled",true);
+
+            if($("#tutor_grupos #lista_grupos td").hasClass('back_modificado')){
+                $("#tutor_grupos #tutor_guardar").prop("disabled",false);
+                $("#tutor_grupos #tutor_rest").prop("disabled",false);
+            }
+        },
+
+        over: function(event, ui){
+            $("#tutor_grupos td[class*='placeholder_list_table_td']").removeClass('placeholder_list_table_td');
+            $("#tutor_grupos ul[class*='placeholder_list_table_td']").removeClass('placeholder_list_table_td');
+            $("#tutor_grupos th[class*='placeholder_list_table_th']").removeClass('placeholder_list_table_th');
+
+            $("#tutor_grupos li[class='ui-state-highligh']").closest("td").addClass('placeholder_list_table_td');
+            $("#tutor_grupos li[class='ui-state-highligh']").closest("ul").addClass('placeholder_list_table_td');
+            $("#tutor_grupos li[class='ui-state-highligh']").closest("tr").find("th").addClass('placeholder_list_table_th');
+
+        },
+        out: function(event, ui){
+
+        },
+        receive: function(event, ui) {
+     
+        }
+        }).disableSelection();
+
+    // Se elimina de la lista de profesores los tutores y se le quita la clase "sortable" en la lista de tutores para que no se pueda desplazar otro a ese grupo.
+    $("#tutor_grupos #lista_grupos td[value!='']").each(function(){
+        id=$(this).find("li").attr("id");
+        $(this).find("ul").removeClass('sortable');
+        
+        $("#tutor_grupos .lista_profesores tr[id='"+id+"']").addClass('oculto');
+        $("#tutor_grupos .lista_profesores tr[id='"+id+"'] li").remove();
+    });
+
+    </script>
+{% endblock %}
+
+{% block body -%}
+    <div id="tutor_grupos">
+    <div class="parent_no_form">
+    <div class="child">
+      <div class="simple_column">
+        <div class="block_insert">
+            <h2>Asignar Tutor a Grupos</h2>
+            <ul>
+                <li>Para <span>asignar</span> un tutor a un grupo, seleccione el profesor y arrástrelo hasta el grupo correspondiente.</li>
+                <li>Para <span>eliminar</span> un tutor de un grupo, pulse sobre el icono de eliminar <img class="add_registro" src="/Symfony/web/bundles/backend/images/menu/eliminar.png"> en el grupo correspondiente.</li>
+                <li>Se debe <span>guardar</span> todos los cambios pulsando sobre la opción <button class="btn_info" tabindex="1">Guardar</button>.</li>
+            </ul>
+        </div> 
+        <div id="botones_centrados">
+            <div>
+                <button id="tutor_guardar" disabled>Guardar</button>
+            </div>
+            <div>
+                <button id="tutor_rest" disabled>Restablecer</button>
+            </div>
+        </div>
+      </div>
+      <div class="lista_profesores">
+        <div class="div_change">
+            <div class="head_change">
+                <label id="one" class="">Infantil</label>
+                <label id="two" class="btn_not_select">Primaria</label>
+            </div>
+            <div id="cont_one" class="contenido_lista ">
+                <p>Profesores de Infantil</p>
+                <div id="tableContainer" class="tableContainer inner_table vh45">
+                    <table id="prof_infantil" class="scrollTable">
+                        <thead class="fixedHeader oculto ">
+                            <tr>
+                                <th></th>
+                                <th>Nombre</th>
+                            </tr>
+                        </thead>
+                        <tbody class="scrollContent">
+                            {% for profesor in profesores if profesor.nivel == "Infantil"%}
+                            <tr id="{{ profesor.id }}">
+                                <td class="oculto"></td>
+                                <td>
+                                    <ul id="sortable"><li id="{{ profesor.id }}">{{ profesor.nombre ~ " " ~ profesor.apellido1 ~ " " ~ profesor.apellido2 }}</li></ul>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div id="cont_two" class="contenido_lista oculto">
+                <p>Profesores de Primaria</p>
+                <div id="tableContainer" class="tableContainer inner_table vh45">
+                    <table id="prof_primaria" class="scrollTable">
+                        <thead class="fixedHeader oculto ">
+                            <tr>
+                                <th></th>
+                                <th>Nombre</th>
+                            </tr>
+                        </thead>
+                        <tbody class="scrollContent">
+                            
+                            {% for profesor in profesores if profesor.nivel == "Primaria"%}
+                            <tr id="{{ profesor.id }}">
+                                <td class="oculto"></td>
+                                <td>
+                                    <ul id="sortable"><li id="{{ profesor.id }}">{{ profesor.nombre ~ " " ~ profesor.apellido1 ~ " " ~ profesor.apellido2 }}</li></ul>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                            
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="div_buscador" id="grupos_infantil">
+                <div id="buscador_inf"> </div>
+            </div>
+            <div class="div_buscador oculto" id="grupos_primaria">
+                <div id="buscador_prim"> </div>
+            </div>
+        </div> 
+      </div>
+
+      <div class="derecha contenedor_registro" id="grupos_infantil">  
+        <div>
+            <div id="cabecera_lista">
+                <h2>Tutores en Infantil</h2>
+            </div>
+            <div id="lista_grupos">
+                <div class="inner_table">
+                    <table>
+                    {% for entity in entities if entity.curso.nivel == "Infantil" %}
+                        <tbody>
+                            <tr grupo="{{ entity.id}}">
+                                <th>{{ entity.curso.curso ~ " " ~ entity.letra }}</th>
+                                {%  if entity.profesor == NULL %}
+                                    <td value="">
+                                        <ul class="sortable"></ul>
+                                        <img src="/Symfony/web/bundles/backend/images/menu/eliminar.png" class="oculto">
+                                    </td>
+                                {% else %}
+                                    <td id="{{ entity.profesor.id }}" value="{{ entity.profesor }}" class="back_asignado" title="Tutor asignado">
+                                        <ul class="sortable">
+                                            <li id="{{ entity.profesor.id }}">
+                                                {{ entity.profesor }}
+                                            </li>
+                                        </ul>
+                                        <img src="/Symfony/web/bundles/backend/images/menu/eliminar.png">
+                                    </td>
+                                {% endif %}
+                            </tr>
+                        </tbody>
+                    {% endfor %}
+                    </table>
+                </div>
+            </div>
+        </div>          
+      </div>
+
+      <div class="derecha contenedor_registro oculto" id="grupos_primaria">  
+        <div>
+            <div id="cabecera_lista" >
+                <h2>Tutores en Primaria</h2>
+            </div>
+            <div id="lista_grupos">
+                <div class="inner_table">
+                    <table >
+                    {% for entity in entities if entity.curso.nivel == "Primaria" %}
+                        <tbody>
+                            <tr grupo="{{ entity.id}}">
+                                <th>{{ entity.curso.curso ~ " " ~ entity.letra }}</th>
+                                {%  if entity.profesor == NULL %}
+                                    <td value="">
+                                        <ul class="sortable"></ul>
+                                        <img src="/Symfony/web/bundles/backend/images/menu/eliminar.png" class="oculto">
+                                    </td>
+                                {% else %}
+                                    <td id="{{ entity.profesor.id }}" value="{{ entity.profesor }}" class="back_asignado" title="Tutor asignado">
+                                        <ul class="sortable">
+                                            <li id="{{ entity.profesor.id }}">
+                                                {{ entity.profesor }}
+                                            </li>
+                                        </ul>
+                                        <img src="/Symfony/web/bundles/backend/images/menu/eliminar.png">
+                                    </td>
+                                {% endif %}
+                            </tr>
+                        </tbody>
+                    {% endfor %}
+                    </table>
+                </div>
+            </div>
+        </div>          
+      </div>
+                <div class="select_table_tutor_grupos select_ord_datatable"></div>  
+    </div>
+    </div>
+    </div>
+    {% endblock %}

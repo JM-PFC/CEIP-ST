@@ -55,12 +55,13 @@
     $("#antiguo_alumno_edit #lista_cursos select option:last").css({"border-top":"none","font-weight":"lighter"});
 
     //Se deshabilita los cursos anteriores al último matriculado.
-    var id;
+    var id="";
     $("#antiguo_alumno_edit #lista_cursos select option").each (function(){ 
-      opt=$(this).text().replace("de","");
+      opt=$(this).text().replace(" de","");
+
       if(opt==$("#antiguo_alumno_edit #ultimo_curso").val()){
         id=$(this).attr("value");
-      return false;
+        return false;
       }
     });
     $("#antiguo_alumno_edit #lista_cursos select option").each (function(){ 
@@ -84,7 +85,19 @@
     <div>
       <div id="content-form">
         <fieldset class="ajustada">
-        <legend>Ficha del alumno: {{entity.nombre}} {{entity.apellido1}} {{entity.apellido2}}</legend>
+        {% set texto = "Ficha "%}
+
+        {% if entity.sexo == "Masculino" %}
+          {% set texto = texto ~ "del alumno: "%}
+        {% else %}
+          {% set texto = texto ~ "de la alumna: "%}
+        {% endif %}
+
+        {% if entity.activo %}
+          <legend>{{texto}} {{entity.nombre}} {{entity.apellido1}} {{entity.apellido2}} - <strong class="color_verde">Activo </strong></legend>
+        {% else %}
+          <legend>{{texto}} {{entity.nombre}} {{entity.apellido1}} {{entity.apellido2}} - <strong class="color_rojo">Inactivo </strong></legend>
+        {% endif %}
         <div class="columna_foto">
             {{ form_errors(edit_form.foto) }}
             <div id="actual">
@@ -221,7 +234,6 @@
             </fieldset >
           </div>
 
-
           {% if entity.responsable2 == null %}
           <div class="block-one" id="noresponsable">
           {% else %}
@@ -233,8 +245,6 @@
             <h3 class="aviso_responsable">Actualmente sólo tiene un responsable asignado.</h3>
             </fieldset >
           </div>
-
-
 
           <div class="block-one">
             <h3 class="label_contenido">Información Académica<span> (Información sobre el alumno dentro de la institución)</span></h3>
@@ -251,19 +261,16 @@
               </div>
             </div>
             <div class="small_column">
-
               <div>
-              <label>Último Curso</label>
-              <input id="ultimo_curso" class="readonly m_input " value="{{ entity.curso }}"></input>
-
+                <label>Último Curso</label>
+                <input id="ultimo_curso" class="readonly m_input " value="{{ expediente.curso ~ " " ~ expediente.nivel  }}"></input>
               </div>
-
             </div>
   
             <div class="small_column">
               <div>
                 <label>Grupo</label>
-              <input class="readonly s_input" value="{{ entity.grupo }}"></input>
+              <input class="readonly s_input" value="{{ expediente.grupo }}"></input>
               </div>
 
             </div>
@@ -283,7 +290,7 @@
         </div>
         </fieldset>       
     </div>
-    {% if expediente %}
+    {% if nuevo_curso  %}
     <div id="c_old_student_active" class="c_old_student derecha">
       <h2>Antiguo Alumno</h2>
       <p>- Se debe comprobar que los datos del alumno están actualizados.</p>

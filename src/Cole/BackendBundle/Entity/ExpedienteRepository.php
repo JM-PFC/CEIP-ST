@@ -27,15 +27,24 @@ class ExpedienteRepository extends EntityRepository
 	public function findByActivo($curso,$nivel)
 	{
         if(date("n")>=6){
-            $actual=date("Y")." / ".(date("Y")+1);
+        	$actual=date("Y")." / ".(date("Y")+1);
+            $anterior=(date("Y")-1)." / ".date("Y");
         }
         else{
-            $actual=(date("Y")-1)." / ".date("Y");
+        	$actual=(date("Y")-1)." / ".date("Y");
+            $anterior=(date("Y")-2)." / ".(date("Y")-1);
         }
-	return $this->getEntityManager()->createQuery(
-			'SELECT e,a FROM BackendBundle:Expediente e INNER JOIN e.alumno a INNER JOIN a.curso c WHERE a.activo=1  and e.curso=c.curso  and e.nivel=c.nivel and e.anyo_Academico=a.anyoAcademico and NOT(e.curso=:curso and e.nivel=:nivel and e.promociona=1) and Not e.anyo_Academico=:actual')
+
+		//Se comprueba que no esté matriculado en el curso actual(Se podría comprobar que el curso o año academico del alumno fuese nulo)
+		//Se obtiene los alumnos activos con último año académico igual al anterior y que no haya superado todos los cursos. 
+		return $this->getEntityManager()->createQuery(
+			'SELECT e  FROM BackendBundle:Expediente e  INNER JOIN e.alumno a  
+			WHERE e.anyo_Academico IN (select MAX(s.anyo_Academico) FROM BackendBundle:Expediente s INNER JOIN s.alumno p GROUP BY p.id) 
+			and a.id NOT IN(select al.id FROM BackendBundle:Matricula m INNER JOIN m.alumno al where m.anyoAcademico=:actual)
+			and a.activo=1  and NOT(e.curso=:curso and e.nivel=:nivel and e.promociona=1 ) and e.anyo_Academico=:anterior')
 		->setParameters(array(
 			'actual' => $actual,
+			'anterior' => $anterior,
 			'curso' => $curso,
 			'nivel' => $nivel))
 		->getResult();
@@ -45,7 +54,7 @@ class ExpedienteRepository extends EntityRepository
 	{
 
 	return $this->getEntityManager()->createQuery(
-			'SELECT a,e FROM BackendBundle:Expediente e INNER JOIN e.alumno a  WHERE a.activo=0  and NOT(e.curso=:curso and e.nivel=:nivel and e.promociona=1)')
+			'SELECT e  FROM BackendBundle:Expediente e  INNER JOIN e.alumno a  WHERE e.anyo_Academico IN (select MAX(s.anyo_Academico) FROM BackendBundle:Expediente s INNER JOIN s.alumno p GROUP BY p.id) and a.activo=0  and NOT(e.curso=:curso and e.nivel=:nivel and e.promociona=1 )')
 		->setParameters(array(
 			'curso' => $curso,
 			'nivel' => $nivel))

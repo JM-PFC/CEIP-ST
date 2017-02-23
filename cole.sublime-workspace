@@ -4,6 +4,50 @@
 		"selected_items":
 		[
 			[
+				"border",
+				"border-left"
+			],
+			[
+				"font",
+				"font-weight"
+			],
+			[
+				"tab",
+				"table-cell"
+			],
+			[
+				"te",
+				"text-align"
+			],
+			[
+				"max",
+				"max-width"
+			],
+			[
+				"mar",
+				"margin-top"
+			],
+			[
+				"style",
+				"list-style"
+			],
+			[
+				"appen",
+				"appendTo	.appendTo()"
+			],
+			[
+				"margn",
+				"margin-left"
+			],
+			[
+				"tex",
+				"text-align"
+			],
+			[
+				"margin",
+				"margin-top"
+			],
+			[
 				"fon",
 				"font-weight"
 			],
@@ -16,24 +60,12 @@
 				"outside"
 			],
 			[
-				"mar",
-				"margin"
-			],
-			[
 				"marg",
 				"margin"
 			],
 			[
-				"margin",
-				"margin-left"
-			],
-			[
 				"fa",
 				"font-family"
-			],
-			[
-				"te",
-				"text-align"
 			],
 			[
 				"pa",
@@ -42,14 +74,6 @@
 			[
 				"inl",
 				"inline-block"
-			],
-			[
-				"font",
-				"font-weight"
-			],
-			[
-				"border",
-				"border-radius"
 			],
 			[
 				"in",
@@ -78,10 +102,6 @@
 			[
 				"bor",
 				"border-radius"
-			],
-			[
-				"max",
-				"max-height"
 			],
 			[
 				"le",
@@ -146,10 +166,6 @@
 			[
 				"bac",
 				"background"
-			],
-			[
-				"tex",
-				"text-align"
 			],
 			[
 				"cur",
@@ -239,7 +255,7 @@
 			"file": "src/Cole/BackendBundle/Resources/views/Default/index.html.twig",
 			"settings":
 			{
-				"buffer_size": 14477,
+				"buffer_size": 14815,
 				"line_ending": "Unix"
 			}
 		},
@@ -311,7 +327,7 @@
 			"file": "src/Cole/BackendBundle/Entity/Alumno.php",
 			"settings":
 			{
-				"buffer_size": 15856,
+				"buffer_size": 15465,
 				"line_ending": "Unix"
 			}
 		},
@@ -320,6 +336,14 @@
 			"settings":
 			{
 				"buffer_size": 4989,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "src/Cole/BackendBundle/Controller/AlumnoController.php",
+			"settings":
+			{
+				"buffer_size": 42613,
 				"line_ending": "Unix"
 			}
 		},
@@ -391,7 +415,7 @@
 			"file": "src/Cole/BackendBundle/Resources/views/Alumno/search_multiple.html.twig",
 			"settings":
 			{
-				"buffer_size": 9532,
+				"buffer_size": 9538,
 				"line_ending": "Unix"
 			}
 		},
@@ -471,6 +495,14 @@
 			}
 		},
 		{
+			"file": "src/Cole/BackendBundle/Entity/ExpedienteRepository.php",
+			"settings":
+			{
+				"buffer_size": 2230,
+				"line_ending": "Unix"
+			}
+		},
+		{
 			"file": "src/Cole/BackendBundle/Resources/views/Asignatura/asignaturas_por_curso.html.twig",
 			"settings":
 			{
@@ -490,7 +522,7 @@
 			"file": "src/Cole/BackendBundle/Controller/AsignaturaController.php",
 			"settings":
 			{
-				"buffer_size": 11185,
+				"buffer_size": 11129,
 				"line_ending": "Unix"
 			}
 		},
@@ -506,15 +538,7 @@
 			"file": "src/Cole/BackendBundle/Resources/views/Grupo/show.html.twig",
 			"settings":
 			{
-				"buffer_size": 10481,
-				"line_ending": "Unix"
-			}
-		},
-		{
-			"file": "src/Cole/BackendBundle/Resources/views/Curso/index.html.twig",
-			"settings":
-			{
-				"buffer_size": 5889,
+				"buffer_size": 10792,
 				"line_ending": "Unix"
 			}
 		},
@@ -522,7 +546,15 @@
 			"file": "src/Cole/BackendBundle/Controller/GrupoController.php",
 			"settings":
 			{
-				"buffer_size": 10648,
+				"buffer_size": 13401,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "src/Cole/BackendBundle/Entity/AlumnoRepository.php",
+			"settings":
+			{
+				"buffer_size": 2203,
 				"line_ending": "Unix"
 			}
 		},
@@ -690,15 +722,7 @@
 			"file": "src/Cole/BackendBundle/Resources/views/Alumno/edit.html.twig",
 			"settings":
 			{
-				"buffer_size": 15005,
-				"line_ending": "Unix"
-			}
-		},
-		{
-			"file": "src/Cole/BackendBundle/Controller/AlumnoController.php",
-			"settings":
-			{
-				"buffer_size": 42056,
+				"buffer_size": 15499,
 				"line_ending": "Unix"
 			}
 		},
@@ -751,10 +775,37 @@
 			}
 		},
 		{
-			"file": "src/Cole/BackendBundle/Entity/ExpedienteRepository.php",
+			"file": "src/Cole/BackendBundle/Resources/views/Alumno/edit_old.html.twig",
 			"settings":
 			{
-				"buffer_size": 1571,
+				"buffer_size": 16999,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "src/Cole/BackendBundle/Resources/config/routing/grupo.yml",
+			"settings":
+			{
+				"buffer_size": 1870,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "src/Cole/BackendBundle/Resources/views/Grupo/AsignarGrupo.html.twig",
+			"settings":
+			{
+				"buffer_size": 3852,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"contents": "{% extends 'BackendBundle:Default:index.html.twig' %}\n\n{% block head %}{% endblock %}\n{% block stylesheets %}{% endblock %}\n    \n{% block javascript %}\n<script>\n\n    //Función para ordenar una lista\n    function OrdenarLista(lista) {\n        var listado = lista;\n        var elementos = listado.children(\"li\").get();\n        elementos.sort(function(a,b) {\n            var A = $(a).text().toUpperCase();\n            var B = $(b).text().toUpperCase();\n            return (A < B) ? -1 : (A > B) ? 1 : 0;\n        });\n        $.each(elementos, function(id, elemento) {\n        listado.append(elemento);\n        });\n    }\n\n\n    function CalcularAlumnos() {\n        $(\"#asignar_grupos ol\").each(function(i){\n            // Se obtiene el número de elementos en la lista y se añade a la variable num.\n            $(this).attr(\"num\",$(this).find(\"li\").length);\n            // Se calcula el número de elementos de cada lista y se muestra en su variable.\n            if($(this).attr(\"id\")==\"grupo_A\" && !$(this).closest(\"div[id='contenedor_asignar_grupos']\").hasClass(\"container_disabled\")){\n                footer=$(\"#footer_A\");\n                footer.find(\"#niños\").html($(this).find(\"li[sexo='Masculino']\").length);\n                footer.find(\"#niñas\").html($(this).find(\"li[sexo='Femenino']\").length);\n                footer.find(\"#total\").html($(this).find(\"li\").length);\n                footer.find(\"#max\").html({{ratio}});\n\n                if(footer.find(\"#total\").html()==footer.find(\"#max\").html()){\n                    $(\"#footer_A p:last span\").addClass(\"completo\");\n                }\n                else{\n                    $(\"#footer_A p:last span\").removeClass(\"completo\");\n                }\n            }\n            else if($(this).attr(\"id\")==\"grupo_B\" && !$(this).closest(\"div[id='contenedor_asignar_grupos']\").hasClass(\"container_disabled\")){\n                footer=$(\"#footer_B\");\n                footer.find(\"#niños\").html($(this).find(\"li[sexo='Masculino']\").length);\n                footer.find(\"#niñas\").html($(this).find(\"li[sexo='Femenino']\").length);\n                footer.find(\"#total\").html($(this).find(\"li\").length);\n                footer.find(\"#max\").html({{ratio}});\n            }\n            else{\n                footer=$(\"#footer_C\");\n                footer.find(\"#niños\").html($(this).find(\"li[sexo='Masculino']\").length);\n                footer.find(\"#niñas\").html($(this).find(\"li[sexo='Femenino']\").length);\n                footer.find(\"#total\").html($(this).find(\"li\").length);\n                footer.find(\"#max\").html({{ratio}});\n            }\n\n            if($(this).attr(\"id\")==\"ordenar_cursos\" && !$(this).find(\"li\").length){\n                $(this).html('<p class=\"aviso ui-sortable-handle\">No existen más alumnos matriculados en este curso</p>');\n            }\n            else{\n                $(this).find(\"p[class*='aviso']\").remove();\n            }\n        }); \n    }\n\n    // Se establece las variables con los audios para las notificaciones.\n    if (navigator.userAgent.search(\"Firefox\") >= 0) { //Firefox sólo admite archivos .ogg\n        var error = new Audio();\n        error.src = \"/Symfony/web/bundles/backend/sounds/error.ogg\";\n    }\n    else{\n        var error = new Audio();\n        error.src = \"/Symfony/web/bundles/backend/sounds/error.mp3\";\n    }\n\n\n    //Se elimina la opción \"todos los cursos\" de la lista de cursos.\n    $(\"#asignar_grupos #lista_cursos select option:last-child\" ).remove();\n    \n    //Se impide arrastrar el elemento de aviso.\n    $( \"#asignar_grupos  #ordenar_cursos\" ).sortable({\n      items: \"li\"\n    });\n\n    $(\"#asignar_grupos #botones_centrados button\").prop(\"disabled\",false);\n\n    $(\"#asignar_grupos #ordenar_cursos\" ).sortable().disableSelection();\n    \n    $(\"#asignar_grupos #lista_cursos select option[value='\"+{{curso}}+\"']\").prop('selected', true); \n    $(\"#asignar_grupos .simple_column_red h4\").html(\"Alumnos de \"+$(\"#asignar_grupos #lista_cursos select option[value='\"+{{curso}}+\"']\").text());\n\n    if({{num_grupos}}==1){\n        $(\"#grupo_A\").closest(\"div[id='contenedor_asignar_grupos']\").removeClass(\"container_disabled\");\n        $(\"#footer_A\").removeClass(\"footer_disabled\");\n    }\n    else if({{num_grupos}}==2){\n        $(\"#grupo_A\").closest(\"div[id='contenedor_asignar_grupos']\").removeClass(\"container_disabled\");\n        $(\"#grupo_B\").closest(\"div[id='contenedor_asignar_grupos']\").removeClass(\"container_disabled\");\n        $(\"#footer_A\").removeClass(\"footer_disabled\");\n        $(\"#footer_B\").removeClass(\"footer_disabled\");\n    }\n    else{\n        $(\"#grupo_A\").closest(\"div[id='contenedor_asignar_grupos']\").removeClass(\"container_disabled\");\n        $(\"#grupo_B\").closest(\"div[id='contenedor_asignar_grupos']\").removeClass(\"container_disabled\");\n        $(\"#grupo_C\").closest(\"div[id='contenedor_asignar_grupos']\").removeClass(\"container_disabled\");\n\n        $(\"#footer_A\").removeClass(\"footer_disabled\");\n        $(\"#footer_B\").removeClass(\"footer_disabled\");\n        $(\"#footer_C\").removeClass(\"footer_disabled\");\n    }         \n\n    $(\"#asignar_grupos #btn_generar button\").prop(\"disabled\",false);\n\n    $(\"#asignar_grupos #ordenar_cursos\").addClass(\"connectedSortable\");\n    if(!$(\"#grupo_C\").closest(\"div[id='contenedor_asignar_grupos']\").hasClass(\"container_disabled\")){\n        $(\"#grupo_A\").addClass(\"connectedSortable\");\n        $(\"#grupo_B\").addClass(\"connectedSortable\");\n        $(\"#grupo_C\").addClass(\"connectedSortable\");\n        $( \"#asignar_grupos #ordenar_cursos, #grupo_A, #grupo_B,#grupo_C\" ).sortable({connectWith: \".connectedSortable\",\n        start: function(event, ui){\n            // Se modifica el elemento al ser arrastrado.        \n            ui.item.addClass(\"desplazamiento\");\n            //Se elimina el estilo de cambio de grupo por si se mueve tras cambiarlo de su grupo.\n            ui.item.removeClass(\"cambio_grupo\");\n        },\n        stop: function(event, ui){ \n            ui.item.removeClass(\"desplazamiento\");\n\n            //Se ordena las listas.\n            OrdenarLista($('#asignar_grupos #ordenar_cursos'));\n            OrdenarLista($('#grupo_A'));\n            OrdenarLista($('#grupo_B'));\n            OrdenarLista($('#grupo_C'));\n\n            lista=ui.item.closest(\"ol\").attr(\"id\").replace(\"grupo_\", \"\");\n            if(ui.item.attr(\"grupo\") && ui.item.attr(\"grupo\")!=lista){\n                ui.item.addClass(\"cambio_grupo\");\n            }\n            else{\n                ui.item.removeClass(\"cambio_grupo\");\n            }\n\n            CalcularAlumnos();\n        },\n        //Se impide añadir más elementos que el números de alumnos asignado en la columna \"ratio\" del curso.\n        receive: function(event, ui) {\n            var $this = $(this);\n            if ($this.children('li').length > {{ ratio }} && $this.attr('id') != \"ordenar_cursos\") {\n                $(ui.sender).sortable('cancel');\n\n                error.play();\n            }\n        }\n        }).disableSelection();\n\n        //Se evita poder desplazar los alumnos que tengan un grupo asignado a la lista de nuevos alumnos.\n        $( \"#asignar_grupos #ordenar_cursos\" ).sortable({connectWith: \"#grupo_A, #grupo_B,#grupo_C\",\n        receive: function(event, ui) {\n            var $this = $(this);\n            if (ui.item.attr('grupo')) {\n                $(ui.sender).sortable('cancel');\n\n                error.play();\n            }\n        }\n        }).disableSelection();\n    }\n    else if(!$(\"#grupo_B\").closest(\"div[id='contenedor_asignar_grupos']\").hasClass(\"container_disabled\")){\n        $(\"#grupo_A\").addClass(\"connectedSortable\");\n        $(\"#grupo_B\").addClass(\"connectedSortable\");\n        $( \"#ordenar_cursos, #grupo_A, #grupo_B\" ).sortable({connectWith: \".connectedSortable\",\n        start: function(event, ui){\n            // Se modifica el elemento al ser arrastrado.        \n            ui.item.addClass(\"desplazamiento\");\n            //Se elimina el estilo de cambio de grupo por si se mueve tras cambiarlo de su grupo.\n            ui.item.removeClass(\"cambio_grupo\");\n        },\n        stop: function(event, ui){ \n            ui.item.removeClass(\"desplazamiento\");\n\n            //Se ordena las listas.\n            OrdenarLista($('#asignar_grupos #ordenar_cursos'));\n            OrdenarLista($('#grupo_A'));\n            OrdenarLista($('#grupo_B'));\n\n            lista=ui.item.closest(\"ol\").attr(\"id\").replace(\"grupo_\", \"\");\n            if(ui.item.attr(\"grupo\") && ui.item.attr(\"grupo\")!=lista){\n                ui.item.addClass(\"cambio_grupo\");\n            }\n            else{\n                ui.item.removeClass(\"cambio_grupo\");\n            }\n\n            CalcularAlumnos();         \n        },\n        //Se impide añadir más elementos que el números de alumnos asignado en la columna \"ratio\" del curso.\n        receive: function(event, ui) {\n            var $this = $(this);\n            if ($this.children('li').length > {{ ratio }} && $this.attr('id') != \"ordenar_cursos\") {\n                $(ui.sender).sortable('cancel');\n\n                error.play();\n            }\n        }\n         }).disableSelection();\n        //placeholder: \"ui-state-highlight\"\n\n        //Se evita poder desplazar los alumnos que tengan un grupo asignado a la lista de nuevos alumnos.\n        $( \"#asignar_grupos #ordenar_cursos\" ).sortable({connectWith: \"#grupo_A, #grupo_B\",\n        receive: function(event, ui) {\n            var $this = $(this);\n            if (ui.item.attr('grupo')) {\n                $(ui.sender).sortable('cancel');\n\n                error.play();\n            }\n        }\n        }).disableSelection();\n    }\n    else{\n        $(\"#grupo_A\").addClass(\"connectedSortable\");\n        $( \"#asignar_grupos #ordenar_cursos, #grupo_A\" ).sortable({connectWith: \".connectedSortable\",\n        start: function(event, ui){\n            // Se modifica el elemento al ser arrastrado.        \n            ui.item.addClass(\"desplazamiento\");\n            //Se elimina el estilo de cambio de grupo por si se mueve tras cambiarlo de su grupo.\n            ui.item.removeClass(\"cambio_grupo\");\n        },\n        stop: function(event, ui){ \n            ui.item.removeClass(\"desplazamiento\");\n\n            //Se ordenan las listas.\n            OrdenarLista($('#asignar_grupos #ordenar_cursos'));\n            OrdenarLista($('#grupo_A'));\n\n            lista=ui.item.closest(\"ol\").attr(\"id\").replace(\"grupo_\", \"\");\n            if(ui.item.attr(\"grupo\") && ui.item.attr(\"grupo\")!=lista){\n                ui.item.addClass(\"cambio_grupo\");\n            }\n            else{\n                ui.item.removeClass(\"cambio_grupo\");\n            }\n\n            CalcularAlumnos();        \n        },\n        //Se impide añadir más elementos que el números de alumnos asignado en la columna \"ratio\" del curso.\n        receive: function(event, ui) {\n            var $this = $(this);\n            if ($this.children('li').length > {{ ratio }} && $this.attr('id') != \"ordenar_cursos\") {\n                $(ui.sender).sortable('cancel');\n\n                error.play();\n            }\n        }\n        }).disableSelection();\n\n        //Se evita poder desplazar los alumnos que tengan un grupo asignado a la lista de nuevos alumnos.\n        $( \"#asignar_grupos #ordenar_cursos\" ).sortable({connectWith: \"#grupo_A\",\n        receive: function(event, ui) {\n            var $this = $(this);\n            if (ui.item.attr('grupo')) {\n                $(ui.sender).sortable('cancel');\n\n                error.play();\n            }\n        }\n        }).disableSelection();\n    }\n\n    CalcularAlumnos();\n\n    //Se genera las listas con los grupos asignados para los alumnos del curso seleccionado.\n    $(document).on('click',\"#asignar_grupos #btn_generar button\",function(event){\n        $(\"#asignar_grupos #loading\").html('<div class=\"ajaxload\"><img src=\"/Symfony/web/bundles/backend/images/loading.gif\"/></div>');\n        // Se asiga el único grupo a los alumnnos matriculados.\n        if($(\"#grupo_B\").closest(\"div[id='contenedor_asignar_grupos']\").hasClass(\"container_disabled\")){\n\n            total=$(\"#asignar_grupos #footer_A #total\").html();\n            max=$(\"#asignar_grupos #footer_A #max\").html();\n  \n            $('#asignar_grupos #ordenar_cursos li').each (function(){ \n                //Se comprueba que no sobre pasa el ratio de alumnos en el curso (aunque se comprueba al matricular).\n                if(parseInt(total)<parseInt(max)){\n                    $(this).appendTo('#grupo_A');\n                    OrdenarLista($('#grupo_A'));\n                    CalcularAlumnos();\n                    total++;\n                }\n            });\n        }\n        //Se asigna los grupos A y B a los alumnos matriculados siguiendo unas condiciones.\n        else if($(\"#grupo_C\").closest(\"div[id='contenedor_asignar_grupos']\").hasClass(\"container_disabled\"))\n        {\n            niños=$(\"#asignar_grupos \").find(\"li[sexo='Masculino']\").length;\n            niñas=$(\"#asignar_grupos\").find(\"li[sexo='Femenino']\").length;\n\n            niños_grupos= parseInt(niños/2); // Otra forma-> niños/2|0\n            niñas_grupos= parseInt(niñas/2);\n\n            niños_A=$(\"#asignar_grupos #grupo_A li[sexo='Masculino']\").length;\n            niñas_A=$(\"#asignar_grupos #grupo_A li[sexo='Femenino']\").length;\n\n            niños_B=$(\"#asignar_grupos #grupo_B li[sexo='Masculino']\").length;\n            niñas_B=$(\"#asignar_grupos #grupo_B li[sexo='Femenino']\").length;\n\n            //Se obtienes los alumnos que faltan para por grupo.\n            niños_faltan_A=parseInt(niños_grupos)-parseInt(niños_A);\n            niñas_faltan_A=parseInt(niñas_grupos)-parseInt(niñas_A);\n\n            niños_faltan_B=parseInt(niños_grupos)-parseInt(niños_B);\n            niñas_faltan_B=parseInt(niñas_grupos)-parseInt(niñas_B);\n\n            niños_nuevos=$(\"#asignar_grupos #ordenar_cursos li[sexo='Masculino']\").length;\n            niñas_nuevos=$(\"#asignar_grupos #ordenar_cursos li[sexo='Femenino']\").length;\n\n            for (var i=niños_faltan_A; i>0; i--) {\n                $(\"#asignar_grupos #ordenar_cursos li[sexo='Masculino']:first\").appendTo('#grupo_A');\n            }\n\n            for (var i=niñas_faltan_A; i>0; i--) {\n                $(\"#asignar_grupos #ordenar_cursos li[sexo='Femenino']:first\").appendTo('#grupo_A');\n            }\n            for (var i=niños_faltan_B; i>0; i--) {\n                $(\"#asignar_grupos #ordenar_cursos li[sexo='Masculino']:first\").appendTo('#grupo_B');\n            }\n\n            for (var i=niñas_faltan_B; i>0; i--) {\n                $(\"#asignar_grupos #ordenar_cursos li[sexo='Femenino']:first\").appendTo('#grupo_B');\n            }\n\n            //Si queda sólo un alumno por asignar se asigna al grupo que tenga menos o al primero si tiene el mismo número de alumnos los grupos.\n            if($(\"#asignar_grupos #ordenar_cursos li\").length==1){\n\n                if($(\"#asignar_grupos #grupo_A li\").length<$(\"#asignar_grupos #grupo_B li\").length){\n                    $(\"#asignar_grupos #ordenar_cursos li\").appendTo('#grupo_A');\n                }\n                else if($(\"#asignar_grupos #grupo_A li\").length>$(\"#asignar_grupos #grupo_B li\").length){\n                    $(\"#asignar_grupos #ordenar_cursos li\").appendTo('#grupo_B');\n                }\n                else{\n                    $(\"#asignar_grupos #ordenar_cursos li\").appendTo('#grupo_A');\n                }\n            }\n            // En caso de que haya más de un alumno por asignar se va alternando en cada grupo.\n            if($(\"#asignar_grupos #ordenar_cursos li[sexo='Masculino']\").length){\n                for (var i=$(\"#asignar_grupos #ordenar_cursos li[sexo='Masculino']\").length; i>0; i--) {\n                    $(\"#asignar_grupos li[sexo='Masculino']:first\").appendTo('#grupo_A');\n                    i--;\n                    if(i>0){\n                        $(\"#asignar_grupos li[sexo='Masculino']:first\").appendTo('#grupo_B');\n                    }\n                }\n            }\n            // En caso de que haya más de una alumna por asignar se va alternando en cada grupo.\n            if($(\"#asignar_grupos #ordenar_cursos li[sexo='Femenino']\").length){\n                for (var i=$(\"#asignar_grupos #ordenar_cursos li[sexo='Femenino']\").length; i>0; i--) {\n                    $(\"#asignar_grupos li[sexo='Femenino']:first\").appendTo('#grupo_A');\n                    i--;\n                    if(i>0){\n                        $(\"#asignar_grupos li[sexo='Femenino']:first\").appendTo('#grupo_B');\n                    }\n                }\n            }\n\n            //Finalmente si los grupos no tienen el mismo número de alumnos, por tener más alumnos de un sexo que otro en el curso anterior, traspasamos alumnos nuevos de sexo con mayor número de ese grupo al otro para igualarlos.\n            if($(\"#asignar_grupos #grupo_A li\").length - $(\"#asignar_grupos #grupo_B li\").length >1){\n                while($(\"#asignar_grupos #grupo_A li\").length-$(\"#asignar_grupos #grupo_B li\").length>1 && $(\"#asignar_grupos #grupo_A li[title='Nuevo Alumno']\").length){\n                    if($(\"#asignar_grupos #grupo_A li[title='Nuevo Alumno'][sexo='Masculino']\").length>$(\"#asignar_grupos #grupo_A li[title='Nuevo Alumno'][sexo='Femenino']\").length){\n                        $(\"#asignar_grupos #grupo_A li[title='Nuevo Alumno'][sexo='Masculino']:last-child\").appendTo('#grupo_B');\n                    }\n                    else if($(\"#asignar_grupos #grupo_A li[title='Nuevo Alumno'][sexo='Femenino']\").length>$(\"#asignar_grupos #grupo_A li[title='Nuevo Alumno'][sexo='Masculino']\").length){\n                        $(\"#asignar_grupos #grupo_A li[title='Nuevo Alumno'][sexo='Femenino']:last-child\").appendTo('#grupo_B');\n                    }\n                    else{\n                        $(\"#asignar_grupos #grupo_A li[title='Nuevo Alumno']:last-child\").appendTo('#grupo_B');\n                    }\n                }   \n            }\n            else if($(\"#asignar_grupos #grupo_B li\").length - $(\"#asignar_grupos #grupo_A li\").length>1){\n                while($(\"#asignar_grupos #grupo_B li\").length-$(\"#asignar_grupos #grupo_A li\").length>1 && $(\"#asignar_grupos #grupo_B li[title='Nuevo Alumno']\").length){\n                    if($(\"#asignar_grupos #grupo_B li[title='Nuevo Alumno'][sexo='Masculino']\").length>$(\"#asignar_grupos #grupo_B li[title='Nuevo Alumno'][sexo='Femenino']\").length){\n                        $(\"#asignar_grupos #grupo_B li[title='Nuevo Alumno'][sexo='Masculino']:last-child\").appendTo('#grupo_A');\n                    }\n                    else if($(\"#asignar_grupos #grupo_B li[title='Nuevo Alumno'][sexo='Femenino']\").length>$(\"#asignar_grupos #grupo_B li[title='Nuevo Alumno'][sexo='Masculino']\").length){\n                        $(\"#asignar_grupos #grupo_B li[title='Nuevo Alumno'][sexo='Femenino']:last-child\").appendTo('#grupo_A');\n                    }\n                    else{\n                        $(\"#asignar_grupos #grupo_A li[title='Nuevo Alumno']:last-child\").appendTo('#grupo_A');\n                    }\n                }  \n            }\n\n            OrdenarLista($('#grupo_A'));    \n            OrdenarLista($('#grupo_B'));    \n            CalcularAlumnos();\n        }\n        //Se asigna los tres grupos a los alumnos matriculados siguiendo unas condiciones.\n        else{\n            niños=$(\"#asignar_grupos \").find(\"li[sexo='Masculino']\").length;\n            niñas=$(\"#asignar_grupos\").find(\"li[sexo='Femenino']\").length;\n\n            niños_grupos= parseInt(niños/3); \n            niñas_grupos= parseInt(niñas/3);\n\n            niños_A=$(\"#asignar_grupos #grupo_A li[sexo='Masculino']\").length;\n            niñas_A=$(\"#asignar_grupos #grupo_A li[sexo='Femenino']\").length;\n\n            niños_B=$(\"#asignar_grupos #grupo_B li[sexo='Masculino']\").length;\n            niñas_B=$(\"#asignar_grupos #grupo_B li[sexo='Femenino']\").length;\n\n            niños_C=$(\"#asignar_grupos #grupo_C li[sexo='Masculino']\").length;\n            niñas_C=$(\"#asignar_grupos #grupo_C li[sexo='Femenino']\").length;\n\n            //Se obtienes los alumnos que faltan para por grupo.\n            niños_faltan_A=parseInt(niños_grupos)-parseInt(niños_A);\n            niñas_faltan_A=parseInt(niñas_grupos)-parseInt(niñas_A);\n\n            niños_faltan_B=parseInt(niños_grupos)-parseInt(niños_B);\n            niñas_faltan_B=parseInt(niñas_grupos)-parseInt(niñas_B);\n\n            niños_faltan_C=parseInt(niños_grupos)-parseInt(niños_C);\n            niñas_faltan_C=parseInt(niñas_grupos)-parseInt(niñas_C);\n\n            niños_nuevos=$(\"#asignar_grupos #ordenar_cursos li[sexo='Masculino']\").length;\n            niñas_nuevos=$(\"#asignar_grupos #ordenar_cursos li[sexo='Femenino']\").length;\n\n            for (var i=niños_faltan_A; i>0; i--) {\n                $(\"#asignar_grupos #ordenar_cursos li[sexo='Masculino']:first\").appendTo('#grupo_A');\n            }\n\n            for (var i=niñas_faltan_A; i>0; i--) {\n                $(\"#asignar_grupos #ordenar_cursos li[sexo='Femenino']:first\").appendTo('#grupo_A');\n            }\n            for (var i=niños_faltan_B; i>0; i--) {\n                $(\"#asignar_grupos #ordenar_cursos li[sexo='Masculino']:first\").appendTo('#grupo_B');\n            }\n\n            for (var i=niñas_faltan_B; i>0; i--) {\n                $(\"#asignar_grupos #ordenar_cursos li[sexo='Femenino']:first\").appendTo('#grupo_B');\n            }\n            for (var i=niños_faltan_C; i>0; i--) {\n                $(\"#asignar_grupos #ordenar_cursos li[sexo='Masculino']:first\").appendTo('#grupo_C');\n            }\n\n            for (var i=niñas_faltan_C; i>0; i--) {\n                $(\"#asignar_grupos #ordenar_cursos li[sexo='Femenino']:first\").appendTo('#grupo_C');\n            }\n            //Si queda sólo un alumno por asignar se asigna al grupo que tenga menos o al primero si tiene el mismo número de alumnos los grupos.\n            if($(\"#asignar_grupos #ordenar_cursos li\").length==1){\n\n                if($(\"#asignar_grupos #grupo_C li\").length<$(\"#asignar_grupos #grupo_B li\").length && $(\"#asignar_grupos #grupo_C li\").length<$(\"#asignar_grupos #grupo_A li\").length){\n                    $(\"#asignar_grupos #ordenar_cursos li\").appendTo('#grupo_C');\n                }\n                else if($(\"#asignar_grupos #grupo_B li\").length<$(\"#asignar_grupos #grupo_A li\").length && $(\"#asignar_grupos #grupo_B li\").length<$(\"#asignar_grupos #grupo_C li\").length){\n                    $(\"#asignar_grupos #ordenar_cursos li\").appendTo('#grupo_B');\n                }\n                else{\n                    $(\"#asignar_grupos #ordenar_cursos li\").appendTo('#grupo_A');\n                }\n            }\n            // En caso de que haya más de un alumno por asignar se va alternando en cada grupo.\n            if($(\"#asignar_grupos #ordenar_cursos li[sexo='Masculino']\").length){\n                for (var i=$(\"#asignar_grupos #ordenar_cursos li[sexo='Masculino']\").length; i>0; i--) {\n                    $(\"#asignar_grupos li[sexo='Masculino']:first\").appendTo('#grupo_A');\n                    i--;\n                    if(i>0){\n                        $(\"#asignar_grupos li[sexo='Masculino']:first\").appendTo('#grupo_B');\n                    }\n                    i--;\n                    if(i>0){\n                        $(\"#asignar_grupos li[sexo='Masculino']:first\").appendTo('#grupo_C');\n                    }\n                }\n            }\n            // En caso de que haya más de una alumna por asignar se va alternando en cada grupo.\n            if($(\"#asignar_grupos #ordenar_cursos li[sexo='Femenino']\").length){\n                for (var i=$(\"#asignar_grupos #ordenar_cursos li[sexo='Femenino']\").length; i>0; i--) {\n                    $(\"#asignar_grupos li[sexo='Femenino']:first\").appendTo('#grupo_A');\n                    i--;\n                    if(i>0){\n                        $(\"#asignar_grupos li[sexo='Femenino']:first\").appendTo('#grupo_B');\n                    }\n                    i--;\n                    if(i>0){\n                        $(\"#asignar_grupos li[sexo='Femenino']:first\").appendTo('#grupo_C');\n                    }\n                }\n            }\n\n            //Finalmente si los grupos no tienen el mismo número de alumnos, por tener más alumnos de un sexo que otro en el curso anterior, traspasamos alumnos nuevos de sexo con mayor número de ese grupo al que tenga menos o al primero en caso de que tengan mismo número de grupos.\n            if((($(\"#asignar_grupos #grupo_A li\").length - $(\"#asignar_grupos #grupo_B li\").length >1)||($(\"#asignar_grupos #grupo_A li\").length - $(\"#asignar_grupos #grupo_C li\").length >1))&& ($(\"#asignar_grupos #grupo_A li\").length>$(\"#asignar_grupos #grupo_B li\").length && $(\"#asignar_grupos #grupo_A li\").length>$(\"#asignar_grupos #grupo_C li\").length)){\n                while((($(\"#asignar_grupos #grupo_A li\").length - $(\"#asignar_grupos #grupo_B li\").length >1)||($(\"#asignar_grupos #grupo_A li\").length - $(\"#asignar_grupos #grupo_C li\").length >1)) && $(\"#asignar_grupos #grupo_A li[title='Nuevo Alumno']\").length){\n\n                    //Se obtiene el alumno a desplazar.\n                    var alumno;\n                    if($(\"#asignar_grupos #grupo_A li[title='Nuevo Alumno'][sexo='Masculino']\").length>$(\"#asignar_grupos #grupo_A li[title='Nuevo Alumno'][sexo='Femenino']\").length){\n                        alumno=$(\"#asignar_grupos #grupo_A li[title='Nuevo Alumno'][sexo='Masculino']:last-child\");\n                    }\n                    else if($(\"#asignar_grupos #grupo_A li[title='Nuevo Alumno'][sexo='Femenino']\").length>$(\"#asignar_grupos #grupo_A li[title='Nuevo Alumno'][sexo='Masculino']\").length){\n                        alumno=$(\"#asignar_grupos #grupo_A li[title='Nuevo Alumno'][sexo='Femenino']:last-child\");\n                    }\n                    else{\n                        alumno=$(\"#asignar_grupos #grupo_A li[title='Nuevo Alumno']:last-child\");\n                    }\n\n                    //Se desplaza el alumno al grupo que menos alumnos tiene.\n                    if($(\"#asignar_grupos #grupo_B li\").length<$(\"#asignar_grupos #grupo_C li\").length){\n                        alumno.appendTo('#grupo_B');\n                    }\n                    else if ($(\"#asignar_grupos #grupo_C li\").length<$(\"#asignar_grupos #grupo_B li\").length){\n                        alumno.appendTo('#grupo_C');\n                    }\n                    else{\n                        alumno.appendTo('#grupo_B');\n                    }\n\n                }   \n            }\n            else if((($(\"#asignar_grupos #grupo_B li\").length - $(\"#asignar_grupos #grupo_A li\").length >1)||($(\"#asignar_grupos #grupo_B li\").length - $(\"#asignar_grupos #grupo_C li\").length >1))&& ($(\"#asignar_grupos #grupo_B li\").length>$(\"#asignar_grupos #grupo_A li\").length && $(\"#asignar_grupos #grupo_B li\").length>$(\"#asignar_grupos #grupo_C li\").length)){\n\n                while((($(\"#asignar_grupos #grupo_B li\").length - $(\"#asignar_grupos #grupo_A li\").length >1)||($(\"#asignar_grupos #grupo_B li\").length - $(\"#asignar_grupos #grupo_C li\").length >1)) && $(\"#asignar_grupos #grupo_B li[title='Nuevo Alumno']\").length){\n                           \n                    //Se obtiene el alumno a desplazar.\n                    var alumno;\n                    if($(\"#asignar_grupos #grupo_B li[title='Nuevo Alumno'][sexo='Masculino']\").length>$(\"#asignar_grupos #grupo_B li[title='Nuevo Alumno'][sexo='Femenino']\").length){\n                        alumno=$(\"#asignar_grupos #grupo_B li[title='Nuevo Alumno'][sexo='Masculino']:last-child\");\n                    }\n                    else if($(\"#asignar_grupos #grupo_B li[title='Nuevo Alumno'][sexo='Femenino']\").length>$(\"#asignar_grupos #grupo_B li[title='Nuevo Alumno'][sexo='Masculino']\").length){\n                        alumno=$(\"#asignar_grupos #grupo_B li[title='Nuevo Alumno'][sexo='Femenino']:last-child\");\n                    }\n                    else{\n                        alumno=$(\"#asignar_grupos #grupo_B li[title='Nuevo Alumno']:last-child\");\n                    }\n\n                    //Se desplaza el alumno al grupo que menos alumnos tiene.\n                    if($(\"#asignar_grupos #grupo_A li\").length<$(\"#asignar_grupos #grupo_C li\").length){\n\n                        alumno.appendTo('#grupo_A');\n                    }\n                    else if ($(\"#asignar_grupos #grupo_C li\").length<$(\"#asignar_grupos #grupo_A li\").length){\n                        alumno.appendTo('#grupo_C');\n                    }\n                    else{\n                        alumno.appendTo('#grupo_A');\n                    }\n                }  \n            }\n            else if((($(\"#asignar_grupos #grupo_C li\").length - $(\"#asignar_grupos #grupo_A li\").length >1)||($(\"#asignar_grupos #grupo_C li\").length - $(\"#asignar_grupos #grupo_B li\").length >1))&& ($(\"#asignar_grupos #grupo_C li\").length>$(\"#asignar_grupos #grupo_A li\").length && $(\"#asignar_grupos #grupo_C li\").length>$(\"#asignar_grupos #grupo_B li\").length)){\n\n                while((($(\"#asignar_grupos #grupo_C li\").length - $(\"#asignar_grupos #grupo_A li\").length >1)||($(\"#asignar_grupos #grupo_C li\").length - $(\"#asignar_grupos #grupo_B li\").length >1)) && $(\"#asignar_grupos #grupo_C li[title='Nuevo Alumno']\").length){\n                    \n                    //Se obtiene el alumno a desplazar.\n                    var alumno;\n                    if($(\"#asignar_grupos #grupo_C li[title='Nuevo Alumno'][sexo='Masculino']\").length>$(\"#asignar_grupos #grupo_C li[title='Nuevo Alumno'][sexo='Femenino']\").length){\n                        alumno=$(\"#asignar_grupos #grupo_C li[title='Nuevo Alumno'][sexo='Masculino']:last-child\");\n                    }\n                    else if($(\"#asignar_grupos #grupo_C li[title='Nuevo Alumno'][sexo='Femenino']\").length>$(\"#asignar_grupos #grupo_C li[title='Nuevo Alumno'][sexo='Masculino']\").length){\n                        alumno=$(\"#asignar_grupos #grupo_C li[title='Nuevo Alumno'][sexo='Femenino']:last-child\");\n                    }\n                    else{\n                        alumno=$(\"#asignar_grupos #grupo_C li[title='Nuevo Alumno']:last-child\");\n                    }\n\n                    //Se desplaza el alumno al grupo que menos alumnos tiene.\n                    if($(\"#asignar_grupos #grupo_A li\").length<$(\"#asignar_grupos #grupo_B li\").length){\n                        alumno.appendTo('#grupo_A');\n                    }\n                    else if ($(\"#asignar_grupos #grupo_B li\").length<$(\"#asignar_grupos #grupo_A li\").length){\n                        alumno.appendTo('#grupo_B');\n                    }\n                    else{\n                        alumno.appendTo('#grupo_A');\n                    }\n                }  \n            }\n\n            OrdenarLista($('#grupo_A'));    \n            OrdenarLista($('#grupo_B'));  \n            OrdenarLista($('#grupo_C'));     \n            CalcularAlumnos();        \n        }\n        $(this).blur();\n        $(this).prop(\"disabled\",true);\n        $(\"#asignar_grupos #loading\").empty();\n  });\n\n</script>\n{% endblock %}\n\n{% block body -%}\n<div id=\"asignar_grupos\" class=\"contenedor_tabla_no_selec\">\n    <div class=\"parent_no_form\">\n        <div class=\"child\">\n            <div id=\"lista_cursos\">\n                {{render(controller(\"BackendBundle:Curso:listaCursos\"))}}\n            </div>\n            <div id=\"btn_generar\">\n                <button disabled=\"disabled\">Generar</button>\n            </div>\n            <h2 id=\"cabecera\">Asignar Grupos a los Alumnos</h2>\n                <div class=\"simple_column_red\">\n                    <h4></h4>\n                    <div id=\"contenedor_cursos\">\n                        <ol id=\"ordenar_cursos\">\n                        {% for alumno in alumnos_sin_grupo %}\n                            <li id=\"curso-{{alumno.alumno.id}}\" sexo={{ alumno.alumno.sexo }} title=\"Nuevo Alumno\"> {#Se utiliza para el método serialize de sortable. Usar: curso-id, curso_id ó curso=id#}\n                                <p class=\"nuevo\">Nuevo</p>\n                                <p>{{ alumno.alumno.apellido1 ~ \" \" ~ alumno.alumno.apellido2 ~ \", \" ~ alumno.alumno.nombre }}</p>\n\n                            </li>\n                        {% endfor %}\n                        </ul>\n                    </div>\n                    <div id=\"botones_centrados\">\n                        <button id=\"button_grupos_all\" disabled=\"disabled\">Guardar</button>\n                        <button id=\"button_grupos_rest\" disabled=\"disabled\">Restablecer</button>\n                    </div>\n                </div>                 \n                <div class=\"derecha contenedor_registro container_disabled\" id=\"contenedor_asignar_grupos\">  \n                    <div>\n                        <div id=\"cabecera_lista\">\n                            <h2>Grupo A</h2>\n                        </div>\n                        <div>\n                            <ol id=\"grupo_A\">\n                            {% for alumno in alumnos_A %}   \n                                <li id=\"curso-{{alumno.alumno.id}}\" sexo={{ alumno.alumno.sexo }}  title=\"Antiguo Alumno\" grupo=\"A\"> {#Se utiliza para el método serialize de sortable. Usar: curso-id, curso_id ó curso=id#}\n                                <p>{{ alumno.alumno.apellido1 ~ \" \" ~ alumno.alumno.apellido2 ~ \", \" ~ alumno.alumno.nombre }}</p>\n                                </li>\n                            {% endfor %}     \n                            </ol>\n                        </div>\n                    </div>         \n                </div>\n                <div class=\"derecha contenedor_registro container_disabled\" id=\"contenedor_asignar_grupos\" >  \n                    <div>\n                        <div id=\"cabecera_lista\">\n                            <h2>Grupo B</h2>\n                        </div>\n                        <div>\n                            <ol id=\"grupo_B\">\n                            {% for alumno in alumnos_B %}   \n                                <li id=\"curso-{{alumno.alumno.id}}\" sexo={{ alumno.alumno.sexo }} title=\"Antiguo Alumno\" grupo=\"B\"> {#Se utiliza para el método serialize de sortable. Usar: curso-id, curso_id ó curso=id#}\n                                   <p>{{ alumno.alumno.apellido1 ~ \" \" ~ alumno.alumno.apellido2 ~ \", \" ~ alumno.alumno.nombre }}</p>\n                                </li>\n                            {% endfor %}     \n                            </ol>\n                        </div>\n                    </div>          \n                </div>\n                <div class=\"derecha contenedor_registro container_disabled\" id=\"contenedor_asignar_grupos\" >  \n                    <div>\n                        <div id=\"cabecera_lista\">\n                            <h2>Grupo C</h2>\n                        </div>\n                        <div>\n                            <ol id=\"grupo_C\">\n                            {% for alumno in alumnos_C %}   \n                                <li id=\"curso-{{alumno.alumno.id}}\" sexo={{ alumno.alumno.sexo }} title=\"Antiguo Alumno\" grupo=\"C\"> {#Se utiliza para el método serialize de sortable. Usar: curso-id, curso_id ó curso=id#}\n                                <p>{{ alumno.alumno.apellido1 ~ \" \" ~ alumno.alumno.apellido2 ~ \", \" ~ alumno.alumno.nombre }}</p>\n                                </li>\n                            {% endfor %}     \n                            </ol>\n                        </div>\n                    </div>          \n                </div>\n                <div class=\"pie_lista\">\n                    <div id=\"footer_A\" class=\"footer_disabled\">\n                        <p>Niños:<span id=\"niños\"></span></p>\n                        <p>Niñas:<span id=\"niñas\"></span></p>\n                        <p>Total:<span id=\"total\"></span>/ <span id=\"max\"></span></p>\n                    </div> \n                    <div id=\"footer_B\" class=\"footer_disabled\">\n                        <p>Niños:<span id=\"niños\"></span></p>\n                        <p>Niñas:<span id=\"niñas\"></span></p>\n                        <p>Total:<span id=\"total\"></span>/ <span id=\"max\"></span></p>\n                    </div> \n                    <div id=\"footer_C\" class=\"footer_disabled\">\n                        <p>Niños:<span id=\"niños\"></span></p>\n                        <p>Niñas:<span id=\"niñas\"></span></p>\n                        <p>Total:<span id=\"total\"></span>/ <span id=\"max\"></span></p>\n                    </div> \n                </div>\n            <div id=\"loading\"></div>\n        </div>\n    </div>\n</div>\n    {% endblock %}",
+			"file": "src/Cole/BackendBundle/Resources/views/Grupo/AsignarGrupoConCurso.html.twig",
+			"file_size": 36525,
+			"file_write_time": 1487693161000000,
+			"settings":
+			{
+				"buffer_size": 36391,
 				"line_ending": "Unix"
 			}
 		},
@@ -762,7 +813,7 @@
 			"file": "src/Cole/BackendBundle/Resources/public/css/backend.css",
 			"settings":
 			{
-				"buffer_size": 120308,
+				"buffer_size": 125871,
 				"line_ending": "Unix"
 			}
 		},
@@ -770,7 +821,7 @@
 			"file": "src/Cole/BackendBundle/Resources/public/js/general.js",
 			"settings":
 			{
-				"buffer_size": 373063,
+				"buffer_size": 379986,
 				"line_ending": "Unix"
 			}
 		},
@@ -944,7 +995,7 @@
 			"file": "src/Cole/BackendBundle/Resources/views/Alumno/search_old.html.twig",
 			"settings":
 			{
-				"buffer_size": 13341,
+				"buffer_size": 13355,
 				"line_ending": "Unix"
 			}
 		},
@@ -952,18 +1003,7 @@
 			"file": "src/Cole/BackendBundle/Resources/views/Alumno/search.html.twig",
 			"settings":
 			{
-				"buffer_size": 13222,
-				"line_ending": "Unix"
-			}
-		},
-		{
-			"contents": "",
-			"file": "src/Cole/BackendBundle/Entity/Imparte.php",
-			"file_size": 4395,
-			"file_write_time": 1485803201000000,
-			"settings":
-			{
-				"buffer_size": 0,
+				"buffer_size": 13795,
 				"line_ending": "Unix"
 			}
 		},
@@ -1043,6 +1083,14 @@
 			}
 		},
 		{
+			"file": "src/Cole/BackendBundle/Resources/views/Grupo/tutor_grupo.html.twig",
+			"settings":
+			{
+				"buffer_size": 17039,
+				"line_ending": "Unix"
+			}
+		},
+		{
 			"file": "src/Cole/BackendBundle/Resources/views/Equipamiento/new.html.twig",
 			"settings":
 			{
@@ -1051,42 +1099,26 @@
 			}
 		},
 		{
-			"file": "src/Cole/BackendBundle/Resources/views/Equipamiento/edit.html.twig",
+			"file": "src/Cole/BackendBundle/Controller/CursoController.php",
 			"settings":
 			{
-				"buffer_size": 3350,
+				"buffer_size": 14645,
 				"line_ending": "Unix"
 			}
 		},
 		{
-			"file": "src/Cole/BackendBundle/Resources/config/routing/equipamiento.yml",
+			"file": "src/Cole/BackendBundle/Resources/views/Curso/show.html.twig",
 			"settings":
 			{
-				"buffer_size": 1324,
+				"buffer_size": 11653,
 				"line_ending": "Unix"
 			}
 		},
 		{
-			"file": "src/Cole/BackendBundle/Controller/EquipamientoController.php",
+			"file": "src/Cole/BackendBundle/Resources/views/Curso/ratio.html.twig",
 			"settings":
 			{
-				"buffer_size": 7785,
-				"line_ending": "Unix"
-			}
-		},
-		{
-			"file": "src/Cole/BackendBundle/Resources/views/Equipamiento/listar_aulas.html.twig",
-			"settings":
-			{
-				"buffer_size": 765,
-				"line_ending": "Unix"
-			}
-		},
-		{
-			"file": "src/Cole/BackendBundle/Entity/Grupo.php",
-			"settings":
-			{
-				"buffer_size": 5565,
+				"buffer_size": 12047,
 				"line_ending": "Unix"
 			}
 		}
@@ -1094,9 +1126,13 @@
 	"build_system": "",
 	"command_palette":
 	{
-		"height": 181.0,
+		"height": 293.0,
 		"selected_items":
 		[
+			[
+				"colo",
+				"Color Picker"
+			],
 			[
 				"ins",
 				"Package Control: Install Package"
@@ -1155,16 +1191,23 @@
 	},
 	"file_history":
 	[
-		"/opt/lampp/htdocs/Symfony/src/Cole/BackendBundle/Entity/Equipamiento.php",
-		"/opt/lampp/htdocs/Symfony/src/Cole/BackendBundle/Resources/views/Curso/show.html.twig",
+		"/opt/lampp/htdocs/Symfony/src/Cole/BackendBundle/Resources/views/Equipamiento/listar_aulas.html.twig",
+		"/opt/lampp/htdocs/Symfony/src/Cole/BackendBundle/Controller/EquipamientoController.php",
 		"/opt/lampp/htdocs/Symfony/src/Cole/BackendBundle/Resources/config/routing/equipamiento.yml",
+		"/opt/lampp/htdocs/Symfony/src/Cole/BackendBundle/Resources/views/Equipamiento/edit.html.twig",
+		"/opt/lampp/htdocs/Symfony/src/Cole/BackendBundle/Entity/Expediente.php",
+		"/opt/lampp/htdocs/Symfony/src/Cole/BackendBundle/Entity/CursoRepository.php",
+		"/opt/lampp/htdocs/Symfony/src/Cole/BackendBundle/Resources/config/routing/grupo.yml",
+		"/opt/lampp/htdocs/Symfony/src/Cole/BackendBundle/Entity/Equipamiento.php",
+		"/opt/lampp/htdocs/Symfony/src/Cole/BackendBundle/Entity/Imparte.php",
+		"/opt/lampp/htdocs/Symfony/src/Cole/BackendBundle/Entity/Grupo.php",
+		"/opt/lampp/htdocs/Symfony/src/Cole/BackendBundle/Resources/views/Curso/index.html.twig",
+		"/opt/lampp/htdocs/Symfony/src/Cole/BackendBundle/Resources/views/Curso/show.html.twig",
 		"/opt/lampp/htdocs/Symfony/src/Cole/BackendBundle/Resources/views/Profesor/new.html.twig",
 		"/opt/lampp/htdocs/Symfony/src/Cole/BackendBundle/Entity/Asignaturas_Cursos.php",
 		"/opt/lampp/htdocs/Symfony/src/Cole/BackendBundle/Entity/Asignaturas_CursosRepository.php",
 		"/opt/lampp/htdocs/Symfony/src/Cole/BackendBundle/Resources/views/Grupo/AsignarGrupoConCurso.html.twig",
-		"/opt/lampp/htdocs/Symfony/src/Cole/BackendBundle/Entity/Grupo.php",
 		"/opt/lampp/htdocs/Symfony/src/Cole/BackendBundle/Entity/Curso.php",
-		"/opt/lampp/htdocs/Symfony/src/Cole/BackendBundle/Resources/views/Curso/index.html.twig",
 		"/opt/lampp/htdocs/Symfony/src/Cole/BackendBundle/Resources/views/Asignatura/index.html.twig",
 		"/opt/lampp/htdocs/Symfony/src/Cole/BackendBundle/Controller/CursoController.php",
 		"/opt/lampp/htdocs/Symfony/src/Cole/BackendBundle/Resources/config/routing/curso.yml",
@@ -1215,14 +1258,13 @@
 		"/opt/lampp/htdocs/Symfony/src/Cole/BackendBundle/Resources/views/Festivos/calendario.html.twig",
 		"/opt/lampp/htdocs/Symfony/src/Cole/BackendBundle/Resources/views/Asignatura/new.html.twig",
 		"/opt/lampp/htdocs/Symfony/src/Cole/BackendBundle/Resources/public/js/general.js",
-		"/opt/lampp/htdocs/Symfony/src/Cole/BackendBundle/Resources/views/Equipamiento/edit.html.twig",
 		"/opt/lampp/htdocs/Symfony/src/Cole/BackendBundle/Resources/views/Festivos/new.html.twig",
 		"/opt/lampp/htdocs/Symfony/src/Cole/BackendBundle/Resources/public/backend.css",
 		"/opt/lampp/htdocs/Symfony/cole.sublime-project"
 	],
 	"find":
 	{
-		"height": 44.0
+		"height": 37.0
 	},
 	"find_in_files":
 	{
@@ -1236,6 +1278,93 @@
 		"case_sensitive": false,
 		"find_history":
 		[
+			"class",
+			"load",
+			"forea",
+			"(Eliminar)",
+			"PNotify",
+			"(Eliminar)",
+			"button_grupos_rest",
+			"restablecer",
+			"rest",
+			"media",
+			"arrow_next_1",
+			"#tutor_grupos #lista_grupos ul",
+			"#tutor_grupos #lista_grupos img",
+			"ui-state-highlight",
+			"appendTo",
+			"desplaza",
+			"appendTo",
+			"list-style",
+			" list-style:",
+			"#tutor_grupos .lista_profesores td",
+			"select_table_old_teacher",
+			"removeClass",
+			"grupos_infantil",
+			"oculto",
+			"grupos",
+			"head_change",
+			"#tutor_grupos #cont_one, #tutor_grupos #cont_two",
+			"one",
+			"grupos",
+			"entities",
+			".contenedor div div",
+			"error",
+			"Asignar Grupo",
+			"Grupos asigna",
+			"asignar_ratio",
+			"button_grupos_all",
+			"event",
+			"cursor",
+			"button_grupos_all",
+			"registro_Ngrupos",
+			"loading",
+			"existe",
+			"actual",
+			"delete",
+			"asignados",
+			"delete",
+			"\"de\"",
+			"\" de\"",
+			"lista_cursos",
+			"old",
+			"search",
+			"cverde",
+			"lista_cursos",
+			"search",
+			"buscador_alumno",
+			"busqueda_alumno",
+			"#lista_cursos select",
+			"\"-\"",
+			"-",
+			"#lista_cursos select",
+			"consulta_antiguo_alumno",
+			"Matrícula Cancelada",
+			"JOIN",
+			"INNER JOIN",
+			"INNERJOIN",
+			"ON",
+			"on",
+			"GROUP BY",
+			"ORDER BY",
+			"old",
+			"verde",
+			"No es un archivo",
+			".columna_foto",
+			"#aulas_dialog #content-form div > button",
+			"¿Estas seguro de continuar?",
+			"foreach",
+			"forea",
+			"for",
+			"¿Estas seguro de continuar?",
+			"#asignar_aula ",
+			"#asignar_aula >",
+			"#asignar_aula > div",
+			"#asignar_aula > div > div > div:nth-child(2)",
+			"simple_column",
+			"#asignar_aula > div > div > div:nth-child(2)",
+			"botones",
+			"error",
 			"asignar_aula",
 			"asignar",
 			"toString",
@@ -1276,94 +1405,7 @@
 			"comprobar",
 			"dni",
 			" $(\"#asignar_grupo\").update_tab();  ",
-			"selected",
-			"alumnos antiguo",
-			"alumnos_antiguo",
-			"#multiples_alumnos .columna_foto, #multiples_alumnos img",
-			"num_matriculas",
-			"findNumMatriculas",
-			"key",
-			"keypress",
-			"blur",
-			"profesor",
-			"PNotify",
-			"Pno",
-			"contenedor_registro_horario",
-			"button_horario_rest",
-			"contenedor_registro_horario",
-			"button disabled=\"disabled\"",
-			"disabled=\"disabled\"",
-			"button disabled=\"disabled\"",
-			"<td><button disabled=\"disabled\" >Guardar</button></td>",
-			"button_horario_save",
-			"'0'",
-			"dia",
-			"dias",
-			"dia",
-			"sub",
-			"selected",
-			"RECREO",
-			"button_generate",
-			"media",
-			"#registro_horario .block_insert select",
-			"#cont_one, #cont_two",
-			"registro_horario_guardar",
-			"simple",
-			".block_insert li",
-			"#cont_one, #cont_two",
-			".center_button",
-			".contenedor_registro_horario",
-			".contenedor_registro_horario div table th",
-			"horarios",
-			"lectivas",
-			"submit",
-			"\"));",
-			"actualizar",
-			"editar",
-			"FormData",
-			"profesor_create",
-			"profesor_horas",
-			"profesor",
-			"ª",
-			"RECREO",
-			"input change keyup",
-			"comprobarEditForm",
-			"valida",
-			"media",
-			"\n    ",
-			" \n",
-			"submit",
-			"child",
-			"number",
-			".delay()",
-			"inicio_navidad",
-			"PNotify",
-			"No se pueden reservar los equipamientos",
-			"equipamiento",
-			"PNotify",
-			"ui-pnotify-title",
-			"PNotify",
-			"form button",
-			"vistas_festivos",
-			"pdf",
-			"festivo",
-			"calendario_",
-			"completo",
-			"calendario_completo",
-			"horarios",
-			"action",
-			"calendario_completo",
-			"calendario",
-			"calendariopdf",
-			"calendario_completo",
-			"findNumPorCurso",
-			"indNumPorCurso",
-			"count",
-			"sw",
-			"ui-icon",
-			"ui-icon-close",
-			"PNotify",
-			"aviso"
+			"selected"
 		],
 		"highlight": true,
 		"in_selection": false,
@@ -1381,7 +1423,7 @@
 	"groups":
 	[
 		{
-			"selected": 37,
+			"selected": 40,
 			"sheets":
 			[
 				{
@@ -2050,15 +2092,15 @@
 					"file": "src/Cole/BackendBundle/Resources/views/Default/index.html.twig",
 					"settings":
 					{
-						"buffer_size": 14477,
+						"buffer_size": 14815,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								5508,
-								5508
+								7852,
+								7852
 							]
 						],
 						"settings":
@@ -2205,7 +2247,7 @@
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 1782.0,
+						"translation.y": 2894.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"
@@ -3542,15 +3584,15 @@
 					"file": "src/Cole/BackendBundle/Entity/Alumno.php",
 					"settings":
 					{
-						"buffer_size": 15856,
+						"buffer_size": 15465,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								660,
-								660
+								14473,
+								14473
 							]
 						],
 						"settings":
@@ -3698,7 +3740,7 @@
 							"translate_tabs_to_spaces": true
 						},
 						"translation.x": 0.0,
-						"translation.y": 432.0,
+						"translation.y": 12978.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"
@@ -3871,6 +3913,172 @@
 				},
 				{
 					"buffer": 15,
+					"file": "src/Cole/BackendBundle/Controller/AlumnoController.php",
+					"settings":
+					{
+						"buffer_size": 42613,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								23669,
+								23669
+							]
+						],
+						"settings":
+						{
+							"BracketHighlighterBusy": false,
+							"annotations":
+							[
+								"TODO",
+								"README",
+								"FIXME"
+							],
+							"bh_regions":
+							[
+								"bh_regex",
+								"bh_regex_center",
+								"bh_regex_open",
+								"bh_regex_close",
+								"bh_double_quote",
+								"bh_double_quote_center",
+								"bh_double_quote_open",
+								"bh_double_quote_close",
+								"bh_square",
+								"bh_square_center",
+								"bh_square_open",
+								"bh_square_close",
+								"bh_angle",
+								"bh_angle_center",
+								"bh_angle_open",
+								"bh_angle_close",
+								"bh_curly",
+								"bh_curly_center",
+								"bh_curly_open",
+								"bh_curly_close",
+								"bh_c_define",
+								"bh_c_define_center",
+								"bh_c_define_open",
+								"bh_c_define_close",
+								"bh_default",
+								"bh_default_center",
+								"bh_default_open",
+								"bh_default_close",
+								"bh_unmatched",
+								"bh_unmatched_center",
+								"bh_unmatched_open",
+								"bh_unmatched_close",
+								"bh_round",
+								"bh_round_center",
+								"bh_round_open",
+								"bh_round_close",
+								"bh_tag",
+								"bh_tag_center",
+								"bh_tag_open",
+								"bh_tag_close",
+								"bh_single_quote",
+								"bh_single_quote_center",
+								"bh_single_quote_open",
+								"bh_single_quote_close"
+							],
+							"csslint_options":
+							{
+								"adjoining-classes": "warning",
+								"box-model": true,
+								"box-sizing": "warning",
+								"compatible-vendor-prefixes": "warning",
+								"display-property-grouping": true,
+								"duplicate-background-images": "warning",
+								"duplicate-properties": true,
+								"empty-rules": true,
+								"errors": true,
+								"fallback-colors": "warning",
+								"floats": "warning",
+								"font-faces": "warning",
+								"font-sizes": "warning",
+								"gradients": "warning",
+								"ids": "warning",
+								"import": "warning",
+								"important": "warning",
+								"known-properties": true,
+								"outline-none": "warning",
+								"overqualified-elements": "warning",
+								"qualified-headings": "warning",
+								"regex-selectors": "warning",
+								"rules-count": "warning",
+								"shorthand": "warning",
+								"star-property-hack": "warning",
+								"text-indent": "warning",
+								"underscore-property-hack": "warning",
+								"unique-headings": "warning",
+								"universal-selector": "warning",
+								"vendor-prefix": true,
+								"zero-units": "warning"
+							},
+							"gjslint_ignore":
+							[
+								110
+							],
+							"gjslint_options":
+							[
+							],
+							"javascript_linter": "jshint",
+							"jshint_options":
+							{
+								"browser": true,
+								"devel": true,
+								"evil": true,
+								"regexdash": true,
+								"sub": true,
+								"trailing": true,
+								"wsh": true
+							},
+							"pep8": true,
+							"pep8_ignore":
+							[
+								"E501"
+							],
+							"perl_linter": "perlcritic",
+							"pyflakes_ignore":
+							[
+							],
+							"pyflakes_ignore_import_*": true,
+							"sublimelinter": "load-save",
+							"sublimelinter_delay": 2,
+							"sublimelinter_disable":
+							[
+							],
+							"sublimelinter_executable_map":
+							{
+							},
+							"sublimelinter_fill_outlines": false,
+							"sublimelinter_gutter_marks": true,
+							"sublimelinter_gutter_marks_theme": "simple",
+							"sublimelinter_mark_style": "none",
+							"sublimelinter_notes": false,
+							"sublimelinter_objj_check_ascii": false,
+							"sublimelinter_popup_errors_on_save": false,
+							"sublimelinter_syntax_map":
+							{
+								"C++": "c",
+								"Python Django": "python",
+								"Ruby on Rails": "ruby"
+							},
+							"sublimelinter_wrap_find": true,
+							"syntax": "Packages/PHP/PHP.tmLanguage",
+							"tab_size": 4,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 10955.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 16,
 					"file": "src/Cole/BackendBundle/Form/PadresType.php",
 					"settings":
 					{
@@ -4036,7 +4244,7 @@
 					"type": "text"
 				},
 				{
-					"buffer": 16,
+					"buffer": 17,
 					"file": "src/Cole/ColeBundle/Resources/config/routing.yml",
 					"settings":
 					{
@@ -4202,7 +4410,7 @@
 					"type": "text"
 				},
 				{
-					"buffer": 17,
+					"buffer": 18,
 					"file": "web/app_dev.php",
 					"settings":
 					{
@@ -4366,7 +4574,7 @@
 					"type": "text"
 				},
 				{
-					"buffer": 18,
+					"buffer": 19,
 					"file": "app/AppKernel.php",
 					"settings":
 					{
@@ -4532,7 +4740,7 @@
 					"type": "text"
 				},
 				{
-					"buffer": 19,
+					"buffer": 20,
 					"file": "src/Cole/BackendBundle/Entity/Profesor.php",
 					"settings":
 					{
@@ -4698,7 +4906,7 @@
 					"type": "text"
 				},
 				{
-					"buffer": 20,
+					"buffer": 21,
 					"file": "src/Cole/BackendBundle/Entity/Asignatura.php",
 					"settings":
 					{
@@ -4858,13 +5066,13 @@
 							"translate_tabs_to_spaces": true
 						},
 						"translation.x": 0.0,
-						"translation.y": 882.0,
+						"translation.y": 423.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"
 				},
 				{
-					"buffer": 21,
+					"buffer": 22,
 					"file": "src/Cole/BackendBundle/Controller/ProfesorController.php",
 					"settings":
 					{
@@ -5030,7 +5238,7 @@
 					"type": "text"
 				},
 				{
-					"buffer": 22,
+					"buffer": 23,
 					"file": "src/Cole/BackendBundle/Resources/config/routing/profesor.yml",
 					"settings":
 					{
@@ -5190,25 +5398,25 @@
 							"translate_tabs_to_spaces": true
 						},
 						"translation.x": 0.0,
-						"translation.y": 935.0,
+						"translation.y": 1649.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"
 				},
 				{
-					"buffer": 23,
+					"buffer": 24,
 					"file": "src/Cole/BackendBundle/Resources/views/Alumno/search_multiple.html.twig",
 					"settings":
 					{
-						"buffer_size": 9532,
+						"buffer_size": 9538,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								1356,
-								1356
+								8566,
+								8566
 							]
 						],
 						"settings":
@@ -5356,13 +5564,13 @@
 							"translate_tabs_to_spaces": true
 						},
 						"translation.x": 0.0,
-						"translation.y": 558.0,
+						"translation.y": 2992.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"
 				},
 				{
-					"buffer": 24,
+					"buffer": 25,
 					"file": "src/Cole/ColeBundle/Controller/CentroController.php",
 					"settings":
 					{
@@ -5528,7 +5736,7 @@
 					"type": "text"
 				},
 				{
-					"buffer": 25,
+					"buffer": 26,
 					"file": "src/Cole/ColeBundle/Resources/views/Cole/centro.html.twig",
 					"settings":
 					{
@@ -5692,7 +5900,7 @@
 					"type": "text"
 				},
 				{
-					"buffer": 26,
+					"buffer": 27,
 					"file": "src/Cole/BackendBundle/Form/ProfesorType.php",
 					"settings":
 					{
@@ -5858,7 +6066,7 @@
 					"type": "text"
 				},
 				{
-					"buffer": 27,
+					"buffer": 28,
 					"file": "src/Cole/BackendBundle/Entity/ProfesorRepository.php",
 					"settings":
 					{
@@ -5869,12 +6077,8 @@
 						"selection":
 						[
 							[
-								771,
-								771
-							],
-							[
-								772,
-								772
+								149,
+								149
 							]
 						],
 						"settings":
@@ -6021,13 +6225,13 @@
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 456.0,
+						"translation.y": 23.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"
 				},
 				{
-					"buffer": 28,
+					"buffer": 29,
 					"file": "src/Cole/BackendBundle/Resources/views/Asignatura/edit.html.twig",
 					"settings":
 					{
@@ -6187,13 +6391,13 @@
 							"translate_tabs_to_spaces": true
 						},
 						"translation.x": 0.0,
-						"translation.y": 278.0,
+						"translation.y": 357.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"
 				},
 				{
-					"buffer": 29,
+					"buffer": 30,
 					"file": "src/Cole/BackendBundle/Resources/views/Asignatura/new.html.twig",
 					"settings":
 					{
@@ -6359,7 +6563,7 @@
 					"type": "text"
 				},
 				{
-					"buffer": 30,
+					"buffer": 31,
 					"file": "src/Cole/BackendBundle/Resources/views/Asignatura/new_asignaturas_curso.html.twig",
 					"settings":
 					{
@@ -6370,8 +6574,8 @@
 						"selection":
 						[
 							[
-								9489,
-								9489
+								885,
+								885
 							]
 						],
 						"settings":
@@ -6519,13 +6723,13 @@
 							"translate_tabs_to_spaces": true
 						},
 						"translation.x": 0.0,
-						"translation.y": 280.0,
+						"translation.y": 2754.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"
 				},
 				{
-					"buffer": 31,
+					"buffer": 32,
 					"file": "src/Cole/BackendBundle/Resources/views/Asignatura/asignaturas_cursos_show.html.twig",
 					"settings":
 					{
@@ -6536,8 +6740,8 @@
 						"selection":
 						[
 							[
-								3573,
-								3573
+								206,
+								206
 							]
 						],
 						"settings":
@@ -6685,13 +6889,13 @@
 							"translate_tabs_to_spaces": true
 						},
 						"translation.x": 0.0,
-						"translation.y": 1632.0,
+						"translation.y": 408.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"
 				},
 				{
-					"buffer": 32,
+					"buffer": 33,
 					"file": "src/Cole/BackendBundle/Resources/config/routing/asignatura.yml",
 					"settings":
 					{
@@ -6857,7 +7061,172 @@
 					"type": "text"
 				},
 				{
-					"buffer": 33,
+					"buffer": 34,
+					"file": "src/Cole/BackendBundle/Entity/ExpedienteRepository.php",
+					"settings":
+					{
+						"buffer_size": 2230,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								1778,
+								1778
+							]
+						],
+						"settings":
+						{
+							"BracketHighlighterBusy": false,
+							"annotations":
+							[
+								"TODO",
+								"README",
+								"FIXME"
+							],
+							"bh_regions":
+							[
+								"bh_regex",
+								"bh_regex_center",
+								"bh_regex_open",
+								"bh_regex_close",
+								"bh_double_quote",
+								"bh_double_quote_center",
+								"bh_double_quote_open",
+								"bh_double_quote_close",
+								"bh_square",
+								"bh_square_center",
+								"bh_square_open",
+								"bh_square_close",
+								"bh_angle",
+								"bh_angle_center",
+								"bh_angle_open",
+								"bh_angle_close",
+								"bh_curly",
+								"bh_curly_center",
+								"bh_curly_open",
+								"bh_curly_close",
+								"bh_c_define",
+								"bh_c_define_center",
+								"bh_c_define_open",
+								"bh_c_define_close",
+								"bh_default",
+								"bh_default_center",
+								"bh_default_open",
+								"bh_default_close",
+								"bh_unmatched",
+								"bh_unmatched_center",
+								"bh_unmatched_open",
+								"bh_unmatched_close",
+								"bh_round",
+								"bh_round_center",
+								"bh_round_open",
+								"bh_round_close",
+								"bh_tag",
+								"bh_tag_center",
+								"bh_tag_open",
+								"bh_tag_close",
+								"bh_single_quote",
+								"bh_single_quote_center",
+								"bh_single_quote_open",
+								"bh_single_quote_close"
+							],
+							"csslint_options":
+							{
+								"adjoining-classes": "warning",
+								"box-model": true,
+								"box-sizing": "warning",
+								"compatible-vendor-prefixes": "warning",
+								"display-property-grouping": true,
+								"duplicate-background-images": "warning",
+								"duplicate-properties": true,
+								"empty-rules": true,
+								"errors": true,
+								"fallback-colors": "warning",
+								"floats": "warning",
+								"font-faces": "warning",
+								"font-sizes": "warning",
+								"gradients": "warning",
+								"ids": "warning",
+								"import": "warning",
+								"important": "warning",
+								"known-properties": true,
+								"outline-none": "warning",
+								"overqualified-elements": "warning",
+								"qualified-headings": "warning",
+								"regex-selectors": "warning",
+								"rules-count": "warning",
+								"shorthand": "warning",
+								"star-property-hack": "warning",
+								"text-indent": "warning",
+								"underscore-property-hack": "warning",
+								"unique-headings": "warning",
+								"universal-selector": "warning",
+								"vendor-prefix": true,
+								"zero-units": "warning"
+							},
+							"gjslint_ignore":
+							[
+								110
+							],
+							"gjslint_options":
+							[
+							],
+							"javascript_linter": "jshint",
+							"jshint_options":
+							{
+								"browser": true,
+								"devel": true,
+								"evil": true,
+								"regexdash": true,
+								"sub": true,
+								"trailing": true,
+								"wsh": true
+							},
+							"pep8": true,
+							"pep8_ignore":
+							[
+								"E501"
+							],
+							"perl_linter": "perlcritic",
+							"pyflakes_ignore":
+							[
+							],
+							"pyflakes_ignore_import_*": true,
+							"sublimelinter": "load-save",
+							"sublimelinter_delay": 2,
+							"sublimelinter_disable":
+							[
+							],
+							"sublimelinter_executable_map":
+							{
+							},
+							"sublimelinter_fill_outlines": false,
+							"sublimelinter_gutter_marks": true,
+							"sublimelinter_gutter_marks_theme": "simple",
+							"sublimelinter_mark_style": "none",
+							"sublimelinter_notes": false,
+							"sublimelinter_objj_check_ascii": false,
+							"sublimelinter_popup_errors_on_save": false,
+							"sublimelinter_syntax_map":
+							{
+								"C++": "c",
+								"Python Django": "python",
+								"Ruby on Rails": "ruby"
+							},
+							"sublimelinter_wrap_find": true,
+							"syntax": "Packages/PHP/PHP.tmLanguage",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 731.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 35,
 					"file": "src/Cole/BackendBundle/Resources/views/Asignatura/asignaturas_por_curso.html.twig",
 					"settings":
 					{
@@ -7015,13 +7384,13 @@
 							"syntax": "Packages/Twig/Syntaxes/HTML (Twig).tmLanguage"
 						},
 						"translation.x": 0.0,
-						"translation.y": 0.0,
+						"translation.y": 238.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"
 				},
 				{
-					"buffer": 34,
+					"buffer": 36,
 					"file": "src/Cole/BackendBundle/Entity/AsignaturasCursos.php",
 					"settings":
 					{
@@ -7187,19 +7556,19 @@
 					"type": "text"
 				},
 				{
-					"buffer": 35,
+					"buffer": 37,
 					"file": "src/Cole/BackendBundle/Controller/AsignaturaController.php",
 					"settings":
 					{
-						"buffer_size": 11185,
+						"buffer_size": 11129,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								1018,
-								1018
+								9664,
+								9664
 							]
 						],
 						"settings":
@@ -7347,13 +7716,13 @@
 							"translate_tabs_to_spaces": true
 						},
 						"translation.x": 0.0,
-						"translation.y": 561.0,
+						"translation.y": 4794.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"
 				},
 				{
-					"buffer": 36,
+					"buffer": 38,
 					"file": "src/Cole/BackendBundle/Resources/config/routing/padres.yml",
 					"settings":
 					{
@@ -7519,19 +7888,19 @@
 					"type": "text"
 				},
 				{
-					"buffer": 37,
+					"buffer": 39,
 					"file": "src/Cole/BackendBundle/Resources/views/Grupo/show.html.twig",
 					"settings":
 					{
-						"buffer_size": 10481,
+						"buffer_size": 10792,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								5805,
-								5805
+								161,
+								161
 							]
 						],
 						"settings":
@@ -7679,191 +8048,25 @@
 							"translate_tabs_to_spaces": true
 						},
 						"translation.x": 0.0,
-						"translation.y": 1822.0,
+						"translation.y": 34.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"
 				},
 				{
-					"buffer": 38,
-					"file": "src/Cole/BackendBundle/Resources/views/Curso/index.html.twig",
-					"settings":
-					{
-						"buffer_size": 5889,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								5704,
-								5704
-							]
-						],
-						"settings":
-						{
-							"BracketHighlighterBusy": false,
-							"annotations":
-							[
-								"TODO",
-								"README",
-								"FIXME"
-							],
-							"bh_regions":
-							[
-								"bh_regex",
-								"bh_regex_center",
-								"bh_regex_open",
-								"bh_regex_close",
-								"bh_double_quote",
-								"bh_double_quote_center",
-								"bh_double_quote_open",
-								"bh_double_quote_close",
-								"bh_square",
-								"bh_square_center",
-								"bh_square_open",
-								"bh_square_close",
-								"bh_angle",
-								"bh_angle_center",
-								"bh_angle_open",
-								"bh_angle_close",
-								"bh_curly",
-								"bh_curly_center",
-								"bh_curly_open",
-								"bh_curly_close",
-								"bh_c_define",
-								"bh_c_define_center",
-								"bh_c_define_open",
-								"bh_c_define_close",
-								"bh_default",
-								"bh_default_center",
-								"bh_default_open",
-								"bh_default_close",
-								"bh_unmatched",
-								"bh_unmatched_center",
-								"bh_unmatched_open",
-								"bh_unmatched_close",
-								"bh_round",
-								"bh_round_center",
-								"bh_round_open",
-								"bh_round_close",
-								"bh_tag",
-								"bh_tag_center",
-								"bh_tag_open",
-								"bh_tag_close",
-								"bh_single_quote",
-								"bh_single_quote_center",
-								"bh_single_quote_open",
-								"bh_single_quote_close"
-							],
-							"csslint_options":
-							{
-								"adjoining-classes": "warning",
-								"box-model": true,
-								"box-sizing": "warning",
-								"compatible-vendor-prefixes": "warning",
-								"display-property-grouping": true,
-								"duplicate-background-images": "warning",
-								"duplicate-properties": true,
-								"empty-rules": true,
-								"errors": true,
-								"fallback-colors": "warning",
-								"floats": "warning",
-								"font-faces": "warning",
-								"font-sizes": "warning",
-								"gradients": "warning",
-								"ids": "warning",
-								"import": "warning",
-								"important": "warning",
-								"known-properties": true,
-								"outline-none": "warning",
-								"overqualified-elements": "warning",
-								"qualified-headings": "warning",
-								"regex-selectors": "warning",
-								"rules-count": "warning",
-								"shorthand": "warning",
-								"star-property-hack": "warning",
-								"text-indent": "warning",
-								"underscore-property-hack": "warning",
-								"unique-headings": "warning",
-								"universal-selector": "warning",
-								"vendor-prefix": true,
-								"zero-units": "warning"
-							},
-							"gjslint_ignore":
-							[
-								110
-							],
-							"gjslint_options":
-							[
-							],
-							"javascript_linter": "jshint",
-							"jshint_options":
-							{
-								"browser": true,
-								"devel": true,
-								"evil": true,
-								"regexdash": true,
-								"sub": true,
-								"trailing": true,
-								"wsh": true
-							},
-							"pep8": true,
-							"pep8_ignore":
-							[
-								"E501"
-							],
-							"perl_linter": "perlcritic",
-							"pyflakes_ignore":
-							[
-							],
-							"pyflakes_ignore_import_*": true,
-							"sublimelinter": "load-save",
-							"sublimelinter_delay": 2,
-							"sublimelinter_disable":
-							[
-							],
-							"sublimelinter_executable_map":
-							{
-							},
-							"sublimelinter_fill_outlines": false,
-							"sublimelinter_gutter_marks": true,
-							"sublimelinter_gutter_marks_theme": "simple",
-							"sublimelinter_mark_style": "none",
-							"sublimelinter_notes": false,
-							"sublimelinter_objj_check_ascii": false,
-							"sublimelinter_popup_errors_on_save": false,
-							"sublimelinter_syntax_map":
-							{
-								"C++": "c",
-								"Python Django": "python",
-								"Ruby on Rails": "ruby"
-							},
-							"sublimelinter_wrap_find": true,
-							"syntax": "Packages/Twig/Syntaxes/HTML (Twig).tmLanguage",
-							"tab_size": 4,
-							"translate_tabs_to_spaces": true
-						},
-						"translation.x": 0.0,
-						"translation.y": 2619.0,
-						"zoom_level": 1.0
-					},
-					"type": "text"
-				},
-				{
-					"buffer": 39,
+					"buffer": 40,
 					"file": "src/Cole/BackendBundle/Controller/GrupoController.php",
 					"settings":
 					{
-						"buffer_size": 10648,
+						"buffer_size": 13401,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								6781,
-								6781
+								12288,
+								12288
 							]
 						],
 						"settings":
@@ -8011,7 +8214,172 @@
 							"translate_tabs_to_spaces": true
 						},
 						"translation.x": 0.0,
-						"translation.y": 3959.0,
+						"translation.y": 6628.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 41,
+					"file": "src/Cole/BackendBundle/Entity/AlumnoRepository.php",
+					"settings":
+					{
+						"buffer_size": 2203,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								0,
+								0
+							]
+						],
+						"settings":
+						{
+							"BracketHighlighterBusy": false,
+							"annotations":
+							[
+								"TODO",
+								"README",
+								"FIXME"
+							],
+							"bh_regions":
+							[
+								"bh_regex",
+								"bh_regex_center",
+								"bh_regex_open",
+								"bh_regex_close",
+								"bh_double_quote",
+								"bh_double_quote_center",
+								"bh_double_quote_open",
+								"bh_double_quote_close",
+								"bh_square",
+								"bh_square_center",
+								"bh_square_open",
+								"bh_square_close",
+								"bh_angle",
+								"bh_angle_center",
+								"bh_angle_open",
+								"bh_angle_close",
+								"bh_curly",
+								"bh_curly_center",
+								"bh_curly_open",
+								"bh_curly_close",
+								"bh_c_define",
+								"bh_c_define_center",
+								"bh_c_define_open",
+								"bh_c_define_close",
+								"bh_default",
+								"bh_default_center",
+								"bh_default_open",
+								"bh_default_close",
+								"bh_unmatched",
+								"bh_unmatched_center",
+								"bh_unmatched_open",
+								"bh_unmatched_close",
+								"bh_round",
+								"bh_round_center",
+								"bh_round_open",
+								"bh_round_close",
+								"bh_tag",
+								"bh_tag_center",
+								"bh_tag_open",
+								"bh_tag_close",
+								"bh_single_quote",
+								"bh_single_quote_center",
+								"bh_single_quote_open",
+								"bh_single_quote_close"
+							],
+							"csslint_options":
+							{
+								"adjoining-classes": "warning",
+								"box-model": true,
+								"box-sizing": "warning",
+								"compatible-vendor-prefixes": "warning",
+								"display-property-grouping": true,
+								"duplicate-background-images": "warning",
+								"duplicate-properties": true,
+								"empty-rules": true,
+								"errors": true,
+								"fallback-colors": "warning",
+								"floats": "warning",
+								"font-faces": "warning",
+								"font-sizes": "warning",
+								"gradients": "warning",
+								"ids": "warning",
+								"import": "warning",
+								"important": "warning",
+								"known-properties": true,
+								"outline-none": "warning",
+								"overqualified-elements": "warning",
+								"qualified-headings": "warning",
+								"regex-selectors": "warning",
+								"rules-count": "warning",
+								"shorthand": "warning",
+								"star-property-hack": "warning",
+								"text-indent": "warning",
+								"underscore-property-hack": "warning",
+								"unique-headings": "warning",
+								"universal-selector": "warning",
+								"vendor-prefix": true,
+								"zero-units": "warning"
+							},
+							"gjslint_ignore":
+							[
+								110
+							],
+							"gjslint_options":
+							[
+							],
+							"javascript_linter": "jshint",
+							"jshint_options":
+							{
+								"browser": true,
+								"devel": true,
+								"evil": true,
+								"regexdash": true,
+								"sub": true,
+								"trailing": true,
+								"wsh": true
+							},
+							"pep8": true,
+							"pep8_ignore":
+							[
+								"E501"
+							],
+							"perl_linter": "perlcritic",
+							"pyflakes_ignore":
+							[
+							],
+							"pyflakes_ignore_import_*": true,
+							"sublimelinter": "load-save",
+							"sublimelinter_delay": 2,
+							"sublimelinter_disable":
+							[
+							],
+							"sublimelinter_executable_map":
+							{
+							},
+							"sublimelinter_fill_outlines": false,
+							"sublimelinter_gutter_marks": true,
+							"sublimelinter_gutter_marks_theme": "simple",
+							"sublimelinter_mark_style": "none",
+							"sublimelinter_notes": false,
+							"sublimelinter_objj_check_ascii": false,
+							"sublimelinter_popup_errors_on_save": false,
+							"sublimelinter_syntax_map":
+							{
+								"C++": "c",
+								"Python Django": "python",
+								"Ruby on Rails": "ruby"
+							},
+							"sublimelinter_wrap_find": true,
+							"syntax": "Packages/PHP/PHP.tmLanguage",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 51.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"
@@ -8019,11 +8387,10 @@
 			]
 		},
 		{
-			"selected": 20,
 			"sheets":
 			[
 				{
-					"buffer": 40,
+					"buffer": 42,
 					"file": "src/Cole/IntranetBundle/Resources/public/css/intranet.css",
 					"settings":
 					{
@@ -8034,8 +8401,8 @@
 						"selection":
 						[
 							[
-								65,
-								65
+								154,
+								154
 							]
 						],
 						"settings":
@@ -8188,7 +8555,7 @@
 					"type": "text"
 				},
 				{
-					"buffer": 41,
+					"buffer": 43,
 					"file": "src/Cole/ColeBundle/Resources/public/js/load.js",
 					"settings":
 					{
@@ -8354,7 +8721,7 @@
 					"type": "text"
 				},
 				{
-					"buffer": 42,
+					"buffer": 44,
 					"file": "src/Cole/ColeBundle/Resources/public/css/estilo.css",
 					"settings":
 					{
@@ -8520,7 +8887,7 @@
 					"type": "text"
 				},
 				{
-					"buffer": 43,
+					"buffer": 45,
 					"file": "src/Cole/ColeBundle/Resources/views/Noticias/galeria.html.twig",
 					"settings":
 					{
@@ -8686,7 +9053,7 @@
 					"type": "text"
 				},
 				{
-					"buffer": 44,
+					"buffer": 46,
 					"file": "src/Cole/ColeBundle/Resources/views/Noticias/imagen.html.twig",
 					"settings":
 					{
@@ -8852,7 +9219,7 @@
 					"type": "text"
 				},
 				{
-					"buffer": 45,
+					"buffer": 47,
 					"file": "src/Cole/ColeBundle/Resources/views/Noticias/new.html.twig",
 					"settings":
 					{
@@ -9018,7 +9385,7 @@
 					"type": "text"
 				},
 				{
-					"buffer": 46,
+					"buffer": 48,
 					"file": "src/Cole/ColeBundle/Resources/views/Noticias/noticia.html.twig",
 					"settings":
 					{
@@ -9184,7 +9551,7 @@
 					"type": "text"
 				},
 				{
-					"buffer": 47,
+					"buffer": 49,
 					"file": "src/Cole/ColeBundle/Resources/views/Noticias/recientes.html.twig",
 					"settings":
 					{
@@ -9350,7 +9717,7 @@
 					"type": "text"
 				},
 				{
-					"buffer": 48,
+					"buffer": 50,
 					"file": "src/Cole/ColeBundle/Resources/views/Noticias/noticias.html.twig",
 					"settings":
 					{
@@ -9516,7 +9883,7 @@
 					"type": "text"
 				},
 				{
-					"buffer": 49,
+					"buffer": 51,
 					"file": "src/Cole/ColeBundle/Controller/NoticiasController.php",
 					"settings":
 					{
@@ -9682,7 +10049,7 @@
 					"type": "text"
 				},
 				{
-					"buffer": 50,
+					"buffer": 52,
 					"file": "src/Cole/ColeBundle/Resources/config/routing/noticias.yml",
 					"settings":
 					{
@@ -9848,7 +10215,7 @@
 					"type": "text"
 				},
 				{
-					"buffer": 51,
+					"buffer": 53,
 					"file": "src/Cole/ColeBundle/Entity/Noticias.php",
 					"settings":
 					{
@@ -10014,7 +10381,7 @@
 					"type": "text"
 				},
 				{
-					"buffer": 52,
+					"buffer": 54,
 					"file": "src/Cole/ColeBundle/Entity/NoticiasRepository.php",
 					"settings":
 					{
@@ -10178,7 +10545,7 @@
 					"type": "text"
 				},
 				{
-					"buffer": 53,
+					"buffer": 55,
 					"file": "src/Cole/BackendBundle/Controller/MatriculaController.php",
 					"settings":
 					{
@@ -10189,8 +10556,8 @@
 						"selection":
 						[
 							[
-								7705,
-								7705
+								6629,
+								6629
 							]
 						],
 						"settings":
@@ -10338,13 +10705,13 @@
 							"translate_tabs_to_spaces": true
 						},
 						"translation.x": 0.0,
-						"translation.y": 4531.0,
+						"translation.y": 4726.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"
 				},
 				{
-					"buffer": 54,
+					"buffer": 56,
 					"file": "src/Cole/BackendBundle/Entity/Centro.php",
 					"settings":
 					{
@@ -10510,7 +10877,7 @@
 					"type": "text"
 				},
 				{
-					"buffer": 55,
+					"buffer": 57,
 					"file": "src/Cole/BackendBundle/Entity/CentroRepository.php",
 					"settings":
 					{
@@ -10521,8 +10888,8 @@
 						"selection":
 						[
 							[
-								0,
-								0
+								277,
+								277
 							]
 						],
 						"settings":
@@ -10669,13 +11036,13 @@
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 0.0,
+						"translation.y": 183.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"
 				},
 				{
-					"buffer": 56,
+					"buffer": 58,
 					"file": "src/Cole/BackendBundle/Resources/views/Centro/horariosAtencion.html.twig",
 					"settings":
 					{
@@ -10686,8 +11053,8 @@
 						"selection":
 						[
 							[
-								33122,
-								33122
+								14777,
+								14777
 							]
 						],
 						"settings":
@@ -10835,13 +11202,13 @@
 							"translate_tabs_to_spaces": true
 						},
 						"translation.x": 0.0,
-						"translation.y": 697.0,
+						"translation.y": 7200.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"
 				},
 				{
-					"buffer": 57,
+					"buffer": 59,
 					"file": "src/Cole/BackendBundle/Form/BusquedaAlumnoType.php",
 					"settings":
 					{
@@ -11007,7 +11374,7 @@
 					"type": "text"
 				},
 				{
-					"buffer": 58,
+					"buffer": 60,
 					"file": "src/Cole/BackendBundle/Form/BusquedaProfesorType.php",
 					"settings":
 					{
@@ -11173,7 +11540,7 @@
 					"type": "text"
 				},
 				{
-					"buffer": 59,
+					"buffer": 61,
 					"file": "src/Cole/BackendBundle/Resources/views/Profesor/search.html.twig",
 					"settings":
 					{
@@ -11339,19 +11706,19 @@
 					"type": "text"
 				},
 				{
-					"buffer": 60,
+					"buffer": 62,
 					"file": "src/Cole/BackendBundle/Resources/views/Alumno/edit.html.twig",
 					"settings":
 					{
-						"buffer_size": 15005,
+						"buffer_size": 15499,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								0,
-								0
+								3188,
+								3188
 							]
 						],
 						"settings":
@@ -11499,179 +11866,13 @@
 							"translate_tabs_to_spaces": true
 						},
 						"translation.x": 0.0,
-						"translation.y": 0.0,
+						"translation.y": 1173.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"
 				},
 				{
-					"buffer": 61,
-					"file": "src/Cole/BackendBundle/Controller/AlumnoController.php",
-					"settings":
-					{
-						"buffer_size": 42056,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								0,
-								0
-							]
-						],
-						"settings":
-						{
-							"BracketHighlighterBusy": false,
-							"annotations":
-							[
-								"TODO",
-								"README",
-								"FIXME"
-							],
-							"bh_regions":
-							[
-								"bh_regex",
-								"bh_regex_center",
-								"bh_regex_open",
-								"bh_regex_close",
-								"bh_double_quote",
-								"bh_double_quote_center",
-								"bh_double_quote_open",
-								"bh_double_quote_close",
-								"bh_square",
-								"bh_square_center",
-								"bh_square_open",
-								"bh_square_close",
-								"bh_angle",
-								"bh_angle_center",
-								"bh_angle_open",
-								"bh_angle_close",
-								"bh_curly",
-								"bh_curly_center",
-								"bh_curly_open",
-								"bh_curly_close",
-								"bh_c_define",
-								"bh_c_define_center",
-								"bh_c_define_open",
-								"bh_c_define_close",
-								"bh_default",
-								"bh_default_center",
-								"bh_default_open",
-								"bh_default_close",
-								"bh_unmatched",
-								"bh_unmatched_center",
-								"bh_unmatched_open",
-								"bh_unmatched_close",
-								"bh_round",
-								"bh_round_center",
-								"bh_round_open",
-								"bh_round_close",
-								"bh_tag",
-								"bh_tag_center",
-								"bh_tag_open",
-								"bh_tag_close",
-								"bh_single_quote",
-								"bh_single_quote_center",
-								"bh_single_quote_open",
-								"bh_single_quote_close"
-							],
-							"csslint_options":
-							{
-								"adjoining-classes": "warning",
-								"box-model": true,
-								"box-sizing": "warning",
-								"compatible-vendor-prefixes": "warning",
-								"display-property-grouping": true,
-								"duplicate-background-images": "warning",
-								"duplicate-properties": true,
-								"empty-rules": true,
-								"errors": true,
-								"fallback-colors": "warning",
-								"floats": "warning",
-								"font-faces": "warning",
-								"font-sizes": "warning",
-								"gradients": "warning",
-								"ids": "warning",
-								"import": "warning",
-								"important": "warning",
-								"known-properties": true,
-								"outline-none": "warning",
-								"overqualified-elements": "warning",
-								"qualified-headings": "warning",
-								"regex-selectors": "warning",
-								"rules-count": "warning",
-								"shorthand": "warning",
-								"star-property-hack": "warning",
-								"text-indent": "warning",
-								"underscore-property-hack": "warning",
-								"unique-headings": "warning",
-								"universal-selector": "warning",
-								"vendor-prefix": true,
-								"zero-units": "warning"
-							},
-							"gjslint_ignore":
-							[
-								110
-							],
-							"gjslint_options":
-							[
-							],
-							"javascript_linter": "jshint",
-							"jshint_options":
-							{
-								"browser": true,
-								"devel": true,
-								"evil": true,
-								"regexdash": true,
-								"sub": true,
-								"trailing": true,
-								"wsh": true
-							},
-							"pep8": true,
-							"pep8_ignore":
-							[
-								"E501"
-							],
-							"perl_linter": "perlcritic",
-							"pyflakes_ignore":
-							[
-							],
-							"pyflakes_ignore_import_*": true,
-							"sublimelinter": "load-save",
-							"sublimelinter_delay": 2,
-							"sublimelinter_disable":
-							[
-							],
-							"sublimelinter_executable_map":
-							{
-							},
-							"sublimelinter_fill_outlines": false,
-							"sublimelinter_gutter_marks": true,
-							"sublimelinter_gutter_marks_theme": "simple",
-							"sublimelinter_mark_style": "none",
-							"sublimelinter_notes": false,
-							"sublimelinter_objj_check_ascii": false,
-							"sublimelinter_popup_errors_on_save": false,
-							"sublimelinter_syntax_map":
-							{
-								"C++": "c",
-								"Python Django": "python",
-								"Ruby on Rails": "ruby"
-							},
-							"sublimelinter_wrap_find": true,
-							"syntax": "Packages/PHP/PHP.tmLanguage",
-							"tab_size": 4,
-							"translate_tabs_to_spaces": true
-						},
-						"translation.x": 0.0,
-						"translation.y": 0.0,
-						"zoom_level": 1.0
-					},
-					"type": "text"
-				},
-				{
-					"buffer": 62,
+					"buffer": 63,
 					"file": "src/Cole/BackendBundle/Resources/config/routing/alumno.yml",
 					"settings":
 					{
@@ -11837,7 +12038,7 @@
 					"type": "text"
 				},
 				{
-					"buffer": 63,
+					"buffer": 64,
 					"file": "src/Cole/BackendBundle/Resources/views/Profesor/search_old.html.twig",
 					"settings":
 					{
@@ -11848,8 +12049,8 @@
 						"selection":
 						[
 							[
-								0,
-								0
+								10858,
+								10858
 							]
 						],
 						"settings":
@@ -11997,13 +12198,13 @@
 							"translate_tabs_to_spaces": true
 						},
 						"translation.x": 0.0,
-						"translation.y": 0.0,
+						"translation.y": 3706.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"
 				},
 				{
-					"buffer": 64,
+					"buffer": 65,
 					"file": "src/Cole/BackendBundle/Resources/views/Profesor/show_bajas.html.twig",
 					"settings":
 					{
@@ -12169,7 +12370,7 @@
 					"type": "text"
 				},
 				{
-					"buffer": 65,
+					"buffer": 66,
 					"file": "src/Cole/BackendBundle/Entity/ImparteRepository.php",
 					"settings":
 					{
@@ -12180,8 +12381,8 @@
 						"selection":
 						[
 							[
-								0,
-								0
+								1224,
+								1224
 							]
 						],
 						"settings":
@@ -12327,14 +12528,14 @@
 							"syntax": "Packages/PHP/PHP.tmLanguage",
 							"translate_tabs_to_spaces": false
 						},
-						"translation.x": 0.0,
-						"translation.y": 0.0,
+						"translation.x": 39.0,
+						"translation.y": 652.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"
 				},
 				{
-					"buffer": 66,
+					"buffer": 67,
 					"file": "src/Cole/BackendBundle/Entity/AsignaturasCursosRepository.php",
 					"settings":
 					{
@@ -12345,8 +12546,8 @@
 						"selection":
 						[
 							[
-								0,
-								0
+								439,
+								439
 							]
 						],
 						"settings":
@@ -12493,13 +12694,13 @@
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 0.0,
+						"translation.y": 227.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"
 				},
 				{
-					"buffer": 67,
+					"buffer": 68,
 					"file": "src/Cole/BackendBundle/Entity/AsignaturaRepository.php",
 					"settings":
 					{
@@ -12510,8 +12711,8 @@
 						"selection":
 						[
 							[
-								410,
-								410
+								460,
+								460
 							]
 						],
 						"settings":
@@ -12663,19 +12864,19 @@
 					"type": "text"
 				},
 				{
-					"buffer": 68,
-					"file": "src/Cole/BackendBundle/Entity/ExpedienteRepository.php",
+					"buffer": 69,
+					"file": "src/Cole/BackendBundle/Resources/views/Alumno/edit_old.html.twig",
 					"settings":
 					{
-						"buffer_size": 1571,
+						"buffer_size": 16999,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								1181,
-								1181
+								2046,
+								2046
 							]
 						],
 						"settings":
@@ -12818,11 +13019,510 @@
 								"Ruby on Rails": "ruby"
 							},
 							"sublimelinter_wrap_find": true,
-							"syntax": "Packages/PHP/PHP.tmLanguage",
-							"translate_tabs_to_spaces": false
+							"syntax": "Packages/Twig/Syntaxes/HTML (Twig).tmLanguage",
+							"tab_size": 2,
+							"translate_tabs_to_spaces": true
 						},
 						"translation.x": 0.0,
-						"translation.y": 459.0,
+						"translation.y": 5049.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 70,
+					"file": "src/Cole/BackendBundle/Resources/config/routing/grupo.yml",
+					"settings":
+					{
+						"buffer_size": 1870,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								1686,
+								1686
+							]
+						],
+						"settings":
+						{
+							"BracketHighlighterBusy": false,
+							"annotations":
+							[
+								"TODO",
+								"README",
+								"FIXME"
+							],
+							"bh_regions":
+							[
+								"bh_regex",
+								"bh_regex_center",
+								"bh_regex_open",
+								"bh_regex_close",
+								"bh_double_quote",
+								"bh_double_quote_center",
+								"bh_double_quote_open",
+								"bh_double_quote_close",
+								"bh_square",
+								"bh_square_center",
+								"bh_square_open",
+								"bh_square_close",
+								"bh_angle",
+								"bh_angle_center",
+								"bh_angle_open",
+								"bh_angle_close",
+								"bh_curly",
+								"bh_curly_center",
+								"bh_curly_open",
+								"bh_curly_close",
+								"bh_c_define",
+								"bh_c_define_center",
+								"bh_c_define_open",
+								"bh_c_define_close",
+								"bh_default",
+								"bh_default_center",
+								"bh_default_open",
+								"bh_default_close",
+								"bh_unmatched",
+								"bh_unmatched_center",
+								"bh_unmatched_open",
+								"bh_unmatched_close",
+								"bh_round",
+								"bh_round_center",
+								"bh_round_open",
+								"bh_round_close",
+								"bh_tag",
+								"bh_tag_center",
+								"bh_tag_open",
+								"bh_tag_close",
+								"bh_single_quote",
+								"bh_single_quote_center",
+								"bh_single_quote_open",
+								"bh_single_quote_close"
+							],
+							"csslint_options":
+							{
+								"adjoining-classes": "warning",
+								"box-model": true,
+								"box-sizing": "warning",
+								"compatible-vendor-prefixes": "warning",
+								"display-property-grouping": true,
+								"duplicate-background-images": "warning",
+								"duplicate-properties": true,
+								"empty-rules": true,
+								"errors": true,
+								"fallback-colors": "warning",
+								"floats": "warning",
+								"font-faces": "warning",
+								"font-sizes": "warning",
+								"gradients": "warning",
+								"ids": "warning",
+								"import": "warning",
+								"important": "warning",
+								"known-properties": true,
+								"outline-none": "warning",
+								"overqualified-elements": "warning",
+								"qualified-headings": "warning",
+								"regex-selectors": "warning",
+								"rules-count": "warning",
+								"shorthand": "warning",
+								"star-property-hack": "warning",
+								"text-indent": "warning",
+								"underscore-property-hack": "warning",
+								"unique-headings": "warning",
+								"universal-selector": "warning",
+								"vendor-prefix": true,
+								"zero-units": "warning"
+							},
+							"gjslint_ignore":
+							[
+								110
+							],
+							"gjslint_options":
+							[
+							],
+							"javascript_linter": "jshint",
+							"jshint_options":
+							{
+								"browser": true,
+								"devel": true,
+								"evil": true,
+								"regexdash": true,
+								"sub": true,
+								"trailing": true,
+								"wsh": true
+							},
+							"pep8": true,
+							"pep8_ignore":
+							[
+								"E501"
+							],
+							"perl_linter": "perlcritic",
+							"pyflakes_ignore":
+							[
+							],
+							"pyflakes_ignore_import_*": true,
+							"sublimelinter": "load-save",
+							"sublimelinter_delay": 2,
+							"sublimelinter_disable":
+							[
+							],
+							"sublimelinter_executable_map":
+							{
+							},
+							"sublimelinter_fill_outlines": false,
+							"sublimelinter_gutter_marks": true,
+							"sublimelinter_gutter_marks_theme": "simple",
+							"sublimelinter_mark_style": "none",
+							"sublimelinter_notes": false,
+							"sublimelinter_objj_check_ascii": false,
+							"sublimelinter_popup_errors_on_save": false,
+							"sublimelinter_syntax_map":
+							{
+								"C++": "c",
+								"Python Django": "python",
+								"Ruby on Rails": "ruby"
+							},
+							"sublimelinter_wrap_find": true,
+							"syntax": "Packages/YAML/YAML.tmLanguage",
+							"tab_size": 4,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 1100.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 71,
+					"file": "src/Cole/BackendBundle/Resources/views/Grupo/AsignarGrupo.html.twig",
+					"settings":
+					{
+						"buffer_size": 3852,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								785,
+								785
+							]
+						],
+						"settings":
+						{
+							"BracketHighlighterBusy": false,
+							"annotations":
+							[
+								"TODO",
+								"README",
+								"FIXME"
+							],
+							"bh_regions":
+							[
+								"bh_regex",
+								"bh_regex_center",
+								"bh_regex_open",
+								"bh_regex_close",
+								"bh_double_quote",
+								"bh_double_quote_center",
+								"bh_double_quote_open",
+								"bh_double_quote_close",
+								"bh_square",
+								"bh_square_center",
+								"bh_square_open",
+								"bh_square_close",
+								"bh_angle",
+								"bh_angle_center",
+								"bh_angle_open",
+								"bh_angle_close",
+								"bh_curly",
+								"bh_curly_center",
+								"bh_curly_open",
+								"bh_curly_close",
+								"bh_c_define",
+								"bh_c_define_center",
+								"bh_c_define_open",
+								"bh_c_define_close",
+								"bh_default",
+								"bh_default_center",
+								"bh_default_open",
+								"bh_default_close",
+								"bh_unmatched",
+								"bh_unmatched_center",
+								"bh_unmatched_open",
+								"bh_unmatched_close",
+								"bh_round",
+								"bh_round_center",
+								"bh_round_open",
+								"bh_round_close",
+								"bh_tag",
+								"bh_tag_center",
+								"bh_tag_open",
+								"bh_tag_close",
+								"bh_single_quote",
+								"bh_single_quote_center",
+								"bh_single_quote_open",
+								"bh_single_quote_close"
+							],
+							"csslint_options":
+							{
+								"adjoining-classes": "warning",
+								"box-model": true,
+								"box-sizing": "warning",
+								"compatible-vendor-prefixes": "warning",
+								"display-property-grouping": true,
+								"duplicate-background-images": "warning",
+								"duplicate-properties": true,
+								"empty-rules": true,
+								"errors": true,
+								"fallback-colors": "warning",
+								"floats": "warning",
+								"font-faces": "warning",
+								"font-sizes": "warning",
+								"gradients": "warning",
+								"ids": "warning",
+								"import": "warning",
+								"important": "warning",
+								"known-properties": true,
+								"outline-none": "warning",
+								"overqualified-elements": "warning",
+								"qualified-headings": "warning",
+								"regex-selectors": "warning",
+								"rules-count": "warning",
+								"shorthand": "warning",
+								"star-property-hack": "warning",
+								"text-indent": "warning",
+								"underscore-property-hack": "warning",
+								"unique-headings": "warning",
+								"universal-selector": "warning",
+								"vendor-prefix": true,
+								"zero-units": "warning"
+							},
+							"gjslint_ignore":
+							[
+								110
+							],
+							"gjslint_options":
+							[
+							],
+							"javascript_linter": "jshint",
+							"jshint_options":
+							{
+								"browser": true,
+								"devel": true,
+								"evil": true,
+								"regexdash": true,
+								"sub": true,
+								"trailing": true,
+								"wsh": true
+							},
+							"pep8": true,
+							"pep8_ignore":
+							[
+								"E501"
+							],
+							"perl_linter": "perlcritic",
+							"pyflakes_ignore":
+							[
+							],
+							"pyflakes_ignore_import_*": true,
+							"sublimelinter": "load-save",
+							"sublimelinter_delay": 2,
+							"sublimelinter_disable":
+							[
+							],
+							"sublimelinter_executable_map":
+							{
+							},
+							"sublimelinter_fill_outlines": false,
+							"sublimelinter_gutter_marks": true,
+							"sublimelinter_gutter_marks_theme": "simple",
+							"sublimelinter_mark_style": "none",
+							"sublimelinter_notes": false,
+							"sublimelinter_objj_check_ascii": false,
+							"sublimelinter_popup_errors_on_save": false,
+							"sublimelinter_syntax_map":
+							{
+								"C++": "c",
+								"Python Django": "python",
+								"Ruby on Rails": "ruby"
+							},
+							"sublimelinter_wrap_find": true,
+							"syntax": "Packages/Twig/Syntaxes/HTML (Twig).tmLanguage",
+							"tab_size": 4,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 102.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 72,
+					"file": "src/Cole/BackendBundle/Resources/views/Grupo/AsignarGrupoConCurso.html.twig",
+					"settings":
+					{
+						"buffer_size": 36391,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								5364,
+								5364
+							]
+						],
+						"settings":
+						{
+							"BracketHighlighterBusy": false,
+							"annotations":
+							[
+								"TODO",
+								"README",
+								"FIXME"
+							],
+							"bh_regions":
+							[
+								"bh_regex",
+								"bh_regex_center",
+								"bh_regex_open",
+								"bh_regex_close",
+								"bh_double_quote",
+								"bh_double_quote_center",
+								"bh_double_quote_open",
+								"bh_double_quote_close",
+								"bh_square",
+								"bh_square_center",
+								"bh_square_open",
+								"bh_square_close",
+								"bh_angle",
+								"bh_angle_center",
+								"bh_angle_open",
+								"bh_angle_close",
+								"bh_curly",
+								"bh_curly_center",
+								"bh_curly_open",
+								"bh_curly_close",
+								"bh_c_define",
+								"bh_c_define_center",
+								"bh_c_define_open",
+								"bh_c_define_close",
+								"bh_default",
+								"bh_default_center",
+								"bh_default_open",
+								"bh_default_close",
+								"bh_unmatched",
+								"bh_unmatched_center",
+								"bh_unmatched_open",
+								"bh_unmatched_close",
+								"bh_round",
+								"bh_round_center",
+								"bh_round_open",
+								"bh_round_close",
+								"bh_tag",
+								"bh_tag_center",
+								"bh_tag_open",
+								"bh_tag_close",
+								"bh_single_quote",
+								"bh_single_quote_center",
+								"bh_single_quote_open",
+								"bh_single_quote_close"
+							],
+							"csslint_options":
+							{
+								"adjoining-classes": "warning",
+								"box-model": true,
+								"box-sizing": "warning",
+								"compatible-vendor-prefixes": "warning",
+								"display-property-grouping": true,
+								"duplicate-background-images": "warning",
+								"duplicate-properties": true,
+								"empty-rules": true,
+								"errors": true,
+								"fallback-colors": "warning",
+								"floats": "warning",
+								"font-faces": "warning",
+								"font-sizes": "warning",
+								"gradients": "warning",
+								"ids": "warning",
+								"import": "warning",
+								"important": "warning",
+								"known-properties": true,
+								"outline-none": "warning",
+								"overqualified-elements": "warning",
+								"qualified-headings": "warning",
+								"regex-selectors": "warning",
+								"rules-count": "warning",
+								"shorthand": "warning",
+								"star-property-hack": "warning",
+								"text-indent": "warning",
+								"underscore-property-hack": "warning",
+								"unique-headings": "warning",
+								"universal-selector": "warning",
+								"vendor-prefix": true,
+								"zero-units": "warning"
+							},
+							"gjslint_ignore":
+							[
+								110
+							],
+							"gjslint_options":
+							[
+							],
+							"javascript_linter": "jshint",
+							"jshint_options":
+							{
+								"browser": true,
+								"devel": true,
+								"evil": true,
+								"regexdash": true,
+								"sub": true,
+								"trailing": true,
+								"wsh": true
+							},
+							"pep8": true,
+							"pep8_ignore":
+							[
+								"E501"
+							],
+							"perl_linter": "perlcritic",
+							"pyflakes_ignore":
+							[
+							],
+							"pyflakes_ignore_import_*": true,
+							"sublimelinter": "load-save",
+							"sublimelinter_delay": 2,
+							"sublimelinter_disable":
+							[
+							],
+							"sublimelinter_executable_map":
+							{
+							},
+							"sublimelinter_fill_outlines": false,
+							"sublimelinter_gutter_marks": true,
+							"sublimelinter_gutter_marks_theme": "simple",
+							"sublimelinter_mark_style": "none",
+							"sublimelinter_notes": false,
+							"sublimelinter_objj_check_ascii": false,
+							"sublimelinter_popup_errors_on_save": false,
+							"sublimelinter_syntax_map":
+							{
+								"C++": "c",
+								"Python Django": "python",
+								"Ruby on Rails": "ruby"
+							},
+							"sublimelinter_wrap_find": true,
+							"syntax": "Packages/Twig/Syntaxes/HTML (Twig).tmLanguage",
+							"tab_size": 4,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 2006.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"
@@ -12830,23 +13530,23 @@
 			]
 		},
 		{
-			"selected": 0,
+			"selected": 1,
 			"sheets":
 			[
 				{
-					"buffer": 69,
+					"buffer": 73,
 					"file": "src/Cole/BackendBundle/Resources/public/css/backend.css",
 					"settings":
 					{
-						"buffer_size": 120308,
+						"buffer_size": 125871,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								38241,
-								38241
+								40560,
+								40560
 							]
 						],
 						"settings":
@@ -12992,25 +13692,25 @@
 							"syntax": "Packages/CSS/CSS.tmLanguage"
 						},
 						"translation.x": 0.0,
-						"translation.y": 32584.0,
+						"translation.y": 34198.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"
 				},
 				{
-					"buffer": 70,
+					"buffer": 74,
 					"file": "src/Cole/BackendBundle/Resources/public/js/general.js",
 					"settings":
 					{
-						"buffer_size": 373063,
+						"buffer_size": 379986,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								116418,
-								116418
+								320118,
+								320118
 							]
 						],
 						"settings":
@@ -13158,13 +13858,13 @@
 							"translate_tabs_to_spaces": true
 						},
 						"translation.x": 0.0,
-						"translation.y": 54259.0,
+						"translation.y": 138170.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"
 				},
 				{
-					"buffer": 71,
+					"buffer": 75,
 					"file": "src/Cole/BackendBundle/Resources/public/js/load.js",
 					"settings":
 					{
@@ -13330,7 +14030,7 @@
 					"type": "text"
 				},
 				{
-					"buffer": 72,
+					"buffer": 76,
 					"file": "src/Cole/BackendBundle/Resources/views/Equipamiento/index.html.twig",
 					"settings":
 					{
@@ -13490,13 +14190,13 @@
 							"translate_tabs_to_spaces": true
 						},
 						"translation.x": 0.0,
-						"translation.y": 1864.0,
+						"translation.y": 487.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"
 				},
 				{
-					"buffer": 73,
+					"buffer": 77,
 					"file": "src/Cole/BackendBundle/Resources/views/Eventos/index.html.twig",
 					"settings":
 					{
@@ -13662,7 +14362,7 @@
 					"type": "text"
 				},
 				{
-					"buffer": 74,
+					"buffer": 78,
 					"file": "src/Cole/BackendBundle/Resources/views/Eventos/edit.html.twig",
 					"settings":
 					{
@@ -13828,7 +14528,7 @@
 					"type": "text"
 				},
 				{
-					"buffer": 75,
+					"buffer": 79,
 					"file": "src/Cole/BackendBundle/Resources/config/routing/festivos.yml",
 					"settings":
 					{
@@ -13994,7 +14694,7 @@
 					"type": "text"
 				},
 				{
-					"buffer": 76,
+					"buffer": 80,
 					"file": "src/Cole/BackendBundle/Controller/FestivosController.php",
 					"settings":
 					{
@@ -14005,8 +14705,8 @@
 						"selection":
 						[
 							[
-								0,
-								0
+								1899,
+								1899
 							]
 						],
 						"settings":
@@ -14154,13 +14854,13 @@
 							"translate_tabs_to_spaces": true
 						},
 						"translation.x": 0.0,
-						"translation.y": 2907.0,
+						"translation.y": 867.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"
 				},
 				{
-					"buffer": 77,
+					"buffer": 81,
 					"file": "src/Cole/BackendBundle/Entity/FestivosRepository.php",
 					"settings":
 					{
@@ -14171,8 +14871,8 @@
 						"selection":
 						[
 							[
-								0,
-								0
+								2651,
+								2651
 							]
 						],
 						"settings":
@@ -14319,13 +15019,13 @@
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 0.0,
+						"translation.y": 1310.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"
 				},
 				{
-					"buffer": 78,
+					"buffer": 82,
 					"file": "src/Cole/ColeBundle/Resources/views/Noticias/edit.html.twig",
 					"settings":
 					{
@@ -14491,7 +15191,7 @@
 					"type": "text"
 				},
 				{
-					"buffer": 79,
+					"buffer": 83,
 					"file": "src/Cole/BackendBundle/Resources/views/Reserva/reserva_instalaciones.html.twig",
 					"settings":
 					{
@@ -14657,7 +15357,7 @@
 					"type": "text"
 				},
 				{
-					"buffer": 80,
+					"buffer": 84,
 					"file": "src/Cole/ColeBundle/Resources/views/Noticias/index.html.twig",
 					"settings":
 					{
@@ -14817,13 +15517,13 @@
 							"translate_tabs_to_spaces": true
 						},
 						"translation.x": 0.0,
-						"translation.y": 0.0,
+						"translation.y": 1683.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"
 				},
 				{
-					"buffer": 81,
+					"buffer": 85,
 					"file": "src/Cole/ColeBundle/Resources/views/Noticias/index_profesores.html.twig",
 					"settings":
 					{
@@ -14989,7 +15689,7 @@
 					"type": "text"
 				},
 				{
-					"buffer": 82,
+					"buffer": 86,
 					"file": "src/Cole/BackendBundle/Controller/EventosController.php",
 					"settings":
 					{
@@ -15155,7 +15855,7 @@
 					"type": "text"
 				},
 				{
-					"buffer": 83,
+					"buffer": 87,
 					"file": "src/Cole/ColeBundle/Form/NoticiasType.php",
 					"settings":
 					{
@@ -15321,7 +16021,7 @@
 					"type": "text"
 				},
 				{
-					"buffer": 84,
+					"buffer": 88,
 					"file": "src/Cole/BackendBundle/Form/EventosType.php",
 					"settings":
 					{
@@ -15487,7 +16187,7 @@
 					"type": "text"
 				},
 				{
-					"buffer": 85,
+					"buffer": 89,
 					"file": "src/Cole/BackendBundle/Resources/config/routing/eventos.yml",
 					"settings":
 					{
@@ -15653,7 +16353,7 @@
 					"type": "text"
 				},
 				{
-					"buffer": 86,
+					"buffer": 90,
 					"file": "src/Cole/BackendBundle/Resources/views/Festivos/index.html.twig",
 					"settings":
 					{
@@ -15819,7 +16519,7 @@
 					"type": "text"
 				},
 				{
-					"buffer": 87,
+					"buffer": 91,
 					"file": "src/Cole/BackendBundle/Resources/views/Festivos/edit_curso.html.twig",
 					"settings":
 					{
@@ -15985,7 +16685,7 @@
 					"type": "text"
 				},
 				{
-					"buffer": 88,
+					"buffer": 92,
 					"file": "src/Cole/BackendBundle/Resources/views/Horario/show.html.twig",
 					"settings":
 					{
@@ -16151,7 +16851,7 @@
 					"type": "text"
 				},
 				{
-					"buffer": 89,
+					"buffer": 93,
 					"file": "src/Cole/BackendBundle/Resources/views/Horario/edit_horario_centro.html.twig",
 					"settings":
 					{
@@ -16317,7 +17017,7 @@
 					"type": "text"
 				},
 				{
-					"buffer": 90,
+					"buffer": 94,
 					"file": "src/Cole/BackendBundle/Controller/HorarioController.php",
 					"settings":
 					{
@@ -16328,8 +17028,8 @@
 						"selection":
 						[
 							[
-								4862,
-								4862
+								8281,
+								8281
 							]
 						],
 						"settings":
@@ -16477,25 +17177,25 @@
 							"translate_tabs_to_spaces": true
 						},
 						"translation.x": 0.0,
-						"translation.y": 4614.0,
+						"translation.y": 4818.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"
 				},
 				{
-					"buffer": 91,
+					"buffer": 95,
 					"file": "src/Cole/BackendBundle/Resources/views/Alumno/search_old.html.twig",
 					"settings":
 					{
-						"buffer_size": 13341,
+						"buffer_size": 13355,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								0,
-								0
+								8234,
+								8234
 							]
 						],
 						"settings":
@@ -16643,25 +17343,25 @@
 							"translate_tabs_to_spaces": true
 						},
 						"translation.x": 0.0,
-						"translation.y": 0.0,
+						"translation.y": 2984.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"
 				},
 				{
-					"buffer": 92,
+					"buffer": 96,
 					"file": "src/Cole/BackendBundle/Resources/views/Alumno/search.html.twig",
 					"settings":
 					{
-						"buffer_size": 13222,
+						"buffer_size": 13795,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								0,
-								0
+								12861,
+								12861
 							]
 						],
 						"settings":
@@ -16809,179 +17509,13 @@
 							"translate_tabs_to_spaces": true
 						},
 						"translation.x": 0.0,
-						"translation.y": 0.0,
+						"translation.y": 4821.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"
 				},
 				{
-					"buffer": 93,
-					"file": "src/Cole/BackendBundle/Entity/Imparte.php",
-					"settings":
-					{
-						"buffer_size": 0,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								0,
-								0
-							]
-						],
-						"settings":
-						{
-							"BracketHighlighterBusy": false,
-							"annotations":
-							[
-								"TODO",
-								"README",
-								"FIXME"
-							],
-							"bh_regions":
-							[
-								"bh_regex",
-								"bh_regex_center",
-								"bh_regex_open",
-								"bh_regex_close",
-								"bh_double_quote",
-								"bh_double_quote_center",
-								"bh_double_quote_open",
-								"bh_double_quote_close",
-								"bh_square",
-								"bh_square_center",
-								"bh_square_open",
-								"bh_square_close",
-								"bh_angle",
-								"bh_angle_center",
-								"bh_angle_open",
-								"bh_angle_close",
-								"bh_curly",
-								"bh_curly_center",
-								"bh_curly_open",
-								"bh_curly_close",
-								"bh_c_define",
-								"bh_c_define_center",
-								"bh_c_define_open",
-								"bh_c_define_close",
-								"bh_default",
-								"bh_default_center",
-								"bh_default_open",
-								"bh_default_close",
-								"bh_unmatched",
-								"bh_unmatched_center",
-								"bh_unmatched_open",
-								"bh_unmatched_close",
-								"bh_round",
-								"bh_round_center",
-								"bh_round_open",
-								"bh_round_close",
-								"bh_tag",
-								"bh_tag_center",
-								"bh_tag_open",
-								"bh_tag_close",
-								"bh_single_quote",
-								"bh_single_quote_center",
-								"bh_single_quote_open",
-								"bh_single_quote_close"
-							],
-							"csslint_options":
-							{
-								"adjoining-classes": "warning",
-								"box-model": true,
-								"box-sizing": "warning",
-								"compatible-vendor-prefixes": "warning",
-								"display-property-grouping": true,
-								"duplicate-background-images": "warning",
-								"duplicate-properties": true,
-								"empty-rules": true,
-								"errors": true,
-								"fallback-colors": "warning",
-								"floats": "warning",
-								"font-faces": "warning",
-								"font-sizes": "warning",
-								"gradients": "warning",
-								"ids": "warning",
-								"import": "warning",
-								"important": "warning",
-								"known-properties": true,
-								"outline-none": "warning",
-								"overqualified-elements": "warning",
-								"qualified-headings": "warning",
-								"regex-selectors": "warning",
-								"rules-count": "warning",
-								"shorthand": "warning",
-								"star-property-hack": "warning",
-								"text-indent": "warning",
-								"underscore-property-hack": "warning",
-								"unique-headings": "warning",
-								"universal-selector": "warning",
-								"vendor-prefix": true,
-								"zero-units": "warning"
-							},
-							"gjslint_ignore":
-							[
-								110
-							],
-							"gjslint_options":
-							[
-							],
-							"javascript_linter": "jshint",
-							"jshint_options":
-							{
-								"browser": true,
-								"devel": true,
-								"evil": true,
-								"regexdash": true,
-								"sub": true,
-								"trailing": true,
-								"wsh": true
-							},
-							"pep8": true,
-							"pep8_ignore":
-							[
-								"E501"
-							],
-							"perl_linter": "perlcritic",
-							"pyflakes_ignore":
-							[
-							],
-							"pyflakes_ignore_import_*": true,
-							"sublimelinter": "load-save",
-							"sublimelinter_delay": 2,
-							"sublimelinter_disable":
-							[
-							],
-							"sublimelinter_executable_map":
-							{
-							},
-							"sublimelinter_fill_outlines": false,
-							"sublimelinter_gutter_marks": true,
-							"sublimelinter_gutter_marks_theme": "simple",
-							"sublimelinter_mark_style": "none",
-							"sublimelinter_notes": false,
-							"sublimelinter_objj_check_ascii": false,
-							"sublimelinter_popup_errors_on_save": false,
-							"sublimelinter_syntax_map":
-							{
-								"C++": "c",
-								"Python Django": "python",
-								"Ruby on Rails": "ruby"
-							},
-							"sublimelinter_wrap_find": true,
-							"syntax": "Packages/PHP/PHP.tmLanguage",
-							"tab_size": 4,
-							"translate_tabs_to_spaces": true
-						},
-						"translation.x": 0.0,
-						"translation.y": 0.0,
-						"zoom_level": 1.0
-					},
-					"type": "text"
-				},
-				{
-					"buffer": 94,
+					"buffer": 97,
 					"file": "src/Cole/BackendBundle/Controller/ReservaController.php",
 					"settings":
 					{
@@ -17147,7 +17681,7 @@
 					"type": "text"
 				},
 				{
-					"buffer": 95,
+					"buffer": 98,
 					"file": "src/Cole/BackendBundle/Resources/views/Reserva/datos_profesor.html.twig",
 					"settings":
 					{
@@ -17311,7 +17845,7 @@
 					"type": "text"
 				},
 				{
-					"buffer": 96,
+					"buffer": 99,
 					"file": "src/Cole/BackendBundle/Resources/views/Eventos/new.html.twig",
 					"settings":
 					{
@@ -17477,7 +18011,7 @@
 					"type": "text"
 				},
 				{
-					"buffer": 97,
+					"buffer": 100,
 					"file": "src/Cole/BackendBundle/Resources/views/Profesor/edit.html.twig",
 					"settings":
 					{
@@ -17643,7 +18177,7 @@
 					"type": "text"
 				},
 				{
-					"buffer": 98,
+					"buffer": 101,
 					"file": "src/Cole/BackendBundle/Resources/views/Horario/horario_escolar.html.twig",
 					"settings":
 					{
@@ -17807,7 +18341,7 @@
 					"type": "text"
 				},
 				{
-					"buffer": 99,
+					"buffer": 102,
 					"file": "src/Cole/BackendBundle/Resources/views/Profesor/new.html.twig",
 					"settings":
 					{
@@ -17973,7 +18507,7 @@
 					"type": "text"
 				},
 				{
-					"buffer": 100,
+					"buffer": 103,
 					"file": "src/Cole/BackendBundle/Entity/MatriculaRepository.php",
 					"settings":
 					{
@@ -17984,8 +18518,8 @@
 						"selection":
 						[
 							[
-								1311,
-								1311
+								819,
+								819
 							]
 						],
 						"settings":
@@ -18132,13 +18666,13 @@
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 816.0,
+						"translation.y": 248.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"
 				},
 				{
-					"buffer": 101,
+					"buffer": 104,
 					"file": "src/Cole/BackendBundle/Controller/PadresController.php",
 					"settings":
 					{
@@ -18304,7 +18838,7 @@
 					"type": "text"
 				},
 				{
-					"buffer": 102,
+					"buffer": 105,
 					"file": "src/Cole/BackendBundle/Resources/views/Equipamiento/index2.html.twig",
 					"settings":
 					{
@@ -18464,13 +18998,179 @@
 							"translate_tabs_to_spaces": true
 						},
 						"translation.x": 0.0,
-						"translation.y": 2853.0,
+						"translation.y": 388.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"
 				},
 				{
-					"buffer": 103,
+					"buffer": 106,
+					"file": "src/Cole/BackendBundle/Resources/views/Grupo/tutor_grupo.html.twig",
+					"settings":
+					{
+						"buffer_size": 17039,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								14229,
+								14272
+							]
+						],
+						"settings":
+						{
+							"BracketHighlighterBusy": false,
+							"annotations":
+							[
+								"TODO",
+								"README",
+								"FIXME"
+							],
+							"bh_regions":
+							[
+								"bh_regex",
+								"bh_regex_center",
+								"bh_regex_open",
+								"bh_regex_close",
+								"bh_double_quote",
+								"bh_double_quote_center",
+								"bh_double_quote_open",
+								"bh_double_quote_close",
+								"bh_square",
+								"bh_square_center",
+								"bh_square_open",
+								"bh_square_close",
+								"bh_angle",
+								"bh_angle_center",
+								"bh_angle_open",
+								"bh_angle_close",
+								"bh_curly",
+								"bh_curly_center",
+								"bh_curly_open",
+								"bh_curly_close",
+								"bh_c_define",
+								"bh_c_define_center",
+								"bh_c_define_open",
+								"bh_c_define_close",
+								"bh_default",
+								"bh_default_center",
+								"bh_default_open",
+								"bh_default_close",
+								"bh_unmatched",
+								"bh_unmatched_center",
+								"bh_unmatched_open",
+								"bh_unmatched_close",
+								"bh_round",
+								"bh_round_center",
+								"bh_round_open",
+								"bh_round_close",
+								"bh_tag",
+								"bh_tag_center",
+								"bh_tag_open",
+								"bh_tag_close",
+								"bh_single_quote",
+								"bh_single_quote_center",
+								"bh_single_quote_open",
+								"bh_single_quote_close"
+							],
+							"csslint_options":
+							{
+								"adjoining-classes": "warning",
+								"box-model": true,
+								"box-sizing": "warning",
+								"compatible-vendor-prefixes": "warning",
+								"display-property-grouping": true,
+								"duplicate-background-images": "warning",
+								"duplicate-properties": true,
+								"empty-rules": true,
+								"errors": true,
+								"fallback-colors": "warning",
+								"floats": "warning",
+								"font-faces": "warning",
+								"font-sizes": "warning",
+								"gradients": "warning",
+								"ids": "warning",
+								"import": "warning",
+								"important": "warning",
+								"known-properties": true,
+								"outline-none": "warning",
+								"overqualified-elements": "warning",
+								"qualified-headings": "warning",
+								"regex-selectors": "warning",
+								"rules-count": "warning",
+								"shorthand": "warning",
+								"star-property-hack": "warning",
+								"text-indent": "warning",
+								"underscore-property-hack": "warning",
+								"unique-headings": "warning",
+								"universal-selector": "warning",
+								"vendor-prefix": true,
+								"zero-units": "warning"
+							},
+							"gjslint_ignore":
+							[
+								110
+							],
+							"gjslint_options":
+							[
+							],
+							"javascript_linter": "jshint",
+							"jshint_options":
+							{
+								"browser": true,
+								"devel": true,
+								"evil": true,
+								"regexdash": true,
+								"sub": true,
+								"trailing": true,
+								"wsh": true
+							},
+							"pep8": true,
+							"pep8_ignore":
+							[
+								"E501"
+							],
+							"perl_linter": "perlcritic",
+							"pyflakes_ignore":
+							[
+							],
+							"pyflakes_ignore_import_*": true,
+							"sublimelinter": "load-save",
+							"sublimelinter_delay": 2,
+							"sublimelinter_disable":
+							[
+							],
+							"sublimelinter_executable_map":
+							{
+							},
+							"sublimelinter_fill_outlines": false,
+							"sublimelinter_gutter_marks": true,
+							"sublimelinter_gutter_marks_theme": "simple",
+							"sublimelinter_mark_style": "none",
+							"sublimelinter_notes": false,
+							"sublimelinter_objj_check_ascii": false,
+							"sublimelinter_popup_errors_on_save": false,
+							"sublimelinter_syntax_map":
+							{
+								"C++": "c",
+								"Python Django": "python",
+								"Ruby on Rails": "ruby"
+							},
+							"sublimelinter_wrap_find": true,
+							"syntax": "Packages/Twig/Syntaxes/HTML (Twig).tmLanguage",
+							"tab_size": 4,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 5423.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 107,
 					"file": "src/Cole/BackendBundle/Resources/views/Equipamiento/new.html.twig",
 					"settings":
 					{
@@ -18636,683 +19336,19 @@
 					"type": "text"
 				},
 				{
-					"buffer": 104,
-					"file": "src/Cole/BackendBundle/Resources/views/Equipamiento/edit.html.twig",
-					"settings":
-					{
-						"buffer_size": 3350,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								990,
-								990
-							]
-						],
-						"settings":
-						{
-							"BracketHighlighterBusy": false,
-							"annotations":
-							[
-								"TODO",
-								"README",
-								"FIXME"
-							],
-							"bh_regions":
-							[
-								"bh_regex",
-								"bh_regex_center",
-								"bh_regex_open",
-								"bh_regex_close",
-								"bh_double_quote",
-								"bh_double_quote_center",
-								"bh_double_quote_open",
-								"bh_double_quote_close",
-								"bh_square",
-								"bh_square_center",
-								"bh_square_open",
-								"bh_square_close",
-								"bh_angle",
-								"bh_angle_center",
-								"bh_angle_open",
-								"bh_angle_close",
-								"bh_curly",
-								"bh_curly_center",
-								"bh_curly_open",
-								"bh_curly_close",
-								"bh_c_define",
-								"bh_c_define_center",
-								"bh_c_define_open",
-								"bh_c_define_close",
-								"bh_default",
-								"bh_default_center",
-								"bh_default_open",
-								"bh_default_close",
-								"bh_unmatched",
-								"bh_unmatched_center",
-								"bh_unmatched_open",
-								"bh_unmatched_close",
-								"bh_round",
-								"bh_round_center",
-								"bh_round_open",
-								"bh_round_close",
-								"bh_tag",
-								"bh_tag_center",
-								"bh_tag_open",
-								"bh_tag_close",
-								"bh_single_quote",
-								"bh_single_quote_center",
-								"bh_single_quote_open",
-								"bh_single_quote_close"
-							],
-							"csslint_options":
-							{
-								"adjoining-classes": "warning",
-								"box-model": true,
-								"box-sizing": "warning",
-								"compatible-vendor-prefixes": "warning",
-								"display-property-grouping": true,
-								"duplicate-background-images": "warning",
-								"duplicate-properties": true,
-								"empty-rules": true,
-								"errors": true,
-								"fallback-colors": "warning",
-								"floats": "warning",
-								"font-faces": "warning",
-								"font-sizes": "warning",
-								"gradients": "warning",
-								"ids": "warning",
-								"import": "warning",
-								"important": "warning",
-								"known-properties": true,
-								"outline-none": "warning",
-								"overqualified-elements": "warning",
-								"qualified-headings": "warning",
-								"regex-selectors": "warning",
-								"rules-count": "warning",
-								"shorthand": "warning",
-								"star-property-hack": "warning",
-								"text-indent": "warning",
-								"underscore-property-hack": "warning",
-								"unique-headings": "warning",
-								"universal-selector": "warning",
-								"vendor-prefix": true,
-								"zero-units": "warning"
-							},
-							"gjslint_ignore":
-							[
-								110
-							],
-							"gjslint_options":
-							[
-							],
-							"javascript_linter": "jshint",
-							"jshint_options":
-							{
-								"browser": true,
-								"devel": true,
-								"evil": true,
-								"regexdash": true,
-								"sub": true,
-								"trailing": true,
-								"wsh": true
-							},
-							"pep8": true,
-							"pep8_ignore":
-							[
-								"E501"
-							],
-							"perl_linter": "perlcritic",
-							"pyflakes_ignore":
-							[
-							],
-							"pyflakes_ignore_import_*": true,
-							"sublimelinter": "load-save",
-							"sublimelinter_delay": 2,
-							"sublimelinter_disable":
-							[
-							],
-							"sublimelinter_executable_map":
-							{
-							},
-							"sublimelinter_fill_outlines": false,
-							"sublimelinter_gutter_marks": true,
-							"sublimelinter_gutter_marks_theme": "simple",
-							"sublimelinter_mark_style": "none",
-							"sublimelinter_notes": false,
-							"sublimelinter_objj_check_ascii": false,
-							"sublimelinter_popup_errors_on_save": false,
-							"sublimelinter_syntax_map":
-							{
-								"C++": "c",
-								"Python Django": "python",
-								"Ruby on Rails": "ruby"
-							},
-							"sublimelinter_wrap_find": true,
-							"syntax": "Packages/Twig/Syntaxes/HTML (Twig).tmLanguage",
-							"tab_size": 4,
-							"translate_tabs_to_spaces": true
-						},
-						"translation.x": 0.0,
-						"translation.y": 357.0,
-						"zoom_level": 1.0
-					},
-					"type": "text"
-				},
-				{
-					"buffer": 105,
-					"file": "src/Cole/BackendBundle/Resources/config/routing/equipamiento.yml",
-					"settings":
-					{
-						"buffer_size": 1324,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								1140,
-								1140
-							]
-						],
-						"settings":
-						{
-							"BracketHighlighterBusy": false,
-							"annotations":
-							[
-								"TODO",
-								"README",
-								"FIXME"
-							],
-							"bh_regions":
-							[
-								"bh_regex",
-								"bh_regex_center",
-								"bh_regex_open",
-								"bh_regex_close",
-								"bh_double_quote",
-								"bh_double_quote_center",
-								"bh_double_quote_open",
-								"bh_double_quote_close",
-								"bh_square",
-								"bh_square_center",
-								"bh_square_open",
-								"bh_square_close",
-								"bh_angle",
-								"bh_angle_center",
-								"bh_angle_open",
-								"bh_angle_close",
-								"bh_curly",
-								"bh_curly_center",
-								"bh_curly_open",
-								"bh_curly_close",
-								"bh_c_define",
-								"bh_c_define_center",
-								"bh_c_define_open",
-								"bh_c_define_close",
-								"bh_default",
-								"bh_default_center",
-								"bh_default_open",
-								"bh_default_close",
-								"bh_unmatched",
-								"bh_unmatched_center",
-								"bh_unmatched_open",
-								"bh_unmatched_close",
-								"bh_round",
-								"bh_round_center",
-								"bh_round_open",
-								"bh_round_close",
-								"bh_tag",
-								"bh_tag_center",
-								"bh_tag_open",
-								"bh_tag_close",
-								"bh_single_quote",
-								"bh_single_quote_center",
-								"bh_single_quote_open",
-								"bh_single_quote_close"
-							],
-							"csslint_options":
-							{
-								"adjoining-classes": "warning",
-								"box-model": true,
-								"box-sizing": "warning",
-								"compatible-vendor-prefixes": "warning",
-								"display-property-grouping": true,
-								"duplicate-background-images": "warning",
-								"duplicate-properties": true,
-								"empty-rules": true,
-								"errors": true,
-								"fallback-colors": "warning",
-								"floats": "warning",
-								"font-faces": "warning",
-								"font-sizes": "warning",
-								"gradients": "warning",
-								"ids": "warning",
-								"import": "warning",
-								"important": "warning",
-								"known-properties": true,
-								"outline-none": "warning",
-								"overqualified-elements": "warning",
-								"qualified-headings": "warning",
-								"regex-selectors": "warning",
-								"rules-count": "warning",
-								"shorthand": "warning",
-								"star-property-hack": "warning",
-								"text-indent": "warning",
-								"underscore-property-hack": "warning",
-								"unique-headings": "warning",
-								"universal-selector": "warning",
-								"vendor-prefix": true,
-								"zero-units": "warning"
-							},
-							"gjslint_ignore":
-							[
-								110
-							],
-							"gjslint_options":
-							[
-							],
-							"javascript_linter": "jshint",
-							"jshint_options":
-							{
-								"browser": true,
-								"devel": true,
-								"evil": true,
-								"regexdash": true,
-								"sub": true,
-								"trailing": true,
-								"wsh": true
-							},
-							"pep8": true,
-							"pep8_ignore":
-							[
-								"E501"
-							],
-							"perl_linter": "perlcritic",
-							"pyflakes_ignore":
-							[
-							],
-							"pyflakes_ignore_import_*": true,
-							"sublimelinter": "load-save",
-							"sublimelinter_delay": 2,
-							"sublimelinter_disable":
-							[
-							],
-							"sublimelinter_executable_map":
-							{
-							},
-							"sublimelinter_fill_outlines": false,
-							"sublimelinter_gutter_marks": true,
-							"sublimelinter_gutter_marks_theme": "simple",
-							"sublimelinter_mark_style": "none",
-							"sublimelinter_notes": false,
-							"sublimelinter_objj_check_ascii": false,
-							"sublimelinter_popup_errors_on_save": false,
-							"sublimelinter_syntax_map":
-							{
-								"C++": "c",
-								"Python Django": "python",
-								"Ruby on Rails": "ruby"
-							},
-							"sublimelinter_wrap_find": true,
-							"syntax": "Packages/YAML/YAML.tmLanguage",
-							"tab_size": 4,
-							"translate_tabs_to_spaces": true
-						},
-						"translation.x": 0.0,
-						"translation.y": 561.0,
-						"zoom_level": 1.0
-					},
-					"type": "text"
-				},
-				{
-					"buffer": 106,
-					"file": "src/Cole/BackendBundle/Controller/EquipamientoController.php",
-					"settings":
-					{
-						"buffer_size": 7785,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								7638,
-								7638
-							]
-						],
-						"settings":
-						{
-							"BracketHighlighterBusy": false,
-							"annotations":
-							[
-								"TODO",
-								"README",
-								"FIXME"
-							],
-							"bh_regions":
-							[
-								"bh_regex",
-								"bh_regex_center",
-								"bh_regex_open",
-								"bh_regex_close",
-								"bh_double_quote",
-								"bh_double_quote_center",
-								"bh_double_quote_open",
-								"bh_double_quote_close",
-								"bh_square",
-								"bh_square_center",
-								"bh_square_open",
-								"bh_square_close",
-								"bh_angle",
-								"bh_angle_center",
-								"bh_angle_open",
-								"bh_angle_close",
-								"bh_curly",
-								"bh_curly_center",
-								"bh_curly_open",
-								"bh_curly_close",
-								"bh_c_define",
-								"bh_c_define_center",
-								"bh_c_define_open",
-								"bh_c_define_close",
-								"bh_default",
-								"bh_default_center",
-								"bh_default_open",
-								"bh_default_close",
-								"bh_unmatched",
-								"bh_unmatched_center",
-								"bh_unmatched_open",
-								"bh_unmatched_close",
-								"bh_round",
-								"bh_round_center",
-								"bh_round_open",
-								"bh_round_close",
-								"bh_tag",
-								"bh_tag_center",
-								"bh_tag_open",
-								"bh_tag_close",
-								"bh_single_quote",
-								"bh_single_quote_center",
-								"bh_single_quote_open",
-								"bh_single_quote_close"
-							],
-							"csslint_options":
-							{
-								"adjoining-classes": "warning",
-								"box-model": true,
-								"box-sizing": "warning",
-								"compatible-vendor-prefixes": "warning",
-								"display-property-grouping": true,
-								"duplicate-background-images": "warning",
-								"duplicate-properties": true,
-								"empty-rules": true,
-								"errors": true,
-								"fallback-colors": "warning",
-								"floats": "warning",
-								"font-faces": "warning",
-								"font-sizes": "warning",
-								"gradients": "warning",
-								"ids": "warning",
-								"import": "warning",
-								"important": "warning",
-								"known-properties": true,
-								"outline-none": "warning",
-								"overqualified-elements": "warning",
-								"qualified-headings": "warning",
-								"regex-selectors": "warning",
-								"rules-count": "warning",
-								"shorthand": "warning",
-								"star-property-hack": "warning",
-								"text-indent": "warning",
-								"underscore-property-hack": "warning",
-								"unique-headings": "warning",
-								"universal-selector": "warning",
-								"vendor-prefix": true,
-								"zero-units": "warning"
-							},
-							"gjslint_ignore":
-							[
-								110
-							],
-							"gjslint_options":
-							[
-							],
-							"javascript_linter": "jshint",
-							"jshint_options":
-							{
-								"browser": true,
-								"devel": true,
-								"evil": true,
-								"regexdash": true,
-								"sub": true,
-								"trailing": true,
-								"wsh": true
-							},
-							"pep8": true,
-							"pep8_ignore":
-							[
-								"E501"
-							],
-							"perl_linter": "perlcritic",
-							"pyflakes_ignore":
-							[
-							],
-							"pyflakes_ignore_import_*": true,
-							"sublimelinter": "load-save",
-							"sublimelinter_delay": 2,
-							"sublimelinter_disable":
-							[
-							],
-							"sublimelinter_executable_map":
-							{
-							},
-							"sublimelinter_fill_outlines": false,
-							"sublimelinter_gutter_marks": true,
-							"sublimelinter_gutter_marks_theme": "simple",
-							"sublimelinter_mark_style": "none",
-							"sublimelinter_notes": false,
-							"sublimelinter_objj_check_ascii": false,
-							"sublimelinter_popup_errors_on_save": false,
-							"sublimelinter_syntax_map":
-							{
-								"C++": "c",
-								"Python Django": "python",
-								"Ruby on Rails": "ruby"
-							},
-							"sublimelinter_wrap_find": true,
-							"syntax": "Packages/PHP/PHP.tmLanguage",
-							"tab_size": 4,
-							"translate_tabs_to_spaces": true
-						},
-						"translation.x": 0.0,
-						"translation.y": 4300.0,
-						"zoom_level": 1.0
-					},
-					"type": "text"
-				},
-				{
-					"buffer": 107,
-					"file": "src/Cole/BackendBundle/Resources/views/Equipamiento/listar_aulas.html.twig",
-					"settings":
-					{
-						"buffer_size": 765,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								388,
-								388
-							]
-						],
-						"settings":
-						{
-							"BracketHighlighterBusy": false,
-							"annotations":
-							[
-								"TODO",
-								"README",
-								"FIXME"
-							],
-							"bh_regions":
-							[
-								"bh_regex",
-								"bh_regex_center",
-								"bh_regex_open",
-								"bh_regex_close",
-								"bh_double_quote",
-								"bh_double_quote_center",
-								"bh_double_quote_open",
-								"bh_double_quote_close",
-								"bh_square",
-								"bh_square_center",
-								"bh_square_open",
-								"bh_square_close",
-								"bh_angle",
-								"bh_angle_center",
-								"bh_angle_open",
-								"bh_angle_close",
-								"bh_curly",
-								"bh_curly_center",
-								"bh_curly_open",
-								"bh_curly_close",
-								"bh_c_define",
-								"bh_c_define_center",
-								"bh_c_define_open",
-								"bh_c_define_close",
-								"bh_default",
-								"bh_default_center",
-								"bh_default_open",
-								"bh_default_close",
-								"bh_unmatched",
-								"bh_unmatched_center",
-								"bh_unmatched_open",
-								"bh_unmatched_close",
-								"bh_round",
-								"bh_round_center",
-								"bh_round_open",
-								"bh_round_close",
-								"bh_tag",
-								"bh_tag_center",
-								"bh_tag_open",
-								"bh_tag_close",
-								"bh_single_quote",
-								"bh_single_quote_center",
-								"bh_single_quote_open",
-								"bh_single_quote_close"
-							],
-							"csslint_options":
-							{
-								"adjoining-classes": "warning",
-								"box-model": true,
-								"box-sizing": "warning",
-								"compatible-vendor-prefixes": "warning",
-								"display-property-grouping": true,
-								"duplicate-background-images": "warning",
-								"duplicate-properties": true,
-								"empty-rules": true,
-								"errors": true,
-								"fallback-colors": "warning",
-								"floats": "warning",
-								"font-faces": "warning",
-								"font-sizes": "warning",
-								"gradients": "warning",
-								"ids": "warning",
-								"import": "warning",
-								"important": "warning",
-								"known-properties": true,
-								"outline-none": "warning",
-								"overqualified-elements": "warning",
-								"qualified-headings": "warning",
-								"regex-selectors": "warning",
-								"rules-count": "warning",
-								"shorthand": "warning",
-								"star-property-hack": "warning",
-								"text-indent": "warning",
-								"underscore-property-hack": "warning",
-								"unique-headings": "warning",
-								"universal-selector": "warning",
-								"vendor-prefix": true,
-								"zero-units": "warning"
-							},
-							"gjslint_ignore":
-							[
-								110
-							],
-							"gjslint_options":
-							[
-							],
-							"javascript_linter": "jshint",
-							"jshint_options":
-							{
-								"browser": true,
-								"devel": true,
-								"evil": true,
-								"regexdash": true,
-								"sub": true,
-								"trailing": true,
-								"wsh": true
-							},
-							"pep8": true,
-							"pep8_ignore":
-							[
-								"E501"
-							],
-							"perl_linter": "perlcritic",
-							"pyflakes_ignore":
-							[
-							],
-							"pyflakes_ignore_import_*": true,
-							"sublimelinter": "load-save",
-							"sublimelinter_delay": 2,
-							"sublimelinter_disable":
-							[
-							],
-							"sublimelinter_executable_map":
-							{
-							},
-							"sublimelinter_fill_outlines": false,
-							"sublimelinter_gutter_marks": true,
-							"sublimelinter_gutter_marks_theme": "simple",
-							"sublimelinter_mark_style": "none",
-							"sublimelinter_notes": false,
-							"sublimelinter_objj_check_ascii": false,
-							"sublimelinter_popup_errors_on_save": false,
-							"sublimelinter_syntax_map":
-							{
-								"C++": "c",
-								"Python Django": "python",
-								"Ruby on Rails": "ruby"
-							},
-							"sublimelinter_wrap_find": true,
-							"syntax": "Packages/Twig/Syntaxes/HTML (Twig).tmLanguage",
-							"tab_size": 4,
-							"translate_tabs_to_spaces": true
-						},
-						"translation.x": 0.0,
-						"translation.y": 153.0,
-						"zoom_level": 1.0
-					},
-					"type": "text"
-				},
-				{
 					"buffer": 108,
-					"file": "src/Cole/BackendBundle/Entity/Grupo.php",
+					"file": "src/Cole/BackendBundle/Controller/CursoController.php",
 					"settings":
 					{
-						"buffer_size": 5565,
+						"buffer_size": 14645,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								610,
-								610
+								12541,
+								12541
 							]
 						],
 						"settings":
@@ -19460,7 +19496,339 @@
 							"translate_tabs_to_spaces": true
 						},
 						"translation.x": 0.0,
-						"translation.y": 642.0,
+						"translation.y": 6726.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 109,
+					"file": "src/Cole/BackendBundle/Resources/views/Curso/show.html.twig",
+					"settings":
+					{
+						"buffer_size": 11653,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								6443,
+								6443
+							]
+						],
+						"settings":
+						{
+							"BracketHighlighterBusy": false,
+							"annotations":
+							[
+								"TODO",
+								"README",
+								"FIXME"
+							],
+							"bh_regions":
+							[
+								"bh_regex",
+								"bh_regex_center",
+								"bh_regex_open",
+								"bh_regex_close",
+								"bh_double_quote",
+								"bh_double_quote_center",
+								"bh_double_quote_open",
+								"bh_double_quote_close",
+								"bh_square",
+								"bh_square_center",
+								"bh_square_open",
+								"bh_square_close",
+								"bh_angle",
+								"bh_angle_center",
+								"bh_angle_open",
+								"bh_angle_close",
+								"bh_curly",
+								"bh_curly_center",
+								"bh_curly_open",
+								"bh_curly_close",
+								"bh_c_define",
+								"bh_c_define_center",
+								"bh_c_define_open",
+								"bh_c_define_close",
+								"bh_default",
+								"bh_default_center",
+								"bh_default_open",
+								"bh_default_close",
+								"bh_unmatched",
+								"bh_unmatched_center",
+								"bh_unmatched_open",
+								"bh_unmatched_close",
+								"bh_round",
+								"bh_round_center",
+								"bh_round_open",
+								"bh_round_close",
+								"bh_tag",
+								"bh_tag_center",
+								"bh_tag_open",
+								"bh_tag_close",
+								"bh_single_quote",
+								"bh_single_quote_center",
+								"bh_single_quote_open",
+								"bh_single_quote_close"
+							],
+							"csslint_options":
+							{
+								"adjoining-classes": "warning",
+								"box-model": true,
+								"box-sizing": "warning",
+								"compatible-vendor-prefixes": "warning",
+								"display-property-grouping": true,
+								"duplicate-background-images": "warning",
+								"duplicate-properties": true,
+								"empty-rules": true,
+								"errors": true,
+								"fallback-colors": "warning",
+								"floats": "warning",
+								"font-faces": "warning",
+								"font-sizes": "warning",
+								"gradients": "warning",
+								"ids": "warning",
+								"import": "warning",
+								"important": "warning",
+								"known-properties": true,
+								"outline-none": "warning",
+								"overqualified-elements": "warning",
+								"qualified-headings": "warning",
+								"regex-selectors": "warning",
+								"rules-count": "warning",
+								"shorthand": "warning",
+								"star-property-hack": "warning",
+								"text-indent": "warning",
+								"underscore-property-hack": "warning",
+								"unique-headings": "warning",
+								"universal-selector": "warning",
+								"vendor-prefix": true,
+								"zero-units": "warning"
+							},
+							"gjslint_ignore":
+							[
+								110
+							],
+							"gjslint_options":
+							[
+							],
+							"javascript_linter": "jshint",
+							"jshint_options":
+							{
+								"browser": true,
+								"devel": true,
+								"evil": true,
+								"regexdash": true,
+								"sub": true,
+								"trailing": true,
+								"wsh": true
+							},
+							"pep8": true,
+							"pep8_ignore":
+							[
+								"E501"
+							],
+							"perl_linter": "perlcritic",
+							"pyflakes_ignore":
+							[
+							],
+							"pyflakes_ignore_import_*": true,
+							"sublimelinter": "load-save",
+							"sublimelinter_delay": 2,
+							"sublimelinter_disable":
+							[
+							],
+							"sublimelinter_executable_map":
+							{
+							},
+							"sublimelinter_fill_outlines": false,
+							"sublimelinter_gutter_marks": true,
+							"sublimelinter_gutter_marks_theme": "simple",
+							"sublimelinter_mark_style": "none",
+							"sublimelinter_notes": false,
+							"sublimelinter_objj_check_ascii": false,
+							"sublimelinter_popup_errors_on_save": false,
+							"sublimelinter_syntax_map":
+							{
+								"C++": "c",
+								"Python Django": "python",
+								"Ruby on Rails": "ruby"
+							},
+							"sublimelinter_wrap_find": true,
+							"syntax": "Packages/Twig/Syntaxes/HTML (Twig).tmLanguage",
+							"tab_size": 4,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 316.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 110,
+					"file": "src/Cole/BackendBundle/Resources/views/Curso/ratio.html.twig",
+					"settings":
+					{
+						"buffer_size": 12047,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								9734,
+								9734
+							]
+						],
+						"settings":
+						{
+							"BracketHighlighterBusy": false,
+							"annotations":
+							[
+								"TODO",
+								"README",
+								"FIXME"
+							],
+							"bh_regions":
+							[
+								"bh_regex",
+								"bh_regex_center",
+								"bh_regex_open",
+								"bh_regex_close",
+								"bh_double_quote",
+								"bh_double_quote_center",
+								"bh_double_quote_open",
+								"bh_double_quote_close",
+								"bh_square",
+								"bh_square_center",
+								"bh_square_open",
+								"bh_square_close",
+								"bh_angle",
+								"bh_angle_center",
+								"bh_angle_open",
+								"bh_angle_close",
+								"bh_curly",
+								"bh_curly_center",
+								"bh_curly_open",
+								"bh_curly_close",
+								"bh_c_define",
+								"bh_c_define_center",
+								"bh_c_define_open",
+								"bh_c_define_close",
+								"bh_default",
+								"bh_default_center",
+								"bh_default_open",
+								"bh_default_close",
+								"bh_unmatched",
+								"bh_unmatched_center",
+								"bh_unmatched_open",
+								"bh_unmatched_close",
+								"bh_round",
+								"bh_round_center",
+								"bh_round_open",
+								"bh_round_close",
+								"bh_tag",
+								"bh_tag_center",
+								"bh_tag_open",
+								"bh_tag_close",
+								"bh_single_quote",
+								"bh_single_quote_center",
+								"bh_single_quote_open",
+								"bh_single_quote_close"
+							],
+							"csslint_options":
+							{
+								"adjoining-classes": "warning",
+								"box-model": true,
+								"box-sizing": "warning",
+								"compatible-vendor-prefixes": "warning",
+								"display-property-grouping": true,
+								"duplicate-background-images": "warning",
+								"duplicate-properties": true,
+								"empty-rules": true,
+								"errors": true,
+								"fallback-colors": "warning",
+								"floats": "warning",
+								"font-faces": "warning",
+								"font-sizes": "warning",
+								"gradients": "warning",
+								"ids": "warning",
+								"import": "warning",
+								"important": "warning",
+								"known-properties": true,
+								"outline-none": "warning",
+								"overqualified-elements": "warning",
+								"qualified-headings": "warning",
+								"regex-selectors": "warning",
+								"rules-count": "warning",
+								"shorthand": "warning",
+								"star-property-hack": "warning",
+								"text-indent": "warning",
+								"underscore-property-hack": "warning",
+								"unique-headings": "warning",
+								"universal-selector": "warning",
+								"vendor-prefix": true,
+								"zero-units": "warning"
+							},
+							"gjslint_ignore":
+							[
+								110
+							],
+							"gjslint_options":
+							[
+							],
+							"javascript_linter": "jshint",
+							"jshint_options":
+							{
+								"browser": true,
+								"devel": true,
+								"evil": true,
+								"regexdash": true,
+								"sub": true,
+								"trailing": true,
+								"wsh": true
+							},
+							"pep8": true,
+							"pep8_ignore":
+							[
+								"E501"
+							],
+							"perl_linter": "perlcritic",
+							"pyflakes_ignore":
+							[
+							],
+							"pyflakes_ignore_import_*": true,
+							"sublimelinter": "load-save",
+							"sublimelinter_delay": 2,
+							"sublimelinter_disable":
+							[
+							],
+							"sublimelinter_executable_map":
+							{
+							},
+							"sublimelinter_fill_outlines": false,
+							"sublimelinter_gutter_marks": true,
+							"sublimelinter_gutter_marks_theme": "simple",
+							"sublimelinter_mark_style": "none",
+							"sublimelinter_notes": false,
+							"sublimelinter_objj_check_ascii": false,
+							"sublimelinter_popup_errors_on_save": false,
+							"sublimelinter_syntax_map":
+							{
+								"C++": "c",
+								"Python Django": "python",
+								"Ruby on Rails": "ruby"
+							},
+							"sublimelinter_wrap_find": true,
+							"syntax": "Packages/Twig/Syntaxes/HTML (Twig).tmLanguage",
+							"tab_size": 4,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 3621.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"
@@ -19507,8 +19875,8 @@
 		"rows":
 		[
 			0.0,
-			0.459896063326,
-			0.584896063326,
+			0.366812227074,
+			0.486171761281,
 			1.0
 		]
 	},
@@ -19538,6 +19906,6 @@
 	"show_open_files": false,
 	"show_tabs": true,
 	"side_bar_visible": true,
-	"side_bar_width": 50.0,
+	"side_bar_width": 72.0,
 	"status_bar_visible": true
 }

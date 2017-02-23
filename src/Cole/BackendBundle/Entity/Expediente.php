@@ -133,29 +133,6 @@ class Expediente
     }
 
     /**
-     * Set añoAcademico
-     *
-     * @param string $añoAcademico
-     * @return Expediente
-     */
-    public function setAñoAcademico($añoAcademico)
-    {
-        $this->añoAcademico = $añoAcademico;
-
-        return $this;
-    }
-
-    /**
-     * Get añoAcademico
-     *
-     * @return string 
-     */
-    public function getAñoAcademico()
-    {
-        return $this->añoAcademico;
-    }
-
-    /**
      * Set notas
      *
      * @param string $notas

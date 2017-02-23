@@ -171,10 +171,10 @@
                                     {% for entity in entities_active %}
                                         <tr id="{{entity.alumno.id}}">
                                             <td class="w15 left">{{ entity.alumno.apellido1 ~ " " ~ entity.alumno.apellido2 ~ ", " ~ entity.alumno.nombre}}</td>
-                                            <td class="w11">{{ entity.alumno.curso}}</td>
+                                            <td class="w11">{{entity.curso ~ " " ~ entity.nivel}}</td>
                                             {#<td data-order="{{ entity.fecha|date('m/d/Y') }}">{{ "2014/2015" }}</td>#}
 
-                                            <td class="w11">{{ entity.alumno.anyoAcademico}}</td>
+                                            <td class="w11">{{ entity.anyoAcademico}}</td>
                                             {% if entity.promociona %}
                                             <td >Promociona</td>
                                             {% else %}
@@ -237,9 +237,9 @@
                                         <tr id="{{entity.alumno.id}}">
                                             <td class="w15 left">{{ entity.alumno.apellido1 ~ " " ~ entity.alumno.apellido2 ~ ", " ~ entity.alumno.nombre}}</td>
                                             <td class="w11">{{ entity.alumno.cursoIngreso}}</td>
-                                            <td class="w11">{{ entity.alumno.curso}}</td>
+                                            <td class="w11">{{  entity.curso ~ " " ~ entity.nivel}}</td>
                                             {#<td data-order="{{ entity.fecha|date('m/d/Y') }}">{{ "2014/2015" }}</td>#}
-                                            <td>{{ entity.alumno.anyoAcademico}}</td>
+                                            <td>{{ entity.anyoAcademico}}</td>
                                         </tr>
                                     {% endfor %}
                                 {% endif %}

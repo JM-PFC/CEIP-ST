@@ -470,7 +470,7 @@ class AlumnoController extends Controller
         $em = $this->getDoctrine()->getManager();
         
         $curso=$em->getRepository('BackendBundle:Curso')->findUltimoCurso();
-        $entities = $em->getRepository('BackendBundle:Alumno')->findByActivo(0);
+        $entities = $em->getRepository('BackendBundle:Expediente')->findNoActivos($curso->getCurso(),$curso->getNivel()); 
         //Se obtiene los alumnos activos que están promocionados en el curso anterior y aparecen en el expediente.
         $entities_active = $em->getRepository('BackendBundle:Alumno')->findByActivo(1);
         
@@ -772,10 +772,13 @@ class AlumnoController extends Controller
         }
 
         // Se comprueba si el alumno está promocionado en el expediente para asignar el nuevo curso a matricular.
-        // Si tiene registro en el año académico anterior, se le asigna el curso automáticamente,sino debe elegir uno de lalista.
-        $expediente=$em->getRepository('BackendBundle:Expediente')->findPorAño($entity,$curso_anterior);
+        // Si tiene registro en el año académico anterior, se le asigna el curso automáticamente,sino debe elegir uno de la lista.
+        $expediente = $em->getRepository('BackendBundle:Expediente')->findOneBy(
+            array('alumno'=>$entity->getId()),
+            array('id' => 'DESC')
+        );
         $nuevo_curso=null;
-        if($expediente){
+        if($expediente && $expediente->getAnyoAcademico()==$curso_anterior){
             $ultimo_curso=$em->getRepository('BackendBundle:Curso')->findCursoByNivel($expediente->getCurso(),$expediente->getNivel());
             $Orden=$ultimo_curso->getNumOrden();
             // Si promociona se obtiene el siguiente curso a matricular. Si repite se obtiene el mismo curso.
@@ -817,11 +820,17 @@ class AlumnoController extends Controller
 
         $c = $this->get('request')->request->get('curso');
         $curso = $em->getRepository('BackendBundle:Curso')->find($c);
+
         //Se valida que no se matricule en un curso anterior.
-        $antiguo_curso=$entity->getCurso();
+        $ultimo_expediente = $em->getRepository('BackendBundle:Expediente')->findOneBy(
+            array('alumno'=>$entity->getId()),
+            array('id' => 'DESC')
+        );
+        $antiguo_curso= $em->getRepository('BackendBundle:Curso')->findCursoByNivel($ultimo_expediente->getCurso(), $ultimo_expediente->getNivel());
  
         if($antiguo_curso->getNumOrden()>$curso->getNumOrden()){
                 return new JsonResponse(array(
+                    'nombre'=>$entity->getNombre()." ".$entity->getApellido1()." ".$entity->getApellido2(),
                     'validate' =>"curso_incorrecto",
                     'success' => true), 200);
         }

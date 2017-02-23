@@ -226,19 +226,23 @@
                                 <thead class="fixedHeader">
                                     <tr>
                                         <th class="w30 left">Apellidos, Nombre</th>
-                                        <th class="w11">Curso</th>
-                                        <th class="w11">Grupo</th>
+                                        <th class="w15">Curso</th>
+                                        <th class="w5">Grupo</th>
                                     </tr>
                                 </thead>
                                 <tbody class="scrollContent">
                                     {% for entity in entities_active %}
                                         <tr id="{{ entity.id }}">
                                             <td class="w30 left">{{ entity.apellido1 ~ " " ~ entity.apellido2 ~ ", " ~ entity.nombre}}</td>
-                                            <td class="w11">{{ entity.curso}}</td>
-                                            {% if entity.grupo != null %}
-                                                <td class="w11">{{ entity.grupo.letra}}</td>
+                                            {% if entity.curso != null %}
+                                                <td class="w15">{{ entity.curso}}</td>
                                             {% else %}
-                                                <td class="w11">-</td>
+                                                <td class="w15 color_verde">(Matrícula Pendiente)</td>
+                                            {% endif %}
+                                            {% if entity.grupo != null %}
+                                                <td class="w5">{{ entity.grupo.letra}}</td>
+                                            {% else %}
+                                                <td class="w5">-</td>
                                             {% endif %}
                                         </tr>
                                     {% endfor %}
@@ -278,9 +282,10 @@
                                 <tbody class="scrollContent">
                                 {% if entities %}
                                     {% for entity in entities %}
-                                        <tr id="{{ entity.id }}">
-                                            <td class="w25 left">{{ entity.apellido1 ~ " " ~ entity.apellido2 ~ ", " ~ entity.nombre}}</td>
-                                            <td class="w11">{{ entity.curso}}</td>
+                                        <tr id="{{ entity.alumno.id }}">
+                                            <td class="w25 left">{{ entity.alumno.apellido1 ~ " " ~ entity.alumno.apellido2 ~ ", " ~ entity.alumno.nombre}}</td>
+                                            {#Se le añade doble se paración entre medio del curso para que funcione la búsqueda correctamente en lugar de reemplazar " de" en valor del select como otra veces (línea 1531 general.js)#}
+                                            <td class="w11">{{ entity.curso ~ "  " ~ entity.nivel }}</td>
                                             <td class="w11">{{ entity.anyoAcademico}}</td>
                                         </tr>
                                     {% endfor %}

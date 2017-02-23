@@ -307,8 +307,6 @@ class AsignaturaController extends Controller
         }
         if($nuevas){
           foreach ($nuevas as $key => $value ) {
-            //echo $key;
-            //echo $value ;
             $asignatura=$em->getRepository('BackendBundle:Asignatura')->findOneById($key);
             $curso=$em->getRepository('BackendBundle:Curso')->findOneById($idcurso);
 
@@ -338,9 +336,6 @@ class AsignaturaController extends Controller
             $query->execute();
           }  
         }
-
-
-
         return new JsonResponse(array('data' => $data,'success' => true), 200);
     }
 

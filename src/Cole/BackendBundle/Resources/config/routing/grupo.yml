@@ -60,3 +60,15 @@ asignar_grupo_update:
     defaults: { _controller: "BackendBundle:Grupo:AsignarGrupoUpdate" }
     options:
         expose: true
+
+tutor_grupo:
+    path:     /tutor_grupo
+    defaults: { _controller: "BackendBundle:Grupo:TutorGrupo" }
+    options:
+        expose: true
+
+asignar_tutor_grupo:
+    path:     /asignar_tutor_grupo
+    defaults: { _controller: "BackendBundle:Grupo:AsignarTutorGrupo" }
+    options:
+        expose: true

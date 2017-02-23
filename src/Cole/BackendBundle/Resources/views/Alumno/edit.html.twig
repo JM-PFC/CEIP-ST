@@ -65,7 +65,20 @@
     <div>
       <div id="content-form">
         <fieldset class="ajustada">
-        <legend>Ficha del alumno: {{entity.nombre}} {{entity.apellido1}} {{entity.apellido2}}</legend>
+        {% set texto = "Ficha "%}
+        
+        {% if entity.sexo == "Masculino" %}
+          {% set texto = texto ~ "del alumno: "%}
+        {% else %}
+          {% set texto = texto ~ "de la alumna: "%}
+        {% endif %}
+
+        {% if entity.activo %}
+          <legend>{{texto}} {{entity.nombre}} {{entity.apellido1}} {{entity.apellido2}} - <strong class="color_verde">Activo </strong></legend>
+        {% else %}
+          <legend>{{texto}} {{entity.nombre}} {{entity.apellido1}} {{entity.apellido2}} - <strong class="color_rojo">Inactivo </strong></legend>
+        {% endif %}
+        
         <div class="columna_foto">
             {{ form_errors(edit_form.foto) }}
             <div id="actual">
