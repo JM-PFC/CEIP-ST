@@ -612,6 +612,12 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 
         // Se obtiene la fecha inicial del curso para comprobar que está registrada. 
         $ini_curso=$em->getRepository('BackendBundle:Centro')->findInicioCurso();
+        $array_ini=explode("-",$ini_curso["inicioCurso"]->format('Y-m-d')); 
+
+        //Se comprueba que la fecha inicial no está registrada.
+        if($array_ini[1]=="0001"){
+            $ini_curso=null;
+        }
 
         // Se obtiene la fecha inicial de las vacaciones para comprobar que están registrada. 
         $ini_nav=$em->getRepository('BackendBundle:Festivos')->findFestivosPorDescripcion("Inicio Vacaciones de Navidad");

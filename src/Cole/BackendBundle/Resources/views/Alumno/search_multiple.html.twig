@@ -107,16 +107,16 @@
 {% endblock %}
 
 {% block body -%}
-    <div id="multiples_alumnos">
+    <div id="multiples_alumnos" class="busqueda_general">
         <div class="parent_no_form">
         <div class="child">
-            <div class="contenedor_registro antiguo_alumno" >  
+            <div class="contenedor_registro" >  
                 <div>
                     <div id="cabecera_lista">
                         <div id="lista_cursos">
                          Último curso: {{render(controller("BackendBundle:Curso:listaCursos"))}}
                         </div>
-                        <h2 class="text_cabecera">Matrícula Múltiple</h2>
+                        <h2 class="text_cabecera_2">Matrícula Múltiple</h2>
                         <div id="buscador"> </div>
                     </div>
                     <div id="fondo_azul_osc" class="tabla_con_info">

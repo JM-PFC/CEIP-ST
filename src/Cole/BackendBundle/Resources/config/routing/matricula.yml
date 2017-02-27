@@ -42,3 +42,15 @@ num_matriculas:
     requirements: { _method: post }
     options:
         expose: true
+
+show_matriculas:
+    path:     /show_matriculas
+    defaults: { _controller: "BackendBundle:Matricula:showMatriculas" }
+    options:
+        expose: true
+
+anular_matricula:
+    path:     /anular_matricula
+    defaults: { _controller: "BackendBundle:Matricula:AnularMatricula" }
+    options:
+        expose: true

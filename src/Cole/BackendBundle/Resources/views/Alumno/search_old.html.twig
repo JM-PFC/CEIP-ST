@@ -137,7 +137,7 @@
 {% endblock %}
 
 {% block body -%}
-    <div id="consulta_antiguo_alumno">
+    <div id="consulta_antiguo_alumno" >
         <div class="parent_no_form">
         <div class="child">
             <div class="contenedor_registro antiguo_alumno" id="antiguo_alumno_activo" >  
@@ -146,7 +146,7 @@
                         <div id="lista_cursos" class="lista_activos">
                          Último curso: {{render(controller("BackendBundle:Curso:listaCursos"))}}
                         </div>
-                        <h2 class="text_cabecera">Antiguos Alumnos</h2>
+                        <h2 class="text_cabecera_2">Antiguos Alumnos</h2>
                         <div class="opciones btn_2opciones">    
                             <label class="btn_selected" id="btn_activos" for="activos">Activos</label>
                             <input type="radio" name="activos" id="activos">
@@ -210,7 +210,7 @@
                         <div id="lista_cursos" class="lista_inactivos">
                          Último curso: {{render(controller("BackendBundle:Curso:listaCursos"))}}
                         </div>
-                        <h2 class="text_cabecera">Antiguos Alumnos</h2>
+                        <h2 class="text_cabecera_2">Antiguos Alumnos</h2>
                         <div class="btn_2opciones">    
                             <label  id="btn_activos" for="activos">Activos</label>
                             <input type="radio" name="activos" id="activos">

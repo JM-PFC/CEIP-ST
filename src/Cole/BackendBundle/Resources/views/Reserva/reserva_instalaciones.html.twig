@@ -77,7 +77,13 @@
   });
   $('#reserva_{{ tipo }} #contenedor_reserva a[class*="ui-state-disabled"]').hide();
   $("#reserva_{{ tipo }} #actualizar_calendario_lectivo").trigger("click");
-  
+
+    //Se muestra el calendario sin opciones marcadas si no hay fecha del curso registrada.
+  if(inicio_a<0){
+    $("#reserva_{{ tipo }} .ui-datepicker-calendar td").addClass('ui-state-disabled');
+    $("#reserva_{{ tipo }} .ui-datepicker-title span").remove();
+  }
+
   // Se comprueba si estan registradas las fechas del curso.
   $.ajax({
     type: 'POST',

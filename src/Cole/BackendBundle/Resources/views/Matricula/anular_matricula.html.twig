@@ -1,0 +1,158 @@
+{% extends '::base.html.twig' %}
+
+{% block head %}{% endblock %}
+{% block stylesheets %}{% endblock %}
+
+{% block javascript %}
+<script>
+
+    // Tabla con la opción de ordenar y búsqueda de antiguos alumnos activos.
+    $('#matriculas').DataTable( { //on( 'page.dt',   function () { $(".current").prop("disabled", true); } )
+        //"aLengthMenu": [[25, 50, 100, 250, 500, -1], [25, 50, 100, 250, 500, "All"]],
+                initComplete: function () {
+            this.api().columns().every( function (e) {
+                var column = this;
+                var select = $('<select class="'+e+'"><option value=""></option></select>')
+                    .appendTo('.tabla_matriculas')
+                    .on( 'change', function () {
+                        var val = $.fn.dataTable.util.escapeRegex(
+                            $(this).val()
+                        );
+ 
+                        column
+                            .search( val ? '^'+val+'$' : '', true, false )
+                            .draw();
+                    } );
+ 
+                column.data().unique().sort().each( function ( d, j ) {
+                    select.append( '<option value="'+d+'">'+d+'</option>' )
+                } );
+                select.append( '<option value="nada">nada</option>' )
+            } );
+        },
+        "order": [[ 0, "asc" ]],
+        "aLengthMenu": [[-1], [ "All"]],
+        "columnDefs": [ {
+            "targets": 'no-sort',
+            "orderable": false,} ],
+        "language": {
+            "zeroRecords": "Lo siento, no se ha encontrado ningún registro coincidente",
+            "emptyTable": "No hay alumnos en el curso anterior pendientes de matriculación",
+            "lengthMenu": "Mostrar _MENU_ entradas",
+            "loadingRecords": "Cargando...",
+            "processing":     "Processando...",
+            "info": "Página _PAGE_ de _PAGES_",
+            "infoEmpty": "No hay registros disponibles",
+            "infoFiltered": "(filtrado de _MAX_ registros)",
+            "search": "Buscar:",
+            "Next": "Siguiente",
+            "paginate": {
+                "previous": "Anterior",
+                "next": "Siguiente"
+            }
+        }
+    });
+
+    $("#anular_matricula .dataTables_info").addClass("oculto");
+    $("#anular_matricula .dataTables_paginate").addClass("oculto");
+    $("#anular_matricula .dataTables_length").addClass("oculto");
+    $('#anular_matricula .contenedor_registro').each (function(){ 
+      $(this).find(".dataTables_filter").appendTo($(this).find('#buscador'));
+    });
+
+    // Se comprueba si existe scrol vertical para ajustar el thead
+    if( $('#anular_matricula table tbody').get(0).scrollHeight>$('#anular_matricula table tbody').height()){
+        $("#anular_matricula table thead tr>th:last-child").attr('style', 'width: 10% !important');
+    }
+    else{
+        $("#anular_matricula table thead tr>th:last-child").attr('style', 'width: 9% !important');
+    }
+    
+    $(window).resize(function() {
+        //Se comrpueba si está el div con la tabla para cambiar los estilos.
+        if($('#anular_matricula table tbody').length){
+            if($('#anular_matricula table tbody').get(0).scrollHeight>$('#anular_matricula table tbody').height() ){
+                $("#anular_matricula table thead tr>th:last-child").attr('style', 'width: 10% !important');
+            }
+            else{
+                $("#anular_matricula table thead tr>th:last-child").attr('style', 'width: 9% !important');
+            }
+        }
+    });
+
+    $("#anular_matricula tbody tr td[class='dataTables_empty']").closest("tr").addClass("no_cursor");
+
+    //Se muestra el número total de matrículas registradas en el sistema.
+    $("#anular_matricula #num_matriculas p").text($("#anular_matricula #matriculas tbody tr").size());
+</script>
+
+{% endblock %}
+
+{% block body -%}
+    <div id="anular_matricula" class="busqueda_general">
+        <div class="parent_no_form">
+        <div class="child">
+            <div class="contenedor_registro tabla_con_seleccion">  
+                <div>
+                    <div id="cabecera_lista">
+                        <div id="lista_cursos">
+                         Último curso: {{render(controller("BackendBundle:Curso:listaCursos"))}}
+                        </div>
+                        <h2 class="text_cabecera_2">Anular Matrículas</h2>
+                        <div id="buscador"> </div>
+                    </div>
+                    <div id="fondo_azul_osc" class="tabla_con_info">
+                        <div id="tableContainer" class="tableContainer inner_table vh45">
+                            <table id="matriculas" class="scrollTable lista_color">
+                                <thead class="fixedHeader">
+                                    <tr>
+                                        {#<th class="id">Id</th>#}
+                                        <th class="w15 left">Apellidos, Nombre</th>
+                                        <th class="w11">Curso Matriculado</th>
+                                        <th class="w11">Año Académido</th>
+                                        <th >Fecha</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="scrollContent">
+                                    {% for entity in entities %}
+                                        <tr id="{{entity.alumno.id}}">
+                                            <td class="w15 left">{{ entity.alumno.apellido1 ~ " " ~ entity.alumno.apellido2 ~ ", " ~ entity.alumno.nombre}}</td>
+                                            <td id="{{ entity.curso.id }}" class="w11">{{entity.curso.curso ~ " " ~ entity.curso.nivel}}</td>
+                                            {#<td data-order="{{ entity.fecha|date('m/d/Y') }}">{{ "2014/2015" }}</td>#}
+
+                                            <td class="w11">{{ entity.anyoAcademico}}</td>
+                                            <td >{{ entity.fecha|date('d/m/Y') }}</td>
+                                        </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <div class="info_en_tabla">
+                        <div class="cabecera_info">
+                            Datos Alumno
+                        </div>
+                        <div class="contenido_info">
+                            <div id="sin_seleccionar">
+                                <p>Para ver detalles seleccione un alumno</p>
+                            </div>
+                            <div id="seleccionado" class="oculto"></div>
+                        </div>             
+                    </div>
+                    <div id="enviar_select">
+                        <div id="texto">
+                            <p>Total de Matrículas</p> 
+                        </div>
+                        <div id="num_matriculas">
+                            <p>50</p>
+                        </div>
+                    </div>
+                </div> 
+                <div class="tabla_matriculas select_ord_datatable">
+                </div>         
+            </div>
+
+        </div>
+        </div>
+    </div>
+    {% endblock %}

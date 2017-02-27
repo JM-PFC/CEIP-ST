@@ -32,6 +32,17 @@ class MatriculaController extends Controller
             'entities' => $entities,
         ));
     }
+
+    public function showMatriculasAction()
+    {
+        $em = $this->getDoctrine()->getManager();
+
+        $entities = $em->getRepository('BackendBundle:Matricula')->findAll();
+
+        return $this->render('BackendBundle:Matricula:anular_matricula.html.twig', array(
+            'entities' => $entities,
+        ));
+    }
     /**
      * Creates a new Matricula entity.
      *
@@ -251,7 +262,18 @@ class MatriculaController extends Controller
             $entity->setAnyoAcademico((date("Y")-1)." / ".date("Y"));
         }
         $entity->setFecha(new \DateTime("now"));
-        
+        //Se comprueba si los responsables están activos. En caso que no lo estén se activan y se restablece la contraseña.
+        if((int)$alumno->getResponsable1()->getActivo()== 0 ){
+            $alumno->getResponsable1()->setActivo(1); 
+
+            //Restablecer contraseña inicial
+        }
+        if((int)$alumno->getResponsable2()->getActivo()==0 ){
+            $alumno->getResponsable2()->setActivo(1); 
+
+            //Restablecer contraseña inicial
+        }
+        $em->persist($alumno);
         $em->persist($entity);
         $em->flush();
         
@@ -281,6 +303,128 @@ class MatriculaController extends Controller
                     'success' => true), 200);
         } 
     }
+
+    public function  AnularMatriculaAction()
+    {
+        $em = $this->getDoctrine()->getEntityManager();
+
+        $id=$this->get('request')->request->get('id');
+
+        $alumno=$em->getRepository('BackendBundle:Alumno')->findOneById($id);
+        //Se comprueba si es nuevo alumno o antiguo.
+        $expediente=$em->getRepository('BackendBundle:Expediente')->findByAlumno($alumno);
+        //nuevo alumno
+        if(!$expediente){
+
+            if($alumno->getResponsable1()){
+                //Se busca todos los alumnos que contiene como primer responsable el del alumno actual.
+                $busqueda=$em->getRepository('BackendBundle:Alumno')->findByResponsables($alumno->getResponsable1());
+                // Si no tiene más hermanos en el sistema se elimina el responsable.
+                if(count($busqueda)==1){
+                    $responsable=$em->getRepository('BackendBundle:Padres')->findOneById($alumno->getResponsable1());
+                    $alumno->setResponsable1(null);
+                    $em->remove($responsable);
+                    $em->flush();
+                }
+                // Si existe algún alummno con el mismo responsable, se comprueba si está activo el alumno para dejar activo al responsable.
+                else{
+                    $alumno->getResponsable1()->setActivo(0);
+                    foreach ($busqueda as $entity) {
+                        if($entity->getActivo()==1 && $entity->getId()!=$id){
+                            $alumno->getResponsable1()->setActivo(1);
+                            break;
+                        }
+                    }  
+                }
+            }
+            if($alumno->getResponsable2()){
+                //Se busca todos los alumnos que contiene como segundo responsable el del alumno actual.
+                $busqueda=$em->getRepository('BackendBundle:Alumno')->findByResponsables($alumno->getResponsable2());
+                // Si no tiene más hermanos en el sistema se elimina el responsable.
+                if(count($busqueda)==1){
+                    $responsable=$em->getRepository('BackendBundle:Padres')->findOneById($alumno->getResponsable2());
+                    $alumno->setResponsable2(null);
+                    $em->remove($responsable);
+                    $em->flush();
+                }
+                // Si existe algún alummno con el mismo responsable, se comprueba si está activo el alumno para dejar activo al responsable.
+                else{
+                    $alumno->getResponsable2()->setActivo(0);
+                    foreach ($busqueda as $entity) {
+                        if($entity->getActivo()==1 && $entity->getId()!=$id ){
+                            $alumno->getResponsable2()->setActivo(1);
+                            break;
+                        }
+                    }    
+                }
+            }
+            $em->persist($alumno);
+
+            // Se elimina el registro en la tabla matrículas.
+            $matricula=$em->getRepository('BackendBundle:Matricula')->findOneByAlumno($alumno);
+            $em->remove($matricula);
+            //Se elimina el nuevoalumno del sistema.
+            $em->remove($alumno);
+        }
+        //antiguo alumno
+        else{
+            if($alumno->getResponsable1()){
+                //Se busca todos los alumnos que contiene como primer responsable el del alumno actual.
+                $busqueda=$em->getRepository('BackendBundle:Alumno')->findByResponsables($alumno->getResponsable1());
+                // Si no tiene más hermanos en el sistema se desactiva el responsable.
+                if(count($busqueda)==1){
+                    $alumno->getResponsable1()->setActivo(0);
+                }
+                // Si existe algún alummno con el mismo responsable, se comprueba si está activo el alumno para dejar activo al responsable.
+                else{
+                    $alumno->getResponsable1()->setActivo(0);
+                    foreach ($busqueda as $entity) {
+                        if($entity->getActivo()==1 && $entity->getId()!=$id){
+                            $alumno->getResponsable1()->setActivo(1);
+                            break;
+                        }
+                    }  
+                }
+            }
+            if($alumno->getResponsable2()){
+                //Se busca todos los alumnos que contiene como segundo responsable el del alumno actual.
+                $busqueda=$em->getRepository('BackendBundle:Alumno')->findByResponsables($alumno->getResponsable2());
+                // Si no tiene más hermanos en el sistema se desactiva el responsable.
+                if(count($busqueda)==1){
+                    $alumno->getResponsable2()->setActivo(0);
+                }
+                // Si existe algún alummno con el mismo responsable, se comprueba si está activo el alumno para dejar activo al responsable.
+                else{
+                    $alumno->getResponsable2()->setActivo(0);
+                    foreach ($busqueda as $entity) {
+                        if($entity->getActivo()==1 && $entity->getId()!=$id ){
+                            $alumno->getResponsable2()->setActivo(1);
+                            break;
+                        }
+                    }    
+                }
+            }
+            // Se elimina el registro en la tabla matrículas.
+            $matricula=$em->getRepository('BackendBundle:Matricula')->findOneByAlumno($alumno);
+            $em->remove($matricula);
+
+            // Se desactiva el alumno y se elimina los datos de la matrícula actual.
+            $alumno->SetCurso(Null);
+            $alumno->SetGrupo(Null);
+            $alumno->SetNumAlum(Null);
+            $alumno->SetAnyoAcademico(Null);
+            $alumno->SetActivo(0);
+
+            $em->persist($alumno);
+        }
+        $em->flush();
+
+        return new JsonResponse(array(
+            'success' => true), 200);
+    }
+
+
+
 
 
 

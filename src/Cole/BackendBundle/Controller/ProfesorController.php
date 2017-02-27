@@ -440,18 +440,6 @@ class ProfesorController extends Controller
             'entities_active' => $entities_active
         ));
     }
-    public function ShowBajaAction()
-    {
-        $em = $this->getDoctrine()->getManager();
-
-        $entities = $em->getRepository('BackendBundle:Profesor')->findByActivo(1);
-
-        return $this->render('BackendBundle:Profesor:show_bajas.html.twig', array(
-            'entities' => $entities,
-        ));
-    }
-
-
     public function ComprobarProfesorAction()
     {
         $nombre=$this->get('request')->request->get('nombre');

@@ -138,11 +138,6 @@
 							<img src="{{ asset('bundles/backend/images/menu/antiguo_profesor.png')}}">
 							<span> Antiguo </span>
 						</a>
-						
-						<a id="baja_profesor" title="Baja del Profesor" href="{{path('show_baja_profesor')}}">
-							<img src="{{ asset('bundles/backend/images/menu/baja_profesor.png')}}">
-							<span> Baja </span>
-						</a>
 												
 						<span> Registro Profesor</span>
 					</div>
@@ -189,7 +184,7 @@
 							<img src="{{ asset('bundles/backend/images/menu/alumno-grupo.png')}}">
 							<span> Asignar <br>Grupos</span>
 						</a>
-						<a id="anular_matricula" title="Anular Matrícula" href="javascript:void(0);">
+						<a id="anular_matricula" title="Anular Matrícula" href="{{path('show_matriculas')}}">
 							<img src="{{ asset('bundles/backend/images/menu/cancelado.png')}}">
 							<span> Anular <br>Matrícula</span>
 						</a>								

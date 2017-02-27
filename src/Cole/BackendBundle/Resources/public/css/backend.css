@@ -630,6 +630,9 @@ nav{
 	#tutor_grupos #lista_grupos ul{
 		width: 88% !important;
 	}
+	#multiples_alumnos .columna_foto,#multiples_alumnos img,.tabla_con_seleccion .columna_foto{
+		width: 100% !important;
+	}
 }
 
 /*Contenido*/
@@ -2245,6 +2248,11 @@ form button{
 }
 .text_cabecera{
 	width: 55%;
+	float: left;
+	text-align: right !important;
+}
+.text_cabecera_2{
+	width: 24%;
 	float: left;
 	text-align: right !important;
 }
@@ -4769,14 +4777,11 @@ tbody.scrollContent tr.alternateRow td {
 #consulta_antiguo_alumno .btn_2opciones label:not(.btn_selected):hover{
 	background: buttonface;
 }
-.antiguo_alumno #lista_cursos{
+.contenedor_registro #lista_cursos{
 	width: 28%;
 	float: left;
 	margin-top: -4px;
 	height: 29px;
-}
-.antiguo_alumno h2{
-	width: 24%;
 }
 #tableContainer table thead th{
 	border-bottom: 1px solid #111;
@@ -4789,8 +4794,6 @@ tbody.scrollContent tr.alternateRow td {
 	border-right: 1px solid grey;
 	border-bottom: 0 !important;
 }
-
-
 .edit_antiguo_alumno #content-form{
 	width: 78% !important;
 	margin: 0;
@@ -6120,4 +6123,37 @@ cursor: default !important;
 	display: inline-block;
 	width: 100%;
 	padding: 2%;
+}
+/*Anular Matríclas*/
+
+#anular_matricula #texto{
+    display: table-cell;
+    padding: 0 5%;
+    text-align: center;
+    vertical-align: middle;
+    width: 35%;
+    font-weight: normal;
+}
+#anular_matricula #texto .bold{
+    font-weight: bold;
+}
+#anular_matricula #num_matriculas{
+    display: table-cell;
+    height: 28px;
+    text-align: center;
+    vertical-align: middle;
+    width: 20%;
+}
+#anular_matricula #num_matriculas p{
+    background: #ffcc7e none repeat scroll 0 0;
+    border: 3px double #334c73;
+    border-radius: 5px;
+    width: 60%;
+}
+#anular_matricula .info_en_tabla #enviar_select{
+	display: table;
+}
+#anular_matricula td,#anular_matricula tr:not(.no_cursor){
+	cursor: pointer !important;
+	pointer-events: auto;
 }

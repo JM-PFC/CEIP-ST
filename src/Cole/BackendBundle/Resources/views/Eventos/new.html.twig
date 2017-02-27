@@ -40,6 +40,7 @@
     showMonthAfterYear: false,
     yearSuffix: ''
   };
+
   
   $.datepicker.setDefaults($.datepicker.regional['es']);
 
@@ -87,6 +88,12 @@
   $('#registrar_evento #contenedor_evento a[class*="ui-state-disabled"]').hide();
   $("#registrar_evento #actualizar_calendario_lectivo").trigger("click");
   
+  //Se muestra el calendario sin opciones marcadas si no hay fecha del curso registrada.
+  if(inicio_a<0){
+    $("#registrar_evento .ui-datepicker-calendar td").addClass('ui-state-disabled');
+    $("#registrar_evento .ui-datepicker-title span").remove();
+  }
+
   // Se comprueba si estan registradas las fechas del curso.
   $.ajax({
     type: 'POST',
@@ -95,6 +102,7 @@
     success: function(response) {
       // Se muestra un aviso indicando si falta alguna fecha por registrar y se cierra la opción de añadir eventos.
       if(response.curso==null || response.navidad==null || response.semanasanta==null ){
+
         texto="<p class='justificado'>Para poder añadir un evento debe completar el calendario del curso con las siguientes fechas:</p><br/>";
         if(response.curso==null){
           texto+="<h4>Fecha de inicio y fin del curso</h4> <br/>";

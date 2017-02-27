@@ -85,12 +85,6 @@ search_old_teacher:
     options:
         expose: true
 
-show_baja_profesor:
-    path:     /profesor/bajas
-    defaults: { _controller: "BackendBundle:Profesor:ShowBaja" }
-    options:
-        expose: true
-
 baja_profesor:
     path:     /profesor/baja
     defaults: { _controller: "BackendBundle:Profesor:BajaProfesor" }

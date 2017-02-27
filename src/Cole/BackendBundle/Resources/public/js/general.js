@@ -975,6 +975,8 @@ $(document).on('keyup',"input[id$='responsable2_dni']",function(e){
     });
           
     var formdata=new FormData($(this)[0]);
+    //Se obtiene el curso de ingreso para actualizar la pestaña de asignar grupo si está mostrado ese grupo.
+    curso=$("#alumno_nuevo #alumno_cursoIngreso").val();
 
     if(val==0){
       $.ajax({
@@ -1022,6 +1024,12 @@ $(document).on('keyup',"input[id$='responsable2_dni']",function(e){
                   out_class: "fadeOutRight",
                 }
               });
+              //Se actualiza la pestaña de anular matrícula y asignar grupo.
+              $("#anular_matricula").update_tab();
+              //Se actualiza la pestaña de asignar grupos si está abierta y tiene seleccionado el curso actualizado.
+              if($("#asignar_grupos #lista_cursos select option:selected").attr("value")==curso){
+                $("#asignar_grupo").update_tab();   
+              }
             }
           })
 
@@ -7057,7 +7065,7 @@ $(document).on("click","#registro_equipamientos td a",function(event){
   ////////////////////////////////// ////////
 
   // Se muestra la información del alumno.
-  $(document).on("mouseenter",".antiguo_alumno .scrollContent tr", function () {
+  $(document).on("mouseenter","#consulta_antiguo_alumno .scrollContent tr", function () {
 
     // Se evita que se muestre el mensaje predeterminado si pasamos de un enlace a otro.
     $(this).closest("div[class*='contenedor_registro']").find(".contenido_info #sin_seleccionar").addClass("oculto");
@@ -7080,7 +7088,7 @@ $(document).on("click","#registro_equipamientos td a",function(event){
   });
 
   // Se elimina la información mostrada del alumno al quitar el puntero.
-  $(document).on("mouseleave",".antiguo_alumno .scrollContent tr", function () {
+  $(document).on("mouseleave","#consulta_antiguo_alumno .scrollContent tr", function () {
     $(this).closest("div[class*='contenedor_registro']").find(".contenido_info #seleccionado").addClass("oculto");
     $(this).closest("div[class*='contenedor_registro']").find(".contenido_info #seleccionado").empty();
     $(this).closest("div[class*='contenedor_registro']").find(".contenido_info #sin_seleccionar").removeClass("oculto");
@@ -7096,6 +7104,7 @@ $(document).on("click","#registro_equipamientos td a",function(event){
 
   // Se modifica el select de búsqueda de antiguo alumno.
   $(document).on('change','#consulta_antiguo_alumno #lista_cursos select',function(event) {
+    event.preventDefault();
     div=$(this).closest("div[class*='antiguo_alumno']");
     //Se añade reemplaza también una separación andes del "de" para que funcione bien la búsqueda.
     curso=$(this).find("option:selected").text().replace(" de", "");
@@ -7143,9 +7152,40 @@ $(document).on("click","#registro_equipamientos td a",function(event){
     }
   });
 
-  // Se modifica el select de búsqueda de multiples alumnos.
-  $(document).on('change','#multiples_alumnos #lista_cursos select',function(event) {
-    div=$(this).closest("#multiples_alumnos");
+  // Se muestra la información del alumno.(Forma General)
+  $(document).on("mouseenter",".busqueda_general .scrollContent tr", function () {
+
+    // Se evita que se muestre el mensaje predeterminado si pasamos de un enlace a otro.
+    $(this).closest("div[class*='contenedor_registro']").find(".contenido_info #sin_seleccionar").addClass("oculto");
+    $(this).closest("div[class*='contenedor_registro']").find(".contenido_info #seleccionado").removeClass("oculto");
+
+    
+    tr=$(this);
+    alumno=$(this).attr("id");
+
+    $.ajax({
+      type: 'POST',
+      url: Routing.generate('datos_imparte'),
+      data: {alumno:alumno},
+      dataType: 'json',
+      success: function(response) {
+        tr.closest("div[class*='contenedor_registro']").find(".contenido_info #seleccionado").load(Routing.generate('datos_alumno', {id:tr.attr("id")}), function(){
+        });
+      }
+    })
+  });
+
+  // Se elimina la información mostrada del alumno al quitar el puntero.(Forma General)
+  $(document).on("mouseleave",".busqueda_general .scrollContent tr", function () {
+    $(this).closest("div[class*='contenedor_registro']").find(".contenido_info #seleccionado").addClass("oculto");
+    $(this).closest("div[class*='contenedor_registro']").find(".contenido_info #seleccionado").empty();
+    $(this).closest("div[class*='contenedor_registro']").find(".contenido_info #sin_seleccionar").removeClass("oculto");
+  });
+
+
+  // Se modifica el select de búsqueda de las tablas de consultas. (Forma General)
+  $(document).on('change','.busqueda_general #lista_cursos select',function(event) {
+    div=$(this).closest(".busqueda_general");
     //Se añade reemplaza también una separación andes del "de" para que funcione bien la búsqueda.
     curso=$(this).find("option:selected").text().replace(" de", "");
     valor=div.find("#lista_cursos select option:selected").val();
@@ -7172,10 +7212,10 @@ $(document).on("click","#registro_equipamientos td a",function(event){
     }
       //Se cambia los estilos según el scroll vertical.
     if( div.find('table tbody').get(0).scrollHeight>div.find('table tbody').height()){
-        div.find("table thead tr>th:last-child").attr('style', 'width: 10% !important');
+      div.find("table thead tr>th:last-child").attr('style', 'width: 10% !important');
     }
     else{
-        div.find("table thead tr>th:last-child").attr('style', 'width: 9% !important');
+      div.find("table thead tr>th:last-child").attr('style', 'width: 9% !important');
     }
   });
 
@@ -7308,12 +7348,13 @@ $(document).on("click","#registro_equipamientos td a",function(event){
                 }
               }); 
             }
-              // Se actualiza la lista de antiguos alumnos y la pestaña de asignar grupo.
+              // Se actualiza la lista de antiguos alumnos y la pestaña de asignar grupo yanular matrícula.
               $("#alumnos_antiguo").update_tab();
               //Se actualiza la pestaña de asignar grupos si está abierta y tiene seleccionado el curso actualizado.
               if($("#asignar_grupos #lista_cursos select option:selected").attr("value")==response.curso){
                 $("#asignar_grupo").update_tab();   
               }
+              $("#anular_matricula").update_tab();
 
               div=input.closest("div[id^='tabs-']");
               $(div).load(Routing.generate('search_multiple'));
@@ -7457,7 +7498,6 @@ $(document).on("click","#registro_equipamientos td a",function(event){
     $(div).load(Routing.generate('search_old'));
   });
 
-
   //Se guarda el formulario antiguo alumno editado con los nuevos datos de matriculación.
   $(document).on("submit","#antiguo_alumno_edit",function(event) {
     event.preventDefault();
@@ -7594,6 +7634,10 @@ $(document).on("click","#registro_equipamientos td a",function(event){
                       out_class: "fadeOutRight",
                     }
                   });
+
+                  //Se actualiza la pestaña de anular matrícula.
+                  $("#anular_matricula").update_tab();
+
                   //Se actualiza la pestaña de asignar grupos si está abierta y tiene seleccionado el curso actualizado.
                   if($("#asignar_grupos #lista_cursos select option:selected").attr("value")==response.curso){
                     $("#asignar_grupo").update_tab();   
@@ -7678,6 +7722,91 @@ $(document).on("click","#registro_equipamientos td a",function(event){
           $(this).prop("checked",false);
       });
     }
+  });
+
+  ///////////////////////////////////////////
+  //            Anular Matrícula           //
+  ///////////////////////////////////////////
+
+  // Se modifica el número de matrículas registradas en la tabla de anular matrículas.
+  $(document).on("change","#anular_matricula #lista_cursos select", function(event){
+    event.preventDefault();
+    if($("#anular_matricula #lista_cursos select").val()==0){
+      $("#anular_matricula #texto").empty();
+      $("#anular_matricula #texto").append('<p>Total de Matrículas</p>');
+      $("#anular_matricula #num_matriculas p").text($("#anular_matricula #matriculas tbody tr").size());
+    }
+    else{
+      texto=$("#anular_matricula #lista_cursos select option[value='"+$("#anular_matricula #lista_cursos select").val()+"']").text();
+      $("#anular_matricula #texto").empty();
+      $("#anular_matricula #texto").append('<p>Matrículas de</p><p class="bold">'+texto+'</p>');
+      $("#anular_matricula #num_matriculas p").text($("#anular_matricula #matriculas tbody tr:not(.no_cursor)").size());
+    }
+  });
+  
+  // Se elimina la matrícula seleccionada.
+  $(document).on("click","#anular_matricula td", function(event){
+    event.preventDefault();
+    id=$(this).closest("tr").attr("id");
+    curso=$(this).closest("tr").find("td:nth-child(2)").attr("id");
+
+    aviso.play();
+    swal({
+      title: "Anulación de Matrículas",
+      text: "<table><p>Se va a eliminar la siguiente matrícula, ¿Estas seguro de continuar? <br></p><thead><tr><th>Alumno</th><th>Curso Matriculado</th><th>Año Académico</th></tr></thead><tbody><tr><td>"+$(this).closest("tr").find("td:nth-child(1)").text()+"</td><td>"+$(this).closest("tr").find("td:nth-child(2)").text()+"</td><td>"+$(this).closest("tr").find("td:nth-child(3)").text()+"</td></tr></tbody><br></p></table>",
+      type: "warning",
+      html: true,
+      showCancelButton: true,
+      cancelButtonText: "Cancelar",
+      customClass: 'swal-wide',
+      confirmButtonColor: color,
+      confirmButtonText: "¡Adelante!",
+      closeOnConfirm: true },
+
+      function(){
+
+        $.ajax({
+          type: 'POST',
+          url: Routing.generate('anular_matricula'),
+          data: {id:id},
+          dataType: 'json',
+          success: function(response) {
+
+            // Notificación de confirmación
+            exito.play();
+            
+            new PNotify({
+              text:"Matrícula Anulada.",
+              addclass: "custom",
+              type: "success",
+              shadow: true,
+              hide: true,
+              buttons: {
+                sticker: false,
+                labels:{close: "Cerrar"}
+              },
+              stack: right_Stack,
+              animate: {
+                animate: true,
+                in_class: "fadeInRight",
+                out_class: "fadeOutRight",
+              }
+            });
+
+            // Se actualiza la pestaña de anular matrícula.
+            $("#anular_matricula").update_tab();
+            //Se actualiza la pestaña de asignar grupos si está abierta y tiene seleccionado el curso actualizado.
+            if($("#asignar_grupos #lista_cursos select option:selected").attr("value")==curso){
+              $("#asignar_grupo").update_tab();   
+            }
+            $("#alumnos_antiguo").update_tab();
+            $("#alumnos_multiple").update_tab();
+            $("#ficha_alumno").update_tab();
+          }
+        })
+      }
+    );
+
   });
 
   ///////////////////////////////////////////
