@@ -33,7 +33,7 @@
 
 
 
-    // Tabla con la opción de ordenar y búsqueda de antiguos profesores.
+    // Tabla con la opción de ordenar y búsqueda de profesores de infantil.
     $('#prof_infantil').DataTable( { //on( 'page.dt',   function () { $(".current").prop("disabled", true); } )
         //"aLengthMenu": [[25, 50, 100, 250, 500, -1], [25, 50, 100, 250, 500, "All"]],
                 initComplete: function () {
@@ -80,7 +80,7 @@
         }
     });
 
-    // Tabla con la opción de ordenar y búsqueda de antiguos profesores.
+    // Tabla con la opción de ordenar y búsqueda de profesores de primaria.
     $('#prof_primaria').DataTable( { //on( 'page.dt',   function () { $(".current").prop("disabled", true); } )
         //"aLengthMenu": [[25, 50, 100, 250, 500, -1], [25, 50, 100, 250, 500, "All"]],
                 initComplete: function () {
@@ -164,7 +164,7 @@
             }
 
             $("#tutor_grupos td[class*='placeholder_list_table_td']").addClass('placeholder_list_table_td_mod');
-            $("#tutor_grupos td[class*='placeholder_list_table_td']").attr('title', 'Nuevo Tutor Añadido');
+            $("#tutor_grupos td[class*='placeholder_list_table_td']").attr('title', 'Profesor pendiente de asignar');
 
             $("#tutor_grupos td[class*='placeholder_list_table_td']").removeClass('placeholder_list_table_td');
             $("#tutor_grupos ul[class*='placeholder_list_table_td']").removeClass('placeholder_list_table_td');
@@ -216,7 +216,20 @@
         $("#tutor_grupos .lista_profesores tr[id='"+id+"'] li").remove();
     });
 
-    </script>
+  //Se muestra el aviso de que no se han encontrado registros en la búsqueda para el caso de que se oculte algunos registros que han sido movidos de la lista y que aún pertenecen en ella y al buscarlos se muestra la lista vacía sin aviso.
+  $(document).on('change keyup paste click input blur cut',"#tutor_grupos #prof_infantil_filter input",function(event){
+    if($("#tutor_grupos #prof_infantil tbody tr:not(.oculto)").size()==0){
+      $("#tutor_grupos #prof_infantil tbody").append('<tr class="odd"><td class="dataTables_empty" colspan="2" valign="top">No se ha encontrado ningún registro coincidente</td></tr>');
+    }
+  });
+
+  $(document).on('change keyup paste click input blur cut',"#tutor_grupos #prof_primaria_filter input",function(event){
+    if($("#tutor_grupos #prof_primaria tbody tr:not(.oculto)").size()==0){
+      $("#tutor_grupos #prof_primaria tbody").append('<tr class="odd"><td class="dataTables_empty" colspan="2" valign="top">No se ha encontrado ningún registro coincidente</td></tr>');
+    }
+  });
+
+</script>
 {% endblock %}
 
 {% block body -%}
@@ -375,7 +388,7 @@
             </div>
         </div>          
       </div>
-                <div class="select_table_tutor_grupos select_ord_datatable"></div>  
+      <div class="select_table_tutor_grupos select_ord_datatable"></div>  
     </div>
     </div>
     </div>

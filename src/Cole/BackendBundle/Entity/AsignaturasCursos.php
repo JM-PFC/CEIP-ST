@@ -47,7 +47,11 @@ class AsignaturasCursos
     * @ORM\JoinColumn(name="id_curso", referencedColumnName="id", nullable=false)
     */
     private $curso;
-
+    
+    /**
+    * @ORM\OneToMany(targetEntity="Imparte", mappedBy="asignatura")
+    */
+    private $imparte;
 
     /**
      * Get id
@@ -149,5 +153,45 @@ class AsignaturasCursos
     public function getCurso()
     {
         return $this->curso;
+    }
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->imparte = new \Doctrine\Common\Collections\ArrayCollection();
+    }
+
+    /**
+     * Add imparte
+     *
+     * @param \Cole\BackendBundle\Entity\Imparte $imparte
+     * @return AsignaturasCursos
+     */
+    public function addImparte(\Cole\BackendBundle\Entity\Imparte $imparte)
+    {
+        $this->imparte[] = $imparte;
+
+        return $this;
+    }
+
+    /**
+     * Remove imparte
+     *
+     * @param \Cole\BackendBundle\Entity\Imparte $imparte
+     */
+    public function removeImparte(\Cole\BackendBundle\Entity\Imparte $imparte)
+    {
+        $this->imparte->removeElement($imparte);
+    }
+
+    /**
+     * Get imparte
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getImparte()
+    {
+        return $this->imparte;
     }
 }

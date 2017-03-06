@@ -664,15 +664,21 @@ class AlumnoController extends Controller
         if (!$entity) {
             throw $this->createNotFoundException('Unable to find Curso entity.');
         }
-
+        // Tres posibles casos: de 2 grupos a 1, de 3 grupos a 2 y de 3 grupos a 1.
         if($num_grupos_ant==2 && $num_grupos==1){
             $grupo = $em->getRepository('BackendBundle:Grupo')->findGrupoByLetter($entity,"B");
             if (!$grupo) {
                 throw $this->createNotFoundException('Unable to find Grupo entity.');
-            }     
+            }
+            //Se comprueba si hay asignación de alumnos en el grupo que se va a eliminar.     
             $alumnos= $em->getRepository('BackendBundle:Alumno')->findAlumnosPorCurso_Grupo($entity,$grupo);
             if($alumnos){
-                return new JsonResponse(array('data' =>"error"), 200);
+                return new JsonResponse(array('data' =>"alumnos"), 200);
+            }
+            //Se comprueba si hay asignación de profesores en el grupo que se va a eliminar.   
+            $profesores= $em->getRepository('BackendBundle:Imparte')->findByGrupo($grupo);
+            if($profesores){
+                return new JsonResponse(array('data' =>"profesores"), 200);
             }
             return new JsonResponse(array('data' =>null), 200);
         }
@@ -682,10 +688,15 @@ class AlumnoController extends Controller
             if (!$entity) {
                 throw $this->createNotFoundException('Unable to find Grupo entity.');
             }     
-
+            //Se comprueba si hay asignación de alumnos en el grupo que se va a eliminar.  
             $alumnos= $em->getRepository('BackendBundle:Alumno')->findAlumnosPorGrupo($grupo);
             if($alumnos){
-                return new JsonResponse(array('data' =>"error"), 200);
+                return new JsonResponse(array('data' =>"alumnos"), 200);
+            }
+            //Se comprueba si hay asignación de profesores en el grupo que se va a eliminar.   
+            $profesores= $em->getRepository('BackendBundle:Imparte')->findByGrupo($grupo);
+            if($profesores){
+                return new JsonResponse(array('data' =>"profesores"), 200);
             }
             return new JsonResponse(array('data' =>null), 200);
         }
@@ -700,24 +711,29 @@ class AlumnoController extends Controller
             if (!$entity) {
                 throw $this->createNotFoundException('Unable to find Grupo entity.');
             }          
-
+            //Se comprueba si hay asignación de alumnos en los grupos que se van a eliminar.  
             $alumnos_grupo_3= $em->getRepository('BackendBundle:Alumno')->findAlumnosPorGrupo($grupo_3);
             $alumnos_grupo_2= $em->getRepository('BackendBundle:Alumno')->findAlumnosPorGrupo($grupo_2);
 
-            if($alumnos_grupo_2 && $alumnos_grupo_3){
-                return new JsonResponse(array('data' =>"error"), 200);
-            }
-
-            else if(!$alumnos_grupo_2 && !$alumnos_grupo_3){
+            if(!$alumnos_grupo_2 && !$alumnos_grupo_3){
                 return new JsonResponse(array('data' =>null), 200);
             }
-            else if($alumnos_grupo_2){
-                return new JsonResponse(array('data' =>"error"), 200);
-                }
             else{
-                return new JsonResponse(array('data' =>"error"), 200);
+                return new JsonResponse(array('data' =>"alumnos"), 200);
 
-                }
+            }
+            //Se comprueba si hay asignación de profesores en los grupos que se van a eliminar. 
+            $profesores_grupo_3=$em->getRepository('BackendBundle:Imparte')->findByGrupo($grupo_3);
+            $profesores_grupo_2=$em->getRepository('BackendBundle:Imparte')->findByGrupo($grupo_2);
+
+            if(!$profesores_grupo_2 && !$profesores_grupo_3){
+                return new JsonResponse(array('data' =>null), 200);
+            }
+            else{
+                return new JsonResponse(array('data' =>"profesores"), 200);
+
+            }
+
         }
     }
 

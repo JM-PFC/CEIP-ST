@@ -1,0 +1,217 @@
+{% extends 'BackendBundle:Default:index.html.twig' %}
+
+{% block head %}{% endblock %}
+{% block stylesheets %}{% endblock %}
+
+{% block javascript %}
+  <script>
+  //Se comprueba si hay asignaturas asignadas inicialmente al grupo para añadir las cabeceras.
+  if($("#profesor_asignatura_grupo_dialog #contenedor_asignaturas li[tipo='Troncal']").size()>0){
+    $("#profesor_asignatura_grupo_dialog #contenedor_asignaturas .aviso").addClass('oculto');
+    $("#profesor_asignatura_grupo_dialog #contenedor_asignaturas #cabecera_troncal").removeClass('oculto');
+  }
+
+  if($("#profesor_asignatura_grupo_dialog #contenedor_asignaturas li[tipo='Específica']").size()>0){
+    $("#profesor_asignatura_grupo_dialog #contenedor_asignaturas .aviso").addClass('oculto');
+    $("#profesor_asignatura_grupo_dialog #contenedor_asignaturas #cabecera_especifica").removeClass('oculto');
+  }
+
+  //Se inserta los profesores asignados a un grupo que estan registrados en la base de datos.
+  array={{imparte|json_encode()|raw}};
+  for (var key in array){
+    asignatura=key;
+    profesor=array[key];
+
+    $("#profesor_asignatura_grupo_dialog #contenedor_asignaturas li[id='"+asignatura+"']").attr("class","back_asignado");
+    $("#profesor_asignatura_grupo_dialog #contenedor_asignaturas li[id='"+asignatura+"'] #asignado").removeClass('oculto');
+    $("#profesor_asignatura_grupo_dialog #contenedor_asignaturas li[id='"+asignatura+"'] #no_asignado").addClass('oculto');
+    $("#profesor_asignatura_grupo_dialog #contenedor_asignaturas li[id='"+asignatura+"'] #asignado input").attr("valor",profesor+" ");
+    $("#profesor_asignatura_grupo_dialog #contenedor_asignaturas li[id='"+asignatura+"'] #asignado input").attr("value",profesor);
+  }
+  //Se elimina de la lista de profesores el tutor/a.
+  if({{id_tutor|json_encode()|raw}}!=null){
+    $("#profesor_asignatura_grupo_dialog #profesores tr[id='"+{{id_tutor|json_encode()|raw}}+"']").addClass('oculto');
+  }
+
+  // Tabla con la opción de ordenar y búsqueda de profesores de primaria.
+  var table = $('#prof_grupos').DataTable( { 
+    initComplete: function () {
+      this.api().columns().every( function (e) {
+        var column = this;
+        var select = $('<select class="'+e+'"><option value=""></option></select>')
+          .appendTo('.select_table_profesores')
+          .on( 'change', function () {
+            var val = $.fn.dataTable.util.escapeRegex(
+              $(this).val()
+            );
+            column
+              .search( val ? '^'+val+'$' : '', true, false )
+              .draw();
+          });
+ 
+          column.data().unique().sort().each( function ( d, j ) {
+            select.append( '<option value="'+d+'">'+d+'</option>' )
+          });
+          select.append( '<option value="nada">nada</option>' )
+      });
+    },
+    "search": {//insensible a mayúsculas o minúsculas.
+    "caseInsensitive": true
+      },
+    "order": [[ 1, "asc" ]],
+    "aLengthMenu": [[-1], [ "All"]],
+    "columnDefs": [ {
+      "type": "html-string",
+     "targets": [1],
+      "orderable": false,} ],
+    "language": {
+      "zeroRecords": "No se ha encontrado ningún registro coincidente",
+      "emptyTable": "No hay profesores de primaria en el sistema",
+      "lengthMenu": "Mostrar _MENU_ entradas",
+      "loadingRecords": "Cargando...",
+      "processing":     "Processando...",
+      "info": "Página _PAGE_ de _PAGES_",
+      "infoEmpty": "No hay registros disponibles",
+      "infoFiltered": "(filtrado de _MAX_ registros)",
+      "search": "Buscar:",
+      "Next": "Siguiente",
+      "paginate": {
+        "previous": "Anterior",
+        "next": "Siguiente"
+      },
+    }
+
+  });
+
+  $("#profesor_asignatura_grupo_dialog .dataTables_info").addClass("oculto");
+  $("#profesor_asignatura_grupo_dialog .dataTables_paginate").addClass("oculto");
+  $("#profesor_asignatura_grupo_dialog .dataTables_length").addClass("oculto");
+  $("#profesor_asignatura_grupo_dialog #prof_grupos_filter").appendTo($("#profesor_asignatura_grupo_dialog #buscador_prim"));
+
+  $("#profesor_asignatura_grupo_dialog tbody tr td[class='dataTables_empty']").closest("tr").addClass("no_cursor");
+
+  //Se muestra el aviso de que no se han encontrado registros en la búsqueda para el caso de que se oculte algunos registros que han sido movidos de la lista y que aún pertenecen en ella y al buscarlos se muestra la lista vacía sin aviso.
+  $(document).on('change keyup paste click input blur cut',"#profesor_asignatura_grupo_dialog #prof_grupos_filter input",function(event){
+    //Para la búsqueda introduciendo acentos.
+    table.search(jQuery.fn.DataTable.ext.type.search.string( this.value )).draw();
+
+    if($("#profesor_asignatura_grupo_dialog #prof_grupos tbody tr:not(.oculto)").size()==0){
+      $("#profesor_asignatura_grupo_dialog #prof_grupos tbody").append('<tr class="odd"><td class="dataTables_empty" colspan="2" valign="top">No se ha encontrado ningún registro coincidente</td></tr>');
+    }
+  });
+
+    //Se oculta el checkbox si no hay más asignaturas troncales por asignar.
+    if($("#profesor_asignatura_grupo_dialog #contenedor_asignaturas li[tipo='Troncal'] #no_asignado:not(.oculto)").size()<2){
+      $("#profesor_asignatura_grupo_dialog #all").addClass('oculto');
+    }
+
+  </script>
+{% endblock %}
+
+{% block body -%}
+    <fieldset id="{{grupo.id}}">
+      <legend>Asignación de profesores de Primaria</legend>
+      <div id="div_lista" class="w35 f_left tcenter b_right">
+        <span>1. Seleccione un <strong>profesor</strong>.</span>
+        <div id="tutor" class="lista_cursos">
+          <div class="cabecera_lista">Tutor/a del Grupo</div>
+          <div class="contenido_lista">
+            {% if tutor %}
+                <button class="buttonface" id="{{ tutor.id }}">{{tutor.nombre ~ " " ~ tutor.apellido1 ~ " " ~ tutor.apellido2}} </button>
+            {% else %}  
+                <p class="aviso"> El grupo aún no tiene tutor/a asignado/a</p>
+            {% endif %}    
+          </div>
+        </div>
+        <div id="profesores" class="lista_cursos">
+          <div class="cabecera_lista">Profesores de Primaria</div>
+            <div class="contenido_lista">
+                <div id="tableContainer" class="tableContainer inner_table vh45">
+                    <table id="prof_grupos" class="scrollTable">
+                        <thead class="fixedHeader oculto ">
+                            <tr>
+                                <th></th>
+                                <th>Nombre</th>
+                            </tr>
+                        </thead>
+                        <tbody class="scrollContent">
+                            
+                            {% for profesor in profesores%}
+                            <tr id="{{ profesor.id }}">
+                                <td class="oculto"></td>
+                                <td>
+                                  <button class="buttonface" id="{{ profesor.id }}">{{profesor.nombre ~ " " ~ profesor.apellido1 ~ " " ~ profesor.apellido2}} </button>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="div_buscador" id="grupos_primaria">
+                <div id="buscador_prim"> </div>
+            </div>
+        </div>
+      </div>
+      <div class="w64 f_left  tcenter">
+        <span>2. Seleccione las <strong>asignaturas</strong> a impartir por el profesor y pulse sobre <strong>Asignar</strong>.</span>
+        <div id="btn_asignar">
+          <span class="disab">
+            <img src="/Symfony/web/bundles/backend/images/menu/flecha_der.png">
+            ASIGNAR
+            <img src="/Symfony/web/bundles/backend/images/menu/flecha_der.png">
+          </span>
+        </div>
+        <div id="contenedor_asignaturas">
+          <h4 id="titulo_curso">Profesores de <strong>{{" " ~ curso.curso ~ " de " ~ curso.nivel ~ " - Grupo " ~ grupo.letra}}</strong></h4>
+          <div>
+            <ul>
+              <p class="aviso">No hay asignaturas asignadas para este curso</p>
+              <ol id="cabecera_troncal" class="oculto">Troncales</ol>
+              <input id="all" type="checkbox" title="Seleccionar asignaturas troncales"></input>
+                {% for entity in entities_troncales %}
+                  <li id="{{ entity.id }}" tipo="{{ entity.asignatura.tipo }}">
+                    <div id="no_asignado" title="Profesor asignado">
+                      <input type="checkbox"></input>
+                      <p class="w64">{{ entity.asignatura.nombre }}</p>
+                    </div>
+                    <div id="asignado" class="oculto" title="Profesor pendiente de asignar">
+                      <input type="checkbox" style="opacity: 0;"></input>
+                      <p>{{ entity.asignatura.abreviatura }}</p>
+                      <input value="" readonly="readonly" type="text"></input>
+                      <img src="/Symfony/web/bundles/backend/images/menu/eliminar.png">
+                    </div>
+                  </li>
+                {% endfor %}
+              <ol id="cabecera_especifica" class="oculto">Específicas</ol>
+                {% for entity in entities_especificas %}
+                  <li id="{{ entity.id }}" tipo="{{ entity.asignatura.tipo }}">
+                    <div id="no_asignado" title="Profesor asignado">
+                      <input type="checkbox"></input>
+                      <p class="w64">{{ entity.asignatura.nombre }}</p>
+                    </div>
+                    <div id="asignado" class="oculto" title="Profesor pendiente de asignar">
+                      <input type="checkbox" style="opacity: 0;"></input>
+                      <p>{{ entity.asignatura.abreviatura }}</p>
+                      <input value="" readonly="readonly" type="text"></input>
+                      <img src="/Symfony/web/bundles/backend/images/menu/eliminar.png">
+                    </div>
+                  </li>
+                {% endfor %}
+            </ul>
+          </div>
+        </div>
+      </div>
+      <div class="select_table_profesores select_ord_datatable"></div>  
+
+    </fieldset> 
+
+    <div class="dialog_button">
+      <div>
+        <button id="profesor_asignatura_grupo_submit" disabled="" type="button">Guardar</button>
+      </div>
+      <div>
+        <button id="profesor_asignatura_grupo_restablecer" disabled="" type="button">Restablecer</button>
+      </div>
+    </div>
+{% endblock %}

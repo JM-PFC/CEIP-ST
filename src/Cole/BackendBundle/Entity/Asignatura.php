@@ -44,11 +44,6 @@ class Asignatura
      * @ORM\Column(name="tipo", type="string", length=255)
      */
     private $tipo;
-
-    /**
-    * @ORM\OneToMany(targetEntity="Imparte", mappedBy="asignatura")
-    */
-    private $imparte;
     
     /**
     * @ORM\OneToMany(targetEntity="AsignaturasCursos", mappedBy="asignatura", cascade={"remove"})
@@ -143,39 +138,6 @@ class Asignatura
     public function __toString()
     {
         return $this->getNombre();
-    }
-
-    /**
-     * Add imparte
-     *
-     * @param \Cole\BackendBundle\Entity\Imparte $imparte
-     * @return Asignatura
-     */
-    public function addImparte(\Cole\BackendBundle\Entity\Imparte $imparte)
-    {
-        $this->imparte[] = $imparte;
-
-        return $this;
-    }
-
-    /**
-     * Remove imparte
-     *
-     * @param \Cole\BackendBundle\Entity\Imparte $imparte
-     */
-    public function removeImparte(\Cole\BackendBundle\Entity\Imparte $imparte)
-    {
-        $this->imparte->removeElement($imparte);
-    }
-
-    /**
-     * Get imparte
-     *
-     * @return \Doctrine\Common\Collections\Collection 
-     */
-    public function getImparte()
-    {
-        return $this->imparte;
     }
 
     /**

@@ -45,6 +45,17 @@ class ImparteRepository extends EntityRepository
 		->getResult();
 	}
 
+	public function findByGrupoAndAsignatura($grupo,$asignatura)
+	{
+		return $this->getEntityManager()->createQuery(
+		'SELECT i FROM BackendBundle:Imparte i INNER JOIN i.grupo g INNER JOIN i.asignatura a WHERE g=:grupo AND a=:asignatura')
+		->setParameters(array(
+			'grupo' => $grupo,
+			'asignatura'=>$asignatura))
+		->setMaxResults(1)
+		->getOneOrNullResult();
+	}
+
 
 
 }

@@ -64,15 +64,41 @@ $(document).ready(function () {
         '' :
         typeof data === 'string' ?
             data
+                .replace( /έ/g, 'ε' )
+                .replace( /[ύϋΰ]/g, 'υ' )
+                .replace( /ό/g, 'ο' )
+                .replace( /ώ/g, 'ω' )
+                .replace( /ά/g, 'α' )
+                .replace( /[ίϊΐ]/g, 'ι' )
+                .replace( /ή/g, 'η' )
                 .replace( /\n/g, ' ' )
-                .replace( /[áâàä]/g, 'a' )
-                .replace( /[éêèë]/g, 'e' )
-                .replace( /[íîìï]/g, 'i' )
-                .replace( /[óôòö]/g, 'o' )
-                .replace( /[úûùü]/g, 'u' )
-                .replace( /ç/g, 'c' ) :
+                .replace( /á/g, 'a' )
+                .replace( /é/g, 'e' )
+                .replace( /í/g, 'i' )
+                .replace( /ó/g, 'o' )
+                .replace( /ú/g, 'u' )
+                .replace( /ê/g, 'e' )
+                .replace( /î/g, 'i' )
+                .replace( /ô/g, 'o' )
+                .replace( /è/g, 'e' )
+                .replace( /ï/g, 'i' )
+                .replace( /ü/g, 'u' )
+                .replace( /ã/g, 'a' )
+                .replace( /õ/g, 'o' )
+                .replace( /ç/g, 'c' )
+                .replace( /ì/g, 'i' ) :
             data;
   };
+
+  //Para el caso de que las celdas de las tablas contengan elemento html que contenga texto a buscar.
+  // Se configurar un tipo de columna personalizado para quitar etiquetas html y normalizar los caracteres para la búsqueda
+  $.fn.dataTableExt.ofnSearch['html-string'] = function(sData) {
+  // Etiquetas de tira html (you will need to test this regex for your needs. Source from http://stackoverflow.com/a/25885923/1544886)
+    sData = sData.replace(/(&nbsp;|<([^>]+)>)/ig, "");
+  // Aplicar carácter normalizador a este tipo de columna
+    return jQuery.fn.DataTable.ext.type.search.string(sData);
+  }
+
 
   /////////////////////////////
   // Métodos para validación //
@@ -3073,7 +3099,8 @@ $(document).on("blur","input[id='edit_profesor_dni']",function() {
         async:false,
   
         success: function(response) {
-          // Si no hay alumnos asignados al curso se puede eliminar.
+
+          // Si no hay alumnos o profesoresasignados al grupo se puede eliminar.
           if(response.data!=null){
             blocker.play();  
             tr.find("select").addClass("modified");
@@ -3097,11 +3124,13 @@ $(document).on("blur","input[id='edit_profesor_dni']",function() {
 
             tr.find("select option:eq("+(num_grupos-1)+")").attr('selected',true);
             tr.find("select option:eq("+(num_grupos_ant-1)+")").attr('selected',false);
+
+            // Se actualizan las pestañas que utilicen grupos.
+            $("#asignar_aula").update_tab();
+            $("#asignar_grupo").update_tab();
+            $("#profesor_asignar_grupo").update_tab();
+            $("#tutor_grupo").update_tab();
           }
-          
-          // Se actualizan las pestañas de asignar aula y asignar grupo.
-          $("#asignar_aula").update_tab();
-          $("#asignar_grupo").update_tab();
         }
       })
     
@@ -3109,7 +3138,7 @@ $(document).on("blur","input[id='edit_profesor_dni']",function() {
 
     }
     $(this).closest("tr").find("select").removeClass("error_guardar");
-        $(this).closest("tr").find("select").removeClass("modified");
+    $(this).closest("tr").find("select").removeClass("modified");
 
     $("#registro_Ngrupos #aviso_error").addClass("oculto");
     // Se actualiza el atributo numGrupos de la entidad Curso y se crean los grupos correspondiente al curso.
@@ -3150,7 +3179,7 @@ $(document).on("blur","input[id='edit_profesor_dni']",function() {
       }  
     });
 
-      if (!$("#contenedor_registro_Ngrupos").find("select").hasClass('error_guardar')){
+    if (!$("#contenedor_registro_Ngrupos").find("select").hasClass('error_guardar')){
       $("#registro_Ngrupos #aviso_error").addClass("oculto");
     }
   });
@@ -3513,7 +3542,7 @@ $(document).on("blur","input[id='edit_profesor_dni']",function() {
       }
     });
 
-    // Se obtienen las asignaturas que han sido eliminadas y que estan asignadas al curso.(Eliminar)
+    // Se obtienen las asignaturas que han sido eliminadas y que estaban asignadas al curso.(Eliminar)
     $("#asignatura_curso_dialog #lista_asignaturas button[class*='asignada']").each(function(){
       id=$(this).attr("id");
 
@@ -3578,6 +3607,7 @@ $(document).on("blur","input[id='edit_profesor_dni']",function() {
         }
         $('#asignatura_curso_dialog').dialog('close');
         $("#asignaturas_cursos").update_tab();
+        $("#profesor_asignar_grupo").update_tab();
         //añadir más
       }
     })
@@ -7348,7 +7378,7 @@ $(document).on("click","#registro_equipamientos td a",function(event){
                 }
               }); 
             }
-              // Se actualiza la lista de antiguos alumnos y la pestaña de asignar grupo yanular matrícula.
+              // Se actualiza la lista de antiguos alumnos y la pestaña de asignar grupo y anular matrícula.
               $("#alumnos_antiguo").update_tab();
               //Se actualiza la pestaña de asignar grupos si está abierta y tiene seleccionado el curso actualizado.
               if($("#asignar_grupos #lista_cursos select option:selected").attr("value")==response.curso){
@@ -8261,7 +8291,7 @@ $(document).on("click","#registro_equipamientos td a",function(event){
     $(this).closest("td").removeClass('back_asignado');
     if($(this).closest('td').attr("value")!=""){
       $(this).closest("td").attr('title', 'Tutor Eliminado');
-      $(this).closest("td").addClass('back_modificado');
+      $(this).closest("td").addClass('eliminado');
     }
     else{
       $(this).closest("td").removeClass('back_modificado');
@@ -8271,7 +8301,7 @@ $(document).on("click","#registro_equipamientos td a",function(event){
     $("#tutor_grupos #tutor_guardar").prop("disabled",true);
     $("#tutor_grupos #tutor_rest").prop("disabled",true);
 
-    if($("#tutor_grupos #lista_grupos td").hasClass('back_modificado')){
+    if($("#tutor_grupos #lista_grupos td").hasClass('back_modificado') || $("#tutor_grupos #lista_grupos td").hasClass('eliminado') ){
       $("#tutor_grupos #tutor_guardar").prop("disabled",false);
       $("#tutor_grupos #tutor_rest").prop("disabled",false);
     }
@@ -8311,7 +8341,7 @@ $(document).on("click","#registro_equipamientos td a",function(event){
 
 
     // Se obtienen los grupos cuyos tutores han sido eliminados.(Eliminar)
-    $("#tutor_grupos #lista_grupos td[value!='']").each(function(){
+    $("#tutor_grupos #lista_grupos .eliminado").each(function(){
       grupo=$(this).closest("tr").attr("grupo");
 
       if($(this).find("li").size()==0){
@@ -8320,7 +8350,7 @@ $(document).on("click","#registro_equipamientos td a",function(event){
       }
     });
 
-    //Si no existe cambios no se avisa.
+    //Se avisa si no existe cambios.
     if($.isEmptyObject(asignaciones) && $.isEmptyObject(eliminados)){
       errorPNotify.pause();
       errorPNotify.currentTime=0.0;
@@ -8413,7 +8443,6 @@ $(document).on("click","#registro_equipamientos td a",function(event){
         });
 
         nivel= $("#tutor_grupos .head_change label[class='']").attr("id");
-
 
         $(div).load(Routing.generate("tutor_grupo"), function(){
           if(nivel=="one"){
@@ -9849,6 +9878,595 @@ $(document).on("click","#registro_equipamientos td a",function(event){
 
 
  
+/////////////////////////////////
+// Asignar profesores a grupos //
+/////////////////////////////////
+
+  $(document).on('click',"#asignar_profesor a[id$='_modal']",function(event){
+    event.preventDefault();
+    var curso= $(this).closest("h2").text();
+    var id=$(this).closest("div").attr("grupo");
+
+    $.ajax({
+      type: 'POST',
+      url: Routing.generate('comprobar_asignaturas'),
+      success: function(response) {
+        // Si no hay asignaturas registradas muestra un aviso.
+        if(response.data==null){
+          error.play(); 
+          swal({
+            title:"No se pueden asignar profesores a los grupos",
+            text: 'Actualmente no hay asignaturas registrada en el sistema.',
+            type: "error",
+            html: true,
+            showCancelButton: false,
+            confirmButtonColor: color,
+            closeOnConfirm: true 
+          });
+        }
+        else{
+          $('#profesor_asignatura_grupo_dialog').load(Routing.generate("asignar_grupo_profesores_new", {id:id}), function(){
+          }).dialog('open'); 
+        }
+      }
+    })
+  });
+
+
+  $(document).on('click',"#profesor_asignatura_grupo_dialog #div_lista button",function(event){ 
+    //Se marca el profesor seleccionado.
+    if(!$(this).hasClass("elected")){
+      $("#profesor_asignatura_grupo_dialog #div_lista button").removeClass("elected"); 
+      $(this).addClass("elected");
+    }
+    if($("#profesor_asignatura_grupo_dialog #contenedor_asignaturas input:checkbox:checked").size()>0){
+      $("#profesor_asignatura_grupo_dialog #btn_asignar").removeClass('disabled');
+      $("#profesor_asignatura_grupo_dialog #btn_asignar span").removeClass('disab');
+    }
+    else{
+      $("#profesor_asignatura_grupo_dialog #btn_asignar").addClass('disabled');
+      $("#profesor_asignatura_grupo_dialog #btn_asignar span").addClass('disab');
+    }
+    //Se deshabilita el botón "restablecer".
+    $("#profesor_asignatura_grupo_dialog #profesor_asignatura_grupo_restablecer").prop("disabled",false);
+  });
+
+  $(document).on('change',"#profesor_asignatura_grupo_dialog input:checkbox",function(event){ 
+    if($("#profesor_asignatura_grupo_dialog #contenedor_asignaturas input:checkbox:checked").size()==0){
+      $("#profesor_asignatura_grupo_dialog #btn_asignar").addClass('disabled');
+      $("#profesor_asignatura_grupo_dialog #btn_asignar span").addClass('disab');
+    }
+    else{
+      if($("#profesor_asignatura_grupo_dialog #div_lista .elected").size()==1){
+        $("#profesor_asignatura_grupo_dialog #btn_asignar").removeClass('disabled');
+        $("#profesor_asignatura_grupo_dialog #btn_asignar span").removeClass('disab');
+      }
+    }
+  });
+
+  $(document).on('click',"#profesor_asignatura_grupo_dialog li",function(event){ 
+    event.preventDefault();
+
+    input=$(this).find("#no_asignado input");
+    //Se pulsa el checkbox.
+    if($(event.target).is('input')){
+                  $("#profesor_asignatura_grupo_dialog #profesor_asignatura_grupo_restablecer").prop("disabled",false);
+      //Retardo para poder mostar el input seleccionado.
+      setTimeout(function(){
+        if(input.is(':checked') ){
+          input.prop("checked",false);
+          // Se habilita el botón de asignar.
+          if($("#profesor_asignatura_grupo_dialog #div_lista .elected").size()==1 && $("#profesor_asignatura_grupo_dialog #contenedor_asignaturas #no_asignado input:checkbox:checked").size()>0){
+            $("#profesor_asignatura_grupo_dialog #btn_asignar").removeClass('disabled');
+            $("#profesor_asignatura_grupo_dialog #btn_asignar span").removeClass('disab');
+          }
+          else{
+            $("#profesor_asignatura_grupo_dialog #btn_asignar").addClass('disable');
+            $("#profesor_asignatura_grupo_dialog #btn_asignar span").addClass('disab');
+          }
+
+          if($("#profesor_asignatura_grupo_dialog #div_lista .elected").size()==0 && $("#profesor_asignatura_grupo_dialog #contenedor_asignaturas #no_asignado input:checkbox:checked").size()==0  && $("#profesor_asignatura_grupo_dialog #contenedor_asignaturas .eliminado").size()==0 && $("#profesor_asignatura_grupo_dialog #contenedor_asignaturas .back_modificado").size()==0){
+            $("#profesor_asignatura_grupo_dialog #profesor_asignatura_grupo_submit").prop("disabled",true);
+            $("#profesor_asignatura_grupo_dialog #profesor_asignatura_grupo_restablecer").prop("disabled",true);
+          }
+        }
+        else{
+          input.prop("checked",true);
+          // Se deshabilita el botón de asignar.
+          if($("#profesor_asignatura_grupo_dialog #div_lista .elected").size()==1){
+            $("#profesor_asignatura_grupo_dialog #btn_asignar").removeClass('disabled');
+            $("#profesor_asignatura_grupo_dialog #btn_asignar span").removeClass('disab');
+          }
+
+        }
+      }, 5);
+    }//Se pulsa la imagen de eliminar asignación.
+    else if($(event.target).is('img')){
+
+    }//Se pulsa la lista.
+    else{
+      $(this).find("#no_asignado input:checkbox").click();
+    }
+  });
+
+  // Marcar o desmarcar todos las asignaturas troncales.
+  $(document).on('click',"#profesor_asignatura_grupo_dialog #all",function(event){
+    if($(this).is(':checked') ){
+      $("#profesor_asignatura_grupo_dialog #contenedor_asignaturas li[tipo='Troncal']").each (function(){ 
+          $(this).find("#no_asignado input").prop("checked",true);
+      });
+    }
+    else{
+      $("#profesor_asignatura_grupo_dialog #contenedor_asignaturas li[tipo='Troncal']").each (function(){ 
+          $(this).find("#no_asignado input").prop("checked",false);
+      });
+    }
+  });
+  //Se añade el profesor y a las asignaturas seleccionadas en el curso correspondiente.
+  $(document).on('click',"#profesor_asignatura_grupo_dialog #btn_asignar",function(event){
+
+    //Se comprueba que esté seleccionado un profesor y y alguna asignatura.
+    if($("#profesor_asignatura_grupo_dialog #div_lista .elected").size()==0 || $("#profesor_asignatura_grupo_dialog #contenedor_asignaturas input:checkbox:checked").size()==0){
+      texto="";
+      if($("#profesor_asignatura_grupo_dialog #div_lista .elected").size()==0){
+        texto+="<span>- Profesor.</span><br>";
+      }
+      if($("#profesor_asignatura_grupo_dialog #contenedor_asignaturas input:checkbox:checked").size()==0){
+        texto+="<span>- Asignaturas.</span><br>";
+      }
+      errorPNotify.pause();
+      errorPNotify.currentTime=0.0;
+      $(".ui-pnotify").remove();
+        
+      errorPNotify.play();
+      new PNotify({
+        title: "Debe seleccionar los siguientes datos para realizar la asignación:",
+        text:texto,
+        addclass: "custom",
+        type: "error",
+        shadow: true,
+        hide: true,
+        width: "335px",
+        buttons: {
+          sticker: false,
+          labels:{close: "Cerrar"}
+        },
+        animate_speed: "fast",
+        stack: right_Stack_dialog,
+        animate: {
+          animate: true,
+          in_class: "fadeInRight",
+          out_class: "fadeOutRight",
+        }
+      });
+
+      $("#profesor_asignatura_grupo_dialog #btn_asignar").addClass('disabled');
+      $("#profesor_asignatura_grupo_dialog #btn_asignar span").addClass('disab');
+      return false;
+    }
+
+    profesor=$("#profesor_asignatura_grupo_dialog .elected").text();
+    id=$("#profesor_asignatura_grupo_dialog .elected").attr("id");
+    $("#profesor_asignatura_grupo_dialog #contenedor_asignaturas li div:not('.oculto') input:checkbox:checked").each (function(){ 
+      $(this).closest("#no_asignado").addClass('oculto');
+      $(this).closest("#no_asignado").next().removeClass('oculto');
+      $(this).closest("#no_asignado").next().find('input[type="text"]').attr("value",profesor);
+      $(this).closest("#no_asignado").next().find('input[type="text"]').attr("id",id);
+      $(this).closest("li").removeClass();
+      
+      $("#profesor_asignatura_grupo_dialog #div_lista .elected").removeClass('elected');
+      $(this).prop("checked", false);
+      if($(this).closest("#no_asignado").next().find('input[type="text"]').attr("value")==$(this).closest("#no_asignado").next().find('input[type="text"]').attr("valor")){
+        $(this).closest("li").addClass("back_asignado");
+      }else{
+        $(this).closest("li").addClass("back_modificado");
+      }
+    });
+    //Se comprueba si hay modificaciones para habilitar o deshabilitar los botones de "guardar" y "restablecer".
+    if($("#profesor_asignatura_grupo_dialog #contenedor_asignaturas .back_modificado").size()>0){
+      $("#profesor_asignatura_grupo_dialog #profesor_asignatura_grupo_submit").prop("disabled",false);
+      $("#profesor_asignatura_grupo_dialog #profesor_asignatura_grupo_restablecer").prop("disabled",false);
+    }else{
+      $("#profesor_asignatura_grupo_dialog #profesor_asignatura_grupo_submit").prop("disabled",true);
+      if($("#profesor_asignatura_grupo_dialog #contenedor_asignaturas .eliminado").size()>0){
+        $("#profesor_asignatura_grupo_dialog #profesor_asignatura_grupo_restablecer").prop("disabled",false);
+      }else{
+        $("#profesor_asignatura_grupo_dialog #profesor_asignatura_grupo_restablecer").prop("disabled",true);
+      }
+    }
+    // Se deshabilita el botón "Asignar".
+    $("#profesor_asignatura_grupo_dialog #btn_asignar").addClass('disabled');
+    $("#profesor_asignatura_grupo_dialog #btn_asignar span").addClass('disab');
+   
+    // Se desmarca el checkbox o se oculta si no hay más asignaturas troncales por asignar.
+    $("#profesor_asignatura_grupo_dialog #all").prop("checked", false);
+    if($("#profesor_asignatura_grupo_dialog #contenedor_asignaturas li[tipo='Troncal'] #no_asignado:not(.oculto)").size()<2){
+      $("#profesor_asignatura_grupo_dialog #all").addClass('oculto');
+    }
+  });
+
+  // Eliminar asignación del profesor.
+  $(document).on('click',"#profesor_asignatura_grupo_dialog #contenedor_asignaturas img",function(event){
+    event.preventDefault();
+
+    $(this).closest("div").addClass('oculto');
+    $(this).closest("div").prev().removeClass('oculto');
+    //Se añade la clase "eliminado" para eliminar los registros asignados.
+    if($(this).closest("li").hasClass('back_asignado')){
+      $(this).closest("li").removeClass();
+      $(this).closest("li").addClass("eliminado");
+    }
+    else{
+      $(this).closest("li").removeClass();
+    }
+
+    //Se comprueba si hay modificaciones para habilitar o deshabilitar los botones de "guardar" y "restablecer".
+    if($("#profesor_asignatura_grupo_dialog #contenedor_asignaturas .back_modificado").size()>0 || $("#profesor_asignatura_grupo_dialog #contenedor_asignaturas .eliminado").size()>0){
+      $("#profesor_asignatura_grupo_dialog #profesor_asignatura_grupo_submit").prop("disabled",false);
+      $("#profesor_asignatura_grupo_dialog #profesor_asignatura_grupo_restablecer").prop("disabled",false);
+    }else{
+      if($("#profesor_asignatura_grupo_dialog #contenedor_asignaturas .eliminado").size()>0){
+        $("#profesor_asignatura_grupo_dialog #profesor_asignatura_grupo_restablecer").prop("disabled",false);
+      }else{
+        $("#profesor_asignatura_grupo_dialog #profesor_asignatura_grupo_restablecer").prop("disabled",true);
+        $("#profesor_asignatura_grupo_dialog #profesor_asignatura_grupo_submit").prop("disabled",true);
+      }
+    }
+    // Se muestra el checkbox si hay más de una asignatura troncal por asignar.
+    if($("#profesor_asignatura_grupo_dialog #contenedor_asignaturas li[tipo='Troncal'] #no_asignado:not(.oculto)").size()>1){
+      $("#profesor_asignatura_grupo_dialog #all").removeClass('oculto');
+    }
+  });
+
+  $(document).on('click',"#profesor_asignatura_grupo_dialog #profesor_asignatura_grupo_restablecer",function(event){
+    event.preventDefault();
+    $("#asignar_profesor #contenedor_registro:not(.oculto) img").click();
+  });
+
+  //Guardar profesores asignados en un grupo.
+  $(document).on('click',"#profesor_asignatura_grupo_dialog #profesor_asignatura_grupo_submit ",function(event){
+    event.preventDefault();
+
+    var asignaciones = new Object();
+    var eliminados = Array();
+    var1=0;
+    var2=0;
+
+    // Se obtienen las asignaturas modificadas.(Insertar/Actualizar)
+    $("#profesor_asignatura_grupo_dialog #contenedor_asignaturas li[class*='back_modificado']").each(function(){
+      id=$(this).attr("id"); //Id asignatura
+      valor=$(this).find("input:text").attr("id"); //Id profesor
+        asignaciones[id] = valor;
+        var1++;
+    });
+
+    // Se obtienen las asignaturas que han sido eliminadas y que estaban asignadas al curso.(Eliminar)
+    $("#profesor_asignatura_grupo_dialog #contenedor_asignaturas li[class*='eliminado']").each(function(){
+      id=$(this).attr("id");
+      eliminados.push(id);
+      var2++;
+    });
+
+    //Se avisa si no existe cambios.
+    if($.isEmptyObject(asignaciones) && $.isEmptyObject(eliminados)){
+      errorPNotify.pause();
+      errorPNotify.currentTime=0.0;
+      $(".ui-pnotify").remove();
+
+      errorPNotify.play();
+
+      new PNotify({
+        text:'No se ha modificado ninguna asignación de profesores.',
+        addclass: "custom",
+        type: "error",
+        shadow: true,
+        hide: true,
+        buttons: {
+          sticker: false,
+          labels:{close: "Cerrar"}
+        },
+        width: "335px",
+        stack: right_Stack_dialog,
+        animate: {
+          animate: true,
+          in_class: "fadeInRight",
+          out_class: "fadeOutRight",
+        }
+      });
+      return false;
+    }
+    grupo=$(this).closest('.dialog_button').prev().attr("id"); //Id del grupo.
+    $.ajax({
+      type: 'POST',
+      url: Routing.generate('asignar_grupo_profesores'),
+      data: { asignaciones:asignaciones, eliminados:eliminados, grupo:grupo},
+      dataType: 'json',
+      success: function(response) {
+        if(response.data==null){
+          errorPNotify.play();
+
+          new PNotify({
+            text:'No se ha modificado ninguna asignación de profesores.',
+            addclass: "custom",
+            type: "error",
+            shadow: true,
+            hide: true,
+            buttons: {
+              sticker: false,
+              labels:{close: "Cerrar"}
+            },
+            width: "335px",
+            stack: right_Stack_dialog,
+            animate: {
+              animate: true,
+              in_class: "fadeInRight",
+              out_class: "fadeOutRight",
+            }
+          });
+          return false;
+        }
+        texto="";
+        if(var1==1){
+          texto+=" <span>"+var1+"  Profesor <strong>asignado</strong><span><br><br>";
+        }
+        else if(var1>1){
+          texto+=" <span>"+var1+"  Profesores <strong>asignados</strong><span><br><br>";
+        }
+
+        if(var2==1){
+          texto+=" <span>"+var2+"  Profesor <strong>eliminado</strong><span><br>";
+        }
+        else if(var2>1){
+          texto+=" <span>"+var2+"  Profesores <strong>eliminados</strong><span><br>";
+        }
+        exito.play();
+        new PNotify({
+          text:texto,
+          addclass: "custom",
+          type: "success",
+          shadow: true,
+          hide: true,
+          animation: "fade",
+          animate_speed: 'fast',
+          delay: 4000,
+          buttons: {
+            sticker: false,
+            labels:{close: "Cerrar"}
+          },
+          stack: right_Stack_dialog,
+          animate: {
+            animate: true,
+            in_class: "fadeInRight",
+            out_class: "fadeOutRight",
+          }
+        });
+        id=$("#asignar_profesor .lista_cursos .elected").attr("id");
+        $("#tabs>div[style='display: block']").load(Routing.generate("asignar_grupo_profesores_show"), function(){
+          $("#asignar_profesor .lista_cursos button[id='"+id+"']").click();
+        });
+        $('#profesor_asignatura_grupo_dialog').dialog('close');
+      }
+    })
+  });
+
+  //Se elimina las asignaciones de profesores de un grupo.
+  $(document).on('click',"#asignar_profesor #eliminar_grupo ",function(event){
+    event.preventDefault();
+
+    //Se avisa si no hay profesores asignados al grupo.
+    if($("#asignar_profesor #contenedor_registro:not(.oculto) tr:not(.cabecera_tipo) td[class='']").size()==0){
+      errorPNotify.pause();
+      errorPNotify.currentTime=0.0;
+      $(".ui-pnotify").remove();
+
+      errorPNotify.play();
+
+      new PNotify({
+        text:'No hay profesores asignados en el grupo.',
+        addclass: "custom",
+        type: "error",
+        shadow: true,
+        hide: true,
+        buttons: {
+          sticker: false,
+          labels:{close: "Cerrar"}
+        },
+        stack: right_Stack,
+        animate: {
+          animate: true,
+          in_class: "fadeInRight",
+          out_class: "fadeOutRight",
+        }
+      });
+      $("#asignar_profesor #eliminar_grupo").prop("disabled",true);
+      return false;
+    }
+    nombre_grupo=$("#asignar_profesor .lista_cursos .elected").text();
+    aviso.play();
+    swal({
+      title: "Eliminación de Asignación de Profesores",
+      text: "<p class='justificado'>Se van a eliminar las asignaciones de profesores de "+nombre_grupo+".</p><br>¿Estas seguro de continuar? No podrás deshacer este paso...",
+      type: "warning",
+      html: true,
+      showCancelButton: true,
+      cancelButtonText: "Cancelar",
+      confirmButtonColor: color,
+      confirmButtonText: "¡Adelante!",
+      closeOnConfirm: true },
+
+      function(){
+
+        grupo=$("#asignar_profesor #eliminar_grupo").attr("grupo"); //Id del grupo.
+        $.ajax({
+          type: 'POST',
+          url: Routing.generate('eliminar_asignaciones_grupo'),
+          data: {grupo:grupo},
+          dataType: 'json',
+          success: function(response) {
+            if(response.data==null){
+              errorPNotify.play();
+
+              new PNotify({
+                text:'No hay profesores asignados en el grupo.',
+                addclass: "custom",
+                type: "error",
+                shadow: true,
+                hide: true,
+                buttons: {
+                  sticker: false,
+                  labels:{close: "Cerrar"}
+                },
+                stack: right_Stack,
+                animate: {
+                  animate: true,
+                  in_class: "fadeInRight",
+                  out_class: "fadeOutRight",
+                }
+              });
+              return false;
+            }
+            exito.play();
+            new PNotify({
+              text:"Se han eliminado los profesores asignados al grupo.",
+              addclass: "custom",
+              type: "success",
+              shadow: true,
+              hide: true,
+              animation: "fade",
+              animate_speed: 'fast',
+              delay: 4000,
+              buttons: {
+                sticker: false,
+                labels:{close: "Cerrar"}
+              },
+              stack: right_Stack,
+              animate: {
+                animate: true,
+                in_class: "fadeInRight",
+                out_class: "fadeOutRight",
+              }
+            });
+            id=$("#asignar_profesor .lista_cursos .elected").attr("id");
+            $("#tabs>div[style='display: block']").load(Routing.generate("asignar_grupo_profesores_show"), function(){
+              $("#asignar_profesor .lista_cursos button[id='"+id+"']").click();
+            });
+          }
+        })
+      }
+    );
+  });
+
+  //Se elimina las asignaciones de profesores de todos los grupos.
+  $(document).on('click',"#asignar_profesor #eliminar_todo ",function(event){
+    event.preventDefault();
+
+    //Se avisa si no hay profesores asignados en ningún grupo.
+    if($("#asignar_profesor #contenedor_registro tr:not(.cabecera_tipo) td[class='']").size()==0){
+      errorPNotify.pause();
+      errorPNotify.currentTime=0.0;
+      $(".ui-pnotify").remove();
+
+      errorPNotify.play();
+
+      new PNotify({
+        text:'No hay profesores asignados en ningún grupo.',
+        addclass: "custom",
+        type: "error",
+        shadow: true,
+        hide: true,
+        buttons: {
+          sticker: false,
+          labels:{close: "Cerrar"}
+        },
+        stack: right_Stack,
+        animate: {
+          animate: true,
+          in_class: "fadeInRight",
+          out_class: "fadeOutRight",
+        }
+      });
+      $("#asignar_profesor #eliminar_todo").prop("disabled",true);
+      return false;
+    }
+    nombre_grupo=$("#asignar_profesor .lista_cursos .elected").text();
+    aviso.play();
+    swal({
+      title: "Eliminación de Asignación de Profesores",
+      text: "<p class='justificado'>Se van a eliminar las asignaciones de todos los profesores.</p><br>¿Estas seguro de continuar? No podrás deshacer este paso...",
+      type: "warning",
+      html: true,
+      showCancelButton: true,
+      cancelButtonText: "Cancelar",
+      confirmButtonColor: color,
+      confirmButtonText: "¡Adelante!",
+      closeOnConfirm: true },
+
+      function(){
+
+        $.ajax({
+          type: 'POST',
+          url: Routing.generate('eliminar_todas_asignaciones_grupos'),
+          dataType: 'json',
+          success: function(response) {
+            if(response.data==null){
+              errorPNotify.play();
+
+              new PNotify({
+                text:'No hay profesores asignados en ningún grupo.',
+                addclass: "custom",
+                type: "error",
+                shadow: true,
+                hide: true,
+                buttons: {
+                  sticker: false,
+                  labels:{close: "Cerrar"}
+                },
+                stack: right_Stack,
+                animate: {
+                  animate: true,
+                  in_class: "fadeInRight",
+                  out_class: "fadeOutRight",
+                }
+              });
+              return false;
+            }
+            exito.play();
+            new PNotify({
+              text:"Se han eliminado las asignaciones de todos los profesores.",
+              addclass: "custom",
+              type: "success",
+              shadow: true,
+              hide: true,
+              animation: "fade",
+              animate_speed: 'fast',
+              delay: 4000,
+              buttons: {
+                sticker: false,
+                labels:{close: "Cerrar"}
+              },
+              stack: right_Stack,
+              animate: {
+                animate: true,
+                in_class: "fadeInRight",
+                out_class: "fadeOutRight",
+              }
+            });
+            id=$("#asignar_profesor .lista_cursos .elected").attr("id");
+            $("#tabs>div[style='display: block']").load(Routing.generate("asignar_grupo_profesores_show"), function(){
+              $("#asignar_profesor .lista_cursos button[id='"+id+"']").click();
+            });
+          }
+        })
+      }
+    );
+  });
+
+
+
+
+
+
+
 
 
 

@@ -30,6 +30,65 @@ class ImparteController extends Controller
             'entities' => $entities,
         ));
     }
+
+    public function AsignarGrupoProfesoresShowAction()
+    {
+        $em = $this->getDoctrine()->getManager();
+
+        $asignaturas= $em->getRepository('BackendBundle:Asignatura')->findNumAsignaturas();
+        $profesores= $em->getRepository('BackendBundle:Profesor')->findByActivo(1);
+        if (!$profesores) {
+            $numProfesores=0;
+        }
+        else{
+            $numProfesores=1;
+        }
+
+        $entities = $em->getRepository('BackendBundle:Grupo')->findGruposByNivel("Primaria");
+        return $this->render('BackendBundle:Imparte:profesor_asignaturas_grupos_show.html.twig', array(
+            'entities' => $entities,
+            'numAsignaturas' => (int)$asignaturas[1],
+            'numProfesores' => $numProfesores,
+        ));
+    }
+    public function AsignarGrupoProfesoresNewAction($id)
+    {
+        $em = $this->getDoctrine()->getManager();
+        $grupo= $em->getRepository('BackendBundle:Grupo')->findOneById($id);
+        $curso= $grupo->getCurso();
+
+        $entities_troncales = $em->getRepository('BackendBundle:AsignaturasCursos')->findAsignaturasTroncalesCurso($curso->getId());
+        $entities_especificas = $em->getRepository('BackendBundle:AsignaturasCursos')->findAsignaturasEspecificasCurso($curso->getId());
+        $imparte = $em->getRepository('BackendBundle:Imparte')->findByGrupo($id);
+        
+        $array=[];
+        foreach($imparte as $registro){
+            $array[$registro->getAsignatura()->getId()]=$registro->getProfesor()->getNombre()." ".$registro->getProfesor()->getApellido1()." ".$registro->getProfesor()->getApellido2();
+        }
+        $tutor=$grupo->getProfesor();
+        if($tutor){
+            $id_tutor=$tutor->getId();   
+        }
+        else{
+            $id_tutor=null; 
+        }
+
+        $profesores = $em->getRepository('BackendBundle:Profesor')->findProfesoresDePrimaria();
+
+
+        return $this->render('BackendBundle:Imparte:new_profesores_asignaturas_grupo.html.twig', array(
+            'entities_troncales' => $entities_troncales,
+            'entities_especificas' => $entities_especificas,
+            'curso' => $curso,
+            'grupo' => $grupo,
+            'imparte' => $array,
+            'tutor' => $tutor,
+            'id_tutor'=>$id_tutor,
+            'profesores' => $profesores
+        ));
+    }
+
+
     /**
      * Creates a new Imparte entity.
      *
@@ -245,4 +304,147 @@ class ImparteController extends Controller
             return new JsonResponse(array('data' =>null), 200);
         }
     }
+
+    public function ProfesoresAsignaturasGruposAction($id)
+    {
+        $em = $this->getDoctrine()->getManager();
+        $grupo = $em->getRepository('BackendBundle:Grupo')->findOneById($id);
+        $entity = $em->getRepository('BackendBundle:AsignaturasCursos')->findAsignaturasCursos($grupo->getCurso()->getId());
+        $imparte = $em->getRepository('BackendBundle:Imparte')->findByGrupo($id);
+        
+        $array=[];
+        foreach($imparte as $registro){
+            $array[$registro->getGrupo()->getId()."-".$registro->getAsignatura()->getId()]=$registro->getProfesor()->getNombre()." ".$registro->getProfesor()->getApellido1()." ".$registro->getProfesor()->getApellido2();
+        }
+
+        return $this->render('BackendBundle:Imparte:datos_imparte.html.twig', array(
+            'imparte' => $array,
+            'entity' => $entity));
+    }
+
+
+    public function AsignarGrupoProfesoresAction()
+    {
+        $em = $this->getDoctrine()->getManager();
+
+        $asignaciones=$this->get('request')->request->get('asignaciones');
+        $eliminados=$this->get('request')->request->get('eliminados');
+        $idgrupo=$this->get('request')->request->get('grupo');
+
+        $data=1;
+        if($asignaciones==null && $eliminados==null){
+            $data=null;
+            return new JsonResponse(array('data' => $data), 200);
+        }
+
+        if($asignaciones){
+          foreach ($asignaciones as $asignatura => $id ) {
+            $profesor = $em->getRepository('BackendBundle:Profesor')->findOneById($id);
+            if (!$profesor) {
+                throw $this->createNotFoundException('Unable to find Profesor entity.');
+            }
+            $asignatura = $em->getRepository('BackendBundle:AsignaturasCursos')->findOneById($asignatura);
+            if (!$asignatura) {
+                throw $this->createNotFoundException('Unable to find AsignaturasCursos entity.');
+            }
+            else{
+                $imparte= $em->getRepository('BackendBundle:Imparte')->findOneByAsignatura($asignatura);
+            }
+            if ($imparte) {
+                $imparte->setProfesor($profesor);
+                $imparte->setAsignatura($asignatura);
+
+                //Validar cambio de profesor con horarios de los cursos asignados. (No puede repetirse hora y día de un profesor)
+            }
+            else{
+
+                $grupo = $em->getRepository('BackendBundle:Grupo')->findOneById($idgrupo);
+                if (!$grupo) {
+                 throw $this->createNotFoundException('Unable to find Grupo entity.');
+                }
+
+                $imparte = new Imparte();
+                $imparte->setProfesor($profesor);
+                $imparte->setAsignatura($asignatura);
+                $imparte->setGrupo($grupo);
+                $imparte->setHorario(null);
+                $imparte->setLibro(null);
+                $imparte->setDiaSemanal(null);
+            }
+
+            $em->persist($imparte);
+          }   
+        }
+
+        if($eliminados){
+          foreach ($eliminados as $asignatura ) {
+            $asignatura = $em->getRepository('BackendBundle:AsignaturasCursos')->findOneById($asignatura);
+            if (!$asignatura) {
+                throw $this->createNotFoundException('Unable to find Asignatura entity.');
+            }
+            $grupo = $em->getRepository('BackendBundle:Grupo')->findOneById($idgrupo);
+            if (!$grupo) {
+                throw $this->createNotFoundException('Unable to find Grupo entity.');
+            }
+
+            $imparte = $em->getRepository('BackendBundle:Imparte')->findByGrupoAndAsignatura($grupo,$asignatura);
+
+            if (!$imparte) {
+                throw $this->createNotFoundException('Unable to find Imparte entity.');
+            }
+            $em->remove($imparte);
+          }  
+        }
+        $em->flush();
+        return new JsonResponse(array('data' => $data,'success' => true), 200);
+    }
+
+
+    public function EliminarAsignacionesGrupoAction()
+    {
+        $em = $this->getDoctrine()->getManager();
+
+        $idgrupo=$this->get('request')->request->get('grupo');
+
+        $grupo = $em->getRepository('BackendBundle:Grupo')->findOneById($idgrupo);
+        if (!$grupo) {
+            throw $this->createNotFoundException('Unable to find Grupo entity.');
+        }
+
+        $imparte= $em->getRepository('BackendBundle:Imparte')->findByGrupo($grupo);
+        
+        $data=1;
+        if(!$imparte){
+            $data=null;
+            return new JsonResponse(array('data' => $data), 200);
+        }
+        else{
+            foreach ($imparte as $asignacion ) {
+                $em->remove($asignacion);
+            }  
+            $em->flush();
+            return new JsonResponse(array('data' => $data,'success' => true), 200);
+        }
+    }
+
+    public function EliminarTodasAsignacionesGruposAction()
+    {
+        $em = $this->getDoctrine()->getManager();
+
+        $imparte= $em->getRepository('BackendBundle:Imparte')->findAll();
+        
+        $data=1;
+        if(!$imparte){
+            $data=null;
+            return new JsonResponse(array('data' => $data), 200);
+        }
+        else{
+            foreach ($imparte as $asignacion ) {
+                $em->remove($asignacion);
+            }  
+            $em->flush();
+            return new JsonResponse(array('data' => $data,'success' => true), 200);
+        }
+    }
+
 }

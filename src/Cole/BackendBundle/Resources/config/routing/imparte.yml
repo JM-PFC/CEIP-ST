@@ -34,3 +34,33 @@ datos_imparte:
     defaults: { _controller: "BackendBundle:Imparte:DatosImparte" }
     options:
         expose: true
+
+asignar_grupo_profesores_show:
+    path:     /asignar_grupo_profesores_show
+    defaults: { _controller: "BackendBundle:Imparte:AsignarGrupoProfesoresShow" }
+    options:
+        expose: true
+
+asignar_grupo_profesores_new:
+    path:     /asignar_grupo_profesores/{id}/new
+    defaults: { _controller: "BackendBundle:Imparte:AsignarGrupoProfesoresNew" }
+    options:
+        expose: true
+
+asignar_grupo_profesores:
+    path:     /asignar_grupo_profesores
+    defaults: { _controller: "BackendBundle:Imparte:AsignarGrupoProfesores" }
+    options:
+        expose: true
+
+eliminar_asignaciones_grupo:
+    path:     /eliminar_asignaciones_grupo
+    defaults: { _controller: "BackendBundle:Imparte:EliminarAsignacionesGrupo" }
+    options:
+        expose: true
+
+eliminar_todas_asignaciones_grupos:
+    path:     /eliminar_todas_asignaciones_grupos
+    defaults: { _controller: "BackendBundle:Imparte:EliminarTodasAsignacionesGrupos" }
+    options:
+        expose: true

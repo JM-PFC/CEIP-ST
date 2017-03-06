@@ -28,7 +28,7 @@ class ProfesorRepository extends EntityRepository
 	}
 
 
-		public function findComprobarUnidades($horario, $equipamiento, $fecha) 
+	public function findComprobarUnidades($horario, $equipamiento, $fecha) 
 	{
 		return $this->getEntityManager()->createQuery(
 			'SELECT COUNT(r) FROM BackendBundle:Reserva r WHERE r.equipamiento=:equipamiento  
@@ -40,5 +40,15 @@ class ProfesorRepository extends EntityRepository
 		->setMaxResults(1)
 		->getOneOrNullResult();
 	}
+
+	public function findProfesoresDePrimaria()
+	{
+	return $this->getEntityManager()->createQuery(
+			'SELECT p FROM BackendBundle:Profesor p WHERE p.activo=1  and p.nivel=:nivel ORDER BY p.nombre')
+			->setParameters(array(
+			'nivel' => "Primaria"))
+		->getResult();
+	}
+	
 
 }

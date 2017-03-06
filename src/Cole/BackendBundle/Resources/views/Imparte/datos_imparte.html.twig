@@ -1,0 +1,38 @@
+<script>
+  //Se añade el nombre del profesor en los grupos donde tengan profesor y asignaturas asignadas.
+  grupo="";
+  array={{imparte|json_encode()|raw}};
+  for (var key in array){
+  	clave=key.split("-");
+  	grupo=clave[0];
+  	asignatura=clave[1];
+  	profesor=array[key];
+
+	 $("#asignar_profesor #cabecera_lista[grupo='"+grupo+"']").next().find(" tr[id='"+asignatura+"'] td:nth-child(2)").text(profesor);
+	 $("#asignar_profesor #cabecera_lista[grupo='"+grupo+"']").next().find(" tr[id='"+asignatura+"'] td:nth-child(2)").removeClass('text_a_c');
+  }
+
+
+
+  $("#asignar_profesor #lista_asignaturas .cabecera_tipo td ").attr("colspan",2);
+
+  //Se oculta la imagen para asignar profesores a los cursos que no tienen asignaturas registradas.
+  $("#asignar_profesor #contenedor_registro #lista_asignaturas tbody .dataTables_empty").each(function(){  
+      $(this).closest("#contenedor_registro").find("#cabecera_lista #añadir_modal").addClass('oculto');
+  });
+
+</script>
+
+{% for entity in entity %}
+	<tr id="{{ entity.id }}" tipo="{{ entity.asignatura.tipo }}">
+  	<td>{{ entity.asignatura.nombre }}</td>
+  	<td class="text_a_c">-</td>
+  	{#<td>{{ entity.profesor.nombre ~ " " ~ entity.profesor.apellido1 ~ " " ~ entity.profesor.apellido2  }}</td>#}
+
+	</tr>
+
+{% else %}
+	<tr class="odd no_cursor">
+		<td class="dataTables_empty">Este grupo no tiene asignaturas asignadas</td>
+	</tr>
+{% endfor %}

@@ -22,7 +22,7 @@ class Imparte
     private $id;
 
     /**
-    * @ORM\ManyToOne(targetEntity="Asignatura", inversedBy="imparte")
+    * @ORM\ManyToOne(targetEntity="AsignaturasCursos", inversedBy="imparte")
     * @ORM\JoinColumn(name="asignatura_id", referencedColumnName="id", nullable=false)
     */
     private $asignatura;
@@ -43,7 +43,7 @@ class Imparte
     /**
      * @var string
      *
-     * @ORM\Column(name="dia_semanal", type="string", length=255, nullable=false)
+     * @ORM\Column(name="dia_semanal", type="string", length=255, nullable=true)
      */
     private $dia_semanal;
 
@@ -52,14 +52,14 @@ class Imparte
      *
      * 
      * @ORM\ManyToOne(targetEntity="Horario", inversedBy="imparte")
-     * @ORM\JoinColumn(name="horario", referencedColumnName="id" ,nullable=false)
+     * @ORM\JoinColumn(name="horario", referencedColumnName="id" )
      */
     private $horario;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="libro", type="string", length=255)
+     * @ORM\Column(name="libro", type="string", length=255, nullable=true)
      */
     private $libro;
 
@@ -71,29 +71,6 @@ class Imparte
     public function getId()
     {
         return $this->id;
-    }
-
-    /**
-     * Set asignatura
-     *
-     * @param \Cole\BackendBundle\Entity\Asignatura $asignatura
-     * @return Imparte
-     */
-    public function setAsignatura(\Cole\BackendBundle\Entity\Asignatura $asignatura)
-    {
-        $this->asignatura = $asignatura;
-
-        return $this;
-    }
-
-    /**
-     * Get asignatura
-     *
-     * @return \Cole\BackendBundle\Entity\Profesor 
-     */
-    public function getAsignatura()
-    {
-        return $this->asignatura;
     }
 
     /**
@@ -232,5 +209,28 @@ class Imparte
     public function getDiaSemanal()
     {
         return $this->dia_semanal;
+    }
+
+    /**
+     * Set asignatura
+     *
+     * @param \Cole\BackendBundle\Entity\AsignaturasCursos $asignatura
+     * @return Imparte
+     */
+    public function setAsignatura(\Cole\BackendBundle\Entity\AsignaturasCursos $asignatura)
+    {
+        $this->asignatura = $asignatura;
+
+        return $this;
+    }
+
+    /**
+     * Get asignatura
+     *
+     * @return \Cole\BackendBundle\Entity\AsignaturasCursos 
+     */
+    public function getAsignatura()
+    {
+        return $this->asignatura;
     }
 }

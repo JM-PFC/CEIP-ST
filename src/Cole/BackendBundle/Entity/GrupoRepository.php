@@ -31,11 +31,21 @@ class GrupoRepository extends EntityRepository
 		->getResult();
 	}
 
+	public function findGruposByNivel($nivel)
+	{
+		return $this->getEntityManager()->createQuery(
+		'SELECT g FROM BackendBundle:Grupo g JOIN g.curso c WHERE c.nivel=:nivel')
+		->setParameters(array(
+			'nivel' => $nivel))
+		->getResult();
+	}
+
 	public function findAllByCurso()
 	{
 		return $this->getEntityManager()->createQuery(
 		'SELECT g,c FROM BackendBundle:Grupo g JOIN g.curso c ORDER BY c.numOrden, g.letra')
 		->getResult();
 	}
+
 
 }
