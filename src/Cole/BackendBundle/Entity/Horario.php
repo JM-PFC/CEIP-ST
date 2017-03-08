@@ -43,12 +43,26 @@ class Horario
     private $fin;
 
     /**
+     * @var string
+     *
+     * @ORM\Column(name="tipo", type="string", length=50,nullable=true)
+     */
+    private $tipo;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="duracion", type="string", length=10,nullable=true)
+     */
+    private $duracion;
+    
+    /**
      * @ORM\OneToMany(targetEntity="Reserva", mappedBy="horario", cascade={"remove"})
      */
     private $reserva;
 
     /**
-    * @ORM\OneToMany(targetEntity="Imparte", mappedBy="horario",cascade={"remove"})
+    * @ORM\OneToMany(targetEntity="Imparte", mappedBy="horario")
     */
     private $imparte;
 
@@ -203,5 +217,51 @@ class Horario
     public function getImparte()
     {
         return $this->imparte;
+    }
+
+    /**
+     * Set tipo
+     *
+     * @param string $tipo
+     * @return Horario
+     */
+    public function setTipo($tipo)
+    {
+        $this->tipo = $tipo;
+
+        return $this;
+    }
+
+    /**
+     * Get tipo
+     *
+     * @return string 
+     */
+    public function getTipo()
+    {
+        return $this->tipo;
+    }
+
+    /**
+     * Set duracion
+     *
+     * @param string $duracion
+     * @return Horario
+     */
+    public function setDuracion($duracion)
+    {
+        $this->duracion = $duracion;
+
+        return $this;
+    }
+
+    /**
+     * Get duracion
+     *
+     * @return string 
+     */
+    public function getDuracion()
+    {
+        return $this->duracion;
     }
 }

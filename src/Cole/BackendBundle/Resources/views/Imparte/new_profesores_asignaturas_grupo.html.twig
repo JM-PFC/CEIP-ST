@@ -173,7 +173,11 @@
                   <li id="{{ entity.id }}" tipo="{{ entity.asignatura.tipo }}">
                     <div id="no_asignado" title="Profesor asignado">
                       <input type="checkbox"></input>
-                      <p class="w64">{{ entity.asignatura.nombre }}</p>
+                      {% if entity.numModulos == 1  %}
+                        <p class="w64">{{ entity.asignatura.nombre }} <span id="{{ entity.numModulos }} ">({{ entity.numModulos }} Módulo)</span></p>
+                      {% else %}
+                        <p class="w64">{{ entity.asignatura.nombre }} <span id="{{ entity.numModulos }} ">({{ entity.numModulos }} Módulos)</span></p>
+                      {% endif %}
                     </div>
                     <div id="asignado" class="oculto" title="Profesor pendiente de asignar">
                       <input type="checkbox" style="opacity: 0;"></input>
@@ -188,7 +192,11 @@
                   <li id="{{ entity.id }}" tipo="{{ entity.asignatura.tipo }}">
                     <div id="no_asignado" title="Profesor asignado">
                       <input type="checkbox"></input>
-                      <p class="w64">{{ entity.asignatura.nombre }}</p>
+                      {% if entity.numModulos == 1  %}
+                        <p class="w64">{{ entity.asignatura.nombre }} <span id="{{ entity.numModulos }} ">({{ entity.numModulos }} Módulo)</span></p>
+                      {% else %}
+                        <p class="w64">{{ entity.asignatura.nombre }} <span id="{{ entity.numModulos }} ">({{ entity.numModulos }} Módulos)</span></p>
+                      {% endif %}
                     </div>
                     <div id="asignado" class="oculto" title="Profesor pendiente de asignar">
                       <input type="checkbox" style="opacity: 0;"></input>

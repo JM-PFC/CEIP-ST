@@ -56,6 +56,21 @@ class ImparteRepository extends EntityRepository
 		->getOneOrNullResult();
 	}
 
+	
+	public function findNumAsignacionesProfesor($profesor)
+	{
+		return $this->getEntityManager()->createQuery(
+		'SELECT COUNT(i) FROM BackendBundle:Imparte i WHERE i.profesor=:profesor')
+		->setParameters(array(
+			'profesor' => $profesor))
+		->setMaxResults(1)
+		->getOneOrNullResult();
+	}
 
-
+	public function findConHorario()
+	{
+		return $this->getEntityManager()->createQuery(
+		'SELECT i FROM BackendBundle:Imparte i WHERE i.horario IS not NULL ')
+		->getResult();
+	}
 }

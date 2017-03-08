@@ -4599,6 +4599,9 @@ $(document).on("blur","input[id='edit_profesor_dni']",function() {
   });
 
   $(document).on("click","#registro_horario #button_generate",function(event){
+    //Se añade el tipo de horario al botón para luego guardarlo en la base de datos.
+    $("#registro_horario #button_horario_save").attr("tipo","manual");
+
     // Se vacia el contenedor para el nuevo horario.
     $("#contenedor_nuevo_horario tbody").empty();
 
@@ -4676,8 +4679,14 @@ $(document).on("blur","input[id='edit_profesor_dni']",function() {
 
   //Se genera y se guarda automáticamente el horario con módulos de la misma duración.
   $(document).on("click","#registro_horario #button_auto_generate",function(event){
-    //Se valida que la duración del día esté dentro del horario del centro.
+    /*Se añade el tipo de horario, duracion de los módulos, posición del recreo y duración del recreo
+      al botón para luego guardarlo en la base de datos.*/
+    $("#registro_horario #button_horario_save").attr("tipo","auto");
+    $("#registro_horario #button_horario_save").attr("duracion",$("#registro_horario #tiempo_modulo").val());
+    $("#registro_horario #button_horario_save").attr("recreo",$("#registro_horario #horas_recreo_auto").val());
+    $("#registro_horario #button_horario_save").attr("tiempo",$("#registro_horario #tiempo_recreo").val());
 
+    //Se valida que la duración del día esté dentro del horario del centro.
     if($("#registro_horario #inicio_clase option:selected").val() < $("#registro_horario #inicio_horario_disable").val()){
       // Se establece el efecto para la notificación de error en el caso de que se de varias veces seguidas a guardar con algunas opción sin marcar.
       errorPNotify.pause();
@@ -5291,11 +5300,16 @@ $(document).on("blur","input[id='edit_profesor_dni']",function() {
       hora_fin=$(this).closest("tr").children('td').slice(3, 4).find("input").attr("value");
       ini=hora_ini+":00";
       fin=hora_fin+":00";
+
+      hora_ini=ini.split(":");
+      hora_fin=fin.split(":");
+      duracion=((parseInt(hora_fin[0])*60)+parseInt(hora_fin[1]))-((parseInt(hora_ini[0])*60)+parseInt(hora_ini[1]));
+     
       // Se actualiza las horas modificadas en la entidad Horario.
       $.ajax({
         type: 'POST',
         url: Routing.generate('editar_horario'),
-        data: {clase:clase,ini:ini,fin:fin},        
+        data: {clase:clase,ini:ini,fin:fin,duracion:duracion},        
       })
     });
     $("#registro_horario #registro_horario_guardar #button_horario_all").prop("disabled",true);
@@ -5303,13 +5317,23 @@ $(document).on("blur","input[id='edit_profesor_dni']",function() {
   });
 
   $(document).on('click',"#button_horario_save",function(event){
+    tipo=$(this).attr("tipo");//Tipo de horario: manual o auto.
     cadena="";
     cont=0;
 
     $("#contenedor_nuevo_horario tbody tr").each(function(){ 
+      //Se calcula la duración de cada módulo.
+      ini=$(this).find("td:nth-child(3) input").val();
+      fin=$(this).find("td:nth-child(4) input").val();
+      hora_ini=ini.split(":");
+      hora_fin=fin.split(":");
+      duracion=((parseInt(hora_fin[0])*60)+parseInt(hora_fin[1]))-((parseInt(hora_ini[0])*60)+parseInt(hora_ini[1]));
+      //Se guarda todos los datos en una cadena
       cadena+= $(this).find("td:nth-child(2)").text() + "-";
       cadena+= $(this).find("td:nth-child(3) input").val()+ ":00-";
       cadena+= $(this).find("td:nth-child(4) input").val()+ ":00-";
+      cadena+= duracion+ "-";
+
       cont++;
     });
     cadena=cadena.slice(0,-1);
@@ -5327,7 +5351,7 @@ $(document).on("blur","input[id='edit_profesor_dni']",function() {
           $.ajax({
             type: 'POST',
             url: Routing.generate('nuevo_horario'),
-            data: {cadena:cadena,cont:cont},
+            data: {cadena:cadena,cont:cont,tipo:tipo},
             success: function(response) {
               // Se establece el efecto para la notificación de error en el caso de que se de varias veces seguidas a guardar con algunas opción sin marcar.
               errorPNotify.pause();
@@ -5374,7 +5398,7 @@ $(document).on("blur","input[id='edit_profesor_dni']",function() {
             texto=texto+"<li><span>Eliminación de las reservas de instalaciones o equipamientos registradas en el sistema.</span></li></br>";
           }
           if(response.imparte!=""){
-            texto=texto+"<li><span>Eliminación de las asignaciones de profesores en los cursos.</span></li></br>";
+            texto=texto+"<li><span>Eliminación de los horarios de las asignaturas en los cursos.</span></li></br>";
           }
           texto=texto+"¿Estas seguro de continuar? No podrás deshacer este paso...";
           swal({
@@ -5392,7 +5416,7 @@ $(document).on("blur","input[id='edit_profesor_dni']",function() {
               $.ajax({
                 type: 'POST',
                 url: Routing.generate('nuevo_horario'),
-                data: {cadena:cadena,cont:cont},
+                data: {cadena:cadena,cont:cont,tipo:tipo},
                 success: function(response) {
 
                   // Notificación de confirmación
@@ -6721,14 +6745,6 @@ $(document).on("click","#registro_equipamientos td a",function(event){
               }
              });
             }
-
-            /*swal({
-            title: tit,
-            type: "success",
-            confirmButtonColor: color,
-            html: true
-            })
-            */
           }
           );
 
@@ -9961,7 +9977,7 @@ $(document).on("click","#registro_equipamientos td a",function(event){
             $("#profesor_asignatura_grupo_dialog #btn_asignar span").removeClass('disab');
           }
           else{
-            $("#profesor_asignatura_grupo_dialog #btn_asignar").addClass('disable');
+            $("#profesor_asignatura_grupo_dialog #btn_asignar").addClass('disabled');
             $("#profesor_asignatura_grupo_dialog #btn_asignar span").addClass('disab');
           }
 
@@ -10063,16 +10079,12 @@ $(document).on("click","#registro_equipamientos td a",function(event){
       }
     });
     //Se comprueba si hay modificaciones para habilitar o deshabilitar los botones de "guardar" y "restablecer".
-    if($("#profesor_asignatura_grupo_dialog #contenedor_asignaturas .back_modificado").size()>0){
+    if($("#profesor_asignatura_grupo_dialog #contenedor_asignaturas .back_modificado").size()>0 || $("#profesor_asignatura_grupo_dialog #contenedor_asignaturas .eliminado").size()>0){
       $("#profesor_asignatura_grupo_dialog #profesor_asignatura_grupo_submit").prop("disabled",false);
       $("#profesor_asignatura_grupo_dialog #profesor_asignatura_grupo_restablecer").prop("disabled",false);
     }else{
       $("#profesor_asignatura_grupo_dialog #profesor_asignatura_grupo_submit").prop("disabled",true);
-      if($("#profesor_asignatura_grupo_dialog #contenedor_asignaturas .eliminado").size()>0){
-        $("#profesor_asignatura_grupo_dialog #profesor_asignatura_grupo_restablecer").prop("disabled",false);
-      }else{
-        $("#profesor_asignatura_grupo_dialog #profesor_asignatura_grupo_restablecer").prop("disabled",true);
-      }
+      $("#profesor_asignatura_grupo_dialog #profesor_asignatura_grupo_restablecer").prop("disabled",true);
     }
     // Se deshabilita el botón "Asignar".
     $("#profesor_asignatura_grupo_dialog #btn_asignar").addClass('disabled');
@@ -10129,22 +10141,21 @@ $(document).on("click","#registro_equipamientos td a",function(event){
 
     var asignaciones = new Object();
     var eliminados = Array();
-    var1=0;
-    var2=0;
 
+    var index = 1;
     // Se obtienen las asignaturas modificadas.(Insertar/Actualizar)
     $("#profesor_asignatura_grupo_dialog #contenedor_asignaturas li[class*='back_modificado']").each(function(){
       id=$(this).attr("id"); //Id asignatura
       valor=$(this).find("input:text").attr("id"); //Id profesor
-        asignaciones[id] = valor;
-        var1++;
+        // Usamos un nuevo index como clave para que al recorrerlo en php no se ordene por el id asignatura
+        // Se recorre en el mismo orden introducido con el index nuevo.
+        asignaciones[index++] = [id, valor];  
     });
 
     // Se obtienen las asignaturas que han sido eliminadas y que estaban asignadas al curso.(Eliminar)
     $("#profesor_asignatura_grupo_dialog #contenedor_asignaturas li[class*='eliminado']").each(function(){
       id=$(this).attr("id");
       eliminados.push(id);
-      var2++;
     });
 
     //Se avisa si no existe cambios.
@@ -10175,78 +10186,314 @@ $(document).on("click","#registro_equipamientos td a",function(event){
       });
       return false;
     }
-    grupo=$(this).closest('.dialog_button').prev().attr("id"); //Id del grupo.
-    $.ajax({
-      type: 'POST',
-      url: Routing.generate('asignar_grupo_profesores'),
-      data: { asignaciones:asignaciones, eliminados:eliminados, grupo:grupo},
-      dataType: 'json',
-      success: function(response) {
-        if(response.data==null){
-          errorPNotify.play();
-
-          new PNotify({
-            text:'No se ha modificado ninguna asignación de profesores.',
-            addclass: "custom",
-            type: "error",
-            shadow: true,
-            hide: true,
-            buttons: {
-              sticker: false,
-              labels:{close: "Cerrar"}
-            },
-            width: "335px",
-            stack: right_Stack_dialog,
-            animate: {
-              animate: true,
-              in_class: "fadeInRight",
-              out_class: "fadeOutRight",
-            }
-          });
-          return false;
-        }
-        texto="";
-        if(var1==1){
-          texto+=" <span>"+var1+"  Profesor <strong>asignado</strong><span><br><br>";
-        }
-        else if(var1>1){
-          texto+=" <span>"+var1+"  Profesores <strong>asignados</strong><span><br><br>";
-        }
-
-        if(var2==1){
-          texto+=" <span>"+var2+"  Profesor <strong>eliminado</strong><span><br>";
-        }
-        else if(var2>1){
-          texto+=" <span>"+var2+"  Profesores <strong>eliminados</strong><span><br>";
-        }
-        exito.play();
-        new PNotify({
-          text:texto,
-          addclass: "custom",
-          type: "success",
-          shadow: true,
-          hide: true,
-          animation: "fade",
-          animate_speed: 'fast',
-          delay: 4000,
-          buttons: {
-            sticker: false,
-            labels:{close: "Cerrar"}
-          },
-          stack: right_Stack_dialog,
-          animate: {
-            animate: true,
-            in_class: "fadeInRight",
-            out_class: "fadeOutRight",
-          }
-        });
-        id=$("#asignar_profesor .lista_cursos .elected").attr("id");
-        $("#tabs>div[style='display: block']").load(Routing.generate("asignar_grupo_profesores_show"), function(){
-          $("#asignar_profesor .lista_cursos button[id='"+id+"']").click();
-        });
-        $('#profesor_asignatura_grupo_dialog').dialog('close');
+    actualizado=0;
+    $("#profesor_asignatura_grupo_dialog #contenedor_asignaturas li[class*='back_modificado']").each(function(){
+      if($(this).find("input:text").attr("valor") && $(this).find("input:text").attr("value")!=$(this).find("input:text").attr("valor")){
+        actualizado=1;
+        return false;
       }
-    })
+    });
+    grupo=$(this).closest('.dialog_button').prev().attr("id"); //Id del grupo.
+    // Se muestra un aviso en caso de que se haya actualizado alguna asignación registrada. (Se eliminará el horario de dicha asignación).
+    if(actualizado){
+      aviso.play();
+      swal({
+        title: "Actualización de Profesores en el Grupo",
+        text: "<p class='justificado'>Se va a actualizar profesores asignados al grupo y se eliminará el horario de la asignatura impartida por el profesor.</p><br>¿Estas seguro de continuar? No podrás deshacer este paso...",
+        type: "warning",
+        html: true,
+        showCancelButton: true,
+        cancelButtonText: "Cancelar",
+        confirmButtonColor: color,
+        confirmButtonText: "¡Adelante!",
+        closeOnConfirm: true },
+
+        function(){
+
+          $.ajax({
+            type: 'POST',
+            url: Routing.generate('asignar_grupo_profesores'),
+            data: { asignaciones:asignaciones, eliminados:eliminados, grupo:grupo},
+            dataType: 'json',
+            success: function(response) {
+              //Se muestra aviso si no hay nada que registrar.
+              if(response.data==null){
+                errorPNotify.play();
+                new PNotify({
+                  text:'No se ha modificado ninguna asignación de profesores.',
+                  addclass: "custom",
+                  type: "error",
+                  shadow: true,
+                  hide: true,
+                  buttons: {
+                    sticker: false,
+                    labels:{close: "Cerrar"}
+                  },
+                  width: "335px",
+                  stack: right_Stack_dialog,
+                  animate: {
+                    animate: true,
+                    in_class: "fadeInRight",
+                    out_class: "fadeOutRight",
+                  }
+                });
+              }
+
+              //Se obtiene el número de asignaciones registradas, actualizadas y eliminadas.
+              var1=response.asignadas;
+              var2=response.actualizadas;
+              var3=response.eliminadas;
+              text="";
+              if(var1==1){
+                text+=" <span>"+var1+"  Asignación registrada <span><br><br>";
+              }
+              else if(var1>1){
+                text+=" <span>"+var1+"  Asignaciones registradas <span><br><br>";
+              }
+
+              if(var2==1){
+                text+=" <span>"+var2+"  Asignación actualizada<span><br><br>";
+              }
+              else if(var2>1){
+                text+=" <span>"+var2+"  Asignaciones actualizadas<span><br><br>";
+              }
+
+              if(var3==1){
+                text+=" <span>"+var3+"  Asignación eliminada<span><br>";
+              }
+              else if(var3>1){
+                text+=" <span>"+var3+"  Asignaciones eliminadas<span><br>";
+              }
+
+              //Se muestra si hay asignaciones que no se han podido realizar debido a que los profesores no tiene horas lectivas disponibles.
+              if(response.error!=""){
+                texto="<table><p class='justificado'>Las asignaciones siguientes no se han realizado ya que los profesores no tienen horas lectivas disponibles.<br></p><thead><tr><th>Profesor</th><th>Asignatura</th><th>Grupo</th></tr></thead><tbody>"
+                for (var key in response.error) { 
+                  texto+="<tr><td>"+response.error[key][0][0]+"</td><td>"+response.error[key][0][1]+"</td><td>"+response.error[key][0][2]+"</td></tr>"
+                }
+                texto+="</tbody><br></p></table>"
+          
+                error.play();
+                swal({
+                  title: "Asignaciones no realizadas ",
+                  text: texto,
+                  type: "error",
+                  html: true,
+                  showCancelButton: false,
+                  confirmButtonColor: color,
+                  customClass: 'swal-wide',
+                  closeOnConfirm: true },
+                  function(){
+
+                    if(var1!=0 || var2!=0 || var3!=0){
+                      exito.play();
+                      new PNotify({
+                        text:text,
+                        addclass: "custom",
+                        type: "success",
+                        shadow: true,
+                        hide: true,
+                        animation: "fade",
+                        animate_speed: 'fast',
+                        delay: 4000,
+                        buttons: {
+                          sticker: false,
+                          labels:{close: "Cerrar"}
+                        },
+                        stack: right_Stack_dialog,
+                        animate: {
+                          animate: true,
+                          in_class: "fadeInRight",
+                          out_class: "fadeOutRight",
+                        }
+                      });
+                    }
+                    id=$("#asignar_profesor .lista_cursos .elected").attr("id");
+                    $("#tabs>div[style='display: block']").load(Routing.generate("asignar_grupo_profesores_show"), function(){
+                      $("#asignar_profesor .lista_cursos button[id='"+id+"']").click();
+                    });
+                    $('#profesor_asignatura_grupo_dialog').dialog('close');
+                  }
+                );
+                return false;
+              }
+              //Se muestra el número de asignaciones si no ha habido ningún aviso anterior.
+              if(var1!=0 || var2!=0 || var3!=0){
+                exito.play();
+                new PNotify({
+                  text:text,
+                  addclass: "custom",
+                  type: "success",
+                  shadow: true,
+                  hide: true,
+                  animation: "fade",
+                  animate_speed: 'fast',
+                  delay: 4000,
+                  buttons: {
+                    sticker: false,
+                    labels:{close: "Cerrar"}
+                  },
+                  stack: right_Stack_dialog,
+                  animate: {
+                    animate: true,
+                    in_class: "fadeInRight",
+                    out_class: "fadeOutRight",
+                  }
+                });
+              }
+
+              id=$("#asignar_profesor .lista_cursos .elected").attr("id");
+              $("#tabs>div[style='display: block']").load(Routing.generate("asignar_grupo_profesores_show"), function(){
+                $("#asignar_profesor .lista_cursos button[id='"+id+"']").click();
+              });
+              $('#profesor_asignatura_grupo_dialog').dialog('close');
+            }
+          })
+        }
+      );
+    }
+    //Se realiza lo mismo sin mostrar aviso para el caso de que no exista ninguna actualización.
+    else{
+      grupo=$(this).closest('.dialog_button').prev().attr("id"); //Id del grupo.
+      $.ajax({
+        type: 'POST',
+        url: Routing.generate('asignar_grupo_profesores'),
+        data: { asignaciones:asignaciones, eliminados:eliminados, grupo:grupo},
+        dataType: 'json',
+        success: function(response) {
+
+          if(response.data==null){
+            errorPNotify.play();
+
+            new PNotify({
+              text:'No se ha modificado ninguna asignación de profesores.',
+              addclass: "custom",
+              type: "error",
+              shadow: true,
+              hide: true,
+              buttons: {
+                sticker: false,
+                labels:{close: "Cerrar"}
+              },
+              width: "335px",
+              stack: right_Stack_dialog,
+              animate: {
+                animate: true,
+                in_class: "fadeInRight",
+                out_class: "fadeOutRight",
+              }
+            });
+          }
+          //Se obtiene el número de asignaciones registradas, actualizadas y eliminadas.
+          var1=response.asignadas;
+          var2=response.actualizadas;
+          var3=response.eliminadas;
+          text="";
+          if(var1==1){
+            text+=" <span>"+var1+"  Asignación registrada <span><br><br>";
+          }
+          else if(var1>1){
+            text+=" <span>"+var1+"  Asignaciones registradas <span><br><br>";
+          } 
+
+          if(var2==1){
+            text+=" <span>"+var2+"  Asignación actualizada<span><br><br>";
+          }
+          else if(var2>1){
+            text+=" <span>"+var2+"  Asignaciones actualizadas<span><br><br>";
+          }
+
+          if(var3==1){
+            text+=" <span>"+var3+"  Asignación eliminada<span><br>";
+          }
+          else if(var3>1){
+            text+=" <span>"+var3+"  Asignaciones eliminadas<span><br>";
+          }
+
+          if(response.error!=""){
+            texto="<table><p class='justificado'>Las asignaciones siguientes no se han realizado ya que los profesores no tienen horas lectivas disponibles.<br></p><thead><tr><th>Profesor</th><th>Asignatura</th><th>Grupo</th></tr></thead><tbody>"
+            for (var key in response.error) { 
+              texto+="<tr><td>"+response.error[key][0][0]+"</td><td>"+response.error[key][0][1]+"</td><td>"+response.error[key][0][2]+"</td></tr>"
+            }
+            texto+="</tbody><br></p></table>"
+          
+            error.play();
+            swal({
+              title: "Asignaciones no realizadas ",
+              text: texto,
+              type: "error",
+              html: true,
+              showCancelButton: false,
+              confirmButtonColor: color,
+              customClass: 'swal-wide',
+              closeOnConfirm: true },
+              function(){
+
+                if(var1!=0 || var2!=0 || var3!=0){
+                  exito.play();
+                  new PNotify({
+                    text:text,
+                    addclass: "custom",
+                    type: "success",
+                    shadow: true,
+                    hide: true,
+                    animation: "fade",
+                    animate_speed: 'fast',
+                    delay: 4000,
+                    buttons: {
+                      sticker: false,
+                      labels:{close: "Cerrar"}
+                    },
+                    stack: right_Stack_dialog,
+                    animate: {
+                      animate: true,
+                      in_class: "fadeInRight",
+                      out_class: "fadeOutRight",
+                    }
+                  });
+                }
+                id=$("#asignar_profesor .lista_cursos .elected").attr("id");
+                $("#tabs>div[style='display: block']").load(Routing.generate("asignar_grupo_profesores_show"), function(){
+                  $("#asignar_profesor .lista_cursos button[id='"+id+"']").click();
+                });
+                $('#profesor_asignatura_grupo_dialog').dialog('close');
+              }
+            );
+            return false;
+          }
+
+          if(var1!=0 || var2!=0 || var3!=0){
+            exito.play();
+            new PNotify({
+              text:text,
+              addclass: "custom",
+              type: "success",
+              shadow: true,
+              hide: true,
+              animation: "fade",
+              animate_speed: 'fast',
+              delay: 4000,
+              buttons: {
+                sticker: false,
+                labels:{close: "Cerrar"}
+              },
+              stack: right_Stack_dialog,
+              animate: {
+                animate: true,
+                in_class: "fadeInRight",
+                out_class: "fadeOutRight",
+              }
+            });
+          }
+
+          id=$("#asignar_profesor .lista_cursos .elected").attr("id");
+          $("#tabs>div[style='display: block']").load(Routing.generate("asignar_grupo_profesores_show"), function(){
+            $("#asignar_profesor .lista_cursos button[id='"+id+"']").click();
+          });
+          $('#profesor_asignatura_grupo_dialog').dialog('close');
+        }
+      })
+    }
   });
 
   //Se elimina las asignaciones de profesores de un grupo.

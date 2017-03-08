@@ -330,50 +330,14 @@ class ImparteController extends Controller
         $asignaciones=$this->get('request')->request->get('asignaciones');
         $eliminados=$this->get('request')->request->get('eliminados');
         $idgrupo=$this->get('request')->request->get('grupo');
+        $num_asig=0;
+        $num_elim=0;
+        $num_actu=0;
 
         $data=1;
         if($asignaciones==null && $eliminados==null){
             $data=null;
             return new JsonResponse(array('data' => $data), 200);
-        }
-
-        if($asignaciones){
-          foreach ($asignaciones as $asignatura => $id ) {
-            $profesor = $em->getRepository('BackendBundle:Profesor')->findOneById($id);
-            if (!$profesor) {
-                throw $this->createNotFoundException('Unable to find Profesor entity.');
-            }
-            $asignatura = $em->getRepository('BackendBundle:AsignaturasCursos')->findOneById($asignatura);
-            if (!$asignatura) {
-                throw $this->createNotFoundException('Unable to find AsignaturasCursos entity.');
-            }
-            else{
-                $imparte= $em->getRepository('BackendBundle:Imparte')->findOneByAsignatura($asignatura);
-            }
-            if ($imparte) {
-                $imparte->setProfesor($profesor);
-                $imparte->setAsignatura($asignatura);
-
-                //Validar cambio de profesor con horarios de los cursos asignados. (No puede repetirse hora y día de un profesor)
-            }
-            else{
-
-                $grupo = $em->getRepository('BackendBundle:Grupo')->findOneById($idgrupo);
-                if (!$grupo) {
-                 throw $this->createNotFoundException('Unable to find Grupo entity.');
-                }
-
-                $imparte = new Imparte();
-                $imparte->setProfesor($profesor);
-                $imparte->setAsignatura($asignatura);
-                $imparte->setGrupo($grupo);
-                $imparte->setHorario(null);
-                $imparte->setLibro(null);
-                $imparte->setDiaSemanal(null);
-            }
-
-            $em->persist($imparte);
-          }   
         }
 
         if($eliminados){
@@ -393,10 +357,140 @@ class ImparteController extends Controller
                 throw $this->createNotFoundException('Unable to find Imparte entity.');
             }
             $em->remove($imparte);
+            $num_elim++;
           }  
+          $em->flush();
         }
-        $em->flush();
-        return new JsonResponse(array('data' => $data,'success' => true), 200);
+
+        $error=array();
+        $tipo_horario = $em->getRepository('BackendBundle:Horario')->findByTipo("manual");
+        if(!$tipo_horario){//Horario Automático. Se valida las horas disponibles de los profesores.
+            if($asignaciones){
+              foreach ($asignaciones as $row ) { //$row[0]->ID asignatura  $row[1]->Id profesor.
+                $profesor = $em->getRepository('BackendBundle:Profesor')->findOneById($row[1]);
+                if (!$profesor) {
+                    throw $this->createNotFoundException('Unable to find Profesor entity.');
+                }
+                $grupo = $em->getRepository('BackendBundle:Grupo')->findOneById($idgrupo);
+                if (!$grupo) {
+                    throw $this->createNotFoundException('Unable to find Grupo entity.');
+                }
+
+                $asignatura = $em->getRepository('BackendBundle:AsignaturasCursos')->findOneById($row[0]);
+                if (!$asignatura) {
+                    throw $this->createNotFoundException('Unable to find AsignaturasCursos entity.');
+                }
+                else{
+                    $imparte= $em->getRepository('BackendBundle:Imparte')->findByGrupoAndAsignatura($grupo, $asignatura);
+                }
+
+                //Se valida las horas lectivas disponibles del profesor.
+                $horario=$em->getRepository('BackendBundle:Horario')->findDuracionHorarioAutomatico();
+                $duracion=$horario->getDuracion();
+                         
+                $asignaciones=$em->getRepository('BackendBundle:Imparte')->findByProfesor($profesor);
+                $num_modulos=0;
+                foreach ($asignaciones as $asignacion) {
+                    $num_modulos+=$asignacion->getAsignatura()->getNumModulos();
+                }
+                $tiempo_impartido=(int)$num_modulos*(int)$duracion;//Se usas [1] para recuerar el valor del count().
+                $tiempo_asignado=$profesor->getHorasLectivas()*60;
+                $tiempo_restante=(int)$tiempo_asignado-(int)$tiempo_impartido;
+                //Se comprueba que el tiempo disponible del profesor sea inferio al tiempo del número de módulos de esa asignatura.
+                if($tiempo_restante<((int)$asignatura->getNumModulos()*(int)$duracion)){
+                    $name=$profesor->getNombre()." ".$profesor->getApellido1()." ".$profesor->getApellido2();
+                    $group=$grupo->getCurso()->getCurso()." ".$grupo->getLetra();
+                    $error[] = array(array($name,$asignatura->getAsignatura()->getNombre(),$group));
+                }
+                else{
+                    //Se actualiza la asignación.
+                    if ($imparte) {
+                        $imparte->setProfesor($profesor);
+                        $imparte->setAsignatura($asignatura);
+                        $imparte->SetHorario(null);//Se elimina la asignación de horario del profesor editado.
+                        $imparte->SetDiaSemanal(null);//Se elimina la asignación del día de clase del profesor editado.
+                        $em->persist($imparte);
+                        $num_actu++; 
+                    }
+                    //Se crea la asignación.
+                    else{
+                        $grupo = $em->getRepository('BackendBundle:Grupo')->findOneById($idgrupo);
+                        if (!$grupo) {
+                            throw $this->createNotFoundException('Unable to find Grupo entity.');
+                        }
+
+                        $imparte = new Imparte();
+                        $imparte->setProfesor($profesor);
+                        $imparte->setAsignatura($asignatura);
+                        $imparte->setGrupo($grupo);
+                        $imparte->setHorario(null);
+                        $imparte->setLibro(null);
+                        $imparte->setDiaSemanal(null);
+                        $em->persist($imparte);
+                        $num_asig++;              
+                    }
+                    $em->flush();
+                }
+
+              }    
+            }
+        }
+        // Horario Manual. 
+        else{//Se valida al asignar las asignaturas en el horario para calcular las horas de cada módulo al ser duracciones distintas.                     
+            if($asignaciones){
+              foreach ($asignaciones as $row ) { //$row[0]->ID asignatura  $row[1]->Id profesor.
+                $profesor = $em->getRepository('BackendBundle:Profesor')->findOneById($row[1]);
+                if (!$profesor) {
+                    throw $this->createNotFoundException('Unable to find Profesor entity.');
+                }
+
+                $grupo = $em->getRepository('BackendBundle:Grupo')->findOneById($idgrupo);
+                if (!$grupo) {
+                    throw $this->createNotFoundException('Unable to find Grupo entity.');
+                }
+
+                $asignatura = $em->getRepository('BackendBundle:AsignaturasCursos')->findOneById($row[0]);
+                if (!$asignatura) {
+                    throw $this->createNotFoundException('Unable to find AsignaturasCursos entity.');
+                }
+                else{
+                    $imparte= $em->getRepository('BackendBundle:Imparte')->findByGrupoAndAsignatura($grupo, $asignatura);
+                }
+
+                if ($imparte) {
+                    $imparte->setProfesor($profesor);
+                    $imparte->setAsignatura($asignatura);
+                    $num_actu++; 
+                    //comprobar que si está asignado dia y hora avise de que se borrará la asignación del horario y debe asignarlo de nuevo.
+                   // Validad que no se asigna a una hora que ya imparte(No puede repetirse hora y día de un profesor)
+                }
+                else{
+                    $grupo = $em->getRepository('BackendBundle:Grupo')->findOneById($idgrupo);
+                    if (!$grupo) {
+                        throw $this->createNotFoundException('Unable to find Grupo entity.');
+                    }
+                    $imparte = new Imparte();
+                    $imparte->setProfesor($profesor);
+                    $imparte->setAsignatura($asignatura);
+                    $imparte->setGrupo($grupo);
+                    $imparte->setHorario(null);
+                    $imparte->setLibro(null);
+                    $imparte->setDiaSemanal(null);
+                    $num_asig++;              
+                }
+                $em->persist($imparte);
+              }    
+            }
+            $em->flush();
+        }
+
+        return new JsonResponse(array(
+            'data' => $data, 
+            'error' =>  $error,
+            'asignadas' =>  $num_asig,
+            'eliminadas' =>  $num_elim,
+            'actualizadas' =>  $num_actu,  
+            'success' => true), 200);
     }
 
 

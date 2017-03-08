@@ -3952,7 +3952,7 @@ border: 1px solid;
     font-weight: bold;
     margin-left: 3%;
     margin-top: 3%;
-    margin-bottom: 17px;
+    margin-bottom: 12px;
     overflow: auto;
     width: 95%;
     /*min-height:44vh;*/
@@ -4004,7 +4004,7 @@ border: 1px solid;
 	padding: 1px 5px;
 }
 #registro_horario  .center_button{
-	padding-top: 4%;
+	padding-top: 3%;
 }
 #registro_horario  .block_insert li{
 	clear: both;
@@ -4044,7 +4044,7 @@ border: 1px solid;
 	font-size: 1.2em;
 	font-family: Verdana,Arial,sans-serif !important;
 	background: none;
-	height: 30px;
+	height: 28px;
     word-wrap: break-word;
     min-width: 25%;
     text-align: center;
@@ -4073,7 +4073,7 @@ border: 1px solid;
     display: block; 
 }
 .contenedor_registro_horario .inner_table{
-    height: 35vh;
+    height: 33vh;
     overflow-y: auto;
 }
 .contenedor_registro_horario table select {
@@ -4103,7 +4103,7 @@ border: 1px solid;
 }
 #registro_horario #aviso_error span:nth-child(2){
 	float: left;
-	padding: 2px 5px;
+	padding: 1px 5px;
 }
 #registro_horario #aviso_error{
     text-align: left;
@@ -4164,6 +4164,12 @@ input[id="si"]{
 	margin: 10%;
 	text-align: center;
 }
+#registro_horario_guardar{
+	display: inline-block;
+	clear: both;
+	width: 100%;
+}
+
 .contenedor_principal_reserva button{
 	margin: 10px;
 	min-width: 100px;
@@ -6123,12 +6129,12 @@ cursor: default !important;
 	border: 3px double #c1bbbb;
 	border-radius: 5px;
 	box-shadow: 0 1px 1px 0 rgba(0, 0, 0, 0.5);
-	height: 190px;
+	height: 180px;
 }
 #cont_one,#cont_two{
 	display: inline-block;
 	width: 100%;
-	padding: 2%;
+	padding: 0 2%;
 }
 /*Anular Matríclas*/
 
@@ -6348,4 +6354,10 @@ cursor: default !important;
 #profesor_asignatura_grupo_dialog #btn_asignar span:active{
    background: #4d769f !important;
 }
-
+#profesor_asignatura_grupo_dialog #contenedor_asignaturas #no_asignado p{
+	width: 85% !important;
+}
+#profesor_asignatura_grupo_dialog #contenedor_asignaturas p span{
+	float: right;
+	margin: 0;
+}

@@ -231,10 +231,19 @@ class HorarioController extends Controller
 
         $cadena=$this->get('request')->request->get('cadena');
         $cont=$this->get('request')->request->get('cont');
+        $tipo=$this->get('request')->request->get('tipo');
 
         $datos = explode("-", $cadena);
         
         $em = $this->getDoctrine()->getEntityManager();
+        $asignaciones=$em->getRepository('BackendBundle:Imparte')->findConHorario();
+        if ($asignaciones) {
+            foreach ($asignaciones  as $asignacion ) {
+                $asignacion->SetHorario(null);
+                $asignacion->SetDiaSemanal(null);
+            }
+        }
+
         $entities = $em->getRepository('BackendBundle:Horario')->findAll();
         if ($entities) {
             foreach ($entities  as $entity ) {
@@ -242,7 +251,6 @@ class HorarioController extends Controller
             }
         }
         $em->flush();
-
         for ($i=0, $j=0; $i < $cont ; $i++) { 
             $clase= new Horario();
             $clase->setHoraClase($datos[$j]);
@@ -251,7 +259,10 @@ class HorarioController extends Controller
             $j++;
             $clase->setFin(new \DateTime($datos[$j]));
             $j++;
+            $clase->setDuracion($datos[$j]);
+            $j++;
 
+            $clase->setTipo($tipo);
             $em->persist($clase);
             $em->flush();
         }
@@ -273,7 +284,7 @@ class HorarioController extends Controller
         $clase=$this->get('request')->request->get('clase');
         $ini=$this->get('request')->request->get('ini');
         $fin=$this->get('request')->request->get('fin');
-
+        $duracion=$this->get('request')->request->get('duracion');
         
         $em = $this->getDoctrine()->getEntityManager();
         $entity = $em->getRepository('BackendBundle:Horario')->findHoraClase($clase);
@@ -285,6 +296,8 @@ class HorarioController extends Controller
         if($ini!=="" && $fin!==""){
             $entity->setInicio(new \DateTime($ini));
             $entity->setFin(new \DateTime($fin));    
+            $entity->setTipo("manual");
+            $entity->setDuracion($duracion);    
     
         }else{
             $entity->setInicio(NULL);     
@@ -331,7 +344,7 @@ class HorarioController extends Controller
         $em = $this->getDoctrine()->getManager();
         $num_imparte="";
 
-        $imparte=$em->getRepository('BackendBundle:Imparte')->findAll();
+        $imparte=$em->getRepository('BackendBundle:Imparte')->findConHorario();
 
         if ($imparte) {
             $num_imparte="hay";

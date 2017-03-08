@@ -44,6 +44,12 @@ class HorarioRepository extends EntityRepository
 		->getResult();
 	}
 
-	
+	public function findDuracionHorarioAutomatico()
+	{
+		return $this->getEntityManager()->createQuery(
+		'SELECT h FROM BackendBundle:Horario h')
+		->setMaxResults(1)
+		->getOneOrNullResult();
+	}
 
 }
