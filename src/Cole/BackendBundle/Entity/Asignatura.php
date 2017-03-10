@@ -46,6 +46,13 @@ class Asignatura
     private $tipo;
     
     /**
+     * 
+     *
+     * @ORM\Column(name="opcional", type="boolean")
+     */
+    private $opcional;
+
+    /**
     * @ORM\OneToMany(targetEntity="AsignaturasCursos", mappedBy="asignatura", cascade={"remove"})
     */
     private $asignaturas_cursos;
@@ -171,5 +178,32 @@ class Asignatura
     public function getAsignaturasCursos()
     {
         return $this->asignaturas_cursos;
+    }
+
+
+
+
+
+    /**
+     * Set opcional
+     *
+     * @param boolean $opcional
+     * @return Asignatura
+     */
+    public function setOpcional($opcional)
+    {
+        $this->opcional = $opcional;
+
+        return $this;
+    }
+
+    /**
+     * Get opcional
+     *
+     * @return boolean 
+     */
+    public function getOpcional()
+    {
+        return $this->opcional;
     }
 }

@@ -60,3 +60,15 @@ asignar_asignaturas_curso:
     defaults: { _controller: "BackendBundle:Asignatura:AsignarAsignaturasCurso" }
     options:
         expose: true
+
+eliminar_asignaciones_asignaturas:
+    path:     /eliminar_asignaciones_asignaturas
+    defaults: { _controller: "BackendBundle:Asignatura:EliminarAsignacionesAsignaturas" }
+    options:
+        expose: true
+
+eliminar_todas_asignaciones_asignaturas:
+    path:     /eliminar_todas_asignaciones_asignaturas
+    defaults: { _controller: "BackendBundle:Asignatura:EliminarTodasAsignacionesAsignaturas" }
+    options:
+        expose: true

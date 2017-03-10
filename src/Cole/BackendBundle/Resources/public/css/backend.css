@@ -10,8 +10,8 @@ button{
 	background: #e4e0e0; 
 }
 .ui-dialog-content button:not(.btn_info){
-	font-size: 14px !important;
-	min-width: 100px !important;
+	font-size: 14px ;
+	min-width: 100px;
 }
 button[class*="ui-dialog-titlebar-close"]{
 	min-width: 0;
@@ -67,6 +67,15 @@ button[class*="ui-dialog-titlebar-close"]{
     background-color: #ec971f;
     border-color: #d58512;
     color: #fff;
+}
+.justificado {
+    text-align: justify !important;
+}
+.negrita{
+	font-weight: bold !important;
+}
+.underline{
+	text-decoration: underline;
 }
 /*Se elimina el borde punteado al hacer click en un "button" (Firefox)*/
 button::-moz-focus-inner {
@@ -636,7 +645,31 @@ nav{
 	#multiples_alumnos .columna_foto,#multiples_alumnos img,.tabla_con_seleccion .columna_foto{
 		width: 100% !important;
 	}
+
+	#asignaturas_cursos .simple_column{
+		width: 34% !important;
+	}
+	#asignaturas_cursos .lista_cursos{
+		margin: 2% 2% 0 !important;
+	}
+	#asignar_profesor .simple_column button, #asignaturas_cursos .simple_column button{
+		margin: 0 2% !important;
+	}
+	#asignar_profesor .simple_column{
+		width: 34% !important;
+	}
+	#asignar_profesor .lista_cursos {
+		margin: 2% 2% 0 !important;
+    	width: 12% !important;
+	}
+	#asignar_profesor #contenedor_registro{
+		width: 50% !important;
+	}
+	#asignar_profesor .cabecera_lista{
+		height: 41px !important; 
+	}
 }
+
 
 /*Contenido*/
 #tabs>div{
@@ -1553,8 +1586,7 @@ form button{
 #asignatura_curso_dialog button{
 	min-width: 120px;
 	display: block;
-	margin: 10% auto;
-	margin-left: 37px;
+	margin: 5% auto 10% 37px;
 }
 #asignatura_curso_dialog span{
 	margin-top: 15px;
@@ -1574,6 +1606,10 @@ form button{
 }
 #asignatura_curso_dialog fieldset>div>div>div, #profesor_asignatura_grupo_dialog fieldset>div>div>div{
 	overflow: auto;
+}
+.lista_asig{
+    max-height: 255px;
+    min-height: 255px;
 }
 #asignatura_curso_dialog .list_asig{
 	max-height: 255px;
@@ -1777,7 +1813,7 @@ form button{
 }
 #contenedor_registro tr:hover { 
 	background: #b1cce7!important;
-	color: white;
+	/*color: white;*/
 }
 #contenedor_registro td a { 
     display: block; 
@@ -1791,6 +1827,10 @@ form button{
 }
 #contenedor_registro .inner_table { 
     max-height: 256px;
+}
+#registro_asignaturas #contenedor_registro .inner_table   , #registro_cursos #contenedor_registro .inner_table{
+	max-height: 225px !important;
+    min-height: 225px !important; /*Añadido para mostrar todo el contenedor*/
 }
 .inner_table td span{
 	margin: 0;
@@ -2565,9 +2605,17 @@ select>option[value=""]{
 #asignatura_nueva .addregistro>div, #asignatura_edit .addregistro>div{
 	width: 75% ;
 	margin-left: 12%;
+	clear: both;
 }
 #asignatura_nueva .addregistro>div:nth-child(1), #asignatura_edit .addregistro>div:nth-child(1){
 	width: 35% ;
+	float: left;
+}
+#asignatura_nueva .addregistro>div:nth-child(2), #asignatura_edit .addregistro>div:nth-child(2){
+    float: left;
+    margin-left: 12%;
+    width: 32%;
+    clear: none;
 }
 .width100 form div{
 	width: 98% !important;
@@ -5980,6 +6028,9 @@ div .disabled{
 .mce-container button:hover{
 	background: none;
 }
+.mce-btn button{
+	min-width: none !important;
+}
 #noticias_edit .mce-menubar{
 	display: none;
 }
@@ -6215,17 +6266,16 @@ cursor: default !important;
 #asignar_profesor h2{
     text-align: center;
 }
-#asignar_profesor .simple_column h2{
+#asignar_profesor .simple_column h2, #asignaturas_cursos .simple_column h2{
     margin-bottom: 4% !important;
     margin-top: 4% !important;
 }
-#asignar_profesor .simple_column ul{
+#asignar_profesor .simple_column ul,#asignaturas_cursos .simple_column ul{
   margin-bottom: 10px !important;
 }
-#asignar_profesor .simple_column button{
-  margin: 0 3% !important;
+#asignar_profesor .simple_column button,#asignaturas_cursos .simple_column button{
+  margin: 0 3% ;
 }
-
 #profesor_asignatura_grupo_dialog span {
     display: block;
     margin-bottom: 15px;

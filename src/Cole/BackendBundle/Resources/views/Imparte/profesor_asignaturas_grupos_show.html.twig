@@ -27,7 +27,7 @@
     $('#profesor_asignatura_grupo_dialog').on('dialogclose', function(event) {
         $('#profesor_asignatura_grupo_dialog').empty();
     });
-
+    //Se activa el primer curso por defecto.
     $("#asignar_profesor #contenedor_registro[idcurso='1']").removeClass('oculto');
     $("#asignar_profesor button[id='1']").addClass('elected');
     //Efecto del botón pulsado en la lista.
@@ -42,14 +42,13 @@
         //Se asigna el nombre y el id del grupo al botón de eliminar asignaciones por grupo.
         $("#asignar_profesor #eliminar_grupo span").text($("#asignar_profesor .lista_cursos .elected").text());
         $("#asignar_profesor #eliminar_grupo").attr("grupo",$("#asignar_profesor #contenedor_registro:not(.oculto) #cabecera_lista").attr("grupo"));
+        //Se muestra o se oculta el botón de Eliminar por grupo.
         if($("#asignar_profesor #contenedor_registro:not(.oculto) tr:not(.cabecera_tipo) td[class='']").size()>0){
             $("#asignar_profesor #eliminar_grupo").prop("disabled",false);
         }
         else{
             $("#asignar_profesor #eliminar_grupo").prop("disabled",true);
         }
-
-
     });
 
     //Comprobacón de existencia de cursos.
@@ -129,16 +128,16 @@
     if($("#asignar_profesor #contenedor_registro:not(.oculto) tr:not(.cabecera_tipo) td[class='']").size()==0){
         $("#asignar_profesor #eliminar_grupo").prop("disabled",true);
     }
-    }, 100);
+    }, 20);
 
 
     //Botón para eliminar todas las asignaciones de profesores en los grupos.
-    //Se desactiva botón cuando no hay ningún profesor asignado en algún grupo.
+    //Se desactiva botón cuando no hay ningún profesor asignado en el sistema.
     setTimeout(function(){ 
     if($("#asignar_profesor #contenedor_registro tr:not(.cabecera_tipo) td[class='']").size()==0){
         $("#asignar_profesor #eliminar_todo").prop("disabled",true);
     }
-    }, 100);
+    }, 20);
 
   //Se añade cabecera a la tabla para diferencias los tipos de asignaturas.
   $("#asignar_profesor #contenedor_registro").each(function(){  
@@ -166,8 +165,8 @@
                 <li>Para <span>eliminar todas</span> las asignaciones de un grupo o de todos los grupos a la vez, pulse sobre los botones inferiores.</li>
             </ul>
             <div>
-                <button id="eliminar_grupo">Eliminar<br>Profesores de <span></span></button>
-                <button id="eliminar_todo">Eliminar<br>Todos los Profesores</button>
+                <button id="eliminar_grupo" title="Elimina todas las asignaciones de profesores del grupo"><strong>Eliminar</strong><br>Profesores de <span></span></button>
+                <button id="eliminar_todo" title="Elimina todas las asignaciones de profesores de todos los grupos"><strong>Eliminar</strong><br>Todos los Profesores</button>
             </div>
         </div> 
       </div>

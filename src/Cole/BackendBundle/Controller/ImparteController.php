@@ -494,6 +494,37 @@ class ImparteController extends Controller
     }
 
 
+    public function ComprobarAsignacionesProfesoresAction()
+    {
+        $em = $this->getDoctrine()->getManager();
+
+        $eliminados=$this->get('request')->request->get('eliminadas');
+
+        $error=array();
+        if($eliminados){
+          foreach ($eliminados as $asignatura ) {
+            $asignatura = $em->getRepository('BackendBundle:AsignaturasCursos')->findOneById($asignatura);
+            if (!$asignatura) {
+                throw $this->createNotFoundException('Unable to find Asignatura entity.');
+            }
+
+            $imparte = $em->getRepository('BackendBundle:Imparte')->findByAsignatura($asignatura);
+            if ($imparte) {
+
+                foreach ($imparte as $asignacion ) {
+                    $profesor=$asignacion->getProfesor()->getNombre()." ".$asignacion->getProfesor()->getApellido1()." ".$asignacion->getProfesor()->getApellido2();
+                    $asignatura=$asignacion->getAsignatura()->getAsignatura()->getNombre();
+                    $grupo=$asignacion->getGrupo()->getCurso()->getCurso()." ".$asignacion->getGrupo()->getLetra();
+                    $error[] = array(array($profesor,$asignatura,$grupo));
+                }
+            }
+          }  
+        }
+
+        return new JsonResponse(array('error' => $error,'success' => true), 200);
+ 
+    }
+
     public function EliminarAsignacionesGrupoAction()
     {
         $em = $this->getDoctrine()->getManager();

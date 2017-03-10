@@ -50,6 +50,8 @@
             <ul>
                 <li>Para <span>añadir</span> una nueva asignatura pulse sobre el icono de añadir <img id="img_1" class="add_registro" src="/Symfony/web/bundles/backend/images/menu/añadir_azul.png"> en el bloque correspondiente.</li>
                 <li>Para <span>modificar</span> o <span>eliminar</span> una asignatura seleccione la asignatura correspondiente.</li>
+
+                <li>Las asignaturas específicas <span class="underline">opcionales</span> son mostradas en la tabla con un subrayado.</li>
             </ul>
         </div> 
       </div>
@@ -76,7 +78,7 @@
                     <table id="lista_color">
                     {% for entity in entities %}
                         {% if entity.tipo == "Troncal" %}
-                        <tr>
+                        <tr title="Modificar Asignatura Troncal">
                             <td><a cargar-href="off" href="{{ path('asignatura_edit', { 'id': entity.id }) }}">{{ entity.nombre }}</a></td>
                             <td><a cargar-href="off" href="{{ path('asignatura_edit', { 'id': entity.id }) }}">{{ entity.abreviatura }}</a></td>
                         </tr>
@@ -111,10 +113,17 @@
                     <table id="lista_color">
                     {% for entity in entities %}
                         {% if entity.tipo == "Específica" %}
-                        <tr>
-                            <td><a cargar-href="off" href="{{ path('asignatura_edit', { 'id': entity.id }) }}">{{ entity.nombre }}</a></td>
-                            <td><a cargar-href="off" href="{{ path('asignatura_edit', { 'id': entity.id }) }}">{{ entity.abreviatura }}</a></td>
-                        </tr>
+                            {% if entity.opcional %}
+                            <tr class="underline" title="Modificar Asignatura Específica">
+                                <td><a cargar-href="off" href="{{ path('asignatura_edit', { 'id': entity.id }) }}">{{ entity.nombre }}</a></td>
+                                <td><a cargar-href="off" href="{{ path('asignatura_edit', { 'id': entity.id }) }}">{{ entity.abreviatura }}</a></td>
+                            </tr>
+                            {% else %}
+                            <tr title="Modificar Asignatura Específica">
+                                <td><a cargar-href="off" href="{{ path('asignatura_edit', { 'id': entity.id }) }}">{{ entity.nombre }}</a></td>
+                                <td><a cargar-href="off" href="{{ path('asignatura_edit', { 'id': entity.id }) }}">{{ entity.abreviatura }}</a></td>
+                            </tr>
+                            {% endif %}
                         {% endif %}
                     {% endfor %}
                     </table>

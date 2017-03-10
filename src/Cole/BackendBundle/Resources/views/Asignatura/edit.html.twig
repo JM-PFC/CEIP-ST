@@ -10,6 +10,10 @@
         // Se muestra "Actualizar" cuando se edita algún valor. "Eliminar" siempre visible. 
         $("#asignatura_edit #asignatura_submit").prop("disabled",true);
         $("#asignatura_edit #asignatura_delete button").attr("id","edit_delete_form"); 
+        //Se oculta el checkbox "opcional" en asignaturas troncales.
+        if($("#asignatura_tipo").val()=="Troncal"){
+            $("#asignatura_edit #asignatura_opcional").closest("div").addClass('oculto');
+        }
     </script>
 {% endblock %}
 
@@ -22,6 +26,7 @@
             		<legend>Edición de Asignatura</legend>
                         <div class="addregistro">
                         	{{ form_row(edit_form.tipo) }}
+                            {{ form_row(edit_form.opcional) }}
                         	{{ form_row(edit_form.nombre) }}
                         	{{ form_row(edit_form.abreviatura) }}
                     	</div>

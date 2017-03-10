@@ -88,12 +88,16 @@
     event.preventDefault();
     id=$(this).closest("li").attr("id");
     tipo=$(this).closest("li").attr("tipo");
+    asigcurso=$(this).closest("li").attr("asigcurso");//Id de asignación de asignatura/grupo
     //Se habilita los botones "guardar" y "restablecer".
     $("#asignatura_curso_dialog #asignaturas_curso_submit").prop("disabled",false);
     $("#asignatura_curso_dialog #asignaturas_curso_restablecer").prop("disabled",false);
 
     $("#asignatura_curso_dialog #lista_asignaturas button[id='"+id+"']").removeClass('elected');
     $("#asignatura_curso_dialog #lista_asignaturas button[id='"+id+"']").closest("div").next().removeClass('disabled');
+    //Se le asigna el Id de la asignación de asignatura/grupo para comprobar que asignación ha sido eliminada.
+    $("#asignatura_curso_dialog #lista_asignaturas button[id='"+id+"']").attr('asigcurso',asigcurso);
+
     $(this).closest("li").remove();
 
     //Se comprueba si no hay más asignaturas de un tipo para eliminar la cabecera de ese tipo(ol). 
@@ -119,7 +123,7 @@
 {% endblock %}
 
 {% block body -%}
-    <fieldset id="{{curso.id}}">
+    <fieldset id="{{curso.id}}" name="{{curso.curso ~ " de " ~ curso.nivel}}">
       <legend>Asignación de asignaturas de {{curso.curso ~ " " ~ curso.nivel}}</legend>
       <div id="lista_asignaturas" class="w40 f_left tcenter b_right">
         <span>1. Seleccione las <strong>asignaturas</strong>:</span>
@@ -151,7 +155,7 @@
               <p class="aviso">No hay asignaturas asignadas para este curso</p>
               <ol id="cabecera_troncal" class="oculto">Troncales</ol>
                 {% for entity in entities_troncales %}
-                  <li id="{{ entity.asignatura.id }}" tipo="{{ entity.asignatura.tipo }}" estado="asignada">
+                  <li id="{{ entity.asignatura.id }}" asigcurso="{{ entity.id }}" tipo="{{ entity.asignatura.tipo }}" estado="asignada">
                     <p>{{ entity.asignatura.nombre }}</p>
                     <input type="number" min="1" max="9" value="{{ entity.numModulos }}" valor="{{ entity.numModulos }}"></input>
                     <img src="/Symfony/web/bundles/backend/images/menu/eliminar.png">
@@ -159,7 +163,7 @@
                 {% endfor %}
               <ol id="cabecera_especifica" class="oculto">Específicas</ol>
                 {% for entity in entities_especificas %}
-                  <li id="{{ entity.asignatura.id }}" tipo="{{ entity.asignatura.tipo }}" estado="asignada">
+                  <li id="{{ entity.asignatura.id }}" asigcurso="{{ entity.id }}" tipo="{{ entity.asignatura.tipo }}" estado="asignada">
                     <p>{{ entity.asignatura.nombre }}</p>
                     <input type="number" min="1" max="9" value="{{ entity.numModulos }}" valor="{{ entity.numModulos }}"></input>
                     <img src="/Symfony/web/bundles/backend/images/menu/eliminar.png">

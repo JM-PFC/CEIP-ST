@@ -818,8 +818,6 @@ $(document).on('keyup',"#alumno_responsable1_dni",function(e){
 
 $(document).on('keyup',"input[id$='responsable1_dni']",function(e){
   form= $(this).closest("form");
-
-
     if($(this).val().trim().length == 0){
         form.find("input[id*='responsable1']").each(function(){
           $(this).val("");
@@ -892,8 +890,6 @@ $(document).on('keyup',"input[id$='responsable2_dni']",function(e){
         form.find("input[id$='responsable2_dni']").prop("disabled", false);
     }
   });
-
-
  
  $(document).on('blur',"#alumno_responsable2_dni",function() {
   //Se elimina la validación Empty, puesto que este campo puede estar vacío.
@@ -1058,7 +1054,6 @@ $(document).on('keyup',"input[id$='responsable2_dni']",function(e){
               }
             }
           })
-
           event.stopPropagation();   
         },
         error: function (response, desc, err){
@@ -1239,8 +1234,6 @@ $(document).on("submit",".formulario_profesor",function(event){
   });
 
 
-
-
   $(document).on("submit","#padres_nuevo",function(event){
     event.preventDefault();
     form= $(this).closest("form");
@@ -1264,29 +1257,6 @@ $(document).on("submit",".formulario_profesor",function(event){
         return false;
       }       
     });
-
-/*
-      if(val==0){
-    $( "#dialog-confirm" ).dialog({
-      height:300,
-      modal: true,
-      buttons: {
-        "Aceptar": function() {
-          $( this ).dialog( "close" );
-
-          $.ajax({
-          //................
-         })
-        },
-        Cancel: function() {
-          $( this ).dialog( "close" );
-        }
-      }
-    });
-$("#dialog-confirm").prev().hide();
-$("#dialog-confirm span").hide();
-
-  }*/
      
     if(val==0){
       aviso.play();
@@ -1720,6 +1690,23 @@ $("#dialog-confirm span").hide();
         }  
       });
 
+      //Se comprueba si se ha cambiado la opción inicial del checkbox.
+      form.find("input[type='checkbox']").each(function(){
+        if($(this).is(':checked') && $(this).attr("checked")!="checked" || !($(this).is(':checked')) && $(this).attr("checked")=="checked"){
+          $(this).addClass("modified");
+          form.find("button[id$='_submit']").prop("disabled",false);
+          if(form.find("button[id$='_restablecer']").length){
+            form.find("button[id$='_restablecer']").prop("disabled",false);
+          }
+          else{
+            form.find("button[id$='_rest']").prop("disabled",false);
+          }          
+          val=1;
+        }
+        else{
+          $(this).removeClass("modified");
+        }  
+      });
 
       // Se comprueba si se ha modificado la foto inicial.
       // Se actualiza la foto inicial.
@@ -1750,7 +1737,7 @@ $("#dialog-confirm span").hide();
         form.find(".columna_foto div[id!='iconos_foto'] img").removeClass("modified");
       }
 
-        // Se comprueba si se ha modificado el valor inicial de algún select.
+      // Se comprueba si se ha modificado el valor inicial de algún select.
       form.find("select option:selected").each(function(){
         //$(this).attr("selected")!=undefined
         if($(this).attr("value")!=$(this).closest("select").attr("seleccionado") && $(this).closest("select").attr("seleccionado")!=""){
@@ -1869,6 +1856,10 @@ $("#dialog-confirm span").hide();
     if($(this).closest("form").attr("id")=="noticias_edit"){
       return false;
     }
+    comprobarEditForm($(this).closest("form"));
+  });
+
+  $(document).on("change","form[id$='_edit'] input[type='checkbox']",function() {
     comprobarEditForm($(this).closest("form"));
   });
 
@@ -3336,6 +3327,10 @@ $(document).on("blur","input[id='edit_profesor_dni']",function() {
     $('#asignaturas_dialog').load(Routing.generate("asignatura_new"), function(){
       $('#asignaturas_dialog form').attr("tipo",tipo[1].charAt(0).toUpperCase() + tipo[1].slice(1) );
       $("#asignatura_tipo").val($("#asignatura_nueva").attr("tipo"));
+      //Se oculta el checkbox "opcional" al registrar asignaturas troncales.
+      if(tipo[1]=="troncal"){
+      $("#asignatura_opcional").closest('div').addClass('oculto');
+      }
     }).dialog('open'); 
   });
 
@@ -3357,6 +3352,19 @@ $(document).on("blur","input[id='edit_profesor_dni']",function() {
   
       // Mostramos un mensaje con la respuesta de PHP
       success: function(response) {
+        if(response.error){
+          error.play();
+          swal({
+            title: "Asignatura registrada en el sistema",
+            text: 'La asignatura introducida ya está registrada en el sistema.',
+            type: "error",
+            confirmButtonColor: color,
+            html: true
+          });
+          return false;
+        }
+
+
         $("#asignaturas_dialog").dialog('close');
         limpiarForm(form);
         
@@ -3429,7 +3437,7 @@ $(document).on("blur","input[id='edit_profesor_dni']",function() {
       cancelButtonText: "Cancelar",
       confirmButtonColor: color,
       confirmButtonText: "¡Adelante!",
-      closeOnConfirm: false },
+      closeOnConfirm: true },
 
       function(){
 
@@ -3439,12 +3447,13 @@ $(document).on("blur","input[id='edit_profesor_dni']",function() {
         data: $('#asignatura_delete').serialize(),
         
         success: function() {
-        $("#asignaturas_dialog").dialog('close');
-        tab=$(".contenido_main").find("div[aria-hidden='false']");
-        $(tab).load(Routing.generate('asignatura'));
-        //$("#tabs #lista_asignaturas").empty();
-        //$("#tabs #lista_asignaturas").load(Routing.generate('alumno_listaAsignatura'));
-        swal.close();
+          $("#asignaturas_dialog").dialog('close');
+          tab=$(".contenido_main").find("div[aria-hidden='false']");
+          $(tab).load(Routing.generate('asignatura'));
+          //$("#tabs #lista_asignaturas").empty();
+          //$("#tabs #lista_asignaturas").load(Routing.generate('alumno_listaAsignatura'));
+          $("#asignaturas_cursos").update_tab();
+          $("#profesor_asignar_grupo").update_tab();
         }
       })
     }
@@ -3460,7 +3469,7 @@ $(document).on("blur","input[id='edit_profesor_dni']",function() {
   $(document).on('click',"#asignaturas_cursos a[id$='_modal']",function(event){
     event.preventDefault();
     var curso= $(this).closest("h2").text();
-    var id=$(this).closest("div").attr("curso");
+    var id=$(this).closest("div").attr("idcurso");
 
     $.ajax({
       type: 'POST',
@@ -3542,14 +3551,16 @@ $(document).on("blur","input[id='edit_profesor_dni']",function() {
       }
     });
 
-    // Se obtienen las asignaturas que han sido eliminadas y que estaban asignadas al curso.(Eliminar)
+    // Se obtienen las asignaciones de asignaturas que han sido eliminadas.(Eliminar)
     $("#asignatura_curso_dialog #lista_asignaturas button[class*='asignada']").each(function(){
       id=$(this).attr("id");
+      asigcurso=$(this).attr("asigcurso");
 
-      if($("#asignatura_curso_dialog #contenedor_asignaturas li[id='"+id+"']").size()==0){
-        eliminadas.push(id);
+      if(id && $("#asignatura_curso_dialog #contenedor_asignaturas li[id='"+id+"']").size()==0){
+        eliminadas.push(asigcurso);
       }
     });
+
     //Si no existe cambios no se avisa.
     if($.isEmptyObject(nuevas) && $.isEmptyObject(asignadas) && $.isEmptyObject(eliminadas)){
       $('#asignatura_curso_dialog').dialog('close');
@@ -3575,42 +3586,314 @@ $(document).on("blur","input[id='edit_profesor_dni']",function() {
       return false;
     }
     curso=$("#asignatura_curso_dialog fieldset").attr("id");
+    name_curso=$("#asignatura_curso_dialog fieldset").attr("name");
+    if(!$.isEmptyObject(eliminadas)){
 
+    // Se muestra un aviso en caso de que se vaya a eliminar asignaturas con asignaciones de profesores registradas en el sistema.
     $.ajax({
       type: 'POST',
-      url: Routing.generate('asignar_asignaturas_curso'),
-      data: {curso:curso, nuevas:nuevas, asignadas:asignadas, eliminadas:eliminadas},
+      url: Routing.generate('comprobar_asignaciones_profesores'),
+      data: {eliminadas:eliminadas},
       dataType: 'json',
       success: function(response) {
-        if(response.data==null){
-          $('#asignatura_curso_dialog').dialog('close');
-          errorPNotify.play();
-
-          new PNotify({
-            text:'No hay modificaciones de asignaturas para este curso.',
-            addclass: "custom",
-            type: "error",
-            shadow: true,
-            hide: true,
-            buttons: {
-              sticker: false,
-              labels:{close: "Cerrar"}
-            },
-            stack: right_Stack,
-            animate: {
-              animate: true,
-              in_class: "fadeInRight",
-              out_class: "fadeOutRight",
+        texto="";
+        if(response.error!=""){
+            texto+="<p class='justificado'>Las siguientes asignaturas que se quieren eliminar tienen asignados profesores en alguno de los grupos de "+name_curso+":</p><br>";
+            for (var key in response.error) { 
+              texto+="<p class='justificado negrita'>- "+response.error[key][0][1]+"</p>";
             }
-          });
-          return false;
+            texto+="<br><table><p class='justificado'>Si deseas continuar se borrarán las siguientes asignaciones de profesores:<br></p><thead><tr><th>Profesor</th><th>Asignatura</th><th>Grupo</th></tr></thead><tbody>";
+            for (var key in response.error) { 
+              texto+="<tr><td>"+response.error[key][0][0]+"</td><td>"+response.error[key][0][1]+"</td><td>"+response.error[key][0][2]+"</td></tr>";
+            }
+            texto+="</tbody><br></p></table>";
+            texto+="<br>¿Estas seguro de continuar? No podrás deshacer este paso...";
+            error.play();
+            swal({
+              title: "Asignaturas con Profesores Asignados",
+              text: texto,
+              type: "warning",
+              html: true,
+              showCancelButton: true,
+              cancelButtonText: "Cancelar",
+              confirmButtonColor: color,
+              confirmButtonText: "¡Adelante!",
+              customClass: 'swal-wide',
+              closeOnConfirm: true },
+              function(){
+                $.ajax({
+                  type: 'POST',
+                  url: Routing.generate('asignar_asignaturas_curso'),
+                  data: {curso:curso, nuevas:nuevas, asignadas:asignadas, eliminadas:eliminadas},
+                  dataType: 'json',
+                  success: function(response) {
+                    if(response.data==null){
+                      $('#asignatura_curso_dialog').dialog('close');
+                      errorPNotify.play();
+
+                      new PNotify({
+                        text:'No hay modificaciones de asignaturas para este curso.',
+                        addclass: "custom",
+                        type: "error",
+                        shadow: true,
+                        hide: true,
+                        buttons: {
+                          sticker: false,
+                          labels:{close: "Cerrar"}
+                        },
+                        stack: right_Stack,
+                        animate: {
+                          animate: true,
+                          in_class: "fadeInRight",
+                          out_class: "fadeOutRight",
+                        }
+                      });
+                      return false;
+                    }
+
+                    //Se obtiene el número de asignaciones registradas, actualizadas y eliminadas.
+                    var1=response.asignadas;
+                    var2=response.actualizadas;
+                    var3=response.eliminadas;
+                    text="";
+                    if(var1==1){
+                      text+=" <span>"+var1+"  Asignación registrada <span><br><br>";
+                    }
+                    else if(var1>1){
+                      text+=" <span>"+var1+"  Asignaciones registradas <span><br><br>";
+                    }
+
+                    if(var2==1){
+                      text+=" <span>"+var2+"  Asignación actualizada<span><br><br>";
+                    }
+                    else if(var2>1){
+                      text+=" <span>"+var2+"  Asignaciones actualizadas<span><br><br>";
+                    }
+
+                    if(var3==1){
+                      text+=" <span>"+var3+"  Asignación eliminada<span><br>";
+                    }
+                    else if(var3>1){
+                      text+=" <span>"+var3+"  Asignaciones eliminadas<span><br>";
+                    }
+                    if(var1!=0 || var2!=0 || var3!=0){
+                      exito.play();
+                      new PNotify({
+                        text:text,
+                        addclass: "custom",
+                        type: "success",
+                        shadow: true,
+                        hide: true,
+                        animation: "fade",
+                        animate_speed: 'fast',
+                        delay: 4000,
+                        buttons: {
+                          sticker: false,
+                          labels:{close: "Cerrar"}
+                        },
+                        stack: right_Stack_dialog,
+                        animate: {
+                          animate: true,
+                          in_class: "fadeInRight",
+                          out_class: "fadeOutRight",
+                        }
+                      });
+                    }
+                    id=$("#asignaturas_cursos .lista_cursos .elected").attr("id");
+                    $("#tabs>div[style='display: block']").load(Routing.generate("asignaturas_cursos"), function(){
+                      $("#asignaturas_cursos .lista_cursos button[id='"+id+"']").click();
+                    });
+
+                    $('#asignatura_curso_dialog').dialog('close');
+                    $("#profesor_asignar_grupo").update_tab();
+                      //añadir más
+                  }
+                })
+              }
+            );
+        } //Se realiza lo mismo sin mostrar aviso para el caso de que ninguna de las asignaturas eliminada tenga asignada un profesor.
+        else{
+          $.ajax({
+            type: 'POST',
+            url: Routing.generate('asignar_asignaturas_curso'),
+            data: {curso:curso, nuevas:nuevas, asignadas:asignadas, eliminadas:eliminadas},
+            dataType: 'json',
+            success: function(response) {
+              if(response.data==null){
+                $('#asignatura_curso_dialog').dialog('close');
+                errorPNotify.play();
+
+                new PNotify({
+                  text:'No hay modificaciones de asignaturas para este curso.',
+                  addclass: "custom",
+                  type: "error",
+                  shadow: true,
+                  hide: true,
+                  buttons: {
+                    sticker: false,
+                    labels:{close: "Cerrar"}
+                  },
+                  stack: right_Stack,
+                  animate: {
+                    animate: true,
+                    in_class: "fadeInRight",
+                    out_class: "fadeOutRight",
+                  }
+                });
+                return false;
+              }
+              //Se obtiene el número de asignaciones registradas, actualizadas y eliminadas.
+              var1=response.asignadas;
+              var2=response.actualizadas;
+              var3=response.eliminadas;
+              text="";
+              if(var1==1){
+                text+=" <span>"+var1+"  Asignación registrada <span><br><br>";
+              }
+              else if(var1>1){
+                text+=" <span>"+var1+"  Asignaciones registradas <span><br><br>";
+              }
+
+              if(var2==1){
+                text+=" <span>"+var2+"  Asignación actualizada<span><br><br>";
+              }
+              else if(var2>1){
+                text+=" <span>"+var2+"  Asignaciones actualizadas<span><br><br>";
+              }
+
+              if(var3==1){
+                text+=" <span>"+var3+"  Asignación eliminada<span><br>";
+              }
+              else if(var3>1){
+                text+=" <span>"+var3+"  Asignaciones eliminadas<span><br>";
+              }
+              if(var1!=0 || var2!=0 || var3!=0){
+                exito.play();
+                new PNotify({
+                  text:text,
+                  addclass: "custom",
+                  type: "success",
+                  shadow: true,
+                  hide: true,
+                  animation: "fade",
+                  animate_speed: 'fast',
+                  delay: 4000,
+                  buttons: {
+                    sticker: false,
+                    labels:{close: "Cerrar"}
+                  },
+                  stack: right_Stack_dialog,
+                  animate: {
+                    animate: true,
+                    in_class: "fadeInRight",
+                    out_class: "fadeOutRight",
+                  }
+                });
+              }
+              id=$("#asignaturas_cursos .lista_cursos .elected").attr("id");
+              $("#tabs>div[style='display: block']").load(Routing.generate("asignaturas_cursos"), function(){
+                $("#asignaturas_cursos .lista_cursos button[id='"+id+"']").click();
+              });
+
+              $('#asignatura_curso_dialog').dialog('close');
+              $("#profesor_asignar_grupo").update_tab();
+              //añadir más
+            }
+          })
         }
-        $('#asignatura_curso_dialog').dialog('close');
-        $("#asignaturas_cursos").update_tab();
-        $("#profesor_asignar_grupo").update_tab();
-        //añadir más
       }
     })
+    }
+    //Se realiza lo mismo sin mostrar aviso para el caso de que no exista asignación en las asignaturas eliminadas.
+    else{
+      $.ajax({
+        type: 'POST',
+        url: Routing.generate('asignar_asignaturas_curso'),
+        data: {curso:curso, nuevas:nuevas, asignadas:asignadas, eliminadas:eliminadas},
+        dataType: 'json',
+        success: function(response) {
+          if(response.data==null){
+            $('#asignatura_curso_dialog').dialog('close');
+            errorPNotify.play();
+
+            new PNotify({
+              text:'No hay modificaciones de asignaturas para este curso.',
+              addclass: "custom",
+              type: "error",
+              shadow: true,
+              hide: true,
+              buttons: {
+                sticker: false,
+                labels:{close: "Cerrar"}
+              },
+              stack: right_Stack,
+              animate: {
+                animate: true,
+                in_class: "fadeInRight",
+                out_class: "fadeOutRight",
+              }
+            });
+            return false;
+          }
+
+              //Se obtiene el número de asignaciones registradas, actualizadas y eliminadas.
+              var1=response.asignadas;
+              var2=response.actualizadas;
+              var3=response.eliminadas;
+              text="";
+              if(var1==1){
+                text+=" <span>"+var1+"  Asignación registrada <span><br><br>";
+              }
+              else if(var1>1){
+                text+=" <span>"+var1+"  Asignaciones registradas <span><br><br>";
+              }
+
+              if(var2==1){
+                text+=" <span>"+var2+"  Asignación actualizada<span><br><br>";
+              }
+              else if(var2>1){
+                text+=" <span>"+var2+"  Asignaciones actualizadas<span><br><br>";
+              }
+
+              if(var3==1){
+                text+=" <span>"+var3+"  Asignación eliminada<span><br>";
+              }
+              else if(var3>1){
+                text+=" <span>"+var3+"  Asignaciones eliminadas<span><br>";
+              }
+              if(var1!=0 || var2!=0 || var3!=0){
+                exito.play();
+                new PNotify({
+                  text:text,
+                  addclass: "custom",
+                  type: "success",
+                  shadow: true,
+                  hide: true,
+                  animation: "fade",
+                  animate_speed: 'fast',
+                  delay: 4000,
+                  buttons: {
+                    sticker: false,
+                    labels:{close: "Cerrar"}
+                  },
+                  stack: right_Stack_dialog,
+                  animate: {
+                    animate: true,
+                    in_class: "fadeInRight",
+                    out_class: "fadeOutRight",
+                  }
+                });
+              }
+          id=$("#asignaturas_cursos .lista_cursos .elected").attr("id");
+          $("#tabs>div[style='display: block']").load(Routing.generate("asignaturas_cursos"), function(){
+            $("#asignaturas_cursos .lista_cursos button[id='"+id+"']").click();
+          });          
+          $('#asignatura_curso_dialog').dialog('close');
+          $("#profesor_asignar_grupo").update_tab();
+          //añadir más
+        }
+      })
+    }
   });
 
   //Se validan los input que se modifican.
@@ -3635,6 +3918,219 @@ $(document).on("blur","input[id='edit_profesor_dni']",function() {
     }
   });
 
+
+  //Se elimina las asignaciones de asignaturas del curso.
+  $(document).on('click',"#asignaturas_cursos #eliminar_en_curso ",function(event){
+    event.preventDefault();
+
+    //Se avisa si no hay asignaturas asignadas al curso.
+    if($("#asignaturas_cursos #contenedor_registro:not(.oculto) tbody tr:not(.no_cursor)").size()==0){
+      errorPNotify.pause();
+      errorPNotify.currentTime=0.0;
+      $(".ui-pnotify").remove();
+
+      errorPNotify.play();
+
+      new PNotify({
+        text:'No hay asignaturas asignadas al curso.',
+        addclass: "custom",
+        type: "error",
+        shadow: true,
+        hide: true,
+        buttons: {
+          sticker: false,
+          labels:{close: "Cerrar"}
+        },
+        stack: right_Stack,
+        animate: {
+          animate: true,
+          in_class: "fadeInRight",
+          out_class: "fadeOutRight",
+        }
+      });
+      $("#asignaturas_cursos #eliminar_en_curso").prop("disabled",true);
+      return false;
+    }
+    nombre_curso=$(this).find("span").text();
+    aviso.play();
+    swal({
+      title: "Eliminación de Asignación de Asignaturas",
+      text: "<p class='justificado'>Se van a eliminar las asignaciones de las asignaturas de "+nombre_curso+".</p><br>¿Estas seguro de continuar? No podrás deshacer este paso...",
+      type: "warning",
+      html: true,
+      showCancelButton: true,
+      cancelButtonText: "Cancelar",
+      confirmButtonColor: color,
+      confirmButtonText: "¡Adelante!",
+      closeOnConfirm: true },
+
+      function(){
+
+        curso=$("#asignaturas_cursos #eliminar_en_curso").attr("curso"); //Id del curso.
+        $.ajax({
+          type: 'POST',
+          url: Routing.generate('eliminar_asignaciones_asignaturas'),
+          data: {curso:curso},
+          dataType: 'json',
+          success: function(response) {
+            if(response.data==null){
+              errorPNotify.play();
+
+              new PNotify({
+                text:'No hay asignaturas asignadas al curso.',
+                addclass: "custom",
+                type: "error",
+                shadow: true,
+                hide: true,
+                buttons: {
+                  sticker: false,
+                  labels:{close: "Cerrar"}
+                },
+                stack: right_Stack,
+                animate: {
+                  animate: true,
+                  in_class: "fadeInRight",
+                  out_class: "fadeOutRight",
+                }
+              });
+              return false;
+            }
+            exito.play();
+            new PNotify({
+              text:"Se han eliminado las asignaturas asignadas al curso.",
+              addclass: "custom",
+              type: "success",
+              shadow: true,
+              hide: true,
+              animation: "fade",
+              animate_speed: 'fast',
+              delay: 4000,
+              buttons: {
+                sticker: false,
+                labels:{close: "Cerrar"}
+              },
+              stack: right_Stack,
+              animate: {
+                animate: true,
+                in_class: "fadeInRight",
+                out_class: "fadeOutRight",
+              }
+            });
+            id=$("#asignaturas_cursos .lista_cursos .elected").attr("id");
+            $("#tabs>div[style='display: block']").load(Routing.generate("asignaturas_cursos"), function(){
+              $("#asignaturas_cursos .lista_cursos button[id='"+id+"']").click();
+            });
+            $("#profesor_asignar_grupo").update_tab();
+          }
+        })
+      }
+    );
+  });
+
+  //Se elimina las asignaciones de asignaturas de todos los cursos.
+  $(document).on('click',"#asignaturas_cursos #eliminar_todo ",function(event){
+    event.preventDefault();
+
+    //Se avisa si no hay asignaturas asignadas en ningún curso.
+    if($("#asignaturas_cursos #contenedor_registro tbody tr:not(.no_cursor)").size()==0){
+      errorPNotify.pause();
+      errorPNotify.currentTime=0.0;
+      $(".ui-pnotify").remove();
+
+      errorPNotify.play();
+
+      new PNotify({
+        text:'No hay asignaturas asignadas en ningún curso.',
+        addclass: "custom",
+        type: "error",
+        shadow: true,
+        hide: true,
+        buttons: {
+          sticker: false,
+          labels:{close: "Cerrar"}
+        },
+        stack: right_Stack,
+        animate: {
+          animate: true,
+          in_class: "fadeInRight",
+          out_class: "fadeOutRight",
+        }
+      });
+      $("#asignaturas_cursos #eliminar_todo").prop("disabled",true);
+      return false;
+    }
+    aviso.play();
+    swal({
+      title: "Eliminación de Asignación de Asignaturas",
+      text: "<p >Se van a eliminar las asignaturas de todos los cursos.</p><br>¿Estas seguro de continuar? No podrás deshacer este paso...",
+      type: "warning",
+      html: true,
+      showCancelButton: true,
+      cancelButtonText: "Cancelar",
+      confirmButtonColor: color,
+      confirmButtonText: "¡Adelante!",
+      closeOnConfirm: true },
+
+      function(){
+
+        $.ajax({
+          type: 'POST',
+          url: Routing.generate('eliminar_todas_asignaciones_asignaturas'),
+          dataType: 'json',
+          success: function(response) {
+            if(response.data==null){
+              errorPNotify.play();
+
+              new PNotify({
+                text:'No hay asignaturas asignadas en ningún curso.',
+                addclass: "custom",
+                type: "error",
+                shadow: true,
+                hide: true,
+                buttons: {
+                  sticker: false,
+                  labels:{close: "Cerrar"}
+                },
+                stack: right_Stack,
+                animate: {
+                  animate: true,
+                  in_class: "fadeInRight",
+                  out_class: "fadeOutRight",
+                }
+              });
+              return false;
+            }
+            exito.play();
+            new PNotify({
+              text:"Se han eliminado las asignaciones de asignaturas de todos los cursos.",
+              addclass: "custom",
+              type: "success",
+              shadow: true,
+              hide: true,
+              animation: "fade",
+              animate_speed: 'fast',
+              delay: 4000,
+              buttons: {
+                sticker: false,
+                labels:{close: "Cerrar"}
+              },
+              stack: right_Stack,
+              animate: {
+                animate: true,
+                in_class: "fadeInRight",
+                out_class: "fadeOutRight",
+              }
+            });
+            id=$("#asignaturas_cursos .lista_cursos .elected").attr("id");
+            $("#tabs>div[style='display: block']").load(Routing.generate("asignaturas_cursos"), function(){
+              $("#asignaturas_cursos .lista_cursos button[id='"+id+"']").click();
+            });
+            $("#profesor_asignar_grupo").update_tab();
+          }
+        })
+      }
+    );
+  });
 
 //////////////////////////////////
 //       Periodo Lectivo        //

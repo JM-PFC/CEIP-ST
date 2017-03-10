@@ -60,6 +60,14 @@ class AsignaturaController extends Controller
 
         if ($form->isValid()) {
             $em = $this->getDoctrine()->getManager();
+
+            // Se comprueba que no exista la asignatura en el sistema.
+            $asignatura = $em->getRepository('BackendBundle:Asignatura')->findOneByNombre($entity->getNombre());
+            if($asignatura){
+                return new JsonResponse(array(
+                    'error' => 'existe',
+                    'success' => true), 200);
+            }
             $em->persist($entity);
             $em->flush();
 
@@ -250,6 +258,14 @@ class AsignaturaController extends Controller
             if (!$entity) {
                 throw $this->createNotFoundException('Unable to find Asignatura entity.');
             }
+            $asignaciones = $em->getRepository('BackendBundle:AsignaturasCursos')->findByAsignatura($entity);
+
+            foreach ($asignaciones as $asignaturacurso ) {
+                $imparte = $em->getRepository('BackendBundle:Imparte')->findByAsignatura($asignaturacurso);
+                foreach ($imparte as $asignacion ) {
+                    $em->remove($asignacion);
+                }
+            }  
 
             $em->remove($entity);
             $em->flush();
@@ -300,11 +316,16 @@ class AsignaturaController extends Controller
         $nuevas=$this->get('request')->request->get('nuevas');
         $asignadas=$this->get('request')->request->get('asignadas');
         $eliminadas=$this->get('request')->request->get('eliminadas');
+        $num_asig=0;
+        $num_elim=0;
+        $num_actu=0;
+
         $data=1;
         if($nuevas==null && $asignadas==null && $eliminadas==null ){
             $data=null;
             return new JsonResponse(array('data' => $data), 200);
         }
+
         if($nuevas){
           foreach ($nuevas as $key => $value ) {
             $asignatura=$em->getRepository('BackendBundle:Asignatura')->findOneById($key);
@@ -315,30 +336,109 @@ class AsignaturaController extends Controller
             $entity->setCurso($curso);
             $entity->setNumModulos($value);
             $em->persist($entity);
+            $num_asig++; 
           }   
+        }
+
+        if($eliminadas){
+        //Se eliminan las asignaciones de profesores si existe en alguno de los grupos.(imparte)
+          foreach ($eliminadas as $eliminada ) {
+            $entity = $em->getRepository('BackendBundle:AsignaturasCursos')->findOneById($eliminada);
+            $query = $em->createQuery('DELETE BackendBundle:Imparte i WHERE i.asignatura = :asignatura')->setParameter("asignatura", $entity);
+            $query->execute();
+          }  
+        //Se eliminan las asignaciones de las asignaturas del curso.
+          foreach ($eliminadas as $eliminada ) {
+            $entity = $em->getRepository('BackendBundle:AsignaturasCursos')->findOneById($eliminada);
+            $query = $em->createQuery('DELETE BackendBundle:AsignaturasCursos r WHERE r.id = :Id')->setParameter("Id", $entity->getId());
+            $query->execute();
+            $num_elim++; 
+          }
         }
 
         if($asignadas){
           foreach ($asignadas as $key => $value ) {
-
             $entity = $em->getRepository('BackendBundle:AsignaturasCursos')->findAsignacion($idcurso,$key);
             $entity->setNumModulos($value);
             $em->persist($entity);
+            $num_actu++; 
           }  
         }
         
         $em->flush();
 
-        if($eliminadas){
-          foreach ($eliminadas as $eliminada ) {
-            $entity = $em->getRepository('BackendBundle:AsignaturasCursos')->findAsignacion($idcurso,$eliminada);
-            $query = $em->createQuery('DELETE BackendBundle:AsignaturasCursos r WHERE r.id = :Id')->setParameter("Id", $entity->getId());
-            $query->execute();
-          }  
-        }
-        return new JsonResponse(array('data' => $data,'success' => true), 200);
+
+        return new JsonResponse(array(
+            'data' => $data,            
+            'asignadas' =>  $num_asig,
+            'eliminadas' =>  $num_elim,
+            'actualizadas' =>  $num_actu,  
+            'success' => true), 200);
     }
 
 
+    public function EliminarAsignacionesAsignaturasAction()
+    {
+        $em = $this->getDoctrine()->getManager();
+
+        $idcurso=$this->get('request')->request->get('curso');
+
+        $curso = $em->getRepository('BackendBundle:Curso')->findOneById($idcurso);
+        if (!$curso) {
+            throw $this->createNotFoundException('Unable to find Curso entity.');
+        }
+
+        $asignaciones= $em->getRepository('BackendBundle:AsignaturasCursos')->findByCurso($curso);
+        
+        $data=1;
+        if(!$asignaciones){
+            $data=null;
+            return new JsonResponse(array('data' => $data), 200);
+        }
+        else{
+
+            foreach ($asignaciones as $asignaturacurso ) {
+                $imparte = $em->getRepository('BackendBundle:Imparte')->findByAsignatura($asignaturacurso);
+                foreach ($imparte as $asignacion ) {
+                    $em->remove($asignacion);
+                }
+            }  
+
+            foreach ($asignaciones as $asignacion ) {
+                $em->remove($asignacion);
+            }  
+            $em->flush();
+            return new JsonResponse(array('data' => $data,'success' => true), 200);
+        }
+    }
+
+
+    public function EliminarTodasAsignacionesAsignaturasAction()
+    {
+        $em = $this->getDoctrine()->getManager();
+
+        $asignaciones= $em->getRepository('BackendBundle:AsignaturasCursos')->findAll();
+        
+        $data=1;
+        if(!$asignaciones){
+            $data=null;
+            return new JsonResponse(array('data' => $data), 200);
+        }
+        else{
+
+            foreach ($asignaciones as $asignaturacurso ) {
+                $imparte = $em->getRepository('BackendBundle:Imparte')->findByAsignatura($asignaturacurso);
+                foreach ($imparte as $asignacion ) {
+                    $em->remove($asignacion);
+                }
+            }  
+
+            foreach ($asignaciones as $asignacion ) {
+                $em->remove($asignacion);
+            }  
+            $em->flush();
+            return new JsonResponse(array('data' => $data,'success' => true), 200);
+        }
+    }
 
 }

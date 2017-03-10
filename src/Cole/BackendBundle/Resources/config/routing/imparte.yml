@@ -64,3 +64,9 @@ eliminar_todas_asignaciones_grupos:
     defaults: { _controller: "BackendBundle:Imparte:EliminarTodasAsignacionesGrupos" }
     options:
         expose: true
+
+comprobar_asignaciones_profesores:
+    path:     /comprobar_asignaciones_profesores
+    defaults: { _controller: "BackendBundle:Imparte:ComprobarAsignacionesProfesores" }
+    options:
+        expose: true

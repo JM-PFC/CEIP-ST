@@ -166,29 +166,6 @@ class Imparte
     }
 
     /**
-     * Set curso
-     *
-     * @param \Cole\BackendBundle\Entity\Curso $curso
-     * @return Imparte
-     */
-    public function setCurso(\Cole\BackendBundle\Entity\Curso $curso)
-    {
-        $this->curso = $curso;
-
-        return $this;
-    }
-
-    /**
-     * Get curso
-     *
-     * @return \Cole\BackendBundle\Entity\Curso 
-     */
-    public function getCurso()
-    {
-        return $this->curso;
-    }
-
-    /**
      * Set dia_semanal
      *
      * @param string $diaSemanal
