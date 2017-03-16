@@ -72,3 +72,27 @@ asignar_tutor_grupo:
     defaults: { _controller: "BackendBundle:Grupo:AsignarTutorGrupo" }
     options:
         expose: true
+
+asignar_horario_show:
+    path:     /asignar_horario_show
+    defaults: { _controller: "BackendBundle:Grupo:AsignarHorarioGrupoShow" }
+    options:
+        expose: true
+
+asignar_horario_new:
+    path:     /asignar_horario/{id}/new
+    defaults: { _controller: "BackendBundle:Grupo:AsignarHorarioGrupoNew" }
+    options:
+        expose: true
+
+eliminar_horario_grupo:
+    path:     /eliminar_horario_grupo
+    defaults: { _controller: "BackendBundle:Grupo:EliminarHorarioGrupo" }
+    options:
+        expose: true
+
+eliminar_todos_horarios_grupos:
+    path:     /eliminar_todos_horarios_grupos
+    defaults: { _controller: "BackendBundle:Grupo:EliminarTodosHorariosGrupo" }
+    options:
+        expose: true

@@ -17,7 +17,7 @@ class AsignaturaType extends AbstractType
         $builder
             ->add('nombre','text',array('label' => 'Nombre', 'attr' => array('validation' => 'Empty_')))
             ->add('tipo')
-            ->add('abreviatura','text',array('label' => 'Abreviatura', 'attr' => array('validation' => 'Empty_')))
+            ->add('abreviatura','text',array('label' => 'Abreviatura', 'max_length' => 15, 'attr' => array('validation' => 'Empty_')))
             ->add('opcional', 'checkbox', array('label' => 'Opcional','required'=> false))
 
         ;

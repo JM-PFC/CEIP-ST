@@ -1,0 +1,8 @@
+<select>
+    <option selected="selected" class="oculto" value="">Aulas</option>
+    {% for aula in aulas %}
+        <option value="{{aula.Id}}">{{ aula.Nombre}}</option>
+    {% endfor %}
+    <option value="0">Sin Aula</option>
+
+</select>

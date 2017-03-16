@@ -6,15 +6,22 @@
   	clave=key.split("-");
   	grupo=clave[0];
   	asignatura=clave[1];
+    aula=clave[2];
   	profesor=array[key];
 
 	 $("#asignar_profesor #cabecera_lista[grupo='"+grupo+"']").next().find(" tr[id='"+asignatura+"'] td:nth-child(2)").text(profesor);
 	 $("#asignar_profesor #cabecera_lista[grupo='"+grupo+"']").next().find(" tr[id='"+asignatura+"'] td:nth-child(2)").removeClass('text_a_c');
+    //Si existe aulaasignada se muestra en la tabla.  
+    if(aula!="" ){
+      $("#asignar_profesor #cabecera_lista[grupo='"+grupo+"']").next().find(" tr[id='"+asignatura+"'] td:nth-child(3)").text(aula);
+      $("#asignar_profesor #cabecera_lista[grupo='"+grupo+"']").next().find(" tr[id='"+asignatura+"'] td:nth-child(3)").removeClass('text_a_c');
+    }
+
   }
 
 
 
-  $("#asignar_profesor #lista_asignaturas .cabecera_tipo td ").attr("colspan",2);
+  $("#asignar_profesor #lista_asignaturas .cabecera_tipo td ").attr("colspan",3);
 
   //Se oculta la imagen para asignar profesores a los cursos que no tienen asignaturas registradas.
   $("#asignar_profesor #contenedor_registro #lista_asignaturas tbody .dataTables_empty").each(function(){  
@@ -24,9 +31,14 @@
 </script>
 
 {% for entity in entity %}
-	<tr id="{{ entity.id }}" tipo="{{ entity.asignatura.tipo }}">
+  {% if entity.asignatura.tipo == "Específica" %}
+	<tr id="{{ entity.id }}" tipo="{{ entity.asignatura.tipo }}" opcional="{{ entity.asignatura.opcional }}">
+  {% else %}  
+  <tr id="{{ entity.id }}" tipo="{{ entity.asignatura.tipo }}">
+  {% endif %}
   	<td>{{ entity.asignatura.nombre }}</td>
   	<td class="text_a_c">-</td>
+    <td class="text_a_c">-</td>
   	{#<td>{{ entity.profesor.nombre ~ " " ~ entity.profesor.apellido1 ~ " " ~ entity.profesor.apellido2  }}</td>#}
 
 	</tr>

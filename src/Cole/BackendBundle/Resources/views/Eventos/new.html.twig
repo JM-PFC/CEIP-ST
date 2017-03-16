@@ -105,13 +105,13 @@
 
         texto="<p class='justificado'>Para poder añadir un evento debe completar el calendario del curso con las siguientes fechas:</p><br/>";
         if(response.curso==null){
-          texto+="<h4>Fecha de inicio y fin del curso</h4> <br/>";
+          texto+="<h4 class='negrita'>Fecha de inicio y fin del curso</h4> <br/>";
         }
         if(response.navidad==null){
-          texto+="<h4>Vacaciones de Navidad</h4> <br/>";
+          texto+="<h4 class='negrita'>Vacaciones de Navidad</h4> <br/>";
         }
         if(response.semanasanta==null){
-          texto+="<h4>Vacaciones de Semana Santa</h4> <br/>";
+          texto+="<h4 class='negrita'>Vacaciones de Semana Santa</h4> <br/>";
         }
 
         titulo="No se puede añadir eventos";
@@ -119,19 +119,17 @@
         error.play(); 
         swal({
           title: titulo,
-          text: texto,
+          html: texto,
           type: 'warning',
           showCancelButton: false,
           allowOutsideClick: false,
           confirmButtonColor: color,
-          animation: false,
-          closeOnConfirm: true,
-          html: true,
-          //timer:10000,
-          animation: false
-          }, 
-          function(){
-            swal.close();
+          timer:6000,
+          }).then(function () {
+
+            div=$(".contenido_main").find("div[id^='tabs-'][style='display: block']");
+            $(" li[aria-controls='"+div.attr("id")+"'] span").trigger("click");
+          }, function (dismiss) {
             div=$(".contenido_main").find("div[id^='tabs-'][style='display: block']");
             $(" li[aria-controls='"+div.attr("id")+"'] span").trigger("click");
           }

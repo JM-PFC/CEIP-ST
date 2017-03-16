@@ -53,6 +53,11 @@ class Equipamiento
     private $grupo;
 
     /**
+    * @ORM\OneToMany(targetEntity="Imparte", mappedBy="aula")
+    */
+    private $imparte;
+
+    /**
      * Get id
      *
      * @return integer 
@@ -195,4 +200,37 @@ class Equipamiento
     }
 
     
+
+    /**
+     * Add imparte
+     *
+     * @param \Cole\BackendBundle\Entity\Imparte $imparte
+     * @return Equipamiento
+     */
+    public function addImparte(\Cole\BackendBundle\Entity\Imparte $imparte)
+    {
+        $this->imparte[] = $imparte;
+
+        return $this;
+    }
+
+    /**
+     * Remove imparte
+     *
+     * @param \Cole\BackendBundle\Entity\Imparte $imparte
+     */
+    public function removeImparte(\Cole\BackendBundle\Entity\Imparte $imparte)
+    {
+        $this->imparte->removeElement($imparte);
+    }
+
+    /**
+     * Get imparte
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getImparte()
+    {
+        return $this->imparte;
+    }
 }

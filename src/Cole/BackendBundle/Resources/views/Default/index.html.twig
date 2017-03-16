@@ -9,7 +9,8 @@
 	<link href="{{ asset('bundles/backend/css/backend.css') }}" rel="stylesheet" type="text/css" />
 	<link href="{{ asset('bundles/backend/css/animate.css') }}" rel="stylesheet" type="text/css" />
 	<link href="{{ asset('bundles/backend/js/jquery-ui/jquery-ui.css') }}" rel="stylesheet" type="text/css" />
-	<link href="{{ asset('bundles/backend/js/sweetalert-master/dist/sweetalert.css') }}" rel="stylesheet" type="text/css">
+	{#<link href="{{ asset('bundles/backend/js/sweetalert-master/dist/sweetalert.css') }}" rel="stylesheet" type="text/css">#}
+	<link href="{{ asset('bundles/backend/js/sweetalert2-master/dist/sweetalert2.min.css') }}" rel="stylesheet" type="text/css">
 	<link href="{{ asset('bundles/backend/js/pnotify/pnotify.custom.min.css') }}" media="all" rel="stylesheet" type="text/css">
 	<link href="{{ asset('bundles/backend/js/DataTables/datatables.css') }}" media="all" rel="stylesheet" type="text/css">
 	<link href="{{ asset('bundles/backend/js/TimePicki-master/css/timepicki.css') }}" media="all" rel="stylesheet" type="text/css">
@@ -25,9 +26,12 @@
     <script type="text/javascript" src="{{ asset('bundles/backend/js/load.js') }}" async="async"></script>
 	<script type="text/javascript" src="{{ asset('bundles/backend/js/general.js') }}" async="async"></script>
 	<script type="text/javascript" src="{{ asset('bundles/backend/js/jquery-ui/jquery-ui.js') }}"></script>
-	<script type="text/javascript" src="{{ asset('bundles/backend/js/sweetalert-master/dist/sweetalert.min.js') }}"></script>
+	{#<script type="text/javascript" src="{{ asset('bundles/backend/js/sweetalert-master/dist/sweetalert.min.js') }}"></script>#}
+	<script type="text/javascript" src="{{ asset('bundles/backend/js/sweetalert2-master/dist/sweetalert2.min.js') }}"></script>
+	<script type="text/javascript" src="{{ asset('bundles/backend/js/es6-promise-master/dist/es6-promise.auto.min.js') }}"></script>
+
 	<script type="text/javascript" src="{{ asset('bundles/backend/js/pnotify/pnotify.custom.min.js') }}"></script>
-  <script type="text/javascript" src="{{asset("bundles/cole/js/imgLiquid-min.js")}}"></script>
+  	<script type="text/javascript" src="{{asset("bundles/cole/js/imgLiquid-min.js")}}"></script>
 
 	<script type="text/javascript" src="{{ asset('bundles/fosjsrouting/js/router.js') }}"></script>
 	<script type="text/javascript" src="{{ path('fos_js_routing_js', {"callback": "fos.Router.setData"}) }}"></script>
@@ -142,12 +146,12 @@
 						<span> Registro Profesor</span>
 					</div>
 					<div>
-						<a id="tutor_grupo" title="Asignar Tutor de Grupos"  href="{{path('tutor_grupo')}}">
+						<a id="tutor_grupo" title="Asignar Tutores"  href="{{path('tutor_grupo')}}">
 							<img src="{{ asset('bundles/backend/images/menu/asignar.png')}}">
 							<span> Asignar <br>Tutor</span>
 						</a>		
 						
-						<a id="profesor_asignar_grupo" title="Asignar Grupo Profesores" href="{{path('asignar_grupo_profesores_show')}}">
+						<a id="profesor_asignar_grupo" title="Asignar Profesores" href="{{path('asignar_grupo_profesores_show')}}">
 							<img src="{{ asset('bundles/backend/images/menu/profesor-grupo.png')}}">
 							<span> Asignar <br>Grupo</span>
 						</a>
@@ -245,7 +249,7 @@
 						<span> Cursos </span>
 					</div>
 					<div>
-						<a id="asignar_horario" title="Asignar Horario" href="javascript:void(0);">
+						<a id="asignar_horario" title="Asignar Horario" href="{{path('asignar_horario_show')}}">
 							<img src="{{ asset('bundles/backend/images/menu/horarios2.png')}}">
 							<span> Asignar <br>Horario</span>
 						</a>

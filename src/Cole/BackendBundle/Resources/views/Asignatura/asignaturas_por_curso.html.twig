@@ -1,8 +1,18 @@
 {% for entity in entity %}
-	<tr id="{{ entity.asignatura.id }}">
+
+
+  {% if entity.asignatura.tipo == "Específica" %}
+  <tr id="{{ entity.asignatura.id }}" tipo="{{ entity.asignatura.tipo }}" opcional="{{ entity.asignatura.opcional }}">
+  {% else %}  
+  <tr id="{{ entity.asignatura.id }}" tipo="{{ entity.asignatura.tipo }}">
+  {% endif %}
   	<td>{{ entity.asignatura.nombre }}</td>
-  	<td>{{ entity.asignatura.tipo}}</td>
   	<td>{{ entity.numModulos }}</td>
+  	{% if  entity.libro %}
+  	  	<td>{{ entity.libro }}</td>
+  	{% else %}	
+  	  	<td>{{ entity.libro }}</td>
+  	{% endif %}
 	</tr>
 
 {% else %}

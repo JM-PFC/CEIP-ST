@@ -11,22 +11,41 @@
     $("#profesor_asignatura_grupo_dialog #contenedor_asignaturas #cabecera_troncal").removeClass('oculto');
   }
 
-  if($("#profesor_asignatura_grupo_dialog #contenedor_asignaturas li[tipo='Específica']").size()>0){
+  if($("#profesor_asignatura_grupo_dialog #contenedor_asignaturas li[opcional='']").size()>0){
     $("#profesor_asignatura_grupo_dialog #contenedor_asignaturas .aviso").addClass('oculto');
     $("#profesor_asignatura_grupo_dialog #contenedor_asignaturas #cabecera_especifica").removeClass('oculto');
   }
 
+  if($("#profesor_asignatura_grupo_dialog #contenedor_asignaturas li[opcional='1']").size()>0){
+    $("#profesor_asignatura_grupo_dialog #contenedor_asignaturas .aviso").addClass('oculto');
+    $("#profesor_asignatura_grupo_dialog #contenedor_asignaturas #cabecera_especifica_opcional").removeClass('oculto');
+  }
+  
+
   //Se inserta los profesores asignados a un grupo que estan registrados en la base de datos.
   array={{imparte|json_encode()|raw}};
   for (var key in array){
-    asignatura=key;
+    clave=key.split("-");
+    asignatura=clave[0];
+    id_profesor=clave[1];
+    aula=clave[2];
     profesor=array[key];
 
-    $("#profesor_asignatura_grupo_dialog #contenedor_asignaturas li[id='"+asignatura+"']").attr("class","back_asignado");
     $("#profesor_asignatura_grupo_dialog #contenedor_asignaturas li[id='"+asignatura+"'] #asignado").removeClass('oculto');
     $("#profesor_asignatura_grupo_dialog #contenedor_asignaturas li[id='"+asignatura+"'] #no_asignado").addClass('oculto');
-    $("#profesor_asignatura_grupo_dialog #contenedor_asignaturas li[id='"+asignatura+"'] #asignado input").attr("valor",profesor+" ");
-    $("#profesor_asignatura_grupo_dialog #contenedor_asignaturas li[id='"+asignatura+"'] #asignado input").attr("value",profesor);
+    $("#profesor_asignatura_grupo_dialog #contenedor_asignaturas li[id='"+asignatura+"'] #asignado input[type='text']").attr("valor",profesor+" ");
+    $("#profesor_asignatura_grupo_dialog #contenedor_asignaturas li[id='"+asignatura+"'] #asignado input[type='text']").attr("value",profesor);
+    $("#profesor_asignatura_grupo_dialog #contenedor_asignaturas li[id='"+asignatura+"'] #asignado input[type='text']").attr("id",id_profesor);
+    if(aula!=""){
+      $("#profesor_asignatura_grupo_dialog #contenedor_asignaturas li[id='"+asignatura+"'] #asignado select").val(aula);
+    }
+    else{
+      $("#profesor_asignatura_grupo_dialog #contenedor_asignaturas li[id='"+asignatura+"'] #asignado select").val(0);
+    }
+    $("#profesor_asignatura_grupo_dialog #contenedor_asignaturas li[id='"+asignatura+"'] #asignado select").attr("valor",$("#profesor_asignatura_grupo_dialog #contenedor_asignaturas li[id='"+asignatura+"'] #asignado select").val());
+    //Se le asigna un color y un title a los profesores ya asignados.
+    $("#profesor_asignatura_grupo_dialog #contenedor_asignaturas li[id='"+asignatura+"']").attr("class","back_asignado");
+    $("#profesor_asignatura_grupo_dialog #contenedor_asignaturas li[id='"+asignatura+"'] #asignado input[type='text'] ").attr("title","Profesor Asignado");
   }
   //Se elimina de la lista de profesores el tutor/a.
   if({{id_tutor|json_encode()|raw}}!=null){
@@ -100,18 +119,31 @@
     }
   });
 
-    //Se oculta el checkbox si no hay más asignaturas troncales por asignar.
-    if($("#profesor_asignatura_grupo_dialog #contenedor_asignaturas li[tipo='Troncal'] #no_asignado:not(.oculto)").size()<2){
-      $("#profesor_asignatura_grupo_dialog #all").addClass('oculto');
-    }
+  //Se oculta el checkbox si no hay más asignaturas troncales por asignar.
+  if($("#profesor_asignatura_grupo_dialog #contenedor_asignaturas li[tipo='Troncal'] #no_asignado:not(.oculto)").size()<2){
+    $("#profesor_asignatura_grupo_dialog #all").addClass('oculto');
+  }
+  //Se deshabilita el aula asignada a una asignatura opcional en el listado de las otras.
+  $("#profesor_asignatura_grupo_dialog #contenedor_asignaturas li[opcional='1'] #asignado:not('.oculto') select").each (function(){
+    aula=$(this).val();
+    li=$(this).closest("li").attr("id");
+
+    $("#profesor_asignatura_grupo_dialog #contenedor_asignaturas li[opcional='1'][id!='"+li+"'] #asignado:not('.oculto') select").each (function(){
+      $(this).find("option[value='"+aula+"']").prop('disabled', true);
+    });
+  });
 
   </script>
 {% endblock %}
 
 {% block body -%}
+  {% if grupo.aula %}
+    <fieldset id="{{grupo.id}}" aula="{{grupo.aula.id}}">
+  {% else %}
     <fieldset id="{{grupo.id}}">
+  {% endif %}
       <legend>Asignación de profesores de Primaria</legend>
-      <div id="div_lista" class="w35 f_left tcenter b_right">
+      <div id="div_lista" class="w30 f_left tcenter b_right">
         <span>1. Seleccione un <strong>profesor</strong>.</span>
         <div id="tutor" class="lista_cursos">
           <div class="cabecera_lista">Tutor/a del Grupo</div>
@@ -119,7 +151,7 @@
             {% if tutor %}
                 <button class="buttonface" id="{{ tutor.id }}">{{tutor.nombre ~ " " ~ tutor.apellido1 ~ " " ~ tutor.apellido2}} </button>
             {% else %}  
-                <p class="aviso"> El grupo aún no tiene tutor/a asignado/a</p>
+                <p class="aviso"> El grupo aún no tiene tutor/a</p>
             {% endif %}    
           </div>
         </div>
@@ -153,7 +185,7 @@
             </div>
         </div>
       </div>
-      <div class="w64 f_left  tcenter">
+      <div class="w69 f_left  tcenter">
         <span>2. Seleccione las <strong>asignaturas</strong> a impartir por el profesor y pulse sobre <strong>Asignar</strong>.</span>
         <div id="btn_asignar">
           <span class="disab">
@@ -170,8 +202,8 @@
               <ol id="cabecera_troncal" class="oculto">Troncales</ol>
               <input id="all" type="checkbox" title="Seleccionar asignaturas troncales"></input>
                 {% for entity in entities_troncales %}
-                  <li id="{{ entity.id }}" tipo="{{ entity.asignatura.tipo }}">
-                    <div id="no_asignado" title="Profesor asignado">
+                  <li id="{{ entity.id }}" tipo="{{ entity.asignatura.tipo }}" >
+                    <div id="no_asignado">
                       <input type="checkbox"></input>
                       {% if entity.numModulos == 1  %}
                         <p class="w64">{{ entity.asignatura.nombre }} <span id="{{ entity.numModulos }} ">({{ entity.numModulos }} Módulo)</span></p>
@@ -179,18 +211,19 @@
                         <p class="w64">{{ entity.asignatura.nombre }} <span id="{{ entity.numModulos }} ">({{ entity.numModulos }} Módulos)</span></p>
                       {% endif %}
                     </div>
-                    <div id="asignado" class="oculto" title="Profesor pendiente de asignar">
+                    <div id="asignado" class="oculto">
                       <input type="checkbox" style="opacity: 0;"></input>
                       <p>{{ entity.asignatura.abreviatura }}</p>
-                      <input value="" readonly="readonly" type="text"></input>
+                      <input value="" readonly="readonly" type="text"></input>  
+                      {{ render(controller("BackendBundle:Equipamiento:listaAulas")) }}
                       <img src="/Symfony/web/bundles/backend/images/menu/eliminar.png">
                     </div>
                   </li>
                 {% endfor %}
               <ol id="cabecera_especifica" class="oculto">Específicas</ol>
                 {% for entity in entities_especificas %}
-                  <li id="{{ entity.id }}" tipo="{{ entity.asignatura.tipo }}">
-                    <div id="no_asignado" title="Profesor asignado">
+                  <li id="{{ entity.id }}" tipo="{{ entity.asignatura.tipo }}" opcional="{{ entity.asignatura.opcional }}">
+                    <div id="no_asignado">
                       <input type="checkbox"></input>
                       {% if entity.numModulos == 1  %}
                         <p class="w64">{{ entity.asignatura.nombre }} <span id="{{ entity.numModulos }} ">({{ entity.numModulos }} Módulo)</span></p>
@@ -198,10 +231,31 @@
                         <p class="w64">{{ entity.asignatura.nombre }} <span id="{{ entity.numModulos }} ">({{ entity.numModulos }} Módulos)</span></p>
                       {% endif %}
                     </div>
-                    <div id="asignado" class="oculto" title="Profesor pendiente de asignar">
+                    <div id="asignado" class="oculto">
                       <input type="checkbox" style="opacity: 0;"></input>
                       <p>{{ entity.asignatura.abreviatura }}</p>
                       <input value="" readonly="readonly" type="text"></input>
+                      {{ render(controller("BackendBundle:Equipamiento:listaAulas")) }}
+                      <img src="/Symfony/web/bundles/backend/images/menu/eliminar.png">
+                    </div>
+                  </li>
+                {% endfor %}
+              <ol id="cabecera_especifica_opcional" class="oculto">Específicas (Opcionales)</ol>
+                {% for entity in entities_especificas_opcionales %}
+                  <li id="{{ entity.id }}" tipo="{{ entity.asignatura.tipo }}" opcional="{{ entity.asignatura.opcional }}">
+                    <div id="no_asignado">
+                      <input type="checkbox"></input>
+                      {% if entity.numModulos == 1  %}
+                        <p class="w64">{{ entity.asignatura.nombre }} <span id="{{ entity.numModulos }} ">({{ entity.numModulos }} Módulo)</span></p>
+                      {% else %}
+                        <p class="w64">{{ entity.asignatura.nombre }} <span id="{{ entity.numModulos }} ">({{ entity.numModulos }} Módulos)</span></p>
+                      {% endif %}
+                    </div>
+                    <div id="asignado" class="oculto">
+                      <input type="checkbox" style="opacity: 0;"></input>
+                      <p>{{ entity.asignatura.abreviatura }}</p>
+                      <input value="" readonly="readonly" type="text"></input>
+                      {{ render(controller("BackendBundle:Equipamiento:listaAulas")) }}
                       <img src="/Symfony/web/bundles/backend/images/menu/eliminar.png">
                     </div>
                   </li>

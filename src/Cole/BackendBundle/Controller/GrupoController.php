@@ -89,7 +89,24 @@ class GrupoController extends Controller
             'form'   => $form->createView(),
         ));
     }
+    public function AsignarHorarioGrupoNewAction($id)
+    {
+        $em = $this->getDoctrine()->getManager();
 
+        $troncales = $em->getRepository('BackendBundle:Asignatura')->findBy(array("tipo"=>"Troncal"),array("nombre"=>"ASC"));
+        $especificas = $em->getRepository('BackendBundle:Asignatura')->findBy(array("tipo"=>"Específica"),array("nombre"=>"ASC"));
+        $entities_troncales = $em->getRepository('BackendBundle:AsignaturasCursos')->findAsignaturasTroncalesCurso($id);
+        $entities_especificas = $em->getRepository('BackendBundle:AsignaturasCursos')->findAsignaturasEspecificasCurso($id);
+        $curso= $em->getRepository('BackendBundle:Curso')->findOneById($id);
+
+        return $this->render('BackendBundle:Grupo:new_horario_grupo.html.twig', array(
+            'troncales' => $troncales,
+            'especificas' => $especificas,
+            'entities_troncales' => $entities_troncales,
+            'entities_especificas' => $entities_especificas,
+            'curso' => $curso,
+        ));
+    }
     /**
      * Finds and displays a Grupo entity.
      *
@@ -104,6 +121,47 @@ class GrupoController extends Controller
             'entities' => $entities,
         ));
     }
+
+    public function AsignarHorarioGrupoShowAction()
+    {
+        $em = $this->getDoctrine()->getManager();
+
+        $asignaturas= $em->getRepository('BackendBundle:Asignatura')->findNumAsignaturas();
+        $profesores= $em->getRepository('BackendBundle:Profesor')->findByActivo(1);
+        if (!$profesores) {
+            $numProfesores=0;
+        }
+        else{
+            $numProfesores=1;
+        }
+
+        $asignaturasCursos= $em->getRepository('BackendBundle:AsignaturasCursos')->findAll();
+        if (!$asignaturasCursos) {
+            $numAsignaturasCursos=0;
+        }
+        else{
+            $numAsignaturasCursos=1;
+        }
+
+        $horarios=$em->getRepository('BackendBundle:Horario')->findAll();
+        if (!$horarios) {
+            $horario=0;
+        }
+        else{
+            $horario=1;
+        }
+
+        $entities=$em->getRepository('BackendBundle:Grupo')->findGruposByNivel("Primaria");
+
+        return $this->render('BackendBundle:Grupo:asignar_horarios_show.html.twig', array(
+            'entities' => $entities,
+            'numAsignaturas' => (int)$asignaturas[1],
+            'numProfesores' => $numProfesores,
+            'numAsignaturasCursos' => $numAsignaturasCursos,
+            'horario' => $horario,
+        ));
+    }
+
 
     /**
      * Displays a form to edit an existing Grupo entity.
@@ -428,6 +486,116 @@ class GrupoController extends Controller
         }
         $em->flush();
         return new JsonResponse(array('data' => $data,'success' => true), 200);
+    }
+
+    public function HorariosGruposAction($id)
+    {
+        $em = $this->getDoctrine()->getManager();
+        $grupo = $em->getRepository('BackendBundle:Grupo')->findOneById($id);
+        $entity = $em->getRepository('BackendBundle:Horario')->findAll();
+        $imparte = $em->getRepository('BackendBundle:Imparte')->findByGrupo($id);
+        
+        $array=[];
+        foreach($imparte as $registro){
+            if($registro->getAula()){
+                $aula=$registro->getAula()->getNombre();
+            }
+            else{
+                $aula="";
+            }
+
+            if($registro->getDiaSemanal()){
+                $dia=$registro->getDiaSemanal();
+            }
+            else{
+                $dia=""; 
+            }
+
+            if($registro->getHorario()){
+                $horario=$registro->getHorario()->getId();
+            }
+            else{
+                $horario="";
+            }
+           
+            $array[$horario."-".$dia."-".$registro->getAsignatura()->getAsignatura()->getNombre()."-".$registro->getAsignatura()->getAsignatura()->getAbreviatura()."-".$aula."-".$registro->getGrupo()->getId()]=$registro->getProfesor()->getNombre()." ".$registro->getProfesor()->getApellido1()." ".$registro->getProfesor()->getApellido2();
+
+        }
+
+        $asignaciones = $em->getRepository('BackendBundle:Imparte')->findByGrupoConHorario($grupo);
+        if($asignaciones){
+            $numAsigHorarios=1;
+        }
+        else{
+            $numAsigHorarios=0;
+        }
+
+        $asignaciones = $em->getRepository('BackendBundle:AsignaturasCursos')->findByCurso($grupo->getCurso());
+        if($asignaciones){
+            $numAsigCurso=1;
+        }
+        else{
+            $numAsigCurso=0;
+        }
+
+        return $this->render('BackendBundle:Grupo:datos_horarios.html.twig', array(
+            'imparte' => $array,
+            'numAsigHorarios' => $numAsigHorarios,
+            'numAsigCurso' => $numAsigCurso,
+            'entity' => $entity));
+    }
+
+    
+
+    public function EliminarHorarioGrupoAction()
+    {
+        $em = $this->getDoctrine()->getManager();
+
+        $idgrupo=$this->get('request')->request->get('grupo');
+
+        $grupo = $em->getRepository('BackendBundle:Grupo')->findOneById($idgrupo);
+        if (!$grupo) {
+            throw $this->createNotFoundException('Unable to find Grupo entity.');
+        }
+
+        $imparte= $em->getRepository('BackendBundle:Imparte')->findByGrupo($grupo);
+        
+        $data=1;
+        if(!$imparte){
+            $data=null;
+            return new JsonResponse(array('data' => $data), 200);
+        }
+        else{
+            foreach ($imparte as $asignacion ) {
+                $asignacion->setHorario(null);
+                $asignacion->setDiaSemanal(null);
+                $em->persist($asignacion);
+            }  
+            $em->flush();
+            return new JsonResponse(array('data' => $data,'success' => true), 200);
+        }
+    }
+
+    public function EliminarTodosHorariosGrupoAction()
+    {
+        $em = $this->getDoctrine()->getManager();
+
+        $imparte= $em->getRepository('BackendBundle:Imparte')->findAll();
+        
+        $data=1;
+        if(!$imparte){
+            $data=null;
+            return new JsonResponse(array('data' => $data), 200);
+        }
+        else{
+            foreach ($imparte as $asignacion ) {
+                $asignacion->setHorario(null);
+                $asignacion->setDiaSemanal(null);
+                $em->persist($asignacion);
+            }  
+            $em->flush();
+            return new JsonResponse(array('data' => $data,'success' => true), 200);
+        }
     }
 
 

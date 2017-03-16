@@ -16,7 +16,7 @@ class AsignaturasCursosRepository extends EntityRepository
 	public function findAsignaturasCursos($id)
 	{
 	return $this->getEntityManager()->createQuery(
-		'SELECT a FROM BackendBundle:AsignaturasCursos a INNER JOIN a.curso c INNER JOIN a.asignatura asig WHERE c.id=:id ORDER BY  asig.tipo DESC,asig.nombre')
+		'SELECT a FROM BackendBundle:AsignaturasCursos a INNER JOIN a.curso c INNER JOIN a.asignatura asig WHERE c.id=:id ORDER BY asig.opcional,asig.tipo DESC,asig.nombre')
 		->setParameters(array(
 			'id' => $id))
 		->getResult();
@@ -38,6 +38,28 @@ class AsignaturasCursosRepository extends EntityRepository
 		'SELECT a FROM BackendBundle:AsignaturasCursos a INNER JOIN a.curso c INNER JOIN a.asignatura asig WHERE c.id=:id and asig.tipo=:tipo ORDER BY  asig.tipo DESC,asig.nombre')
 		->setParameters(array(
 			'id' => $id,
+			'tipo' => "Específica"))
+		->getResult();
+	}
+
+	public function findAsignaturasEspecificasNoOpcionalesCurso($id)
+	{
+	return $this->getEntityManager()->createQuery(
+		'SELECT a FROM BackendBundle:AsignaturasCursos a INNER JOIN a.curso c INNER JOIN a.asignatura asig WHERE c.id=:id and asig.tipo=:tipo and asig.opcional=:opcional ORDER BY  asig.tipo DESC,asig.nombre')
+		->setParameters(array(
+			'id' => $id,
+			'opcional' => 0,
+			'tipo' => "Específica"))
+		->getResult();
+	}
+
+	public function findAsignaturasEspecificasOpcionalesCurso($id)
+	{
+	return $this->getEntityManager()->createQuery(
+		'SELECT a FROM BackendBundle:AsignaturasCursos a INNER JOIN a.curso c INNER JOIN a.asignatura asig WHERE c.id=:id and asig.tipo=:tipo and asig.opcional=:opcional ORDER BY  asig.tipo DESC,asig.nombre')
+		->setParameters(array(
+			'id' => $id,
+			'opcional' => 1,
 			'tipo' => "Específica"))
 		->getResult();
 	}

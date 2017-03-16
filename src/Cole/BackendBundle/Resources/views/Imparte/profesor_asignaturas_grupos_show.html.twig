@@ -49,6 +49,14 @@
         else{
             $("#asignar_profesor #eliminar_grupo").prop("disabled",true);
         }
+
+        //Se oculta la cabecera de la tabla si no hay registros.
+        if($("#asignar_profesor #contenedor_registro:not(.oculto) tr .dataTables_empty").size()==0){
+            $("#asignar_profesor #lista_asignaturas thead").removeClass('oculto');
+        }
+        else{
+            $("#asignar_profesor #lista_asignaturas thead").addClass('oculto');  
+        }
     });
 
     //Comprobacón de existencia de cursos.
@@ -68,8 +76,7 @@
             title: "Cursos no registrados",
             text: 'Actualmente no existe ningún curso registrado en el sistema. Debe registrar los cursos para poder asignarles los profesores.',
             type: "error",
-            confirmButtonColor: color,
-            html: true
+            confirmButtonColor: color
           });          
         $("#tabs ul li[aria-selected='true'] span").trigger("click");
     }
@@ -91,13 +98,12 @@
             title: "Asignaturas no registradas",
             text: 'Actualmente no existen asignaturas registrada en el sistema. Debe registrar las asignaturas para poder asignarles los profesores.',
             type: "error",
-            confirmButtonColor: color,
-            html: true
+            confirmButtonColor: color
           });          
         $("#tabs ul li[aria-selected='true'] span").trigger("click");
     }
 
-    //Comprobacón de existencia deprofesores.
+    //Comprobacón de existencia de profesores.
     if({{numProfesores|json_encode()|raw}}==0){
 
         // Se establece las variables con los audios para las notificaciones.
@@ -114,8 +120,7 @@
             title: "Profesores no registrados",
             text: 'Actualmente no existen profesores registrados en el sistema. Debe registrar los profesores para poder asignarlos.',
             type: "error",
-            confirmButtonColor: color,
-            html: true
+            confirmButtonColor: color
           });          
         $("#tabs ul li[aria-selected='true'] span").trigger("click");
     }
@@ -123,28 +128,35 @@
     //Se asigna el nombre y el id del grupo al botón de eliminar asignaciones por grupo.
     $("#asignar_profesor #eliminar_grupo span").text($("#asignar_profesor .lista_cursos .elected").text());
     $("#asignar_profesor #eliminar_grupo").attr("grupo",$("#asignar_profesor #contenedor_registro:not(.oculto) #cabecera_lista").attr("grupo"));
+
     //Se desactiva botón para grupos que no tienen profesores asignados.
     setTimeout(function(){ 
-    if($("#asignar_profesor #contenedor_registro:not(.oculto) tr:not(.cabecera_tipo) td[class='']").size()==0){
-        $("#asignar_profesor #eliminar_grupo").prop("disabled",true);
-    }
-    }, 20);
+        if($("#asignar_profesor #contenedor_registro:not(.oculto) tr:not(.cabecera_tipo) td[class='']").size()==0){
+            $("#asignar_profesor #eliminar_grupo").prop("disabled",true);
+        }
 
+        //Botón para eliminar todas las asignaciones de profesores en los grupos.
+        //Se desactiva botón cuando no hay ningún profesor asignado en el sistema.
+        if($("#asignar_profesor #contenedor_registro tr:not(.cabecera_tipo) td[class='']").size()==0){
+            $("#asignar_profesor #eliminar_todo").prop("disabled",true);
+        }
 
-    //Botón para eliminar todas las asignaciones de profesores en los grupos.
-    //Se desactiva botón cuando no hay ningún profesor asignado en el sistema.
-    setTimeout(function(){ 
-    if($("#asignar_profesor #contenedor_registro tr:not(.cabecera_tipo) td[class='']").size()==0){
-        $("#asignar_profesor #eliminar_todo").prop("disabled",true);
-    }
+        //Se oculta la cabecera de la tabla si no hay registros.
+        if($("#asignar_profesor #contenedor_registro:not(.oculto) tr .dataTables_empty").size()==0){
+            $("#asignar_profesor #lista_asignaturas thead").removeClass('oculto');
+        }
+        else{
+            $("#asignar_profesor #lista_asignaturas thead").addClass('oculto');  
+        }
     }, 20);
 
   //Se añade cabecera a la tabla para diferencias los tipos de asignaturas.
   $("#asignar_profesor #contenedor_registro").each(function(){  
     grupo=$(this).find("#cabecera_lista").attr("grupo");
 
-    $('<tr class="cabecera_tipo"><td id="cabecera_troncal" class="">Troncales</td></tr>').insertBefore($(this).find("tr[tipo='Troncal']:first")); 
-    $('<tr class="cabecera_tipo"><td id="cabecera_troncal" class="">Específicas</td></tr>').insertBefore($(this).find("tr[tipo='Específica']:first"));
+    $('<tr class="cabecera_tipo"><td id="cabecera_troncal" class="">Troncales</td></tr>').insertBefore($(this).find("tbody tr[tipo='Troncal']:first")); 
+    $('<tr class="cabecera_tipo"><td id="cabecera_troncal" class="">Específicas</td></tr>').insertBefore($(this).find("tbody tr[opcional='']:first"));
+    $('<tr class="cabecera_tipo"><td id="cabecera_troncal" class="">Específicas (Opcionales)</td></tr>').insertBefore($(this).find("tbody tr[opcional='1']:first"));
   });
 
 
@@ -158,22 +170,20 @@
     <div class="child">
       <div class="simple_column">
         <div class="block_insert">
-            <h2>Asignar Grupos a Profesores</h2>
+            <h2>Asignación de Profesores</h2>
             <ul>
                 <li>Para <span>mostrar</span> las asignaciones de profesores de un grupo pulse sobre el botón del grupo correspondiente.</li>
                 <li>Para <span>añadir</span> ó <span>modificar</span> asignaciones de profesores de un grupo pulse sobre el icono de añadir <img id="img_1" class="add_registro" src="/Symfony/web/bundles/backend/images/menu/añadir_azul.png"> del grupo correspondiente.</li>
                 <li>Para <span>eliminar todas</span> las asignaciones de un grupo o de todos los grupos a la vez, pulse sobre los botones inferiores.</li>
             </ul>
             <div>
-                <button id="eliminar_grupo" title="Elimina todas las asignaciones de profesores del grupo"><strong>Eliminar</strong><br>Profesores de <span></span></button>
-                <button id="eliminar_todo" title="Elimina todas las asignaciones de profesores de todos los grupos"><strong>Eliminar</strong><br>Todos los Profesores</button>
+                <button id="eliminar_grupo" title="Elimina todas las asignaciones de profesores del grupo"><strong>Eliminar</strong><br>Prof. de <span></span></button>
+                <button id="eliminar_todo" title="Elimina todas las asignaciones de profesores de todos los grupos"><strong>Eliminar</strong><br>Todos los Prof.</button>
             </div>
         </div> 
       </div>
       <div class="lista_cursos">
-        <div class="cabecera_lista">
-        Grupos de Primaria
-        </div>
+        <div class="cabecera_lista">Primaria</div>
         <div class="contenido_lista">
             {% for entity in entities %}
                 {% if entity.curso.nivel == "Primaria" %}
@@ -199,6 +209,7 @@
                     <tr>
                         <th>Asignatura</th>
                         <th>Profesor</th>
+                        <th>Aula</th>
                     </tr>
                     </thead>
                 </table>

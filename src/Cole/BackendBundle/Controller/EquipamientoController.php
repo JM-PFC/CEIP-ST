@@ -287,4 +287,16 @@ class EquipamientoController extends Controller
             'entities' => $entities,
         ));
     }
+
+    public function listaAulasAction()
+    {
+        $em = $this->getDoctrine()->getManager();
+
+        $aulas = $em->getRepository('BackendBundle:Equipamiento')->findByTipo("Aula");
+
+        return $this->render('BackendBundle:Equipamiento:listaAulas.html.twig', array(
+            'aulas' => $aulas,
+        ));
+    }
+
 }

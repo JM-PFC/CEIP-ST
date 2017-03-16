@@ -19,7 +19,7 @@
         bgiframe: true,
         autoOpen: false,
         height: 504,
-        width: 900,
+        width: 1000,
         modal: true,
         resizable: false,
        }
@@ -48,8 +48,7 @@
             title: "Cursos no registrados",
             text: 'Actualmente no existe ningún curso registrado en el sistema. Para poder asignar las asignaturas debe registrar un curso.',
             type: "error",
-            confirmButtonColor: color,
-            html: true
+            confirmButtonColor: color
           });          
         $("#tabs ul li[aria-selected='true'] span").trigger("click");
     }
@@ -71,8 +70,7 @@
             title: "Asignaturas no registradas",
             text: 'Actualmente no existen asignaturas registradas en el sistema. Debe registrar las asignaturas para poder asignarlas.',
             type: "error",
-            confirmButtonColor: color,
-            html: true
+            confirmButtonColor: color
           });          
         $("#tabs ul li[aria-selected='true'] span").trigger("click");
     }
@@ -99,6 +97,13 @@
             $("#asignaturas_cursos #eliminar_en_curso").prop("disabled",true);
         }
 
+        //Se oculta la cabecera de la tabla si no hay registros.
+        if($("#asignaturas_cursos #contenedor_registro:not(.oculto) tr .dataTables_empty").size()==0){
+            $("#asignaturas_cursos #lista_asignaturas thead").removeClass('oculto');
+        }
+        else{
+            $("#asignaturas_cursos #lista_asignaturas thead").addClass('oculto');  
+        }
     });
 
 
@@ -108,20 +113,32 @@
     $("#asignaturas_cursos #eliminar_en_curso").attr("curso",$("#asignaturas_cursos #contenedor_registro:not(.oculto) #cabecera_lista").attr("idcurso"));
     //Se desactiva botón para cursos que no tienen asignaturas asignadas.
     setTimeout(function(){ 
-    if($("#asignaturas_cursos #contenedor_registro:not(.oculto) tbody tr:not(.no_cursor)").size()==0){
-        $("#asignaturas_cursos #eliminar_en_curso").prop("disabled",true);
-    }
+        if($("#asignaturas_cursos #contenedor_registro:not(.oculto) tbody tr:not(.no_cursor)").size()==0){
+            $("#asignaturas_cursos #eliminar_en_curso").prop("disabled",true);
+        }
+
+        //Botón para eliminar todas las asignaturas asignadas en todos los cursos.
+        //Se desactiva botón cuando no hay ninguna asignatura asignada en el sistema.
+
+        if($("#asignaturas_cursos #contenedor_registro tbody tr:not(.no_cursor)").size()==0){
+            $("#asignaturas_cursos #eliminar_todo").prop("disabled",true);
+        }
+
+        //Se oculta la cabecera de la tabla si no hay registros.
+        if($("#asignaturas_cursos #contenedor_registro:not(.oculto) tr .dataTables_empty").size()==0){
+            $("#asignaturas_cursos #lista_asignaturas thead").removeClass('oculto');
+        }
+        else{
+            $("#asignaturas_cursos #lista_asignaturas thead").addClass('oculto');  
+        }
     }, 20);
-
-
-    //Botón para eliminar todas las asignaturas asignadas en todos los cursos.
-    //Se desactiva botón cuando no hay ninguna asignatura asignada en el sistema.
-    setTimeout(function(){ 
-    if($("#asignaturas_cursos #contenedor_registro tbody tr:not(.no_cursor)").size()==0){
-        $("#asignaturas_cursos #eliminar_todo").prop("disabled",true);
-    }
-    }, 20);
-
+  
+    //Se añade cabecera a la tabla para diferencias los tipos de asignaturas.
+    $("#asignaturas_cursos #contenedor_registro").each(function(){  
+        $('<tr class="cabecera_tipo"><td id="cabecera_troncal" class="" colspan="3">Troncales</td></tr>').insertBefore($(this).find("tr[tipo='Troncal']:first")); 
+        $('<tr class="cabecera_tipo"><td id="cabecera_troncal" class="" colspan="3">Específicas</td></tr>').insertBefore($(this).find("tr[opcional='']:first"));
+        $('<tr class="cabecera_tipo"><td id="cabecera_troncal" class="" colspan="3">Específicas (Opcionales)</td></tr>').insertBefore($(this).find("tr[opcional='1']:first"));
+    });
 
     </script>
 {% endblock %}
@@ -139,8 +156,8 @@
                 <li>Para <span>eliminar todas</span> las asignaturas de un curso o de todos los cursos a la vez, pulse sobre los botones inferiores.</li>
             </ul>
             <div>
-                <button id="eliminar_en_curso" title="Elimina todas las asignaturas del curso"><strong>Eliminar </strong><br>Asignaturas de <span></span></button>
-                <button id="eliminar_todo" title="Elimina todas las asignaturas de todos los cursos"><strong>Eliminar</strong><br>Todas los Asignaturas</button>
+                <button id="eliminar_en_curso" title="Elimina todas las asignaturas del curso"><strong>Eliminar </strong><br>Asig. de <span></span></button>
+                <button id="eliminar_todo" title="Elimina todas las asignaturas de todos los cursos"><strong>Eliminar</strong><br>Todas las Asig.</button>
             </div>
         </div> 
       </div>
@@ -170,8 +187,8 @@
                     <thead>
                     <tr>
                         <th>Asignatura</th>
-                        <th>Tipo</th>
                         <th>Nº Módulos</th>
+                        <th>Libro</th>
                     </tr>
                     </thead>
                 </table>

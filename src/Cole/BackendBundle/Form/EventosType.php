@@ -15,7 +15,7 @@ class EventosType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('title','text',array('label' => 'Título','attr' => array('validation' => 'Empty')))
+            ->add('title','text',array('label' => 'Título','max_length' => 35,'attr' => array('validation' => 'Empty')))
             ->add('description')
             ->add('description','textarea',array('label' => 'Descripción', 'attr' => array('type'=>'textarea', 'validation' => 'Empty')))
             ->add('datetime')

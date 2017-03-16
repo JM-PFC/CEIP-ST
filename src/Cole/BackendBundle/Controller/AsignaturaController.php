@@ -135,7 +135,8 @@ class AsignaturaController extends Controller
         $troncales = $em->getRepository('BackendBundle:Asignatura')->findBy(array("tipo"=>"Troncal"),array("nombre"=>"ASC"));
         $especificas = $em->getRepository('BackendBundle:Asignatura')->findBy(array("tipo"=>"Específica"),array("nombre"=>"ASC"));
         $entities_troncales = $em->getRepository('BackendBundle:AsignaturasCursos')->findAsignaturasTroncalesCurso($id);
-        $entities_especificas = $em->getRepository('BackendBundle:AsignaturasCursos')->findAsignaturasEspecificasCurso($id);
+        $entities_especificas = $em->getRepository('BackendBundle:AsignaturasCursos')->findAsignaturasEspecificasNoOpcionalesCurso($id);
+        $entities_especificas_opcionales = $em->getRepository('BackendBundle:AsignaturasCursos')->findAsignaturasEspecificasOpcionalesCurso($id);
         $curso= $em->getRepository('BackendBundle:Curso')->findOneById($id);
 
         return $this->render('BackendBundle:Asignatura:new_asignaturas_curso.html.twig', array(
@@ -143,6 +144,7 @@ class AsignaturaController extends Controller
             'especificas' => $especificas,
             'entities_troncales' => $entities_troncales,
             'entities_especificas' => $entities_especificas,
+            'entities_especificas_opcionales' => $entities_especificas_opcionales,
             'curso' => $curso,
         ));
     }
@@ -327,14 +329,20 @@ class AsignaturaController extends Controller
         }
 
         if($nuevas){
-          foreach ($nuevas as $key => $value ) {
-            $asignatura=$em->getRepository('BackendBundle:Asignatura')->findOneById($key);
+          foreach ($nuevas as $row ) { //$row[0]->ID asignatura  $row[1]->Nº Módulos $row[2]->Libro.
+            $asignatura=$em->getRepository('BackendBundle:Asignatura')->findOneById($row[0]);
             $curso=$em->getRepository('BackendBundle:Curso')->findOneById($idcurso);
 
             $entity = new AsignaturasCursos();
             $entity->setAsignatura($asignatura);
             $entity->setCurso($curso);
-            $entity->setNumModulos($value);
+            $entity->setNumModulos($row[1]);
+            if($row[2]==""){
+                $entity->setLibro(null); 
+            }
+            else{
+                $entity->setLibro($row[2]); 
+            }
             $em->persist($entity);
             $num_asig++; 
           }   
@@ -357,9 +365,15 @@ class AsignaturaController extends Controller
         }
 
         if($asignadas){
-          foreach ($asignadas as $key => $value ) {
-            $entity = $em->getRepository('BackendBundle:AsignaturasCursos')->findAsignacion($idcurso,$key);
-            $entity->setNumModulos($value);
+          foreach ($asignadas as $row ) { //$row[0]->ID asignatura  $row[1]->Nº Módulos $row[2]->Libro.
+            $entity = $em->getRepository('BackendBundle:AsignaturasCursos')->findAsignacion($idcurso,$row[0]);
+            $entity->setNumModulos($row[1]);
+            if($row[2]==""){
+                $entity->setLibro(null); 
+            }
+            else{
+                $entity->setLibro($row[2]); 
+            }
             $em->persist($entity);
             $num_actu++; 
           }  

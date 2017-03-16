@@ -59,9 +59,11 @@ class Imparte
     /**
      * @var string
      *
-     * @ORM\Column(name="libro", type="string", length=255, nullable=true)
+     * 
+     * @ORM\ManyToOne(targetEntity="Equipamiento", inversedBy="imparte")
+     * @ORM\JoinColumn(name="aula", referencedColumnName="id" )
      */
-    private $libro;
+    private $aula;
 
     /**
      * Get id
@@ -143,29 +145,6 @@ class Imparte
     }
 
     /**
-     * Set libro
-     *
-     * @param string $libro
-     * @return Imparte
-     */
-    public function setLibro($libro)
-    {
-        $this->libro = $libro;
-
-        return $this;
-    }
-
-    /**
-     * Get libro
-     *
-     * @return string 
-     */
-    public function getLibro()
-    {
-        return $this->libro;
-    }
-
-    /**
      * Set dia_semanal
      *
      * @param string $diaSemanal
@@ -209,5 +188,28 @@ class Imparte
     public function getAsignatura()
     {
         return $this->asignatura;
+    }
+
+    /**
+     * Set aula
+     *
+     * @param \Cole\BackendBundle\Entity\Equipamiento $aula
+     * @return Imparte
+     */
+    public function setAula(\Cole\BackendBundle\Entity\Equipamiento $aula = null)
+    {
+        $this->aula = $aula;
+
+        return $this;
+    }
+
+    /**
+     * Get aula
+     *
+     * @return \Cole\BackendBundle\Entity\Equipamiento 
+     */
+    public function getAula()
+    {
+        return $this->aula;
     }
 }

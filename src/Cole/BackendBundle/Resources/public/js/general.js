@@ -726,22 +726,14 @@ $(document).on("blur","input[id$='responsable1_dni']",function() {
             }, 300);       Modal dialog does not focus correctly when show option is set*/
           aviso.play();
           swal({
-            title: "Responsable existente en el sistema",
-            text: "El DNI introducido pertenece al responsable: <br><br><h3>"+response.name+"</h3><br>¿Desea obtener sus datos?",
+            title: "Responsable registrado en el sistema",
+            html: "El DNI introducido pertenece al responsable: <br><br><h3>"+response.name+"</h3><br>¿Desea obtener sus datos?",
             type: "warning",
-            html: true,
             showCancelButton: true,
             cancelButtonText: "Cancelar",
             confirmButtonColor: color,
             confirmButtonText: "¡Adelante!",
-            closeOnConfirm: true,
-            closeOnCancel: false // Se cancela el cierre automático para hacer los cambios tras el cierre manual.
-            },
-
-          function(isConfirm){
-
-            if(isConfirm)
-            {
+            }).then(function () {
               $.ajax({
                 type: 'POST',
                 url: Routing.generate('obtenerdatos_responsable'),
@@ -757,10 +749,7 @@ $(document).on("blur","input[id$='responsable1_dni']",function() {
                 form.find("input[id$='responsable2_dni']").focus();
                 }
               })
-            }
-            else{
-              // Se cierra antes la notificación para poder realizar luego los cambios en el formulario.
-              swal.close();
+            }, function (dismiss) {
 
               if(form.find("input[id$='responsable1_nombre']").val()==''){
                 form.find("input[id$='responsable1_nombre']").removeClass("invalid");
@@ -771,7 +760,7 @@ $(document).on("blur","input[id$='responsable1_dni']",function() {
               form.find("input[id$='responsable1_dni']").val('');
               form.find("input[id$='responsable1_dni']").keyup();
             }
-          });
+          );
          }   
         } 
       })
@@ -923,20 +912,14 @@ $(document).on('keyup',"input[id$='responsable2_dni']",function(e){
 
           aviso.play();
           swal({
-            title: "Responsable existente en el sistema",
-            text: "El DNI introducido pertenece al responsable: <br><br><h3>"+response.name+"</h3><br>¿Desea obtener sus datos?",
+            title: "Responsable registrado en el sistema",
+            html: "El DNI introducido pertenece al responsable: <br><br><h3>"+response.name+"</h3><br>¿Desea obtener sus datos?",
             type: "warning",
-            html: true,
             showCancelButton: true,
             cancelButtonText: "Cancelar",
             confirmButtonColor: color,
-            confirmButtonText: "¡Adelante!",
-            closeOnConfirm: true },
-
-          function(isConfirm){
-            if (isConfirm) {
-
-
+            confirmButtonText: "¡Adelante!"
+            }).then(function () {
               $.ajax({
                 type: 'POST',
                 url: Routing.generate('obtenerdatos_responsable'),
@@ -951,13 +934,12 @@ $(document).on('keyup',"input[id$='responsable2_dni']",function(e){
                   $("#alumno_responsable2_email").focus().val(response.data['email']).prop('readonly', true); 
                 }
               })
-            }
-            else{
+            }, function (dismiss) {
               $("#alumno_responsable2_dni").focus();
               $("#alumno_responsable2_dni").val('');
               $("#alumno_responsable2_dni").keyup();
             }
-          });
+          );
          }   
         }
       })
@@ -1088,12 +1070,10 @@ $(document).on('keyup',"input[id$='responsable2_dni']",function(e){
             error.play();
             swal({
               title: "Error en el sistema",
-              text: "Se ha producido un error en el sistema, por favor cierra la pestaña <span>Nuevo Alumno</span> y vuelva a intentarlo de nuevo.",
+              html: "Se ha producido un error en el sistema, por favor cierra la pestaña <span>Nuevo Alumno</span> y vuelva a intentarlo de nuevo.",
               type: "error",
-              html: true,
               showCancelButton: false,
-              confirmButtonColor: color,
-              closeOnConfirm: true 
+              confirmButtonColor: color
             });
           }
         }
@@ -1262,16 +1242,14 @@ $(document).on("submit",".formulario_profesor",function(event){
       aviso.play();
       swal({
         title: "Nueva asignación de responsable",
-        text: "<p class='justificado'>Se va a asignar un nuevo responsable al alumno y no se podrá recuperar el anterior.</p><br>¿Estas seguro de realizar la nueva asignación?",
+        html: "<p class='justificado'>Se va a asignar un nuevo responsable al alumno y no se podrá recuperar el anterior.</p><br>¿Estas seguro de realizar la nueva asignación?",
         type: "warning",
-        html: true,
         showCancelButton: true,
         cancelButtonText: "Cancelar",
         confirmButtonColor: color,
-        confirmButtonText: "¡Adelante!",
-        closeOnConfirm: true },
+        confirmButtonText: "¡Adelante!"
+        }).then(function () {
 
-        function(){
           $.ajax({
             type: 'POST',
             url: form.attr('action'),
@@ -1326,10 +1304,8 @@ $(document).on("submit",".formulario_profesor",function(event){
                   title: "Responsable asignado al alumno",
                   text: "Este responsable ya se encuentra asignado a este alumno.",
                   type: "error",
-                  html: true,
                   showCancelButton: false,
-                  confirmButtonColor: color,
-                  closeOnConfirm: true 
+                  confirmButtonColor: color
                 });
               }
             },
@@ -1359,10 +1335,8 @@ $(document).on("submit",".formulario_profesor",function(event){
                   title: "Error en el sistema",
                   text: "Se ha producido un error en el sistema, por favor intentelo más tarde.",
                   type: "error",
-                  html: true,
                   showCancelButton: false,
-                  confirmButtonColor: color,
-                  closeOnConfirm: true 
+                  confirmButtonColor: color
                 });
               }
             }
@@ -2229,10 +2203,8 @@ $(document).on("submit",".formulario_profesor",function(event){
       showCancelButton: true,
       cancelButtonText: "Cancelar",
       confirmButtonColor: color,
-      confirmButtonText: "¡Adelante!",
-      closeOnConfirm: false },
-
-      function(){
+      confirmButtonText: "¡Adelante!"
+      }).then(function () {
         $.ajax({
           type: 'POST',
           url: Routing.generate('eliminar_responsable'),
@@ -2251,7 +2223,8 @@ $(document).on("submit",".formulario_profesor",function(event){
           });
           }
         })
-        swal.close();
+      }, function (dismiss) {
+
       }
     );  
     return false;
@@ -2636,44 +2609,44 @@ $(document).on("blur","input[id='edit_profesor_dni']",function() {
       showCancelButton: true,
       cancelButtonText: "Cancelar",
       confirmButtonColor: color,
-      confirmButtonText: "¡Adelante!",
-      closeOnConfirm: true },
+      confirmButtonText: "¡Adelante!"
+      }).then(function () {
 
-      function(){
-
-      tipo=id.attr("id");
-      contenido="";
-      $.ajax({
-        type: 'POST',
-        url: Routing.generate('registrar_horario_atencion'),
-        data:{tipo:tipo, contenido:contenido}, 
-        dataType: 'json',
-        success: function(response){
-          exito.play();
-          new PNotify({
-            text:"Horario de atención eliminado.",
-            addclass: "custom",
-            type: "success",
-            shadow: true,
-            hide: true,
-            animation: "fade",
-            animate_speed: 'fast',
-            delay: 4000,
-            buttons: {
-              sticker: false,
-              labels:{close: "Cerrar"}
-            },
-            stack: right_Stack_dialog,
-            animate: {
-              animate: true,
-              in_class: "fadeInRight",
-              out_class: "fadeOutRight",
-            }
-          });
-          actualizarContenido(contenido,id);
-        }
-      })
-    }
+        tipo=id.attr("id");
+        contenido="";
+        $.ajax({
+          type: 'POST',
+          url: Routing.generate('registrar_horario_atencion'),
+          data:{tipo:tipo, contenido:contenido}, 
+          dataType: 'json',
+          success: function(response){
+            exito.play();
+            new PNotify({
+              text:"Horario de atención eliminado.",
+              addclass: "custom",
+              type: "success",
+              shadow: true,
+              hide: true,
+              animation: "fade",
+              animate_speed: 'fast',
+              delay: 4000,
+              buttons: {
+                sticker: false,
+                labels:{close: "Cerrar"}
+              },
+              stack: right_Stack_dialog,
+              animate: {
+                animate: true,
+                in_class: "fadeInRight",
+                out_class: "fadeOutRight",
+              }
+            });
+            actualizarContenido(contenido,id);
+          }
+        })
+      }, function (dismiss) {
+        
+      }
     );
     return false;
   });
@@ -2891,8 +2864,7 @@ $(document).on("blur","input[id='edit_profesor_dni']",function() {
             title: "Curso registrado en el sistema",
             text: 'El curso introducido ya está registrado en el sistema.',
             type: "error",
-            confirmButtonColor: color,
-            html: true
+            confirmButtonColor: color
           });
           return false;
         }
@@ -2996,19 +2968,17 @@ $(document).on("blur","input[id='edit_profesor_dni']",function() {
           showCancelButton: true,
           cancelButtonText: "Cancelar",
           confirmButtonColor: color,
-          confirmButtonText: "¡Adelante!",
-          closeOnConfirm: false },
+          confirmButtonText: "¡Adelante!"
+          }).then(function () {
 
-          function(){
             // Si no hay alumnos asignados al curso se puede eliminar.
             if(response.data!=null){ 
               error.play();
               swal({
                 title: "La eliminación no se ha efectuado",
-                text: '<p class="justificado">El curso <span>"'+curso+" de "+nivel+'"</span> no se puede eliminar porque existen alumnos matriculados en este curso. Debe cancelar las matrículas del curso para poder eliminarlo.</p>',
+                html: '<p class="justificado">El curso <span class="negrita">'+curso+" de "+nivel+'</span> no se puede eliminar porque existen alumnos matriculados en este curso. Debe cancelar las matrículas del curso para poder eliminarlo.</p>',
                 type: "error",
                 confirmButtonColor: color,
-                html: true
               });
               $("#cursos_dialog").dialog('close');
             }
@@ -3033,8 +3003,9 @@ $(document).on("blur","input[id='edit_profesor_dni']",function() {
                   $("#asignaturas_cursos").update_tab();
                 }
               })
-              swal.close();
             }
+          }, function (dismiss) {
+
           }
         );     
       }
@@ -3267,15 +3238,13 @@ $(document).on("blur","input[id='edit_profesor_dni']",function() {
     aviso.play();
     swal({
       title: "Eliminación de asignaciones de aulas.",
-      text: "<p class='justificado'>Se eliminarán todas las asignaciones de aulas de los grupos.</p></br>¿Estas seguro de continuar? No podrás deshacer este paso...",
+      html: "<p>Se eliminarán todas las asignaciones de aulas de los grupos.</p></br>¿Estas seguro de continuar? No podrás deshacer este paso...",
       type: "warning",
       showCancelButton: true,
       cancelButtonText: "Cancelar",
-      html: true,
       confirmButtonColor: color,
-      confirmButtonText: "¡Adelante!",
-      closeOnConfirm: true },
-      function(){
+      confirmButtonText: "¡Adelante!"
+      }).then(function () {
         $.ajax({
           type: 'POST',
           url: Routing.generate('vaciar_aulas'),
@@ -3283,6 +3252,8 @@ $(document).on("blur","input[id='edit_profesor_dni']",function() {
             $("#asignar_aula").update_tab();
           }
         })
+      }, function (dismiss) {
+
       }
     );
   });
@@ -3359,11 +3330,12 @@ $(document).on("blur","input[id='edit_profesor_dni']",function() {
             text: 'La asignatura introducida ya está registrada en el sistema.',
             type: "error",
             confirmButtonColor: color,
-            html: true
           });
           return false;
         }
-
+        
+        //Se actualiza la pestaña de asignar horario a grupos.
+        $("#asignar_horario").update_tab();
 
         $("#asignaturas_dialog").dialog('close');
         limpiarForm(form);
@@ -3413,11 +3385,17 @@ $(document).on("blur","input[id='edit_profesor_dni']",function() {
         data:$(this).serialize(), 
   
         success: function() {
-        $("#asignaturas_dialog").dialog('close');
-        tab=$(".contenido_main").find("div[aria-hidden='false']");
-        $(tab).load(Routing.generate('asignatura'));
-        //$("#tabs #lista_asignaturas").empty();
-        //$("#tabs #lista_asignaturas").load(Routing.generate('alumno_listaAsignatura'));
+          //Se actualiza la pestaña de asignar horario a grupos.
+          $("#asignar_horario").update_tab();
+
+          $("#asignaturas_dialog").dialog('close');
+          tab=$(".contenido_main").find("div[aria-hidden='false']");
+          $(tab).load(Routing.generate('asignatura'));
+          //$("#tabs #lista_asignaturas").empty();
+          //$("#tabs #lista_asignaturas").load(Routing.generate('alumno_listaAsignatura'));
+          $("#asignaturas_cursos").update_tab();
+          $("#profesor_asignar_grupo").update_tab();
+          $("#asignar_horario").update_tab();
         }
       })
       return false;
@@ -3436,27 +3414,27 @@ $(document).on("blur","input[id='edit_profesor_dni']",function() {
       showCancelButton: true,
       cancelButtonText: "Cancelar",
       confirmButtonColor: color,
-      confirmButtonText: "¡Adelante!",
-      closeOnConfirm: true },
+      confirmButtonText: "¡Adelante!"
+      }).then(function () {
 
-      function(){
-
-      $.ajax({
-        type: 'DELETE',
-        url: Routing.generate(arr[4]+"_delete", {id:arr[5]}),
-        data: $('#asignatura_delete').serialize(),
+        $.ajax({
+          type: 'DELETE',
+          url: Routing.generate(arr[4]+"_delete", {id:arr[5]}),
+          data: $('#asignatura_delete').serialize(),
         
-        success: function() {
-          $("#asignaturas_dialog").dialog('close');
-          tab=$(".contenido_main").find("div[aria-hidden='false']");
-          $(tab).load(Routing.generate('asignatura'));
-          //$("#tabs #lista_asignaturas").empty();
-          //$("#tabs #lista_asignaturas").load(Routing.generate('alumno_listaAsignatura'));
-          $("#asignaturas_cursos").update_tab();
-          $("#profesor_asignar_grupo").update_tab();
-        }
-      })
-    }
+          success: function() {
+            $("#asignaturas_dialog").dialog('close');
+            tab=$(".contenido_main").find("div[aria-hidden='false']");
+            $(tab).load(Routing.generate('asignatura'));
+            //$("#tabs #lista_asignaturas").empty();
+            //$("#tabs #lista_asignaturas").load(Routing.generate('alumno_listaAsignatura'));
+            $("#asignaturas_cursos").update_tab();
+            $("#profesor_asignar_grupo").update_tab();
+          }
+        })
+      }, function (dismiss) {
+
+      }
     );
       return false;
   });
@@ -3482,10 +3460,8 @@ $(document).on("blur","input[id='edit_profesor_dni']",function() {
             title:"No se pueden asignar asignaturas",
             text: 'Actualmente no hay asignaturas registrada en el sistema',
             type: "error",
-            html: true,
             showCancelButton: false,
-            confirmButtonColor: color,
-            closeOnConfirm: true 
+            confirmButtonColor: color
           });
         }
         else{
@@ -3495,12 +3471,14 @@ $(document).on("blur","input[id='edit_profesor_dni']",function() {
       }
     })
   });
+
   //Se asigna todas las asignaturas troncales al curso.
   $(document).on('click',"#asignatura_curso_dialog #all_troncales",function(event){
     event.preventDefault();
     $("#asignatura_curso_dialog #lista_troncal button").click();
     $(this).addClass('disabled');
   });
+
   //Se asigna todas las asignaturas específicas al curso.
   $(document).on('click',"#asignatura_curso_dialog #all_especificas",function(event){
     event.preventDefault();
@@ -3522,7 +3500,7 @@ $(document).on("blur","input[id='edit_profesor_dni']",function() {
 
     var valor=0;
     // Se valida que ningún input esté vacío. Si hay algún input vacío no se realiza nada.
-    $("#asignatura_curso_dialog #contenedor_asignaturas li input").each(function(){ 
+    $("#asignatura_curso_dialog #contenedor_asignaturas li input[type='number']").each(function(){ 
       if($(this).val()==""){
         $(this).addClass("invalid");
         valor=1;
@@ -3536,18 +3514,19 @@ $(document).on("blur","input[id='edit_profesor_dni']",function() {
     // Se obtienen las asignaturas nuevas.(Insertar)
     $("#asignatura_curso_dialog #contenedor_asignaturas li[estado='nueva']").each(function(){
       id=$(this).attr("id");
-      valor=$(this).find("input").val();
-
-      nuevas[id] = valor;
+      valor=$(this).find("input[type='number']").val();
+      libro=$(this).find("input[type='text']").val();
+      nuevas[index++] = [id, valor, libro];  
     });
-
+    var index = 1;
     // Se obtienen las asignaturas que ya estaban asignadas pero el número de módulos ha sido modificado.(Actualizar)
     $("#asignatura_curso_dialog #contenedor_asignaturas li[estado='asignada']").each(function(){
       id=$(this).attr("id");
-      valor=$(this).find("input").val();
+      valor=$(this).find("input[type='number']").val();
+      libro=$(this).find("input[type='text']").val();
 
-      if(valor!=$(this).find("input").attr("valor")){
-        asignadas[id] = valor;
+      if(valor!=$(this).find("input[type='number']").attr("valor") || libro!=$(this).find("input[type='text']").attr("valor")){
+        asignadas[index++] = [id, valor, libro];  
       }
     });
 
@@ -3600,27 +3579,27 @@ $(document).on("blur","input[id='edit_profesor_dni']",function() {
         if(response.error!=""){
             texto+="<p class='justificado'>Las siguientes asignaturas que se quieren eliminar tienen asignados profesores en alguno de los grupos de "+name_curso+":</p><br>";
             for (var key in response.error) { 
-              texto+="<p class='justificado negrita'>- "+response.error[key][0][1]+"</p>";
+              if (texto.indexOf(response.error[key][0][1]) < 0){
+                texto+="<p class='justificado negrita'>- "+response.error[key][0][1]+"</p>"; 
+              }
             }
             texto+="<br><table><p class='justificado'>Si deseas continuar se borrarán las siguientes asignaciones de profesores:<br></p><thead><tr><th>Profesor</th><th>Asignatura</th><th>Grupo</th></tr></thead><tbody>";
             for (var key in response.error) { 
               texto+="<tr><td>"+response.error[key][0][0]+"</td><td>"+response.error[key][0][1]+"</td><td>"+response.error[key][0][2]+"</td></tr>";
             }
             texto+="</tbody><br></p></table>";
-            texto+="<br>¿Estas seguro de continuar? No podrás deshacer este paso...";
+            texto+="<br><br>¿Estas seguro de continuar? No podrás deshacer este paso...";
             error.play();
             swal({
               title: "Asignaturas con Profesores Asignados",
-              text: texto,
+              html: texto,
               type: "warning",
-              html: true,
               showCancelButton: true,
               cancelButtonText: "Cancelar",
               confirmButtonColor: color,
               confirmButtonText: "¡Adelante!",
-              customClass: 'swal-wide',
-              closeOnConfirm: true },
-              function(){
+              width: "600px"
+              }).then(function () {
                 $.ajax({
                   type: 'POST',
                   url: Routing.generate('asignar_asignaturas_curso'),
@@ -3684,6 +3663,7 @@ $(document).on("blur","input[id='edit_profesor_dni']",function() {
                         type: "success",
                         shadow: true,
                         hide: true,
+                        width: "335px",
                         animation: "fade",
                         animate_speed: 'fast',
                         delay: 4000,
@@ -3709,6 +3689,8 @@ $(document).on("blur","input[id='edit_profesor_dni']",function() {
                       //añadir más
                   }
                 })
+              }, function (dismiss) {
+
               }
             );
         } //Se realiza lo mismo sin mostrar aviso para el caso de que ninguna de las asignaturas eliminada tenga asignada un profesor.
@@ -3775,6 +3757,7 @@ $(document).on("blur","input[id='edit_profesor_dni']",function() {
                   type: "success",
                   shadow: true,
                   hide: true,
+                  width: "335px",
                   animation: "fade",
                   animate_speed: 'fast',
                   delay: 4000,
@@ -3869,6 +3852,7 @@ $(document).on("blur","input[id='edit_profesor_dni']",function() {
                   type: "success",
                   shadow: true,
                   hide: true,
+                  width: "335px",
                   animation: "fade",
                   animate_speed: 'fast',
                   delay: 4000,
@@ -3896,8 +3880,8 @@ $(document).on("blur","input[id='edit_profesor_dni']",function() {
     }
   });
 
-  //Se validan los input que se modifican.
-  $(document).on('keyup change',"#asignatura_curso_dialog #contenedor_asignaturas li input",function(event){
+  //Se valida el número de módulos modificado.
+  $(document).on('keyup change',"#asignatura_curso_dialog #contenedor_asignaturas li input[type='number']",function(event){
     event.preventDefault();
     //Se habilita los botones "guardar" y "restablecer".
     $("#asignatura_curso_dialog #asignaturas_curso_submit").prop("disabled",false);
@@ -3905,6 +3889,20 @@ $(document).on("blur","input[id='edit_profesor_dni']",function() {
 
     if($(this).val()!=""){
       $(this).removeClass('invalid');
+      if($(this).val()==$(this).attr("valor") && $(this).prev().val()==$(this).prev().attr("valor") ){
+        $(this).closest("li").removeClass('back_modificado');
+        if($("#asignatura_curso_dialog #contenedor_asignaturas .back_modificado").size()==0){
+          //Se deshabilita los botones de "guardar" y "restablecer".
+          $("#asignatura_curso_dialog #asignaturas_curso_submit").prop("disabled",true);
+          $("#asignatura_curso_dialog #asignaturas_curso_restablecer").prop("disabled",true);
+        }
+      }
+      else{
+        $(this).closest("li").addClass('back_modificado');
+        //Se habilita los botones de "guardar" y "restablecer".
+        $("#asignatura_curso_dialog #asignaturas_curso_submit").prop("disabled",false);
+        $("#asignatura_curso_dialog #asignaturas_curso_restablecer").prop("disabled",false);
+      }
     }
     else{
       $(this).addClass('invalid');
@@ -3918,6 +3916,29 @@ $(document).on("blur","input[id='edit_profesor_dni']",function() {
     }
   });
 
+
+  //Se valida el libro modificado.
+  $(document).on('keyup change',"#asignatura_curso_dialog #contenedor_asignaturas li input[type='text']",function(event){
+    event.preventDefault();
+    //Se habilita los botones "guardar" y "restablecer".
+    $("#asignatura_curso_dialog #asignaturas_curso_submit").prop("disabled",false);
+    $("#asignatura_curso_dialog #asignaturas_curso_restablecer").prop("disabled",false);
+
+    if($(this).val()==$(this).attr("valor") && $(this).next().val()==$(this).next().attr("valor") ){
+      $(this).closest("li").removeClass('back_modificado');
+      if($("#asignatura_curso_dialog #contenedor_asignaturas .back_modificado").size()==0){
+        //Se deshabilita los botones de "guardar" y "restablecer".
+        $("#asignatura_curso_dialog #asignaturas_curso_submit").prop("disabled",true);
+        $("#asignatura_curso_dialog #asignaturas_curso_restablecer").prop("disabled",true);
+      }
+    }
+    else{
+      $(this).closest("li").addClass('back_modificado');
+      //Se habilita los botones de "guardar" y "restablecer".
+      $("#asignatura_curso_dialog #asignaturas_curso_submit").prop("disabled",false);
+      $("#asignatura_curso_dialog #asignaturas_curso_restablecer").prop("disabled",false);
+    }
+  });
 
   //Se elimina las asignaciones de asignaturas del curso.
   $(document).on('click',"#asignaturas_cursos #eliminar_en_curso ",function(event){
@@ -3955,16 +3976,14 @@ $(document).on("blur","input[id='edit_profesor_dni']",function() {
     aviso.play();
     swal({
       title: "Eliminación de Asignación de Asignaturas",
-      text: "<p class='justificado'>Se van a eliminar las asignaciones de las asignaturas de "+nombre_curso+".</p><br>¿Estas seguro de continuar? No podrás deshacer este paso...",
+      html: "<p>Se van a eliminar las asignaciones de las asignaturas de <span class='negrita'>"+nombre_curso+" de Primaria</span>.</p><br>¿Estas seguro de continuar? No podrás deshacer este paso...",
       type: "warning",
-      html: true,
       showCancelButton: true,
       cancelButtonText: "Cancelar",
+      width: "600px",
       confirmButtonColor: color,
       confirmButtonText: "¡Adelante!",
-      closeOnConfirm: true },
-
-      function(){
+      }).then(function () {
 
         curso=$("#asignaturas_cursos #eliminar_en_curso").attr("curso"); //Id del curso.
         $.ajax({
@@ -4023,6 +4042,8 @@ $(document).on("blur","input[id='edit_profesor_dni']",function() {
             $("#profesor_asignar_grupo").update_tab();
           }
         })
+      }, function (dismiss) {
+
       }
     );
   });
@@ -4062,16 +4083,13 @@ $(document).on("blur","input[id='edit_profesor_dni']",function() {
     aviso.play();
     swal({
       title: "Eliminación de Asignación de Asignaturas",
-      text: "<p >Se van a eliminar las asignaturas de todos los cursos.</p><br>¿Estas seguro de continuar? No podrás deshacer este paso...",
+      html: "<p>Se van a eliminar las asignaturas de todos los cursos.</p><br>¿Estas seguro de continuar? No podrás deshacer este paso...",
       type: "warning",
-      html: true,
       showCancelButton: true,
       cancelButtonText: "Cancelar",
       confirmButtonColor: color,
-      confirmButtonText: "¡Adelante!",
-      closeOnConfirm: true },
-
-      function(){
+      confirmButtonText: "¡Adelante!"
+      }).then(function () {
 
         $.ajax({
           type: 'POST',
@@ -4128,6 +4146,8 @@ $(document).on("blur","input[id='edit_profesor_dni']",function() {
             $("#profesor_asignar_grupo").update_tab();
           }
         })
+      }, function (dismiss) {
+
       }
     );
   });
@@ -4564,8 +4584,7 @@ $(document).on("blur","input[id='edit_profesor_dni']",function() {
             title: "Día festivo ya asignado",
             text: 'El día y mes introducido ya tiene asignado un festivo en el sistema.',
             type: "error",
-            confirmButtonColor: color,
-            html: true
+            confirmButtonColor: color
           });
           return false;
         }
@@ -4658,8 +4677,7 @@ $(document).on("blur","input[id='edit_profesor_dni']",function() {
             title: "Día festivo ya asignado",
             text: 'El día y mes introducido ya tiene asignado un festivo en el sistema.',
             type: "error",
-            confirmButtonColor: color,
-            html: true
+            confirmButtonColor: color
           });          
           return false;
         }
@@ -4714,38 +4732,37 @@ $(document).on("blur","input[id='edit_profesor_dni']",function() {
       showCancelButton: true,
       cancelButtonText: "Cancelar",
       confirmButtonColor: color,
-      confirmButtonText: "¡Adelante!",
-      closeOnConfirm: false },
+      confirmButtonText: "¡Adelante!"
+      }).then(function () {
 
-      function(){
-
-      $.ajax({
-        type: 'DELETE',
-        url: Routing.generate(arr[4]+"_delete", {id:arr[5]}),
-        data: $('#festivos_delete').serialize(),
+        $.ajax({
+          type: 'DELETE',
+          url: Routing.generate(arr[4]+"_delete", {id:arr[5]}),
+          data: $('#festivos_delete').serialize(),
         
-        success: function() {
-          tipo=$("#festivos_tipo").val();
+          success: function() {
+            tipo=$("#festivos_tipo").val();
 
-          if($("#festivos_nueva").attr("tipo")!=""){
-            $("#festivos_dialog").dialog('close');
-            div=$("#asignacion_festivos div[id$='"+tipo.toLowerCase()+"'] .Festivos_list");
-            $(div).empty();
-            $(div).load(Routing.generate('festivos_por_tipo', {id:tipo}));
+            if($("#festivos_nueva").attr("tipo")!=""){
+              $("#festivos_dialog").dialog('close');
+              div=$("#asignacion_festivos div[id$='"+tipo.toLowerCase()+"'] .Festivos_list");
+              $(div).empty();
+              $(div).load(Routing.generate('festivos_por_tipo', {id:tipo}));
+            }
+            else{
+              $("#festivos_dialog").dialog('close');
+              div=$("#asignacion_festivos div[style='display: block;'] .Festivos_list");
+              $(div).empty();
+              $(div).load(Routing.generate('festivos_por_tipo', {id:tipo}));
+            }
+            $("#actualizar_calendario").trigger("click");
           }
-          else{
-            $("#festivos_dialog").dialog('close');
-            div=$("#asignacion_festivos div[style='display: block;'] .Festivos_list");
-            $(div).empty();
-            $(div).load(Routing.generate('festivos_por_tipo', {id:tipo}));
-          }
-          $("#actualizar_calendario").trigger("click");
-          swal.close();
-        }
-      })
-    }
+        })
+      }, function (dismiss) {
+
+      }
     );
-      return false;
+    return false;
   });
 
 
@@ -5531,9 +5548,9 @@ $(document).on("blur","input[id='edit_profesor_dni']",function() {
         }
           $("#horario_rest").prop("disabled", true);  
       });
-      // Se habilta el botón "Guardar Todo", cuando existe algun valor modificado y ningún error (Con 'keyup' se comprueba que tampoco exista input vacío).
+      // Se habilta el botón "Guardar Todo", cuando existe algun valor modificado , algún error ó algún input vacío.
       $(div_actual).find("input").each (function(){                         
-        if($(this).hasClass("invalid") || !$(div_actual).find("input").hasClass("modified") ){
+        if($(this).hasClass("invalid") || !$(div_actual).find("input").hasClass("modified")  || $(this).val()==""){
           $("#button_horario_all").prop("disabled", true);  
           return false;
         }
@@ -5874,7 +5891,9 @@ $(document).on("blur","input[id='edit_profesor_dni']",function() {
                   out_class: "fadeOutRight",
                 }
               });
-              
+              //Se actualiza la pestaña de asignar horario a grupos.
+              $("#asignar_horario").update_tab();
+
               // Se muestra el calendario actual actualizado.
               $("#registro_horario_guardar #horario_rest").prop("disabled",false);
               $("#registro_horario_guardar #horario_rest").trigger("click");
@@ -5891,24 +5910,21 @@ $(document).on("blur","input[id='edit_profesor_dni']",function() {
           texto='<p class="justificado">Se recomienda asignar el Horario Escolar antes del comienzo del curso para no efectuar cambios en el sistema. Si desea realizar la asignación ahora, debe saber que se realizarán los siguientes cambios en el sistema:</p><br>';
           
           if(response.reserva!=""){
-            texto=texto+"<li><span>Eliminación de las reservas de instalaciones o equipamientos registradas en el sistema.</span></li></br>";
+            texto=texto+"<li><span class='negrita'>Eliminación de las reservas de instalaciones o equipamientos registradas en el sistema.</span></li></br>";
           }
           if(response.imparte!=""){
-            texto=texto+"<li><span>Eliminación de los horarios de las asignaturas en los cursos.</span></li></br>";
+            texto=texto+"<li><span class='negrita'>Eliminación de los horarios de las asignaturas en los cursos.</span></li></br>";
           }
           texto=texto+"¿Estas seguro de continuar? No podrás deshacer este paso...";
           swal({
             title: "Registro del Horario Escolar en el sistema.",
-            text: texto,
+            html: texto,
             type: "warning",
             showCancelButton: true,
-            html: true,
             cancelButtonText: "Cancelar",
             confirmButtonColor: color,
-            confirmButtonText: "¡Adelante!",
-            closeOnConfirm: true },
-
-            function(){
+            confirmButtonText: "¡Adelante!"
+            }).then(function () {
               $.ajax({
                 type: 'POST',
                 url: Routing.generate('nuevo_horario'),
@@ -5935,6 +5951,9 @@ $(document).on("blur","input[id='edit_profesor_dni']",function() {
                       out_class: "fadeOutRight",
                     }
                   });
+                  //Se actualiza la pestaña de asignar horario a grupos.
+                  $("#asignar_horario").update_tab();
+
                   // Se muestra el calendario actual actualizado.
                   $("#aviso_horario").addClass("oculto");
                   $("#registro_horario_guardar #horario_rest").prop("disabled",false);
@@ -5942,6 +5961,8 @@ $(document).on("blur","input[id='edit_profesor_dni']",function() {
                   $("#nuevo_horario_guardar #button_horario_rest").trigger("click");    
                 }
               })
+            }, function (dismiss) {
+
             }
           );
         }
@@ -5966,29 +5987,28 @@ $(document).on("blur","input[id='edit_profesor_dni']",function() {
         aviso.play();
         texto='<p class="justificado">Se recomienda asignar el horario del centro antes del comienzo del curso para no efectuar cambios en el sistema. Si desea realizar la asignación ahora, debe saber que se realizarán los siguientes cambios en el sistema:</p><br>';
           
-        texto=texto+"<li><span>Eliminación del Horario Escolar actual.</span></li></br>";
+        texto=texto+"<li><span class='negrita'>Eliminación del Horario Escolar actual.</span></li></br>";
 
         if(response.reserva!=""){
-          texto=texto+"<li><span>Eliminación de las reservas de instalaciones o equipamientos registradas en el sistema.</span></li></br>";
+          texto=texto+"<li><span class='negrita'>Eliminación de las reservas de instalaciones o equipamientos registradas en el sistema.</span></li></br>";
         }
         if(response.imparte!=""){
-          texto=texto+"<li><span>Eliminación de las asignaciones de profesores en los cursos.</span></li></br>";
+          texto=texto+"<li><span class='negrita'>Eliminación de las asignaciones de profesores en los cursos.</span></li></br>";
         }
         texto=texto+"¿Estas seguro de continuar? No podrás deshacer este paso...";
         swal({
           title: "Asignación del horario del centro.",
-          text: texto,
+          html: texto,
           type: "warning",
           showCancelButton: true,
-          html: true,
           cancelButtonText: "Cancelar",
           confirmButtonColor: color,
-          confirmButtonText: "¡Adelante!",
-          closeOnConfirm: true },
-
-          function(){
+          confirmButtonText: "¡Adelante!"
+          }).then(function () {
             $('#horario_centro_dialog').load(Routing.generate("edit_horario_centro"), function(){
             }).dialog('open');
+          }, function (dismiss) {
+
           }
         );
       }
@@ -5996,52 +6016,6 @@ $(document).on("blur","input[id='edit_profesor_dni']",function() {
     }
   });
 
-  //Se abre la ventana modal para registrar horario del centro.
-  $(document).on("click","#registro_horario #fin_horario_disable",function(event){
-    event.preventDefault();
-    //Se comprueba si existe horario escolar para mostrar aviso de modificaciones.
-    if(!$("#registro_horario #aviso_horario").hasClass('oculto')){
-        $('#horario_centro_dialog').load(Routing.generate("edit_horario_centro"), function(){
-        }).dialog('open');
-    }
-    else
-    {
-    $.ajax({
-      type: 'POST',
-      url: Routing.generate('comprobaciones_horario_nuevo'),
-      success: function(response) {
-        aviso.play();
-        texto='<p class="justificado">Se recomienda asignar el horario del centro antes del comienzo del curso para no efectuar cambios en el sistema. Si desea realizar la asignación ahora, debe saber que se realizarán los siguientes cambios en el sistema:</p><br>';
-          
-        texto=texto+"<li><span>Eliminación del horario escolar actual.</span></li></br>";
-
-        if(response.reserva!=""){
-          texto=texto+"<li><span>Eliminación de las reservas de instalaciones o equipamientos registradas en el sistema.</span></li></br>";
-        }
-        if(response.imparte!=""){
-          texto=texto+"<li><span>Eliminación de las asignaciones de profesores en los cursos.</span></li></br>";
-        }
-        texto=texto+"¿Estas seguro de continuar? No podrás deshacer este paso...";
-        swal({
-          title: "Asignar Horario del Centro.",
-          text: texto,
-          type: "warning",
-          showCancelButton: true,
-          html: true,
-          cancelButtonText: "Cancelar",
-          confirmButtonColor: color,
-          confirmButtonText: "¡Adelante!",
-          closeOnConfirm: true },
-
-          function(){
-            $('#horario_centro_dialog').load(Routing.generate("edit_horario_centro"), function(){
-            }).dialog('open');
-          }
-        );
-      }
-    })
-    }
-  });
 
   //Se restablece la ventana modal.
   $(document).on("click","#button_hora_centro_rest",function(event){
@@ -6234,8 +6208,7 @@ $(document).on("blur","input[id='edit_profesor_dni']",function() {
               title: "Instalación registrada en el sistema",
               text: 'La instalación introducida ya está registrada en el sistema.',
               type: "error",
-              confirmButtonColor: color,
-              html: true
+              confirmButtonColor: color
             });
             return false;
           }
@@ -6298,8 +6271,7 @@ $(document).on("blur","input[id='edit_profesor_dni']",function() {
               title: "Instalación registrada en el sistema",
               text: 'La instalación introducida ya está registrada en el sistema.',
               type: "error",
-              confirmButtonColor: color,
-              html: true
+              confirmButtonColor: color
             });
             return false;
           }
@@ -6326,49 +6298,47 @@ $(document).on("blur","input[id='edit_profesor_dni']",function() {
       showCancelButton: true,
       cancelButtonText: "Cancelar",
       confirmButtonColor: color,
-      confirmButtonText: "¡Adelante!",
-      closeOnConfirm: false },
+      confirmButtonText: "¡Adelante!"
+      }).then(function () {
 
-      function(){
-
-      $.ajax({
-        type: 'POST',
-        url: Routing.generate('equipamiento_reservado'),
-        data: {equipamiento:equipamiento},
-        dataType: 'json',
-        async:false,
+        $.ajax({
+          type: 'POST',
+          url: Routing.generate('equipamiento_reservado'),
+          data: {equipamiento:equipamiento},
+          dataType: 'json',
+          async:false,
   
-        success: function(response) {
-          // Si no hay alumnos asignados al curso se puede eliminar.
-          if(response.data!=null){ 
-            error.play();
-            swal({
-            title: "La eliminación no se ha efectuado",
-            text: '<p class="justificado">La instalación <span>"'+equipamiento+'"</span> no se puede eliminar porque está reservada. Debe eliminar las reservas de la instalación para poder eliminarla.</p>',
-            type: "error",
-            confirmButtonColor: color,
-            html: true
-             });
-          }
-          else{
-            $.ajax({
-              type: 'DELETE',
-              url: Routing.generate("equipamiento_delete", {id:arr[5]}),
-              data: form.serialize(),
+          success: function(response) {
+            // Si no hay alumnos asignados al curso se puede eliminar.
+            if(response.data!=null){ 
+              error.play();
+              swal({
+                title: "La eliminación no se ha efectuado",
+                html: '<p class="justificado">La instalación <span>"'+equipamiento+'"</span> no se puede eliminar porque está reservada. Debe eliminar las reservas de la instalación para poder eliminarla.</p>',
+                type: "error",
+                confirmButtonColor: color
+              });
+            }
+            else{
+              $.ajax({
+                type: 'DELETE',
+                url: Routing.generate("equipamiento_delete", {id:arr[5]}),
+                data: form.serialize(),
         
-              success: function() {
-                // Se actualiza las pestañas de equipamientos.
-                $("#registrar_instalaciones").update_tab();
-                $("#reservar_instalaciones").update_tab();
-              }
-            })
-            swal.close();
+                success: function() {
+                  // Se actualiza las pestañas de equipamientos.
+                  $("#registrar_instalaciones").update_tab();
+                  $("#reservar_instalaciones").update_tab();
+                }
+              })
+            }
           }
-        }
-      })
+        })
+      }, function (dismiss) {
+
       }
     );
-      return false;
+    return false;
   });
 
   //////////////////////////////////
@@ -6410,8 +6380,7 @@ $(document).on("blur","input[id='edit_profesor_dni']",function() {
               title: "Aula registrada en el sistema",
               text: 'Esta aula ya se encuentra registrada en el sistema.',
               type: "error",
-              confirmButtonColor: color,
-              html: true
+              confirmButtonColor: color
             });
             return false;
           }
@@ -6421,6 +6390,13 @@ $(document).on("blur","input[id='edit_profesor_dni']",function() {
         }
       })
     }
+  });
+
+  //Se modifica el máximo de caracteres permitido para el nombre de aulas con el foco del elemento.
+  $(document).on("focus","#registro_instalaciones #aula_nombre",function(event){
+    event.preventDefault();
+    $(this).attr("maxlength",15);
+
   });
 
   $(document).on("click","#registro_instalaciones .aulas td a",function(event){
@@ -6475,8 +6451,7 @@ $(document).on("blur","input[id='edit_profesor_dni']",function() {
               title: "Aula registrada en el sistema",
               text: 'Esta aula ya se encuentra registrada en el sistema.',
               type: "error",
-              confirmButtonColor: color,
-              html: true
+              confirmButtonColor: color
             });
             return false;
           }
@@ -6503,46 +6478,44 @@ $(document).on("blur","input[id='edit_profesor_dni']",function() {
       showCancelButton: true,
       cancelButtonText: "Cancelar",
       confirmButtonColor: color,
-      confirmButtonText: "¡Adelante!",
-      closeOnConfirm: false },
+      confirmButtonText: "¡Adelante!"
+      }).then(function () {
 
-      function(){
-
-      $.ajax({
-        type: 'POST',
-        url: Routing.generate('equipamiento_reservado'),
-        data: {equipamiento:equipamiento},
-        dataType: 'json',
-        async:false,
+        $.ajax({
+          type: 'POST',
+          url: Routing.generate('equipamiento_reservado'),
+          data: {equipamiento:equipamiento},
+          dataType: 'json',
+          async:false,
   
-        success: function(response) {
-          // Si no hay alumnos asignados al curso se puede eliminar.
-          if(response.data!=null){ 
-            error.play();
-            swal({
-            title: "La eliminación no se ha efectuado",
-            text: '<p class="justificado">El aula <span>"'+equipamiento+'"</span> no se puede eliminar porque está reservada. Debe eliminar las reservas de la instalación para poder eliminarla.</p>',
-            type: "error",
-            confirmButtonColor: color,
-            html: true
-             });
-          }
-          else{
-            $.ajax({
-              type: 'DELETE',
-              url: Routing.generate("equipamiento_delete", {id:arr[5]}),
-              data: form.serialize(),
+          success: function(response) {
+            // Si no hay alumnos asignados al curso se puede eliminar.
+            if(response.data!=null){ 
+              error.play();
+              swal({
+                title: "La eliminación no se ha efectuado",
+                html: '<p class="justificado">El aula <span>"'+equipamiento+'"</span> no se puede eliminar porque está reservada. Debe eliminar las reservas de la instalación para poder eliminarla.</p>',
+                type: "error",
+                confirmButtonColor: color
+              });
+            }
+            else{
+              $.ajax({
+                type: 'DELETE',
+                url: Routing.generate("equipamiento_delete", {id:arr[5]}),
+                data: form.serialize(),
         
-              success: function() {
-                // Se actualiza las pestañas de instalaciones y asignar aulas.
-                $("#registrar_instalaciones").update_tab();
-                $("#asignar_aula").update_tab();
-              }
-            })
-            swal.close();
+                success: function() {
+                  // Se actualiza las pestañas de instalaciones y asignar aulas.
+                  $("#registrar_instalaciones").update_tab();
+                  $("#asignar_aula").update_tab();
+                }
+              })
+            }
           }
-        }
-      })
+        })
+      }, function (dismiss) {
+
       }
     );
     return false;
@@ -6610,8 +6583,7 @@ $(document).on("blur","input[id='edit_profesor_dni']",function() {
               title: "Equipamiento registrado en el sistema",
               text: 'El equipamiento introducido ya está registrado en el sistema.',
               type: "error",
-              confirmButtonColor: color,
-              html: true
+              confirmButtonColor: color
             });
             return false;
           }
@@ -6679,8 +6651,7 @@ $(document).on("click","#registro_equipamientos td a",function(event){
               title: "Equipamiento registrado en el sistema",
               text: 'El equipamiento introducido ya está registrado en el sistema.',
               type: "error",
-              confirmButtonColor: color,
-              html: true
+              confirmButtonColor: color
             });
             return false;
           }
@@ -6703,16 +6674,14 @@ $(document).on("click","#registro_equipamientos td a",function(event){
     aviso.play(); 
     // Se muestra la notificación.
     swal({
-    title: "Eliminación del equipamiento del sistema.",
-    text: "¿Estas seguro de continuar? No podrás deshacer este paso...",
-    type: "warning",
-    showCancelButton: true,
-    cancelButtonText: "Cancelar",
-    confirmButtonColor: color,
-    confirmButtonText: "¡Adelante!",
-    closeOnConfirm: false },
-
-    function(){
+     title: "Eliminación del equipamiento del sistema.",
+     text: "¿Estas seguro de continuar? No podrás deshacer este paso...",
+     type: "warning",
+     showCancelButton: true,
+     cancelButtonText: "Cancelar",
+     confirmButtonColor: color,
+     confirmButtonText: "¡Adelante!"
+     }).then(function () {
 
       $.ajax({
         type: 'POST',
@@ -6726,12 +6695,11 @@ $(document).on("click","#registro_equipamientos td a",function(event){
           if(response.data!=null){
             error.play(); 
             swal({
-            title: "La eliminación no se ha efectuado",
-            text: '<p class="justificado">El equipamiento <span>"'+equipamiento+'"</span> no se puede eliminar porque está reservado. Debe eliminar las reservas del equipamiento para poder eliminarlo.</p>',
-            type: "error",
-            confirmButtonColor: color,
-            html: true
-             });
+              title: "La eliminación no se ha efectuado",
+              html: '<p class="justificado">El equipamiento <span>"'+equipamiento+'"</span> no se puede eliminar porque está reservado. Debe eliminar las reservas del equipamiento para poder eliminarlo.</p>',
+              type: "error",
+              confirmButtonColor: color
+            });
           }
           else{
             $.ajax({
@@ -6745,11 +6713,13 @@ $(document).on("click","#registro_equipamientos td a",function(event){
                 $("#reservar_equipamientos").update_tab();
               }
             })
-            swal.close();
           }
         }
       })
-    });
+     }, function (dismiss) {
+
+     }
+    );
     return false;
   });
 
@@ -6760,6 +6730,7 @@ $(document).on("click","#registro_equipamientos td a",function(event){
   // Se deshabilita los días no lectivos en el calendario de reservas. 
   $(document).on('click',"#actualizar_calendario_lectivo",function(event){
     //Se obtiene el contenedor principal según si el calendario está en un formulario o no.
+
     if($(this).hasClass('form'))
     {
       contenedor=$(this).closest("form");
@@ -6814,11 +6785,14 @@ $(document).on("click","#registro_equipamientos td a",function(event){
               // Si el dato obtenido tiene un sólo dígito, se excluye los días de dos dígitos del calendario que contiene ese dato.
               if(String(dato).length=="1"){
                 if(String(comp).length=="1"){
-                  $(this).closest("td").addClass("ui-datepicker-unselectable ui-state-disabled");
+                  $(this).closest("td").addClass("ui-datepicker-unselectable");
+                  $(this).closest("td:not(.ui-datepicker-week-end) a").addClass(" no_lectivo");//Se le añade la clase no:lectivo a todos los elementos "a" de los días festivos.
                   // Se comprueba que el día festivo es un domingo y que el lunes no hay ningún festivo añadido. 
                   if($(this).closest("td").hasClass("ui-datepicker-week-end") &&  $(this).closest("tr").find("td:last a").text() == $(this).text() && !contenedor.find("#div_leyenda h4[id='"+$(this).closest("tr").next("tr").find("td:nth-child(1) a").text()+"']").length){
                     // Mostramos el traspado del festivo al lunes.
-                    $(this).closest("tr").next("tr").find("td:nth-child(1) a").closest("td").addClass("ui-datepicker-unselectable ui-state-disabled");
+                    $(this).closest("tr").next("tr").find("td:nth-child(1) a").closest("td").addClass("ui-datepicker-unselectable");
+                    $(this).closest("tr").next("tr").find("td:nth-child(1) a").closest("td a").addClass("no_lectivo");
+
                     $(this).closest("tr").next("tr").find("td:nth-child(1) a").attr("tipo","traslado");
 
                       //Se muestra sólo un traslado del festivo (ya que hay dos elementos con el mismo día).
@@ -6827,27 +6801,39 @@ $(document).on("click","#registro_equipamientos td a",function(event){
                           $( "<h4 id='"+(dato+1)+"'>"+(dato+1)+"</h4><h4 id='h4_descripcion'>Traslado del Festivo del día "+dato+"</h4>" ).insertAfter( $(this).next());
                         }
                       });
-                    //$(this).closest("tr").next("tr").find("td:nth-child(1) a").attr("title",contenedor.find("#div_leyenda h4[id="+ $(this).closest("tr").next("tr").find("td:nth-child(1) a").text()+"]").next("h4").text());
+                      //Se comprueba que exista el elemento "a" del traslado del festivo para añadirle el título del festivo.
+                      //Si no existe es porque el día ha pasado con respecto al día actual y se ha convertido en un span, y no se puede mostrar.
+                      if($(this).closest("tr").next("tr").find("td:nth-child(1) a").size()>0){
+                        $(this).closest("tr").next("tr").find("td:nth-child(1) a").attr("title",contenedor.find("#div_leyenda h4[id="+ $(this).closest("tr").next("tr").find("td:nth-child(1) a").text()+"]").next("h4").text());
+                      }
                   }
                 }
               }
               else{
-                $(this).closest("td").addClass("ui-datepicker-unselectable ui-state-disabled");
+
+                $(this).closest("td").addClass("ui-datepicker-unselectable");
+                $(this).closest("td:not(.ui-datepicker-week-end) a").addClass(" no_lectivo");
                 // Se comprueba que el día festivo es un domingo, que el lunes no hay ningún festivo añadido y que el festivo no coincida con el último día del mes. 
                 if($(this).closest("td").hasClass("ui-datepicker-week-end") &&  $(this).closest("tr").find("td:last a").text() == $(this).text() && !contenedor.find("#div_leyenda h4[id='"+$(this).closest("tr").next("tr").find("td:nth-child(1) a").text()+"']").length && contenedor.find("tbody tr:last td:last a").text()!=$(this).text() ){
                   // Mostramos el traspado del festivo al lunes.
-                  $(this).closest("tr").next("tr").find("td:nth-child(1) a").closest("td").addClass("ui-datepicker-unselectable ui-state-disabled");
+                  $(this).closest("tr").next("tr").find("td:nth-child(1) a").closest("td").addClass("ui-datepicker-unselectable");
+                  $(this).closest("tr").next("tr").find("td:nth-child(1) a").closest("td a").addClass("no_lectivo");
+                  
                   $(this).closest("tr").next("tr").find("td:nth-child(1) a").attr("tipo","traslado");
 
-                  //setTimeout(function(){
+                  
                     //Se muestra sólo un traslado del festivo (ya que hay dos elementos con el mismo día).
                     contenedor.find("#div_leyenda h4[id='"+dato+"']").each(function(){
+
                       if($(this).next().text().indexOf(" Vacaciones ")<0){
                         $( "<h4 id='"+(dato+1)+"'>"+(dato+1)+"</h4><h4 id='h4_descripcion'>Traslado del Festivo del día "+dato+"</h4>" ).insertAfter( $(this).next());
                       }
                     });
-                  $(this).closest("tr").next("tr").find("td:nth-child(1) a").attr("title",contenedor.find("#div_leyenda h4[id="+ $(this).closest("tr").next("tr").find("td:nth-child(1) a").text()+"]").next("h4").text());
-                  //}, 50);
+                    //Se comprueba que exista el elemento "a" del traslado del festivo para añadirle el título del festivo.
+                    //Si no existe es porque el día ha pasado con respecto al día actual y se ha convertido en un span, y no se puede mostrar.
+                    if($(this).closest("tr").next("tr").find("td:nth-child(1) a").size()>0){
+                      $(this).closest("tr").next("tr").find("td:nth-child(1) a").attr("title",contenedor.find("#div_leyenda h4[id="+ $(this).closest("tr").next("tr").find("td:nth-child(1) a").text()+"]").next("h4").text());
+                    }
                 }
               }
             });
@@ -6871,9 +6857,11 @@ $(document).on("click","#registro_equipamientos td a",function(event){
                 }
                 // Se añade la clase vacaciones a los días correspondientes.
                 for(var i = response.inicio_vacaciones["dia"]; i <= response.fin_vacaciones["dia"]; i++){
-                  contenedor.find(".ui-datepicker-calendar td[data-month='"+(mes-1)+"'] a").filter(function(){return $(this).text()==i;}).closest("td").addClass("ui-datepicker-unselectable ui-state-disabled");;
+                  contenedor.find(".ui-datepicker-calendar td[data-month='"+(mes-1)+"'] a").filter(function(){return $(this).text()==i;}).closest("td").addClass("ui-datepicker-unselectable");
+                  contenedor.find(".ui-datepicker-calendar td[data-month='"+(mes-1)+"'] a").filter(function(){return $(this).text()==i;}).closest("td a").addClass("no_lectivo");
+
                   contenedor.find("#div_leyenda h4[id='"+i+"']").addClass("vacaciones"); 
-                  contenedor.find(".ui-datepicker-calendar td[data-month='"+(mes-1)+"'][class='ui-datepicker-unselectable ui-state-disabled'] a").filter(function(){return $(this).text()==i;}).attr("title",contenedor.find("#div_leyenda h4[class='vacaciones']").next().text().replace("Inicio ",""));
+                  contenedor.find(".ui-datepicker-calendar td[data-month='"+(mes-1)+"'][class='ui-datepicker-unselectable'] a").filter(function(){return $(this).text()==i;}).attr("title",contenedor.find("#div_leyenda h4[class='vacaciones']").next().text().replace("Inicio ",""));
                 }
                 // Si se repite el día de inicio de vacaciones, se elimina la clase vacaciones en los días de la leyenda que no contiene la información de las vacaciones.
                 if(contenedor.find("#div_leyenda h4[id='"+response.inicio_vacaciones["dia"]+"']").length>1){
@@ -6929,8 +6917,10 @@ $(document).on("click","#registro_equipamientos td a",function(event){
             }
             // Se modifica los días desde inicio de vacaciones hasta final de mes puesto que sigue en el siguiente mes.
             for(var i = response.inicio_vacaciones["dia"]; i <= último_día; i++){
-              contenedor.find(".ui-datepicker-calendar td[data-month='"+(mes-1)+"'] a").filter(function(){return $(this).text()==i;}).closest("td").addClass("ui-datepicker-unselectable ui-state-disabled");
-              contenedor.find(".ui-datepicker-calendar td[data-month='"+(mes-1)+"'][class='ui-datepicker-unselectable ui-state-disabled'] a").filter(function(){return $(this).text()==i;}).attr("title",contenedor.find("#div_leyenda h4[class='vacaciones']").next().text().replace("Inicio ",""));
+              contenedor.find(".ui-datepicker-calendar td[data-month='"+(mes-1)+"'] a").filter(function(){return $(this).text()==i;}).closest("td").addClass("ui-datepicker-unselectable");
+              contenedor.find(".ui-datepicker-calendar td[data-month='"+(mes-1)+"'] a").filter(function(){return $(this).text()==i;}).closest("td a").addClass("no_lectivo");
+              
+              contenedor.find(".ui-datepicker-calendar td[data-month='"+(mes-1)+"'][class='ui-datepicker-unselectable'] a").filter(function(){return $(this).text()==i;}).attr("title",contenedor.find("#div_leyenda h4[class='vacaciones']").next().text().replace("Inicio ",""));
             }
 
             }, 50);
@@ -6959,8 +6949,10 @@ $(document).on("click","#registro_equipamientos td a",function(event){
             }
             // Se modifica los días desde inicio del mes hasta final de vacaciones puesto que sigue en el mes anterior.
             for(var i = response.fin_vacaciones["dia"]; i >= 1; i--){
-              contenedor.find(".ui-datepicker-calendar td[data-month='"+(mes-1)+"'] a").filter(function(){return $(this).text()==i;}).closest("td").addClass("ui-datepicker-unselectable ui-state-disabled");
-              contenedor.find(".ui-datepicker-calendar td[data-month='"+(mes-1)+"'][class='ui-datepicker-unselectable ui-state-disabled']").find("a").filter(function(){return $(this).text()==i;}).attr("title",contenedor.find("#div_leyenda h4[class='vacaciones']").next().text().replace("Fin ",""));
+              contenedor.find(".ui-datepicker-calendar td[data-month='"+(mes-1)+"'] a").filter(function(){return $(this).text()==i;}).closest("td").addClass("ui-datepicker-unselectable");
+              contenedor.find(".ui-datepicker-calendar td[data-month='"+(mes-1)+"'] a").filter(function(){return $(this).text()==i;}).closest("td a").addClass("no_lectivo");
+
+              contenedor.find(".ui-datepicker-calendar td[data-month='"+(mes-1)+"'][class='ui-datepicker-unselectable']").find("a").filter(function(){return $(this).text()==i;}).attr("title",contenedor.find("#div_leyenda h4[class='vacaciones']").next().text().replace("Fin ",""));
             }
             }, 50);
           }
@@ -6993,7 +6985,8 @@ $(document).on("click","#registro_equipamientos td a",function(event){
           success: function(response) {
             if(response.data!=null)
             {
-              dia_1.closest("td").addClass("ui-datepicker-unselectable ui-state-disabled");
+              dia_1.closest("td").addClass("ui-datepicker-unselectable");
+              dia_1.closest("td a").addClass("no_lectivo");
               setTimeout(function(){
                 contenedor.find("#div_leyenda").prepend("<h4 id='"+dia_1.text()+"'>"+dia_1.text()+"</h4><h4 id='h4_descripcion'>Traslado del Festivo del día "+dia_ant+" de "+MES[contenedor.find("tbody tr:first td:last").attr("data-month")-1]+" </h4>" );
               }, 20);
@@ -7146,17 +7139,16 @@ $(document).on("click","#registro_equipamientos td a",function(event){
           error.play();
           swal({
             title: "Se ha producido un error en el sistema",
-            text: texto,
+            html: texto,
             type: "error",
             confirmButtonColor: color,
-            closeOnConfirm: false ,
-            html: true
+            closeOnConfirm: false
           });
           return false;
         }
         if(response.data.length != 0)
         {
-          var texto= 'El equipamiento <span>"'+equipamiento+'"</span> no se puede reservar en las siguientes horas de clase porque ya estan reservadas:<br><br>';
+          var texto= 'El equipamiento <span class="negrita">'+equipamiento+'</span> no se puede reservar en los siguientes módulos de clase porque ya esta reservado:<br><br>';
           for (var key in response.data) {
             hora=contenedor.find("#contenedor_reserva_horas button[clase='"+response.data[key]+"']").text(); 
             texto+="<h4>"+hora+"</h4>";
@@ -7164,86 +7156,85 @@ $(document).on("click","#registro_equipamientos td a",function(event){
           error.play();
           swal({
             title: "Se ha producido un error en el sistema al realizar la reserva",
-            text: texto,
+            html: texto,
             type: "error",
             confirmButtonColor: color,
-            closeOnConfirm: false ,
-            html: true
-          }, 
-          function(){
-            swal.close();
-            if(response.message==1){
-              exito.play();
-             new PNotify({
-              text:"1 reserva efectuada.",
-              addclass: "custom",
-              type: "success",
-              shadow: true,
-              hide: true,
-              buttons: {
-              sticker: false,
-              labels:{close: "Cerrar"}
-              },
-              stack: right_Stack,
-              animate: {
-                animate: true,
-                in_class: "fadeInRight",
-                out_class: "fadeOutRight",
-              }
-             });
-              // Se actualiza las pestañas de equipamientos o instalaciones
-              $("#consultar_"+tipo).update_tab();
-              $("#reservar_"+tipo).update_tab();
-            }
-            else if(response.message!=0){
-              titulo=response.message+ " reservas efectuadas.";
-              exito.play();
+            closeOnConfirm: false
+            }).then(function () {
 
-             new PNotify({
-              text:titulo,
-              addclass: "custom",
-              type: "success",
-              shadow: true,
-              hide: true,
-              buttons: {
-              sticker: false,
-              labels:{close: "Cerrar"}
-              },
-              stack: right_Stack,
-              animate: {
-                animate: true,
-                in_class: "fadeInRight",
-                out_class: "fadeOutRight",
+              if(response.message==1){
+                exito.play();
+                new PNotify({
+                  text:"1 reserva efectuada.",
+                  addclass: "custom",
+                  type: "success",
+                  shadow: true,
+                  hide: true,
+                  buttons: {
+                    sticker: false,
+                    labels:{close: "Cerrar"}
+                  },
+                  stack: right_Stack,
+                  animate: {
+                    animate: true,
+                    in_class: "fadeInRight",
+                    out_class: "fadeOutRight",
+                  }
+                });
+                // Se actualiza las pestañas de equipamientos o instalaciones
+                $("#consultar_"+tipo).update_tab();
+                $("#reservar_"+tipo).update_tab();
               }
-             });
-              // Se actualiza las pestañas de equipamientos o instalaciones
-              $("#consultar_"+tipo).update_tab();
-              $("#reservar_"+tipo).update_tab();
-            }
-            else{
-             errorPNotify.play();
+              else if(response.message!=0){
+                titulo=response.message+ " reservas efectuadas.";
+                exito.play();
 
-             new PNotify({
-              text:'No se ha realizado ninguna reserva',
-              addclass: "custom",
-              type: "error",
-              shadow: true,
-              hide: true,
-              buttons: {
-              sticker: false,
-              labels:{close: "Cerrar"}
-              },
-              stack: right_Stack,
-              animate: {
-                animate: true,
-                in_class: "fadeInRight",
-                out_class: "fadeOutRight",
+                new PNotify({
+                  text:titulo,
+                  addclass: "custom",
+                  type: "success",
+                  shadow: true,
+                  hide: true,
+                  buttons: {
+                    sticker: false,
+                    labels:{close: "Cerrar"}
+                  },
+                  stack: right_Stack,
+                  animate: {
+                    animate: true,
+                    in_class: "fadeInRight",
+                    out_class: "fadeOutRight",
+                  }
+                });
+                // Se actualiza las pestañas de equipamientos o instalaciones
+                $("#consultar_"+tipo).update_tab();
+                $("#reservar_"+tipo).update_tab();
               }
-             });
+              else{
+                errorPNotify.play();
+
+                new PNotify({
+                  text:'No se ha realizado ninguna reserva',
+                  addclass: "custom",
+                  type: "error",
+                  shadow: true,
+                  hide: true,
+                  buttons: {
+                    sticker: false,
+                    labels:{close: "Cerrar"}
+                  },
+                  stack: right_Stack,
+                  animate: {
+                    animate: true,
+                    in_class: "fadeInRight",
+                    out_class: "fadeOutRight",
+                  }
+                });
+              }
+            }, function (dismiss) {
+
             }
-          }
           );
-
         }
         else{
           if(response.message==1){
@@ -7499,17 +7490,14 @@ $(document).on("click","#registro_equipamientos td a",function(event){
     aviso.play();
     swal({
       title: "Eliminación de reserva",
-      text: "<table><p>Se va a eliminar la siguiente reserva, ¿Estas seguro de continuar? <br></p><thead><tr><th>Profesor</th><th>Equipamiento</th><th>Fecha</th><th>Hora</th></tr></thead><tbody><tr><td>"+nombre_profesor+"</td><td>"+equipamiento+"</td><td>"+fecha_aviso+"</td><td>"+hora_inicio+" - "+hora_fin+"</td></tr></tbody><br></p></table>",
+      html: "<table><p>Se va a eliminar la siguiente reserva: <br></p><thead><tr><th>Profesor</th><th>Equipamiento</th><th>Fecha</th><th>Hora</th></tr></thead><tbody><tr><td>"+nombre_profesor+"</td><td>"+equipamiento+"</td><td>"+fecha_aviso+"</td><td>"+hora_inicio+" - "+hora_fin+"</td></tr></tbody></p></table><br>¿Estas seguro de continuar? No podrás deshacer este paso...<br>",
       type: "warning",
-      html: true,
       showCancelButton: true,
       cancelButtonText: "Cancelar",
-      customClass: 'swal-wide',
+      width: "600px",
       confirmButtonColor: color,
-      confirmButtonText: "¡Adelante!",
-      closeOnConfirm: true },
-
-      function(){
+      confirmButtonText: "¡Adelante!"
+      }).then(function () {
         $.ajax({
           type: 'POST',
           url: Routing.generate('obtener_reserva'),
@@ -7538,7 +7526,9 @@ $(document).on("click","#registro_equipamientos td a",function(event){
             })
           }
         })
-      return false;
+        return false;
+      }, function (dismiss) {
+
       }
     );
     //Se detiene la propagación del evento para que no detecte hacer click en el elemento "tr" que lo contiene.
@@ -8118,11 +8108,11 @@ $(document).on("click","#registro_equipamientos td a",function(event){
           if(response.validate){
             if(response.validate=="curso_incorrecto"){
               titulo="Matrícula cancelada";              
-              texto= '<span>'+response.nombre+'</span> ya tiene superado este curso.';
+              texto= '<span class="negrita">'+response.nombre+'</span> ya tiene superado este curso.';
             }
             else if(response.validate=="año_incorrecto"){
               titulo="Matrícula cancelada";              
-              texto= '<span>'+response.nombre+'</span> ya tiene una matrícula registrada en el Año Académico actual.';
+              texto= '<span class="negrita">'+response.nombre+'</span> ya tiene una matrícula registrada en el Año Académico actual.';
             }
             else{
               titulo="Matrícula cancelada";              
@@ -8131,12 +8121,11 @@ $(document).on("click","#registro_equipamientos td a",function(event){
             error.play();
             swal({
               title: titulo,
-              text: texto,
+              html: texto,
               type: "error",
-              html: true,
+              width: "500px",
               showCancelButton: false,
-              confirmButtonColor: color,
-              closeOnConfirm: true 
+              confirmButtonColor: color
             });
               return false;
           }
@@ -8295,17 +8284,14 @@ $(document).on("click","#registro_equipamientos td a",function(event){
     aviso.play();
     swal({
       title: "Anulación de Matrículas",
-      text: "<table><p>Se va a eliminar la siguiente matrícula, ¿Estas seguro de continuar? <br></p><thead><tr><th>Alumno</th><th>Curso Matriculado</th><th>Año Académico</th></tr></thead><tbody><tr><td>"+$(this).closest("tr").find("td:nth-child(1)").text()+"</td><td>"+$(this).closest("tr").find("td:nth-child(2)").text()+"</td><td>"+$(this).closest("tr").find("td:nth-child(3)").text()+"</td></tr></tbody><br></p></table>",
+      html: "<table><p>Se va a eliminar la siguiente matrícula, ¿Estas seguro de continuar? <br></p><thead><tr><th>Alumno</th><th>Curso Matriculado</th><th>Año Académico</th></tr></thead><tbody><tr><td>"+$(this).closest("tr").find("td:nth-child(1)").text()+"</td><td>"+$(this).closest("tr").find("td:nth-child(2)").text()+"</td><td>"+$(this).closest("tr").find("td:nth-child(3)").text()+"</td></tr></tbody><br></p></table>",
       type: "warning",
-      html: true,
       showCancelButton: true,
       cancelButtonText: "Cancelar",
-      customClass: 'swal-wide',
+      width: "600px",
       confirmButtonColor: color,
-      confirmButtonText: "¡Adelante!",
-      closeOnConfirm: true },
-
-      function(){
+      confirmButtonText: "¡Adelante!"
+      }).then(function () {
 
         $.ajax({
           type: 'POST',
@@ -8346,9 +8332,10 @@ $(document).on("click","#registro_equipamientos td a",function(event){
             $("#ficha_alumno").update_tab();
           }
         })
+      }, function (dismiss) {
+
       }
     );
-
   });
 
   ///////////////////////////////////////////
@@ -8516,7 +8503,7 @@ $(document).on("click","#registro_equipamientos td a",function(event){
       titulo="<table><p>Se va a registrar el alta del antiguo profesor:<br></p><thead><tr><th>Nombre</th><th>Nivel</th></tr></thead><tbody><tr><td>"+nombre+"</td><td>"+nivel+"</td></tr></tbody><br></p></table><br>¿Estas seguro de continuar?";
     }
     else{
-      titulo="<table class='max_h_table_swall'><p>Se va a registrar el alta de los antiguos profesores:<br></p><thead><tr><th>Nombre</th><th>Nivel</th></tr></thead><tbody>";
+      titulo="<table ><p>Se va a registrar el alta de los antiguos profesores:<br></p><thead><tr><th>Nombre</th><th>Nivel</th></tr></thead><tbody>";
       $("#consulta_antiguo_profesor #old_teacher_no_active tbody td input:checked").each (function(){ 
         nombre=$(this).closest("tr").find("td:nth-child(2)").text();
         nivel=$(this).closest("tr").find("#nivel").text();
@@ -8528,17 +8515,14 @@ $(document).on("click","#registro_equipamientos td a",function(event){
     aviso.play();
     swal({
       title: "Alta de Profesores",
-      text: titulo,
+      html: titulo,
       type: "warning",
-      html: true,
       showCancelButton: true,
       cancelButtonText: "Cancelar",
-      customClass: 'swal-wide',
+      width: "500px",
       confirmButtonColor: color,
-      confirmButtonText: "¡Adelante!",
-      closeOnConfirm: true },
-
-      function(){
+      confirmButtonText: "¡Adelante!"
+      }).then(function () {
 
         $.ajax({
           type: 'POST',
@@ -8581,6 +8565,8 @@ $(document).on("click","#registro_equipamientos td a",function(event){
             ////Añadir más: profesor_asignar_grupo, mensaje profesores...
           }
         })
+      }, function (dismiss) {
+
       }
     );
   });
@@ -8602,32 +8588,29 @@ $(document).on("click","#registro_equipamientos td a",function(event){
     });
 
       //titulo="<table><p>Se va a registrar el alta del antiguo profesor X, ¿Estas seguro de continuar? <br></p><thead><tr><th>Evento</th><th>Fecha</th><th>Hora</th></tr></thead><tbody><tr><td>"+titulo+"</td><td>"+fecha+"</td><td>"+hora+"</td></tr></tbody><br></p></table>",
-      titulo="<table><p>Se va a registrar la baja del siguiente profesor:<br></p><thead><tr><th>Nombre</th><th>Nivel</th></tr></thead><tbody><tr><td>"+nombre+"</td><td>"+nivel+"</td></tr></tbody><br></p></table><br><span>AVISO: Si el profesor está asignado a un grupo o es tutor, se eliminará automáticamente esa asignación y no se podrá recuperar.</span><br><br>¿Estas seguro de continuar?";
+      titulo="<table><p>Se va a registrar la baja del siguiente profesor:<br></p><thead><tr><th>Nombre</th><th>Nivel</th></tr></thead><tbody><tr><td>"+nombre+"</td><td>"+nivel+"</td></tr></tbody><br></table><br><span>AVISO: Si el profesor está asignado a un grupo o es tutor, se eliminará automáticamente esa asignación y no se podrá recuperar.</span><br><br>¿Estas seguro de continuar?";
     }
     else{
-      titulo="<table class='max_h_table_swall'><p>Se va a registrar la baja de los siguientes profesores:<br></p><thead><tr><th>Nombre</th><th>Nivel</th></tr></thead><tbody>";
+      titulo="<table><p>Se va a registrar la baja de los siguientes profesores:<br></p><thead><tr><th>Nombre</th><th>Nivel</th></tr></thead><tbody>";
       $("#consulta_antiguo_profesor #old_teacher tbody td input:checked").each (function(){ 
         nombre=$(this).closest("tr").find("td:nth-child(2)").text();
         nivel=$(this).closest("tr").find("#nivel").text();
         titulo+="<tr><td>"+nombre+"</td><td>"+nivel+"</td></tr>";
        });
-      titulo+="</tbody><br></p></table><br><span>AVISO: Si algún profesor está asignado a un grupo o es tutor, se eliminará automáticamente esa asignación y no se podrá recuperar.</span><br><br>¿Estas seguro de continuar?";
+      titulo+="</tbody><br></p></table><br><br><p class='justificado'>AVISO: Si algún profesor está asignado a un grupo o es tutor, se eliminará automáticamente esa asignación y no se podrá recuperar.</p><br>¿Estas seguro de continuar?";
     }
 
     aviso.play();
     swal({
       title: "Baja de Profesores",
-      text: titulo,
+      html: titulo,
       type: "warning",
-      html: true,
       showCancelButton: true,
       cancelButtonText: "Cancelar",
-      customClass: 'swal-wide',
+      width: "500px",
       confirmButtonColor: color,
-      confirmButtonText: "¡Adelante!",
-      closeOnConfirm: true },
-
-      function(){
+      confirmButtonText: "¡Adelante!"
+      }).then(function () {
         $.ajax({
           type: 'POST',
           url: Routing.generate('baja_profesor'),
@@ -8669,6 +8652,8 @@ $(document).on("click","#registro_equipamientos td a",function(event){
             ////Añadir más: profesor_asignar_grupo, mensaje profesores...
           }
         })
+      }, function (dismiss) {
+
       }
     );
   });
@@ -8724,12 +8709,10 @@ $(document).on("click","#registro_equipamientos td a",function(event){
               error.play();
               swal({
                 title: "Error en el sistema",
-                text: "Se ha producido un error en el sistema, por favor cierra la pestaña <span>Asignar Grupos</span> y vuelva a intentarlo de nuevo.",
+                html: "Se ha producido un error en el sistema, por favor cierra la pestaña <span class='negrita'>Asignar Grupos</span> y vuelva a intentarlo de nuevo.",
                 type: "error",
-                html: true,
                 showCancelButton: false,
-                confirmButtonColor: color,
-                closeOnConfirm: true 
+                confirmButtonColor: color
               });
             }
           })
@@ -9070,11 +9053,9 @@ $(document).on("click","#registro_equipamientos td a",function(event){
           error.play();
           swal({
             title: "Se ha producido un error en el sistema",
-            text: texto,
+            html: texto,
             type: "error",
-            confirmButtonColor: color,
-            closeOnConfirm: false ,
-            html: true
+            confirmButtonColor: color
           });
         }
 
@@ -9210,17 +9191,14 @@ $(document).on("click","#registro_equipamientos td a",function(event){
     aviso.play();
     swal({
       title: "Eliminación del evento",
-      text: "<table><p>Se va a eliminar el siguiente evento, ¿Estas seguro de continuar? <br></p><thead><tr><th>Evento</th><th>Fecha</th><th>Hora</th></tr></thead><tbody><tr><td>"+titulo+"</td><td>"+fecha+"</td><td>"+hora+"</td></tr></tbody><br></p></table>",
+      html: "<table><p>Se va a eliminar el siguiente evento: </p><thead><tr><th>Evento</th><th>Fecha</th><th>Hora</th></tr></thead><tbody><tr><td>"+titulo+"</td><td>"+fecha+"</td><td>"+hora+"</td></tr></tbody><br></p></table><br><br>¿Estas seguro de continuar? <br>",
       type: "warning",
-      html: true,
       showCancelButton: true,
       cancelButtonText: "Cancelar",
-      customClass: 'swal-wide',
+      width: "550px",
       confirmButtonColor: color,
-      confirmButtonText: "¡Adelante!",
-      closeOnConfirm: true },
-
-      function(){
+      confirmButtonText: "¡Adelante!"
+      }).then(function () {
         $.ajax({
           type: 'DELETE',
           url: Routing.generate("eventos_delete", {id:evento}),
@@ -9229,7 +9207,9 @@ $(document).on("click","#registro_equipamientos td a",function(event){
             $("#consultar_eventos").update_tab();
           }
         })
-      return false;
+        return false;
+      }, function (dismiss) {
+
       }
     );
     //Se detiene la propagación del evento para que no detecte hacer click en el elemento "tr" que lo contiene.
@@ -9406,12 +9386,10 @@ $(document).on("click","#registro_equipamientos td a",function(event){
             error.play();
             swal({
               title: "Error en el sistema",
-              text: "Se ha producido un error en el sistema, por favor cierra la ventana <span>Editar Evento</span> y vuelva a intentarlo de nuevo.",
+              html: "Se ha producido un error en el sistema, por favor cierra la ventana <span class='negrita'>Editar Evento</span> y vuelva a intentarlo de nuevo.",
               type: "error",
-              html: true,
               showCancelButton: false,
-              confirmButtonColor: color,
-              closeOnConfirm: true 
+              confirmButtonColor: color
             });
           }
         }
@@ -9709,12 +9687,10 @@ $(document).on("click","#registro_equipamientos td a",function(event){
             error.play();
             swal({
               title:"Nombre de la galería asignado",
-              text: 'Ya existe una galería con ese nombre en el sistema.<br>Inserte otro nombre para continuar.',
+              html: 'Ya existe una galería con ese nombre en el sistema.<br>Inserte otro nombre para continuar.',
               type: "error",
-              html: true,
               showCancelButton: false,
-              confirmButtonColor: color,
-              closeOnConfirm: true 
+              confirmButtonColor: color
             });
             return false;
           }
@@ -9805,12 +9781,11 @@ $(document).on("click","#registro_equipamientos td a",function(event){
             error.play();
             swal({
               title:"Nombre de la galería asignado",
-              text: 'Ya existe una galería con ese nombre en el sistema.<br>Inserte otro nombre para continuar.',
+              html: 'Ya existe una galería con ese nombre en el sistema.<br>Inserte otro nombre para continuar.',
               type: "error",
-              html: true,
+
               showCancelButton: false,
-              confirmButtonColor: color,
-              closeOnConfirm: true 
+              confirmButtonColor: color
             });
             return false;
           }
@@ -9874,17 +9849,14 @@ $(document).on("click","#registro_equipamientos td a",function(event){
     aviso.play();
     swal({
       title: "Eliminación de noticias",
-      text: "<table><p>Se va a eliminar la siguiente noticia, ¿Estas seguro de continuar? <br></p><thead><tr><th>Noticia</th><th>Fecha</th><th>Hora</th></tr></thead><tbody><tr><td>"+titulo+"</td><td>"+fecha+"</td><td>"+hora+"</td></tr></tbody><br></p></table>",
+      html: "<table><p>Se va a eliminar la siguiente noticia:</p><thead><tr><th>Noticia</th><th>Fecha</th><th>Hora</th></tr></thead><tbody><tr><td>"+titulo+"</td><td>"+fecha+"</td><td>"+hora+"</td></tr></tbody><br></p></table><br><br>¿Estas seguro de continuar? <br>",
       type: "warning",
-      html: true,
       showCancelButton: true,
       cancelButtonText: "Cancelar",
-      customClass: 'swal-wide',
+      width: "600px",
       confirmButtonColor: color,
-      confirmButtonText: "¡Adelante!",
-      closeOnConfirm: true },
-
-      function(){
+      confirmButtonText: "¡Adelante!"
+      }).then(function () {
         $.ajax({
           type: 'DELETE',
           url: Routing.generate("noticias_delete", {id:noticia}),
@@ -9893,7 +9865,9 @@ $(document).on("click","#registro_equipamientos td a",function(event){
             $("#consultar_noticias").update_tab();
           }
         })
-      return false;
+        return false;
+      }, function (dismiss) {
+
       }
     );
     //Se detiene la propagación del evento para que no detecte hacer click en el elemento "tr" que lo contiene.
@@ -10068,12 +10042,10 @@ $(document).on("click","#registro_equipamientos td a",function(event){
             error.play();
             swal({
               title:"Nombre de la galería asignado",
-              text: 'Ya existe una galería con ese nombre en el sistema.<br>Inserte otro nombre para continuar.',
+              html: 'Ya existe una galería con ese nombre en el sistema.<br>Inserte otro nombre para continuar.',
               type: "error",
-              html: true,
               showCancelButton: false,
-              confirmButtonColor: color,
-              closeOnConfirm: true 
+              confirmButtonColor: color
             });
             return false;
           }
@@ -10165,12 +10137,10 @@ $(document).on("click","#registro_equipamientos td a",function(event){
             error.play();
             swal({
               title:"Nombre de la galería asignado",
-              text: 'Ya existe una galería con ese nombre en el sistema.<br>Inserte otro nombre para continuar.',
+              html: 'Ya existe una galería con ese nombre en el sistema.<br>Inserte otro nombre para continuar.',
               type: "error",
-              html: true,
               showCancelButton: false,
-              confirmButtonColor: color,
-              closeOnConfirm: true 
+              confirmButtonColor: color
             });
             return false;
           }
@@ -10375,12 +10345,10 @@ $(document).on("click","#registro_equipamientos td a",function(event){
             error.play();
             swal({
               title: "Error en el sistema",
-              text: "Se ha producido un error en el sistema, por favor cierra la ventana <span>Editar Evento</span> y vuelva a intentarlo de nuevo.",
+              html: "Se ha producido un error en el sistema, por favor cierra la ventana <span class='negrita'>Editar Evento</span> y vuelva a intentarlo de nuevo.",
               type: "error",
-              html: true,
               showCancelButton: false,
-              confirmButtonColor: color,
-              closeOnConfirm: true 
+              confirmButtonColor: color
             });
           }
         }
@@ -10410,10 +10378,8 @@ $(document).on("click","#registro_equipamientos td a",function(event){
             title:"No se pueden asignar profesores a los grupos",
             text: 'Actualmente no hay asignaturas registrada en el sistema.',
             type: "error",
-            html: true,
             showCancelButton: false,
-            confirmButtonColor: color,
-            closeOnConfirm: true 
+            confirmButtonColor: color
           });
         }
         else{
@@ -10442,6 +10408,11 @@ $(document).on("click","#registro_equipamientos td a",function(event){
     //Se deshabilita el botón "restablecer".
     $("#profesor_asignatura_grupo_dialog #profesor_asignatura_grupo_restablecer").prop("disabled",false);
   });
+  //Se modifica el title del select con el nombre del aula seleccionada.
+  $(document).on('change',"#profesor_asignatura_grupo_dialog select",function(event){
+    titulo= $(this).find("option:selected").text();
+    $(this).attr("title",titulo);
+  });
 
   $(document).on('change',"#profesor_asignatura_grupo_dialog input:checkbox",function(event){ 
     if($("#profesor_asignatura_grupo_dialog #contenedor_asignaturas input:checkbox:checked").size()==0){
@@ -10454,19 +10425,37 @@ $(document).on("click","#registro_equipamientos td a",function(event){
         $("#profesor_asignatura_grupo_dialog #btn_asignar span").removeClass('disab');
       }
     }
+    //Si se marca una asignatura opcional se deshabilita los checkbox de las otras opcionales para que no se pueda añadir el mismo profesor.
+    if($(this).closest("li").attr("opcional")==1)
+    {
+      if($(this).is(':checked')){
+        $("#profesor_asignatura_grupo_dialog #contenedor_asignaturas li[opcional='1'] input:checkbox").each (function(){ 
+          $(this).prop('disabled', true);
+        });
+        $(this).prop('disabled', false);
+      }
+      else{
+        $("#profesor_asignatura_grupo_dialog #contenedor_asignaturas li[opcional='1'] input:checkbox").each (function(){ 
+          $(this).prop('disabled', false);
+        });
+      }
+    }
+
+
   });
 
   $(document).on('click',"#profesor_asignatura_grupo_dialog li",function(event){ 
-    event.preventDefault();
-
+   event.preventDefault();
+   //Se ejecuta sólo al marcar los checkbox.
+   if(!$(this).find("#no_asignado").hasClass('oculto')){
     input=$(this).find("#no_asignado input");
     //Se pulsa el checkbox.
     if($(event.target).is('input')){
-                  $("#profesor_asignatura_grupo_dialog #profesor_asignatura_grupo_restablecer").prop("disabled",false);
+      $("#profesor_asignatura_grupo_dialog #profesor_asignatura_grupo_restablecer").prop("disabled",false);
       //Retardo para poder mostar el input seleccionado.
       setTimeout(function(){
         if(input.is(':checked') ){
-          input.prop("checked",false);
+          input.prop("checked",false).change();
           // Se habilita el botón de asignar.
           if($("#profesor_asignatura_grupo_dialog #div_lista .elected").size()==1 && $("#profesor_asignatura_grupo_dialog #contenedor_asignaturas #no_asignado input:checkbox:checked").size()>0){
             $("#profesor_asignatura_grupo_dialog #btn_asignar").removeClass('disabled');
@@ -10483,7 +10472,7 @@ $(document).on("click","#registro_equipamientos td a",function(event){
           }
         }
         else{
-          input.prop("checked",true);
+          input.prop("checked",true).change();
           // Se deshabilita el botón de asignar.
           if($("#profesor_asignatura_grupo_dialog #div_lista .elected").size()==1){
             $("#profesor_asignatura_grupo_dialog #btn_asignar").removeClass('disabled');
@@ -10495,10 +10484,15 @@ $(document).on("click","#registro_equipamientos td a",function(event){
     }//Se pulsa la imagen de eliminar asignación.
     else if($(event.target).is('img')){
 
-    }//Se pulsa la lista.
+    }
+    else if($(event.target).is('select')){
+
+    }
+    //Se pulsa la lista.
     else{
       $(this).find("#no_asignado input:checkbox").click();
     }
+   }
   });
 
   // Marcar o desmarcar todos las asignaturas troncales.
@@ -10514,10 +10508,61 @@ $(document).on("click","#registro_equipamientos td a",function(event){
       });
     }
   });
+
+  //Se oculta el title con el nombre del aula al abrir el select.
+  $(document).on('click',"#profesor_asignatura_grupo_dialog #contenedor_asignaturas select",function(event){
+    $(this).attr("title","");
+  });
+  //Se muestra el title con el nombre del aula al modificar el select.
+  $(document).on('change',"#profesor_asignatura_grupo_dialog #contenedor_asignaturas select",function(event){
+    $(this).attr("title",$(this).find("option:selected").text());
+    
+    if($(this).attr("valor")){
+      if($(this).attr("valor")!=$(this).val()){
+        $(this).closest('li').addClass('back_modificado');
+        $(this).closest('li').removeClass('back_asignado');
+        $(this).prev().attr("title", "Profesor Asignado con cambio de Aula");
+     }
+      else{
+        $(this).closest('li').removeClass('back_modificado');
+        $(this).closest('li').addClass('back_asignado');
+        $(this).prev().attr("title", "Profesor Asignado");
+      }
+    }
+
+    //Se deshabilita el aula asignada a una asignatura opcional en el listado de las otras.
+    $("#profesor_asignatura_grupo_dialog #contenedor_asignaturas li[opcional='1'] #asignado:not('.oculto') select option").prop('disabled', false);
+    
+    $("#profesor_asignatura_grupo_dialog #contenedor_asignaturas li[opcional='1'] #asignado:not('.oculto') select").each (function(){
+      aula=$(this).val();
+      li=$(this).closest("li").attr("id");
+      if(aula!=0){
+        $("#profesor_asignatura_grupo_dialog #contenedor_asignaturas li[opcional='1'] #asignado:not('.oculto') select").each (function(){
+          //Se deshabilita las aulas asignadas en los otros select, excepto cuando la opción está seleccionada en el select.
+          //(Caso validado desde javascript para que no pueda seleccionarse el mismo, pero es necesario para comprobar aula asignada en php)
+          if($(this).closest("li").attr("id")!=li && $(this).val()!=aula){
+            $(this).find("option[value='"+aula+"']").prop('disabled', true);
+          }
+
+        });
+      }
+    });
+
+    //Se comprueba si hay modificaciones para habilitar o deshabilitar los botones de "guardar" y "restablecer".
+    if($("#profesor_asignatura_grupo_dialog #contenedor_asignaturas .back_modificado").size()>0 || $("#profesor_asignatura_grupo_dialog #contenedor_asignaturas .eliminado").size()>0){
+      $("#profesor_asignatura_grupo_dialog #profesor_asignatura_grupo_submit").prop("disabled",false);
+      $("#profesor_asignatura_grupo_dialog #profesor_asignatura_grupo_restablecer").prop("disabled",false);
+    }else{
+      $("#profesor_asignatura_grupo_dialog #profesor_asignatura_grupo_submit").prop("disabled",true);
+      $("#profesor_asignatura_grupo_dialog #profesor_asignatura_grupo_restablecer").prop("disabled",true);
+    }
+    $(this).blur();
+  });
+
   //Se añade el profesor y a las asignaturas seleccionadas en el curso correspondiente.
   $(document).on('click',"#profesor_asignatura_grupo_dialog #btn_asignar",function(event){
 
-    //Se comprueba que esté seleccionado un profesor y y alguna asignatura.
+    //Se comprueba que esté seleccionado un profesor y alguna asignatura.
     if($("#profesor_asignatura_grupo_dialog #div_lista .elected").size()==0 || $("#profesor_asignatura_grupo_dialog #contenedor_asignaturas input:checkbox:checked").size()==0){
       texto="";
       if($("#profesor_asignatura_grupo_dialog #div_lista .elected").size()==0){
@@ -10559,7 +10604,8 @@ $(document).on("click","#registro_equipamientos td a",function(event){
 
     profesor=$("#profesor_asignatura_grupo_dialog .elected").text();
     id=$("#profesor_asignatura_grupo_dialog .elected").attr("id");
-    $("#profesor_asignatura_grupo_dialog #contenedor_asignaturas li div:not('.oculto') input:checkbox:checked").each (function(){ 
+    //Se asignan las asignaturas troncales y específicas(excepto las opcionales)
+    $("#profesor_asignatura_grupo_dialog #contenedor_asignaturas li[opcional!='1'] div:not('.oculto') input:checkbox:checked").each (function(){ 
       $(this).closest("#no_asignado").addClass('oculto');
       $(this).closest("#no_asignado").next().removeClass('oculto');
       $(this).closest("#no_asignado").next().find('input[type="text"]').attr("value",profesor);
@@ -10569,11 +10615,75 @@ $(document).on("click","#registro_equipamientos td a",function(event){
       $("#profesor_asignatura_grupo_dialog #div_lista .elected").removeClass('elected');
       $(this).prop("checked", false);
       if($(this).closest("#no_asignado").next().find('input[type="text"]').attr("value")==$(this).closest("#no_asignado").next().find('input[type="text"]').attr("valor")){
+        //Se le asigna un color y un title a los profesores ya asignados.
         $(this).closest("li").addClass("back_asignado");
+        $(this).closest("#no_asignado").next().find('input[type="text"]').attr("title","Profesor Asignado");
+
+        aula= $(this).closest("#no_asignado").next().find('select').attr("valor");
+        $(this).closest("#no_asignado").next().find('select').val(aula);
+        $(this).closest("#no_asignado").next().find('select').attr("title",$(this).closest("#no_asignado").next().find('select option:selected').text());
+
       }else{
+         //Se le asigna un color y un title a los profesores pendientes de asignar.
         $(this).closest("li").addClass("back_modificado");
+        $(this).closest("#no_asignado").next().find('input[type="text"]').attr("title","Profesor pendiente de Asignar");
+
+        aula=$(this).closest("fieldset").attr("aula");
+        $(this).closest("#no_asignado").next().find('select').val(aula);
+        $(this).closest("#no_asignado").next().find('select').attr("title",$(this).closest("#no_asignado").next().find('select option:selected').text());
       }
     });
+    var asignaturas = Array();
+    //Se asignan las asignaturas específicas opcionales.
+    $("#profesor_asignatura_grupo_dialog #contenedor_asignaturas li[opcional='1'] div:not('.oculto') input:checkbox:checked").each (function(){ 
+      //Se comprueba si el profesor está asignado a otra asignatura opcional.
+      if($("#profesor_asignatura_grupo_dialog #contenedor_asignaturas li[opcional='1'] div:not('.oculto') input[type='text']").size()>0 && $("#profesor_asignatura_grupo_dialog #contenedor_asignaturas li[opcional='1'] div:not('.oculto') input[id='"+id+"']").size()>0){
+        contenido=$(this).next("p").text();
+        arr=contenido.split("(");
+        asignatura=arr[0];
+
+        asignaturas.push(asignatura);
+      }
+      else{
+        div=$(this).closest("#no_asignado").next();
+        //Se deshabilita del listado de aulas disponibles las aulas ya asignadas.
+        $("#profesor_asignatura_grupo_dialog #contenedor_asignaturas li[opcional='1'] #asignado:not('.oculto') select").each (function(){ 
+          aula=$(this).val();
+          if(aula!=0){
+            div.find("select option[value='"+aula+"']").prop('disabled', true);
+          }
+        });
+
+        $(this).closest("#no_asignado").addClass('oculto');
+        $(this).closest("#no_asignado").next().removeClass('oculto');
+        $(this).closest("#no_asignado").next().find('input[type="text"]').attr("value",profesor);
+        $(this).closest("#no_asignado").next().find('input[type="text"]').attr("id",id);
+        $(this).closest("li").removeClass();
+      
+        $("#profesor_asignatura_grupo_dialog #div_lista .elected").removeClass('elected');
+        $(this).prop("checked", false);
+        if($(this).closest("#no_asignado").next().find('input[type="text"]').attr("value")==$(this).closest("#no_asignado").next().find('input[type="text"]').attr("valor")){
+          //Se le asigna un color y un title a los profesores ya asignados.
+          $(this).closest("li").addClass("back_asignado");
+          $(this).closest("#no_asignado").next().find('input[type="text"]').attr("title","Profesor Asignado");
+
+          $(this).closest("#no_asignado").next().find('select').val(0).change();
+
+          $(this).closest("#no_asignado").next().find('select').attr("title",$(this).closest("#no_asignado").next().find('select option:selected').text());
+
+        }else{
+
+          //Se le asigna un color y un title a los profesores pendientes de asignar.
+          $(this).closest("li").addClass("back_modificado");
+          $(this).closest("#no_asignado").next().find('input[type="text"]').attr("title","Profesor pendiente de Asignar");
+
+          $(this).closest("#no_asignado").next().find('select').val(0).change();
+     
+          $(this).closest("#no_asignado").next().find('select').attr("title",$(this).closest("#no_asignado").next().find('select option:selected').text());
+        }
+      }
+    });
+
     //Se comprueba si hay modificaciones para habilitar o deshabilitar los botones de "guardar" y "restablecer".
     if($("#profesor_asignatura_grupo_dialog #contenedor_asignaturas .back_modificado").size()>0 || $("#profesor_asignatura_grupo_dialog #contenedor_asignaturas .eliminado").size()>0){
       $("#profesor_asignatura_grupo_dialog #profesor_asignatura_grupo_submit").prop("disabled",false);
@@ -10591,6 +10701,33 @@ $(document).on("click","#registro_equipamientos td a",function(event){
     if($("#profesor_asignatura_grupo_dialog #contenedor_asignaturas li[tipo='Troncal'] #no_asignado:not(.oculto)").size()<2){
       $("#profesor_asignatura_grupo_dialog #all").addClass('oculto');
     }
+    //Se habilita los checkbox restante por si se habían deshabilitado con las asignaturas opcionales.
+    $("#profesor_asignatura_grupo_dialog #contenedor_asignaturas li input:checkbox").each (function(){ 
+      $(this).prop('disabled', false);
+      $(this).prop("checked",false).change();
+    });
+
+    //Se elimina la clase elected del profesor seleccionado.
+    $("#profesor_asignatura_grupo_dialog #div_lista .elected").removeClass('elected');
+
+    //Se informa la asignacion de la asignatura específica opcional no se ha realizado.
+    if(asignaturas.length){
+      texto="<table><p class='justificado'>La asignación siguiente no se ha realizado ya que el profesor tiene asignada una asignatura opcional en el grupo.<br></p><thead><tr><th>Profesor</th><th>Asignatura</th></tr></thead><tbody>"
+      for (var asignatura in asignaturas) { 
+        texto+="<tr><td>"+profesor+"</td><td>"+asignaturas[asignatura]+"</td></tr>";
+      }
+      texto+="</tbody><br></p></table>"
+  
+      error.play();
+      swal({
+        title: "Profesor Asignado",
+        html: texto,
+        type: "error",
+        width: "500px",
+        confirmButtonColor: color,
+        showCancelButton: false
+      });  
+    }
   });
 
   // Eliminar asignación del profesor.
@@ -10607,6 +10744,18 @@ $(document).on("click","#registro_equipamientos td a",function(event){
     else{
       $(this).closest("li").removeClass();
     }
+
+    //Se deshabilita el aula asignada a una asignatura opcional en el listado de las otras.
+    $("#profesor_asignatura_grupo_dialog #contenedor_asignaturas li[opcional='1'] #asignado:not('.oculto') select option").prop('disabled', false);
+    
+    $("#profesor_asignatura_grupo_dialog #contenedor_asignaturas li[opcional='1'] #asignado:not('.oculto') select").each (function(){
+      aula=$(this).val();
+      li=$(this).closest("li").attr("id");
+
+      $("#profesor_asignatura_grupo_dialog #contenedor_asignaturas li[opcional='1'][id!='"+li+"'] #asignado:not('.oculto') select").each (function(){
+        $(this).find("option[value='"+aula+"']").prop('disabled', true);
+      });
+    });
 
     //Se comprueba si hay modificaciones para habilitar o deshabilitar los botones de "guardar" y "restablecer".
     if($("#profesor_asignatura_grupo_dialog #contenedor_asignaturas .back_modificado").size()>0 || $("#profesor_asignatura_grupo_dialog #contenedor_asignaturas .eliminado").size()>0){
@@ -10643,9 +10792,10 @@ $(document).on("click","#registro_equipamientos td a",function(event){
     $("#profesor_asignatura_grupo_dialog #contenedor_asignaturas li[class*='back_modificado']").each(function(){
       id=$(this).attr("id"); //Id asignatura
       valor=$(this).find("input:text").attr("id"); //Id profesor
+      aula=$(this).find("select").val();//Id aula
         // Usamos un nuevo index como clave para que al recorrerlo en php no se ordene por el id asignatura
         // Se recorre en el mismo orden introducido con el index nuevo.
-        asignaciones[index++] = [id, valor];  
+        asignaciones[index++] = [id, valor, aula];  
     });
 
     // Se obtienen las asignaturas que han sido eliminadas y que estaban asignadas al curso.(Eliminar)
@@ -10695,17 +10845,12 @@ $(document).on("click","#registro_equipamientos td a",function(event){
       aviso.play();
       swal({
         title: "Actualización de Profesores en el Grupo",
-        text: "<p class='justificado'>Se va a actualizar profesores asignados al grupo y se eliminará el horario de la asignatura impartida por el profesor.</p><br>¿Estas seguro de continuar? No podrás deshacer este paso...",
+        html: "<p class='justificado'>Se van a actualizar profesores asignados al grupo y se eliminará el horario de la asignatura impartida por el profesor.</p><br>¿Estas seguro de continuar? No podrás deshacer este paso...",
         type: "warning",
-        html: true,
         showCancelButton: true,
         cancelButtonText: "Cancelar",
         confirmButtonColor: color,
-        confirmButtonText: "¡Adelante!",
-        closeOnConfirm: true },
-
-        function(){
-
+        confirmButtonText: "¡Adelante!"}).then(function () {
           $.ajax({
             type: 'POST',
             url: Routing.generate('asignar_grupo_profesores'),
@@ -10761,25 +10906,39 @@ $(document).on("click","#registro_equipamientos td a",function(event){
                 text+=" <span>"+var3+"  Asignaciones eliminadas<span><br>";
               }
 
-              //Se muestra si hay asignaciones que no se han podido realizar debido a que los profesores no tiene horas lectivas disponibles.
-              if(response.error!=""){
-                texto="<table><p class='justificado'>Las asignaciones siguientes no se han realizado ya que los profesores no tienen horas lectivas disponibles.<br></p><thead><tr><th>Profesor</th><th>Asignatura</th><th>Grupo</th></tr></thead><tbody>"
-                for (var key in response.error) { 
-                  texto+="<tr><td>"+response.error[key][0][0]+"</td><td>"+response.error[key][0][1]+"</td><td>"+response.error[key][0][2]+"</td></tr>"
+              //Se muestra aviso si hay asignaciones que no se han podido realizar debido a que los profesores no tiene horas lectivas disponibles.
+              //Se muestra aviso si hay asignaciones que contienen asignaturas específicas opcionales y el aula ya está asignada a otra opcional..
+              if(response.error!="" || response.error_opcional!=""){
+                texto="";
+                if(response.error!=""){
+                  texto+="<table><p class='justificado'>Las asignaciones siguientes no se han realizado ya que los profesores no tienen horas lectivas disponibles.<br></p><thead><tr><th>Profesor</th><th>Asignatura</th><th>Grupo</th></tr></thead><tbody>"
+                  for (var key in response.error) { 
+                    texto+="<tr><td>"+response.error[key][0][0]+"</td><td>"+response.error[key][0][1]+"</td><td>"+response.error[key][0][2]+"</td></tr>"
+                  }
+                  texto+="</tbody><br></p></table>"  
                 }
-                texto+="</tbody><br></p></table>"
+
+                if(response.error_opcional!=""){
+                  if(response.error!=""){
+                    texto+="<br>" ;
+                  }
+                  texto+="<table><br><p class='justificado'>Las asignaciones siguientes no se han realizado ya que otra asignatura opcional del grupo tiene asignada el mismo aula.<br></p><thead><tr><th>Profesor</th><th>Asignatura</th><th>Grupo</th></tr></thead><tbody>"
+                  for (var key in response.error_opcional) { 
+                    texto+="<tr><td>"+response.error_opcional[key][0][0]+"</td><td>"+response.error_opcional[key][0][1]+"</td><td>"+response.error_opcional[key][0][2]+"</td></tr>"
+                  }
+                  texto+="</tbody><br></p></table>"
+                }
           
                 error.play();
                 swal({
-                  title: "Asignaciones no realizadas ",
-                  text: texto,
+                  title: "Asignaciones no realizadas",
                   type: "error",
-                  html: true,
+                  width: "600px",
+                  target: "body",
+                  html: texto,
                   showCancelButton: false,
-                  confirmButtonColor: color,
-                  customClass: 'swal-wide',
-                  closeOnConfirm: true },
-                  function(){
+                  confirmButtonColor: color
+                  }).then(function () {
 
                     if(var1!=0 || var2!=0 || var3!=0){
                       exito.play();
@@ -10789,6 +10948,7 @@ $(document).on("click","#registro_equipamientos td a",function(event){
                         type: "success",
                         shadow: true,
                         hide: true,
+                        width: "335px",
                         animation: "fade",
                         animate_speed: 'fast',
                         delay: 4000,
@@ -10809,6 +10969,8 @@ $(document).on("click","#registro_equipamientos td a",function(event){
                       $("#asignar_profesor .lista_cursos button[id='"+id+"']").click();
                     });
                     $('#profesor_asignatura_grupo_dialog').dialog('close');
+                  }, function (dismiss) {
+
                   }
                 );
                 return false;
@@ -10822,6 +10984,7 @@ $(document).on("click","#registro_equipamientos td a",function(event){
                   type: "success",
                   shadow: true,
                   hide: true,
+                  width: "335px",
                   animation: "fade",
                   animate_speed: 'fast',
                   delay: 4000,
@@ -10845,6 +11008,8 @@ $(document).on("click","#registro_equipamientos td a",function(event){
               $('#profesor_asignatura_grupo_dialog').dialog('close');
             }
           })
+        }, function (dismiss) {
+
         }
       );
     }
@@ -10906,24 +11071,38 @@ $(document).on("click","#registro_equipamientos td a",function(event){
             text+=" <span>"+var3+"  Asignaciones eliminadas<span><br>";
           }
 
-          if(response.error!=""){
-            texto="<table><p class='justificado'>Las asignaciones siguientes no se han realizado ya que los profesores no tienen horas lectivas disponibles.<br></p><thead><tr><th>Profesor</th><th>Asignatura</th><th>Grupo</th></tr></thead><tbody>"
-            for (var key in response.error) { 
-              texto+="<tr><td>"+response.error[key][0][0]+"</td><td>"+response.error[key][0][1]+"</td><td>"+response.error[key][0][2]+"</td></tr>"
+          //Se muestra aviso si hay asignaciones que no se han podido realizar debido a que los profesores no tiene horas lectivas disponibles.
+          //Se muestra aviso si hay asignaciones que contienen asignaturas específicas opcionales y el aula ya está asignada a otra opcional..
+          if(response.error!="" || response.error_opcional!=""){
+            texto="";
+            if(response.error!=""){
+              texto+="<table><p class='justificado'>Las asignaciones siguientes no se han realizado ya que los profesores no tienen horas lectivas disponibles.<br></p><thead><tr><th>Profesor</th><th>Asignatura</th><th>Grupo</th></tr></thead><tbody>"
+              for (var key in response.error) { 
+                texto+="<tr><td>"+response.error[key][0][0]+"</td><td>"+response.error[key][0][1]+"</td><td>"+response.error[key][0][2]+"</td></tr>"
+              }
+              texto+="</tbody><br></p></table>"  
             }
-            texto+="</tbody><br></p></table>"
+
+            if(response.error_opcional!=""){
+              if(response.error!=""){
+                texto+="<br><br>" ;
+              }
+              texto+="<table><br><p class='justificado'>Las asignaciones siguientes no se han realizado ya que otra asignatura opcional del grupo tiene asignada el mismo aula.<br></p><thead><tr><th>Profesor</th><th>Asignatura</th><th>Grupo</th></tr></thead><tbody>"
+              for (var key in response.error_opcional) { 
+                texto+="<tr><td>"+response.error_opcional[key][0][0]+"</td><td>"+response.error_opcional[key][0][1]+"</td><td>"+response.error_opcional[key][0][2]+"</td></tr>"
+              }
+              texto+="</tbody><br></p></table>"
+            }
           
             error.play();
             swal({
               title: "Asignaciones no realizadas ",
-              text: texto,
+              html: texto,
               type: "error",
-              html: true,
               showCancelButton: false,
               confirmButtonColor: color,
-              customClass: 'swal-wide',
-              closeOnConfirm: true },
-              function(){
+              width: "600px"
+              }).then(function () {
 
                 if(var1!=0 || var2!=0 || var3!=0){
                   exito.play();
@@ -10933,6 +11112,7 @@ $(document).on("click","#registro_equipamientos td a",function(event){
                     type: "success",
                     shadow: true,
                     hide: true,
+                    width: "335px",
                     animation: "fade",
                     animate_speed: 'fast',
                     delay: 4000,
@@ -10953,6 +11133,8 @@ $(document).on("click","#registro_equipamientos td a",function(event){
                   $("#asignar_profesor .lista_cursos button[id='"+id+"']").click();
                 });
                 $('#profesor_asignatura_grupo_dialog').dialog('close');
+              }, function (dismiss) {
+
               }
             );
             return false;
@@ -10966,6 +11148,7 @@ $(document).on("click","#registro_equipamientos td a",function(event){
               type: "success",
               shadow: true,
               hide: true,
+              width: "335px",
               animation: "fade",
               animate_speed: 'fast',
               delay: 4000,
@@ -11028,16 +11211,13 @@ $(document).on("click","#registro_equipamientos td a",function(event){
     aviso.play();
     swal({
       title: "Eliminación de Asignación de Profesores",
-      text: "<p class='justificado'>Se van a eliminar las asignaciones de profesores de "+nombre_grupo+".</p><br>¿Estas seguro de continuar? No podrás deshacer este paso...",
+      html: "<p>Se van a eliminar las asignaciones de profesores de "+nombre_grupo+".</p><br>¿Estas seguro de continuar? No podrás deshacer este paso...",
       type: "warning",
-      html: true,
       showCancelButton: true,
       cancelButtonText: "Cancelar",
       confirmButtonColor: color,
-      confirmButtonText: "¡Adelante!",
-      closeOnConfirm: true },
-
-      function(){
+      confirmButtonText: "¡Adelante!"
+      }).then(function () {
 
         grupo=$("#asignar_profesor #eliminar_grupo").attr("grupo"); //Id del grupo.
         $.ajax({
@@ -11075,6 +11255,7 @@ $(document).on("click","#registro_equipamientos td a",function(event){
               type: "success",
               shadow: true,
               hide: true,
+              width: "335px",
               animation: "fade",
               animate_speed: 'fast',
               delay: 4000,
@@ -11095,6 +11276,8 @@ $(document).on("click","#registro_equipamientos td a",function(event){
             });
           }
         })
+      }, function (dismiss) {
+
       }
     );
   });
@@ -11135,16 +11318,13 @@ $(document).on("click","#registro_equipamientos td a",function(event){
     aviso.play();
     swal({
       title: "Eliminación de Asignación de Profesores",
-      text: "<p class='justificado'>Se van a eliminar las asignaciones de todos los profesores.</p><br>¿Estas seguro de continuar? No podrás deshacer este paso...",
+      html: "<p>Se van a eliminar las asignaciones de todos los profesores.</p><br>¿Estas seguro de continuar? No podrás deshacer este paso...",
       type: "warning",
-      html: true,
       showCancelButton: true,
       cancelButtonText: "Cancelar",
       confirmButtonColor: color,
-      confirmButtonText: "¡Adelante!",
-      closeOnConfirm: true },
-
-      function(){
+      confirmButtonText: "¡Adelante!"
+      }).then(function () {
 
         $.ajax({
           type: 'POST',
@@ -11180,6 +11360,7 @@ $(document).on("click","#registro_equipamientos td a",function(event){
               type: "success",
               shadow: true,
               hide: true,
+              width: "335px",
               animation: "fade",
               animate_speed: 'fast',
               delay: 4000,
@@ -11200,11 +11381,292 @@ $(document).on("click","#registro_equipamientos td a",function(event){
             });
           }
         })
+      }, function (dismiss) {
+
       }
     );
   });
 
+/////////////////////////////////
+//  Asignar horarios a grupos  //
+/////////////////////////////////
 
+  //Se muestra la información del horario al colocar el cursor sobre un módulo de clase.
+  $(document).on("mouseenter","#asignar_horario_grupos #contenedor_registro td", function(){
+    // Se evita que se muestre el mensaje predeterminado si pasamos de un enlace a otro.
+    $("#asignar_horario_grupos #contenedor_datos #sin_seleccionar").addClass("oculto");
+    
+    //Se comprueba que no es un aviso predeterminado.
+    if(!$(this).hasClass("dataTables_empty")){
+      if($(this).attr("profesor")){
+        profesor=$(this).attr("profesor");
+      }
+      else{
+        profesor="(Sin asignar)";
+      }
+      $("#asignar_horario_grupos #contenedor_datos #seleccionado #profesor").text(profesor);
+
+      if($(this).attr("asignatura")){
+        asignatura=$(this).attr("asignatura");
+      }
+      else{
+        asignatura="(Sin asignar)";
+      }
+      $("#asignar_horario_grupos #contenedor_datos #seleccionado #asignatura").text(asignatura);
+
+      if($(this).attr("aula")){
+        aula=$(this).attr("aula");
+      }
+      else{
+        aula="(Sin asignar)";
+      }
+      $("#asignar_horario_grupos #contenedor_datos #seleccionado #aula").text(aula);
+
+      $("#asignar_horario_grupos #contenedor_datos #seleccionado").removeClass("oculto");
+      $("#asignar_horario_grupos #contenedor_datos #sin_seleccionar").addClass("oculto");     
+    }
+    else{
+      $("#asignar_horario_grupos #contenedor_datos #seleccionado #profesor").text("");
+      $("#asignar_horario_grupos #contenedor_datos #seleccionado #asignatura").text("");
+      $("#asignar_horario_grupos #contenedor_datos #seleccionado #aula").text("");
+
+      $("#asignar_horario_grupos #contenedor_datos #seleccionado").addClass("oculto");
+      $("#asignar_horario_grupos #contenedor_datos #sin_seleccionar").removeClass("oculto");
+    }
+
+  });
+
+  // Se elimina la información mostrada del horario al quitar el puntero de un módulo de clase.
+  $(document).on("mouseleave","#asignar_horario_grupos  #contenedor_registro td", function () {
+    $("#asignar_horario_grupos #contenedor_datos #seleccionado #profesor").text("");
+    $("#asignar_horario_grupos #contenedor_datos #seleccionado #asignatura").text("");
+    $("#asignar_horario_grupos #contenedor_datos #seleccionado #aula").text("");
+
+    $("#asignar_horario_grupos #contenedor_datos #seleccionado").addClass("oculto");
+    $("#asignar_horario_grupos #contenedor_datos #sin_seleccionar").removeClass("oculto");
+  });
+
+  $(document).on('click',"#asignar_horario_grupos a[id$='_modal']",function(event){
+    event.preventDefault();
+    var id=$(this).closest("div").attr("grupo");
+
+    $('#asignar_horario_grupo_dialog').load(Routing.generate("asignar_horario_new", {id:id}), function(){
+    }).dialog('open'); 
+
+  });
+
+  //Se elimina el horario de un grupo.
+  $(document).on('click',"#asignar_horario_grupos #eliminar_grupo ",function(event){
+    event.preventDefault();
+
+    //Se avisa si no hay horario asignado al grupo.
+    if($("#asignar_horario_grupos #contenedor_registro:not(.oculto) tr .dataTables_empty").size()>0){
+      errorPNotify.pause();
+      errorPNotify.currentTime=0.0;
+      $(".ui-pnotify").remove();
+
+      errorPNotify.play();
+
+      new PNotify({
+        text:'No hay horario asignado al grupo.',
+        addclass: "custom",
+        type: "error",
+        shadow: true,
+        hide: true,
+        buttons: {
+          sticker: false,
+          labels:{close: "Cerrar"}
+        },
+        stack: right_Stack,
+        animate: {
+          animate: true,
+          in_class: "fadeInRight",
+          out_class: "fadeOutRight",
+        }
+      });
+      $("#asignar_horario_grupos #eliminar_grupo").prop("disabled",true);
+      return false;
+    }
+    nombre_grupo=$("#asignar_horario_grupos .lista_cursos .elected").text();
+    aviso.play();
+    swal({
+      title: "Eliminación de Horarios de Grupos",
+      html: "<p>Se va a eliminar el horario de <span class='negrita'>"+nombre_grupo+"</span>.</p><br>¿Estas seguro de continuar? No podrás deshacer este paso...",
+      type: "warning",
+      showCancelButton: true,
+      cancelButtonText: "Cancelar",
+      confirmButtonColor: color,
+      confirmButtonText: "¡Adelante!"
+      }).then(function () {
+
+        grupo=$("#asignar_horario_grupos #eliminar_grupo").attr("grupo"); //Id del grupo.
+        $.ajax({
+          type: 'POST',
+          url: Routing.generate('eliminar_horario_grupo'),
+          data: {grupo:grupo},
+          dataType: 'json',
+          success: function(response) {
+            if(response.data==null){
+              errorPNotify.play();
+
+              new PNotify({
+                text:'No hay horario asignado al grupo.',
+                addclass: "custom",
+                type: "error",
+                shadow: true,
+                hide: true,
+                buttons: {
+                  sticker: false,
+                  labels:{close: "Cerrar"}
+                },
+                stack: right_Stack,
+                animate: {
+                  animate: true,
+                  in_class: "fadeInRight",
+                  out_class: "fadeOutRight",
+                }
+              });
+              return false;
+            }
+            exito.play();
+            new PNotify({
+              text:"Se ha eliminado el horario asignado al grupo.",
+              addclass: "custom",
+              type: "success",
+              shadow: true,
+              hide: true,
+              animation: "fade",
+              width: "335px",
+              animate_speed: 'fast',
+              delay: 4000,
+              buttons: {
+                sticker: false,
+                labels:{close: "Cerrar"}
+              },
+              stack: right_Stack,
+              animate: {
+                animate: true,
+                in_class: "fadeInRight",
+                out_class: "fadeOutRight",
+              }
+            });
+            id=$("#asignar_horario_grupos .lista_cursos .elected").attr("id");
+            $("#tabs>div[style='display: block']").load(Routing.generate("asignar_horario_show"), function(){
+              $("#asignar_horario_grupos .lista_cursos button[id='"+id+"']").click();
+            });
+          }
+        })
+      }, function (dismiss) {
+
+      }
+    );
+  });
+
+  //Se elimina los horarios de todos los grupos.
+  $(document).on('click',"#asignar_horario_grupos #eliminar_todo ",function(event){
+    event.preventDefault();
+
+    //Se avisa si no hay horarios en ningún grupo.
+    if($("#asignar_horario_grupos #contenedor_registro").size()==$("#asignar_horario_grupos #contenedor_registro tr .dataTables_empty").size()){
+      alert();
+      errorPNotify.pause();
+      errorPNotify.currentTime=0.0;
+      $(".ui-pnotify").remove();
+
+      errorPNotify.play();
+
+      new PNotify({
+        text:'No hay horarios asignados a ningún grupo.',
+        addclass: "custom",
+        type: "error",
+        shadow: true,
+        hide: true,
+        buttons: {
+          sticker: false,
+          labels:{close: "Cerrar"}
+        },
+        stack: right_Stack,
+        animate: {
+          animate: true,
+          in_class: "fadeInRight",
+          out_class: "fadeOutRight",
+        }
+      });
+      $("#asignar_horario_grupos #eliminar_todo").prop("disabled",true);
+      return false;
+    }
+    nombre_grupo=$("#asignar_horario_grupos .lista_cursos .elected").text();
+    aviso.play();
+    swal({
+      title: "Eliminación de Horarios de Grupos",
+      html: "<p>Se van a eliminar los horarios de todos los grupos.</p><br>¿Estas seguro de continuar? No podrás deshacer este paso...",
+      type: "warning",
+      showCancelButton: true,
+      cancelButtonText: "Cancelar",
+      confirmButtonColor: color,
+      confirmButtonText: "¡Adelante!"
+      }).then(function () {
+
+        $.ajax({
+          type: 'POST',
+          url: Routing.generate('eliminar_todos_horarios_grupos'),
+          dataType: 'json',
+          success: function(response) {
+            if(response.data==null){
+              errorPNotify.play();
+
+              new PNotify({
+                text:'No hay horarios asignados a ningún grupo.',
+                addclass: "custom",
+                type: "error",
+                shadow: true,
+                hide: true,
+                buttons: {
+                  sticker: false,
+                  labels:{close: "Cerrar"}
+                },
+                stack: right_Stack,
+                animate: {
+                  animate: true,
+                  in_class: "fadeInRight",
+                  out_class: "fadeOutRight",
+                }
+              });
+              return false;
+            }
+            exito.play();
+            new PNotify({
+              text:"Se han eliminado los horarios de todos los grupos.",
+              addclass: "custom",
+              type: "success",
+              shadow: true,
+              hide: true,
+              width: "335px",
+              animation: "fade",
+              animate_speed: 'fast',
+              delay: 4000,
+              buttons: {
+                sticker: false,
+                labels:{close: "Cerrar"}
+              },
+              stack: right_Stack,
+              animate: {
+                animate: true,
+                in_class: "fadeInRight",
+                out_class: "fadeOutRight",
+              }
+            });
+            id=$("#asignar_horario_grupos .lista_cursos .elected").attr("id");
+            $("#tabs>div[style='display: block']").load(Routing.generate("asignar_horario_show"), function(){
+              $("#asignar_horario_grupos .lista_cursos button[id='"+id+"']").click();
+            });
+          }
+        })
+      }, function (dismiss) {
+
+      }
+    );
+  });
 
 
 

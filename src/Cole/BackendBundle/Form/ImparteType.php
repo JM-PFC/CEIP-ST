@@ -18,7 +18,7 @@ class ImparteType extends AbstractType
             ->add('horario')
             ->add('libro')
             ->add('asignatura')
-            ->add('curso')
+            ->add('aula')
             ->add('grupo')
             ->add('profesor')
         ;
