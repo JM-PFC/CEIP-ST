@@ -14,6 +14,67 @@
         if($("#asignatura_tipo").val()=="Troncal"){
             $("#asignatura_edit #asignatura_opcional").closest("div").addClass('oculto');
         }
+
+        $("#asignaturas_dialog #asignatura_color").closest("div").addClass('oculto');
+
+
+
+        $("#asignaturas_dialog #color #contenedor").css("background",$("#asignaturas_dialog #asignatura_color").val());
+        $("#asignaturas_dialog #color #contenedor").attr("color", $("#asignaturas_dialog #asignatura_color").val());
+        $("#asignaturas_dialog #contenedor>span").addClass('oculto');
+
+        //Se cambia el color del div al color seleccionado y se asigna el valor al input.
+        $("#asignaturas_dialog #color_option").click(function(event) {
+            $("#asignaturas_dialog #color #contenedor").css("background", $(this).attr("color"));
+            $("#asignaturas_dialog #color #contenedor").attr("color", $(this).attr("color"));
+            $("#asignaturas_dialog #tabla").addClass('oculto');
+            $("#asignaturas_dialog #contenedor>span").addClass('oculto');
+
+            $("#asignaturas_dialog #asignatura_color").removeClass('invalid');
+            $("#asignaturas_dialog #color").removeClass('invalid');
+            $("#asignaturas_dialog #div_error").addClass('oculto');
+
+            $("#asignaturas_dialog #asignatura_color").val($(this).attr("color")).keyup().blur();
+
+            //Se muestra el aviso de error si no tiene color seleccionado.
+            if($("#asignaturas_dialog #asignatura_color").hasClass('modified')){
+                $("#asignaturas_dialog #color").addClass('modified');
+            }
+            else{
+                $("#asignaturas_dialog #color").removeClass('modified');
+            }
+        });
+
+        //Se muestra/oculta la tabla con las opciones decolores. 
+
+        $("#asignaturas_dialog #tabla").click(function(event) {
+            event.stopPropagation();
+        });
+
+        $("#asignaturas_dialog #flecha").click(function(event) {
+            if($("#asignaturas_dialog #tabla").hasClass('oculto')){
+                $("#asignaturas_dialog #tabla").removeClass('oculto');
+            }
+            else{
+                $("#asignaturas_dialog #tabla").addClass('oculto');
+            }
+            event.stopPropagation();
+        });
+
+        $(document).click(function(event) {
+            //Se comprueba  que se hace click en el botón izquierdo del ratón (which->1(izquierdo),2(central) y 3(derecho))
+            if(event.which == 1){
+                //Si no tiene color seleccionado y se cierra la tabla de opciones se muestra aviso de error.
+                if(!$("#asignaturas_dialog #tabla").hasClass('oculto') && !$("#asignaturas_dialog #contenedor").attr("color")){
+                    $("#asignaturas_dialog #color").addClass('invalid');
+                    $("#asignaturas_dialog #div_error").removeClass('oculto');
+                }
+
+                $("#asignaturas_dialog #tabla").addClass('oculto');
+            }
+        });
+
+
     </script>
 {% endblock %}
 
@@ -27,16 +88,38 @@
                         <div class="addregistro">
                         	{{ form_row(edit_form.tipo) }}
                             {{ form_row(edit_form.opcional) }}
+                                                        <div>
+                                <label id="label_color">Color<span>(Para edición de horarios)</span></label>
+                                <div id="color">
+                                    <div id="contenedor"><span>Seleccione</span></div>
+                                    <div id="flecha"></div>
+                                </div>
+                                <div id="tabla" class="oculto">
+                                    {% set colores = ["#FA5858","#FA8258", "#f4ba70" , "#cda16d","#76bf67", "#a9cf55","#58FA82","#7fca9f","#4d96ae","#4a789c","#8777ff", "#BE81F7","#F781BE"] %}
+
+                                    {% for color in colores %}
+                                    <div id="color_option" style="background-color:{{ color }}; color:{{ color }};" color="{{ color }}">&#10004;
+                                    </div>
+
+                                    {% endfor %}
+
+                                </div>
+                                <div id="div_error" class="oculto">
+                                    <span class="error">Dato Requerido</span>
+                                </div>
+                                
+                            </div>
                         	{{ form_row(edit_form.nombre) }}
                         	{{ form_row(edit_form.abreviatura) }}
                     	</div>
 				</fieldset> 
 			</div>
-    		{{ form_rest(edit_form) }}
-    		{{form_end(edit_form)}}
-    		<div class="double_button">
-    			{{ form(delete_form) }}
-    		</div>
+            {{ form_rest(edit_form) }}
+
+            {{form_end(edit_form)}}
+            <div class="double_button">
+                {{ form(delete_form) }}
+            </div>
 		</div>
 	{{form_end(edit_form)}}
 {% endblock %}

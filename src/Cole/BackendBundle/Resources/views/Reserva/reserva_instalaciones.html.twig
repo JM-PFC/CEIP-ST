@@ -175,12 +175,12 @@
           </div>
 
           <div class="four_column_no_form">
-            <span>3. Seleccione hora para la reserva:</span>
+            <span>3. Seleccione módulos para la reserva:</span>
             <div class="parent_no_form">
             <div class="child">
               <div class="contenedor_reserva" id="contenedor_reserva_horas">
               {% for clase in clases %}
-                <button type="radio" disabled="disabled" clase="{{clase.horaClase}}" min="{{  clase.inicio|date('H:i')}}" ><span>{{ clase.horaClase ~ " Hora " }}</span>{{  "(" ~ clase.inicio|date('H:i') ~ " - " ~ clase.fin|date('H:i') ~ ")" }}</button>
+                <button type="radio" disabled="disabled" clase="{{clase.horaClase}}" min="{{  clase.inicio|date('H:i')}}" ><span>{{ " Módulo " ~ clase.horaClase }}</span>{{  "(" ~ clase.inicio|date('H:i') ~ " - " ~ clase.fin|date('H:i') ~ ")" }}</button>
               {% endfor %}
               </div>
             </div>

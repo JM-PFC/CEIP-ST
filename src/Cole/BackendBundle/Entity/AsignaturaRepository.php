@@ -19,4 +19,25 @@ class AsignaturaRepository extends EntityRepository
 		->setMaxResults(1)
 		->getOneOrNullResult();
 	}
+
+	public function findByNombreEdit($nombre,$id)
+	{
+	return $this->getEntityManager()->createQuery(
+		'SELECT	a FROM BackendBundle:Asignatura a where a.nombre=:nombre and a.id NOT IN (:id)')
+		->setParameters(array(
+			'id' => $id,
+			'nombre' => $nombre))
+		->setMaxResults(1)
+		->getOneOrNullResult();
+	}
+
+	public function findByOpcionalEdit($id)
+	{
+	return $this->getEntityManager()->createQuery(
+		'SELECT	a FROM BackendBundle:Asignatura a where a.opcional=:opcional and a.id NOT IN (:id)')
+		->setParameters(array(
+			'id' => $id,
+			'opcional' => 1))
+		->getResult();
+	}
 }

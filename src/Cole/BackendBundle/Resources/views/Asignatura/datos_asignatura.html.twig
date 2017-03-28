@@ -1,0 +1,153 @@
+
+{# Se muestra las asignaturas "no opcionales" #}
+{% if entity != null %}
+  {% if entity != "" %}
+    <div id="icono_asig">
+      {% set array = entity.asignatura.asignatura.abreviatura|split(' ') %}
+  
+      {% if array|length == 1 %}
+        <span style="background:{{entity.asignatura.asignatura.color}};"> {{ entity.asignatura.asignatura.abreviatura|slice(0, 3)|lower|capitalize }} </span>
+      {% else %}
+        <span style="background:{{entity.asignatura.asignatura.color}};"> {{ array[0]|slice(0, 1)|lower|capitalize ~ "." ~ array[1]|slice(0, 1)|lower|capitalize ~ "."}} </span>
+      {% endif %}
+    </div>
+    <div>
+      <p><img src="{{ asset('bundles/backend/images/menu/teacher_16.png')}}">{{entity.profesor.nombre ~ " " ~ entity.profesor.apellido1 ~ " " ~ entity.profesor.apellido2 }}</p>
+      <p><img src="{{ asset('bundles/backend/images/menu/subject_16.png')}}">{{entity.asignatura.asignatura.nombre}}</p>
+      {% if entity.aula %}
+        <p><img src="{{ asset('bundles/backend/images/menu/room_16.png')}}">{{entity.aula.nombre}}</p>
+      {% else %}
+        <p><img src="{{ asset('bundles/backend/images/menu/room_16.png')}}">Sin Aula</p>
+      {% endif %}
+    </div>
+  {% endif %}
+{# Se muestra las asignaturas "opcionales" #}
+{% else %}
+
+  {# Se muestra 1 asignatura opcional #}
+  {% if imparte|length == 1 %}
+
+    {% for entity in imparte %}
+    <div id="icono_asig">
+      {% set array = entity.asignatura.asignatura.abreviatura|split(' ') %}
+  
+      {% if array|length == 1 %}
+        <span style="background:{{entity.asignatura.asignatura.color}};"> {{ entity.asignatura.asignatura.abreviatura|slice(0, 3)|lower|capitalize }} </span>
+      {% else %}
+        <span style="background:{{entity.asignatura.asignatura.color}};"> {{ array[0]|slice(0, 1)|lower|capitalize ~ "." ~ array[1]|slice(0, 1)|lower|capitalize ~ "."}} </span>
+      {% endif %}
+    </div>
+    <div>
+      <p><img src="{{ asset('bundles/backend/images/menu/teacher_16.png')}}">{{entity.profesor.nombre ~ " " ~ entity.profesor.apellido1 ~ " " ~ entity.profesor.apellido2 }}</p>
+      <p><img src="{{ asset('bundles/backend/images/menu/subject_16.png')}}">{{entity.asignatura.asignatura.nombre}}</p>
+      {% if entity.aula %}
+        <p><img src="{{ asset('bundles/backend/images/menu/room_16.png')}}">{{entity.aula.nombre}}</p>
+      {% else %}
+        <p><img src="{{ asset('bundles/backend/images/menu/room_16.png')}}">Sin Aula</p>
+      {% endif %}
+    </div>
+    {% endfor %}
+
+  {# Se muestra 2 asignaturas opcionales #}
+  {% elseif imparte|length == 2 %}
+
+    {% for entity in imparte %}
+      {% set array = entity.asignatura.asignatura.abreviatura|split(' ') %}
+      {# Icono de la asignatura #}
+      {% if array|length == 1 %}
+        <span id="icono_mult_asig" style="background:{{entity.asignatura.asignatura.color}};"> {{ entity.asignatura.asignatura.abreviatura|slice(0, 3)|lower|capitalize }} </span>
+      {% else %}
+        <span id="icono_mult_asig" style="background:{{entity.asignatura.asignatura.color}};"> {{ array[0]|slice(0, 1)|lower|capitalize ~ "." ~ array[1]|slice(0, 1)|lower|capitalize ~ "."}} </span>
+      {% endif %}
+
+      <div class="multiple">
+
+      {# Para nombres de profesor con longitud mayor a 5 se muestra las siglas del nombre #}
+      {% if entity.profesor.nombre|length <= 5  %} 
+        <p><img src="{{ asset('bundles/backend/images/menu/teacher_16.png')}}">{{entity.profesor.nombre ~ " " ~ entity.profesor.apellido1|slice(0, 1)|lower|capitalize ~ "." ~ " " ~ entity.profesor.apellido2|slice(0, 1)|lower|capitalize ~ "." }}</p>
+      {% else %}
+        {% set name = entity.profesor.nombre|split(' ') %}
+          {# Nombre siempre - Se obtiene las siglas del nombre y apellidos #}
+          {% if name|length == 1 %}
+            <p><img src="{{ asset('bundles/backend/images/menu/teacher_16.png')}}">{{name|first|slice(0, 1)|lower|capitalize ~ "." ~ " " ~ entity.profesor.apellido1|slice(0, 1)|lower|capitalize ~ "." ~ " " ~ entity.profesor.apellido2|slice(0, 1)|lower|capitalize ~ "." }}</p>
+          {# Nombre compuesto - Se las siglas del primer y último elemento del nombre compuesto y apellidos #}
+          {% else %}
+            <p><img src="{{ asset('bundles/backend/images/menu/teacher_16.png')}}">{{name|first|slice(0, 1)|lower|capitalize ~ "." ~ " " ~ name|last|slice(0, 1)|lower|capitalize ~ "." ~ " " ~ entity.profesor.apellido1|slice(0, 1)|lower|capitalize ~ "." ~ " " ~ entity.profesor.apellido2|slice(0, 1)|lower|capitalize ~ "." }}</p>
+          {% endif %}
+      {% endif %}
+
+      {# Para abreviaturas de asignaturas de longitud mayor a 11 se muestra las siglas del nombre #}
+      {% if entity.asignatura.asignatura.abreviatura|length <= 11  %} 
+        <p><img src="{{ asset('bundles/backend/images/menu/subject_16.png')}}">{{entity.asignatura.asignatura.abreviatura}}</p>
+      {% else %}
+        {% set asig = entity.asignatura.asignatura.abreviatura|split(' ') %}
+          {# Nombre simple #}
+          {% if asig|length == 1 %}
+            <p><img src="{{ asset('bundles/backend/images/menu/subject_16.png')}}">{{asig|first|slice(0, 3)|lower|capitalize ~ "."}}</p>
+          {# Nombre compuesto #}
+          {% else %}
+            <p><img src="{{ asset('bundles/backend/images/menu/teacher_16.png')}}">{{asig[0]|slice(0, 3)|lower|capitalize ~ "." ~ " " ~ asig[1]|slice(0, 3)|lower|capitalize ~ "."}}</p>
+          {% endif %}
+      {% endif %}
+
+      {% if entity.aula %}
+        <p><img src="{{ asset('bundles/backend/images/menu/room_16.png')}}">{{entity.aula.nombre}}</p>
+      {% else %}
+        <p><img src="{{ asset('bundles/backend/images/menu/room_16.png')}}"> </p>
+      {% endif %}
+      </div>
+    {% endfor %}
+
+  {# Se muestra 3 asignaturas opcionales #}
+  {% else %}
+
+    {% for entity in imparte %}
+      {% set array = entity.asignatura.asignatura.abreviatura|split(' ') %}
+      <div class="multiple">
+
+      {# Icono de la asignatura #}
+      {% if array|length == 1 %}
+        <p id="icono_mult_asig_p" style="background:{{entity.asignatura.asignatura.color}};"> {{ entity.asignatura.asignatura.abreviatura|slice(0, 3)|lower|capitalize }} </p>
+      {% else %}
+        <p id="icono_mult_asig_p" style="background:{{entity.asignatura.asignatura.color}};"> {{ array[0]|slice(0, 1)|lower|capitalize ~ "." ~ array[1]|slice(0, 1)|lower|capitalize ~ "."}} </p>
+      {% endif %}
+
+      {# Para nombres de profesor con longitud mayor a 5 se muestra las siglas del nombre #}
+      {% if entity.profesor.nombre|length <= 5  %} 
+        <p><img src="{{ asset('bundles/backend/images/menu/teacher_16.png')}}">{{entity.profesor.nombre ~ " " ~ entity.profesor.apellido1|slice(0, 1)|lower|capitalize ~ "." ~ " " ~ entity.profesor.apellido2|slice(0, 1)|lower|capitalize ~ "." }}</p>
+      {% else %}
+        {% set name = entity.profesor.nombre|split(' ') %}
+          {# Nombre siempre - Se obtiene las siglas del nombre y apellidos #}
+          {% if name|length == 1 %}
+            <p><img src="{{ asset('bundles/backend/images/menu/teacher_16.png')}}">{{name|first|slice(0, 1)|lower|capitalize ~ "." ~ " " ~ entity.profesor.apellido1|slice(0, 1)|lower|capitalize ~ "." ~ " " ~ entity.profesor.apellido2|slice(0, 1)|lower|capitalize ~ "." }}</p>
+          {# Nombre compuesto - Se las siglas del primer y último elemento del nombre compuesto y apellidos #}
+          {% else %}
+            <p><img src="{{ asset('bundles/backend/images/menu/teacher_16.png')}}">{{name|first|slice(0, 1)|lower|capitalize ~ "." ~ " " ~ name|last|slice(0, 1)|lower|capitalize ~ "." ~ " " ~ entity.profesor.apellido1|slice(0, 1)|lower|capitalize ~ "." ~ " " ~ entity.profesor.apellido2|slice(0, 1)|lower|capitalize ~ "." }}</p>
+          {% endif %}
+      {% endif %}
+
+      {# Para abreviaturas de asignaturas de longitud mayor a 11 se muestra las siglas del nombre #}
+      {% if entity.asignatura.asignatura.abreviatura|length <= 11  %} 
+        <p><img src="{{ asset('bundles/backend/images/menu/subject_16.png')}}">{{entity.asignatura.asignatura.abreviatura}}</p>
+      {% else %}
+        {% set asig = entity.asignatura.asignatura.abreviatura|split(' ') %}
+          {# Nombre simple #}
+          {% if asig|length == 1 %}
+            <p><img src="{{ asset('bundles/backend/images/menu/subject_16.png')}}">{{asig|first|slice(0, 3)|lower|capitalize ~ "."}}</p>
+          {# Nombre compuesto #}
+          {% else %}
+            <p><img src="{{ asset('bundles/backend/images/menu/subject_16.png')}}">{{asig[0]|slice(0, 3)|lower|capitalize ~ "." ~ " " ~ asig[1]|slice(0, 1)|lower|capitalize ~ "."}}</p>
+          {% endif %}
+      {% endif %}
+
+      {% if entity.aula %}
+        <p><img src="{{ asset('bundles/backend/images/menu/room_16.png')}}">{{entity.aula.nombre}}</p>
+      {% else %}
+        <p><img src="{{ asset('bundles/backend/images/menu/room_16.png')}}"> </p>
+      {% endif %}
+      </div>
+    {% endfor %}
+  
+  {% endif %}
+
+{% endif %}

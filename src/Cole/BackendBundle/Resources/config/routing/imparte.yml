@@ -70,3 +70,9 @@ comprobar_asignaciones_profesores:
     defaults: { _controller: "BackendBundle:Imparte:ComprobarAsignacionesProfesores" }
     options:
         expose: true
+
+obtener_modulos_ocupados:    
+    path:     /obtener_modulos_ocupados
+    defaults: { _controller: "BackendBundle:Imparte:ObtenerModulosOcupados" }
+    options:
+        expose: true

@@ -123,15 +123,15 @@
         if($("#asignaturas_cursos #contenedor_registro tbody tr:not(.no_cursor)").size()==0){
             $("#asignaturas_cursos #eliminar_todo").prop("disabled",true);
         }
-
-        //Se oculta la cabecera de la tabla si no hay registros.
-        if($("#asignaturas_cursos #contenedor_registro:not(.oculto) tr .dataTables_empty").size()==0){
-            $("#asignaturas_cursos #lista_asignaturas thead").removeClass('oculto');
-        }
-        else{
-            $("#asignaturas_cursos #lista_asignaturas thead").addClass('oculto');  
-        }
     }, 20);
+
+    //Se oculta la cabecera de la tabla si no hay registros.
+    if($("#asignaturas_cursos #contenedor_registro:not(.oculto) tr .dataTables_empty").size()==0){
+        $("#asignaturas_cursos #lista_asignaturas thead").removeClass('oculto');
+    }
+    else{
+        $("#asignaturas_cursos #lista_asignaturas thead").addClass('oculto');  
+    }
   
     //Se añade cabecera a la tabla para diferencias los tipos de asignaturas.
     $("#asignaturas_cursos #contenedor_registro").each(function(){  

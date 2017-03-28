@@ -63,7 +63,7 @@ class ReservaController extends Controller
                 $error[]="- Fecha de la reserva";
             }
             if(!$horas){
-                $error[]="- Horas de reserva";
+                $error[]="- Módulos de reserva";
             }
             return new JsonResponse(array(
                     'error' =>  $error), 200); 

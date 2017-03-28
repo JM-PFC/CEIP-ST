@@ -18,7 +18,7 @@
        {
         bgiframe: true,
         autoOpen: false,
-        height: 570,
+        height: 600,
         width: 1000,
         modal: true,
         resizable: false,
@@ -30,38 +30,9 @@
     //Se activa el primer curso por defecto.
     $("#asignar_horario_grupos #contenedor_registro[idcurso='1']").removeClass('oculto');
     $("#asignar_horario_grupos button[id='1']").addClass('elected');
-    //Efecto del botón pulsado en la lista.
-    $(document).on('click',"#asignar_horario_grupos .contenido_lista button",function(event){
-        event.preventDefault();
-        id=$(this).attr("id");
-        $("#asignar_horario_grupos #contenedor_registro").addClass('oculto');
-        $("#asignar_horario_grupos button").removeClass('elected');
-        $(this).addClass('elected');
-        $("#asignar_horario_grupos #contenedor_registro[idcurso='"+id+"']").removeClass('oculto');
 
-        //Se asigna el nombre y el id del grupo al botón de eliminar horarios del grupo.
-        $("#asignar_horario_grupos #eliminar_grupo span").text($("#asignar_horario_grupos .lista_cursos .elected").text());
-        $("#asignar_horario_grupos #eliminar_grupo").attr("grupo",$("#asignar_horario_grupos #contenedor_registro:not(.oculto) #cabecera_lista").attr("grupo"));
-        
-        //Se muestra o se oculta el botón de Eliminar horario del grupo.
-        if($("#asignar_horario_grupos #contenedor_registro:not(.oculto) tr .dataTables_empty").size()>0){
-            $("#asignar_horario_grupos #eliminar_grupo").prop("disabled",true);
-        }
-        else{
-            $("#asignar_horario_grupos #eliminar_grupo").prop("disabled",false);
-        }
-        
-        //Se muestra o se oculta la cabecera de la tabla y la información del horario seleccionada.
-        if($("#asignar_horario_grupos #contenedor_registro:not(.oculto) tr .dataTables_empty").size()==0){
-            $("#asignar_horario_grupos #contenedor_datos").removeClass('oculto');
-            $("#asignar_horario_grupos #lista_asignaturas thead").removeClass('oculto');
-        }
-        else{
-            $("#asignar_horario_grupos #contenedor_datos").addClass('oculto');
-            $("#asignar_horario_grupos #lista_asignaturas thead").addClass('oculto');  
-        }
-    });
-
+    /*Comprobaciones de existencia de datos */
+    
     //Comprobacón de existencia de cursos.
     if($("#asignar_horario_grupos .contenido_lista button").size()==0){
 
@@ -192,18 +163,13 @@
         else{
             $("#asignar_horario_grupos #eliminar_todo").prop("disabled",true);
         }
-
-        //Se oculta la cabecera de la tabla y la información del horario si no tiene horario.
-        if($("#asignar_horario_grupos #contenedor_registro tbody tr td:not(.dataTables_empty)").size()==0){
-            $("#asignar_horario_grupos #contenedor_datos").addClass('oculto');
-            $("#asignar_horario_grupos #lista_asignaturas thead").addClass('oculto');
-        }
     }, 20);
 
-
-
-
-
+    //Se oculta la cabecera de la tabla y la información del horario si no tiene horario.
+    if($("#asignar_horario_grupos #contenedor_registro tbody tr td:not(.dataTables_empty)").size()==0){
+        $("#asignar_horario_grupos #contenedor_datos").addClass('oculto');
+        $("#asignar_horario_grupos #lista_asignaturas thead").addClass('oculto');
+    }
     </script>
 {% endblock %}
 
@@ -250,7 +216,7 @@
                 <table class="records_list">
                     <thead>
                     <tr>
-                        <th></th>
+                        <th>Módulos</th>
                         <th>Lunes</th>
                         <th>Martes</th>
                         <th>Miércoles</th>
@@ -270,9 +236,11 @@
                     </div>
                     <div id="seleccionado" class="oculto">
 
-                        <p><span class="negrita">Profesor: </span><span id="profesor" class="datos"></span></p>
+                        <p><img src="{{ asset('bundles/backend/images/menu/teacher_16.png')}}"><span class="negrita">Profesor: </span><span id="profesor" class="datos"></span></p>
                         <p>
+                            <img src="{{ asset('bundles/backend/images/menu/subject_16.png')}}">
                             <span class="negrita">Asignatura: </span><span id="asignatura" class="datos"></span>
+                            <img src="{{ asset('bundles/backend/images/menu/room_16.png')}}">
                             <span class="negrita">Aula: </span><span id="aula" class="datos"></span>
                         </p>
                     </div>

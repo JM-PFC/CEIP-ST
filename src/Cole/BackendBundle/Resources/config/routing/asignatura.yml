@@ -72,3 +72,9 @@ eliminar_todas_asignaciones_asignaturas:
     defaults: { _controller: "BackendBundle:Asignatura:EliminarTodasAsignacionesAsignaturas" }
     options:
         expose: true
+
+datos_asignatura:
+    path:     /datos_asignatura/{id}/{id_grupo}
+    defaults: { _controller: "BackendBundle:Asignatura:DatosAsignatura" }
+    options:
+        expose: true

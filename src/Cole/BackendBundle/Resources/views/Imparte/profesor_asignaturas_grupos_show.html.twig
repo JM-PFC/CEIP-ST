@@ -140,6 +140,7 @@
         if($("#asignar_profesor #contenedor_registro tr:not(.cabecera_tipo) td[class='']").size()==0){
             $("#asignar_profesor #eliminar_todo").prop("disabled",true);
         }
+    }, 20);
 
         //Se oculta la cabecera de la tabla si no hay registros.
         if($("#asignar_profesor #contenedor_registro:not(.oculto) tr .dataTables_empty").size()==0){
@@ -148,7 +149,6 @@
         else{
             $("#asignar_profesor #lista_asignaturas thead").addClass('oculto');  
         }
-    }, 20);
 
   //Se añade cabecera a la tabla para diferencias los tipos de asignaturas.
   $("#asignar_profesor #contenedor_registro").each(function(){  

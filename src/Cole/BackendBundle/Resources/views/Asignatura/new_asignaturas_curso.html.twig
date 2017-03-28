@@ -57,112 +57,6 @@
   }
 
 
-  //Se asigna una lista al curso.
-  $(document).on('click',"#asignatura_curso_dialog #lista_troncal button",function(event){
-    event.preventDefault();
-    id=$(this).attr("id");
-    tipo=$(this).attr("tipo");
-
-    $(this).addClass('elected');
-    if($("#asignatura_curso_dialog #contenedor_asignaturas li[id='"+id+"']").size()==0){
-      if($(this).hasClass('asignada')){
-        $('<li class="back_modificado" id="'+id+'"tipo="'+tipo+'" estado="asignada"><p>'+$(this).attr("title")+'</p></input><input placeholder="Libro de la asignatura" valor="'+$(this).attr("libro")+'" style="text-transform: capitalize;" type="text"><input type="number" min="1" max="9" valor="'+$(this).attr("valor")+'"></input><img src="/Symfony/web/bundles/backend/images/menu/eliminar.png"></li>').insertBefore($("#asignatura_curso_dialog #cabecera_especifica"));
-      }else{
-        $('<li class="back_modificado" id="'+id+'"tipo="'+tipo+'" estado="nueva"><p>'+$(this).attr("title")+'</p></input><input placeholder="Libro de la asignatura" style="text-transform: capitalize;" type="text"><input type="number" min="1" max="9"></input><img src="/Symfony/web/bundles/backend/images/menu/eliminar.png"></li>').insertBefore($("#asignatura_curso_dialog #cabecera_especifica"));
-      }
-
-    }
-
-    //Se deshabilita el botón de seleccionar todas las asignaturas troncales cuando estan todas seleccionadas.
-    if($("#asignatura_curso_dialog #lista_asignaturas #lista_troncal button:not(.elected)").size()==0){
-      $("#asignatura_curso_dialog #all_troncales").addClass('disabled');
-    }
-
-    $("#asignatura_curso_dialog #contenedor_asignaturas #cabecera_troncal").removeClass('oculto');
-    $("#asignatura_curso_dialog #contenedor_asignaturas .aviso").addClass('oculto');
-    //Se habilita los botones "guardar" y "restablecer".
-    $("#asignatura_curso_dialog #asignaturas_curso_submit").prop("disabled",false);
-    $("#asignatura_curso_dialog #asignaturas_curso_restablecer").prop("disabled",false);
-  });
-
-  $(document).on('click',"#asignatura_curso_dialog #lista_especifica button",function(event){
-    event.preventDefault();
-    id=$(this).attr("id");
-    tipo=$(this).attr("tipo");
-    opcional=$(this).attr("opcional");
-
-    $(this).addClass('elected');
-    if(opcional==1){
-      if($("#asignatura_curso_dialog #contenedor_asignaturas li[id='"+id+"']").size()==0){
-        if($(this).hasClass('asignada')){
-          $("#asignatura_curso_dialog #contenedor_asignaturas ul").append('<li class="back_modificado" id="'+id+'"tipo="'+tipo+'" estado="asignada" opcional="'+$(this).attr("opcional")+'"><p>'+$(this).attr("title")+'</p></input><input placeholder="Libro de la asignatura" valor="'+$(this).attr("libro")+'" style="text-transform: capitalize;" type="text"><input type="number" min="1" max="9" valor="'+$(this).attr("valor")+'"></input><img src="/Symfony/web/bundles/backend/images/menu/eliminar.png"></li>');
-        }else{
-          $("#asignatura_curso_dialog #contenedor_asignaturas ul").append('<li class="back_modificado" id="'+id+'"tipo="'+tipo+'" estado="nueva" opcional="'+$(this).attr("opcional")+'"><p>'+$(this).attr("title")+'</p></input><input placeholder="Libro de la asignatura" style="text-transform: capitalize;" type="text"><input type="number" min="1" max="9"></input><img src="/Symfony/web/bundles/backend/images/menu/eliminar.png"></li>');
-        }
-      }
-      $("#asignatura_curso_dialog #contenedor_asignaturas #cabecera_especifica_opcional").removeClass('oculto');
-    }
-    else{
-      if($("#asignatura_curso_dialog #contenedor_asignaturas li[id='"+id+"']").size()==0){
-        if($(this).hasClass('asignada')){
-          $('<li class="back_modificado" id="'+id+'"tipo="'+tipo+'" estado="asignada" opcional="'+$(this).attr("opcional")+'"><p>'+$(this).attr("title")+'</p></input><input placeholder="Libro de la asignatura" valor="'+$(this).attr("libro")+'" style="text-transform: capitalize;" type="text"><input type="number" min="1" max="9" valor="'+$(this).attr("valor")+'"></input><img src="/Symfony/web/bundles/backend/images/menu/eliminar.png"></li>').insertBefore($("#asignatura_curso_dialog #cabecera_especifica_opcional"));
-        }else{
-          $('<li class="back_modificado" id="'+id+'"tipo="'+tipo+'" estado="nueva" opcional="'+$(this).attr("opcional")+'"><p>'+$(this).attr("title")+'</p></input><input placeholder="Libro de la asignatura" style="text-transform: capitalize;" type="text"><input type="number" min="1" max="9"></input><img src="/Symfony/web/bundles/backend/images/menu/eliminar.png"></li>').insertBefore($("#asignatura_curso_dialog #cabecera_especifica_opcional"));
-        }
-      }
-      $("#asignatura_curso_dialog #contenedor_asignaturas #cabecera_especifica").removeClass('oculto');
-    }
-
-    //Se deshabilita el botón de seleccionar todas las asignaturas específicas cuando estan todas seleccionadas.
-    if($("#asignatura_curso_dialog #lista_asignaturas #lista_especifica button:not(.elected)").size()==0){
-      $("#asignatura_curso_dialog #all_especificas").addClass('disabled');
-    }
-
-
-    $("#asignatura_curso_dialog #contenedor_asignaturas .aviso").addClass('oculto');
-    //Se habilita los botones "guardar" y "restablecer".
-    $("#asignatura_curso_dialog #asignaturas_curso_submit").prop("disabled",false);
-    $("#asignatura_curso_dialog #asignaturas_curso_restablecer").prop("disabled",false);
-  });
-
-  //Se elimina la lista asignada al curso
-  $(document).on('click',"#asignatura_curso_dialog #contenedor_asignaturas img",function(event){
-    event.preventDefault();
-    id=$(this).closest("li").attr("id");
-    tipo=$(this).closest("li").attr("tipo");
-    asigcurso=$(this).closest("li").attr("asigcurso");//Id de asignación de asignatura/grupo
-    //Se habilita los botones "guardar" y "restablecer".
-    $("#asignatura_curso_dialog #asignaturas_curso_submit").prop("disabled",false);
-    $("#asignatura_curso_dialog #asignaturas_curso_restablecer").prop("disabled",false);
-
-    $("#asignatura_curso_dialog #lista_asignaturas button[id='"+id+"']").removeClass('elected');
-    $("#asignatura_curso_dialog #lista_asignaturas button[id='"+id+"']").closest("div").next().removeClass('disabled');
-    //Se le asigna el Id de la asignación de asignatura/grupo para comprobar que asignación ha sido eliminada.
-    $("#asignatura_curso_dialog #lista_asignaturas button[id='"+id+"']").attr('asigcurso',asigcurso);
-
-    $(this).closest("li").remove();
-
-    //Se comprueba si no hay más asignaturas de un tipo para eliminar la cabecera de ese tipo(ol).
-    if(tipo=="Troncal"){
-      if($("#asignatura_curso_dialog #contenedor_asignaturas li[tipo='Troncal']").size()==0){
-        $("#asignatura_curso_dialog #contenedor_asignaturas #cabecera_troncal").addClass('oculto');
-      }
-    }
-    else{
-      if($("#asignatura_curso_dialog #contenedor_asignaturas li[opcional='']").size()==0){
-        $("#asignatura_curso_dialog #contenedor_asignaturas #cabecera_especifica").addClass('oculto');
-      }
-      if($("#asignatura_curso_dialog #contenedor_asignaturas li[opcional='1']").size()==0){
-        $("#asignatura_curso_dialog #contenedor_asignaturas #cabecera_especifica_opcional").addClass('oculto');
-      }
-    } 
-
-    //Se oculta el aviso de error si no quedan elementos con input vacíos.
-    if($("#asignatura_curso_dialog #contenedor_asignaturas li input[class='invalid']").size()==0){
-      $("#asignatura_curso_dialog #aviso_error").addClass('oculto');
-    }
-  });
-
   </script>
 {% endblock %}
 
@@ -229,7 +123,7 @@
         </div>
         <div id="aviso_error" class="oculto">
           <span></span>
-          <span>Falta por asignar el Nº de módulos en alguna asignatura. </span>
+          <span>El Nº de módulos de la asignatura no puede estar vacío. </span>
         </div>
       </div>
 

@@ -254,7 +254,7 @@ fieldset.fsetoculto {
     width: 400px;
     height: 145px;
     margin: 0   auto;
-    z-index: 1;
+    z-index: -1;
 }
 .carrusel>div{
     position: absolute;

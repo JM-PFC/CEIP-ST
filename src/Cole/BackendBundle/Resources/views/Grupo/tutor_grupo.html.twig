@@ -143,11 +143,11 @@
         start: function(event, ui){
             // Se modifica el elemento al ser arrastrado.        
             ui.helper.addClass("desplazamiento_tutor");
-            ui.item.closest("ul").addClass('sortable');
+            //ui.item.closest("ul").addClass('sortable');
         },
         stop: function(event, ui){ 
             ui.item.removeClass("desplazamiento");
-            
+    
             lista=ui.item.attr("id");
             if(ui.item.closest('#lista_grupos').size()){
                 $("#tutor_grupos .lista_profesores tr[id='"+lista+"']").addClass('oculto');
@@ -189,6 +189,7 @@
         },
 
         over: function(event, ui){
+
             $("#tutor_grupos td[class*='placeholder_list_table_td']").removeClass('placeholder_list_table_td');
             $("#tutor_grupos ul[class*='placeholder_list_table_td']").removeClass('placeholder_list_table_td');
             $("#tutor_grupos th[class*='placeholder_list_table_th']").removeClass('placeholder_list_table_th');

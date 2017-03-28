@@ -68,7 +68,18 @@ class AsignaturaController extends Controller
                     'error' => 'existe',
                     'success' => true), 200);
             }
+            $num = $em->getRepository('BackendBundle:Asignatura')->findByOpcional(1);
+
             $em->persist($entity);
+
+            if(count($num)>=3 && $entity->getOpcional()==1){
+                $entity->setOpcional(0);
+                $em->flush();
+                return new JsonResponse(array(
+                    'opcional' => 'none',
+                    'success' => true), 200);
+            }
+
             $em->flush();
 
             if ($request->isXmlHttpRequest()) {
@@ -233,6 +244,24 @@ class AsignaturaController extends Controller
         $editForm->handleRequest($request);
 
         if ($editForm->isValid()) {
+
+            // Se comprueba que no exista la asignatura en el sistema.
+            $asignatura = $em->getRepository('BackendBundle:Asignatura')->findByNombreEdit($entity->getNombre(),$entity->getId());
+            if($asignatura){
+                return new JsonResponse(array(
+                    'error' => 'existe',
+                    'success' => true), 200);
+            }
+            $num = $em->getRepository('BackendBundle:Asignatura')->findByOpcionalEdit($entity->getId());
+
+            if(count($num)>=3 && $entity->getOpcional()==1){
+                $entity->setOpcional(0);
+                $em->flush();
+                return new JsonResponse(array(
+                    'opcional' => 'none',
+                    'success' => true), 200);
+            }
+
             $em->flush();
 
             return $this->redirect($this->generateUrl('asignatura_edit', array('id' => $id)));
@@ -318,6 +347,7 @@ class AsignaturaController extends Controller
         $nuevas=$this->get('request')->request->get('nuevas');
         $asignadas=$this->get('request')->request->get('asignadas');
         $eliminadas=$this->get('request')->request->get('eliminadas');
+        $modulos=$this->get('request')->request->get('modulos');
         $num_asig=0;
         $num_elim=0;
         $num_actu=0;
@@ -326,6 +356,13 @@ class AsignaturaController extends Controller
         if($nuevas==null && $asignadas==null && $eliminadas==null ){
             $data=null;
             return new JsonResponse(array('data' => $data), 200);
+        }
+
+        //Se comprueba que el número de módulos selecionado no sobrepase el máximo permitido.
+        $modulos_dia=$em->getRepository('BackendBundle:Horario')->findClases();
+        $modulos_total=count($modulos_dia)*5;
+        if($modulos> $modulos_total){
+            return new JsonResponse(array('data' => $modulos_total), 200);
         }
 
         if($nuevas){
@@ -376,12 +413,16 @@ class AsignaturaController extends Controller
             }
             $em->persist($entity);
             $num_actu++; 
+
+            $imparte= $em->getRepository('BackendBundle:Imparte')->findByAsignatura($entity);
+            foreach ($imparte as $imparte ) {
+                $em->remove($imparte);
+            }  
           }  
         }
         
         $em->flush();
-
-
+        
         return new JsonResponse(array(
             'data' => $data,            
             'asignadas' =>  $num_asig,
@@ -454,5 +495,31 @@ class AsignaturaController extends Controller
             return new JsonResponse(array('data' => $data,'success' => true), 200);
         }
     }
+
+    public function DatosAsignaturaAction($id, $id_grupo)
+    {
+        $em = $this->getDoctrine()->getManager();
+        $grupo= $em->getRepository('BackendBundle:Grupo')->findOneById($id_grupo);
+
+        if($id!=0){
+            $asignatura = $em->getRepository('BackendBundle:AsignaturasCursos')->findOneById($id);
+            $entity = $em->getRepository('BackendBundle:Imparte')->findByOneGrupoAndAsignatura($grupo,$asignatura);
+            if ($entity) {
+                return $this->render('BackendBundle:Asignatura:datos_asignatura.html.twig', array(
+                'entity' => $entity));        
+            }
+            return $this->render('BackendBundle:Asignatura:datos_asignatura.html.twig', array(
+                'entity' => "")); 
+        }
+        else{
+            $imparte = $em->getRepository('BackendBundle:Imparte')->findOpcionalesGrupo($grupo);
+                return $this->render('BackendBundle:Asignatura:datos_asignatura.html.twig', array(
+                'entity' => null,
+                'imparte' => $imparte));  
+
+        }
+
+    }
+
 
 }

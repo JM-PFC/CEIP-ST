@@ -16,7 +16,7 @@ class CursoType extends AbstractType
     {
         $builder
             ->add('nivel')
-            ->add('curso','text',array('label' => 'Curso', 'max_length' => 15,'attr' => array('validation' => 'Empty_')))
+            ->add('curso','text',array('label' => 'Curso', 'max_length' => 15,'attr' => array('validation' => 'Empty')))
             ->add('numGrupos')
         ;
     }

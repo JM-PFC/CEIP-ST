@@ -26,7 +26,7 @@
        {
         bgiframe: true,
         autoOpen: false,
-        height: 315,
+        height: 375,
         width: 350,
         modal: true,
         resizable: false,
@@ -71,6 +71,7 @@
                     <tr>
                         <th>Asignatura</th>
                         <th>Abreviatura</th>
+                        <th></th>
                     </tr>
                     </thead>
                 </table>
@@ -81,6 +82,7 @@
                         <tr title="Modificar Asignatura Troncal">
                             <td><a cargar-href="off" href="{{ path('asignatura_edit', { 'id': entity.id }) }}">{{ entity.nombre }}</a></td>
                             <td><a cargar-href="off" href="{{ path('asignatura_edit', { 'id': entity.id }) }}">{{ entity.abreviatura }}</a></td>
+                            <td><span id="color" style="background-color:{{ entity.color }};"></span></td>
                         </tr>
                         {% endif %}
                     {% endfor %}
@@ -106,6 +108,7 @@
                     <tr>
                         <th>Asignatura</th>
                         <th>Abreviatura</th>
+                        <th></th>
                     </tr>
                     </thead>
                 </table>
@@ -117,11 +120,13 @@
                             <tr class="underline" title="Modificar Asignatura Específica">
                                 <td><a cargar-href="off" href="{{ path('asignatura_edit', { 'id': entity.id }) }}">{{ entity.nombre }}</a></td>
                                 <td><a cargar-href="off" href="{{ path('asignatura_edit', { 'id': entity.id }) }}">{{ entity.abreviatura }}</a></td>
+                                <td><span id="color" style="background-color:{{ entity.color }};"></span></td>
                             </tr>
                             {% else %}
                             <tr title="Modificar Asignatura Específica">
                                 <td><a cargar-href="off" href="{{ path('asignatura_edit', { 'id': entity.id }) }}">{{ entity.nombre }}</a></td>
                                 <td><a cargar-href="off" href="{{ path('asignatura_edit', { 'id': entity.id }) }}">{{ entity.abreviatura }}</a></td>
+                                <td><span id="color" style="background-color:{{ entity.color }};"></span></td>
                             </tr>
                             {% endif %}
                         {% endif %}

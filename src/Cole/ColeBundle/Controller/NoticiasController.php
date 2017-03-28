@@ -486,7 +486,7 @@ class NoticiasController extends Controller
 
     public function NoticiasRecientesAction()
     {
-        $em = $this->getDoctrine()->getEntityManager();
+        $em = $this->getDoctrine()->getManager();
 
         $noticias = $em->getRepository('ColeBundle:Noticias')->findRecientes();
         
@@ -527,7 +527,7 @@ class NoticiasController extends Controller
 
     public function noticiasAction()
     {
-        $em = $this->getDoctrine()->getEntityManager();
+        $em = $this->getDoctrine()->getManager();
 
         $noticias = $em->getRepository('ColeBundle:Noticias')->findAll();
         return $this->render('ColeBundle:Noticias:noticias.html.twig',

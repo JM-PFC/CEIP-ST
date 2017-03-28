@@ -30,7 +30,7 @@
 
 
 </script>
-{% if numAsigHorarios and numAsigCurso %}
+{% if numAsigHorarios and numAsigCurso and completo%}
   {% for entity in entity %}
 	 <tr id="{{ entity.id }}" class="no_efect">
   	 <td class="horario azul_opacity">{{ entity.inicio|date("H:i") ~ " - " ~ entity.fin|date("H:i")  }}</td>
@@ -46,9 +46,15 @@
 	 </tr>
   {% endfor %}
 {% else %}
+
   {% if not numAsigCurso %}
     <tr class="odd no_cursor">
-		  <td class="dataTables_empty" id="asignatura"><p>El curso no tiene asignada ninguna asignatura</p><p class="color_rojo"> (Debe asignar las asignaturas del curso)</p></td>
+      <td class="dataTables_empty" id="asignatura"><p>El curso no tiene asignada ninguna asignatura</p><p class="color_rojo"> (Debe asignar las asignaturas del curso)</p></td>
+   </tr>
+
+  {% elseif not completo %}
+    <tr class="odd no_cursor">
+		  <td class="dataTables_empty" id="asignatura"><p>Faltan profesores por asignar al grupo</p><p class="color_rojo"> (Debe asignar los profesores a las asignaturas del grupo)</p></td>
 	 </tr>
   {% else %}
     <tr class="odd no_cursor">

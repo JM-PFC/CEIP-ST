@@ -5,243 +5,367 @@
 
 {% block javascript %}
   <script>
-  //Se comprueba si hay asignaturas asignadas inicialmente para hacer las modificaciones correspondientes.
-  if($("#asignatura_curso_dialog #contenedor_asignaturas li[tipo='Troncal']").size()>0){
-    $("#asignatura_curso_dialog #contenedor_asignaturas .aviso").addClass('oculto');
-    $("#asignatura_curso_dialog #contenedor_asignaturas #cabecera_troncal").removeClass('oculto');
-
-    //Se modifica de la lista de asignaturas todas las que estan asigandas.
-    $("#asignatura_curso_dialog #contenedor_asignaturas li[tipo='Troncal']").each(function(){
-      id=$(this).attr("id");
-      valor=$(this).find("input[type='number']").val();
-      libro=$(this).find("input[type='text']").val();
-      $("#asignatura_curso_dialog #lista_troncal button[id='"+id+"']").addClass('elected');
-      $("#asignatura_curso_dialog #lista_asignaturas button[id='"+id+"']").addClass('asignada');
-      $("#asignatura_curso_dialog #lista_asignaturas button[id='"+id+"']").attr('valor',valor);
-      $("#asignatura_curso_dialog #lista_asignaturas button[id='"+id+"']").attr('libro',libro);
-    });
-    //Si estan todas las aignaturas seleccionada se deshabilita el botón "todas".
-    if($("#asignatura_curso_dialog #lista_troncal button:not(.elected)").size()==0){
-      $("#asignatura_curso_dialog #lista_troncal").next().addClass('disabled');
-    }
-
+  //Se ajusta la altura de cada fila de la tabla al número de filas.
+  num=$("#asignar_horario_grupo_dialog #tabla_horario .inner_table tr").size();
+  altura=285/num;
+  $("#asignar_horario_grupo_dialog #tabla_horario .inner_table tr td").css("height", altura);
+  //Se oculta los elementos de las listas para que no se vea el desplazamiento inicial a la tabla y al finalizar se muestra.
+  $("#asignar_horario_grupo_dialog #tabla_horario li").css('opacity',"0");
+  //Se inserta el id de profesores y aula en la lista de asignaturas no opcionales.
+  array={{imparte|json_encode()|raw}};
+  for (var key in array){
+    asignatura=key;
+    clave=array[key].split("-");
+    profesor=clave[0];
+    aula=clave[1];
+    $("#asignar_horario_grupo_dialog #pie_horario li[id='"+asignatura+"'] ").attr("profesor",profesor);
+    $("#asignar_horario_grupo_dialog #pie_horario li[id='"+asignatura+"'] ").attr("aula",aula);
   }
 
-  if($("#asignatura_curso_dialog #contenedor_asignaturas li[tipo='Específica']").size()>0){
-    //Se modifica de la lista de asignaturas todas las que estan asigandas.
-    $("#asignatura_curso_dialog #contenedor_asignaturas li[tipo='Específica']").each(function(){
-      id=$(this).attr("id");
-      valor=$(this).find("input[type='number']").val();
-      libro=$(this).find("input[type='text']").val();
-      opcional=$(this).attr("opcional");
-      $("#asignatura_curso_dialog #lista_especifica button[id='"+id+"']").addClass('elected');
-      $("#asignatura_curso_dialog #lista_asignaturas button[id='"+id+"']").addClass('asignada');
-      $("#asignatura_curso_dialog #lista_asignaturas button[id='"+id+"']").attr('valor',valor);
-      $("#asignatura_curso_dialog #lista_asignaturas button[id='"+id+"']").attr('libro',libro);
-      $("#asignatura_curso_dialog #lista_asignaturas button[id='"+id+"']").attr('opcional',opcional);
-    });
-    //Si estan todas las aignaturas seleccionada se deshabilita el botón "todas".
-    if($("#asignatura_curso_dialog #lista_especifica button:not(.elected)").size()==0){
-      $("#asignatura_curso_dialog #lista_especifica").next().addClass('disabled');
+  //Se inserta el id de asignaturas, profesores y aulas en la lista de asignaturas opcionales.
+  array={{imparte_op|json_encode()|raw}};
+  $("#asignar_horario_grupo_dialog #pie_horario li[id='0'] ").attr("asignaturas","");
+  $("#asignar_horario_grupo_dialog #pie_horario li[id='0'] ").attr("profesor","");
+  $("#asignar_horario_grupo_dialog #pie_horario li[id='0'] ").attr("aula","");
+  for (var key in array){
+    asignatura=key;
+    clave=array[key].split("-");
+    profesor=clave[0];
+    aula=clave[1];
+
+    v_asig=$("#asignar_horario_grupo_dialog #pie_horario li[id='0'] ").attr("asignaturas");
+    v_prof=$("#asignar_horario_grupo_dialog #pie_horario li[id='0'] ").attr("profesor");
+    v_aul=$("#asignar_horario_grupo_dialog #pie_horario li[id='0'] ").attr("aula");
+    
+    $("#asignar_horario_grupo_dialog #pie_horario li[id='0'] ").attr("asignaturas",v_asig+"-"+asignatura);
+    $("#asignar_horario_grupo_dialog #pie_horario li[id='0'] ").attr("profesor",v_prof+"-"+profesor);
+    if(aula){
+      $("#asignar_horario_grupo_dialog #pie_horario li[id='0'] ").attr("aula",v_aul+"-"+aula);
     }
   }
+  
+  v_asig=$("#asignar_horario_grupo_dialog #pie_horario li[id='0'] ").attr("asignaturas");
+  v_prof=$("#asignar_horario_grupo_dialog #pie_horario li[id='0'] ").attr("profesor");
+  v_aul=$("#asignar_horario_grupo_dialog #pie_horario li[id='0'] ").attr("aula");
 
-  if($("#asignatura_curso_dialog #contenedor_asignaturas li[opcional='']").size()>0){
-    $("#asignatura_curso_dialog #contenedor_asignaturas .aviso").addClass('oculto');
-    $("#asignatura_curso_dialog #contenedor_asignaturas #cabecera_especifica").removeClass('oculto');
+  $("#asignar_horario_grupo_dialog #pie_horario li[id='0'] ").attr("asignaturas",v_asig.replace("-", ""));
+  $("#asignar_horario_grupo_dialog #pie_horario li[id='0'] ").attr("profesor",v_prof.replace("-", ""));
+  $("#asignar_horario_grupo_dialog #pie_horario li[id='0'] ").attr("aula",v_aul.replace("-", ""));
+
+
+  // Se establece las variables con los audios para las notificaciones.
+  if (navigator.userAgent.search("Firefox") >= 0) { //Firefox sólo admite archivos .ogg
+    var error = new Audio();
+    error.src = "/Symfony/web/bundles/backend/sounds/error.ogg";
+  }
+  else{
+    var error = new Audio();
+    error.src = "/Symfony/web/bundles/backend/sounds/error.mp3";
   }
 
-  if($("#asignatura_curso_dialog #contenedor_asignaturas li[opcional='1']").size()>0){
-    $("#asignatura_curso_dialog #contenedor_asignaturas .aviso").addClass('oculto');
-    $("#asignatura_curso_dialog #contenedor_asignaturas #cabecera_especifica_opcional").removeClass('oculto');
-  }
+  $( "#sortable,.sortable" ).sortable({
+    connectWith: ".sortable",
+    items: "li:not(.no-last)",
+    placeholder: "ui-state-highligh",
+    cursor: "none", //Se oculta el cursor
+    start: function(event, ui){
+      //ui.item.css("cursor","none");
+      ui.item.css("style","background:"+ui.item.attr("color")+";");
 
-
-  //Se asigna una lista al curso.
-  $(document).on('click',"#asignatura_curso_dialog #lista_troncal button",function(event){
-    event.preventDefault();
-    id=$(this).attr("id");
-    tipo=$(this).attr("tipo");
-
-    $(this).addClass('elected');
-    if($("#asignatura_curso_dialog #contenedor_asignaturas li[id='"+id+"']").size()==0){
-      if($(this).hasClass('asignada')){
-        $('<li class="back_modificado" id="'+id+'"tipo="'+tipo+'" estado="asignada"><p>'+$(this).attr("title")+'</p></input><input placeholder="Libro de la asignatura" valor="'+$(this).attr("libro")+'" style="text-transform: capitalize;" type="text"><input type="number" min="1" max="9" valor="'+$(this).attr("valor")+'"></input><img src="/Symfony/web/bundles/backend/images/menu/eliminar.png"></li>').insertBefore($("#asignatura_curso_dialog #cabecera_especifica"));
-      }else{
-        $('<li class="back_modificado" id="'+id+'"tipo="'+tipo+'" estado="nueva"><p>'+$(this).attr("title")+'</p></input><input placeholder="Libro de la asignatura" style="text-transform: capitalize;" type="text"><input type="number" min="1" max="9"></input><img src="/Symfony/web/bundles/backend/images/menu/eliminar.png"></li>').insertBefore($("#asignatura_curso_dialog #cabecera_especifica"));
+      id=ui.item.attr("id");
+      //Se añade la clase a todas los elementos de una lista de una misma asignatura, menos el último para que no se pueda que el placeholder aparezca delante de todos al mover el último elemento.
+      $("#asignar_horario_grupo_dialog #contenedor_asig ul[asig='"+id+"'] li:not(:last-child)").addClass('no-last');
+      //Se muestra la info en otro contenedor para evitar el evento mouseenter de cada lista.
+      $("#asignar_horario_grupo_dialog #contenedor_info_drag").load(Routing.generate('datos_asignatura', {id:ui.item.attr("id"),id_grupo:ui.item.closest("fieldset").attr("id")}), function(){
+        $("#asignar_horario_grupo_dialog #contenedor_info_drag").removeClass('oculto');
+        $("#asignar_horario_grupo_dialog #contenedor_info").addClass('oculto');
+      });
+      //Se le añade al elemento los atributos dia y horario, para comprobar al acabar la selección donde estaban situados anteriormente.
+      if(ui.item.closest("td").size()>0){ //Tabla
+        dia=ui.item.closest("ul").attr("dia");
+        horario=ui.item.closest("ul").attr("horario");
+        ui.item.attr("dia",dia);
+        ui.item.attr("horario",horario);
+      }
+      else{//Lista inicial
+        ui.item.attr("dia",0);
+        ui.item.attr("horario",0);
       }
 
-    }
-
-    //Se deshabilita el botón de seleccionar todas las asignaturas troncales cuando estan todas seleccionadas.
-    if($("#asignatura_curso_dialog #lista_asignaturas #lista_troncal button:not(.elected)").size()==0){
-      $("#asignatura_curso_dialog #all_troncales").addClass('disabled');
-    }
-
-    $("#asignatura_curso_dialog #contenedor_asignaturas #cabecera_troncal").removeClass('oculto');
-    $("#asignatura_curso_dialog #contenedor_asignaturas .aviso").addClass('oculto');
-    //Se habilita los botones "guardar" y "restablecer".
-    $("#asignatura_curso_dialog #asignaturas_curso_submit").prop("disabled",false);
-    $("#asignatura_curso_dialog #asignaturas_curso_restablecer").prop("disabled",false);
-  });
-
-  $(document).on('click',"#asignatura_curso_dialog #lista_especifica button",function(event){
-    event.preventDefault();
-    id=$(this).attr("id");
-    tipo=$(this).attr("tipo");
-    opcional=$(this).attr("opcional");
-
-    $(this).addClass('elected');
-    if(opcional==1){
-      if($("#asignatura_curso_dialog #contenedor_asignaturas li[id='"+id+"']").size()==0){
-        if($(this).hasClass('asignada')){
-          $("#asignatura_curso_dialog #contenedor_asignaturas ul").append('<li class="back_modificado" id="'+id+'"tipo="'+tipo+'" estado="asignada" opcional="'+$(this).attr("opcional")+'"><p>'+$(this).attr("title")+'</p></input><input placeholder="Libro de la asignatura" valor="'+$(this).attr("libro")+'" style="text-transform: capitalize;" type="text"><input type="number" min="1" max="9" valor="'+$(this).attr("valor")+'"></input><img src="/Symfony/web/bundles/backend/images/menu/eliminar.png"></li>');
-        }else{
-          $("#asignatura_curso_dialog #contenedor_asignaturas ul").append('<li class="back_modificado" id="'+id+'"tipo="'+tipo+'" estado="nueva" opcional="'+$(this).attr("opcional")+'"><p>'+$(this).attr("title")+'</p></input><input placeholder="Libro de la asignatura" style="text-transform: capitalize;" type="text"><input type="number" min="1" max="9"></input><img src="/Symfony/web/bundles/backend/images/menu/eliminar.png"></li>');
+      //Se establece el padding de los elementos que se mueven a la tabla según el numero de módulos existentes.
+      altura=$("#asignar_horario_grupo_dialog #tabla_horario .inner_table tr td").css('height');
+      
+      //Se establece el padding para los elementos en la tabla.
+      if(ui.item.closest("td").size()>0){
+        if(parseInt(altura.slice(0, -2))<30){
+          ui.item.css("padding","1px 3px");
+        }
+        else if(parseInt(altura.slice(0, -2))>40){
+          ui.item.css("padding","8px 3px");
+        }
+        else{
+          ui.item.css("padding","5px 3px");
         }
       }
-      $("#asignatura_curso_dialog #contenedor_asignaturas #cabecera_especifica_opcional").removeClass('oculto');
-    }
-    else{
-      if($("#asignatura_curso_dialog #contenedor_asignaturas li[id='"+id+"']").size()==0){
-        if($(this).hasClass('asignada')){
-          $('<li class="back_modificado" id="'+id+'"tipo="'+tipo+'" estado="asignada" opcional="'+$(this).attr("opcional")+'"><p>'+$(this).attr("title")+'</p></input><input placeholder="Libro de la asignatura" valor="'+$(this).attr("libro")+'" style="text-transform: capitalize;" type="text"><input type="number" min="1" max="9" valor="'+$(this).attr("valor")+'"></input><img src="/Symfony/web/bundles/backend/images/menu/eliminar.png"></li>').insertBefore($("#asignatura_curso_dialog #cabecera_especifica_opcional"));
-        }else{
-          $('<li class="back_modificado" id="'+id+'"tipo="'+tipo+'" estado="nueva" opcional="'+$(this).attr("opcional")+'"><p>'+$(this).attr("title")+'</p></input><input placeholder="Libro de la asignatura" style="text-transform: capitalize;" type="text"><input type="number" min="1" max="9"></input><img src="/Symfony/web/bundles/backend/images/menu/eliminar.png"></li>').insertBefore($("#asignatura_curso_dialog #cabecera_especifica_opcional"));
+      
+    },
+    beforeStop: function( event, ui ) {
+
+    },
+    stop: function(event, ui){ 
+      //ui.item.css("cursor","ponter");
+      id=ui.item.attr("id");
+      //Se comprueba si el elemento asignado se ha añadido por error en una celda o lista no permitida y se cancela la asignación.
+      //También se comprueba en el mouseup (general.js).
+      if(ui.item.closest("td").hasClass('bloqueo') || ui.item.closest("#listas_nulas").size()==1){
+        $(this).sortable("cancel");
+        $("#asignar_horario_grupo_dialog #tabla_horario td").removeClass('placeholder_list_table_td');
+        error.play();
+      }
+
+      if(ui.item.closest("td").size()>0){ //Elemento soltado en la tabla.
+        //Se añade el nombre y un span para quitar el elemento de la tabla.
+        ui.item.text("");
+        ui.item.append('<span class="ui-icon ui-icon-close" role="presentation">Remove Tab</span>'+ui.item.attr("nombre"));
+        //Se añade un efecto de sombra
+        ui.item.addClass('box-shadow');
+
+        //Se añade la clase "sortable" a las listas de la tabla y se elimina luego a las listas que tienen asignatura asignada para que no pueda añadirse otra.
+        $("#asignar_horario_grupo_dialog #tabla_horario ul").addClass('sortable');
+        $("#asignar_horario_grupo_dialog #tabla_horario li").closest("ul").removeClass('sortable');
+
+      }
+      else{
+        ui.item.text(ui.item.attr("siglas"));
+      }
+      //Se elimina el placeholder al soltar el elemento.
+      ui.item.closest('ul').removeClass('placeholder_list_table_td');
+      ui.item.closest('td').removeClass('placeholder_list_table_td');
+
+      //Se elimina la clase "no-last" de las listas de la tabla.
+      $("#asignar_horario_grupo_dialog #tabla_horario li").removeClass('no-last');
+       //Se elimina la clase "box-shadow" de las listas de la lista de asignaturas.
+      $("#asignar_horario_grupo_dialog #pie_horario li").removeClass('box-shadow');
+      //Se oculta las listas que quedan vacía.
+      $("#asignar_horario_grupo_dialog #pie_horario ul:empty").addClass('oculto');
+    
+      //Se muestra el contenedor inicial con la info del evento mousenter.
+      $("#asignar_horario_grupo_dialog #contenedor_info").empty();
+      $("#asignar_horario_grupo_dialog #contenedor_info_drag").empty();
+      $("#asignar_horario_grupo_dialog #contenedor_info_drag").addClass('oculto');
+      $("#asignar_horario_grupo_dialog #contenedor_info").removeClass('oculto');
+ 
+      $("#asignar_horario_grupo_dialog #tabla_horario td").removeClass('rojo');
+      $("#asignar_horario_grupo_dialog #tabla_horario td").removeClass('bloqueo');
+
+      //Se establece el padding de los elementos que se mueven a la tabla según el numero de módulos existentes.
+      altura=$("#asignar_horario_grupo_dialog #tabla_horario .inner_table tr td").css('height');
+
+      //Se establece el padding para los elementos en la lista.
+      if(ui.item.closest("td").size()==0){
+        ui.item.css("padding","7px");
+      }
+      //Se establece el padding para los elementos en la tabla.
+      else{
+        if(parseInt(altura.slice(0, -2))<30){
+          ui.item.css("padding","1px 3px");
+        }
+        else if(parseInt(altura.slice(0, -2))>40){
+          ui.item.css("padding","8px 3px");
+        }
+        else{
+          ui.item.css("padding","5px 3px");
         }
       }
-      $("#asignatura_curso_dialog #contenedor_asignaturas #cabecera_especifica").removeClass('oculto');
+
+      //Se añade la clase asignada o modificada cuando se añade una asignatura a la tabla comparando el atribut "carga" de la lista.
+      if(ui.item.closest("td").size()>0){
+        if(!ui.item.closest("ul").attr("carga") || ui.item.closest("ul").attr("carga")!=ui.item.attr("id")){
+          ui.item.closest("ul").removeClass('asignada');
+          ui.item.closest("ul").addClass('modificada');
+          ui.item.closest("ul").removeClass('eliminada');
+        }
+        else{
+          ui.item.closest("ul").addClass('asignada');
+          ui.item.closest("ul").removeClass('modificada');
+          ui.item.closest("ul").removeClass('eliminada');
+        }
+      }
+
+      //Se comprueba si hay modificación para mostrar los botones. 
+      $("#asignar_horario_grupo_dialog #horario_grupo_submit").prop("disabled",true);
+      $("#asignar_horario_grupo_dialog #horario_grupo_restablecer").prop("disabled",true);
+
+      if($("#asignar_horario_grupo_dialog #tabla_horario td ul").hasClass('eliminada') || $("#asignar_horario_grupo_dialog #tabla_horario td ul").hasClass('modificada') ){
+        $("#asignar_horario_grupo_dialog #horario_grupo_submit").prop("disabled",false);
+        $("#asignar_horario_grupo_dialog #horario_grupo_restablecer").prop("disabled",false);
+      }
+
+
+    },
+    over: function(event, ui){
+
+      //$("#asignar_horario_grupo_dialog #tabla_horario ul").addClass('sortable');
+      //$("#asignar_horario_grupo_dialog #tabla_horario li").closest("ul").removeClass('sortable');
+
+      $("#asignar_horario_grupo_dialog #pie_horario td[class*='placeholder_list_table_td']").removeClass('placeholder_list_table_td');
+      $("#asignar_horario_grupo_dialog #tabla_horario td[class*='placeholder_list_table_td']").removeClass('placeholder_list_table_td');
+      $("#asignar_horario_grupo_dialog #tabla_horario ul[class*='placeholder_list_table_td']").removeClass('placeholder_list_table_td');
+
+      $("#asignar_horario_grupo_dialog #tabla_horario li[class='ui-state-highligh']").closest("td").addClass('placeholder_list_table_td');
+
+    },
+    out: function(event, ui){
+
+    },
+    receive: function(event, ui) {
+
     }
+  }).disableSelection();
 
-    //Se deshabilita el botón de seleccionar todas las asignaturas específicas cuando estan todas seleccionadas.
-    if($("#asignatura_curso_dialog #lista_asignaturas #lista_especifica button:not(.elected)").size()==0){
-      $("#asignatura_curso_dialog #all_especificas").addClass('disabled');
-    }
-
-
-    $("#asignatura_curso_dialog #contenedor_asignaturas .aviso").addClass('oculto');
-    //Se habilita los botones "guardar" y "restablecer".
-    $("#asignatura_curso_dialog #asignaturas_curso_submit").prop("disabled",false);
-    $("#asignatura_curso_dialog #asignaturas_curso_restablecer").prop("disabled",false);
+  //Efecto de cambiar incono de elminar asignatura en la tabla.
+  $(document).on("mouseover","#asignar_horario_grupo_dialog #tabla_horario  .ui-icon", function () {
+    $(this).addClass('ui-icon-circle-close');
+    $(this).removeClass('ui-icon-close');
   });
 
-  //Se elimina la lista asignada al curso
-  $(document).on('click',"#asignatura_curso_dialog #contenedor_asignaturas img",function(event){
-    event.preventDefault();
-    id=$(this).closest("li").attr("id");
-    tipo=$(this).closest("li").attr("tipo");
-    asigcurso=$(this).closest("li").attr("asigcurso");//Id de asignación de asignatura/grupo
-    //Se habilita los botones "guardar" y "restablecer".
-    $("#asignatura_curso_dialog #asignaturas_curso_submit").prop("disabled",false);
-    $("#asignatura_curso_dialog #asignaturas_curso_restablecer").prop("disabled",false);
-
-    $("#asignatura_curso_dialog #lista_asignaturas button[id='"+id+"']").removeClass('elected');
-    $("#asignatura_curso_dialog #lista_asignaturas button[id='"+id+"']").closest("div").next().removeClass('disabled');
-    //Se le asigna el Id de la asignación de asignatura/grupo para comprobar que asignación ha sido eliminada.
-    $("#asignatura_curso_dialog #lista_asignaturas button[id='"+id+"']").attr('asigcurso',asigcurso);
-
-    $(this).closest("li").remove();
-
-    //Se comprueba si no hay más asignaturas de un tipo para eliminar la cabecera de ese tipo(ol).
-    if(tipo=="Troncal"){
-      if($("#asignatura_curso_dialog #contenedor_asignaturas li[tipo='Troncal']").size()==0){
-        $("#asignatura_curso_dialog #contenedor_asignaturas #cabecera_troncal").addClass('oculto');
-      }
-    }
-    else{
-      if($("#asignatura_curso_dialog #contenedor_asignaturas li[opcional='']").size()==0){
-        $("#asignatura_curso_dialog #contenedor_asignaturas #cabecera_especifica").addClass('oculto');
-      }
-      if($("#asignatura_curso_dialog #contenedor_asignaturas li[opcional='1']").size()==0){
-        $("#asignatura_curso_dialog #contenedor_asignaturas #cabecera_especifica_opcional").addClass('oculto');
-      }
-    } 
-
-    //Se oculta el aviso de error si no quedan elementos con input vacíos.
-    if($("#asignatura_curso_dialog #contenedor_asignaturas li input[class='invalid']").size()==0){
-      $("#asignatura_curso_dialog #aviso_error").addClass('oculto');
-    }
+  $(document).on("mouseleave","#asignar_horario_grupo_dialog #tabla_horario .ui-icon", function () {
+    $(this).addClass('ui-icon-close');
+    $(this).removeClass('ui-icon-circle-close');
   });
+
+  setTimeout(function() {
+    $("#asignar_horario_grupo_dialog #tabla_horario .asignada").each (function(){ 
+      id=$(this).attr("carga");
+      elemento=$("#asignar_horario_grupo_dialog #pie_horario ul[asig='"+id+"'] li:last-child");
+      lista=elemento.parent();
+      elemento.appendTo($(this));
+      $(this).find("li").addClass('box-shadow');
+      $(this).find("li").text($(this).find("li").attr("nombre"));
+      $(this).find("li").append('<span class="ui-icon ui-icon-close" role="presentation">Remove Tab</span>');
+      //Se oculta la lista si no tiene más elementos en la lista inicial.
+      if(lista.find("li").size()==0){
+        lista.addClass('oculto');
+      }
+    }); 
+
+    //Se muestra las listas una vez eliminadas las que esán asignadas al grupo.
+    $("#asignar_horario_grupo_dialog #tabla_horario li").css('opacity',"1");
+  }, 5);
+
 
   </script>
 {% endblock %}
 
 {% block body -%}
-    <fieldset id="{{curso.id}}" name="{{curso.curso ~ " de " ~ curso.nivel}}">
-      <legend>Asignación de asignaturas de {{curso.curso ~ " " ~ curso.nivel}}</legend>
-      <div id="lista_asignaturas" class="w30 f_left tcenter b_right">
-        <span>1. Seleccione las <strong>asignaturas</strong>:</span>
-        <div class="w50 f_left">
-          <h4>Troncales</h4>
-          <div class="lista_asig" id="lista_troncal">
-            {% for troncal in troncales %}
-              <button id="{{troncal.id}}" tipo="{{troncal.tipo}}" title="{{troncal.nombre }}">{{ troncal.Abreviatura }}</button>
-            {% endfor %}
-          </div>
-          <button class="button_all" id="all_troncales" title="Selecciona todas las asignaturas troncales">Todas</button>
-        </div>
-        <div class="w50 f_left">
-          <h4>Específicas</h4>
-          <div class="lista_asig" id="lista_especifica">
-            {% for especifica in especificas %}
-              <button id="{{especifica.id}}" tipo="{{especifica.tipo}}" opcional="{{especifica.opcional}}" title="{{especifica.nombre }}">{{ especifica.Abreviatura }}</button>
-            {% endfor %}
-          </div>
-           <button class="button_all"   id="all_especificas" title="Selecciona todas las asignaturas específicas">Todas</button>
-        </div>
-      </div>
-      <div class="w69 f_left  tcenter">
-        <span>2. Seleccione el <strong>Nº de módulos</strong> semanales para cada asignatura:</span>
-        <div id="contenedor_asignaturas">
-          <h4 id="titulo_curso">Asignaturas de <strong>{{" " ~ curso.curso ~ " " ~ curso.nivel}}</strong></h4>
-          <div>
-            <ul>
-              <p class="aviso">No hay asignaturas asignadas para este curso</p>
-              <ol id="cabecera_troncal" class="oculto">Troncales</ol>
-                {% for entity in entities_troncales %}
-                  <li id="{{ entity.asignatura.id }}" asigcurso="{{ entity.id }}" tipo="{{ entity.asignatura.tipo }}" estado="asignada" >
-                    <p>{{ entity.asignatura.nombre }}</p>
-                    <input type="text" value="{{ entity.libro }}" valor="{{ entity.libro}}" placeholder="Libro de la asignatura"></input>
-                    <input type="number" min="1" max="9" value="{{ entity.numModulos }}" valor="{{ entity.numModulos }}"></input>
-                    <img src="/Symfony/web/bundles/backend/images/menu/eliminar.png">
-                  </li>
-                {% endfor %}
-              <ol id="cabecera_especifica" class="oculto">Específicas</ol>
-                {% for entity in entities_especificas %}
-                  <li id="{{ entity.asignatura.id }}" asigcurso="{{ entity.id }}" tipo="{{ entity.asignatura.tipo }}" opcional="{{ entity.asignatura.opcional }}" estado="asignada">
-                    <p>{{ entity.asignatura.nombre }}</p>
-                    <input type="text" value="{{ entity.libro }}" valor="{{ entity.libro}}" placeholder="Libro de la asignatura"></input>
-                    <input type="number" min="1" max="9" value="{{ entity.numModulos }}" valor="{{ entity.numModulos }}"></input>
-                    <img src="/Symfony/web/bundles/backend/images/menu/eliminar.png">
-                  </li>
-                {% endfor %}
-              <ol id="cabecera_especifica_opcional" class="oculto">Específicas (Opcionales)</ol>
-                {% for entity in entities_especificas_opcionales %}
-                  <li id="{{ entity.asignatura.id }}" asigcurso="{{ entity.id }}" tipo="{{ entity.asignatura.tipo }}" estado="asignada" opcional="{{ entity.asignatura.opcional }}">
-                    <p>{{ entity.asignatura.nombre }}</p>
-                    <input type="text" value="{{ entity.libro }}" valor="{{ entity.libro}}" placeholder="Libro de la asignatura"></input>
-                    <input type="number" min="1" max="9" value="{{ entity.numModulos }}" valor="{{ entity.numModulos }}"></input>
-                    <img src="/Symfony/web/bundles/backend/images/menu/eliminar.png">
-                  </li>
-                {% endfor %}
-            </ul>
-          </div>
-        </div>
-        <div id="aviso_error" class="oculto">
-          <span></span>
-          <span>Falta por asignar el Nº de módulos en alguna asignatura. </span>
-        </div>
-      </div>
 
+    <fieldset id="{{grupo.id}}" name="{{grupo.curso.curso ~ " de " ~ grupo.curso.nivel}}">
+      <legend>{{grupo.curso.curso ~ " de " ~ grupo.curso.nivel ~ " - Grupo " ~ grupo.letra}}</legend>
+        <div id="tabla_horario">
+          <div class="parent_no_form">
+          <div class="child">
+            <table class="records_list">
+              <thead>
+                <tr>
+                  <th>Módulos</th>
+                  <th>Lunes</th>
+                  <th>Martes</th>
+                  <th>Miércoles</th>
+                  <th>Jueves</th>
+                  <th>Viernes</th>
+                </tr>
+              </thead>
+            </table>
+            <div class="inner_table">
+              <table id="lista_color">
+                {{render (controller('BackendBundle:Grupo:HorariosGruposNew',{'id': grupo.id }))}}
+              </table>
+            </div>
+            <div id="pie_horario">
+              <div id="contenedor_info"> </div>
+              <div id="contenedor_info_drag" class="oculto"></div>
+              <div id="contenedor_asig">
+                
+                {% for entity in entities_troncales %}
+                  {% set array = entity.asignatura.abreviatura|split(' ') %}
+                  {% set iter = entity.numModulos %}
+
+                  {% if array|length == 1 %}
+                    <ul id="sortable" class="ui-sortable" asig="{{ entity.id }}">
+                    {% for i in 1..iter %}
+                      <li id="{{entity.id}}" nombre="{{ entity.asignatura.abreviatura }}" siglas="{{ entity.asignatura.abreviatura|slice(0, 3)|lower|capitalize }}" style="background:{{entity.asignatura.color}};" color="{{entity.asignatura.color}}">{{ entity.asignatura.abreviatura|slice(0, 3)|lower|capitalize }}</li>
+                    {% endfor %} 
+                    </ul>
+                  {% else %}
+                    <ul id="sortable" class="ui-sortable" asig="{{ entity.id }}">
+                    {% for i in 1..iter %}
+                      <li id="{{entity.id}}" nombre="{{ entity.asignatura.abreviatura }}" siglas="{{ array[0]|slice(0, 1)|lower|capitalize ~ "." ~ array[1]|slice(0, 1)|lower|capitalize ~ "."}}" style="background:{{entity.asignatura.color}};" color="{{entity.asignatura.color}}">{{ array[0]|slice(0, 1)|lower|capitalize ~ "." ~ array[1]|slice(0, 1)|lower|capitalize ~ "."}}</li>
+                    {% endfor %} 
+                    </ul>
+                  {% endif %}
+                {% endfor %}
+
+                {% for entity in entities_especificas_no_op %}
+                  {% set array = entity.asignatura.abreviatura|split(' ') %}
+                  {% set iter = entity.numModulos %}
+
+                  {% if array|length == 1 %}
+                    <ul id="sortable" class="ui-sortable" asig="{{ entity.id }}">
+                    {% for i in 1..iter %}
+                      <li id="{{entity.id}}" nombre="{{ entity.asignatura.abreviatura }}" siglas="{{ entity.asignatura.abreviatura|slice(0, 3)|lower|capitalize }}" style="background:{{entity.asignatura.color}};" color="{{entity.asignatura.color}}">{{ entity.asignatura.abreviatura|slice(0, 3)|lower|capitalize }}</li>
+                    {% endfor %} 
+                    </ul>
+                  {% else %}
+                    <ul id="sortable" class="ui-sortable" asig="{{ entity.id }}">
+                    {% for i in 1..iter%}
+                      <li id="{{entity.id}}" nombre="{{ entity.asignatura.abreviatura }}" siglas="{{ array[0]|slice(0, 1)|lower|capitalize ~ "." ~ array[1]|slice(0, 1)|lower|capitalize ~ "."}}" style="background:{{entity.asignatura.color}};" color="{{entity.asignatura.color}}">{{ array[0]|slice(0, 1)|lower|capitalize ~ "." ~ array[1]|slice(0, 1)|lower|capitalize ~ "."}}</li>
+                    {% endfor %} 
+                    </ul>
+                  {% endif %}
+                {% endfor %}   
+                {% if entities_especificas_op %}
+                {% set iter2 = "" %}
+                {% for entity in entities_especificas_op %}
+                  {% set array = entity.asignatura.abreviatura|split(' ') %}
+                  {% set iter = entity.numModulos %}
+                  {% set iter2 = entity.numModulos %}
+{#
+                  {% if array|length == 1 %}
+                    <ul id="sortable" class="ui-sortable" asig="{{ entity.id }}">
+                    {% for i in 1..iter %}
+                      <li class="oculto" id="{{entity.id}}"nombre="{{ entity.asignatura.abreviatura }}" siglas="{{ entity.asignatura.abreviatura|slice(0, 3)|lower|capitalize }}" style="background:{{entity.asignatura.color}};" color="{{entity.asignatura.color}}">{{ entity.asignatura.abreviatura|slice(0, 3)|lower|capitalize }}</li>
+                    {% endfor %} 
+                    </ul>
+                  {% else %}
+                    <ul id="sortable" class="ui-sortable" asig="{{ entity.id }}">
+                    {% for i in 1..iter%}
+                      <li  class="oculto" id="{{entity.id}}" nombre="{{ entity.asignatura.abreviatura }}" siglas="{{ array[0]|slice(0, 1)|lower|capitalize ~ "." ~ array[1]|slice(0, 1)|lower|capitalize ~ "."}}" style="background:{{entity.asignatura.color}};" color="{{entity.asignatura.color}}">{{ array[0]|slice(0, 1)|lower|capitalize ~ "." ~ array[1]|slice(0, 1)|lower|capitalize ~ "."}}</li>
+                    {% endfor %} 
+                    </ul>
+                  {% endif %}
+                  #}
+                {% endfor %}
+
+                <ul class="ul_opcional" id="sortable" class="ui-sortable" asig="0" >
+                    {% for i in 1..iter2 %}
+                      <li id="0" style="background:#DBA901;" color="#DBA901" siglas="Opcional" nombre="Opcional">Opcional</li>
+                    {% endfor %} 
+                </ul> 
+              {% endif %}
+              </div>
+            </div>  
+          </div>
+          </div>
+        </div>    
 
     </fieldset> 
 
     <div class="dialog_button">
       <div>
-        <button id="asignaturas_curso_submit" disabled="" type="button">Guardar</button>
+        <button id="horario_grupo_submit" disabled="" type="button">Guardar</button>
       </div>
       <div>
-        <button id="asignaturas_curso_restablecer" disabled="" type="button">Restablecer</button>
+        <button id="horario_grupo_restablecer" disabled="" type="button">Restablecer</button>
       </div>
     </div>
 {% endblock %}

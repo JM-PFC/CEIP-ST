@@ -9,6 +9,9 @@ button{
 	padding: 3px;
 	background: #e4e0e0; 
 }
+form label{
+	pointer-events: none;
+}
 .ui-dialog-content button:not(.btn_info){
 	font-size: 14px ;
 	min-width: 100px;
@@ -693,8 +696,18 @@ nav{
 		margin-top: 1% !important;
 		margin-left: 2% !important;
 	}
-
-
+	.btn_save button:disabled{
+		margin: -10px 9px !important;
+	}
+	.contenedor_principal_reserva #guardar_reserva{
+		margin-top: 0 !important;
+	}
+	.contenedor_principal_reserva .four_column_no_form span{
+		width: 105% !important;
+	}
+	.contenedor_principal_reserva button{
+		margin: 10px !important;
+	}
 }
 
 
@@ -1544,6 +1557,9 @@ form button{
 #registro_asignaturas .simple_column{
 	width: 28%;
 }
+#registro_asignaturas #contenedor_registro div table th{
+	width: 47%;
+}
 #registro_asignaturas .block_insert{
 	margin: 10% 5%;
 	width: 95%;
@@ -1553,7 +1569,7 @@ form button{
 	text-align: center;
 }
 #asignaturas_cursos .simple_column button{
-  margin: 0 6.5%;
+  margin: 0 7%;
 }
 #asignaturas_cursos .simple_column{
 	width: 27%;
@@ -1562,8 +1578,9 @@ form button{
 	margin-bottom: 16% !important;
 }
 #registro_asignaturas #contenedor_registro{
-	width: 33%;
+	width: 34%;
 	min-height: 216px;
+	margin-left: 2% !important;
 }
 #asignaturas_cursos #contenedor_registro, #asignar_profesor #contenedor_registro, #asignar_horario_grupos #contenedor_registro{
 	width: 50%;
@@ -1625,20 +1642,22 @@ button[class*="elected"]{
 	border: none;
 }
 #asignatura_curso_dialog button{
-	min-width: 120px;
 	display: block;
 	margin: 5% auto 10% 10px;
+	min-height: 30px;
+	min-width: 120px;
 }
 #asignatura_curso_dialog span{
-	margin-top: 15px;
-	margin-bottom: 15px;
 	display: block;
+	margin-bottom: 10px;
+	margin-top: 5px;
 }
 #asignatura_curso_dialog h4{
 	text-decoration: underline;
 }
 #asignatura_curso_dialog #lista_asignaturas>div>div{
-	margin: 10px 0;
+	margin-bottom: 20px;
+    margin-top: 10px;
 }
 
 #asignatura_curso_dialog fieldset{
@@ -1695,11 +1714,11 @@ button[class*="elected"]{
 	margin-left: 3px;
 	color: #fa8258;
 }
-#asignatura_curso_dialog #contenedor_asignaturas>div, #profesor_asignatura_grupo_dialog #contenedor_asignaturas>div{
+#asignatura_curso_dialog #contenedor_asignaturas>div{
     background: #b1cce7 none repeat scroll 0 0;
     border-radius: 0 0 5px 5px;
     box-shadow: 0 1px 1px 1px rgba(0, 0, 0, 0.5);
-    height: 260px;
+    height: 284px;
     margin-top: 2px;
 }
 #asignatura_curso_dialog #contenedor_asignaturas .aviso, #profesor_asignatura_grupo_dialog #contenedor_asignaturas .aviso{
@@ -1769,6 +1788,10 @@ button[class*="elected"]{
 	margin: 0 auto !important;
 	margin-top: 10px !important;
 	font-size: 14px !important;
+}
+.aviso_opcional2 span:nth-child(2){
+	width: 95% !important;
+	margin: 10px 30px !important;
 }
 #asignatura_curso_dialog .button_all{
     background: #b1cce7;
@@ -2134,6 +2157,9 @@ button[class*="elected"]{
 }
 .placeholder_list_table_td{
     background: #FFCE55 !important;
+}
+.box-shadow{
+	box-shadow: 1px 1px 1px 1px grey;
 }
 .placeholder_list_table_th{
 	color: white !important;
@@ -2512,15 +2538,129 @@ button[class*="elected"]{
 	width: 88%;
 	margin: 0 !important;
 }
+#curso_nuevo .mensaje, #curso_edit .mensaje{
+	max-width: 71% !important;
+	margin-left: -45px !important;
+	padding: 3px !important;
+}
+#curso_nuevo .mensaje::before, #curso_edit .mensaje::before{
+	left: 47%;
+}
+#curso_nuevo input, #curso_edit input{
+	width: 80%;
+}
+#curso_nuevo label, #curso_edit label{
+	width: 140px;
+}
+#asignatura_nueva>div, #curso_nuevo>div{
+	top: 0 !important;
+	left: 0 !important;
+}
 #asignaturas_dialog form{
 	height: 81% !important;
 }
+
 #asignaturas_dialog #content-form{
-	min-height: 205px !important;
 	height: 0px !important;
-	width: 88%;
 	margin: 0 !important;
+	min-height: 263px !important;
+	width: 88%;
 }
+#asignaturas_dialog select{
+	width: 100px;
+}
+#asignatura_nueva label, #asignatura_edit label{
+	width: 222px;
+}
+#asignatura_nueva .addregistro > div:nth-child(3), #asignatura_edit .addregistro > div:nth-child(3){
+	width: 90%;
+}
+#asignatura_nueva #label_color>span, #asignatura_edit #label_color>span{
+	font-family: "Liberation Serif";
+	font-size: 1em !important;
+	margin-left: 5px;
+}
+#asignaturas_dialog #color{
+	background: white;
+	border-radius: 5px;
+	height: 23px;
+	margin-bottom: 10px;
+	width: 108px;
+	border: 2px double #A4A4A4;
+}
+#asignaturas_dialog #contenedor{
+	border-radius: 2px 0 0 2px;
+	float: left;
+	height: 23px;
+	width: 75%;
+	color: grey;
+	text-align: center;
+}
+#asignaturas_dialog #contenedor>span{
+	padding: 4px 0;
+	display: block;
+	font-size: 1.1em;
+}
+#asignaturas_dialog #flecha{
+	background: #e4e0e0;
+	border-radius: 0 3px 3px 0;
+	border-left: 2px double #A4A4A4;
+	cursor: pointer;
+	float: left;
+	height: 23px;
+	width: 23%;
+	opacity: 0.8;
+}
+#asignaturas_dialog #flecha:hover{
+	opacity: 1;
+}
+#flecha:before{ /* Este es un truco para crear una flechita */
+	border-color: grey transparent transparent;
+	border-style: solid;
+	border-width: 5px;
+    content: '';
+    left: 7px;
+    position: relative;
+    top: 15px;
+}
+
+#asignaturas_dialog #tabla{
+	background: white;
+	border-radius: 0 0 3px 3px;
+	box-shadow: 0 1px 1px 1px rgba(0, 0, 0, 0.5);
+	height: 120px;
+	margin-top: -9px;
+	position: absolute;
+	width: 108px;
+	z-index: 10;
+	overflow: auto;
+}
+#asignaturas_dialog #color_option{
+	cursor: pointer;
+	font-size: 1.3em;
+	height: 20px;
+	padding-left: 3%;
+	width: 97%;
+	border-bottom: 1px solid grey;
+}
+#asignaturas_dialog #color_option:hover{
+	color: white !important;
+	opacity: 0.9;
+}
+#asignaturas_dialog #div_error{
+	float: left;
+	margin-top: -29px;
+	margin-left: 110px;
+}
+
+#registro_asignaturas #color{
+	border: 1px solid grey;
+    border-radius: 5px;
+    display: block;
+    height: 17px;
+    width: 17px;
+}
+
 #festivos_dialog form{
 	height: 81% !important;
 }
@@ -2682,6 +2822,14 @@ select>option[value=""]{
     margin-left: 12%;
     width: 32%;
     clear: none;
+}
+#asignatura_nueva .addregistro > div:nth-child(2) label, #asignatura_edit .addregistro > div:nth-child(2) label{
+    width: 90px !important;
+}
+#asignatura_nueva .mensaje, #asignatura_edit .mensaje{
+	max-width: 71% !important;
+	margin-left: -5px !important;
+	padding: 3px !important;
 }
 .width100 form div{
 	width: 98% !important;
@@ -3814,6 +3962,12 @@ z-index: 100000000000000000000000000000000;
 .color_rojo{
 	color: #bc1010;
 }
+.color_rojo_swal{
+	color: #f27474;
+}
+.rojo{
+	background: #f27474 !important;
+}
 .verde{
 	background:#93ED99 !important;
 	}
@@ -4293,7 +4447,7 @@ input[id="si"]{
 }
 
 .contenedor_principal_reserva button{
-	margin: 10px;
+	margin: 15px;
 	min-width: 100px;
 	/*display: block;*/
 }
@@ -6381,6 +6535,13 @@ cursor: default !important;
 #asignar_horario_grupos  .simple_column button{
   margin: 1% 7% ;
 }
+#profesor_asignatura_grupo_dialog #contenedor_asignaturas>div{
+    background: #b1cce7 none repeat scroll 0 0;
+    border-radius: 0 0 5px 5px;
+    box-shadow: 0 1px 1px 1px rgba(0, 0, 0, 0.5);
+    height: 260px;
+    margin-top: 2px;
+}
 #profesor_asignatura_grupo_dialog span {
     display: block;
     margin-bottom: 15px;
@@ -6534,6 +6695,9 @@ cursor: default !important;
 #profesor_asignatura_grupo_dialog .lista_cursos{
 	min-height: 309px;
 }
+
+/*Asignación de Horarios de Grupo*/
+
 #asignar_horario_grupos .simple_column{
 	width: 25%;
 }
@@ -6587,7 +6751,11 @@ cursor: default !important;
 #asignar_horario_grupos #contenedor_datos span{
     float: left;
     font-size: 1.1em !important;
-    margin: 2px 10px;
+    margin: 2px 5px;
+}
+#asignar_horario_grupos #contenedor_datos img{
+    float: left;
+	margin: 2px
 }
 #asignar_horario_grupos #contenedor_datos p{
 	font-family: verdana;
@@ -6606,4 +6774,222 @@ cursor: default !important;
 #asignar_horario_grupos #contenedor_datos p span:first-child{
     min-width: 90px;
 }
+#asignar_horario_grupos #contenedor_registro li,#asignar_horario_grupo_dialog li{
+    list-style: outside none none;
+}
+#asignar_horario_grupo_dialog{
+	overflow: hidden;
+}
+#asignar_horario_grupo_dialog fieldset{
+   height: 495px;
+   padding: 10px;
+   padding-top: 0;
+    -moz-box-sizing: border-box;
+    -webkit-box-sizing: border-box;
+    box-sizing: border-box;
+}
+#asignar_horario_grupo_dialog #cabecera_horario{
+   height: 35px;
+   background: white;    
+   box-shadow: 0 1px 1px 1px rgba(0, 0, 0, 0.5);
+}
+#asignar_horario_grupo_dialog #tabla_horario{
+   height: 350px;
+}
+#asignar_horario_grupo_dialog #pie_horario{
+    border-top: 2px double grey;
+    display: table;
+    height: 100%;
+    width: 100%;
+}
+#asignar_horario_grupo_dialog .inner_table{
+   	max-height: 315px;
+   	background: none !important;
+}
 
+#asignar_horario_grupo_dialog th, #asignar_horario_grupo_dialog td{
+   	width: 1%;
+   	max-width: 0;
+   	text-align: center;
+   	min-height: 30px;
+   	max-height: 40px;
+}
+#asignar_horario_grupo_dialog .parent_no_form{
+   	height: 455px;
+}
+
+#asignar_horario_grupo_dialog th{
+   	height: 30px;
+}
+.row_recreo{
+	height: 29px !important;
+}
+#asignar_horario_grupo_dialog .inner_table tr td:nth-child(2)[class*='row_recreo']{
+	background: #5f706f  !important;
+	color: white !important;
+    font-family: "Comic Sans MS";
+    font-size: 0.8em;
+    font-weight: bold;
+}
+#asignar_horario_grupo_dialog .inner_table tr td[class*='list_mod']{
+    background: #4d769f none repeat scroll 0 0 !important;
+    color: white !important;
+    font-family: "serif";
+    font-size: 0.8em;
+    font-weight: bold;
+}
+#asignar_horario_grupo_dialog .child{
+    border-radius: 5px;
+    box-shadow: 0 1px 1px 1px rgba(0, 0, 0, 0.5);
+}
+#asignar_horario_grupo_dialog #tabla_horario th:first-child{
+    border-radius: 5px 0 0 0 ;  
+}
+#asignar_horario_grupo_dialog #tabla_horario th:last-child{
+    border-radius: 0 5px 0 0 ;  
+}
+#asignar_horario_grupo_dialog #contenedor_info, #asignar_horario_grupo_dialog #contenedor_info_drag {
+	border-right: 2px double grey;
+    display: table;
+    float: left;
+    height: 100%;
+    height: 108px;
+    min-width: 41%;
+    max-width: 41%;
+    padding: 4px 0;
+}
+#asignar_horario_grupo_dialog #contenedor_info div, #asignar_horario_grupo_dialog #contenedor_info_drag div{
+    display: table-cell;
+    height: 100px;
+    vertical-align: middle;
+    width: 385px;
+}
+#asignar_horario_grupo_dialog #contenedor_info div p, #asignar_horario_grupo_dialog #contenedor_info_drag div p{
+    margin: 5px 0;
+    clear: both;
+}
+#asignar_horario_grupo_dialog #contenedor_info div p img, #asignar_horario_grupo_dialog #contenedor_info_drag div p img{
+    margin:  0 5px;
+    vertical-align: top;
+}
+#asignar_horario_grupo_dialog #contenedor_info p, #asignar_horario_grupo_dialog #contenedor_info_drag p{
+    font-size: 0.9em;
+}
+
+#asignar_horario_grupo_dialog #contenedor_asig{
+    display: table-cell;
+    float: left;
+    height: 100%;
+    height: 108px;
+    max-width: 57%;
+    overflow-y: auto;
+    padding: 4px 5px;
+    width: 58%;
+}
+#asignar_horario_grupo_dialog #contenedor_asig ul{
+    float: left;
+    height: 20px;
+    margin: 18px 17px;
+    width: 40px;
+}
+#asignar_horario_grupo_dialog #contenedor_asig li{
+    border: 2px groove grey;
+    border-radius: 5px;
+    float: left;
+    font-family: Georgia;
+    font-size: 0.9em;
+    height: 18px;
+    margin: -17px 0;
+    padding: 7px;
+    text-align: center;
+    width: 35px;
+}
+
+#asignar_horario_grupo_dialog .ui-state-highligh{
+    background: #FFCE55 !important;
+}
+#asignar_horario_grupo_dialog #lista_color td{
+	padding: 0;
+}
+#asignar_horario_grupo_dialog #lista_color ul{
+ 	display: table;
+    height: 100%;
+    max-height: 40px;
+    width: 100%;
+}
+#asignar_horario_grupo_dialog #lista_color li{
+	border-radius: 2px;
+	padding: 1px; /*cambiar cuando arrastra*/
+	display: table-cell;
+	text-align: center !important;
+	vertical-align: middle;
+	max-height: 20px !important;
+}
+
+#asignar_horario_grupo_dialog ul[class*="sortable"] li{
+	cursor: pointer;
+}
+#asignar_horario_grupo_dialog .ui-icon{
+	float: right;
+}
+#asignar_horario_grupo_dialog #icono_asig{
+	width: 70px !important;
+}
+#asignar_horario_grupo_dialog #icono_asig span{
+    border: 2px groove grey;
+    border-radius: 5px;
+    float: left;
+    font-family: Georgia;
+    font-size: 0.9em;
+    height: 18px;
+    margin: -18px 10px -17px 20px;
+    padding: 7px;
+    text-align: center;
+    width: 35px;
+}
+#icono_mult_asig{
+    border: 2px groove grey;
+    border-radius: 5px;
+    display: table-cell;
+    float: left;
+    font-family: Georgia;
+    font-size: 0.9em;
+    height: 18px;
+    margin-left: 20px !important;
+    margin-top: 35px;
+    padding: 7px;
+    text-align: center;
+    vertical-align: middle;
+    width: 35px;
+}
+
+#icono_mult_asig_p{
+    border: 2px groove grey;
+    border-radius: 5px;
+    display: table-cell;
+    float: left;
+    font-family: Georgia;
+    font-size: 0.9em;
+    height: 18px;
+    margin-left: 25px !important;
+    margin-top: 35px;
+    padding: 3px !important;
+    text-align: center;
+    vertical-align: middle;
+    width: 35px;
+}
+
+#asignar_horario_grupo_dialog .ul_opcional li{
+    font-size: 0.8em !important;
+    width: 65px !important;
+}
+#asignar_horario_grupo_dialog .multiple{
+	padding: 0 5px;
+	max-width: 110px;
+}
+#asignar_horario_grupo_dialog td img{
+	margin: 0 5px; 
+	width: 25px;
+	height: 25px;
+
+}

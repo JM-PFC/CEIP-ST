@@ -1,0 +1,58 @@
+<script>
+  //Se añade el nombre del profesor en los grupos donde tengan profesor y asignaturas asignadas.
+  array={{imparte|json_encode()|raw}};
+  for (var key in array){
+    clave=key.split("-");
+    id_horario=clave[0];
+    dia=clave[1];
+    //nombre_asig=clave[2];
+    //abrev_asig=clave[3];
+    //aula=clave[4];
+    //grupo=clave[5];
+    //profesor=array[key];
+    id_asignatura=array[key];
+    //Se añade estilo para mostrar el recreo y la comida.
+    $("#asignar_horario_grupo_dialog .row_recreo").prev().addClass('row_recreo');
+
+    //Si existe alguna asignación con horario se muestra en la tabla.  
+    if(id_horario!=""){
+
+    $("#asignar_horario_grupo_dialog tr[id='"+id_horario+"'] td[id='"+dia+"'] ul").attr("carga",id_asignatura);
+    $("#asignar_horario_grupo_dialog tr[id='"+id_horario+"'] td[id='"+dia+"'] ul").addClass('asignada');
+
+     /*
+
+      $("#asignar_horario_grupo_dialog tr[id='"+id_horario+"'] td ul[dia='"+dia+"'] li").text(abrev_asig);
+      //Se crean atributos con los datos para mostrar.
+      $("#asignar_horario_grupo_dialog tr[id='"+id_horario+"'] td ul[dia='"+dia+"'] li").attr("asignatura",nombre_asig);
+      $("#asignar_horario_grupo_dialog tr[id='"+id_horario+"'] td ul[dia='"+dia+"'] li").attr("profesor",profesor);
+      $("#asignar_horario_grupo_dialog tr[id='"+id_horario+"'] td ul[dia='"+dia+"'] li").attr("aula",aula);
+
+
+      $("#asignar_horario_grupo_dialog tr[id='"+id_horario+"'] td[id='"+dia+"'] ul").append('<li id="55" class="ui-sortable-handle box-shadow" nombre="C. Naturales" siglas="C.N." style="background: rgb(118, 191, 103) none repeat scroll 0% 0%;" color="#76bf67" profesor="63" aula="69" dia="0" horario="0">');
+
+      */
+    }
+  }
+
+  /*
+<li id="55" class="ui-sortable-handle box-shadow" nombre="C. Naturales" siglas="C.N." style="background: rgb(118, 191, 103) none repeat scroll 0% 0%;" color="#76bf67" profesor="63" aula="69" dia="0" horario="0">
+
+  */
+</script>
+
+  {% for entity in entity %}
+	 <tr id="{{ entity.id }}" class="no_efect">
+  	 <td class="horario azul_opacity list_mod">{{ entity.inicio|date("H:i") ~ " - " ~ entity.fin|date("H:i")  }}</td>
+    {% if entity.horaClase == "RECREO" or entity.horaClase == "COMIDA" %}
+  	 <td colspan="5" class="no_efect row_recreo"> {{ entity.horaClase }}</td>
+     {% else %}
+     <td id="1"><ul dia="1" horario="{{entity.id}}" class="sortable"></ul></td>
+     <td id="2"><ul dia="2" horario="{{entity.id}}" class="sortable"></ul></td>
+     <td id="3"><ul dia="3" horario="{{entity.id}}" class="sortable"></ul></td>
+     <td id="4"><ul dia="4" horario="{{entity.id}}" class="sortable"></ul></td>
+     <td id="5"><ul dia="5" horario="{{entity.id}}" class="sortable"></ul></td>
+     {% endif %}
+	 </tr>
+  {% endfor %}
+    <div id="listas_nulas" class="oculto"></div>

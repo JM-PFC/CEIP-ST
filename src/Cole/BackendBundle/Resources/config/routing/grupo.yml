@@ -85,6 +85,12 @@ asignar_horario_new:
     options:
         expose: true
 
+asignar_horario_grupo:
+    path:     /asignar_horario_grupo
+    defaults: { _controller: "BackendBundle:Grupo:AsignarHorarioGrupo" }
+    options:
+        expose: true
+
 eliminar_horario_grupo:
     path:     /eliminar_horario_grupo
     defaults: { _controller: "BackendBundle:Grupo:EliminarHorarioGrupo" }

@@ -212,6 +212,14 @@ class CursoController extends Controller
         $editForm->handleRequest($request);
 
         if ($editForm->isValid()) {
+            // Se comprueba que no exista el curso en el sistema.
+            $curso = $em->getRepository('BackendBundle:Curso')->findCursoByNivel($entity->getCurso(),$entity->getNivel());
+            if($curso){
+                return new JsonResponse(array(
+                    'error' => 'existe',
+                    'success' => true), 200);
+            }
+            
             $em->flush();
 
             return $this->redirect($this->generateUrl('curso_edit', array('id' => $id)));

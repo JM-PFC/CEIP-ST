@@ -370,7 +370,9 @@ class ImparteController extends Controller
             if (!$imparte) {
                 throw $this->createNotFoundException('Unable to find Imparte entity.');
             }
-            $em->remove($imparte);
+            foreach ($imparte as $imparte ){
+                $em->remove($imparte);
+            }
             $num_elim++;
           }  
           $em->flush();
@@ -382,6 +384,7 @@ class ImparteController extends Controller
         if(!$tipo_horario){//Horario Automático. Se valida las horas disponibles de los profesores.
             if($asignaciones){
               foreach ($asignaciones as $row ) { //$row[0]->ID asignatura  $row[1]->Id profesor $row[2]->Id aula.
+
                 $profesor = $em->getRepository('BackendBundle:Profesor')->findOneById($row[1]);
                 if (!$profesor) {
                     throw $this->createNotFoundException('Unable to find Profesor entity.');
@@ -429,6 +432,7 @@ class ImparteController extends Controller
                         $error[] = array(array($name,$asignatura->getAsignatura()->getNombre(),$group));
                     }
                     else{
+                        /*
                         //Se actualiza la asignación.
                         if ($imparte) {
                             $imparte->setProfesor($profesor);
@@ -468,12 +472,62 @@ class ImparteController extends Controller
                             $num_asig++;              
                         }
                         $em->flush();
+                        */
+                        //Se actualiza la asignación.
+                        if ($imparte) {
+
+                          foreach ($imparte as $imparte) {
+
+                            $imparte->setProfesor($profesor);
+                            $imparte->setAsignatura($asignatura);
+                            if($aula!=null){
+                                $imparte->setAula($aula);    
+                            }
+                            else{
+                                $imparte->setAula(null);     
+                            }
+
+                            $imparte->SetHorario(null);//Se elimina la asignación de horario del profesor editado.
+                            $imparte->SetDiaSemanal(null);//Se elimina la asignación del día de clase del profesor editado.
+                            $em->persist($imparte);
+                            $em->flush();
+                          }
+                          $num_actu++; 
+
+                        }
+                        //Se crea la asignación.
+                        else{
+
+                          for ($i = 1; $i <= $asignatura->getNumModulos(); $i++) {
+
+                            $grupo = $em->getRepository('BackendBundle:Grupo')->findOneById($idgrupo);
+                            if (!$grupo) {
+                                throw $this->createNotFoundException('Unable to find Grupo entity.');
+                            }
+
+                            $imparte = new Imparte();
+                            $imparte->setProfesor($profesor);
+                            $imparte->setAsignatura($asignatura);
+                            $imparte->setGrupo($grupo);
+                            $imparte->setHorario(null);
+                            $imparte->setDiaSemanal(null);
+                            if($aula!=null){
+                                $imparte->setAula($aula);    
+                            }
+                            else{
+                                $imparte->setAula(null);     
+                            }
+                            $em->persist($imparte); 
+                            $em->flush();
+                          }
+                          $num_asig++; 
+                        }
                     }
                 }
               }    
             }
         }
-        // Horario Manual. 
+        // Horario Manual.
         else{//Se valida al asignar las asignaturas en el horario para calcular las horas de cada módulo al ser duracciones distintas.                     
             if($asignaciones){
               foreach ($asignaciones as $row ) { //$row[0]->ID asignatura  $row[1]->Id profesor $row[2]->Id aula.
@@ -508,35 +562,49 @@ class ImparteController extends Controller
                 else{
 
                     if ($imparte) {
-                        $imparte->setProfesor($profesor);
-                        $imparte->setAsignatura($asignatura);
+                        foreach ($imparte as $imparte) {
+                            $imparte->setProfesor($profesor);
+                            $imparte->setAsignatura($asignatura);
+                            if($aula!=null){
+                                $imparte->setAula($aula);    
+                            }
+                            else{
+                                $imparte->setAula(null);     
+                            }
+
+                            $imparte->SetHorario(null);//Se elimina la asignación de horario del profesor editado.
+                            $imparte->SetDiaSemanal(null);//Se elimina la asignación del día de clase del profesor editado.
+                            $em->persist($imparte);
+                            $em->flush();
+                        }
                         $num_actu++; 
-                        //comprobar que si está asignado dia y hora avise de que se borrará la asignación del horario y debe asignarlo de nuevo.
-                        // Validad que no se asigna a una hora que ya imparte(No puede repetirse hora y día de un profesor)
                     }
                     else{
                         $grupo = $em->getRepository('BackendBundle:Grupo')->findOneById($idgrupo);
                         if (!$grupo) {
                             throw $this->createNotFoundException('Unable to find Grupo entity.');
                         }
-                        $imparte = new Imparte();
-                        $imparte->setProfesor($profesor);
-                        $imparte->setAsignatura($asignatura);
-                        $imparte->setGrupo($grupo);
-                        $imparte->setHorario(null);
-                        $imparte->setDiaSemanal(null);
-                        if($aula!=null){
-                            $imparte->setAula($aula);    
-                        }
-                        else{
-                            $imparte->setAula(null);     
+                        for ($i = 1; $i <= $asignatura->getNumModulos(); $i++) {
+
+                            $imparte = new Imparte();
+                            $imparte->setProfesor($profesor);
+                            $imparte->setAsignatura($asignatura);
+                            $imparte->setGrupo($grupo);
+                            $imparte->setHorario(null);
+                            $imparte->setDiaSemanal(null);
+                            if($aula!=null){
+                                $imparte->setAula($aula);    
+                            }
+                            else{
+                                $imparte->setAula(null);     
+                            }
+                            $em->persist($imparte);
+                            $em->flush();
                         }
                         $num_asig++;              
                     }
-                    $em->persist($imparte);
                 }    
              }
-             $em->flush();
             }
         }
 
@@ -565,7 +633,7 @@ class ImparteController extends Controller
                 throw $this->createNotFoundException('Unable to find Asignatura entity.');
             }
 
-            $imparte = $em->getRepository('BackendBundle:Imparte')->findByAsignatura($asignatura);
+            $imparte = $em->getRepository('BackendBundle:Imparte')->findAsignaturasSinRepetir($asignatura);
             if ($imparte) {
 
                 foreach ($imparte as $asignacion ) {
@@ -628,5 +696,42 @@ class ImparteController extends Controller
             return new JsonResponse(array('data' => $data,'success' => true), 200);
         }
     }
+
+    public function ObtenerModulosOcupadosAction()
+    {
+        $em = $this->getDoctrine()->getManager();
+        $v_profesor=$this->get('request')->request->get('profesor');
+        $v_aula=$this->get('request')->request->get('aula');
+        $id_grupo=$this->get('request')->request->get('grupo');
+        $grupo = $em->getRepository('BackendBundle:Grupo')->findOneById($id_grupo);
+
+        $array_prof=[];
+        $array_aula=[];
+        foreach($v_profesor as $idprofesor){
+            $profesor = $em->getRepository('BackendBundle:Profesor')->findOneById($idprofesor);
+            $imparte_profesor = $em->getRepository('BackendBundle:Imparte')->findOcupadoPorProfesor($profesor, $grupo);
+
+            foreach($imparte_profesor as $registro){
+                $array_prof[$registro->getDiaSemanal()]=$registro->getHorario()->getId();
+            }
+        }
+
+        foreach($v_aula as $idaula){
+            $aula = $em->getRepository('BackendBundle:Equipamiento')->findOneById($idaula);
+            $imparte_aula = $em->getRepository('BackendBundle:Imparte')->findOcupadoPorAula($aula, $grupo);
+
+            foreach($imparte_aula as $registro){
+                $array_aula[$registro->getDiaSemanal()]=$registro->getHorario()->getId();
+            }
+        }
+
+        return new JsonResponse(array('profesor' => $array_prof,'aula' => $array_aula,'success' => true), 200);
+        
+    }
+
+
+
+
+
 
 }
