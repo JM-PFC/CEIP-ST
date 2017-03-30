@@ -4,12 +4,20 @@
 		"selected_items":
 		[
 			[
-				"last",
-				"last-child"
+				"margin",
+				"margin-left"
 			],
 			[
-				"margin",
-				"margin"
+				"li",
+				"line-height"
+			],
+			[
+				"mou",
+				"mouseenter	.mouseenter()"
+			],
+			[
+				"last",
+				"last-child"
 			],
 			[
 				"mo",
@@ -443,7 +451,7 @@
 			"file": "src/Cole/BackendBundle/Entity/Profesor.php",
 			"settings":
 			{
-				"buffer_size": 18566,
+				"buffer_size": 18565,
 				"line_ending": "Unix"
 			}
 		},
@@ -496,13 +504,10 @@
 			}
 		},
 		{
-			"contents": "<?php\n\nnamespace Cole\\BackendBundle\\Form;\n\nuse Symfony\\Component\\Form\\AbstractType;\nuse Symfony\\Component\\Form\\FormBuilderInterface;\nuse Symfony\\Component\\OptionsResolver\\OptionsResolverInterface;\n\nclass ProfesorType extends AbstractType\n{\n    /**\n    * @param FormBuilderInterface $builder\n    * @param array $options\n    */\n    public function buildForm(FormBuilderInterface $builder, array $options)\n    {\n        $builder\n            ->add('dni','text',array('label' => 'DNI/NIE','max_length' => 10, 'attr' => array('lengthmin'=> 9,'validation' => ' Equal,Empty,Length,Dni', 'class' => 'dni')))\n            ->add('nombre','text',array('label' => 'Nombre', 'max_length' => 30,'attr' => array('validation' => 'Empty, Words')))\n            ->add('apellido1','text',array('label' => 'Primer Apellido', 'max_length' => 30,'attr' => array('validation' => 'Empty, Words')))\n            ->add('apellido2','text',array('label' => 'Segundo Apellido','max_length' => 30, 'attr' => array('validation' => 'Empty, Words')))\n            ->add('sexo', 'choice', array('label' => 'Sexo','choices' => array('Masculino' => 'Masculino', 'Femenino'=>'Femenino'),'required'=> true, 'expanded'=>true, 'multiple'=>false))\n            ->add('fechaNacimiento','date',array('label' => 'Fecha Nacimiento', 'max_length' => 10,'widget' => 'single_text','format' => 'dd/MM/yyyy', 'attr' => array('lengthmin'=> 8,'class' => 'fecha', 'placeholder'=>'__/__/____','validation' => 'Empty,Length,Fecha,Fecha_Adulto')))\n            ->add('direccion','text',array('label' => 'Dirección','max_length' => 50, 'attr' => array('validation' => 'Empty, LetterInitial')))\n            ->add('localidad','text',array('label' => 'Localidad','max_length' => 50, 'attr' => array('validation' => 'Empty, Letters')))\n            ->add('provincia','text',array('label' => 'Provincia','max_length' => 30,'attr' => array('validation' => 'Empty, Letters')))\n            ->add('cp','text',array('label' => 'Código Postal', 'max_length' => 5, 'attr' => array('class' => 'cp','validation' => 'Empty,Length,CP')))\n            ->add('telefono','text', array('label' => 'Teléfono', 'max_length' => 12, 'attr' => array('class' => 'telefono', 'lengthmin'=> 9, 'validation' => 'Length,Telefono')))\n            ->add('movil','text', array('label' => 'Móvil', 'max_length' => 12, 'attr' => array('lengthmin'=> 9,'class' => 'telefono','validation' => 'Length,Telefono')))\n            ->add('email','email', array('label' => 'Email','required'=> false,'attr' => array('class' => 'text_transform_none','validation' => 'Email')))\n            //->add('fechaAlta')\n            ->add('foto', 'file', array('data_class' => null,'required' => false, 'attr' => array( 'class' => 'archivo','size' => 50, 'mimeTypes' => '.png,.jpg,.jpeg','validation' => 'MimeTypes, MaxSize')))\n            ->add('perfilAcademico', 'textarea',array('label' => 'Observaciones:', 'max_length' => 1200, 'attr' => array('type'=>'textarea', 'validation' => 'Words')))\n            ->add('perfilProfesional', 'textarea',array('label' => 'Observaciones:', 'max_length' => 1200, 'attr' => array('type'=>'textarea', 'validation' => 'Words')))\n            ->add('nivel', 'choice', array('label' => 'Profesor de:','choices' => array('Infantil' => 'Infantil', 'Primaria'=>'Primaria'), 'empty_data' => null,'empty_value'=> 'Seleccione un nivel','required'=> true, 'multiple'=>false, 'attr' => array('validation' => 'Empty')))\n            ->add('fechaAlta','date',array('label' => 'Fecha Alta', 'max_length' => 10,'widget' => 'single_text','format' => 'dd/MM/yyyy'))\n            ->add('fechaBaja','date',array('label' => 'Fecha Baja', 'max_length' => 10,'widget' => 'single_text','format' => 'dd/MM/yyyy'))\n            ->add('observaciones', 'textarea',array('label' => 'Observaciones:', 'max_length' => 500, 'attr' => array('type'=>'textarea')))\n            ->add('observaciones', 'textarea',array('label' => 'Observaciones:', 'max_length' => 500, 'attr' => array('type'=>'textarea')))\n            ->add('horas','integer', array('label' => 'Jornada Laboral','required' => true,'attr' => array('min' => 15,'max' => 40,'step' => 0.5,'validation' => ' Empty')))\n            ->add('horasLectivas','integer', array('label' => 'Horas lectivas (sin contar las 2.5 horas del Recreo)','required' => true,'attr' => array('min' => 5,'max' => \"22,5\",'step' => 0.5,'validation' => ' Empty')))\n            //->add('username')\n            //->add('password')\n            //->add('salt')\n            //->add('claveUsuario')\n            //->add('activo')\n            ->add('limpiar', 'button', array('attr' => array('class' => 'limpiar')))\n\n            //->add('role') No debe modificarlo el usuario\n        ;\n    }\n    \n    /**\n     * @param OptionsResolverInterface $resolver\n     */\n    public function setDefaultOptions(OptionsResolverInterface $resolver)\n    {\n        $resolver->setDefaults(array(\n            'data_class' => 'Cole\\BackendBundle\\Entity\\Profesor'\n        ));\n    }\n\n    /**\n     * @return string\n     */\n    public function getName()\n    {\n        return 'profesor';\n    }\n}\n",
 			"file": "src/Cole/BackendBundle/Form/ProfesorType.php",
-			"file_size": 5075,
-			"file_write_time": 1487036977000000,
 			"settings":
 			{
-				"buffer_size": 5073,
+				"buffer_size": 5050,
 				"line_ending": "Unix"
 			}
 		},
@@ -542,7 +547,7 @@
 			"file": "src/Cole/BackendBundle/Resources/views/Grupo/new_horario_grupo.html.twig",
 			"settings":
 			{
-				"buffer_size": 17754,
+				"buffer_size": 24626,
 				"line_ending": "Unix"
 			}
 		},
@@ -550,7 +555,7 @@
 			"file": "src/Cole/BackendBundle/Controller/GrupoController.php",
 			"settings":
 			{
-				"buffer_size": 23374,
+				"buffer_size": 29785,
 				"line_ending": "Unix"
 			}
 		},
@@ -558,7 +563,7 @@
 			"file": "src/Cole/BackendBundle/Resources/views/Grupo/datos_horarios.html.twig",
 			"settings":
 			{
-				"buffer_size": 2748,
+				"buffer_size": 4344,
 				"line_ending": "Unix"
 			}
 		},
@@ -566,7 +571,7 @@
 			"file": "src/Cole/BackendBundle/Resources/views/Asignatura/asignaturas_cursos_show.html.twig",
 			"settings":
 			{
-				"buffer_size": 9693,
+				"buffer_size": 9833,
 				"line_ending": "Unix"
 			}
 		},
@@ -590,7 +595,7 @@
 			"file": "src/Cole/BackendBundle/Controller/AsignaturaController.php",
 			"settings":
 			{
-				"buffer_size": 18300,
+				"buffer_size": 18569,
 				"line_ending": "Unix"
 			}
 		},
@@ -598,7 +603,7 @@
 			"file": "src/Cole/BackendBundle/Resources/config/routing/imparte.yml",
 			"settings":
 			{
-				"buffer_size": 2308,
+				"buffer_size": 2487,
 				"line_ending": "Unix"
 			}
 		},
@@ -606,7 +611,7 @@
 			"file": "src/Cole/BackendBundle/Controller/ImparteController.php",
 			"settings":
 			{
-				"buffer_size": 29428,
+				"buffer_size": 29326,
 				"line_ending": "Unix"
 			}
 		},
@@ -761,7 +766,7 @@
 			"file": "src/Cole/BackendBundle/Resources/views/Grupo/datos_horarios_new.html.twig",
 			"settings":
 			{
-				"buffer_size": 2779,
+				"buffer_size": 2365,
 				"line_ending": "Unix"
 			}
 		},
@@ -841,7 +846,7 @@
 			"file": "src/Cole/BackendBundle/Entity/ImparteRepository.php",
 			"settings":
 			{
-				"buffer_size": 5606,
+				"buffer_size": 7642,
 				"line_ending": "Unix"
 			}
 		},
@@ -876,7 +881,7 @@
 			"file": "src/Cole/BackendBundle/Resources/config/routing/grupo.yml",
 			"settings":
 			{
-				"buffer_size": 2575,
+				"buffer_size": 2743,
 				"line_ending": "Unix"
 			}
 		},
@@ -884,7 +889,7 @@
 			"file": "src/Cole/BackendBundle/Resources/views/Grupo/asignar_horarios_show.html.twig",
 			"settings":
 			{
-				"buffer_size": 11484,
+				"buffer_size": 11497,
 				"line_ending": "Unix"
 			}
 		},
@@ -956,7 +961,7 @@
 			"file": "src/Cole/BackendBundle/Resources/public/css/backend.css",
 			"settings":
 			{
-				"buffer_size": 149875,
+				"buffer_size": 152635,
 				"line_ending": "Unix"
 			}
 		},
@@ -964,7 +969,7 @@
 			"file": "src/Cole/BackendBundle/Resources/public/js/general.js",
 			"settings":
 			{
-				"buffer_size": 543795,
+				"buffer_size": 547435,
 				"line_ending": "Unix"
 			}
 		},
@@ -1300,6 +1305,14 @@
 				"buffer_size": 10431,
 				"line_ending": "Unix"
 			}
+		},
+		{
+			"file": "src/Cole/BackendBundle/Resources/public/js/pnotify/pnotify.custom.min.css",
+			"settings":
+			{
+				"buffer_size": 6227,
+				"line_ending": "Unix"
+			}
 		}
 	],
 	"build_system": "",
@@ -1450,7 +1463,7 @@
 	],
 	"find":
 	{
-		"height": 78.0
+		"height": 81.0
 	},
 	"find_in_files":
 	{
@@ -1464,6 +1477,69 @@
 		"case_sensitive": false,
 		"find_history":
 		[
+			"asignaturas_cursos",
+			"array",
+			"foreach",
+			"findClases",
+			"modulos",
+			"AsignaturasCurso",
+			"Debe seleccionar los siguientes datos para realizar la reserva",
+			"Debe seleccionar",
+			"Debe completar",
+			".ui-pnotify.custom .ui-pnotify-title, .ui-pnotify.custom .ui-pnotify-text",
+			"swal",
+			"sólo",
+			" ó ",
+			"ó",
+			"error.play();",
+			"swal",
+			"justificada",
+			"$profesor",
+			"swal",
+			"cancel",
+			"inferio",
+			"ajax",
+			"object",
+			"array",
+			"'asignada'",
+			"asignada",
+			"bloqueo",
+			"hasClass('bloqueo')",
+			"AsignarGrupoProfesores",
+			"profesor_asignatura_grupo_submit",
+			"btn_asignar",
+			"asignar_grupo_profesores",
+			"asignarprofe",
+			"profesor_asignatura_grupo_submit",
+			"asignatura_curso_dialog",
+			"$(\".ui-pnotify\").remove();",
+			"PNotify",
+			"PNotify.remove",
+			"errorPNotify.remove",
+			"        $('#asignar_horario_grupo_dialog').dialog('close');\n",
+			"pnoti",
+			"pnof",
+			"Horario actual",
+			"horario actualizado",
+			"findByAsignaturaLibre",
+			"carga",
+			"asignar_horario_grupos",
+			"$array",
+			"array",
+			"$array",
+			"opcional",
+			"event",
+			"target",
+			"event",
+			"targe",
+			"input",
+			"object",
+			"asignartuto",
+			"object",
+			"PNotify",
+			"object",
+			"stack",
+			"object",
 			"restablecer",
 			"ajax",
 			"dismiss",
@@ -1528,70 +1604,7 @@
 			"curso_nuevo",
 			"Debe asignar las asignaturas del curso",
 			"not",
-			"asignatura_opcional",
-			"new_profe",
-			"img",
-			"Routing.generate",
-			"tutor_grupos",
-			"img",
-			"tutor_grupos",
-			"ui",
-			"each",
-			"asignar_horario_grupo_dialog",
-			"tutor_grupos",
-			"asignar_horario_grupo_dialog",
-			"sorting_1",
-			"placeholder_list_table_td",
-			"sortable",
-			"tutor_grupos",
-			"asignatura_nueva",
-			"event",
-			"label",
-			"programation",
-			"_edit",
-			"blur",
-			"asignatura_nueva",
-			"contenedor",
-			"absolute",
-			"fadeIn",
-			"show",
-			"caja_login",
-			"curso_nuevo",
-			"cursos_dialog",
-			"curso_nuevo",
-			"curso",
-			"curso_nuevo",
-			"blur",
-			"validation",
-			"blur",
-			"comprobarEditForm",
-			"keyup",
-			"_submit",
-			"$(this).closest(\"form\").find(\":input\")",
-			"alumno_sub",
-			"nuevo_alumno",
-			"alumno_nuevo",
-			"new",
-			"asignatura_nueva",
-			"asignatura_submit",
-			"box-",
-			"thead",
-			"chil",
-			"box",
-			"fieldset",
-			"asignar_horario_grupos",
-			"reserva",
-			"Hora de reserva",
-			"Horas de reserva",
-			"media",
-			"#asignatura_curso_dialog #contenedor_asignaturas li input[class='invalid']",
-			"asignada",
-			"invalid",
-			"each",
-			"asignatura_curso_dialog",
-			"no_lectivo",
-			"ui-state-disabled ",
-			"no_lectivo"
+			"asignatura_opcional"
 		],
 		"highlight": true,
 		"in_selection": false,
@@ -1610,7 +1623,7 @@
 	"groups":
 	[
 		{
-			"selected": 33,
+			"selected": 36,
 			"sheets":
 			[
 				{
@@ -2452,8 +2465,8 @@
 						"selection":
 						[
 							[
-								634,
-								634
+								12591,
+								12591
 							]
 						],
 						"settings":
@@ -2600,7 +2613,7 @@
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 154.0,
+						"translation.y": 4616.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"
@@ -5097,15 +5110,15 @@
 					"file": "src/Cole/BackendBundle/Entity/Profesor.php",
 					"settings":
 					{
-						"buffer_size": 18566,
+						"buffer_size": 18565,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								5527,
-								5527
+								5414,
+								5414
 							]
 						],
 						"settings":
@@ -5253,7 +5266,7 @@
 							"translate_tabs_to_spaces": true
 						},
 						"translation.x": 0.0,
-						"translation.y": 4304.0,
+						"translation.y": 4202.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"
@@ -6257,15 +6270,15 @@
 					"file": "src/Cole/BackendBundle/Form/ProfesorType.php",
 					"settings":
 					{
-						"buffer_size": 5073,
+						"buffer_size": 5050,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								3978,
-								3978
+								4652,
+								4652
 							]
 						],
 						"settings":
@@ -6412,8 +6425,8 @@
 							"tab_size": 4,
 							"translate_tabs_to_spaces": true
 						},
-						"translation.x": 786.0,
-						"translation.y": 612.0,
+						"translation.x": 216.0,
+						"translation.y": 510.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"
@@ -6761,8 +6774,8 @@
 						"selection":
 						[
 							[
-								1779,
-								1779
+								3241,
+								3241
 							]
 						],
 						"settings":
@@ -6910,7 +6923,7 @@
 							"translate_tabs_to_spaces": true
 						},
 						"translation.x": 0.0,
-						"translation.y": 663.0,
+						"translation.y": 1173.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"
@@ -6927,8 +6940,8 @@
 						"selection":
 						[
 							[
-								7403,
-								7403
+								148,
+								148
 							]
 						],
 						"settings":
@@ -7076,7 +7089,7 @@
 							"translate_tabs_to_spaces": true
 						},
 						"translation.x": 0.0,
-						"translation.y": 357.0,
+						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"
@@ -7086,15 +7099,15 @@
 					"file": "src/Cole/BackendBundle/Resources/views/Grupo/new_horario_grupo.html.twig",
 					"settings":
 					{
-						"buffer_size": 17754,
+						"buffer_size": 24626,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								9103,
-								9103
+								6783,
+								6783
 							]
 						],
 						"settings":
@@ -7242,7 +7255,7 @@
 							"translate_tabs_to_spaces": true
 						},
 						"translation.x": 0.0,
-						"translation.y": 2752.0,
+						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"
@@ -7252,15 +7265,15 @@
 					"file": "src/Cole/BackendBundle/Controller/GrupoController.php",
 					"settings":
 					{
-						"buffer_size": 23374,
+						"buffer_size": 29785,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								4113,
-								4113
+								4780,
+								4780
 							]
 						],
 						"settings":
@@ -7408,7 +7421,7 @@
 							"translate_tabs_to_spaces": true
 						},
 						"translation.x": 0.0,
-						"translation.y": 1936.0,
+						"translation.y": 2123.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"
@@ -7418,15 +7431,15 @@
 					"file": "src/Cole/BackendBundle/Resources/views/Grupo/datos_horarios.html.twig",
 					"settings":
 					{
-						"buffer_size": 2748,
+						"buffer_size": 4344,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								145,
-								145
+								2714,
+								2714
 							]
 						],
 						"settings":
@@ -7574,7 +7587,7 @@
 							"translate_tabs_to_spaces": true
 						},
 						"translation.x": 0.0,
-						"translation.y": 357.0,
+						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"
@@ -7584,15 +7597,15 @@
 					"file": "src/Cole/BackendBundle/Resources/views/Asignatura/asignaturas_cursos_show.html.twig",
 					"settings":
 					{
-						"buffer_size": 9693,
+						"buffer_size": 9833,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								550,
-								550
+								8795,
+								8795
 							]
 						],
 						"settings":
@@ -7740,7 +7753,7 @@
 							"translate_tabs_to_spaces": true
 						},
 						"translation.x": 0.0,
-						"translation.y": 391.0,
+						"translation.y": 3138.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"
@@ -7757,8 +7770,8 @@
 						"selection":
 						[
 							[
-								1647,
-								1647
+								1148,
+								1148
 							]
 						],
 						"settings":
@@ -7906,7 +7919,7 @@
 							"translate_tabs_to_spaces": true
 						},
 						"translation.x": 0.0,
-						"translation.y": 885.0,
+						"translation.y": 610.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"
@@ -7923,8 +7936,8 @@
 						"selection":
 						[
 							[
-								212,
-								212
+								0,
+								0
 							]
 						],
 						"settings":
@@ -8072,7 +8085,7 @@
 							"translate_tabs_to_spaces": true
 						},
 						"translation.x": 0.0,
-						"translation.y": 51.0,
+						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"
@@ -8082,15 +8095,15 @@
 					"file": "src/Cole/BackendBundle/Controller/AsignaturaController.php",
 					"settings":
 					{
-						"buffer_size": 18300,
+						"buffer_size": 18569,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								17864,
-								17864
+								1499,
+								1499
 							]
 						],
 						"settings":
@@ -8238,7 +8251,7 @@
 							"translate_tabs_to_spaces": true
 						},
 						"translation.x": 0.0,
-						"translation.y": 8658.0,
+						"translation.y": 564.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"
@@ -8248,15 +8261,15 @@
 					"file": "src/Cole/BackendBundle/Resources/config/routing/imparte.yml",
 					"settings":
 					{
-						"buffer_size": 2308,
+						"buffer_size": 2487,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								2271,
-								2271
+								2450,
+								2450
 							]
 						],
 						"settings":
@@ -8404,7 +8417,7 @@
 							"translate_tabs_to_spaces": true
 						},
 						"translation.x": 0.0,
-						"translation.y": 1108.0,
+						"translation.y": 1173.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"
@@ -8414,15 +8427,15 @@
 					"file": "src/Cole/BackendBundle/Controller/ImparteController.php",
 					"settings":
 					{
-						"buffer_size": 29428,
+						"buffer_size": 29326,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								28890,
-								28890
+								29124,
+								29124
 							]
 						],
 						"settings":
@@ -8570,7 +8583,7 @@
 							"translate_tabs_to_spaces": true
 						},
 						"translation.x": 0.0,
-						"translation.y": 12022.0,
+						"translation.y": 12243.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"
@@ -8578,7 +8591,7 @@
 			]
 		},
 		{
-			"selected": 16,
+			"selected": 34,
 			"sheets":
 			[
 				{
@@ -10914,8 +10927,8 @@
 						"selection":
 						[
 							[
-								10591,
-								10591
+								13567,
+								13567
 							]
 						],
 						"settings":
@@ -11063,7 +11076,7 @@
 							"translate_tabs_to_spaces": true
 						},
 						"translation.x": 0.0,
-						"translation.y": 5664.0,
+						"translation.y": 6596.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"
@@ -11229,7 +11242,7 @@
 							"translate_tabs_to_spaces": true
 						},
 						"translation.x": 0.0,
-						"translation.y": 3009.0,
+						"translation.y": 544.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"
@@ -11246,8 +11259,8 @@
 						"selection":
 						[
 							[
-								1177,
-								1177
+								1284,
+								1284
 							]
 						],
 						"settings":
@@ -11395,7 +11408,7 @@
 							"translate_tabs_to_spaces": true
 						},
 						"translation.x": 0.0,
-						"translation.y": 2329.0,
+						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"
@@ -11561,7 +11574,7 @@
 							"translate_tabs_to_spaces": true
 						},
 						"translation.x": 0.0,
-						"translation.y": 612.0,
+						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"
@@ -11571,15 +11584,15 @@
 					"file": "src/Cole/BackendBundle/Resources/views/Grupo/datos_horarios_new.html.twig",
 					"settings":
 					{
-						"buffer_size": 2779,
+						"buffer_size": 2365,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								1960,
-								1960
+								267,
+								267
 							]
 						],
 						"settings":
@@ -11727,7 +11740,7 @@
 							"translate_tabs_to_spaces": true
 						},
 						"translation.x": 0.0,
-						"translation.y": 340.0,
+						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"
@@ -12905,8 +12918,8 @@
 						"selection":
 						[
 							[
-								23,
-								23
+								97,
+								97
 							]
 						],
 						"settings":
@@ -13230,180 +13243,15 @@
 					"file": "src/Cole/BackendBundle/Entity/ImparteRepository.php",
 					"settings":
 					{
-						"buffer_size": 5606,
+						"buffer_size": 7642,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								4382,
-								4382
-							]
-						],
-						"settings":
-						{
-							"BracketHighlighterBusy": false,
-							"annotations":
-							[
-								"TODO",
-								"README",
-								"FIXME"
-							],
-							"bh_regions":
-							[
-								"bh_regex",
-								"bh_regex_center",
-								"bh_regex_open",
-								"bh_regex_close",
-								"bh_double_quote",
-								"bh_double_quote_center",
-								"bh_double_quote_open",
-								"bh_double_quote_close",
-								"bh_square",
-								"bh_square_center",
-								"bh_square_open",
-								"bh_square_close",
-								"bh_angle",
-								"bh_angle_center",
-								"bh_angle_open",
-								"bh_angle_close",
-								"bh_curly",
-								"bh_curly_center",
-								"bh_curly_open",
-								"bh_curly_close",
-								"bh_c_define",
-								"bh_c_define_center",
-								"bh_c_define_open",
-								"bh_c_define_close",
-								"bh_default",
-								"bh_default_center",
-								"bh_default_open",
-								"bh_default_close",
-								"bh_unmatched",
-								"bh_unmatched_center",
-								"bh_unmatched_open",
-								"bh_unmatched_close",
-								"bh_round",
-								"bh_round_center",
-								"bh_round_open",
-								"bh_round_close",
-								"bh_tag",
-								"bh_tag_center",
-								"bh_tag_open",
-								"bh_tag_close",
-								"bh_single_quote",
-								"bh_single_quote_center",
-								"bh_single_quote_open",
-								"bh_single_quote_close"
-							],
-							"csslint_options":
-							{
-								"adjoining-classes": "warning",
-								"box-model": true,
-								"box-sizing": "warning",
-								"compatible-vendor-prefixes": "warning",
-								"display-property-grouping": true,
-								"duplicate-background-images": "warning",
-								"duplicate-properties": true,
-								"empty-rules": true,
-								"errors": true,
-								"fallback-colors": "warning",
-								"floats": "warning",
-								"font-faces": "warning",
-								"font-sizes": "warning",
-								"gradients": "warning",
-								"ids": "warning",
-								"import": "warning",
-								"important": "warning",
-								"known-properties": true,
-								"outline-none": "warning",
-								"overqualified-elements": "warning",
-								"qualified-headings": "warning",
-								"regex-selectors": "warning",
-								"rules-count": "warning",
-								"shorthand": "warning",
-								"star-property-hack": "warning",
-								"text-indent": "warning",
-								"underscore-property-hack": "warning",
-								"unique-headings": "warning",
-								"universal-selector": "warning",
-								"vendor-prefix": true,
-								"zero-units": "warning"
-							},
-							"gjslint_ignore":
-							[
-								110
-							],
-							"gjslint_options":
-							[
-							],
-							"javascript_linter": "jshint",
-							"jshint_options":
-							{
-								"browser": true,
-								"devel": true,
-								"evil": true,
-								"regexdash": true,
-								"sub": true,
-								"trailing": true,
-								"wsh": true
-							},
-							"pep8": true,
-							"pep8_ignore":
-							[
-								"E501"
-							],
-							"perl_linter": "perlcritic",
-							"pyflakes_ignore":
-							[
-							],
-							"pyflakes_ignore_import_*": true,
-							"sublimelinter": "load-save",
-							"sublimelinter_delay": 2,
-							"sublimelinter_disable":
-							[
-							],
-							"sublimelinter_executable_map":
-							{
-							},
-							"sublimelinter_fill_outlines": false,
-							"sublimelinter_gutter_marks": true,
-							"sublimelinter_gutter_marks_theme": "simple",
-							"sublimelinter_mark_style": "none",
-							"sublimelinter_notes": false,
-							"sublimelinter_objj_check_ascii": false,
-							"sublimelinter_popup_errors_on_save": false,
-							"sublimelinter_syntax_map":
-							{
-								"C++": "c",
-								"Python Django": "python",
-								"Ruby on Rails": "ruby"
-							},
-							"sublimelinter_wrap_find": true,
-							"syntax": "Packages/PHP/PHP.tmLanguage",
-							"translate_tabs_to_spaces": false
-						},
-						"translation.x": 236.0,
-						"translation.y": 2181.0,
-						"zoom_level": 1.0
-					},
-					"type": "text"
-				},
-				{
-					"buffer": 71,
-					"file": "src/Cole/BackendBundle/Entity/AsignaturasCursosRepository.php",
-					"settings":
-					{
-						"buffer_size": 2556,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								1345,
-								1345
+								7639,
+								7639
 							]
 						],
 						"settings":
@@ -13550,7 +13398,172 @@
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 714.0,
+						"translation.y": 3743.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 71,
+					"file": "src/Cole/BackendBundle/Entity/AsignaturasCursosRepository.php",
+					"settings":
+					{
+						"buffer_size": 2556,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								321,
+								321
+							]
+						],
+						"settings":
+						{
+							"BracketHighlighterBusy": false,
+							"annotations":
+							[
+								"TODO",
+								"README",
+								"FIXME"
+							],
+							"bh_regions":
+							[
+								"bh_regex",
+								"bh_regex_center",
+								"bh_regex_open",
+								"bh_regex_close",
+								"bh_double_quote",
+								"bh_double_quote_center",
+								"bh_double_quote_open",
+								"bh_double_quote_close",
+								"bh_square",
+								"bh_square_center",
+								"bh_square_open",
+								"bh_square_close",
+								"bh_angle",
+								"bh_angle_center",
+								"bh_angle_open",
+								"bh_angle_close",
+								"bh_curly",
+								"bh_curly_center",
+								"bh_curly_open",
+								"bh_curly_close",
+								"bh_c_define",
+								"bh_c_define_center",
+								"bh_c_define_open",
+								"bh_c_define_close",
+								"bh_default",
+								"bh_default_center",
+								"bh_default_open",
+								"bh_default_close",
+								"bh_unmatched",
+								"bh_unmatched_center",
+								"bh_unmatched_open",
+								"bh_unmatched_close",
+								"bh_round",
+								"bh_round_center",
+								"bh_round_open",
+								"bh_round_close",
+								"bh_tag",
+								"bh_tag_center",
+								"bh_tag_open",
+								"bh_tag_close",
+								"bh_single_quote",
+								"bh_single_quote_center",
+								"bh_single_quote_open",
+								"bh_single_quote_close"
+							],
+							"csslint_options":
+							{
+								"adjoining-classes": "warning",
+								"box-model": true,
+								"box-sizing": "warning",
+								"compatible-vendor-prefixes": "warning",
+								"display-property-grouping": true,
+								"duplicate-background-images": "warning",
+								"duplicate-properties": true,
+								"empty-rules": true,
+								"errors": true,
+								"fallback-colors": "warning",
+								"floats": "warning",
+								"font-faces": "warning",
+								"font-sizes": "warning",
+								"gradients": "warning",
+								"ids": "warning",
+								"import": "warning",
+								"important": "warning",
+								"known-properties": true,
+								"outline-none": "warning",
+								"overqualified-elements": "warning",
+								"qualified-headings": "warning",
+								"regex-selectors": "warning",
+								"rules-count": "warning",
+								"shorthand": "warning",
+								"star-property-hack": "warning",
+								"text-indent": "warning",
+								"underscore-property-hack": "warning",
+								"unique-headings": "warning",
+								"universal-selector": "warning",
+								"vendor-prefix": true,
+								"zero-units": "warning"
+							},
+							"gjslint_ignore":
+							[
+								110
+							],
+							"gjslint_options":
+							[
+							],
+							"javascript_linter": "jshint",
+							"jshint_options":
+							{
+								"browser": true,
+								"devel": true,
+								"evil": true,
+								"regexdash": true,
+								"sub": true,
+								"trailing": true,
+								"wsh": true
+							},
+							"pep8": true,
+							"pep8_ignore":
+							[
+								"E501"
+							],
+							"perl_linter": "perlcritic",
+							"pyflakes_ignore":
+							[
+							],
+							"pyflakes_ignore_import_*": true,
+							"sublimelinter": "load-save",
+							"sublimelinter_delay": 2,
+							"sublimelinter_disable":
+							[
+							],
+							"sublimelinter_executable_map":
+							{
+							},
+							"sublimelinter_fill_outlines": false,
+							"sublimelinter_gutter_marks": true,
+							"sublimelinter_gutter_marks_theme": "simple",
+							"sublimelinter_mark_style": "none",
+							"sublimelinter_notes": false,
+							"sublimelinter_objj_check_ascii": false,
+							"sublimelinter_popup_errors_on_save": false,
+							"sublimelinter_syntax_map":
+							{
+								"C++": "c",
+								"Python Django": "python",
+								"Ruby on Rails": "ruby"
+							},
+							"sublimelinter_wrap_find": true,
+							"syntax": "Packages/PHP/PHP.tmLanguage",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 256.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"
@@ -13891,15 +13904,15 @@
 					"file": "src/Cole/BackendBundle/Resources/config/routing/grupo.yml",
 					"settings":
 					{
-						"buffer_size": 2575,
+						"buffer_size": 2743,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								2383,
-								2383
+								2295,
+								2295
 							]
 						],
 						"settings":
@@ -14047,7 +14060,7 @@
 							"translate_tabs_to_spaces": true
 						},
 						"translation.x": 0.0,
-						"translation.y": 1496.0,
+						"translation.y": 1445.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"
@@ -14057,15 +14070,15 @@
 					"file": "src/Cole/BackendBundle/Resources/views/Grupo/asignar_horarios_show.html.twig",
 					"settings":
 					{
-						"buffer_size": 11484,
+						"buffer_size": 11497,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								3903,
-								3903
+								7192,
+								7192
 							]
 						],
 						"settings":
@@ -14213,7 +14226,7 @@
 							"translate_tabs_to_spaces": true
 						},
 						"translation.x": 0.0,
-						"translation.y": 4029.0,
+						"translation.y": 441.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"
@@ -14894,8 +14907,8 @@
 						"selection":
 						[
 							[
-								3102,
-								3102
+								3022,
+								3022
 							]
 						],
 						"settings":
@@ -15043,7 +15056,7 @@
 							"translate_tabs_to_spaces": true
 						},
 						"translation.x": 0.0,
-						"translation.y": 2974.0,
+						"translation.y": 2533.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"
@@ -15392,8 +15405,8 @@
 						"selection":
 						[
 							[
-								73,
-								73
+								123,
+								123
 							]
 						],
 						"settings":
@@ -15549,7 +15562,7 @@
 			]
 		},
 		{
-			"selected": 1,
+			"selected": 0,
 			"sheets":
 			[
 				{
@@ -15557,15 +15570,15 @@
 					"file": "src/Cole/BackendBundle/Resources/public/css/backend.css",
 					"settings":
 					{
-						"buffer_size": 149875,
+						"buffer_size": 152635,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								148426,
-								148426
+								31102,
+								31102
 							]
 						],
 						"settings":
@@ -15711,7 +15724,7 @@
 							"syntax": "Packages/CSS/CSS.tmLanguage"
 						},
 						"translation.x": 0.0,
-						"translation.y": 117517.0,
+						"translation.y": 26731.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"
@@ -15721,15 +15734,15 @@
 					"file": "src/Cole/BackendBundle/Resources/public/js/general.js",
 					"settings":
 					{
-						"buffer_size": 543795,
+						"buffer_size": 547435,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								543716,
-								543716
+								350309,
+								350309
 							]
 						],
 						"settings":
@@ -15877,7 +15890,7 @@
 							"translate_tabs_to_spaces": true
 						},
 						"translation.x": 0.0,
-						"translation.y": 223633.0,
+						"translation.y": 142386.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"
@@ -18715,8 +18728,8 @@
 						"selection":
 						[
 							[
-								349,
-								349
+								6,
+								6
 							]
 						],
 						"settings":
@@ -20039,8 +20052,8 @@
 						"selection":
 						[
 							[
-								3789,
-								3789
+								14147,
+								14147
 							]
 						],
 						"settings":
@@ -20188,7 +20201,7 @@
 							"translate_tabs_to_spaces": true
 						},
 						"translation.x": 0.0,
-						"translation.y": 419.0,
+						"translation.y": 5558.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"
@@ -20205,8 +20218,8 @@
 						"selection":
 						[
 							[
-								396,
-								396
+								1997,
+								1997
 							]
 						],
 						"settings":
@@ -20352,8 +20365,8 @@
 							"syntax": "Packages/PHP/PHP.tmLanguage",
 							"translate_tabs_to_spaces": false
 						},
-						"translation.x": 281.0,
-						"translation.y": 237.0,
+						"translation.x": 0.0,
+						"translation.y": 1247.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"
@@ -22629,6 +22642,172 @@
 						"zoom_level": 1.0
 					},
 					"type": "text"
+				},
+				{
+					"buffer": 127,
+					"file": "src/Cole/BackendBundle/Resources/public/js/pnotify/pnotify.custom.min.css",
+					"settings":
+					{
+						"buffer_size": 6227,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								6226,
+								6226
+							]
+						],
+						"settings":
+						{
+							"BracketHighlighterBusy": false,
+							"annotations":
+							[
+								"TODO",
+								"README",
+								"FIXME"
+							],
+							"bh_regions":
+							[
+								"bh_regex",
+								"bh_regex_center",
+								"bh_regex_open",
+								"bh_regex_close",
+								"bh_double_quote",
+								"bh_double_quote_center",
+								"bh_double_quote_open",
+								"bh_double_quote_close",
+								"bh_square",
+								"bh_square_center",
+								"bh_square_open",
+								"bh_square_close",
+								"bh_angle",
+								"bh_angle_center",
+								"bh_angle_open",
+								"bh_angle_close",
+								"bh_curly",
+								"bh_curly_center",
+								"bh_curly_open",
+								"bh_curly_close",
+								"bh_c_define",
+								"bh_c_define_center",
+								"bh_c_define_open",
+								"bh_c_define_close",
+								"bh_default",
+								"bh_default_center",
+								"bh_default_open",
+								"bh_default_close",
+								"bh_unmatched",
+								"bh_unmatched_center",
+								"bh_unmatched_open",
+								"bh_unmatched_close",
+								"bh_round",
+								"bh_round_center",
+								"bh_round_open",
+								"bh_round_close",
+								"bh_tag",
+								"bh_tag_center",
+								"bh_tag_open",
+								"bh_tag_close",
+								"bh_single_quote",
+								"bh_single_quote_center",
+								"bh_single_quote_open",
+								"bh_single_quote_close"
+							],
+							"csslint_options":
+							{
+								"adjoining-classes": "warning",
+								"box-model": true,
+								"box-sizing": "warning",
+								"compatible-vendor-prefixes": "warning",
+								"display-property-grouping": true,
+								"duplicate-background-images": "warning",
+								"duplicate-properties": true,
+								"empty-rules": true,
+								"errors": true,
+								"fallback-colors": "warning",
+								"floats": "warning",
+								"font-faces": "warning",
+								"font-sizes": "warning",
+								"gradients": "warning",
+								"ids": "warning",
+								"import": "warning",
+								"important": "warning",
+								"known-properties": true,
+								"outline-none": "warning",
+								"overqualified-elements": "warning",
+								"qualified-headings": "warning",
+								"regex-selectors": "warning",
+								"rules-count": "warning",
+								"shorthand": "warning",
+								"star-property-hack": "warning",
+								"text-indent": "warning",
+								"underscore-property-hack": "warning",
+								"unique-headings": "warning",
+								"universal-selector": "warning",
+								"vendor-prefix": true,
+								"zero-units": "warning"
+							},
+							"gjslint_ignore":
+							[
+								110
+							],
+							"gjslint_options":
+							[
+							],
+							"javascript_linter": "jshint",
+							"jshint_options":
+							{
+								"browser": true,
+								"devel": true,
+								"evil": true,
+								"regexdash": true,
+								"sub": true,
+								"trailing": true,
+								"wsh": true
+							},
+							"pep8": true,
+							"pep8_ignore":
+							[
+								"E501"
+							],
+							"perl_linter": "perlcritic",
+							"pyflakes_ignore":
+							[
+							],
+							"pyflakes_ignore_import_*": true,
+							"sublimelinter": "load-save",
+							"sublimelinter_delay": 2,
+							"sublimelinter_disable":
+							[
+							],
+							"sublimelinter_executable_map":
+							{
+							},
+							"sublimelinter_fill_outlines": false,
+							"sublimelinter_gutter_marks": true,
+							"sublimelinter_gutter_marks_theme": "simple",
+							"sublimelinter_mark_style": "none",
+							"sublimelinter_notes": false,
+							"sublimelinter_objj_check_ascii": false,
+							"sublimelinter_popup_errors_on_save": false,
+							"sublimelinter_syntax_map":
+							{
+								"C++": "c",
+								"Python Django": "python",
+								"Ruby on Rails": "ruby"
+							},
+							"sublimelinter_wrap_find": true,
+							"syntax": "Packages/CSS/CSS.tmLanguage",
+							"tab_size": 4,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
 				}
 			]
 		}
@@ -22672,8 +22851,8 @@
 		"rows":
 		[
 			0.0,
-			0.245070745389,
-			0.466432974491,
+			0.57891902577,
+			0.665964622573,
 			1.0
 		]
 	},
@@ -22707,6 +22886,6 @@
 	"show_open_files": false,
 	"show_tabs": true,
 	"side_bar_visible": true,
-	"side_bar_width": 159.0,
+	"side_bar_width": 301.0,
 	"status_bar_visible": true
 }

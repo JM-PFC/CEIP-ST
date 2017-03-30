@@ -1568,6 +1568,27 @@ form button{
 	font-size: 1.3em;
 	text-align: center;
 }
+#asignaturas_cursos #cabecera_lista h2>div{
+	float: left ;
+	width: 130px ;
+	font-size: 13px ;
+	font-weight: bold;
+	text-align: left;
+	margin-top: 5px;
+}
+#asignaturas_cursos #cabecera_lista h2>div>span{
+	font-weight: bold !important;
+	color: #334c73 !important;
+}
+
+#asignaturas_cursos #cabecera_lista h2>span{
+	float: left ;
+	width: 130px ;
+	margin-left: 19.5%;
+}
+#asignaturas_cursos h2{
+	margin-left: 0 !important;
+}
 #asignaturas_cursos .simple_column button{
   margin: 0 7%;
 }
@@ -2970,9 +2991,93 @@ float: right;
 	font-weight: bold !important;
 	font-size: 10.7px !important;
 }
-.ui-pnotify-text{
-z-index: 100000000000000000000000000000000;
+.ui-pnotify.custom .ui-pnotify-container {
+	background-color:#d6e9c6;
+	border:0 solid #3c763d;
+	color:#3c763d;
+    -moz-border-radius: 10px;
+    -webkit-border-radius: 10px;
+    border-radius: 10px;
+    padding: 10px;
+
 }
+.ui-pnotify.custom .ui-pnotify-title, .ui-pnotify.custom .ui-pnotify-text {
+font-family: Arial, Helvetica, sans-serif !important;
+font-size: 16px !important;
+padding-left: 50px !important;
+line-height: 1.5 !important;
+text-rendering: geometricPrecision !important;
+}
+.ui-pnotify.custom .ui-pnotify-title {
+font-weight: bold;
+}
+.ui-pnotify.custom span {
+font-weight: bold;
+}
+.brighttheme-error{
+    background: #F78181 !important;
+    color: #721C1C !important;
+}
+.brighttheme-info{
+    background: #012831 !important;
+    color: #8fcedd !important;
+}
+.brighttheme-notice{
+    background: #F9F78A !important;
+    color: #DE6E06 !important;
+}
+.brighttheme-icon-closer{
+    font-size: 20px !important;
+}
+
+.brighttheme-icon-success {
+    font-size: 25px !important;
+    height: 22px !important;
+    line-height: 25px !important;
+    width: 22px !important;
+ }
+
+ .brighttheme-icon-notice {
+    font-size: 22px !important;
+    height: 22px !important;
+    line-height: 25px !important;
+    width: 22px !important;
+    background:#DE6E06   !important ;
+    color: #F9F78A!important;
+ }
+
+  .brighttheme-icon-info {
+    font-size: 20px !important;
+    height: 22px !important;
+    line-height: 25px !important;
+    width: 22px !important;
+    background: #8fcedd !important;
+    color: #012831 !important;
+ }  
+ .brighttheme-icon-info::after {
+	left: 5px !important;
+ }
+
+.brighttheme-icon-error::after{
+	font-size: 20px !important;
+	left: -6px !important;
+	line-height: 25px !important;
+}
+.brighttheme-icon-error {
+    border-bottom: 22px solid #721C1C !important;
+    border-left: 12px solid transparent !important;
+    border-right: 12px solid transparent !important;
+    color: #F78181 !important;
+
+ }
+
+ .ui-pnotify .ui-pnotify-shadow{
+ 	-webkit-box-shadow:0 6px 15px 0 rgba(0,0,0,.4) !important;
+ 	-moz-box-shadow:0 6px 15px 0 rgba(0,0,0,.4) !important;
+ 	box-shadow:0 6px 15px 0 rgba(0,0,0,.4) !important;
+ }
+
+
 .ui-pnotify-title{
 	font-weight: normal !important;
 }
@@ -6720,6 +6825,23 @@ cursor: default !important;
     font-size: 1em;
     height: 28px;
     min-width: 15%;
+    padding: 0;
+}
+#asignar_horario_grupos #contenedor_registro div table td tr{
+    background: none !important;
+}
+#asignar_horario_grupos #contenedor_registro div table td tr:hover {
+    background: none !important;
+}
+#asignar_horario_grupos #contenedor_registro div table td td {
+    font-family: serif !important;
+    font-size: 1em;
+    height: 28px;
+    min-width: 0;
+    border-bottom: none !important;
+    border-top: none !important;
+    border-left: 1px solid #b1cce7;
+    border-right: 1px solid #b1cce7;
 }
 #asignar_horario_grupos #contenedor_registro div table th {
     width: 13%;
@@ -6900,7 +7022,7 @@ cursor: default !important;
     font-size: 0.9em;
     height: 18px;
     margin: -17px 0;
-    padding: 7px;
+    padding: 7px !important;
     text-align: center;
     width: 35px;
 }

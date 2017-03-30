@@ -1,15 +1,10 @@
 <script>
   //Se añade el nombre del profesor en los grupos donde tengan profesor y asignaturas asignadas.
-  array={{imparte|json_encode()|raw}};
+  array={{imparte|json_encode()|raw}};//Asignaturas no opcionales.
   for (var key in array){
     clave=key.split("-");
     id_horario=clave[0];
     dia=clave[1];
-    //nombre_asig=clave[2];
-    //abrev_asig=clave[3];
-    //aula=clave[4];
-    //grupo=clave[5];
-    //profesor=array[key];
     id_asignatura=array[key];
     //Se añade estilo para mostrar el recreo y la comida.
     $("#asignar_horario_grupo_dialog .row_recreo").prev().addClass('row_recreo');
@@ -19,26 +14,27 @@
 
     $("#asignar_horario_grupo_dialog tr[id='"+id_horario+"'] td[id='"+dia+"'] ul").attr("carga",id_asignatura);
     $("#asignar_horario_grupo_dialog tr[id='"+id_horario+"'] td[id='"+dia+"'] ul").addClass('asignada');
-
-     /*
-
-      $("#asignar_horario_grupo_dialog tr[id='"+id_horario+"'] td ul[dia='"+dia+"'] li").text(abrev_asig);
-      //Se crean atributos con los datos para mostrar.
-      $("#asignar_horario_grupo_dialog tr[id='"+id_horario+"'] td ul[dia='"+dia+"'] li").attr("asignatura",nombre_asig);
-      $("#asignar_horario_grupo_dialog tr[id='"+id_horario+"'] td ul[dia='"+dia+"'] li").attr("profesor",profesor);
-      $("#asignar_horario_grupo_dialog tr[id='"+id_horario+"'] td ul[dia='"+dia+"'] li").attr("aula",aula);
-
-
-      $("#asignar_horario_grupo_dialog tr[id='"+id_horario+"'] td[id='"+dia+"'] ul").append('<li id="55" class="ui-sortable-handle box-shadow" nombre="C. Naturales" siglas="C.N." style="background: rgb(118, 191, 103) none repeat scroll 0% 0%;" color="#76bf67" profesor="63" aula="69" dia="0" horario="0">');
-
-      */
     }
   }
 
-  /*
-<li id="55" class="ui-sortable-handle box-shadow" nombre="C. Naturales" siglas="C.N." style="background: rgb(118, 191, 103) none repeat scroll 0% 0%;" color="#76bf67" profesor="63" aula="69" dia="0" horario="0">
+  //Se añade el nombre del profesor en los grupos donde tengan profesor y asignaturas asignadas.
+  array={{imparte_op|json_encode()|raw}};//Asignaturas opcionales.
+  for (var key in array){
+    clave=key.split("-");
+    id_horario=clave[0];
+    dia=clave[1];
+    id_asignatura=array[key];
+    //Se añade estilo para mostrar el recreo y la comida.
+    $("#asignar_horario_grupo_dialog .row_recreo").prev().addClass('row_recreo');
 
-  */
+    //Si existe alguna asignación con horario se muestra en la tabla.  
+    if(id_horario!=""){
+
+    $("#asignar_horario_grupo_dialog tr[id='"+id_horario+"'] td[id='"+dia+"'] ul").attr("carga",0);
+    $("#asignar_horario_grupo_dialog tr[id='"+id_horario+"'] td[id='"+dia+"'] ul").addClass('asignada');
+    }
+  }
+
 </script>
 
   {% for entity in entity %}

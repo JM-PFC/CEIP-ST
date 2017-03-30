@@ -76,3 +76,9 @@ obtener_modulos_ocupados:
     defaults: { _controller: "BackendBundle:Imparte:ObtenerModulosOcupados" }
     options:
         expose: true
+
+comprobar_horas_profesor:
+    path:     /comprobar_horas_profesor
+    defaults: { _controller: "BackendBundle:Imparte:ComprobarHorasProfesor" }
+    options:
+        expose: true

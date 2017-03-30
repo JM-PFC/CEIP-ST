@@ -140,6 +140,17 @@
         $('<tr class="cabecera_tipo"><td id="cabecera_troncal" class="" colspan="3">Específicas (Opcionales)</td></tr>').insertBefore($(this).find("tr[opcional='1']:first"));
     });
 
+    setTimeout(function(){
+        $("#asignaturas_cursos #contenedor_registro").each(function(){
+            var num=0;
+            $(this).find("table tr:not(.cabecera_tipo) td:nth-child(2)").each(function(){
+                num+=parseInt($(this).text());
+            });
+            $(this).find("#mod_asignados").text(num);
+        });
+    }, 20);
+    
+
     </script>
 {% endblock %}
 
@@ -175,7 +186,9 @@
       <div class="derecha contenedor_registro oculto" idcurso="{{ loop.index }}"id="contenedor_registro">  
         <div>
             <div id="cabecera_lista" idcurso="{{ entity.id}}" curso="{{ entity.curso}}">
-                <h2>{{ entity.curso ~ " de " ~ entity.nivel }}
+                <h2>
+                    <div>Nº Módulos: <span id="mod_asignados"></span> / <span>{{ modulos_total}}</span> </div>
+                    <span>{{ entity.curso ~ " de " ~ entity.nivel }}</span>
                     <a id="añadir_modal" title="Añadir Asignaturas" href="javascript:void(0);">
                         <img id="img_1" class="add_registro" src="{{ asset('bundles/backend/images/menu/añadir_azul.png')}}">
                         <img id="img_2" class="add_registro oculto" src="{{ asset('bundles/backend/images/menu/añadir_azul2.png')}}">

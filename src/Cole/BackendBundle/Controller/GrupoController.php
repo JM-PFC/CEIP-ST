@@ -119,6 +119,14 @@ class GrupoController extends Controller
                 $array_op[$registro->getAsignatura()->getId()]=$registro->getProfesor()->getId()."-";
             }
         }
+        //Se optiene el tipo de horario para indicarlo para la comprobación de nº de horas de profesores en manual.
+        $tipo_horario = $em->getRepository('BackendBundle:Horario')->findByTipo("manual");
+        if(!$tipo_horario){
+            $tipo="automatico";
+        }
+        else{
+            $tipo="manual";
+        }
         return $this->render('BackendBundle:Grupo:new_horario_grupo.html.twig', array(
             'grupo' => $grupo,
             'horario' => $horario,
@@ -126,7 +134,8 @@ class GrupoController extends Controller
             'entities_especificas_no_op' => $entities_especificas_no_opcional,
             'entities_especificas_op' => $entities_especificas_opcional,
             'imparte' => $array,
-            'imparte_op' => $array_op
+            'imparte_op' => $array_op, 
+            'tipo' => $tipo
         ));
     }
     /**
@@ -515,10 +524,34 @@ class GrupoController extends Controller
         $em = $this->getDoctrine()->getManager();
         $grupo = $em->getRepository('BackendBundle:Grupo')->findOneById($id);
         $entity = $em->getRepository('BackendBundle:Horario')->findAll();
-
-
-        $imparte = $em->getRepository('BackendBundle:Imparte')->findByGrupo($id);
         
+        $imparte = $em->getRepository('BackendBundle:Imparte')->findByGrupo($id);
+
+        $asignaciones = $em->getRepository('BackendBundle:Imparte')->findByGrupoConHorario($grupo);
+        if($asignaciones){
+            $numAsigHorarios=1;
+        }
+        else{
+            $numAsigHorarios=0;
+        }
+
+        $asignaciones = $em->getRepository('BackendBundle:AsignaturasCursos')->findByCurso($grupo->getCurso());
+        if($asignaciones){
+            $numAsigCurso=1;
+        }
+        else{
+            $numAsigCurso=0;
+        }
+        $asignaturas=$em->getRepository('BackendBundle:AsignaturasCursos')->findByCurso($grupo->getCurso());
+        if(count($asignaturas)==count($imparte)){
+            $completo=1;
+        }
+        else{
+            $completo=0;
+        }
+
+        $imparte= $em->getRepository('BackendBundle:Imparte')->findAsignacionesNoOpcionales($grupo);
+
         $array=[];
         foreach($imparte as $registro){
             if($registro->getAula()){
@@ -545,6 +578,50 @@ class GrupoController extends Controller
             $array[$horario."-".$dia."-".$registro->getAsignatura()->getAsignatura()->getNombre()."-".$registro->getAsignatura()->getAsignatura()->getAbreviatura()."-".$aula."-".$registro->getGrupo()->getId()]=$registro->getProfesor()->getNombre()." ".$registro->getProfesor()->getApellido1()." ".$registro->getProfesor()->getApellido2();
         }
 
+        $imparte= $em->getRepository('BackendBundle:Imparte')->findAsignacionesOpcionales($grupo);
+
+        $array_op=[];
+        foreach($imparte as $registro){
+            if($registro->getAula()){
+                $aula=$registro->getAula()->getNombre();
+            }
+            else{
+                $aula="";
+            }
+
+            if($registro->getDiaSemanal()){
+                $dia=$registro->getDiaSemanal();
+            }
+            else{
+                $dia=""; 
+            }
+
+            if($registro->getHorario()){
+                $horario=$registro->getHorario()->getId();
+            }
+            else{
+                $horario="";
+            }
+           
+            $array_op[$horario."-".$dia."-".$registro->getAsignatura()->getAsignatura()->getNombre()."-".$registro->getAsignatura()->getAsignatura()->getAbreviatura()."-".$aula."-".$registro->getGrupo()->getId()]=$registro->getProfesor()->getNombre()." ".$registro->getProfesor()->getApellido1()." ".$registro->getProfesor()->getApellido2();
+        }
+
+
+        return $this->render('BackendBundle:Grupo:datos_horarios.html.twig', array(
+            'imparte' => $array,
+            'imparte_op' => $array_op,
+            'numAsigHorarios' => $numAsigHorarios,
+            'numAsigCurso' => $numAsigCurso,
+            'completo' => $completo,
+            'entity' => $entity));
+    }
+
+    public function HorariosGruposNewAction($id)
+    {
+        $em = $this->getDoctrine()->getManager();
+        $grupo = $em->getRepository('BackendBundle:Grupo')->findOneById($id);
+        $entity = $em->getRepository('BackendBundle:Horario')->findAll();
+
         $asignaciones = $em->getRepository('BackendBundle:Imparte')->findByGrupoConHorario($grupo);
         if($asignaciones){
             $numAsigHorarios=1;
@@ -560,28 +637,18 @@ class GrupoController extends Controller
         else{
             $numAsigCurso=0;
         }
-        $asignaturas=$em->getRepository('BackendBundle:AsignaturasCursos')->findByCurso($grupo->getCurso());
-        if(count($asignaturas)==count($imparte)){
-            $completo=1;
-        }
-        else{
-            $completo=0;
-        }
+        //Se obtiene los registros con asignaturas opcionales
+        $opcional = $em->getRepository('BackendBundle:Imparte')->findOpcionalesGrupo($grupo);
 
-        return $this->render('BackendBundle:Grupo:datos_horarios.html.twig', array(
-            'imparte' => $array,
-            'numAsigHorarios' => $numAsigHorarios,
-            'numAsigCurso' => $numAsigCurso,
-            'completo' => $completo,
-            'entity' => $entity));
-    }
+        //Asignaturas opcionales registradas
+        $asig_op = $em->getRepository('BackendBundle:AsignaturasCursos')->findAsignaturasEspecificasOpcionalesCurso($grupo->getCurso());
 
-    public function HorariosGruposNewAction($id)
-    {
-        $em = $this->getDoctrine()->getManager();
-        $grupo = $em->getRepository('BackendBundle:Grupo')->findOneById($id);
-        $entity = $em->getRepository('BackendBundle:Horario')->findAll();
-        $imparte = $em->getRepository('BackendBundle:Imparte')->findByGrupo($id);
+        //Obtenemos el número de módulos opcionales asignados
+        $modulos=count($opcional)/count($asig_op);
+        //echo $modulos; // hay que modificar imparte para añadir tantos registros como nº de modulos en asignar asignaturas curso
+
+
+        $imparte= $em->getRepository('BackendBundle:Imparte')->findAsignacionesNoOpcionales($grupo);
         
         $array=[];
         foreach($imparte as $registro){
@@ -611,34 +678,39 @@ class GrupoController extends Controller
 
         }
 
-        $asignaciones = $em->getRepository('BackendBundle:Imparte')->findByGrupoConHorario($grupo);
-        if($asignaciones){
-            $numAsigHorarios=1;
-        }
-        else{
-            $numAsigHorarios=0;
-        }
 
-        $asignaciones = $em->getRepository('BackendBundle:AsignaturasCursos')->findByCurso($grupo->getCurso());
-        if($asignaciones){
-            $numAsigCurso=1;
+        $imparte= $em->getRepository('BackendBundle:Imparte')->findAsignacionesOpcionales($grupo);
+
+        $array_op=[];
+        foreach($imparte as $registro){
+            if($registro->getAula()){
+                $aula=$registro->getAula()->getNombre();
+            }
+            else{
+                $aula="";
+            }
+
+            if($registro->getDiaSemanal()){
+                $dia=$registro->getDiaSemanal();
+            }
+            else{
+                $dia=""; 
+            }
+
+            if($registro->getHorario()){
+                $horario=$registro->getHorario()->getId();
+            }
+            else{
+                $horario="";
+            }
+           
+            //$array[$horario."-".$dia."-".$registro->getAsignatura()->getAsignatura()->getNombre()."-".$registro->getAsignatura()->getAsignatura()->getAbreviatura()."-".$aula."-".$registro->getGrupo()->getId()]=$registro->getProfesor()->getNombre()." ".$registro->getProfesor()->getApellido1()." ".$registro->getProfesor()->getApellido2();
+            $array_op[$horario."-".$dia]=$registro->getAsignatura()->getId();
         }
-        else{
-            $numAsigCurso=0;
-        }
-        //Se obtiene los registros con asignaturas opcionales
-        $opcional = $em->getRepository('BackendBundle:Imparte')->findOpcionalesGrupo($grupo);
-
-        //Asignaturas opcionales registradas
-        $asig_op = $em->getRepository('BackendBundle:AsignaturasCursos')->findAsignaturasEspecificasOpcionalesCurso($grupo->getCurso());
-
-        //Obtenemos el número de módulos opcionales asignados
-        $modulos=count($opcional)/count($asig_op);
-        //echo $modulos; // hay que modificar imparte para añadir tantos registros como nº de modulos en asignar asignaturas curso
-
 
         return $this->render('BackendBundle:Grupo:datos_horarios_new.html.twig', array(
             'imparte' => $array,
+            'imparte_op' => $array_op,
             'numAsigHorarios' => $numAsigHorarios,
             'numAsigCurso' => $numAsigCurso,
             'entity' => $entity));
@@ -678,7 +750,7 @@ class GrupoController extends Controller
 
                 $imparte = $em->getRepository('BackendBundle:Imparte')->findByAsignaturaLibre($grupo, $asignatura);
                 if (!$imparte) {
-                    throw $this->createNotFoundException('Unable to find Asignatura Cursos entity.');
+                    throw $this->createNotFoundException('Unable to find Imparte entity.');
                 }
 
                 $imparte->setDiaSemanal($row[1]);
@@ -686,7 +758,15 @@ class GrupoController extends Controller
                 $em->persist($imparte);
             }
             else{
-
+                $imparte = $em->getRepository('BackendBundle:Imparte')->findByAsignaturasOpLibre($grupo);
+                if (!$imparte) {
+                    throw $this->createNotFoundException('Unable to find Imparte entity.');
+                }
+                foreach ($imparte as $imparte ){
+                    $imparte->setDiaSemanal($row[1]);
+                    $imparte->setHorario($horario);
+                    $em->persist($imparte);
+                }
             }
           }   
         }
@@ -701,7 +781,7 @@ class GrupoController extends Controller
 
                 $imparte = $em->getRepository('BackendBundle:Imparte')->findByAsignaturaOcupada($grupo, $row[1], $horario);
                 if (!$imparte) {
-                    throw $this->createNotFoundException('Unable to find Asignatura Cursos entity.');
+                    throw $this->createNotFoundException('Unable to find Imparte entity.');
                 }
 
                 $imparte->setDiaSemanal(null);
@@ -709,7 +789,15 @@ class GrupoController extends Controller
                 $em->persist($imparte);
             }
             else{
-
+                $imparte = $em->getRepository('BackendBundle:Imparte')->findByAsignaturasOpOcupada($grupo, $row[1], $horario);
+                if (!$imparte) {
+                    throw $this->createNotFoundException('Unable to find Imparte entity.');
+                }
+                foreach ($imparte as $imparte ){
+                    $imparte->setDiaSemanal(null);
+                    $imparte->setHorario(null);
+                    $em->persist($imparte);
+                }
             }
           }  
         }

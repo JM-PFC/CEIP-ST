@@ -261,7 +261,7 @@ class Profesor implements UserInterface, \Serializable
     /**
      *
      * @ORM\Column(name="lectivas", type="decimal", precision=3, scale=1)
-     * @Assert\Range(min=15, max=40)
+     * @Assert\Range(min=5, max=25)
      * @Assert\NotBlank()
      */
     private $horasLectivas;

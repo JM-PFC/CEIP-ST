@@ -1,6 +1,6 @@
 <script>
   //Se añade el nombre del profesor en los grupos donde tengan profesor y asignaturas asignadas.
-  array={{imparte|json_encode()|raw}};
+  array={{imparte|json_encode()|raw}};//Asignaturas no opcionales
   for (var key in array){
     clave=key.split("-");
     id_horario=clave[0];
@@ -18,6 +18,45 @@
       $("#asignar_horario_grupos #cabecera_lista[grupo='"+grupo+"']").next().find("tr[id='"+id_horario+"'] td[id='"+dia+"']").attr("asignatura",nombre_asig);
       $("#asignar_horario_grupos #cabecera_lista[grupo='"+grupo+"']").next().find("tr[id='"+id_horario+"'] td[id='"+dia+"']").attr("profesor",profesor);
       $("#asignar_horario_grupos #cabecera_lista[grupo='"+grupo+"']").next().find("tr[id='"+id_horario+"'] td[id='"+dia+"']").attr("aula",aula);
+    }
+  }
+
+    //Se añade el nombre del profesor en los grupos donde tengan profesor y asignaturas asignadas.
+  array={{imparte_op|json_encode()|raw}};//Asignaturas opcionales.
+  for (var key in array){
+    clave=key.split("-");
+    id_horario=clave[0];
+    dia=clave[1];
+    nombre_asig=clave[2];
+    abrev_asig=clave[3];
+    aula=clave[4];
+    grupo=clave[5];
+    profesor=array[key];
+
+    //Si existe alguna asignación con horario se muestra en la tabla.  
+    if(id_horario!=""){
+      td=$("#asignar_horario_grupos #cabecera_lista[grupo='"+grupo+"']").next().find("tr[id='"+id_horario+"'] td[id='"+dia+"']");
+      td.addClass('no_efect');
+      //Se añade una tabla interior en la celda para añadir las aisgnaturas opcionales.
+      if(td.find("table").size()==0){
+        td.append("<table><tbody><tr></tr></tbody></table>");
+      }
+      //Se añade celdas interiores por cada asignatura opcional.
+      if(td.find("td[asignatura='"+nombre_asig+"']").size()==0){
+        td.find("tr").append("<td asignatura='"+nombre_asig+"' profesor='"+profesor+"' aula='"+aula+"'></td>");
+      }
+      //Añadimos lassiglas de la asignatura a las asignaturas opcionales en la tabla.
+      siglas="";
+      arr = abrev_asig.split(' ');
+      if(arr.length==1){
+        siglas=abrev_asig.slice(0,3);
+      }
+      else{
+      siglas=arr[0].slice(0,1)+". ";
+      siglas+=arr[1].slice(0,1)+". ";
+      }
+
+      $("#asignar_horario_grupos #cabecera_lista[grupo='"+grupo+"']").next().find("tr[id='"+id_horario+"'] td[id='"+dia+"'] td[asignatura='"+nombre_asig+"']").text(siglas);
     }
   }
 

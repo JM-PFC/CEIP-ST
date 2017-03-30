@@ -37,10 +37,16 @@ class AsignaturaController extends Controller
         $em = $this->getDoctrine()->getManager();
         $asignaturas= $em->getRepository('BackendBundle:Asignatura')->findNumAsignaturas();
 
+
+        //Se comprueba que el número de módulos selecionado no sobrepase el máximo permitido.
+        $modulos_dia=$em->getRepository('BackendBundle:Horario')->findClases();
+        $modulos_total=count($modulos_dia)*5;
+
         $entities = $em->getRepository('BackendBundle:Curso')->findBy(array('nivel'=>'Primaria'),array('numOrden'=>'ASC'));
         return $this->render('BackendBundle:Asignatura:asignaturas_cursos_show.html.twig', array(
             'entities' => $entities,
-            'numAsignaturas' => (int)$asignaturas[1]
+            'numAsignaturas' => (int)$asignaturas[1],
+            'modulos_total' => $modulos_total
         ));
     }
 

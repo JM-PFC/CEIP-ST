@@ -107,7 +107,6 @@
           ui.item.css("padding","5px 3px");
         }
       }
-      
     },
     beforeStop: function( event, ui ) {
 
@@ -115,6 +114,141 @@
     stop: function(event, ui){ 
       //ui.item.css("cursor","ponter");
       id=ui.item.attr("id");
+
+      if(ui.item.closest("fieldset").attr("tipo")=="manual"){
+        var horarios = Array();
+        $("#asignar_horario_grupo_dialog #tabla_horario .asignada").each(function(){
+          horarios.push($(this).attr("horario"));
+        });
+        $("#asignar_horario_grupo_dialog #tabla_horario .modificada").each(function(){
+          horarios.push($(this).attr("horario"));
+        });
+        horarios.push(ui.item.closest("ul").attr("horario"));
+        profesor= ui.item.attr("profesor");
+        grupo=ui.item.closest("fieldset").attr("id");
+        li=$(this);
+
+        $.ajax({
+          type: 'POST',
+          url: Routing.generate('comprobar_horas_profesor'),
+          data: {horarios:horarios, profesor:profesor, grupo:grupo},
+          dataType: 'json',
+          success: function(response){
+            if(response.data==null){
+              li.sortable("cancel");
+              $("#asignar_horario_grupo_dialog #tabla_horario td").removeClass('placeholder_list_table_td');
+
+              error.play();
+              swal({
+                title: "Profesor No Disponible",
+                html: "<p class='justificado'>La asignación no se puede realizar debido a que el profesor <span class='negrita'>"+response.profesor+"</span> tiene sus <span class='negrita'>"+response.horas+" horas lectivas asignadas</span>.<br><br>Para poder asignar esta asignatura deberá asignarle otro profesor o aumentar el número de horas lectivas del profesor actual si el número de módulos de la asignatura no pueda modificarse.</p>",
+                type: "error",
+                showCancelButton: false,
+                width: "510px",
+                confirmButtonColor: color
+              });
+            }
+
+
+      //Se comprueba si el elemento asignado se ha añadido por error en una celda o lista no permitida y se cancela la asignación.
+      //También se comprueba en el mouseup (general.js).
+      if(ui.item.closest("td").hasClass('bloqueo') || ui.item.closest("#listas_nulas").size()==1){
+        li.sortable("cancel");
+        $("#asignar_horario_grupo_dialog #tabla_horario td").removeClass('placeholder_list_table_td');
+        error.play();
+      }
+
+      if(ui.item.closest("td").size()>0){ //Elemento soltado en la tabla.
+        //Se añade el nombre y un span para quitar el elemento de la tabla.
+        ui.item.text("");
+        ui.item.append('<span class="ui-icon ui-icon-close" role="presentation">Remove Tab</span>'+ui.item.attr("nombre"));
+        //Se añade un efecto de sombra
+        ui.item.addClass('box-shadow');
+
+        //Se añade la clase "sortable" a las listas de la tabla y se elimina luego a las listas que tienen asignatura asignada para que no pueda añadirse otra.
+        $("#asignar_horario_grupo_dialog #tabla_horario ul").addClass('sortable');
+        $("#asignar_horario_grupo_dialog #tabla_horario li").closest("ul").removeClass('sortable');
+
+      }
+      else{
+        ui.item.text(ui.item.attr("siglas"));
+      }
+      //Se elimina el placeholder al soltar el elemento.
+      ui.item.closest('ul').removeClass('placeholder_list_table_td');
+      ui.item.closest('td').removeClass('placeholder_list_table_td');
+
+      //Se elimina la clase "no-last" de las listas de la tabla.
+      $("#asignar_horario_grupo_dialog #tabla_horario li").removeClass('no-last');
+       //Se elimina la clase "box-shadow" de las listas de la lista de asignaturas.
+      $("#asignar_horario_grupo_dialog #pie_horario li").removeClass('box-shadow');
+      //Se oculta las listas que quedan vacía.
+      $("#asignar_horario_grupo_dialog #pie_horario ul:empty").addClass('oculto');
+    
+      //Se muestra el contenedor inicial con la info del evento mousenter.
+      $("#asignar_horario_grupo_dialog #contenedor_info").empty();
+      $("#asignar_horario_grupo_dialog #contenedor_info_drag").empty();
+      $("#asignar_horario_grupo_dialog #contenedor_info_drag").addClass('oculto');
+      $("#asignar_horario_grupo_dialog #contenedor_info").removeClass('oculto');
+ 
+      $("#asignar_horario_grupo_dialog #tabla_horario td").removeClass('rojo');
+      $("#asignar_horario_grupo_dialog #tabla_horario td").removeClass('bloqueo');
+
+      //Se establece el padding de los elementos que se mueven a la tabla según el numero de módulos existentes.
+      altura=$("#asignar_horario_grupo_dialog #tabla_horario .inner_table tr td").css('height');
+
+      //Se establece el padding para los elementos en la lista.
+      if(ui.item.closest("td").size()==0){
+        ui.item.css("padding","7px");
+      }
+      //Se establece el padding para los elementos en la tabla.
+      else{
+        if(parseInt(altura.slice(0, -2))<30){
+          ui.item.css("padding","1px 3px");
+        }
+        else if(parseInt(altura.slice(0, -2))>40){
+          ui.item.css("padding","8px 3px");
+        }
+        else{
+          ui.item.css("padding","5px 3px");
+        }
+      }
+
+      //Se añade la clase asignada o modificada cuando se añade una asignatura a la tabla comparando el atribut "carga" de la lista.
+      if(ui.item.closest("td").size()>0){
+        if(!ui.item.closest("ul").attr("carga") || ui.item.closest("ul").attr("carga")!=ui.item.attr("id")){
+          ui.item.closest("ul").removeClass('asignada');
+          ui.item.closest("ul").addClass('modificada');
+          ui.item.closest("ul").removeClass('eliminada');
+        }
+        else{
+          ui.item.closest("ul").addClass('asignada');
+          ui.item.closest("ul").removeClass('modificada');
+          ui.item.closest("ul").removeClass('eliminada');
+        }
+      }
+
+      //Se comprueba si hay modificación para mostrar los botones. 
+      $("#asignar_horario_grupo_dialog #horario_grupo_submit").prop("disabled",true);
+      $("#asignar_horario_grupo_dialog #horario_grupo_restablecer").prop("disabled",true);
+
+      if($("#asignar_horario_grupo_dialog #tabla_horario td ul").hasClass('eliminada') || $("#asignar_horario_grupo_dialog #tabla_horario td ul").hasClass('modificada') ){
+        $("#asignar_horario_grupo_dialog #horario_grupo_submit").prop("disabled",false);
+        $("#asignar_horario_grupo_dialog #horario_grupo_restablecer").prop("disabled",false);
+      }
+
+
+
+
+
+
+
+
+
+          }
+        })
+      }
+      else{
+
       //Se comprueba si el elemento asignado se ha añadido por error en una celda o lista no permitida y se cancela la asignación.
       //También se comprueba en el mouseup (general.js).
       if(ui.item.closest("td").hasClass('bloqueo') || ui.item.closest("#listas_nulas").size()==1){
@@ -202,6 +336,7 @@
       }
 
 
+      }
     },
     over: function(event, ui){
 
@@ -247,6 +382,7 @@
       if(lista.find("li").size()==0){
         lista.addClass('oculto');
       }
+      $(this).removeClass('sortable');
     }); 
 
     //Se muestra las listas una vez eliminadas las que esán asignadas al grupo.
@@ -259,7 +395,7 @@
 
 {% block body -%}
 
-    <fieldset id="{{grupo.id}}" name="{{grupo.curso.curso ~ " de " ~ grupo.curso.nivel}}">
+    <fieldset id="{{grupo.id}}" name="{{grupo.curso.curso ~ " de " ~ grupo.curso.nivel}}" tipo="{{tipo}}">
       <legend>{{grupo.curso.curso ~ " de " ~ grupo.curso.nivel ~ " - Grupo " ~ grupo.letra}}</legend>
         <div id="tabla_horario">
           <div class="parent_no_form">

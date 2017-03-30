@@ -425,55 +425,13 @@ class ImparteController extends Controller
                     $tiempo_impartido=(int)$num_modulos*(int)$duracion;//Se usas [1] para recuerar el valor del count().
                     $tiempo_asignado=$profesor->getHorasLectivas()*60;
                     $tiempo_restante=(int)$tiempo_asignado-(int)$tiempo_impartido;
-                    //Se comprueba que el tiempo disponible del profesor sea inferio al tiempo del número de módulos de esa asignatura.
+                    //Se comprueba que el tiempo disponible del profesor sea inferior al tiempo del número de módulos de esa asignatura.
                     if($tiempo_restante<((int)$asignatura->getNumModulos()*(int)$duracion)){
                         $name=$profesor->getNombre()." ".$profesor->getApellido1()." ".$profesor->getApellido2();
                         $group=$grupo->getCurso()->getCurso()." ".$grupo->getLetra();
                         $error[] = array(array($name,$asignatura->getAsignatura()->getNombre(),$group));
                     }
                     else{
-                        /*
-                        //Se actualiza la asignación.
-                        if ($imparte) {
-                            $imparte->setProfesor($profesor);
-                            $imparte->setAsignatura($asignatura);
-                            if($aula!=null){
-                                $imparte->setAula($aula);    
-                            }
-                            else{
-                                $imparte->setAula(null);     
-                            }
-
-                            $imparte->SetHorario(null);//Se elimina la asignación de horario del profesor editado.
-                            $imparte->SetDiaSemanal(null);//Se elimina la asignación del día de clase del profesor editado.
-                            $em->persist($imparte);
-                            $num_actu++; 
-                        }
-                        //Se crea la asignación.
-                        else{
-                            $grupo = $em->getRepository('BackendBundle:Grupo')->findOneById($idgrupo);
-                            if (!$grupo) {
-                                throw $this->createNotFoundException('Unable to find Grupo entity.');
-                            }
-
-                            $imparte = new Imparte();
-                            $imparte->setProfesor($profesor);
-                            $imparte->setAsignatura($asignatura);
-                            $imparte->setGrupo($grupo);
-                            $imparte->setHorario(null);
-                            $imparte->setDiaSemanal(null);
-                            if($aula!=null){
-                                $imparte->setAula($aula);    
-                            }
-                            else{
-                                $imparte->setAula(null);     
-                            }
-                            $em->persist($imparte);
-                            $num_asig++;              
-                        }
-                        $em->flush();
-                        */
-                        //Se actualiza la asignación.
                         if ($imparte) {
 
                           foreach ($imparte as $imparte) {
@@ -647,7 +605,6 @@ class ImparteController extends Controller
         }
 
         return new JsonResponse(array('error' => $error,'success' => true), 200);
- 
     }
 
     public function EliminarAsignacionesGrupoAction()
@@ -726,10 +683,50 @@ class ImparteController extends Controller
         }
 
         return new JsonResponse(array('profesor' => $array_prof,'aula' => $array_aula,'success' => true), 200);
-        
     }
 
 
+    public function ComprobarHorasProfesorAction()
+    {
+        $em = $this->getDoctrine()->getManager();
+
+        $horarios=$this->get('request')->request->get('horarios');
+        $id_profesor=$this->get('request')->request->get('profesor');
+        $id_grupo=$this->get('request')->request->get('grupo');
+
+        $grupo = $em->getRepository('BackendBundle:Grupo')->findOneById($id_grupo);
+        $profesor = $em->getRepository('BackendBundle:Profesor')->findOneById($id_profesor);
+
+        $data=null;
+        //Se obtiene las asignaciones del profesor en otros grupos para calcular la duración de todas las clases.
+        $otros_grupos=$em->getRepository('BackendBundle:Imparte')->findAsignacionesOtrosGrupos($profesor, $grupo);
+
+        $total=0;
+        foreach ($otros_grupos as $imparte ) {
+            $duracion=$imparte->getHorario()->getDuracion();
+            $total=(int)$total+(int)$duracion;
+        }
+        //Se obtiene la duración de cada módulo asignado en dicho grupo.
+        $asignadas=0;
+        if($horarios){
+            foreach ($horarios as $id_horario) {
+                $horario=$em->getRepository('BackendBundle:Horario')->findOneById($id_horario);
+                $duracion=$horario->getDuracion();
+                $asignadas=(int)$asignadas+(int)$duracion;
+            }
+        }
+        //Se obtiene la duración total impartida por el profesor.
+        $tiempo_impartido=(int)$total+(int)$asignadas;
+        $tiempo_asignado=$profesor->getHorasLectivas()*60;
+        $tiempo_restante=(int)$tiempo_asignado-(int)$tiempo_impartido;
+        //Se comprueba si el profesor tiene tiempo disponible.
+        if($tiempo_restante>=0){
+            $data="";
+            return new JsonResponse(array('data' => $data,'success' => true), 200);
+        }
+
+        return new JsonResponse(array('data' => $data,'horas' => $profesor->getHorasLectivas(),'profesor' => $profesor->getNombre()." ".$profesor->getApellido1()." ".$profesor->getApellido2(),'success' => true), 200);
+    }
 
 
 

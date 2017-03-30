@@ -97,6 +97,29 @@ class ImparteRepository extends EntityRepository
 		->getOneOrNullResult();
 	}
 
+	public function findByAsignaturasOpLibre($grupo)
+	{
+		return $this->getEntityManager()->createQuery(
+		'SELECT i FROM BackendBundle:Imparte i INNER JOIN i.grupo g INNER JOIN i.asignatura a INNER JOIN a.asignatura asig WHERE g=:grupo and asig.opcional=:opcional and i.horario IS NULL and i.dia_semanal IS NULL GROUP BY i.asignatura')
+		->setParameters(array(
+			'grupo' => $grupo,
+			'opcional'=>1))
+		->getResult();
+	}
+
+	public function findByAsignaturasOpOcupada($grupo, $dia, $horario)
+	{
+		return $this->getEntityManager()->createQuery(
+		'SELECT i FROM BackendBundle:Imparte i INNER JOIN i.grupo g INNER JOIN i.asignatura a INNER JOIN a.asignatura asig WHERE g=:grupo and asig.opcional=:opcional and i.horario=:horario and i.dia_semanal=:dia')
+		->setParameters(array(
+			'grupo' => $grupo,
+			'dia' => $dia,
+			'horario'=>$horario,
+			'opcional'=>1))
+		->getResult();
+	}
+
+
 	
 	public function findNumAsignacionesProfesor($profesor)
 	{
@@ -179,7 +202,7 @@ class ImparteRepository extends EntityRepository
 	public function findAsignacionesNoOpcionales($grupo)
 	{
 	return $this->getEntityManager()->createQuery(
-		'SELECT i FROM BackendBundle:Imparte i INNER JOIN i.asignatura a INNER JOIN a.asignatura asig WHERE i.grupo=:grupo and asig.opcional=:opcional GROUP BY i.asignatura')
+		'SELECT i FROM BackendBundle:Imparte i INNER JOIN i.asignatura a INNER JOIN a.asignatura asig WHERE i.grupo=:grupo and asig.opcional=:opcional')
 		->setParameters(array(
 			'grupo' => $grupo,
 			'opcional' => 0))
@@ -189,10 +212,21 @@ class ImparteRepository extends EntityRepository
 	public function findAsignacionesOpcionales($grupo)
 	{
 	return $this->getEntityManager()->createQuery(
-		'SELECT i FROM BackendBundle:Imparte i INNER JOIN i.asignatura a INNER JOIN a.asignatura asig WHERE i.grupo=:grupo and asig.opcional=:opcional GROUP BY i.asignatura')
+		'SELECT i FROM BackendBundle:Imparte i INNER JOIN i.asignatura a INNER JOIN a.asignatura asig WHERE i.grupo=:grupo and asig.opcional=:opcional')
 		->setParameters(array(
 			'grupo' => $grupo,
 			'opcional' => 1))
+		->getResult();
+	}
+
+	
+	public function findAsignacionesOtrosGrupos($profesor, $grupo)
+	{
+	return $this->getEntityManager()->createQuery(
+		'SELECT i FROM BackendBundle:Imparte i INNER JOIN i.profesor p WHERE i.grupo NOT IN (:grupo) and p=:profesor and i.dia_semanal IS not NULL and i.horario IS not NULL')
+		->setParameters(array(
+			'grupo' => $grupo,
+			'profesor' => $profesor))
 		->getResult();
 	}
 

@@ -166,7 +166,7 @@
     }, 20);
 
     //Se oculta la cabecera de la tabla y la información del horario si no tiene horario.
-    if($("#asignar_horario_grupos #contenedor_registro tbody tr td:not(.dataTables_empty)").size()==0){
+    if($("#asignar_horario_grupos #contenedor_registro:not(.oculto) tbody tr td:not(.dataTables_empty)").size()==0){
         $("#asignar_horario_grupos #contenedor_datos").addClass('oculto');
         $("#asignar_horario_grupos #lista_asignaturas thead").addClass('oculto');
     }

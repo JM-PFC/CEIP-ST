@@ -28,7 +28,7 @@ $(document).ready(function () {
   var right_Stack_dialog = {"dir1": "up", "dir2": "left", "context": $("body"), "push": "top", "firstpos1": 20, "firstpos2":40};
 
   // Se establece las variables con los audios para las notificaciones.
-  if (navigator.userAgent.search("Firefox") >= 0) { //Firefox sólo admite archivos .ogg
+  if (navigator.userAgent.search("Firefox") >= 0) { //Firefox solo admite archivos .ogg
     var aviso = new Audio();
     aviso.src = "/Symfony/web/bundles/backend/sounds/aviso.ogg";
     var ok = new Audio();
@@ -412,12 +412,12 @@ $(document).ready(function () {
 
   var message = {
     "Empty":"Este campo no puede estar vacío.",
-    "Words":"Contiene caracteres inválidos ó insuficientes.",
+    "Words":"Contiene caracteres inválidos o insuficientes.",
     "Letters":"Este campo no puede contener números.",
     "LetterInitial":"Este campo debe empezar con una letra",
-    "Numbers":"Este campo sólo puede contener números",
+    "Numbers":"Este campo solo puede contener números",
     "Length":"La longitud del campo es incorrecta.",
-    "Dni":"No es un DNI ó NIE válido.",
+    "Dni":"No es un DNI o NIE válido.",
     "Fecha":"No es una fecha válida.<br> Formato válido: 31/12/2000",
     "Fecha_Adulto":"No es una fecha válida.<br> Introduzca un año del "+ (actual.getFullYear()-80) + " al "+(actual.getFullYear()-18)+".",
     "Fecha_Niño":"No es una fecha válida.<br> Introduzca un año del "+ (actual.getFullYear()-18) + " al "+(actual.getFullYear()-2)+".",
@@ -634,7 +634,7 @@ setInterval(function(){
   // Al presionar cualquier tecla en cualquier elemento del formulario se ejectua la siguiente función
   // Función para desplazarse mediante teclado por los campos.
   $(document).on("keydown",':input', function(e){
-    // Sólo importa si las teclas presionadas fueron TAB o ENTER. (Para ver el código de otras teclas: http://www.webonweboff.com/tips/js/event_key_codes.aspx)
+    // Solo importa si las teclas presionadas fueron TAB o ENTER. (Para ver el código de otras teclas: http://www.webonweboff.com/tips/js/event_key_codes.aspx)
     // Y que no sean botones o textarea.
     if(e.keyCode == 9 || (e.keyCode == 13 && (!($(this).is("textarea")) && !($(this).is("button"))&& ($(this).attr("type")!=("file")) )))
     {
@@ -1857,6 +1857,10 @@ $(document).on("submit",".formulario_profesor",function(event){
     comprobarEditForm($(this).closest("form"));
   });
 
+  $(document).on("change","form[id$='_edit'] input[type='number']",function() {
+    comprobarEditForm($(this).closest("form"));
+  });
+
   $(document).on("change","form[id$='_edit'] input[type='radio']",function() {
     if($(this).closest("form").attr("id")=="noticias_edit"){
       return false;
@@ -2153,8 +2157,6 @@ $(document).on("submit",".formulario_profesor",function(event){
               //form.find("div[id='message']").fadeIn('fast').delay(5000).fadeOut('slow');
 
               // Notificación de confirmación.
-              errorPNotify.pause();
-              errorPNotify.currentTime=0.0;
               $(".ui-pnotify").remove();
               exito.play();
 
@@ -2252,7 +2254,7 @@ $(document).on("submit",".formulario_profesor",function(event){
             // Se borran los valores del segundo responsable y se oculta el formulario.
             form.find("#responsable").addClass("oculto");
             form.find("#responsable input").val("");
-            // Se muestra un aviso para indicar que sólo hay un responsable.
+            // Se muestra un aviso para indicar que solo hay un responsable.
             form.find("#noresponsable").removeClass("oculto");
           });
           }
@@ -2480,8 +2482,6 @@ $(document).on("blur","input[id='edit_profesor_dni']",function() {
               //form.find("div[id='message']").fadeIn('fast').delay(5000).fadeOut('slow');
 
               // Notificación de confirmación.
-              errorPNotify.pause();
-              errorPNotify.currentTime=0.0;
               $(".ui-pnotify").remove();
               exito.play();
 
@@ -3381,6 +3381,10 @@ $(document).on("blur","input[id='edit_profesor_dni']",function() {
 //////////////////////////////////
 //         Asignaturas          //
 //////////////////////////////////
+  //Se muestra la edición de asignatura al darle click sobre el div del color.
+  $(document).on('click',"#registro_asignaturas td span",function(event){
+    $(this).closest("td").prev().find("a").click();
+  });
 
   $(document).on('click',"#registro_asignaturas a[id$='_modal']",function(event){
     event.preventDefault();
@@ -3396,7 +3400,7 @@ $(document).on("blur","input[id='edit_profesor_dni']",function() {
       //Se establece como máximo 3 asignaturas opcionales.
       if(num==3){
         $("#asignatura_opcional").prop("disabled",true);
-        $("#asignatura_opcional").attr("title","Sólo se permiten 3 asignaturas opcionales");
+        $("#asignatura_opcional").attr("title","Solo se permiten 3 asignaturas opcionales");
         $("#asignatura_opcional").css("cursor","default");
       }
     }).dialog('open'); 
@@ -3410,7 +3414,7 @@ $(document).on("blur","input[id='edit_profesor_dni']",function() {
       //Se establece como máximo 3 asignaturas opcionales.
       if(num==3 && !$("#asignatura_opcional").is(':checked')){
         $("#asignatura_opcional").prop("disabled",true);
-        $("#asignatura_opcional").attr("title","Sólo se permiten 3 asignaturas opcionales");
+        $("#asignatura_opcional").attr("title","Solo se permiten 3 asignaturas opcionales");
         $("#asignatura_opcional").css("cursor","default");
       }
     }).dialog('open'); 
@@ -5054,8 +5058,6 @@ $(document).on("blur","input[id='edit_profesor_dni']",function() {
 
     //Se avisa si no hay asignaturas asignadas al curso.
     if($("#asignaturas_cursos #contenedor_registro:not(.oculto) tbody tr:not(.no_cursor)").size()==0){
-      errorPNotify.pause();
-      errorPNotify.currentTime=0.0;
       $(".ui-pnotify").remove();
 
       errorPNotify.play();
@@ -5469,7 +5471,7 @@ $(document).on("blur","input[id='edit_profesor_dni']",function() {
               var dato=response.data[key]["dia"];
               var comp= $(this).text();
               // Con :contains se obtiene los días del calendario que contiene en sus dígitos el dato dado.
-              // Si el dato obtenido tiene un sólo dígito, se excluye los días de dos dígitos del calendario que contiene ese dato.
+              // Si el dato obtenido tiene un solo dígito, se excluye los días de dos dígitos del calendario que contiene ese dato.
               if(String(dato).length=="1"){
                 if(String(comp).length=="1"){
                   $(this).addClass("festivo");
@@ -5479,7 +5481,7 @@ $(document).on("blur","input[id='edit_profesor_dni']",function() {
                     $(this).closest("tr").next("tr").find("td:nth-child(1) a").addClass("festivo");
                     $(this).closest("tr").next("tr").find("td:nth-child(1) a").attr("tipo","traslado");
                     setTimeout(function(){
-                      //Se muestra sólo un traslado del festivo (ya que hay dos elementos con el mismo día).
+                      //Se muestra solo un traslado del festivo (ya que hay dos elementos con el mismo día).
                       $("#d_calendario #div_leyenda h4[id='"+dato+"']").each(function(){
                         if($(this).next().text().indexOf(" Vacaciones ")<0){
                           $( "<h4 id='"+(dato+1)+"'>"+(dato+1)+"</h4><h4 id='h4_descripcion'>Traslado del Festivo del día "+dato+"</h4>" ).insertAfter( $(this).next());
@@ -5497,7 +5499,7 @@ $(document).on("blur","input[id='edit_profesor_dni']",function() {
                   $(this).closest("tr").next("tr").find("td:nth-child(1) a").addClass("festivo");
                   $(this).closest("tr").next("tr").find("td:nth-child(1) a").attr("tipo","traslado");
                   setTimeout(function(){
-                    //Se muestra sólo un traslado del festivo (ya que hay dos elementos con el mismo día).
+                    //Se muestra solo un traslado del festivo (ya que hay dos elementos con el mismo día).
                     $("#d_calendario #div_leyenda h4[id='"+dato+"']").each(function(){
                       if($(this).next().text().indexOf(" Vacaciones ")<0){
                         $( "<h4 id='"+(dato+1)+"'>"+(dato+1)+"</h4><h4 id='h4_descripcion'>Traslado del Festivo del día "+dato+"</h4>" ).insertAfter( $(this).next());
@@ -5603,7 +5605,7 @@ $(document).on("blur","input[id='edit_profesor_dni']",function() {
 
             setTimeout(function(){
 
-            //Se añade la clase vacaciones, sólo a los elementos de ese día que contiene la información de las vacaciones.
+            //Se añade la clase vacaciones, solo a los elementos de ese día que contiene la información de las vacaciones.
             if($("#d_calendario #div_leyenda h4[id='"+response.fin_vacaciones["dia"]+"']").length>1){
               $("#d_calendario #div_leyenda h4[id='"+response.fin_vacaciones["dia"]+"']").each(function(){
                 if($(this).next().text().indexOf(" Vacaciones ")>0){
@@ -6054,7 +6056,7 @@ $(document).on("blur","input[id='edit_profesor_dni']",function() {
   });
 
   $(document).on('click',"#button_festivos_all",function(event){
-    //Retardo por si se da el caso de modificar sólo un input de vacaciones y le damos a guardar sin antes actualizarse el otro input.
+    //Retardo por si se da el caso de modificar solo un input de vacaciones y le damos a guardar sin antes actualizarse el otro input.
    setTimeout(function(){
     if($("#contenedor_festivos input[type!='radio'][class*='modified']").length==0){
       return false;
@@ -6133,8 +6135,6 @@ $(document).on("blur","input[id='edit_profesor_dni']",function() {
       }
     }
     // Se establece el efecto para la notificación de error en el caso de que se de varias veces seguidas a guardar con algunas opción sin marcar.
-    errorPNotify.pause();
-    errorPNotify.currentTime=0.0;
     $(".ui-pnotify").remove();
 
     exito.play();
@@ -6285,8 +6285,6 @@ $(document).on("blur","input[id='edit_profesor_dni']",function() {
   //Se valida que estan registradas las fechas de vacaciones cuando se genera el PDF del calendario del curso.
   $(document).on("click","#asignacion_festivos #calendario_completo",function(event){
       // Se establece el efecto para la notificación de error en el caso de que se de varias veces seguidas a guardar con algunas opción sin marcar.
-      errorPNotify.pause();
-      errorPNotify.currentTime=0.0;
       $(".ui-pnotify").remove();
       
       if(($("#asignacion_festivos #inicio_navidad").val()=="" && !$("#asignacion_festivos #inicio_navidad").hasClass('modified')) || ($("#asignacion_festivos #inicio_semanasanta").val()=="" && !$("#asignacion_festivos #inicio_semanasanta").hasClass('modified'))){
@@ -6440,8 +6438,6 @@ $(document).on("blur","input[id='edit_profesor_dni']",function() {
     //Se valida que la duración del día esté dentro del horario del centro.
     if($("#registro_horario #inicio_clase option:selected").val() < $("#registro_horario #inicio_horario_disable").val()){
       // Se establece el efecto para la notificación de error en el caso de que se de varias veces seguidas a guardar con algunas opción sin marcar.
-      errorPNotify.pause();
-      errorPNotify.currentTime=0.0;
       $(".ui-pnotify").remove();
         
       errorPNotify.play();
@@ -6481,8 +6477,6 @@ $(document).on("blur","input[id='edit_profesor_dni']",function() {
 
       if(permitido<total){
         // Se establece el efecto para la notificación de error en el caso de que se de varias veces seguidas a guardar con algunas opción sin marcar.
-        errorPNotify.pause();
-        errorPNotify.currentTime=0.0;
         $(".ui-pnotify").remove();
 
         errorPNotify.play();
@@ -6765,7 +6759,7 @@ $(document).on("blur","input[id='edit_profesor_dni']",function() {
           }
       });
 
-      // Se habilta el botón "Guardar", sólo para las filas que tengan hora de inicio y fin correctas
+      // Se habilta el botón "Guardar", solo para las filas que tengan hora de inicio y fin correctas
       $(div_actual).find("input").each (function(){
         $(this).closest("tr").find("button").prop("disabled", true);
       });
@@ -6786,7 +6780,7 @@ $(document).on("blur","input[id='edit_profesor_dni']",function() {
         }
           $("#horario_rest").prop("disabled", true);  
       });
-      // Se habilta el botón "Guardar Todo", cuando existe algun valor modificado , algún error ó algún input vacío.
+      // Se habilta el botón "Guardar Todo", cuando existe algun valor modificado , algún error  algún input vacío.
       $(div_actual).find("input").each (function(){                         
         if($(this).hasClass("invalid") || !$(div_actual).find("input").hasClass("modified")  || $(this).val()==""){
           $("#button_horario_all").prop("disabled", true);  
@@ -7105,8 +7099,6 @@ $(document).on("blur","input[id='edit_profesor_dni']",function() {
             data: {cadena:cadena,cont:cont,tipo:tipo},
             success: function(response) {
               // Se establece el efecto para la notificación de error en el caso de que se de varias veces seguidas a guardar con algunas opción sin marcar.
-              errorPNotify.pause();
-              errorPNotify.currentTime=0.0;
               $(".ui-pnotify").remove();
               
               // Notificación de confirmación
@@ -7265,7 +7257,7 @@ $(document).on("blur","input[id='edit_profesor_dni']",function() {
   $(document).on('click',"#horario_centro_dialog .timepicker_wrap .prev ",function(event){
     elem=$(this).next().find("input");
     setTimeout(function(){
-    //Se valida sólo el input modificado. 
+    //Se valida solo el input modificado. 
     $("#horario_centro_dialog  #aviso_error").hide();
       if(elem.val()!=""){
         elem.removeClass('error_guardar');
@@ -8020,7 +8012,7 @@ $(document).on("click","#registro_equipamientos td a",function(event){
               var dato=response.data[key]["dia"];
               var comp= $(this).text();
               // Con :contains se obtiene los días del calendario que contiene en sus dígitos el dato dado.
-              // Si el dato obtenido tiene un sólo dígito, se excluye los días de dos dígitos del calendario que contiene ese dato.
+              // Si el dato obtenido tiene un solo dígito, se excluye los días de dos dígitos del calendario que contiene ese dato.
               if(String(dato).length=="1"){
                 if(String(comp).length=="1"){
                   $(this).closest("td").addClass("ui-datepicker-unselectable");
@@ -8033,7 +8025,7 @@ $(document).on("click","#registro_equipamientos td a",function(event){
 
                     $(this).closest("tr").next("tr").find("td:nth-child(1) a").attr("tipo","traslado");
 
-                      //Se muestra sólo un traslado del festivo (ya que hay dos elementos con el mismo día).
+                      //Se muestra solo un traslado del festivo (ya que hay dos elementos con el mismo día).
                       contenedor.find("#div_leyenda h4[id='"+dato+"']").each(function(){
                         if($(this).next().text().indexOf(" Vacaciones ")<0){
                           $( "<h4 id='"+(dato+1)+"'>"+(dato+1)+"</h4><h4 id='h4_descripcion'>Traslado del Festivo del día "+dato+"</h4>" ).insertAfter( $(this).next());
@@ -8060,7 +8052,7 @@ $(document).on("click","#registro_equipamientos td a",function(event){
                   $(this).closest("tr").next("tr").find("td:nth-child(1) a").attr("tipo","traslado");
 
                   
-                    //Se muestra sólo un traslado del festivo (ya que hay dos elementos con el mismo día).
+                    //Se muestra solo un traslado del festivo (ya que hay dos elementos con el mismo día).
                     contenedor.find("#div_leyenda h4[id='"+dato+"']").each(function(){
 
                       if($(this).next().text().indexOf(" Vacaciones ")<0){
@@ -8166,7 +8158,7 @@ $(document).on("click","#registro_equipamientos td a",function(event){
           else if(response.fin_vacaciones){
 
             setTimeout(function(){
-            //Se añade la clase vacaciones, sólo a los elementos de ese día que contiene la información de las vacaciones.
+            //Se añade la clase vacaciones, solo a los elementos de ese día que contiene la información de las vacaciones.
             if(contenedor.find("#div_leyenda h4[id='"+response.fin_vacaciones["dia"]+"']").length>1){
               contenedor.find("#div_leyenda h4[id='"+response.fin_vacaciones["dia"]+"']").each(function(){
                 if($(this).next().text().indexOf(" Vacaciones ")>0){
@@ -8301,8 +8293,6 @@ $(document).on("click","#registro_equipamientos td a",function(event){
 
   $(document).on('click',"div[id^='reserva_'] #reserva_save",function(event){ 
     // Se establece el efecto para la notificación de error en el caso de que se de varias veces seguidas a guardar con algunas opción sin marcar.
-    errorPNotify.pause();
-    errorPNotify.currentTime=0.0;
     $(".ui-pnotify").remove();
 
     contenedor= $(this).closest("div[id^='reserva_']");
@@ -8361,6 +8351,7 @@ $(document).on("click","#registro_equipamientos td a",function(event){
               out_class: "fadeOutLeft",
             }
           });
+          $("#reserva_equipamientos #reserva_save").prop("disabled",true);
           return false;
         }
 
@@ -8537,7 +8528,7 @@ $(document).on("click","#registro_equipamientos td a",function(event){
     equipamiento=container.find("#contenedor_reserva_equipamientos button[class='elected']").text();
 
     // Se comprueba si el usuario tiene reservas en el día indicado y se muestra.
-    // Se comprueba si quedan unidades de equipamiento ó la instalación está libre para el día indicado.
+    // Se comprueba si quedan unidades de equipamiento o la instalación está libre para el día indicado.
     $.ajax({
       type: 'POST',
       url: Routing.generate('comprobar_reserva'),
@@ -9096,7 +9087,7 @@ $(document).on("click","#registro_equipamientos td a",function(event){
             dataType: 'json',
             success: function(response) {
 
-            //Se muestra aviso si se pulsa en enviar uno sólo (input no checked)
+            //Se muestra aviso si se pulsa en enviar uno solo (input no checked)
             if(!input.is(':checked') ){
               exito.play();
 
@@ -10085,8 +10076,6 @@ $(document).on("click","#registro_equipamientos td a",function(event){
 
     //Se avisa si no existe cambios.
     if($.isEmptyObject(asignaciones) && $.isEmptyObject(eliminados)){
-      errorPNotify.pause();
-      errorPNotify.currentTime=0.0;
       $(".ui-pnotify").remove();
 
       errorPNotify.play();
@@ -10250,8 +10239,6 @@ $(document).on("click","#registro_equipamientos td a",function(event){
 
   $(document).on('click',"#registrar_evento #reserva_save",function(e){
     // Se establece el efecto para la notificación de error en el caso de que se de varias veces seguidas a guardar con algunas opción sin marcar.
-    errorPNotify.pause();
-    errorPNotify.currentTime=0.0;
     $(".ui-pnotify").remove();
 
     fecha=$("#registrar_evento #dia_seleccionado").val();
@@ -10324,6 +10311,7 @@ $(document).on("click","#registro_equipamientos td a",function(event){
               out_class: "fadeOutLeft",
             }
           });
+          $("#registrar_evento #reserva_save").prop("disabled",true);
           return false;
         }
         else{
@@ -10667,8 +10655,6 @@ $(document).on("click","#registro_equipamientos td a",function(event){
   $(document).on('click',"#registrar_noticias #save",function(e){
     e.preventDefault();
     // Se establece el efecto para la notificación de error en el caso de que se de varias veces seguidas a guardar con algunas opción sin marcar.
-    errorPNotify.pause();
-    errorPNotify.currentTime=0.0;
     $(".ui-pnotify").remove();
 
     titulo=$("#registrar_noticias #titulo").val();
@@ -10731,6 +10717,7 @@ $(document).on("click","#registro_equipamientos td a",function(event){
               out_class: "fadeOutLeft",
             }
           });
+          $("#registrar_noticias #save").prop("disabled",true);
           return false;
         }
         else{
@@ -11451,8 +11438,6 @@ $(document).on("click","#registro_equipamientos td a",function(event){
     form= $(this).closest("form");
 
     // Se establece el efecto para la notificación de error en el caso de que se de varias veces seguidas a guardar con algunas opción sin marcar.
-    errorPNotify.pause();
-    errorPNotify.currentTime=0.0;
     $(".ui-pnotify").remove();
 
     if(!$("#noticias_edit #imagen_noticia").hasClass("oculto")){
@@ -11684,7 +11669,7 @@ $(document).on("click","#registro_equipamientos td a",function(event){
 
   $(document).on('click',"#profesor_asignatura_grupo_dialog li",function(event){ 
    event.preventDefault();
-   //Se ejecuta sólo al marcar los checkbox.
+   //Se ejecuta solo al marcar los checkbox.
    if(!$(this).find("#no_asignado").hasClass('oculto')){
     input=$(this).find("#no_asignado input");
     //Se pulsa el checkbox.
@@ -12045,8 +12030,6 @@ $(document).on("click","#registro_equipamientos td a",function(event){
 
     //Se avisa si no existe cambios.
     if($.isEmptyObject(asignaciones) && $.isEmptyObject(eliminados)){
-      errorPNotify.pause();
-      errorPNotify.currentTime=0.0;
       $(".ui-pnotify").remove();
 
       errorPNotify.play();
@@ -12424,8 +12407,6 @@ $(document).on("click","#registro_equipamientos td a",function(event){
 
     //Se avisa si no hay profesores asignados al grupo.
     if($("#asignar_profesor #contenedor_registro:not(.oculto) tr:not(.cabecera_tipo) td[class='']").size()==0){
-      errorPNotify.pause();
-      errorPNotify.currentTime=0.0;
       $(".ui-pnotify").remove();
 
       errorPNotify.play();
@@ -12531,8 +12512,6 @@ $(document).on("click","#registro_equipamientos td a",function(event){
 
     //Se avisa si no hay profesores asignados en ningún grupo.
     if($("#asignar_profesor #contenedor_registro tr:not(.cabecera_tipo) td[class='']").size()==0){
-      errorPNotify.pause();
-      errorPNotify.currentTime=0.0;
       $(".ui-pnotify").remove();
 
       errorPNotify.play();
@@ -12667,7 +12646,15 @@ $(document).on("click","#registro_equipamientos td a",function(event){
   });
 
   //Se muestra la información del horario al colocar el cursor sobre un módulo de clase.
-  $(document).on("mouseenter","#asignar_horario_grupos #contenedor_registro td", function(){
+  //Se usa para evitar que se muestre la información del "td" que contiene las asignaturas opcionales.
+  $(document).on("mouseenter","#asignar_horario_grupos #contenedor_registro td", function(event){
+    event.stopPropagation(); 
+  });
+
+  //Se muestra la información del horario al colocar el cursor sobre un módulo de clase.
+  $(document).on("mouseenter","#asignar_horario_grupos #contenedor_registro td", function(event){
+    event.preventDefault();
+
     // Se evita que se muestre el mensaje predeterminado si pasamos de un enlace a otro.
     $("#asignar_horario_grupos #contenedor_datos #sin_seleccionar").addClass("oculto");
     
@@ -12735,8 +12722,6 @@ $(document).on("click","#registro_equipamientos td a",function(event){
 
     //Se avisa si no hay horario asignado al grupo.
     if($("#asignar_horario_grupos #contenedor_registro:not(.oculto) tr .dataTables_empty").size()>0){
-      errorPNotify.pause();
-      errorPNotify.currentTime=0.0;
       $(".ui-pnotify").remove();
 
       errorPNotify.play();
@@ -12842,9 +12827,6 @@ $(document).on("click","#registro_equipamientos td a",function(event){
 
     //Se avisa si no hay horarios en ningún grupo.
     if($("#asignar_horario_grupos #contenedor_registro").size()==$("#asignar_horario_grupos #contenedor_registro tr .dataTables_empty").size()){
-      alert();
-      errorPNotify.pause();
-      errorPNotify.currentTime=0.0;
       $(".ui-pnotify").remove();
 
       errorPNotify.play();
@@ -13096,7 +13078,7 @@ $(document).on("click","#registro_equipamientos td a",function(event){
                 //Desplazamos la lista no permitida al div "listas_nulas", para que no se pueda insertar ningún elemento.
                 ul.appendTo('#listas_nulas');
               }
-            }//Si ya estaba desplazada, sólo hay que añadir el icono para indicar que el aula está ocupada en dicho módulo.
+            }//Si ya estaba desplazada, solo hay que añadir el icono para indicar que el aula está ocupada en dicho módulo.
             else{
               $("#asignar_horario_grupo_dialog #tabla_horario tr[id='"+horario+"'] td[id='"+dia+"']").append("<img src='/Symfony/web/bundles/backend/images/menu/room_no_dis.png'>");
             }
@@ -13128,6 +13110,8 @@ $(document).on("click","#registro_equipamientos td a",function(event){
           dia=$(this).attr("dia");
           horario=$(this).attr("horario");
           $(this).appendTo('#asignar_horario_grupo_dialog #tabla_horario tr[id="'+horario+'"] td[id="'+dia+'"] ul');
+          error.pause();
+          error.currentTime=0.0;
           error.play();
         }
       });  
@@ -13140,12 +13124,13 @@ $(document).on("click","#registro_equipamientos td a",function(event){
           id=$(this).attr("id");
           $(this).appendTo('#asignar_horario_grupo_dialog #tabla_horario li[asig="'+id+'"]');
           $('#asignar_horario_grupo_dialog #tabla_horario li[asig="'+id+'"]').removeClass('oculto');
-          error.play();
         }
         else{//Celda de la tabla.
           dia=$(this).attr("dia");
           horario=$(this).attr("horario");
           $(this).appendTo('#asignar_horario_grupo_dialog #tabla_horario tr[id="'+horario+'"] td[id="'+dia+'"] ul');
+          error.pause();
+          error.currentTime=0.0;
           error.play();
         }
       });
@@ -13254,6 +13239,7 @@ $(document).on("click","#registro_equipamientos td a",function(event){
           return false;
         }
       
+        $(".ui-pnotify").remove();
 
         exito.play();
         new PNotify({
@@ -13277,9 +13263,9 @@ $(document).on("click","#registro_equipamientos td a",function(event){
         id=$("#asignar_horario_grupos .lista_cursos .elected").attr("id");
         $("#tabs>div[style='display: block']").load(Routing.generate("asignar_horario_show"), function(){
           $("#asignar_horario_grupos .lista_cursos button[id='"+id+"']").click();
-          $('#asignar_horario_grupo_dialog').dialog('close');
         });
 
+        $('#asignar_horario_grupo_dialog').dialog('close');
         //Añadir más donde se muestre el horario de un grupo.
         //$("#profesor_asignar_grupo").update_tab();
 
