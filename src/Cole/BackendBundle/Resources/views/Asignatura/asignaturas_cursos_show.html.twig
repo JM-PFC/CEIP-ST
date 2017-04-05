@@ -139,7 +139,7 @@
         $('<tr class="cabecera_tipo"><td id="cabecera_troncal" class="" colspan="3">Específicas</td></tr>').insertBefore($(this).find("tr[opcional='']:first"));
         $('<tr class="cabecera_tipo"><td id="cabecera_troncal" class="" colspan="3">Específicas (Opcionales)</td></tr>').insertBefore($(this).find("tr[opcional='1']:first"));
     });
-
+    //Se añade el número de módulos asignados al curso en la cabecera de la tabla.
     setTimeout(function(){
         $("#asignaturas_cursos #contenedor_registro").each(function(){
             var num=0;

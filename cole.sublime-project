@@ -2,19 +2,7 @@
 	"folders":
 	[
 		{
-			"path": "app"
-		},
-		{
-			"path": "src"
-		},
-		{
-			"path": "bin"
-		},
-		{
-			"path": "vendor"
-		},
-		{
-			"path": "web"
+			"path": "/opt/lampp/htdocs/Symfony"
 		}
 	]
 }

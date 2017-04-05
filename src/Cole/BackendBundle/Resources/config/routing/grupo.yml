@@ -102,3 +102,33 @@ eliminar_todos_horarios_grupos:
     defaults: { _controller: "BackendBundle:Grupo:EliminarTodosHorariosGrupo" }
     options:
         expose: true
+
+horario_grupo:
+    pattern:  /{id}/horario
+    defaults: { _controller: "BackendBundle:Grupo:HorarioDelGrupo"}
+    options:
+      expose: true
+
+horario_grupo:
+    pattern:  /{id}/horario
+    defaults: { _controller: "BackendBundle:Grupo:HorarioDelGrupo"}
+    options:
+      expose: true
+
+horario_grupo_pdf:
+    pattern:  /{id}/horarioPdf
+    defaults: { _controller: "BackendBundle:Grupo:HorarioDelGrupoPdf", _format: pdf}
+    options:
+      expose: true
+
+horarios_grupos_pdf:
+    pattern:  /horarios_gruposPdf
+    defaults: { _controller: "BackendBundle:Grupo:HorariosGruposPdf", _format: pdf}
+    options:
+      expose: true
+
+generar_horarios_pdf:
+    path:     /generar_horarios_pdf/{id}
+    defaults: { _controller: "BackendBundle:Grupo:GenerarHorariosPdf" }
+    options:
+        expose: true

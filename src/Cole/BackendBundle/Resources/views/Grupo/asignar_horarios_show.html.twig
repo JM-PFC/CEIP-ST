@@ -24,6 +24,17 @@
         resizable: false,
        }
     );
+
+    $("#generar_horarios_pdf").dialog(
+       {
+        bgiframe: true,
+        autoOpen: false,
+        height: 300,
+        width: 300,
+        modal: true,
+        resizable: false,
+       }
+    );
     $('#asignar_horario_grupo_dialog').on('dialogclose', function(event) {
         $('#asignar_horario_grupo_dialog').empty();
     });
@@ -115,7 +126,7 @@
         error.play();
           swal({
             title: "Profesores no registrados",
-            text: 'Actualmente no existen profesores registrados en el sistema. Debe registrar los profesores para poder asignarlos.',
+            text: 'Actualmente no existen profesores de primaria registrados en el sistema. Debe registrar los profesores para poder asignarlos.',
             type: "error",
             confirmButtonColor: color
           });          
@@ -174,7 +185,7 @@
 {% endblock %}
 
 {% block body -%}
-    <div id="asignar_horario_grupos">
+    <div id="asignar_horario_grupos" class="div_con_horario ">
     <div class="parent_no_form">
     <div class="child">
       <div class="simple_column">
@@ -232,7 +243,15 @@
                 </div>
                 <div id="contenedor_datos">
                     <div id="sin_seleccionar" class="">
-                        <p>Para ver detalles del horario seleccione un módulo de clase</p>
+                        <p id="horario_pdf">
+                            <span>Descarga PDF</span> 
+                            <img src="{{ asset('bundles/backend/images/menu/horario.png')}}">
+                        </p>                        
+                        <p id="cargando_horario_pdf" class="oculto">
+                            <span>Cargando PDF</span> 
+                            <img src="/Symfony/web/bundles/backend/images/loading_s.gif"/>
+                        </p>
+                        <p  id="aviso">Para ver detalles del horario seleccione un módulo de clase</p>
                     </div>
                     <div id="seleccionado" class="oculto">
 
@@ -250,8 +269,12 @@
       </div>
     {% endfor %}
 
-      <div id="asignar_horario_grupo_dialog" title="Asignación del horario del grupo">
+        <div id="asignar_horario_grupo_dialog" title="Asignación del horario del grupo"></div>
+        <div id="generar_horarios_pdf" title="Descarga de Horarios en PDF"></div>
+            
     </div>
     </div>
     </div>
+    
+    
     {% endblock %}

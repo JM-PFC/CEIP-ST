@@ -575,6 +575,33 @@ class ProfesorController extends Controller
         return new JsonResponse(array('message' => 'Success!','success' => true), 200);
     }
 
+    public function ClasesImpartidasAction()
+    {
+        $em = $this->getDoctrine()->getManager();
+
+        $entities = $em->getRepository('BackendBundle:Profesor')->findProfesoresDePrimaria();
+        if (!$entities) {
+            $numProfesores=0;
+        }
+        else{
+            $numProfesores=1;
+        }
+
+        $horarios=$em->getRepository('BackendBundle:Horario')->findAll();
+        if (!$horarios) {
+            $horario=0;
+        }
+        else{
+            $horario=1;
+        }
+
+        return $this->render('BackendBundle:Profesor:clases_impartidas.html.twig', array(
+            'entities' => $entities,
+            'horario' => $horario,
+            'horarios' => $horarios,
+            'numProfesores' => $numProfesores,
+        ));
+    }
 
 
 }

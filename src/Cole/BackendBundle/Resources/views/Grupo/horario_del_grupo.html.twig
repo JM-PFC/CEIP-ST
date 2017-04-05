@@ -1,0 +1,228 @@
+
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta content="Horario del grupo" name="description" />
+    <meta content="CEIP, SANTA TERESA, CÁDIZ, WEB, COLEGIO" name="keywords" />
+    <link id="favicon" rel="icon" type="image/x-icon" href="{{ asset('favicon.ico') }}" />
+	  <link href="{{ app.request.scheme ~ '://' ~ app.request.httpHost ~ asset('bundles/backend/css/backend.css') }}" rel="stylesheet" type="text/css" />
+	  <link href="{{ app.request.scheme ~ '://' ~ app.request.httpHost ~ asset('bundles/cole/css/estilo.css') }}" rel="stylesheet" type="text/css" />
+	  <link href="{{app.request.scheme ~ '://' ~ app.request.httpHost ~ asset('bundles/backend/js/jquery-ui/	jquery-ui.css') }}" rel="stylesheet" type="text/css" />
+    <script src="{{app.request.scheme ~ '://' ~ app.request.httpHost ~ asset('bundles/cole/js/jquery-1.11.2.js')}}" type="text/javascript"></script>
+    <script type="text/javascript" src="{{app.request.scheme ~ '://' ~ app.request.httpHost ~ asset('bundles/backend/js/jquery-ui/jquery-ui.js') }}"></script>
+  </head>
+    
+  {% if aula %}
+  <body id="horario_grupo_pdf" class="horario_grupo_pdf" aula="{{ aula.nombre }}">
+  {% else %}
+  <body id="horario_grupo_pdf" class="horario_grupo_pdf" aula="">
+  {% endif %}
+    <div>
+      <div>
+				<img alt="logo del colegio"   src= " {{ app.request.scheme ~ '://' ~ app.request.httpHost ~ asset('bundles/backend/images/logo_trans.png') }} ">
+    	</div>
+    	<div class="titulo">
+				Colegio de Educación Infantil y Primaria
+				<br>
+				<strong>Santa Teresa</strong>
+				<br>
+				Cádiz
+			</div>
+			<div id="curso">
+        <h2> Horario de Clase </h2>
+        <h3> Curso <span id="año_inicio"> {{ inicio.inicioCurso|date('Y') }}</span>/<span id="año_fin">{{ fin.finCurso|date('Y') }}</span></h3>
+			</div>
+    </div>
+    <div>
+      <h2>{{ grupo }}</h2>
+      {% if aula %}
+      <h3>({{ aula.nombre }})</h3>
+      {% endif %}
+    </div>
+    <div> 
+      <table>
+        <thead>
+          <tr>
+            <th><img alt="Horas"   src= " {{ app.request.scheme ~ '://' ~ app.request.httpHost ~ asset('bundles/backend/images/menu/hora.png') }} "></th>
+            <th>Lunes</th>
+            <th>Martes</th>
+            <th>Miércoles</th>
+            <th>Jueves</th>
+            <th>Viernes</th>
+          </tr>
+        </thead>
+        <tbody>
+        {% for entity in horarios %}
+          <tr id="{{ entity.id }}" class="no_efect">
+            <td >{{ entity.inicio|date("H:i") ~ " - " ~ entity.fin|date("H:i")  }}</td>
+            {% if entity.horaClase == "RECREO" or entity.horaClase == "COMIDA" %}
+            <td colspan="5" class="no_efect placeholder_list_table_td_mod color_azul row_recreo"> {{ entity.horaClase }}</td>
+            {% else %}
+            <td class="horario azul_opacity" id="1"><div></div></td>
+            <td class="horario azul_opacity" id="2"><div></div></td>
+            <td class="horario azul_opacity" id="3"><div></div></td>
+            <td class="horario azul_opacity" id="4"><div></div></td>
+            <td class="horario azul_opacity" id="5"><div></div></td>
+            {% endif %}
+          </tr>
+        {% endfor %}
+        </tbody>
+      </table>
+    </div>
+    {% if profesor %}
+    <div id="tutor">
+      {% if  profesor.sexo == "Masculino" %}
+      <span class="label">Tutor: </span>
+      {% else %}
+      <span class="label">Tutora: </span>
+      {% endif %}
+      <span class="nombre"> {{ profesor ~ "." }} </span>
+    </div>
+    {% endif %}
+    <div id="info_op" class="oculto">
+      <div>Asignaturas<br>Opcionales</div>
+      <div id="asignaturas">
+        
+      </div>
+      
+    </div>
+    
+    <script  type="text/javascript">
+
+    array={{imparte|json_encode()|raw}};//Asignaturas no opcionales
+    for (var key in array){
+      clave=key.split("-");
+      id_horario=clave[0];
+      dia=clave[1];
+      nombre_asig=clave[2];
+      abrev_asig=clave[3];
+      aula=clave[4];
+      grupo=clave[5];
+      profesor=array[key];
+
+      //Si existe alguna asignación con horario se muestra en la tabla.  
+      if(id_horario!=""){
+        $("#horario_grupo_pdf tr[id='"+id_horario+"'] td[id='"+dia+"']>div").append("<span class='asignatura'>"+abrev_asig+"</span>");
+
+        if(aula!=$("#horario_grupo_pdf").attr("aula") && aula!=""){
+          $("#horario_grupo_pdf tr[id='"+id_horario+"'] td[id='"+dia+"']>div").append("<span class='aula'>("+aula+")</span>");
+          //Se establece un estilo para mostrar las asignaturas con diferente aulas dependiendo del la altura de las celdas.
+          if($("#horario_grupo_pdf tr[id='"+id_horario+"'] td[id='1']").height()<70){
+            $("#horario_grupo_pdf tr[id='"+id_horario+"'] td[id='"+dia+"'] .asignatura").css("margin-top","-"+12+"%");
+            $("#horario_grupo_pdf tr[id='"+id_horario+"'] td[id='"+dia+"'] .asignatura").css("margin-bottom","-2px");
+          }else{
+            $("#horario_grupo_pdf tr[id='"+id_horario+"'] td[id='"+dia+"'] .asignatura").css("margin-top","-"+12+"%");
+          }
+        }
+      }
+    }
+
+    array={{imparte_op|json_encode()|raw}};//Asignaturas opcionales
+    datos_asig=0;//Variable para comprobar si se tiene que mostrar los datos de las asignaturas optativas debajo de la tabla.
+    for (var key in array){
+      clave=key.split("-");
+      id_horario=clave[0];
+      dia=clave[1];
+      nombre_asig=clave[2];
+      abrev_asig=clave[3];
+      aula=clave[4];
+      num_op=clave[5];
+      profesor=array[key];
+
+      //Si existe alguna asignación con horario se muestra en la tabla.  
+      if(id_horario!=""){
+
+        //Añadimos las siglas de la asignatura a las asignaturas opcionales en la tabla.
+        siglas="";
+        if(num_op<3){
+          arr = abrev_asig.split(' ');
+          if(arr.length==1){
+            if(abrev_asig.length>10){
+              siglas=abrev_asig.slice(0,4)+". ";
+              datos_asig=1;//Se indica que hay que mostrar los datos de las asignaturas optativas.
+            }
+            else{
+              siglas=abrev_asig;
+            }
+          }
+          else{
+            if(arr[0].length<=7){
+              siglas=arr[0].slice(0,7)+" ";
+              siglas+=arr[1].slice(0,1)+".";
+            }
+            else{
+              siglas=arr[0].slice(0,3)+". ";
+              siglas+=arr[1].slice(0,3)+".";
+            }
+          }
+        }
+        else{
+          arr = abrev_asig.split(' ');
+          if(arr.length==1){
+            siglas=abrev_asig.slice(0,3)+".";
+          }
+          else{
+            siglas=arr[0].slice(0,1)+". ";
+            siglas+=arr[1].slice(0,1)+".";
+          }
+        }
+
+        $("#horario_grupo_pdf tr[id='"+id_horario+"'] td[id='"+dia+"']>div").addClass('opcionales');
+        $("#horario_grupo_pdf tr[id='"+id_horario+"'] td[id='"+dia+"']>div").append("<span class='asignatura_op'>"+siglas+"</span>");
+
+        if(num_op==1 || num_op==2){
+          if(aula!=$("#horario_grupo_pdf").attr("aula") || $("#horario_grupo_pdf").attr("aula")==""){
+            if(aula!=""){
+              
+              $("#horario_grupo_pdf tr[id='"+id_horario+"'] td[id='"+dia+"']>div").append("<span class='aula_op'>("+aula+")</span>");
+            }
+          }
+
+          if(num_op==2){
+            
+            if($("#horario_grupo_pdf tr[id='"+id_horario+"'] td[id='1']").height()<70){
+              $("#horario_grupo_pdf table .opcionales").css("margin-top","-"+14+"%");
+            }else{
+              $("#horario_grupo_pdf table .opcionales").css("margin-top","-"+12+"%");
+            }
+          }      
+        }
+        else if(num_op==3){
+          $("#horario_grupo_pdf #info_op").removeClass("oculto");
+
+
+          if($("#horario_grupo_pdf tr[id='"+id_horario+"'] td[id='1']").height()<70){
+            $("#horario_grupo_pdf table .opcionales").css("margin-top","-"+16+"%");
+          }else{
+            $("#horario_grupo_pdf table .opcionales").css("margin-top","-"+23+"%");
+            $("#horario_grupo_pdf table .opcionales .asignatura_op_siglas").css("padding","17% 4%");
+            
+          }
+
+          $("#horario_grupo_pdf table .opcionales .asignatura_op").each(function() {
+            $(this).removeClass('asignatura_op');
+            $(this).addClass('asignatura_op_siglas');
+          });
+
+          $("#horario_grupo_pdf table .opcionales>span:nth-child(3)").css("border","none");
+                  
+          if( $("#horario_grupo_pdf table .info_op #asignaturas p[id='"+abrev_asig+"']").size()==0){
+            if(nombre_asig.length<40){
+              $("#horario_grupo_pdf #info_op #asignaturas").append("<p id='"+abrev_asig+"'><span class='siglas'>"+siglas+"</span><span class='nombre'> -  "+nombre_asig+"</span><span class='aula'>("+aula+")</span></p>");
+            }
+            else{
+              $("#horario_grupo_pdf #info_op #asignaturas").append("<p id='"+abrev_asig+"'><span class='siglas'>"+siglas+"</span><span class='nombre'> -  "+abrev_asig+"</span><span class='aula'>("+aula+")</span></p>");
+            }
+
+          }
+
+         
+
+
+        }
+      }
+    }
+    </script>
+  </body>
+</html>

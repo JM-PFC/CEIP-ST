@@ -16,6 +16,11 @@ form label{
 	font-size: 14px ;
 	min-width: 100px;
 }
+.ui-widget-header{
+	color: #334c73 !important;
+    background: #3975bf url("../images/ui-bg_gloss-wave_75_3975bf_500x100.png") repeat-x scroll -125% 50% !important;
+    font-family: "Nimbus Sans L" !important;
+}
 button[class*="ui-dialog-titlebar-close"]{
 	min-width: 0;
 	min-height: 0;
@@ -118,6 +123,7 @@ button:disabled{
 }
 #botones_centrados div button{
 	min-width: 100px !important;
+	min-height: 30px;
 }
 
 a{
@@ -368,7 +374,7 @@ nav{
 .contenedor div a span{
 	margin-top: -4px;
 	font-size: 12px;
-	line-height: 13px;
+	line-height: 15px;
     display: table-cell;
     vertical-align: middle;
     min-width: 50px;
@@ -2056,11 +2062,11 @@ button[class*="elected"]{
 	padding: 2% 0 0 0; 
 	overflow: hidden !important;
 }
-#tutor_grupos .div_buscador, #profesor_asignatura_grupo_dialog .div_buscador{
+.div_buscador{
 	height: 31px;
 	background: #334c73;
 	border-radius: 0 0 3px 3px;
-	 box-shadow: 0 -2px 3px -1px rgba(0, 0, 0, 0.5);
+	box-shadow: 0px 0px 1px 0px rgba(0, 0, 0, 0.5);
 }
 #tutor_grupos .lista_profesores p {
 	color: #334c73;
@@ -2134,16 +2140,16 @@ button[class*="elected"]{
 #tutor_grupos .contenedor_registro div table{
 	table-layout: fixed;
 }
-#tutor_grupos .dataTables_filter{
+#tutor_grupos .dataTables_filter, #clases_impartidas .dataTables_filter{
 	height: 30px;
 }
-#tutor_grupos .dataTables_filter label,#profesor_asignatura_grupo_dialog .dataTables_filter label{
+#tutor_grupos .dataTables_filter label,#profesor_asignatura_grupo_dialog .dataTables_filter label, #clases_impartidas .dataTables_filter label{
 	color: white;
 	display: block;
 	margin:0 2%;
 	padding-top: 1%;
 }
-#tutor_grupos .dataTables_filter input{
+#tutor_grupos .dataTables_filter input, #clases_impartidas .dataTables_filter input{
 	width: 78%;
 	margin-left: 2%;
 }
@@ -2199,6 +2205,9 @@ button[class*="elected"]{
     text-align: left;
     width: 85%;
     cursor: pointer;
+}
+#tutor_grupos .lista_profesores  ul:hover {
+  background: #b1cce7;
 }
 #tutor_grupos #lista_grupos img {
     width: 20px;
@@ -2330,6 +2339,9 @@ button[class*="elected"]{
 	color: #A80101;
 	font-size: 17px;
 }
+#registro_ratio #contenedor_ratio_grupos #slider span{
+	cursor: pointer;
+}
 #registro_ratio .simple_column_red{
 	width: 39%
 }
@@ -2453,7 +2465,7 @@ button[class*="elected"]{
 	width: 100%;
 }
 #edit_profesor_nivel{
-	min-width: 110px;
+	min-width: 120px;
 	text-align: center;
 }
 .datos_registro input[type='number']{
@@ -2462,17 +2474,10 @@ button[class*="elected"]{
 .datos_registro label{
 	min-width: 115px;
 }
-#profesor_edit #imparte{
-	min-width: 150px;
-	margin-top: 20px;
-}
-#profesor_edit #imparte button{
-	padding: 4px;
-}
 .datos_registro div{
 	width: 100px;
 	float: left;
-	margin-right: 7%;
+	margin-right: 11%;
 }
 .datos_registro input{
 	text-align: center;
@@ -2686,7 +2691,7 @@ button[class*="elected"]{
 	height: 81% !important;
 }
 #festivos_dialog #content-form{
-	min-height: 210px !important;
+	min-height: 215px !important;
 	height: 0px !important;
 	width: 88%;
 	margin: 0 !important;
@@ -3008,6 +3013,9 @@ padding-left: 50px !important;
 line-height: 1.5 !important;
 text-rendering: geometricPrecision !important;
 }
+.ui-pnotify-text span{
+	display: block;
+}
 .ui-pnotify.custom .ui-pnotify-title {
 font-weight: bold;
 }
@@ -3076,7 +3084,6 @@ font-weight: bold;
  	-moz-box-shadow:0 6px 15px 0 rgba(0,0,0,.4) !important;
  	box-shadow:0 6px 15px 0 rgba(0,0,0,.4) !important;
  }
-
 
 .ui-pnotify-title{
 	font-weight: normal !important;
@@ -3625,7 +3632,7 @@ font-weight: bold;
 	margin-left: 5px;
 }
 #vistas_festivos div{
-	margin-bottom: 30px;
+	margin-bottom: 28px;
 	margin-left: 14%;
 }
 #vistas_festivos button{
@@ -3822,6 +3829,10 @@ font-weight: bold;
 	margin-left: 20%;
 	width: 53%;
 }
+#festivos_nueva>div, #festivos_edit>div{
+	top: 0 !important;
+	left: 0 !important;
+}
 #festivos_nueva .addregistro>div:last-child{
 	margin-left:5%;
 	width: 90%;
@@ -3952,9 +3963,8 @@ font-weight: bold;
 #calendario_pdf>div{
 	width: 100%;
 	display: block;
-	margin: 5px;
+	margin-bottom: 10px;
 	clear: both;
-
 }
 #calendario_pdf>div:nth-child(1)>div{
 	float: left;
@@ -3968,10 +3978,11 @@ font-weight: bold;
 	text-align: center;
 }
 #meses_calendario div div>div{
-	width: 16em !important;
+	width: 15.5em !important;
 	margin: 0px;
 	background: none;	
 	float: left;
+	opacity: 1;
 }
 #meses_calendario div div{
 	margin-top: 5px;
@@ -3993,7 +4004,7 @@ font-weight: bold;
 #meses_calendario div div th span,#meses_calendario div div td a{
 	font-size: 15px;
 	text-align: center;
-	height: 20px;
+	height: 19px;
 	border: 0;
 	background: none;
 }
@@ -4039,7 +4050,7 @@ font-weight: bold;
 	font-weight: bold;
 }
 #meses_calendario div[class*="ui-datepicker-inline"]{
-   height: 220px;
+   	height: 220px;
     margin-bottom: 20px;
     background: #fafafa;
 }
@@ -4116,7 +4127,7 @@ font-weight: bold;
 }
 
 #meses_calendario>div[id="col_izq"] #leyenda h4{
-	margin-left: 0px;
+	margin-left: 1px;
 }
 #meses_calendario #leyenda h4[id="h4_descripcion"]{
 	border-radius: none;
@@ -4209,8 +4220,10 @@ border: 1px solid;
 	height: 22px;
 }
 #tipo_festivos td{
-	font-size: 0.9em;
-	min-width: 0 !important;
+    font-size: 0.9em;
+    left: 10px;
+    min-width: 0 !important;
+    position: relative;
 }
 #lectivos td,#tipo_festivos td{
 	background: none;
@@ -6803,101 +6816,153 @@ cursor: default !important;
 
 /*Asignación de Horarios de Grupo*/
 
-#asignar_horario_grupos .simple_column{
-	width: 25%;
+.div_con_horario .simple_column{
+	width: 25% !important;
 }
-#asignar_horario_grupos #contenedor_registro{
-	width: 59%;
-	margin-left: 0%;
-}
-#asignar_horario_grupos .simple_column h2{
+.div_con_horario .simple_column h2{
     margin-bottom: 6% !important;
     margin-top: 6% !important;
 }
-#asignar_horario_grupos .simple_column ul{
+.div_con_horario .simple_column ul{
   margin-bottom: 15px !important;
 }
-#asignar_horario_grupos #lista_asignaturas td:not(.dataTables_empty), #asignar_profesor #contenedor_registro div table td:not(.dataTables_empty), #asignaturas_cursos #contenedor_registro div table td:not(.dataTables_empty){
+.div_con_horario #contenedor_registro{
+	width: 59% !important;
+	margin-left: 0% !important;
+}
+.div_con_horario #lista_asignaturas td:not(.dataTables_empty), #asignar_profesor #contenedor_registro div table td:not(.dataTables_empty), #asignaturas_cursos #contenedor_registro div table td:not(.dataTables_empty){
 	border: 1px solid #b1cce7;
 }
-#asignar_horario_grupos #contenedor_registro div table td:not(.dataTables_empty) {
+.div_con_horario #contenedor_registro div table td:not(.dataTables_empty) {
     font-family: serif !important;
-    font-size: 1em;
+    font-size: 1em !important;
     height: 28px;
     min-width: 15%;
-    padding: 0;
+    padding: 0 !important;
 }
-#asignar_horario_grupos #contenedor_registro div table td tr{
+.div_con_horario #contenedor_registro div table td tr{
     background: none !important;
 }
-#asignar_horario_grupos #contenedor_registro div table td tr:hover {
+.div_con_horario #contenedor_registro div table td tr:hover {
     background: none !important;
 }
-#asignar_horario_grupos #contenedor_registro div table td td {
+.div_con_horario #contenedor_registro div table td td  {
     font-family: serif !important;
-    font-size: 1em;
-    height: 28px;
-    min-width: 0;
+    font-size: 1em !important;
+    height: 28px !important;
+    min-width: 0 !important;
     border-bottom: none !important;
     border-top: none !important;
     border-left: 1px solid #b1cce7;
     border-right: 1px solid #b1cce7;
+    min-width: 30% !important;
 }
-#asignar_horario_grupos #contenedor_registro div table th {
-    width: 13%;
+.div_con_horario #contenedor_registro div table td td:first-child  {
+	border-left: none !important;
 }
-#asignar_horario_grupos #contenedor_registro tbody tr,#asignar_horario_grupos #contenedor_registro tbody td{ 
+.div_con_horario #contenedor_registro div table td td:last-child  {
+	border-right: none !important;
+}
+.div_con_horario #contenedor_registro div table th {
+    width: 13% !important;
+}
+.div_con_horario #contenedor_registro tbody tr,.div_con_horario #contenedor_registro tbody td{ 
 	cursor: default !important;
-	text-align: center;
+	text-align: center !important;
 }
-#asignar_horario_grupos #contenedor_registro td:not(.horario):not(.no_efect):hover { 
-	background: #FFCE55;
-	color: #334c73;
+.div_con_horario #contenedor_registro td:not(.horario):not(.no_efect):hover{ 
+	background: #FFCE55 !important;
+	color: #334c73 !important;
 }	
-#asignar_horario_grupos #contenedor_registro tr:last-child td{ 
+.div_con_horario #contenedor_registro tr:last-child td{ 
 	border-bottom: none !important;
 }	
-#asignar_horario_grupos #contenedor_registro .inner_table{
-	max-height: 203px;
+.div_con_horario #contenedor_registro .inner_table{
+	max-height: 203px !important;
 }
-#asignar_horario_grupos #contenedor_datos{
-	height: 54px;
-	border: 5px solid #b1cce7;
+.div_con_horario #contenedor_datos{
+	height: 54px !important;
+	border: 5px solid #b1cce7 !important;
 	-webkit-box-sizing: border-box;
 	-moz-box-sizing: border-box;
 	box-sizing: border-box;
 }
-#asignar_horario_grupos #contenedor_datos span[class="datos"]{
+.div_con_horario #contenedor_datos span[class="datos"]{
     color: #334c73 !important;
 }
-#asignar_horario_grupos #contenedor_datos span{
+.div_con_horario #contenedor_datos span{
     float: left;
     font-size: 1.1em !important;
-    margin: 2px 5px;
+    margin: 2px 5px !important;
 }
-#asignar_horario_grupos #contenedor_datos img{
-    float: left;
-	margin: 2px
+.div_con_horario #contenedor_datos img{
+    float: left !important;
+	margin: 2px !important;
 }
-#asignar_horario_grupos #contenedor_datos p{
-	font-family: verdana;
-    clear: both;
+.div_con_horario #contenedor_datos p{
+	font-family: verdana !important;
+    clear: both !important;
 }
-#asignar_horario_grupos #contenedor_datos #asignatura{
-    display: inline;
+.div_con_horario #contenedor_datos #asignatura{
+    display: inline !important;
     width: 50% !important;
 }
-#contenedor_datos #sin_seleccionar p{
-	text-align: center;
-	font-size: 1.2em;
-	font-family: Courier,Helvetica,Arial,sans-serif;
-	margin-top: 14px;
+.div_con_horario #contenedor_datos #sin_seleccionar p{
+	text-align: center !important;
+	font-size: 1.2em !important;
+	font-family: Courier,Helvetica,Arial,sans-serif !important;
+	margin-top: 14px !important;
 }
-#asignar_horario_grupos #contenedor_datos p span:first-child{
-    min-width: 90px;
+.div_con_horario #contenedor_datos #sin_seleccionar #horario_pdf, .div_con_horario #contenedor_datos #sin_seleccionar #cargando_horario_pdf{
+   	background: #b1cce7 none repeat scroll 0 0 !important;
+    display: block ;
+    float: left !important;
+    height: 44px !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    width: 16.5% !important;
 }
-#asignar_horario_grupos #contenedor_registro li,#asignar_horario_grupo_dialog li{
-    list-style: outside none none;
+.div_con_horario #contenedor_datos #sin_seleccionar #horario_pdf img{
+    border: 2px outset grey !important;
+    border-radius: 7px !important;
+    cursor: pointer !important;
+    float: none !important;
+    margin: 2px !important;
+    width: 45px !important;
+}
+.div_con_horario #contenedor_datos #sin_seleccionar #horario_pdf img:hover{
+	box-shadow: 0 1px 1px 1px rgba(0, 0, 0, 0.3) !important;
+}
+.div_con_horario #contenedor_datos #sin_seleccionar #horario_pdf img:active{
+	border: 2px inset grey !important;
+}
+.div_con_horario #contenedor_datos #sin_seleccionar #horario_pdf span{
+	font-family: Georgia !important;
+    font-size: 10px !important;
+    margin: 0 !important;
+    min-width: 0 !important;
+    padding: 11px 0 !important;
+    width: 51px !important;
+}
+.div_con_horario #contenedor_datos #sin_seleccionar #cargando_horario_pdf{
+   	font-size: 12px !important;
+}
+.div_con_horario #contenedor_datos #sin_seleccionar #cargando_horario_pdf img {
+    float: none !important;
+    margin-left: -5px !important;
+}
+.div_con_horario #contenedor_datos #sin_seleccionar #aviso{
+	border-radius: 5px !important;
+    display: inline-block !important;
+    margin: 0 !important;
+    padding: 13px 0 !important;
+    width: 83% !important;
+}
+.div_con_horario #contenedor_datos p span:first-child{
+    min-width: 90px !important;
+}
+.div_con_horario #contenedor_registro li,#asignar_horario_grupo_dialog li{
+    list-style: outside none none !important;
 }
 #asignar_horario_grupo_dialog{
 	overflow: hidden;
@@ -7114,4 +7179,280 @@ cursor: default !important;
 	width: 25px;
 	height: 25px;
 
+}
+
+/*Horarios de Grupos en PDF*/
+.horario_grupo_pdf {
+    width: 297mm;
+    height: 210mm;
+}
+
+.horario_grupo_pdf> div {
+    clear: both;
+    display: block;
+    margin-bottom: 5px;
+    width: 100%;
+}
+.horario_grupo_pdf > div:nth-child(1) > div{
+	float: left;
+}
+.horario_grupo_pdf > div:nth-child(1) > div>img{
+	height: 100px;
+	width: 100px;
+}
+.horario_grupo_pdf .titulo {
+   font-size: 1.2em;
+   margin: 0.5em;
+   margin-bottom: 0;
+}
+.horario_grupo_pdf > div:nth-child(1) > div:nth-child(3) {
+    float: right;
+    margin: 20px !important;
+}
+.horario_grupo_pdf  > div:nth-child(2) > h1 {
+    font-family: "Comic Sans MS",cursive;
+    text-align: center;
+    margin-bottom: 10px; 
+}
+.horario_grupo_pdf  > div:nth-child(2) > h2 {
+    font-family: "Comic Sans MS",cursive;
+    text-align: center;
+    margin-bottom: 5px; 
+}
+.horario_grupo_pdf  > div:nth-child(2) > h3 {
+    font-family: "Comic Sans MS",cursive;
+    text-align: center;
+}
+.horario_grupo_pdf  table {
+    background: #fafafa none repeat scroll 0 0;
+    border-radius: 5px;
+    border: 1px double grey;
+    box-shadow: 0 1px 1px 0 rgba(0, 0, 0, 0.5);
+    height: 145mm;
+    margin: 0 auto;
+    width: 98%;
+}
+.horario_grupo_pdf  thead {
+    display: table-header-group;
+    height: 40px;
+    max-height: 40px;
+    position: relative;
+    width: 100%;
+}
+.horario_grupo_pdf  thead th {
+    height: 35px;
+    text-align: center;
+}
+.horario_grupo_pdf  tbody {
+    top: 42px;
+    position: relative;
+}
+.horario_grupo_pdf  tbody  td{
+    text-align: center;
+    max-width: 0;
+    font-family: 'Comic Sans MS';
+}
+.horario_grupo_pdf  th img{
+    height: 30px;
+    vertical-align: middle;
+    width: 30px;
+}
+.horario_grupo_pdf  #curso{
+    text-align: right;
+    margin: 10px !important
+}
+.horario_grupo_pdf  #curso h3{
+    font-weight: normal !important;
+}
+.horario_grupo_pdf  table td>div{
+	max-height: 0 !important;
+    overflow: visible;
+}
+.horario_grupo_pdf  table tr{
+	max-height: 100px !important;
+   
+}
+.horario_grupo_pdf  table .aula{
+    font-family: "Times New Roman";
+    font-size: 15px;
+    min-width: 100%;
+}
+.horario_grupo_pdf  table .asignatura{
+    display: block;
+    font-family: "Comic Sans MS";
+    font-size: 18px;
+    font-weight: bold;
+    margin-bottom: 8px;
+    margin-top: -7%;
+}
+.horario_grupo_pdf  .row_recreo{
+    height: 40px !important;
+}
+.horario_grupo_pdf  #tutor .label{
+    display: block;
+    float: left;
+    font-weight: bold;
+    height: 26px;
+    margin-left: 30px;
+    margin-right: 7px;
+}
+.horario_grupo_pdf  table .asignatura_op{
+	display: inline-block;
+	font-size: 16px;
+    font-weight: bold;
+    width: 53%;
+    margin-left: 2%;
+    text-align: left;
+    margin-bottom: 8px;
+    margin-top: -7%;
+}
+.horario_grupo_pdf  table .aula_op{
+	display: inline-block;
+	font-family: "Times New Roman";
+    font-size: 15px;
+    margin-right: 3%;
+    width: 42%;
+    text-align: center;
+}
+.horario_grupo_pdf  table .asignatura_op_siglas{
+    border-right: 2px solid #fafafa;
+    display: inline-block;
+    font-size: 16px;
+    font-weight: bold;
+    min-width: 41px !important;
+    padding: 10% 4%;
+}
+.horario_grupo_pdf  #tutor{
+	clear: none;
+	float: left;
+	font-size: 15px;
+	margin-top: 15px;
+	width: 45%;
+}
+.horario_grupo_pdf  #info_op{
+	clear: none;
+	float: left;
+	font-size: 14px;
+	width: 55%;
+}
+.horario_grupo_pdf  #info_op div:nth-child(1){
+    border-right: 1px solid #001f51;
+    float: left;
+    font-weight: bold;
+    padding: 15px 5px 15px 0;
+    text-align: center;
+    width: 17%;
+}
+.horario_grupo_pdf  #info_op #asignaturas{
+	float: left;
+	margin-left: 2%;
+	width: 77%;
+}
+.horario_grupo_pdf  #info_op #asignaturas p{
+	height: 20px;
+	margin: 3px 0;
+}
+.horario_grupo_pdf  #info_op #asignaturas .siglas{
+    float: left;
+    font-family: verdana;
+    font-size: 14px;
+    font-weight: bold;
+    width: 10%;
+}
+.horario_grupo_pdf  #info_op #asignaturas .nombre{
+	min-width: 65%;
+	float: left;
+}
+.horario_grupo_pdf  #info_op #asignaturas .aula{
+	min-width: 23%;
+	margin-left: 2%;
+	float: left;
+}
+#generar_horarios_pdf #content-form>p{
+    text-align: center;
+    margin-top: 15px;
+}
+#generar_horarios_pdf button{
+    display: table;
+    height: 64px;
+    margin: 23px auto;
+    max-width: 190px;
+}
+#generar_horarios_pdf button p{
+    font-family: serif;
+}
+#generar_horarios_pdf div{
+    display: table-cell;
+    height: 50px;
+    padding: 0 5px !important;
+    vertical-align: middle;
+    width: 50%;
+}
+
+#generar_horarios_pdf  .multiple img{
+    border: 2px groove transparent;
+    border-radius: 5px;
+    float: left;
+    height: 35px;
+    margin: -26px 0;
+    padding: 10px 15px !important;
+    text-align: center;
+    width: 45px;
+}
+#carga_horarios{
+	height: 30px;
+	display: block;
+}
+#clases_impartidas #contenedor_registro{
+	margin-top: 0.5% !important;
+}
+#clases_impartidas>div>div>h2{
+	font-size: 1.3em;
+	text-align: center;
+	font-family: Impact,Haettenschweiler,Franklin Gothic Bold,Charcoal,Helvetica Inserat,Bitstream Vera Sans Bold,Arial Black,sans serif;
+	color: #424242;
+}
+
+#clases_impartidas #contenedor_registro {
+    margin-left: 0 !important;
+    width: 70% !important;
+}
+.lista_profesores{
+    background: #b1cce7 none repeat scroll 0 0;
+    border-radius: 5px;
+    box-shadow: 0 1px 1px 1px rgba(0, 0, 0, 0.5);
+    float: left;
+    margin: 0.5% 2% 0.5% 1%;
+    min-height: 295px;
+    width: 27%;
+}
+.lista_profesores  .cabecera_lista{
+    background: #334c73 none repeat scroll 0 0;
+    border-radius: 5px 5px 0 0;
+    color: white;
+    font-weight: bold;
+    height: 25px;
+    padding-top: 5px;
+    text-align: center;
+    vertical-align: middle;
+    box-shadow: 0 0px 1px 0px rgba(0, 0, 0, 0.5);
+    margin-bottom: 5px;
+}
+.lista_profesores .contenido_lista{
+    margin: 0 auto;
+    max-height: 270px;
+    overflow: auto;
+    text-align: center;
+    margin-bottom: 2px;
+}
+.lista_profesores .contenido_lista button {
+    margin: 2% 0;
+    min-height: 40px;
+    width: 95%;
+}
+#clases_impartidas #contenedor_registro div table td:not(.dataTables_empty) {
+    height: 44px !important;
+}
+#clases_impartidas #contenedor_registro .inner_table {
+    max-height: 225px !important;
 }

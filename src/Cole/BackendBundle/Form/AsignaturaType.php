@@ -15,7 +15,7 @@ class AsignaturaType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('nombre','text',array('label' => 'Nombre', 'attr' => array('validation' => 'Empty')))
+            ->add('nombre','text',array('label' => 'Nombre','max_length' => 60, 'attr' => array('validation' => 'Empty')))
             ->add('tipo')
             ->add('abreviatura','text',array('label' => 'Abreviatura', 'max_length' => 15, 'attr' => array('validation' => 'Empty')))
             ->add('opcional', 'checkbox', array('label' => 'Opcional','required'=> false))

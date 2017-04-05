@@ -141,7 +141,7 @@ class ImparteRepository extends EntityRepository
 	public function findByGrupoConHorario($grupo)
 	{
 		return $this->getEntityManager()->createQuery(
-		'SELECT i FROM BackendBundle:Imparte i WHERE i.horario IS not NULL and i.grupo=:grupo GROUP BY i.asignatura')
+		'SELECT i FROM BackendBundle:Imparte i WHERE i.horario IS not NULL and i.grupo=:grupo')
 		->setParameters(array(
 			'grupo' => $grupo))
 		->getResult();
@@ -164,6 +164,16 @@ class ImparteRepository extends EntityRepository
 		'SELECT i FROM BackendBundle:Imparte i INNER JOIN i.asignatura a INNER JOIN a.asignatura asig WHERE i.grupo=:grupo and asig.opcional=:opcional GROUP BY i.asignatura')
 		->setParameters(array(
 			'grupo' => $grupo,
+			'opcional' => 1))
+		->getResult();
+	}
+
+	public function findOpcionalesCurso($curso)
+	{
+		return $this->getEntityManager()->createQuery(
+		'SELECT i FROM BackendBundle:Imparte i INNER JOIN i.asignatura a INNER JOIN a.asignatura asig INNER JOIN i.grupo g WHERE asig.opcional=:opcional and g.curso=:curso')
+		->setParameters(array(
+			'curso' => $curso,
 			'opcional' => 1))
 		->getResult();
 	}

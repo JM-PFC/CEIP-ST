@@ -1849,7 +1849,7 @@ $(document).on("submit",".formulario_profesor",function(event){
 
   // Se llama a la función de comprobar formulario editado, en el caso que se modifique algún elemento del formulario.
   
-  $(document).on("keyup paste cut","form[id$='_edit'] input",function() {
+  $(document).on("blur keyup paste cut","form[id$='_edit'] input",function() {
     //Se omite la validación en editar noticias.
     if($(this).closest("form").attr("id")=="noticias_edit"){
       return false;
@@ -3550,46 +3550,109 @@ $(document).on("blur","input[id='edit_profesor_dni']",function() {
     }
 
     if(val==0){
-      $.ajax({
-        type: 'PUT',
-        url: $(this).attr('action'),
-        data:$(this).serialize(), 
+
+      elemento=$(this);
+      //Se comprueba si se modifica una asignatura añadiendo/eliminando la opción "opcional" para eliminar todas las asignaciones de todas las asignaturas opcionales.
+      if($("#asignatura_edit #asignatura_opcional").hasClass('modified')){
+        aviso.play();
+        swal({
+          title: "Actualización de Asignatura Opcional",
+          html: "<p class='justificado'>Se va a realizar cambios en una asignatura específica opcional, por lo que se eliminará las asignaciones de todas las asignaturas específicas opcionales del sistema.</p><br>¿Estas seguro de continuar? No podrás deshacer este paso...",
+          type: "warning",
+          showCancelButton: true,
+          cancelButtonText: "Cancelar",
+          confirmButtonColor: color,
+          confirmButtonText: "¡Adelante!"
+          }).then(function () {
+            opcional=1;//Variable para indicar si se ha modificado una asignatura opcional.
+            $.ajax({
+              type: 'PUT',
+              url: elemento.attr('action'),
+              data:elemento.serialize()+"&opcional="+opcional, 
   
-        success: function(response) {
+              success: function(response) {
 
-          if(response.error){
-            error.play();
-            swal({
-              title: "Asignatura registrada en el sistema",
-              text: 'La asignatura introducida ya está registrada en el sistema.',
-              type: "error",
-              confirmButtonColor: color,
-            });
-            return false;
+                if(response.error){
+                  error.play();
+                  swal({
+                    title: "Asignatura registrada en el sistema",
+                    text: 'La asignatura introducida ya está registrada en el sistema.',
+                    type: "error",
+                    confirmButtonColor: color,
+                  });
+                  return false;
+                }
+                if(response.opcional){
+                  error.play();
+                  swal({
+                    title: "Asignatura Específica No Opcional",
+                    text: 'Existen 3 asignaturas opcionales registradas en el sistema, por lo que la asignatura actual se ha guardado como no opcional.',
+                    type: "warning",
+                    confirmButtonColor: color,
+                  });
+                }
+
+                //Se actualiza la pestaña de asignar horario a grupos.
+                $("#asignar_horario").update_tab();
+
+                $("#asignaturas_dialog").dialog('close');
+                tab=$(".contenido_main").find("div[aria-hidden='false']");
+                $(tab).load(Routing.generate('asignatura'));
+                //$("#tabs #lista_asignaturas").empty();
+                //$("#tabs #lista_asignaturas").load(Routing.generate('alumno_listaAsignatura'));
+                $("#asignaturas_cursos").update_tab();
+                $("#profesor_asignar_grupo").update_tab();
+                $("#asignar_horario").update_tab();
+              }
+            })
+          }, function (dismiss) {
+
           }
-          if(response.opcional){
-            error.play();
-            swal({
-              title: "Asignatura Específica No Opcional",
-              text: 'Existen 3 asignaturas opcionales registradas en el sistema, por lo que la asignatura actual se ha guardado como no opcional.',
-              type: "warning",
-              confirmButtonColor: color,
-            });
+        );
+      }
+      else{
+        opcional=0;//Variable para indicar si se ha modificado una asignatura opcional.
+        $.ajax({
+          type: 'PUT',
+          url: $(this).attr('action'),
+          data:$(this).serialize()+"&opcional="+opcional, 
+  
+          success: function(response) {
+
+            if(response.error){
+              error.play();
+              swal({
+                title: "Asignatura registrada en el sistema",
+                text: 'La asignatura introducida ya está registrada en el sistema.',
+                type: "error",
+                confirmButtonColor: color,
+              });
+              return false;
+            }
+            if(response.opcional){
+              error.play();
+              swal({
+                title: "Asignatura Específica No Opcional",
+                text: 'Existen 3 asignaturas opcionales registradas en el sistema, por lo que la asignatura actual se ha guardado como no opcional.',
+                type: "warning",
+                confirmButtonColor: color,
+              });
+            }
+
+            //Se actualiza la pestaña de asignar horario a grupos.
+            $("#asignar_horario").update_tab();
+
+            $("#asignaturas_dialog").dialog('close');
+            tab=$(".contenido_main").find("div[aria-hidden='false']");
+            $(tab).load(Routing.generate('asignatura'));
+            //$("#tabs #lista_asignaturas").empty();
+            //$("#tabs #lista_asignaturas").load(Routing.generate('alumno_listaAsignatura'));
+            $("#asignaturas_cursos").update_tab();
+            $("#profesor_asignar_grupo").update_tab();
+            $("#asignar_horario").update_tab();
           }
-
-          //Se actualiza la pestaña de asignar horario a grupos.
-          $("#asignar_horario").update_tab();
-
-          $("#asignaturas_dialog").dialog('close');
-          tab=$(".contenido_main").find("div[aria-hidden='false']");
-          $(tab).load(Routing.generate('asignatura'));
-          //$("#tabs #lista_asignaturas").empty();
-          //$("#tabs #lista_asignaturas").load(Routing.generate('alumno_listaAsignatura'));
-          $("#asignaturas_cursos").update_tab();
-          $("#profesor_asignar_grupo").update_tab();
-          $("#asignar_horario").update_tab();
-        }
-      })
+        })
+      }
     }
   });
 
@@ -3928,24 +3991,24 @@ $(document).on("blur","input[id='edit_profesor_dni']",function() {
                               var3=response.eliminadas;
                               text="";
                               if(var1==1){
-                                text+=" <span>"+var1+"  Asignación registrada <span><br><br>";
+                                text+=" <span>"+var1+"  Asignación registrada <span>";
                               }
                               else if(var1>1){
-                                text+=" <span>"+var1+"  Asignaciones registradas <span><br><br>";
+                                text+=" <span>"+var1+"  Asignaciones registradas <span>";
                               }
 
                               if(var2==1){
-                                text+=" <span>"+var2+"  Asignación actualizada<span><br><br>";
+                                text+=" <span>"+var2+"  Asignación actualizada<span>";
                               }
                               else if(var2>1){
-                                text+=" <span>"+var2+"  Asignaciones actualizadas<span><br><br>";
+                                text+=" <span>"+var2+"  Asignaciones actualizadas<span>";
                               }
 
                               if(var3==1){
-                                text+=" <span>"+var3+"  Asignación eliminada<span><br>";
+                                text+=" <span>"+var3+"  Asignación eliminada<span>";
                               }
                               else if(var3>1){
-                                text+=" <span>"+var3+"  Asignaciones eliminadas<span><br>";
+                                text+=" <span>"+var3+"  Asignaciones eliminadas<span>";
                               }
                               if(var1!=0 || var2!=0 || var3!=0){
                                 exito.play();
@@ -4038,24 +4101,24 @@ $(document).on("blur","input[id='edit_profesor_dni']",function() {
                           var3=response.eliminadas;
                           text="";
                           if(var1==1){
-                            text+=" <span>"+var1+"  Asignación registrada <span><br><br>";
+                            text+=" <span>"+var1+"  Asignación registrada <span>";
                           }
                           else if(var1>1){
-                            text+=" <span>"+var1+"  Asignaciones registradas <span><br><br>";
+                            text+=" <span>"+var1+"  Asignaciones registradas <span>";
                           }
 
                           if(var2==1){
-                            text+=" <span>"+var2+"  Asignación actualizada<span><br><br>";
+                            text+=" <span>"+var2+"  Asignación actualizada<span>";
                           }
                           else if(var2>1){
-                            text+=" <span>"+var2+"  Asignaciones actualizadas<span><br><br>";
+                            text+=" <span>"+var2+"  Asignaciones actualizadas<span>";
                           }
 
                           if(var3==1){
-                            text+=" <span>"+var3+"  Asignación eliminada<span><br>";
+                            text+=" <span>"+var3+"  Asignación eliminada<span>";
                           }
                           else if(var3>1){
-                            text+=" <span>"+var3+"  Asignaciones eliminadas<span><br>";
+                            text+=" <span>"+var3+"  Asignaciones eliminadas<span>";
                           }
                           if(var1!=0 || var2!=0 || var3!=0){
                             exito.play();
@@ -4149,24 +4212,24 @@ $(document).on("blur","input[id='edit_profesor_dni']",function() {
                     var3=response.eliminadas;
                     text="";
                     if(var1==1){
-                      text+=" <span>"+var1+"  Asignación registrada <span><br><br>";
+                      text+=" <span>"+var1+"  Asignación registrada <span>";
                     }
                     else if(var1>1){
-                      text+=" <span>"+var1+"  Asignaciones registradas <span><br><br>";
+                      text+=" <span>"+var1+"  Asignaciones registradas <span>";
                     }
 
                     if(var2==1){
-                      text+=" <span>"+var2+"  Asignación actualizada<span><br><br>";
+                      text+=" <span>"+var2+"  Asignación actualizada<span>";
                     }
                     else if(var2>1){
-                      text+=" <span>"+var2+"  Asignaciones actualizadas<span><br><br>";
+                      text+=" <span>"+var2+"  Asignaciones actualizadas<span>";
                     }
 
                     if(var3==1){
-                      text+=" <span>"+var3+"  Asignación eliminada<span><br>";
+                      text+=" <span>"+var3+"  Asignación eliminada<span>";
                     }
                     else if(var3>1){
-                      text+=" <span>"+var3+"  Asignaciones eliminadas<span><br>";
+                      text+=" <span>"+var3+"  Asignaciones eliminadas<span>";
                     }
           
                     if(var1!=0 || var2!=0 || var3!=0){
@@ -4297,24 +4360,24 @@ $(document).on("blur","input[id='edit_profesor_dni']",function() {
                             var3=response.eliminadas;
                             text="";
                             if(var1==1){
-                              text+=" <span>"+var1+"  Asignación registrada <span><br><br>";
+                              text+=" <span>"+var1+"  Asignación registrada <span>";
                             }
                             else if(var1>1){
-                              text+=" <span>"+var1+"  Asignaciones registradas <span><br><br>";
+                              text+=" <span>"+var1+"  Asignaciones registradas <span>";
                             }
 
                             if(var2==1){
-                              text+=" <span>"+var2+"  Asignación actualizada<span><br><br>";
+                              text+=" <span>"+var2+"  Asignación actualizada<span>";
                             }
                             else if(var2>1){
-                              text+=" <span>"+var2+"  Asignaciones actualizadas<span><br><br>";
+                              text+=" <span>"+var2+"  Asignaciones actualizadas<span>";
                             }
 
                             if(var3==1){
-                              text+=" <span>"+var3+"  Asignación eliminada<span><br>";
+                              text+=" <span>"+var3+"  Asignación eliminada<span>";
                             }
                             else if(var3>1){
-                              text+=" <span>"+var3+"  Asignaciones eliminadas<span><br>";
+                              text+=" <span>"+var3+"  Asignaciones eliminadas<span>";
                             }
                             if(var1!=0 || var2!=0 || var3!=0){
                               exito.play();
@@ -4407,24 +4470,24 @@ $(document).on("blur","input[id='edit_profesor_dni']",function() {
                         var3=response.eliminadas;
                         text="";
                         if(var1==1){
-                          text+=" <span>"+var1+"  Asignación registrada <span><br><br>";
+                          text+=" <span>"+var1+"  Asignación registrada <span>";
                         }
                         else if(var1>1){
-                          text+=" <span>"+var1+"  Asignaciones registradas <span><br><br>";
+                          text+=" <span>"+var1+"  Asignaciones registradas <span>";
                         }
 
                         if(var2==1){
-                          text+=" <span>"+var2+"  Asignación actualizada<span><br><br>";
+                          text+=" <span>"+var2+"  Asignación actualizada<span>";
                         }
                         else if(var2>1){
-                          text+=" <span>"+var2+"  Asignaciones actualizadas<span><br><br>";
+                          text+=" <span>"+var2+"  Asignaciones actualizadas<span>";
                         }
 
                         if(var3==1){
-                          text+=" <span>"+var3+"  Asignación eliminada<span><br>";
+                          text+=" <span>"+var3+"  Asignación eliminada<span>";
                         }
                         else if(var3>1){
-                          text+=" <span>"+var3+"  Asignaciones eliminadas<span><br>";
+                          text+=" <span>"+var3+"  Asignaciones eliminadas<span>";
                         }
                         if(var1!=0 || var2!=0 || var3!=0){
                           exito.play();
@@ -4518,24 +4581,24 @@ $(document).on("blur","input[id='edit_profesor_dni']",function() {
                   var3=response.eliminadas;
                   text="";
                   if(var1==1){
-                    text+=" <span>"+var1+"  Asignación registrada <span><br><br>";
+                    text+=" <span>"+var1+"  Asignación registrada <span>";
                   }
                   else if(var1>1){
-                    text+=" <span>"+var1+"  Asignaciones registradas <span><br><br>";
+                    text+=" <span>"+var1+"  Asignaciones registradas <span>";
                   }
 
                   if(var2==1){
-                    text+=" <span>"+var2+"  Asignación actualizada<span><br><br>";
+                    text+=" <span>"+var2+"  Asignación actualizada<span>";
                   }
                   else if(var2>1){
-                    text+=" <span>"+var2+"  Asignaciones actualizadas<span><br><br>";
+                    text+=" <span>"+var2+"  Asignaciones actualizadas<span>";
                   }
 
                   if(var3==1){
-                    text+=" <span>"+var3+"  Asignación eliminada<span><br>";
+                    text+=" <span>"+var3+"  Asignación eliminada<span>";
                   }
                   else if(var3>1){
-                    text+=" <span>"+var3+"  Asignaciones eliminadas<span><br>";
+                    text+=" <span>"+var3+"  Asignaciones eliminadas<span>";
                   }
           
                   if(var1!=0 || var2!=0 || var3!=0){
@@ -4662,23 +4725,23 @@ $(document).on("blur","input[id='edit_profesor_dni']",function() {
                       var3=response.eliminadas;
                       text="";
                       if(var1==1){
-                        text+=" <span>"+var1+"  Asignación registrada <span><br><br>";
+                        text+=" <span>"+var1+"  Asignación registrada <span>";
                       }
                       else if(var1>1){
-                        text+=" <span>"+var1+"  Asignaciones registradas <span><br><br>";
+                        text+=" <span>"+var1+"  Asignaciones registradas <span>";
                       }
 
                       if(var2==1){
-                        text+=" <span>"+var2+"  Asignación actualizada<span><br><br>";
+                        text+=" <span>"+var2+"  Asignación actualizada<span>";
                       }
                       else if(var2>1){
-                        text+=" <span>"+var2+"  Asignaciones actualizadas<span><br><br>";
+                        text+=" <span>"+var2+"  Asignaciones actualizadas<span>";
                       }
                       if(var3==1){
-                        text+=" <span>"+var3+"  Asignación eliminada<span><br>";
+                        text+=" <span>"+var3+"  Asignación eliminada<span>";
                       }
                       else if(var3>1){
-                        text+=" <span>"+var3+"  Asignaciones eliminadas<span><br>";
+                        text+=" <span>"+var3+"  Asignaciones eliminadas<span>";
                       }
                       if(var1!=0 || var2!=0 || var3!=0){
                         exito.play();
@@ -4771,24 +4834,24 @@ $(document).on("blur","input[id='edit_profesor_dni']",function() {
                   var3=response.eliminadas;
                   text="";
                   if(var1==1){
-                    text+=" <span>"+var1+"  Asignación registrada <span><br><br>";
+                    text+=" <span>"+var1+"  Asignación registrada <span>";
                   }
                   else if(var1>1){
-                    text+=" <span>"+var1+"  Asignaciones registradas <span><br><br>";
+                    text+=" <span>"+var1+"  Asignaciones registradas <span>";
                   }
 
                   if(var2==1){
-                    text+=" <span>"+var2+"  Asignación actualizada<span><br><br>";
+                    text+=" <span>"+var2+"  Asignación actualizada<span>";
                   }
                   else if(var2>1){
-                    text+=" <span>"+var2+"  Asignaciones actualizadas<span><br><br>";
+                    text+=" <span>"+var2+"  Asignaciones actualizadas<span>";
                   }
 
                   if(var3==1){
-                    text+=" <span>"+var3+"  Asignación eliminada<span><br>";
+                    text+=" <span>"+var3+"  Asignación eliminada<span>";
                   }
                   else if(var3>1){
-                    text+=" <span>"+var3+"  Asignaciones eliminadas<span><br>";
+                    text+=" <span>"+var3+"  Asignaciones eliminadas<span>";
                   }
                   if(var1!=0 || var2!=0 || var3!=0){
                     exito.play();
@@ -4882,24 +4945,24 @@ $(document).on("blur","input[id='edit_profesor_dni']",function() {
             var3=response.eliminadas;
             text="";
             if(var1==1){
-              text+=" <span>"+var1+"  Asignación registrada <span><br><br>";
+              text+=" <span>"+var1+"  Asignación registrada <span>";
             }
             else if(var1>1){
-              text+=" <span>"+var1+"  Asignaciones registradas <span><br><br>";
+              text+=" <span>"+var1+"  Asignaciones registradas <span>";
             }
 
             if(var2==1){
-              text+=" <span>"+var2+"  Asignación actualizada<span><br><br>";
+              text+=" <span>"+var2+"  Asignación actualizada<span>";
             }
             else if(var2>1){
-              text+=" <span>"+var2+"  Asignaciones actualizadas<span><br><br>";
+              text+=" <span>"+var2+"  Asignaciones actualizadas<span>";
             }
 
             if(var3==1){
-              text+=" <span>"+var3+"  Asignación eliminada<span><br>";
+              text+=" <span>"+var3+"  Asignación eliminada<span>";
             }
             else if(var3>1){
-              text+=" <span>"+var3+"  Asignaciones eliminadas<span><br>";
+              text+=" <span>"+var3+"  Asignaciones eliminadas<span>";
             }
           
             if(var1!=0 || var2!=0 || var3!=0){
@@ -6109,28 +6172,28 @@ $(document).on("blur","input[id='edit_profesor_dni']",function() {
 
     if($("#asignacion_festivos #inicio_navidad").hasClass('modified')||$("#asignacion_festivos #fin_navidad").hasClass('modified')){
       if($("#asignacion_festivos #inicio_navidad").attr("value")==""){
-        texto+="<span>- Vacaciones de Navidad <strong>registrada</strong><span><br>";
+        texto+="<span>- Vacaciones de Navidad <strong>registrada</strong><span>";
       }
       else{
         if($("#asignacion_festivos #inicio_navidad").val()!=""){
-          texto+="<span>- Vacaciones de Navidad <strong>actualizada</strong><span><br>";
+          texto+="<span>- Vacaciones de Navidad <strong>actualizada</strong><span>";
         }
         else{
-          texto+="<span>- Vacaciones de Navidad <strong>eliminada</strong><span><br>";
+          texto+="<span>- Vacaciones de Navidad <strong>eliminada</strong><span>";
         }
       }
     }
 
     if($("#asignacion_festivos #inicio_semanasanta").hasClass('modified')||$("#asignacion_festivos #fin_semanasanta").hasClass('modified')){
       if($("#asignacion_festivos #inicio_semanasanta").attr("value")==""){
-        texto+="<span>- Vacaciones de Semana Santa <strong>registrada</strong><span><br>";
+        texto+="<span>- Vacaciones de Semana Santa <strong>registrada</strong><span>";
       }
       else{
         if($("#asignacion_festivos #inicio_semanasanta").val()!=""){
-          texto+="<span>- Vacaciones de Semana Santa <strong>actualizada</strong><span><br>";
+          texto+="<span>- Vacaciones de Semana Santa <strong>actualizada</strong><span>";
         }
         else{
-          texto+="<span>- Vacaciones de Semana Santa <strong>eliminada</strong><span><br>";
+          texto+="<span>- Vacaciones de Semana Santa <strong>eliminada</strong><span>";
         }
       }
     }
@@ -6290,13 +6353,13 @@ $(document).on("blur","input[id='edit_profesor_dni']",function() {
       if(($("#asignacion_festivos #inicio_navidad").val()=="" && !$("#asignacion_festivos #inicio_navidad").hasClass('modified')) || ($("#asignacion_festivos #inicio_semanasanta").val()=="" && !$("#asignacion_festivos #inicio_semanasanta").hasClass('modified'))){
         var texto="";
         if(($("#asignacion_festivos #inicio_navidad").val()=="" && !$("#asignacion_festivos #inicio_navidad").hasClass('modified')) && ($("#asignacion_festivos #inicio_semanasanta").val()=="" && !$("#asignacion_festivos #inicio_semanasanta").hasClass('modified'))){
-          texto+="<span>Vacaciones de Navidad<span><br><span>Vacaciones de Semana Santa<span><br>";
+          texto+="<span>Vacaciones de Navidad<span><span>Vacaciones de Semana Santa<span>";
         }
         else if($("#asignacion_festivos #inicio_navidad").val()=="" && !$("#asignacion_festivos #inicio_navidad").hasClass('modified')){
-          texto+="<strong>Vacaciones de Navidad<strong><br>";
+          texto+="<strong>Vacaciones de Navidad<strong>";
         }
         else{
-          texto+="<span>Vacaciones de Semana Santa<span><br>";
+          texto+="<span>Vacaciones de Semana Santa<span>";
         }
         errorPNotify.play();
         new PNotify({
@@ -7038,6 +7101,15 @@ $(document).on("blur","input[id='edit_profesor_dni']",function() {
   // Se quita la marca de los input modificados y se guarda los valores en la base de datos.
   $(document).on('click',"#registro_horario_guardar #button_horario_all",function(event){
 
+    if($("#contenedor_registro_horario input[value='']").size()>0){
+      $("#contenedor_registro_horario input[value='']").each(function(){
+        $(this).addClass("invalid");
+        $(this).closest("tr").find("td>span").removeClass("oculto");
+        $("#registro_horario #aviso_error").removeClass("oculto"); 
+      });
+      $("#registro_horario #registro_horario_guardar #button_horario_all").prop("disabled",true);
+    }
+
     $("#contenedor_registro_horario input[class='modified']").each(function(){  
       $(this).closest("tr").find("input").removeClass("modified");
       clase=$(this).closest("tr").children('td').slice(1, 2).html();
@@ -7056,9 +7128,10 @@ $(document).on("blur","input[id='edit_profesor_dni']",function() {
         url: Routing.generate('editar_horario'),
         data: {clase:clase,ini:ini,fin:fin,duracion:duracion},        
       })
+      $("#registro_horario #registro_horario_guardar #button_horario_all").prop("disabled",true);
+      $("#registro_horario #registro_horario_guardar #horario_rest").prop("disabled",true);
     });
-    $("#registro_horario #registro_horario_guardar #button_horario_all").prop("disabled",true);
-    $("#registro_horario #registro_horario_guardar #horario_rest").prop("disabled",true);
+
   });
 
   $(document).on('click',"#button_horario_save",function(event){
@@ -7597,6 +7670,12 @@ $(document).on("blur","input[id='edit_profesor_dni']",function() {
       $("#registro_instalaciones #aula_nombre").addClass("invalid_placeholder");
     }
     else{
+      //Se comprueba si el nombre empieza por "Aula", para añadirselo en caso contrario.
+      if(!$("#registro_instalaciones #aula_nombre").val().match("^Aula")){
+        nuevo="Aula "+$("#registro_instalaciones #aula_nombre").val().toLowerCase();
+        $("#registro_instalaciones #aula_nombre").val(nuevo);
+      }
+
       $.ajax({
         type: 'POST',
         url: $("#registro_instalaciones #aula_nueva").attr('action'),
@@ -7669,6 +7748,11 @@ $(document).on("blur","input[id='edit_profesor_dni']",function() {
       $("#registro_instalaciones #aula_nombre").addClass("invalid_placeholder");
     }
     else{
+      //Se comprueba si el nombre empieza por "Aula", para añadirselo en caso contrario.
+      if(!$("#registro_instalaciones #aula_nombre").val().match("^Aula")){
+        nuevo="Aula "+$("#registro_instalaciones #aula_nombre").val().toLowerCase();
+        $("#registro_instalaciones #aula_nombre").val(nuevo);
+      }
       $.ajax({
         type: 'PUT',
         url: $("#registro_instalaciones #aula_editar").attr('action'),
@@ -8325,7 +8409,7 @@ $(document).on("click","#registro_equipamientos td a",function(event){
         if(response.error.length != 0){
           var texto="";
           for (var key in response.error) {
-            texto+="<span>"+response.error[key]+"<span><br>";
+            texto+="<span>"+response.error[key]+"<span>";
           }
           if(tipo=="instalaciones"){
             texto=texto.replace("Equipamiento", "Instalación");
@@ -10130,17 +10214,17 @@ $(document).on("click","#registro_equipamientos td a",function(event){
         }
         texto="";
         if(var1==1){
-          texto+=" <span>"+var1+" Tutor <strong>registrado</strong><span><br><br>";
+          texto+=" <span>"+var1+" Tutor <strong>registrado</strong><span>";
         }
         else if(var1>1){
-          texto+=" <span>"+var1+" Tutores <strong>registrados</strong><span><br><br>";
+          texto+=" <span>"+var1+" Tutores <strong>registrados</strong><span>";
         }
 
         if(var2==1){
-          texto+=" <span>"+var2+" Tutor <strong>eliminado</strong><span><br>";
+          texto+=" <span>"+var2+" Tutor <strong>eliminado</strong><span>";
         }
         else if(var2>1){
-          texto+=" <span>"+var2+" Tutores <strong>eliminados</strong><span><br>";
+          texto+=" <span>"+var2+" Tutores <strong>eliminados</strong><span>";
         }
         exito.play();
         new PNotify({
@@ -10288,7 +10372,7 @@ $(document).on("click","#registro_equipamientos td a",function(event){
         if(response.error.length != 0){
           var texto="";
           for (var key in response.error) {
-            texto+="<span>"+response.error[key]+"<span><br>";
+            texto+="<span>"+response.error[key]+"<span>";
           }
           errorPNotify.play();
           new PNotify({
@@ -10694,7 +10778,7 @@ $(document).on("click","#registro_equipamientos td a",function(event){
         if(response.error.length != 0){
           var texto="";
           for (var key in response.error) {
-            texto+="<span>"+response.error[key]+"<span><br>";
+            texto+="<span>"+response.error[key]+"<span>";
           }
           errorPNotify.play();
           new PNotify({
@@ -11789,10 +11873,10 @@ $(document).on("click","#registro_equipamientos td a",function(event){
     if($("#profesor_asignatura_grupo_dialog #div_lista .elected").size()==0 || $("#profesor_asignatura_grupo_dialog #contenedor_asignaturas input:checkbox:checked").size()==0){
       texto="";
       if($("#profesor_asignatura_grupo_dialog #div_lista .elected").size()==0){
-        texto+="<span>- Profesor.</span><br>";
+        texto+="<span>- Profesor.</span>";
       }
       if($("#profesor_asignatura_grupo_dialog #contenedor_asignaturas input:checkbox:checked").size()==0){
-        texto+="<span>- Asignaturas.</span><br>";
+        texto+="<span>- Asignaturas.</span>";
       }
       errorPNotify.pause();
       errorPNotify.currentTime=0.0;
@@ -12065,9 +12149,15 @@ $(document).on("click","#registro_equipamientos td a",function(event){
     // Se muestra un aviso en caso de que se haya actualizado alguna asignación registrada. (Se eliminará el horario de dicha asignación).
     if(actualizado){
       aviso.play();
+      if($("#profesor_asignatura_grupo_dialog #contenedor_asignaturas li[class*='back_modificado']").attr("opcional")==1){
+        texto="<p class='justificado'>Se van a actualizar profesores asignados al grupo y se eliminará el horario de la asignatura impartida por el profesor.</p><br><p class='justificado'>Además, se va a actualizar alguna asignatura específica opcional, por lo que deberá asignar de nuevo el horario de las asignaturas específicas opcionales del grupo.</p><br>¿Estas seguro de continuar? No podrás deshacer este paso...";
+      }
+      else{
+        texto="<p class='justificado'>Se van a actualizar profesores asignados al grupo y se eliminará el horario de la asignatura impartida por el profesor.</p><br>¿Estas seguro de continuar? No podrás deshacer este paso...";
+      }
       swal({
         title: "Actualización de Profesores en el Grupo",
-        html: "<p class='justificado'>Se van a actualizar profesores asignados al grupo y se eliminará el horario de la asignatura impartida por el profesor.</p><br>¿Estas seguro de continuar? No podrás deshacer este paso...",
+        html: texto,
         type: "warning",
         showCancelButton: true,
         cancelButtonText: "Cancelar",
@@ -12108,24 +12198,24 @@ $(document).on("click","#registro_equipamientos td a",function(event){
               var3=response.eliminadas;
               text="";
               if(var1==1){
-                text+=" <span>"+var1+"  Asignación registrada <span><br><br>";
+                text+=" <span>"+var1+"  Asignación registrada <span>";
               }
               else if(var1>1){
-                text+=" <span>"+var1+"  Asignaciones registradas <span><br><br>";
+                text+=" <span>"+var1+"  Asignaciones registradas <span>";
               }
 
               if(var2==1){
-                text+=" <span>"+var2+"  Asignación actualizada<span><br><br>";
+                text+=" <span>"+var2+"  Asignación actualizada<span>";
               }
               else if(var2>1){
-                text+=" <span>"+var2+"  Asignaciones actualizadas<span><br><br>";
+                text+=" <span>"+var2+"  Asignaciones actualizadas<span>";
               }
 
               if(var3==1){
-                text+=" <span>"+var3+"  Asignación eliminada<span><br>";
+                text+=" <span>"+var3+"  Asignación eliminada<span>";
               }
               else if(var3>1){
-                text+=" <span>"+var3+"  Asignaciones eliminadas<span><br>";
+                text+=" <span>"+var3+"  Asignaciones eliminadas<span>";
               }
 
               //Se muestra aviso si hay asignaciones que no se han podido realizar debido a que los profesores no tiene horas lectivas disponibles.
@@ -12275,24 +12365,24 @@ $(document).on("click","#registro_equipamientos td a",function(event){
           var3=response.eliminadas;
           text="";
           if(var1==1){
-            text+=" <span>"+var1+"  Asignación registrada <span><br><br>";
+            text+=" <span>"+var1+"  Asignación registrada <span>";
           }
           else if(var1>1){
-            text+=" <span>"+var1+"  Asignaciones registradas <span><br><br>";
+            text+=" <span>"+var1+"  Asignaciones registradas <span>";
           } 
 
           if(var2==1){
-            text+=" <span>"+var2+"  Asignación actualizada<span><br><br>";
+            text+=" <span>"+var2+"  Asignación actualizada<span>";
           }
           else if(var2>1){
-            text+=" <span>"+var2+"  Asignaciones actualizadas<span><br><br>";
+            text+=" <span>"+var2+"  Asignaciones actualizadas<span>";
           }
 
           if(var3==1){
-            text+=" <span>"+var3+"  Asignación eliminada<span><br>";
+            text+=" <span>"+var3+"  Asignación eliminada<span>";
           }
           else if(var3>1){
-            text+=" <span>"+var3+"  Asignaciones eliminadas<span><br>";
+            text+=" <span>"+var3+"  Asignaciones eliminadas<span>";
           }
 
           //Se muestra aviso si hay asignaciones que no se han podido realizar debido a que los profesores no tiene horas lectivas disponibles.
@@ -12652,7 +12742,7 @@ $(document).on("click","#registro_equipamientos td a",function(event){
   });
 
   //Se muestra la información del horario al colocar el cursor sobre un módulo de clase.
-  $(document).on("mouseenter","#asignar_horario_grupos #contenedor_registro td", function(event){
+  $(document).on("mouseenter","#asignar_horario_grupos #contenedor_registro td:not(.horario)", function(event){
     event.preventDefault();
 
     // Se evita que se muestre el mensaje predeterminado si pasamos de un enlace a otro.
@@ -12924,6 +13014,48 @@ $(document).on("click","#registro_equipamientos td a",function(event){
     );
   });
 
+  //Se abre una ventana para seleccionar el tipo de documento a descargar.
+  $(document).on('click',"#asignar_horario_grupos #horario_pdf img ",function(event){
+    event.preventDefault();
+    id=$(this).closest("#contenedor_registro").find("#cabecera_lista").attr("grupo");
+    $('#generar_horarios_pdf').load(Routing.generate("generar_horarios_pdf", {id:id}), function(){
+    }).dialog('open'); 
+  });
+
+  //Se ejecuta el controlador para la descarga el horario del grupo en PDF.
+  $(document).on('click',"#generar_horarios_pdf #btn_horario_grupo ",function(event){
+    event.preventDefault();
+    id=$(this).attr("grupo");
+    window.open(Routing.generate('horario_grupo_pdf', {id:id}),"_self");
+    $("#asignar_horario_grupos #cargando_horario_pdf").removeClass('oculto');
+    $("#asignar_horario_grupos #horario_pdf").addClass('oculto');
+    setTimeout(function() {
+      $("#generar_horarios_pdf").load(Routing.generate('horario_grupo_pdf', {id:id}), function(){
+        $("#asignar_horario_grupos #cargando_horario_pdf").addClass('oculto');
+        $("#asignar_horario_grupos #horario_pdf").removeClass('oculto');
+        $('#generar_horarios_pdf').empty();
+      });
+    },20);
+    $('#generar_horarios_pdf').dialog('close');
+  });
+
+  //Se ejecuta el controlador para la descarga todos los horarios en PDF.
+  $(document).on('click',"#generar_horarios_pdf #btn_horarios ",function(event){
+    event.preventDefault();
+    window.open(Routing.generate('horarios_grupos_pdf'),'_self');
+    $("#asignar_horario_grupos #cargando_horario_pdf").removeClass('oculto');
+    $("#asignar_horario_grupos #horario_pdf").addClass('oculto');
+    setTimeout(function() {
+      $("#generar_horarios_pdf").load(Routing.generate('horarios_grupos_pdf'), function(){
+        $("#asignar_horario_grupos #cargando_horario_pdf").addClass('oculto');
+        $("#asignar_horario_grupos #horario_pdf").removeClass('oculto');
+        $('#generar_horarios_pdf').empty();
+      });
+    },20);
+    $('#generar_horarios_pdf').dialog('close');
+
+  });
+  
   //Se elimina una asignatura de la lista.
   $(document).on("click","#asignar_horario_grupo_dialog li span",function(event){
     event.preventDefault();
@@ -13247,6 +13379,7 @@ $(document).on("click","#registro_equipamientos td a",function(event){
           addclass: "custom",
           type: "success",
           shadow: true,
+          width: "335px",
           hide: true,
           buttons: {
             sticker: false,

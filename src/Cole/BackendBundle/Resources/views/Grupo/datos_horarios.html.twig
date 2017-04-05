@@ -45,15 +45,15 @@
       if(td.find("td[asignatura='"+nombre_asig+"']").size()==0){
         td.find("tr").append("<td asignatura='"+nombre_asig+"' profesor='"+profesor+"' aula='"+aula+"'></td>");
       }
-      //Añadimos lassiglas de la asignatura a las asignaturas opcionales en la tabla.
+      //Añadimos las siglas de la asignatura a las asignaturas opcionales en la tabla.
       siglas="";
       arr = abrev_asig.split(' ');
       if(arr.length==1){
-        siglas=abrev_asig.slice(0,3);
+        siglas=abrev_asig.slice(0,3)+". ";
       }
       else{
       siglas=arr[0].slice(0,1)+". ";
-      siglas+=arr[1].slice(0,1)+". ";
+      siglas+=arr[1].slice(0,1)+".";
       }
 
       $("#asignar_horario_grupos #cabecera_lista[grupo='"+grupo+"']").next().find("tr[id='"+id_horario+"'] td[id='"+dia+"'] td[asignatura='"+nombre_asig+"']").text(siglas);

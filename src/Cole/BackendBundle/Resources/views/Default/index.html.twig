@@ -163,9 +163,9 @@
 							<img src="{{ asset('bundles/backend/images/menu/profesor-ficha.png')}}">
 							<span> Ficha </span>
 						</a>
-						<a title="Consulta Profesor" href="javascript:void(0);">
-							<img src="{{ asset('bundles/backend/images/menu/consultar.png')}}">
-							<span> Consulta</span>
+						<a id="clases_impartidas" title="Clases Impartidas" href="{{path('clases_impartidas')}}">
+							<img src="{{ asset('bundles/backend/images/menu/cursos-impartidos.png')}}">
+							<span>Clases<br>Impartidas</span>
 						</a>
 						<span> Información </span>
 					</div>
@@ -215,6 +215,13 @@
 				</div>
 				<div id="4">
 					<div>
+						<a id="registrar_horario_academico" title="Registro Horario" href="{{path('horario_show')}}">
+							<img src="{{ asset('bundles/backend/images/menu/horario_escolar.png')}}">
+							<span> Registro <br>H. Escolar </span>
+						</a>					
+						<span> Horario </span>
+					</div>
+					<div>
 						<a title="Registro Asignatura" href="{{path('asignatura')}}">
 							<img src="{{ asset('bundles/backend/images/menu/asignaturas.png')}}">
 							<span> Registro </span>
@@ -240,7 +247,7 @@
 						</a>
 						<a id="ratio_curso" title="Nº Alumnos/grupo" href="{{path('ratio_cursos')}}">
 							<img src="{{ asset('bundles/backend/images/menu/ratio.png')}}">
-							<span> Alumnos <br>por grupo </span>
+							<span>Nº Alumnos <br>por grupo </span>
 						</a>		
 						<a id="consulta_curso" title="Consulta Curso" href="javascript:void(0);">
 							<img src="{{ asset('bundles/backend/images/menu/consultar.png')}}">
@@ -262,17 +269,6 @@
 							<span> Consulta </span>
 						</a>
 						<span> Grupos </span>
-					</div>
-					<div>
-						<a id="registrar_horario_academico" title="Registro Horario" href="{{path('horario_show')}}">
-							<img src="{{ asset('bundles/backend/images/menu/horario_escolar.png')}}">
-							<span> Registro </span>
-						</a>					
-						<a id="consulta_horario" title="Consulta Horario" href="javascript:void(0);">
-							<img src="{{ asset('bundles/backend/images/menu/consultar.png')}}">
-							<span> Consulta </span>
-						</a>
-						<span> Horario Escolar </span>
 					</div>
 				</div>
 				<div id="5">

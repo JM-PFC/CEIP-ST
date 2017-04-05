@@ -96,3 +96,9 @@ alta_profesor:
     defaults: { _controller: "BackendBundle:Profesor:AltaProfesor" }
     options:
         expose: true
+
+clases_impartidas:
+    path:     /clases_impartidas
+    defaults: { _controller: "BackendBundle:Profesor:ClasesImpartidas" }
+    options:
+        expose: true

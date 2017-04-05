@@ -364,17 +364,25 @@ class ImparteController extends Controller
             if (!$grupo) {
                 throw $this->createNotFoundException('Unable to find Grupo entity.');
             }
-
+  
             $imparte = $em->getRepository('BackendBundle:Imparte')->findByGrupoAndAsignatura($grupo,$asignatura);
-
-            if (!$imparte) {
-                throw $this->createNotFoundException('Unable to find Imparte entity.');
-            }
+       
             foreach ($imparte as $imparte ){
                 $em->remove($imparte);
             }
             $num_elim++;
-          }  
+
+            //Se comprueba si es una opcional, ya que si se actualiza una opcional hay que eliminar las asignaciones de horario de todas las opcionales.
+            if($asignatura->getAsignatura()->getOpcional()==1){
+                $imparte = $em->getRepository('BackendBundle:Imparte')->findAsignacionesOpcionales($grupo);
+                foreach ($imparte as $imparte) {
+                    $imparte->SetHorario(null);
+                    $imparte->SetDiaSemanal(null);
+                    $em->persist($imparte);
+                    $em->flush();
+                }
+            }    
+          }
           $em->flush();
         }
 
@@ -426,7 +434,8 @@ class ImparteController extends Controller
                     $tiempo_asignado=$profesor->getHorasLectivas()*60;
                     $tiempo_restante=(int)$tiempo_asignado-(int)$tiempo_impartido;
                     //Se comprueba que el tiempo disponible del profesor sea inferior al tiempo del número de módulos de esa asignatura.
-                    if($tiempo_restante<((int)$asignatura->getNumModulos()*(int)$duracion)){
+                    //Además se comprueba si es una asignación nueva o en caso de actualización si se ha modificado el profesor para comprobar las horas del profesor.
+                    if((!$imparte || ($imparte && $imparte[1]->getProfesor()!=$profesor )) && ($tiempo_restante<((int)$asignatura->getNumModulos()*(int)$duracion))){
                         $name=$profesor->getNombre()." ".$profesor->getApellido1()." ".$profesor->getApellido2();
                         $group=$grupo->getCurso()->getCurso()." ".$grupo->getLetra();
                         $error[] = array(array($name,$asignatura->getAsignatura()->getNombre(),$group));
@@ -450,7 +459,18 @@ class ImparteController extends Controller
                             $em->persist($imparte);
                             $em->flush();
                           }
-                          $num_actu++; 
+                          $num_actu++;
+
+                          //Se comprueba si es una opcional, ya que si se actualiza una opcional hay que eliminar las asignaciones de horario de todas las opcionales.
+                          if($asignatura->getAsignatura()->getOpcional()==1){
+                            $imparte = $em->getRepository('BackendBundle:Imparte')->findAsignacionesOpcionales($grupo);
+                            foreach ($imparte as $imparte) {
+                                $imparte->SetHorario(null);
+                                $imparte->SetDiaSemanal(null);
+                                $em->persist($imparte);
+                                $em->flush();
+                            }
+                          } 
 
                         }
                         //Se crea la asignación.
@@ -536,6 +556,17 @@ class ImparteController extends Controller
                             $em->flush();
                         }
                         $num_actu++; 
+
+                        //Se comprueba si es una opcional, ya que si se actualiza una opcional hay que eliminar las asignaciones de horario de todas las opcionales.
+                        if($asignatura->getAsignatura()->getOpcional()==1){
+                            $imparte = $em->getRepository('BackendBundle:Imparte')->findAsignacionesOpcionales($grupo);
+                            foreach ($imparte as $imparte) {
+                                $imparte->SetHorario(null);
+                                $imparte->SetDiaSemanal(null);
+                                $em->persist($imparte);
+                                $em->flush();
+                            }
+                        }
                     }
                     else{
                         $grupo = $em->getRepository('BackendBundle:Grupo')->findOneById($idgrupo);

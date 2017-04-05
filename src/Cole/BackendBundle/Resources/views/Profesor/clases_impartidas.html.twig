@@ -1,0 +1,152 @@
+{% extends 'BackendBundle:Default:index.html.twig' %}
+
+{% block head %}{% endblock %}
+{% block stylesheets %}{% endblock %}
+    
+{% block javascript %}
+    <script>
+
+    /*Comprobaciones de existencia de datos */
+    
+    //Comprobacón de existencia de profesores.
+    if({{numProfesores|json_encode()|raw}}==0){
+
+        // Se establece las variables con los audios para las notificaciones.
+        if (navigator.userAgent.search("Firefox") >= 0) { //Firefox sólo admite archivos .ogg
+            var error = new Audio();
+            error.src = "/Symfony/web/bundles/backend/sounds/error.ogg";
+        }
+        else{
+            var error = new Audio();
+            error.src = "/Symfony/web/bundles/backend/sounds/error.mp3";
+        }
+        error.play();
+          swal({
+            title: "Profesores no registrados",
+            text: 'Actualmente no existen profesores de primaria registrados en el sistema. Debe registrar los profesores para poder asignarlos.',
+            type: "error",
+            confirmButtonColor: color
+          });          
+        $("#tabs ul li[aria-selected='true'] span").trigger("click");
+    }
+
+    //Comprobacón de existencia de horario escolar.
+    if({{horario|json_encode()|raw}}==0){
+
+        // Se establece las variables con los audios para las notificaciones.
+        if (navigator.userAgent.search("Firefox") >= 0) { //Firefox sólo admite archivos .ogg
+            var error = new Audio();
+            error.src = "/Symfony/web/bundles/backend/sounds/error.ogg";
+        }
+        else{
+            var error = new Audio();
+            error.src = "/Symfony/web/bundles/backend/sounds/error.mp3";
+        }
+        error.play();
+          swal({
+            title: "Horario Escolar no registrado",
+            text: 'Actualmente no existe ningún horario escolar en el sistema. Debe registrarlo para poder asignar el horario del grupo.',
+            type: "error",
+            confirmButtonColor: color
+          });          
+        $("#tabs ul li[aria-selected='true'] span").trigger("click");
+    }
+/*
+    //Se oculta la cabecera de la tabla y la información del horario si no tiene horario.
+    if($("#asignar_horario_grupos #contenedor_registro:not(.oculto) tbody tr td:not(.dataTables_empty)").size()==0){
+        $("#asignar_horario_grupos #contenedor_datos").addClass('oculto');
+        $("#asignar_horario_grupos #lista_asignaturas thead").addClass('oculto');
+    }
+*/
+    </script>
+{% endblock %}
+
+{% block body -%}
+    <div id="clases_impartidas" class="div_con_horario ">
+    <div class="parent_no_form">
+    <div class="child">
+      <div class="lista_profesores">
+        <div class="cabecera_lista">Profesores de Primaria</div>
+        <div class="contenido_lista">
+            {% for entity in entities %}
+                <button class="buttonface" id="{{ loop.index }}">{{ entity }} </button>
+            {% endfor %}    
+        </div>
+        <div class="div_buscador">
+            <div id="prof_primaria_filter" class="dataTables_filter">
+                <label>
+                    Buscar:
+                    <input class="" placeholder="" aria-controls="prof_primaria" type="search">
+                </label>
+            </div>
+        </div>
+      </div>
+      <div class="derecha contenedor_registro" id="contenedor_registro">  
+        <div>
+            <div id="cabecera_lista">
+                <h2>Clases Impartidas por el Profesor</h2>
+            </div>
+            <div id="lista_asignaturas">
+                <table class="records_list">
+                    <thead>
+                    <tr>
+                        <th>Módulos</th>
+                        <th>Lunes</th>
+                        <th>Martes</th>
+                        <th>Miércoles</th>
+                        <th>Jueves</th>
+                        <th>Viernes</th>
+                    </tr>
+                    </thead>
+                </table>
+                <div class="inner_table">
+                    <table id="lista_color">
+                        {% for entity in horarios %}
+                        <tr id="{{ entity.id }}" class="no_efect">
+                            <td class="horario azul_opacity">{{ entity.inicio|date("H:i") ~ " - " ~ entity.fin|date("H:i")  }}</td>
+                            {% if entity.horaClase == "RECREO" or entity.horaClase == "COMIDA" %}
+                            <td colspan="5" class="no_efect placeholder_list_table_td_mod color_azul"> {{ entity.horaClase }}</td>
+                            {% else %}
+                            <td id="1"></td>
+                            <td id="2"></td>
+                            <td id="3"></td>
+                            <td id="4"></td>
+                            <td id="5"></td>
+                            {% endif %}
+                        </tr>
+                        {% endfor %}
+                    </table>
+                </div>
+                <div id="contenedor_datos">
+                    <div id="sin_seleccionar" class="">
+                        <p id="horario_pdf">
+                            <span>Descarga PDF</span> 
+                            <img src="{{ asset('bundles/backend/images/menu/horario.png')}}">
+                        </p>                        
+                        <p id="cargando_horario_pdf" class="oculto">
+                            <span>Cargando PDF</span> 
+                            <img src="/Symfony/web/bundles/backend/images/loading_s.gif"/>
+                        </p>
+                        <p  id="aviso">Para ver detalles del horario seleccione un módulo de clase</p>
+                    </div>
+                    <div id="seleccionado" class="oculto">
+
+                        <p><img src="{{ asset('bundles/backend/images/menu/teacher_16.png')}}"><span class="negrita">Profesor: </span><span id="profesor" class="datos"></span></p>
+                        <p>
+                            <img src="{{ asset('bundles/backend/images/menu/subject_16.png')}}">
+                            <span class="negrita">Asignatura: </span><span id="asignatura" class="datos"></span>
+                            <img src="{{ asset('bundles/backend/images/menu/room_16.png')}}">
+                            <span class="negrita">Aula: </span><span id="aula" class="datos"></span>
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>          
+      </div>
+            
+    </div>
+    </div>
+    </div>
+    
+    
+    {% endblock %}

@@ -1,0 +1,35 @@
+{% extends 'BackendBundle:Default:index.html.twig' %}
+
+{% block head %}{% endblock %}
+{% block stylesheets %}{% endblock %}
+
+{% block javascript %}
+  <script>
+ 
+  </script>
+{% endblock %}
+
+{% block body -%}
+
+      <div id="content-form">
+        <p>Selecccione el tipo de documento:</p>
+        <button id="btn_horario_grupo" class="buttonface" grupo="{{grupo.id}}">
+          <div>
+            <p>Horario del Grupo</p>
+          </div>
+          <div class"multiple">
+            <img src="/Symfony/web/bundles/backend/images/menu/horario.png">
+          </div>
+        <button id="btn_horarios" class="buttonface">
+          <div>
+            <p>Todos los Horarios </p>
+          </div>
+          <div class="multiple">
+            <img src="/Symfony/web/bundles/backend/images/menu/horario.png">
+            <img src="/Symfony/web/bundles/backend/images/menu/horario.png">
+            <img src="/Symfony/web/bundles/backend/images/menu/horario.png">
+          </div>
+        </button>
+      </div>
+
+{% endblock %}

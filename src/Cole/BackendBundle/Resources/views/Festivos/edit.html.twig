@@ -6,6 +6,9 @@
 {% block javascript %}
 
     <script>
+        // Se muestra "Actualizar" cuando se edita algún valor. "Eliminar" siempre visible. 
+        $("#festivos_edit #festivos_submit").prop("disabled",true);
+
         if($("#festivos_tipo").val()!="" && $("#festivos_edit").attr("tipo")!=""){
             $("#tipo_festivo").removeClass("oculto");
             $("#tipo_festivo select option[value='"+$("#festivos_tipo").val()+"']").prop('selected',true);

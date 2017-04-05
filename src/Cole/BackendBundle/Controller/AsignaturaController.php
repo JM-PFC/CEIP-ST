@@ -239,6 +239,8 @@ class AsignaturaController extends Controller
     {
         $em = $this->getDoctrine()->getManager();
 
+        $opcional=$this->get('request')->request->get('opcional');
+
         $entity = $em->getRepository('BackendBundle:Asignatura')->find($id);
 
         if (!$entity) {
@@ -266,6 +268,35 @@ class AsignaturaController extends Controller
                 return new JsonResponse(array(
                     'opcional' => 'none',
                     'success' => true), 200);
+            }
+            //Se comprueba si es una asignatura opcional.
+            if($opcional==1){
+
+                $asignaturasCursos=$em->getRepository('BackendBundle:AsignaturasCursos')->findByAsignatura($entity);
+
+                foreach ($asignaturasCursos as $asignaturaCurso) {
+                    $imparte=$em->getRepository('BackendBundle:Imparte')->findByAsignatura($asignaturaCurso);
+       
+                    foreach ($imparte as $imparte) {
+                        /*
+                        //Se elimina todas las asignaciones de horarios de las asignaturas opcionales que estaban asignadas junto a la que se ha modificado.
+                        $asig_op = $em->getRepository('BackendBundle:Imparte')->findAsignacionesOpcionales($imparte->getGrupo());
+                        
+                        foreach ($asig_op as $asig_op) {
+                            $asig_op->SetHorario(null);
+                            $asig_op->SetDiaSemanal(null);
+                            $em->persist($asig_op);
+                            $em->flush();
+                        }
+                        */
+                        //Se elimina todas las asignaciones de profesores de la asignatura modificada.
+                        $em->remove($imparte);
+                        $em->flush();
+                    }
+                    //Se elimina la asignación de la asignatura con los cursos asignados.
+                    $em->remove($asignaturaCurso);
+                    $em->flush();
+                }
             }
 
             $em->flush();
@@ -388,6 +419,18 @@ class AsignaturaController extends Controller
             }
             $em->persist($entity);
             $num_asig++; 
+
+            if($asignatura->getOpcional()==1){
+                //Se elimina todas las asignaciones de horarios de las asignaturas opcionales del curso al añadir una nueva asignatura opcional.
+                $asig_op = $em->getRepository('BackendBundle:Imparte')->findOpcionalesCurso($curso);
+                        
+                foreach ($asig_op as $asig_op) {
+                    $asig_op->SetHorario(null);
+                    $asig_op->SetDiaSemanal(null);
+                    $em->persist($asig_op);
+                    $em->flush();
+                }
+            }
           }   
         }
 
