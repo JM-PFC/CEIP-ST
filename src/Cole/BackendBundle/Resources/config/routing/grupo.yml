@@ -109,12 +109,6 @@ horario_grupo:
     options:
       expose: true
 
-horario_grupo:
-    pattern:  /{id}/horario
-    defaults: { _controller: "BackendBundle:Grupo:HorarioDelGrupo"}
-    options:
-      expose: true
-
 horario_grupo_pdf:
     pattern:  /{id}/horarioPdf
     defaults: { _controller: "BackendBundle:Grupo:HorarioDelGrupoPdf", _format: pdf}

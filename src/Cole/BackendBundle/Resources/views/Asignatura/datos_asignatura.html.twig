@@ -86,7 +86,7 @@
             <p><img src="{{ asset('bundles/backend/images/menu/subject_16.png')}}">{{asig|first|slice(0, 3)|lower|capitalize ~ "."}}</p>
           {# Nombre compuesto #}
           {% else %}
-            <p><img src="{{ asset('bundles/backend/images/menu/teacher_16.png')}}">{{asig[0]|slice(0, 3)|lower|capitalize ~ "." ~ " " ~ asig[1]|slice(0, 3)|lower|capitalize ~ "."}}</p>
+            <p><img src="{{ asset('bundles/backend/images/menu/subject_16.png')}}">{{asig[0]|slice(0, 3)|lower|capitalize ~ "." ~ " " ~ asig[1]|slice(0, 3)|lower|capitalize ~ "."}}</p>
           {% endif %}
       {% endif %}
 

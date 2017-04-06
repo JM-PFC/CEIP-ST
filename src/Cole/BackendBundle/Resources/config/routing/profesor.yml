@@ -102,3 +102,15 @@ clases_impartidas:
     defaults: { _controller: "BackendBundle:Profesor:ClasesImpartidas" }
     options:
         expose: true
+
+horario_profesor:
+    pattern:  /{id}/horario
+    defaults: { _controller: "BackendBundle:Profesor:HorarioDelProfesor"}
+    options:
+      expose: true
+
+horario_profesor_pdf:
+    pattern:  /{id}/horarioPdf
+    defaults: { _controller: "BackendBundle:Profesor:HorarioDelProfesorPdf", _format: pdf}
+    options:
+      expose: true

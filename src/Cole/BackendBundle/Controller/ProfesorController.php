@@ -12,6 +12,7 @@ use Cole\BackendBundle\Entity\Imparte;
 use Cole\BackendBundle\Entity\Grupo;
 use Cole\BackendBundle\Form\ProfesorType;
 use Cole\BackendBundle\Form\BusquedaProfesorType;
+use Symfony\Component\HttpFoundation\Response;
 
 /**
  * Profesor controller.
@@ -598,10 +599,179 @@ class ProfesorController extends Controller
         return $this->render('BackendBundle:Profesor:clases_impartidas.html.twig', array(
             'entities' => $entities,
             'horario' => $horario,
-            'horarios' => $horarios,
             'numProfesores' => $numProfesores,
         ));
     }
+
+    public function HorarioProfesorAction($id)
+    {
+        $em = $this->getDoctrine()->getManager();
+        $profesor = $em->getRepository('BackendBundle:Profesor')->findOneById($id);
+        $entity = $em->getRepository('BackendBundle:Horario')->findAll();
+        
+        $imparte = $em->getRepository('BackendBundle:Imparte')->findByProfesor($id);
+
+        $array=[];
+        foreach($imparte as $registro){
+            if($registro->getAula()){
+                $aula=$registro->getAula()->getNombre();
+            }
+            else{
+                $aula="";
+            }
+
+            if($registro->getDiaSemanal()){
+                $dia=$registro->getDiaSemanal();
+            }
+            else{
+                $dia=""; 
+            }
+
+            if($registro->getHorario()){
+                $horario=$registro->getHorario()->getId();
+            }
+            else{
+                $horario="";
+            }
+           
+            $array[$horario."-".$dia."-".$registro->getAsignatura()->getAsignatura()->getNombre()."-".$registro->getAsignatura()->getAsignatura()->getAbreviatura()."-".$aula."-".$registro->getGrupo()->getCurso()->getCurso()."-".$registro->getGrupo()->getLetra()."-".$registro->getProfesor()->getId()]=$registro->getProfesor()->getNombre()." ".$registro->getProfesor()->getApellido1()." ".$registro->getProfesor()->getApellido2();
+        }
+
+        return $this->render('BackendBundle:Profesor:datos_horarios.html.twig', array(
+            'imparte' => $array,
+            'entity' => $entity));
+    }
+
+
+    //Función de prueba para ver los resultados del horario en html.
+    public function HorarioDelProfesorAction($id)
+    {
+
+        $em = $this->getDoctrine()->getManager();
+
+        $profesor= $em->getRepository('BackendBundle:Profesor')->findOneById($id);
+
+        $inicio =$em->getRepository('BackendBundle:Centro')->findInicioCurso();
+        $fin =$em->getRepository('BackendBundle:Centro')->findFinCurso();
+
+        $horarios = $em->getRepository('BackendBundle:Horario')->findAll();
+
+        $grupo_tutor= $em->getRepository('BackendBundle:Grupo')->findOneByProfesor($id);
+
+        $imparte = $em->getRepository('BackendBundle:Imparte')->findByProfesor($id);
+
+        $array=[];
+        foreach($imparte as $registro){
+            if($registro->getAula()){
+                $aula=$registro->getAula()->getNombre();
+            }
+            else{
+                $aula="";
+            }
+
+            if($registro->getDiaSemanal()){
+                $dia=$registro->getDiaSemanal();
+            }
+            else{
+                $dia=""; 
+            }
+
+            if($registro->getHorario()){
+                $horario=$registro->getHorario()->getId();
+            }
+            else{
+                $horario="";
+            }
+           
+            $array[$horario."-".$dia."-".$registro->getAsignatura()->getAsignatura()->getNombre()."-".$registro->getAsignatura()->getAsignatura()->getAbreviatura()."-".$aula."-".$registro->getGrupo()->getCurso()->getCurso()." ".$registro->getGrupo()->getLetra()]=$registro->getProfesor()->getNombre()." ".$registro->getProfesor()->getApellido1()." ".$registro->getProfesor()->getApellido2();
+        }
+
+        return $this->render('BackendBundle:Profesor:horario_del_profesor.html.twig', array(
+            'entities' => $imparte,
+            'inicio' => $inicio,
+            'fin' => $fin,
+            'profesor' => $registro->getProfesor()->getNombre()." ".$registro->getProfesor()->getApellido1()." ".$registro->getProfesor()->getApellido2(),
+            'row_profesor' => $profesor,
+            'horarios' => $horarios,
+            'imparte' => $array,
+            'grupo_tutor' => $grupo_tutor
+        ));
+    }
+
+    
+    public function HorarioDelProfesorPdfAction($id)
+    {
+
+        $em = $this->getDoctrine()->getManager();
+
+        $profesor= $em->getRepository('BackendBundle:Profesor')->findOneById($id);
+
+        $inicio =$em->getRepository('BackendBundle:Centro')->findInicioCurso();
+        $fin =$em->getRepository('BackendBundle:Centro')->findFinCurso();
+
+        $horarios = $em->getRepository('BackendBundle:Horario')->findAll();
+
+        $grupo_tutor= $em->getRepository('BackendBundle:Grupo')->findOneByProfesor($id);
+
+        $imparte = $em->getRepository('BackendBundle:Imparte')->findByProfesor($id);
+
+        $array=[];
+        foreach($imparte as $registro){
+            if($registro->getAula()){
+                $aula=$registro->getAula()->getNombre();
+            }
+            else{
+                $aula="";
+            }
+
+            if($registro->getDiaSemanal()){
+                $dia=$registro->getDiaSemanal();
+            }
+            else{
+                $dia=""; 
+            }
+
+            if($registro->getHorario()){
+                $horario=$registro->getHorario()->getId();
+            }
+            else{
+                $horario="";
+            }
+           
+            $array[$horario."-".$dia."-".$registro->getAsignatura()->getAsignatura()->getNombre()."-".$registro->getAsignatura()->getAsignatura()->getAbreviatura()."-".$aula."-".$registro->getGrupo()->getCurso()->getCurso()." ".$registro->getGrupo()->getLetra()]=$registro->getProfesor()->getNombre()." ".$registro->getProfesor()->getApellido1()." ".$registro->getProfesor()->getApellido2();
+        }
+
+        $html = $this->renderView('BackendBundle:Profesor:horario_del_profesor.html.twig', array(
+            'entities' => $imparte,
+            'inicio' => $inicio,
+            'fin' => $fin,
+            'profesor' => $profesor->getNombre()." ".$profesor->getApellido1()." ".$profesor->getApellido2(),
+            'row_profesor' => $profesor,
+            'horarios' => $horarios,
+            'imparte' => $array,
+            'grupo_tutor' => $grupo_tutor
+        ));
+
+        $options = [
+            'margin-top'    => 3,
+            'margin-right'  => 8,
+            'margin-bottom' => 3,
+            'margin-left'   => 8,
+            //Opciones para orientación horizontal.
+            'orientation'=>'Landscape', 
+            'default-header'=>false
+        ];
+        $dato=substr($profesor->getNombre(), 0, 1).substr($profesor->getApellido1(), 0, 1).substr($profesor->getApellido2(), 0, 1);
+        return new Response(
+            $this->get('knp_snappy.pdf')->getOutputFromHtml($html,$options),
+            200,
+            array(
+                'Content-Type'        => 'application/pdf',
+                'Content-Disposition' => 'attachment; filename="Horario_Docente_'.$dato.'.pdf"'
+            )
+        );
+    }
+
 
 
 }

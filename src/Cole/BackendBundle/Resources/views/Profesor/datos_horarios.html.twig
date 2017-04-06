@@ -1,0 +1,49 @@
+<script>
+  //Se añade el nombre del profesor en los grupos donde tengan profesor y asignaturas asignadas.
+  array={{imparte|json_encode()|raw}};//Asignaturas no opcionales
+  for (var key in array){
+    clave=key.split("-");
+    id_horario=clave[0];
+    dia=clave[1];
+    nombre_asig=clave[2];
+    abrev_asig=clave[3];
+    aula=clave[4];
+    curso=clave[5];
+    letra=clave[6];
+    grupo=clave[5]+" "+clave[6];
+    id_profesor=clave[7];
+    profesor=array[key];
+
+    //Si existe alguna asignación con horario se muestra en la tabla.  
+    if(id_horario!=""){
+      $("#clases_impartidas #cabecera_lista[profesor='"+id_profesor+"']").next().find("tr[id='"+id_horario+"'] td[id='"+dia+"']").append("<p>"+grupo+"</p> <p>"+abrev_asig+"</p>");
+      //Se crean atributos con los datos para mostrar.
+      $("#clases_impartidas #cabecera_lista[profesor='"+id_profesor+"']").next().find("tr[id='"+id_horario+"'] td[id='"+dia+"']").attr("asignatura",nombre_asig);
+      $("#clases_impartidas #cabecera_lista[profesor='"+id_profesor+"']").next().find("tr[id='"+id_horario+"'] td[id='"+dia+"']").attr("aula",aula);
+      $("#clases_impartidas #cabecera_lista[profesor='"+id_profesor+"']").next().find("tr[id='"+id_horario+"'] td[id='"+dia+"']").attr("curso",curso+" de Primaria - Grupo "+letra);
+    }
+  }
+
+  //Se modifica la altura de la fila de aviso de recreo o comida.
+  $("#clases_impartidas #contenedor_registro .placeholder_list_table_td_mod").each (function(){ 
+    $(this).css("height","30px");
+    $(this).prev().css("height","30px");
+  });
+
+
+</script>
+
+  {% for entity in entity %}
+	 <tr id="{{ entity.id }}" class="no_efect">
+  	 <td class="horario azul_opacity">{{ entity.inicio|date("H:i") ~ " - " ~ entity.fin|date("H:i")  }}</td>
+    {% if entity.horaClase == "RECREO" or entity.horaClase == "COMIDA" %}
+  	 <td colspan="5" class="no_efect placeholder_list_table_td_mod color_azul"> {{ entity.horaClase }}</td>
+    {% else %}
+     <td id="1"></td>
+     <td id="2"></td>
+     <td id="3"></td>
+     <td id="4"></td>
+     <td id="5"></td>
+    {% endif %}
+	 </tr>
+  {% endfor %}

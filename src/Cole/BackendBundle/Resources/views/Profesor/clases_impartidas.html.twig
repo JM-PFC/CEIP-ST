@@ -51,13 +51,66 @@
           });          
         $("#tabs ul li[aria-selected='true'] span").trigger("click");
     }
-/*
-    //Se oculta la cabecera de la tabla y la información del horario si no tiene horario.
-    if($("#asignar_horario_grupos #contenedor_registro:not(.oculto) tbody tr td:not(.dataTables_empty)").size()==0){
-        $("#asignar_horario_grupos #contenedor_datos").addClass('oculto');
-        $("#asignar_horario_grupos #lista_asignaturas thead").addClass('oculto');
-    }
-*/
+
+    //Se activa el primer curso por defecto.
+    $("#clases_impartidas #contenedor_registro[index='1']").removeClass('oculto');
+    $("#clases_impartidas button[id='1']").addClass('elected');
+
+
+    // Tabla con la opción de ordenar y búsqueda de profesores de primaria.
+    $('#profesor').DataTable( { //on( 'page.dt',   function () { $(".current").prop("disabled", true); } )
+        //"aLengthMenu": [[25, 50, 100, 250, 500, -1], [25, 50, 100, 250, 500, "All"]],
+                initComplete: function () {
+            this.api().columns().every( function (e) {
+                var column = this;
+                var select = $('<select class="'+e+'"><option value=""></option></select>')
+                    .appendTo('.select_table_profesor')
+                    .on( 'change', function () {
+                        var val = $.fn.dataTable.util.escapeRegex(
+                            $(this).val()
+                        );
+ 
+                        column
+                            .search( val ? '^'+val+'$' : '', true, false )
+                            .draw();
+                    } );
+ 
+                column.data().unique().sort().each( function ( d, j ) {
+                    select.append( '<option value="'+d+'">'+d+'</option>' )
+                } );
+                select.append( '<option value="nada">nada</option>' )
+            } );
+        },
+        "order": [[ 1, "asc" ]],
+        "aLengthMenu": [[-1], [ "All"]],
+        "columnDefs": [ {
+            "targets": 'no-sort',
+            "orderable": false,} ],
+        "language": {
+            "zeroRecords": "No se ha encontrado ningún registro coincidente",
+            "emptyTable": "No hay profesores de primaria en el sistema",
+            "lengthMenu": "Mostrar _MENU_ entradas",
+            "loadingRecords": "Cargando...",
+            "processing":     "Processando...",
+            "info": "Página _PAGE_ de _PAGES_",
+            "infoEmpty": "No hay registros disponibles",
+            "infoFiltered": "(filtrado de _MAX_ registros)",
+            "search": "Buscar:",
+            "Next": "Siguiente",
+            "paginate": {
+                "previous": "Anterior",
+                "next": "Siguiente"
+            }
+        }
+    });
+    $("#clases_impartidas .dataTables_info").addClass("oculto");
+    $("#clases_impartidas .dataTables_paginate").addClass("oculto");
+    $("#clases_impartidas .dataTables_length").addClass("oculto");
+
+    $("#clases_impartidas #profesor_filter").appendTo($("#clases_impartidas .div_buscador"));
+    $("#clases_impartidas tbody tr td[class='dataTables_empty']").closest("tr").addClass("no_cursor");
+
+
     </script>
 {% endblock %}
 
@@ -66,25 +119,52 @@
     <div class="parent_no_form">
     <div class="child">
       <div class="lista_profesores">
-        <div class="cabecera_lista">Profesores de Primaria</div>
-        <div class="contenido_lista">
-            {% for entity in entities %}
-                <button class="buttonface" id="{{ loop.index }}">{{ entity }} </button>
-            {% endfor %}    
-        </div>
-        <div class="div_buscador">
-            <div id="prof_primaria_filter" class="dataTables_filter">
-                <label>
-                    Buscar:
-                    <input class="" placeholder="" aria-controls="prof_primaria" type="search">
-                </label>
+            <div class="cabecera_lista">
+                <h2>Profesores de Primaria</h2>
             </div>
-        </div>
+            <div class="contenido_lista ">
+                <table id="profesor" class="scrollTable">
+                    <thead class="fixedHeader oculto ">
+                        <tr>
+                            <th></th>
+                            <th>Nombre</th>
+                        </tr>
+                    </thead>
+                    <tbody class="scrollContent">
+                        {% for entity in entities %}
+                        <tr id="{{ entity.id }}">
+                            <td class="oculto"></td>
+                            <td>
+                                <button class="buttonface" id="{{ loop.index }}">{{ entity }}</button>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            <div class="div_buscador">
+                <div id="buscador_inf"> </div>
+            </div>
       </div>
-      <div class="derecha contenedor_registro" id="contenedor_registro">  
+
+
+      {% for entity in entities %}
+      <div class="derecha contenedor_registro oculto" index="{{ loop.index }}" id="contenedor_registro">  
         <div>
-            <div id="cabecera_lista">
-                <h2>Clases Impartidas por el Profesor</h2>
+            <div id="cabecera_lista" profesor="{{ entity.id}}">
+                {% if (entity.nombre ~ " " ~ entity.apellido1 ~ " " ~ entity.apellido2)|length <= 55 %}
+                    {% if entity.sexo == "Masculino" %}
+                    <h2>Clases Impartidas por el Profesor: <span>{{ entity }}</span></h2>
+                    {% else %}
+                    <h2>Clases Impartidas por la Profesora: <span>{{ entity }}</span></h2>
+                    {% endif %}
+                {% else %}
+                    {% if entity.sexo == "Masculino" %}
+                    <h2>Clases Impartidas por el Profesor: <span>{{ entity|truncate(55,true) }}</span></h2>
+                    {% else %}
+                    <h2>Clases Impartidas por la Profesora: <span>{{ entity|truncate(55,true) }}</span></h2>
+                    {% endif %}
+                {% endif %}
             </div>
             <div id="lista_asignaturas">
                 <table class="records_list">
@@ -101,20 +181,7 @@
                 </table>
                 <div class="inner_table">
                     <table id="lista_color">
-                        {% for entity in horarios %}
-                        <tr id="{{ entity.id }}" class="no_efect">
-                            <td class="horario azul_opacity">{{ entity.inicio|date("H:i") ~ " - " ~ entity.fin|date("H:i")  }}</td>
-                            {% if entity.horaClase == "RECREO" or entity.horaClase == "COMIDA" %}
-                            <td colspan="5" class="no_efect placeholder_list_table_td_mod color_azul"> {{ entity.horaClase }}</td>
-                            {% else %}
-                            <td id="1"></td>
-                            <td id="2"></td>
-                            <td id="3"></td>
-                            <td id="4"></td>
-                            <td id="5"></td>
-                            {% endif %}
-                        </tr>
-                        {% endfor %}
+                        {{render (controller('BackendBundle:Profesor:HorarioProfesor',{'id': entity.id }))}}
                     </table>
                 </div>
                 <div id="contenedor_datos">
@@ -131,7 +198,7 @@
                     </div>
                     <div id="seleccionado" class="oculto">
 
-                        <p><img src="{{ asset('bundles/backend/images/menu/teacher_16.png')}}"><span class="negrita">Profesor: </span><span id="profesor" class="datos"></span></p>
+                        <p><img src="{{ asset('bundles/backend/images/menu/class_16.png')}}"><span class="negrita">Curso: </span><span id="curso" class="datos"></span></p>
                         <p>
                             <img src="{{ asset('bundles/backend/images/menu/subject_16.png')}}">
                             <span class="negrita">Asignatura: </span><span id="asignatura" class="datos"></span>
@@ -143,7 +210,8 @@
             </div>
         </div>          
       </div>
-            
+     {% endfor %} 
+     <div class="select_table_profesor select_ord_datatable"></div> 
     </div>
     </div>
     </div>

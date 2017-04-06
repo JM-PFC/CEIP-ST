@@ -374,7 +374,7 @@ nav{
 .contenedor div a span{
 	margin-top: -4px;
 	font-size: 12px;
-	line-height: 15px;
+	line-height: 14px;
     display: table-cell;
     vertical-align: middle;
     min-width: 50px;
@@ -2149,7 +2149,7 @@ button[class*="elected"]{
 	margin:0 2%;
 	padding-top: 1%;
 }
-#tutor_grupos .dataTables_filter input, #clases_impartidas .dataTables_filter input{
+#tutor_grupos .dataTables_filter input{
 	width: 78%;
 	margin-left: 2%;
 }
@@ -5520,6 +5520,7 @@ input[type="checkbox"]:hover{
 	text-align: center;
 	width: 55%;
 	float: left;
+	color: #424242;
 }
 #contenedor_asignar_grupos ol{
 	height: 39.5vh;
@@ -5527,7 +5528,7 @@ input[type="checkbox"]:hover{
 	overflow: auto;
 }
 #asignar_grupos #lista_cursos{
-	width: 16%;
+	width: 15%;
 	float: left;
 	height: 30px;
 	margin-top: -2px;
@@ -5614,6 +5615,9 @@ input[type="checkbox"]:hover{
 #asignar_grupos #btn_generar{
 	float: left;
 	margin-top: -2px;
+}
+#asignar_grupos #btn_generar button{
+	min-width: 100px;
 }
 .container_disabled{
 	opacity: 0.5;
@@ -6941,7 +6945,7 @@ cursor: default !important;
     font-size: 10px !important;
     margin: 0 !important;
     min-width: 0 !important;
-    padding: 11px 0 !important;
+    padding: 10px 0 !important;
     width: 51px !important;
 }
 .div_con_horario #contenedor_datos #sin_seleccionar #cargando_horario_pdf{
@@ -7412,17 +7416,28 @@ cursor: default !important;
 	font-family: Impact,Haettenschweiler,Franklin Gothic Bold,Charcoal,Helvetica Inserat,Bitstream Vera Sans Bold,Arial Black,sans serif;
 	color: #424242;
 }
-
+#clases_impartidas .dataTables_filter input{
+	width: 75%;
+	margin-left: 2%;
+}
 #clases_impartidas #contenedor_registro {
     margin-left: 0 !important;
     width: 70% !important;
+}
+#clases_impartidas #contenedor_registro h2 {
+    font-size: 17px;
+    margin-left: 25px;
+    text-align: left;
+}
+#clases_impartidas #contenedor_registro h2 span {
+    color: #334c73;
 }
 .lista_profesores{
     background: #b1cce7 none repeat scroll 0 0;
     border-radius: 5px;
     box-shadow: 0 1px 1px 1px rgba(0, 0, 0, 0.5);
     float: left;
-    margin: 0.5% 2% 0.5% 1%;
+    margin: 0.5% 2% 0 1%;
     min-height: 295px;
     width: 27%;
 }
@@ -7440,19 +7455,67 @@ cursor: default !important;
 }
 .lista_profesores .contenido_lista{
     margin: 0 auto;
-    max-height: 270px;
+    max-height: 265px;
     overflow: auto;
     text-align: center;
     margin-bottom: 2px;
 }
+.lista_profesores h2{
+    font-family: "Arial";
+    font-size: 15px;
+}
 .lista_profesores .contenido_lista button {
-    margin: 2% 0;
-    min-height: 40px;
+    margin: 2%;
+    min-height: 35px;
     width: 95%;
 }
-#clases_impartidas #contenedor_registro div table td:not(.dataTables_empty) {
-    height: 44px !important;
+#clases_impartidas #contenedor_registro div table td {
+    height: 42px;
+}
+#clases_impartidas #contenedor_registro div table td p {
+    margin: 4px;
 }
 #clases_impartidas #contenedor_registro .inner_table {
     max-height: 225px !important;
+}
+#clases_impartidas .lista_profesores tr, #clases_impartidas .lista_profesores td {
+    background: none !important;
+}
+#clases_impartidas .lista_profesores #profesor{
+    border: none;
+}
+#clases_impartidas .lista_profesores #profesor td:not(.dataTables_empty) {
+    padding: 0 !important;
+}
+#horario_profesor_pdf #tutor .label{
+    width: 82px !important; 
+    margin-right: 0 !important;
+}
+#horario_profesor_pdf #tutor {
+    margin-top: 0;
+    min-height: 26px;
+    width: 80%;
+}
+#horario_profesor_pdf .grupo {
+    display: block;
+    font-family: "times new roman";
+    font-size: 19px;
+    font-weight: bold;
+    margin-bottom: 13px;
+    margin-top: -20%;
+}
+#horario_profesor_pdf .asignatura {
+   	display: block;
+    font-family: "Comic Sans MS";
+    font-size: 18px;
+    font-weight: bold;
+    margin-bottom: 4%;
+}
+
+#horario_profesor_pdf .aula {
+    display: block;
+    font-family: "Times New Roman";
+    font-size: 15px;
+    margin-top: -4%;
+    min-width: 100%;
 }

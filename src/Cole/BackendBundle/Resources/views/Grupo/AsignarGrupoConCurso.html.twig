@@ -82,7 +82,7 @@
       items: "li"
     });
 
-    $("#asignar_grupos #botones_centrados button").prop("disabled",false);
+    //$("#asignar_grupos #botones_centrados button").prop("disabled",false);
 
     $("#asignar_grupos #ordenar_cursos" ).sortable().disableSelection();
     
@@ -141,6 +141,19 @@
             }
 
             CalcularAlumnos();
+            //Se oculta el select y se muestra los botón de guardar y restablecer al editar los grupos.
+            if($("#asignar_grupos #contenedor_asignar_grupos li[class*='cambio_grupo']").size()>0 || $("#asignar_grupos #contenedor_asignar_grupos li p[class='nuevo']").size()>0){
+                $("#asignar_grupos #botones_centrados button").prop("disabled",false);
+                $("#asignar_grupos #lista_cursos select").prop("disabled",true);
+            }
+            else{
+                $("#asignar_grupos #botones_centrados button").prop("disabled",true);
+                $("#asignar_grupos #lista_cursos select").prop("disabled",false);
+            } 
+            //Se muestra el select cuando se devuelve un alumno nuevo al contenedor inicial. 
+            if($("#asignar_grupos #contenedor_cursos li").size()>0){
+                $("#asignar_grupos #btn_generar button").prop("disabled",false);
+            }     
         },
         //Se impide añadir más elementos que el números de alumnos asignado en la columna "ratio" del curso.
         receive: function(event, ui) {
@@ -191,7 +204,20 @@
                 ui.item.removeClass("cambio_grupo");
             }
 
-            CalcularAlumnos();         
+            CalcularAlumnos();
+            //Se oculta el select y se muestra los botón de guardar y restablecer al editar los grupos.
+            if($("#asignar_grupos #contenedor_asignar_grupos li[class*='cambio_grupo']").size()>0 || $("#asignar_grupos #contenedor_asignar_grupos li p[class='nuevo']").size()>0){
+                $("#asignar_grupos #botones_centrados button").prop("disabled",false);
+                $("#asignar_grupos #lista_cursos select").prop("disabled",true);
+            }
+            else{
+                $("#asignar_grupos #botones_centrados button").prop("disabled",true);
+                $("#asignar_grupos #lista_cursos select").prop("disabled",false);
+            }
+            //Se muestra el select cuando se devuelve un alumno nuevo al contenedor inicial. 
+            if($("#asignar_grupos #contenedor_cursos li").size()>0){
+                $("#asignar_grupos #btn_generar button").prop("disabled",false);
+            }       
         },
         //Se impide añadir más elementos que el números de alumnos asignado en la columna "ratio" del curso.
         receive: function(event, ui) {
@@ -241,7 +267,20 @@
                 ui.item.removeClass("cambio_grupo");
             }
 
-            CalcularAlumnos();        
+            CalcularAlumnos(); 
+            //Se oculta el select y se muestra los botón de guardar y restablecer al editar los grupos.
+            if($("#asignar_grupos #contenedor_asignar_grupos li[class*='cambio_grupo']").size()>0 || $("#asignar_grupos #contenedor_asignar_grupos li p[class='nuevo']").size()>0){
+                $("#asignar_grupos #botones_centrados button").prop("disabled",false);
+                $("#asignar_grupos #lista_cursos select").prop("disabled",true);
+            }
+            else{
+                $("#asignar_grupos #botones_centrados button").prop("disabled",true);
+                $("#asignar_grupos #lista_cursos select").prop("disabled",false);
+            } 
+            //Se muestra el select cuando se devuelve un alumno nuevo al contenedor inicial. 
+            if($("#asignar_grupos #contenedor_cursos li").size()>0){
+                $("#asignar_grupos #btn_generar button").prop("disabled",false);
+            }         
         },
         //Se impide añadir más elementos que el números de alumnos asignado en la columna "ratio" del curso.
         receive: function(event, ui) {
@@ -272,7 +311,7 @@
     //Se genera las listas con los grupos asignados para los alumnos del curso seleccionado.
     $(document).on('click',"#asignar_grupos #btn_generar button",function(event){
         $("#asignar_grupos #loading").html('<div class="ajaxload"><img src="/Symfony/web/bundles/backend/images/loading.gif"/></div>');
-        // Se asiga el único grupo a los alumnnos matriculados.
+        // Se asigna el único grupo a los alumnnos matriculados.
         if($("#grupo_B").closest("div[id='contenedor_asignar_grupos']").hasClass("container_disabled")){
 
             total=$("#asignar_grupos #footer_A #total").html();
@@ -303,7 +342,7 @@
             niños_B=$("#asignar_grupos #grupo_B li[sexo='Masculino']").length;
             niñas_B=$("#asignar_grupos #grupo_B li[sexo='Femenino']").length;
 
-            //Se obtienes los alumnos que faltan para por grupo.
+            //Se obtiene los alumnos que faltan en cada grupo.
             niños_faltan_A=parseInt(niños_grupos)-parseInt(niños_A);
             niñas_faltan_A=parseInt(niñas_grupos)-parseInt(niñas_A);
 
@@ -322,7 +361,7 @@
             }
             for (var i=niños_faltan_B; i>0; i--) {
                 $("#asignar_grupos #ordenar_cursos li[sexo='Masculino']:first").appendTo('#grupo_B');
-            }
+            }            
 
             for (var i=niñas_faltan_B; i>0; i--) {
                 $("#asignar_grupos #ordenar_cursos li[sexo='Femenino']:first").appendTo('#grupo_B');
@@ -365,27 +404,29 @@
             //Finalmente si los grupos no tienen el mismo número de alumnos, por tener más alumnos de un sexo que otro en el curso anterior, traspasamos alumnos nuevos de sexo con mayor número de ese grupo al otro para igualarlos.
             if($("#asignar_grupos #grupo_A li").length - $("#asignar_grupos #grupo_B li").length >1){
                 while($("#asignar_grupos #grupo_A li").length-$("#asignar_grupos #grupo_B li").length>1 && $("#asignar_grupos #grupo_A li[title='Nuevo Alumno']").length){
+
                     if($("#asignar_grupos #grupo_A li[title='Nuevo Alumno'][sexo='Masculino']").length>$("#asignar_grupos #grupo_A li[title='Nuevo Alumno'][sexo='Femenino']").length){
-                        $("#asignar_grupos #grupo_A li[title='Nuevo Alumno'][sexo='Masculino']:last-child").appendTo('#grupo_B');
+     
+                        $("#asignar_grupos #grupo_A li[title='Nuevo Alumno'][sexo='Masculino']").last().appendTo('#grupo_B');
                     }
                     else if($("#asignar_grupos #grupo_A li[title='Nuevo Alumno'][sexo='Femenino']").length>$("#asignar_grupos #grupo_A li[title='Nuevo Alumno'][sexo='Masculino']").length){
-                        $("#asignar_grupos #grupo_A li[title='Nuevo Alumno'][sexo='Femenino']:last-child").appendTo('#grupo_B');
+                        $("#asignar_grupos #grupo_A li[title='Nuevo Alumno'][sexo='Femenino']").last().appendTo('#grupo_B');
                     }
                     else{
-                        $("#asignar_grupos #grupo_A li[title='Nuevo Alumno']:last-child").appendTo('#grupo_B');
+                        $("#asignar_grupos #grupo_A li[title='Nuevo Alumno']").last().appendTo('#grupo_B');
                     }
                 }   
             }
             else if($("#asignar_grupos #grupo_B li").length - $("#asignar_grupos #grupo_A li").length>1){
                 while($("#asignar_grupos #grupo_B li").length-$("#asignar_grupos #grupo_A li").length>1 && $("#asignar_grupos #grupo_B li[title='Nuevo Alumno']").length){
                     if($("#asignar_grupos #grupo_B li[title='Nuevo Alumno'][sexo='Masculino']").length>$("#asignar_grupos #grupo_B li[title='Nuevo Alumno'][sexo='Femenino']").length){
-                        $("#asignar_grupos #grupo_B li[title='Nuevo Alumno'][sexo='Masculino']:last-child").appendTo('#grupo_A');
+                        $("#asignar_grupos #grupo_B li[title='Nuevo Alumno'][sexo='Masculino']").last().appendTo('#grupo_A');
                     }
                     else if($("#asignar_grupos #grupo_B li[title='Nuevo Alumno'][sexo='Femenino']").length>$("#asignar_grupos #grupo_B li[title='Nuevo Alumno'][sexo='Masculino']").length){
-                        $("#asignar_grupos #grupo_B li[title='Nuevo Alumno'][sexo='Femenino']:last-child").appendTo('#grupo_A');
+                        $("#asignar_grupos #grupo_B li[title='Nuevo Alumno'][sexo='Femenino']").last().appendTo('#grupo_A');
                     }
                     else{
-                        $("#asignar_grupos #grupo_A li[title='Nuevo Alumno']:last-child").appendTo('#grupo_A');
+                        $("#asignar_grupos #grupo_A li[title='Nuevo Alumno']").last().appendTo('#grupo_A');
                     }
                 }  
             }
@@ -411,7 +452,7 @@
             niños_C=$("#asignar_grupos #grupo_C li[sexo='Masculino']").length;
             niñas_C=$("#asignar_grupos #grupo_C li[sexo='Femenino']").length;
 
-            //Se obtienes los alumnos que faltan para por grupo.
+            //Se obtiene los alumnos que faltan en cada grupo.
             niños_faltan_A=parseInt(niños_grupos)-parseInt(niños_A);
             niñas_faltan_A=parseInt(niñas_grupos)-parseInt(niñas_A);
 
@@ -494,13 +535,13 @@
                     //Se obtiene el alumno a desplazar.
                     var alumno;
                     if($("#asignar_grupos #grupo_A li[title='Nuevo Alumno'][sexo='Masculino']").length>$("#asignar_grupos #grupo_A li[title='Nuevo Alumno'][sexo='Femenino']").length){
-                        alumno=$("#asignar_grupos #grupo_A li[title='Nuevo Alumno'][sexo='Masculino']:last-child");
+                        alumno=$("#asignar_grupos #grupo_A li[title='Nuevo Alumno'][sexo='Masculino']").last();
                     }
                     else if($("#asignar_grupos #grupo_A li[title='Nuevo Alumno'][sexo='Femenino']").length>$("#asignar_grupos #grupo_A li[title='Nuevo Alumno'][sexo='Masculino']").length){
-                        alumno=$("#asignar_grupos #grupo_A li[title='Nuevo Alumno'][sexo='Femenino']:last-child");
+                        alumno=$("#asignar_grupos #grupo_A li[title='Nuevo Alumno'][sexo='Femenino']").last();
                     }
                     else{
-                        alumno=$("#asignar_grupos #grupo_A li[title='Nuevo Alumno']:last-child");
+                        alumno=$("#asignar_grupos #grupo_A li[title='Nuevo Alumno']").last();
                     }
 
                     //Se desplaza el alumno al grupo que menos alumnos tiene.
@@ -523,13 +564,13 @@
                     //Se obtiene el alumno a desplazar.
                     var alumno;
                     if($("#asignar_grupos #grupo_B li[title='Nuevo Alumno'][sexo='Masculino']").length>$("#asignar_grupos #grupo_B li[title='Nuevo Alumno'][sexo='Femenino']").length){
-                        alumno=$("#asignar_grupos #grupo_B li[title='Nuevo Alumno'][sexo='Masculino']:last-child");
+                        alumno=$("#asignar_grupos #grupo_B li[title='Nuevo Alumno'][sexo='Masculino']").last();
                     }
                     else if($("#asignar_grupos #grupo_B li[title='Nuevo Alumno'][sexo='Femenino']").length>$("#asignar_grupos #grupo_B li[title='Nuevo Alumno'][sexo='Masculino']").length){
-                        alumno=$("#asignar_grupos #grupo_B li[title='Nuevo Alumno'][sexo='Femenino']:last-child");
+                        alumno=$("#asignar_grupos #grupo_B li[title='Nuevo Alumno'][sexo='Femenino']").last();
                     }
                     else{
-                        alumno=$("#asignar_grupos #grupo_B li[title='Nuevo Alumno']:last-child");
+                        alumno=$("#asignar_grupos #grupo_B li[title='Nuevo Alumno']").last();
                     }
 
                     //Se desplaza el alumno al grupo que menos alumnos tiene.
@@ -552,13 +593,13 @@
                     //Se obtiene el alumno a desplazar.
                     var alumno;
                     if($("#asignar_grupos #grupo_C li[title='Nuevo Alumno'][sexo='Masculino']").length>$("#asignar_grupos #grupo_C li[title='Nuevo Alumno'][sexo='Femenino']").length){
-                        alumno=$("#asignar_grupos #grupo_C li[title='Nuevo Alumno'][sexo='Masculino']:last-child");
+                        alumno=$("#asignar_grupos #grupo_C li[title='Nuevo Alumno'][sexo='Masculino']").last();
                     }
                     else if($("#asignar_grupos #grupo_C li[title='Nuevo Alumno'][sexo='Femenino']").length>$("#asignar_grupos #grupo_C li[title='Nuevo Alumno'][sexo='Masculino']").length){
-                        alumno=$("#asignar_grupos #grupo_C li[title='Nuevo Alumno'][sexo='Femenino']:last-child");
+                        alumno=$("#asignar_grupos #grupo_C li[title='Nuevo Alumno'][sexo='Femenino']").last();
                     }
                     else{
-                        alumno=$("#asignar_grupos #grupo_C li[title='Nuevo Alumno']:last-child");
+                        alumno=$("#asignar_grupos #grupo_C li[title='Nuevo Alumno']").last();
                     }
 
                     //Se desplaza el alumno al grupo que menos alumnos tiene.
@@ -582,6 +623,12 @@
         $(this).blur();
         $(this).prop("disabled",true);
         $("#asignar_grupos #loading").empty();
+
+         //Se oculta el select y se muestra los botón de guardar y restablecer al editar los grupos.
+        if($("#asignar_grupos #contenedor_asignar_grupos li[class*='cambio_grupo']").size()>0 || $("#asignar_grupos #contenedor_asignar_grupos li p[class='nuevo']").size()>0){
+            $("#asignar_grupos #botones_centrados button").prop("disabled",false);
+            $("#asignar_grupos #lista_cursos select").prop("disabled",true);
+        }
   });
 
 </script>

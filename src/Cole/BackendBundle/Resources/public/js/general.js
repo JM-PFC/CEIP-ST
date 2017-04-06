@@ -9982,7 +9982,17 @@ $(document).on("click","#registro_equipamientos td a",function(event){
      // Se añade un gif para la espera de la carga del contenido actualizado.
     $("#asignar_grupos #loading").html('<div class="ajaxload"><img src="/Symfony/web/bundles/backend/images/loading.gif"/></div>');
 
-    div.load(Routing.generate('curso_asignar_grupo', {curso:curso}));
+    div.load(Routing.generate('curso_asignar_grupo', {curso:curso}), function(){
+      //Se muestra el select cuando se devuelve un alumno nuevo al contenedor inicial. 
+      if($("#asignar_grupos #contenedor_cursos li").size()>0){
+        $("#asignar_grupos #btn_generar button").prop("disabled",false);
+      }
+      else{
+        $("#asignar_grupos #btn_generar button").prop("disabled",true);
+      } 
+    });
+
+
 
   });
 
@@ -13404,15 +13414,96 @@ $(document).on("click","#registro_equipamientos td a",function(event){
 
       }
     })
-
-
-
-
-
   });
 
 
+//////////////////////////////////////
+//  Clases Impartidas por Profesor  //
+//////////////////////////////////////
 
+  //Efecto del botón pulsado en la lista de profesores.
+  $(document).on('click',"#clases_impartidas .contenido_lista button",function(event){
+    event.preventDefault();
+    id=$(this).attr("id");
+    $("#clases_impartidas #contenedor_registro").addClass('oculto');
+    $("#clases_impartidas button").removeClass('elected');
+    $(this).addClass('elected');
+    $("#clases_impartidas #contenedor_registro[index='"+id+"']").removeClass('oculto');
+  });
+
+  //Se muestra la información del horario al colocar el cursor sobre un módulo de clase.
+  $(document).on("mouseenter","#clases_impartidas #contenedor_registro td:not(.horario)", function(event){
+    event.preventDefault();
+
+    // Se evita que se muestre el mensaje predeterminado si pasamos de un enlace a otro.
+    $("#clases_impartidas #contenedor_datos #sin_seleccionar").addClass("oculto");
+    
+    //Se comprueba que no es un aviso predeterminado.
+    if(!$(this).hasClass("dataTables_empty")){
+      if($(this).attr("asignatura")){
+        asignatura=$(this).attr("asignatura");
+      }
+      else{
+        asignatura="(Sin asignar)";
+      }
+      $("#clases_impartidas #contenedor_datos #seleccionado #asignatura").text(asignatura);
+
+      if($(this).attr("aula")){
+        aula=$(this).attr("aula");
+      }
+      else{
+        aula="(Sin asignar)";
+      }
+      $("#clases_impartidas #contenedor_datos #seleccionado #aula").text(aula);
+
+      if($(this).attr("curso")){
+        curso=$(this).attr("curso");
+      }
+      else{
+        curso="(Sin asignar)";
+      }
+      $("#clases_impartidas #contenedor_datos #seleccionado #curso").text(curso);
+
+      $("#clases_impartidas #contenedor_datos #seleccionado").removeClass("oculto");
+      $("#clases_impartidas #contenedor_datos #sin_seleccionar").addClass("oculto");     
+    }
+    else{
+      $("#clases_impartidas #contenedor_datos #seleccionado #asignatura").text("");
+      $("#clases_impartidas #contenedor_datos #seleccionado #aula").text("");
+      $("#clases_impartidas #contenedor_datos #seleccionado #curso").text("");
+
+      $("#clases_impartidas #contenedor_datos #seleccionado").addClass("oculto");
+      $("#clases_impartidas #contenedor_datos #sin_seleccionar").removeClass("oculto");
+    }
+
+  });
+
+  // Se elimina la información mostrada del horario al quitar el puntero de un módulo de clase.
+  $(document).on("mouseleave","#clases_impartidas  #contenedor_registro td", function () {
+    $("#clases_impartidas #contenedor_datos #seleccionado #asignatura").text("");
+    $("#clases_impartidas #contenedor_datos #seleccionado #aula").text("");
+    $("#clases_impartidas #contenedor_datos #seleccionado #curso").text("");
+
+    $("#clases_impartidas #contenedor_datos #seleccionado").addClass("oculto");
+    $("#clases_impartidas #contenedor_datos #sin_seleccionar").removeClass("oculto");
+  });
+
+  //Se ejecuta el controlador para la descarga el horario del profesor en PDF.
+  $(document).on('click',"#clases_impartidas #horario_pdf img ",function(event){
+    event.preventDefault();
+    id=$(this).closest("#contenedor_registro").find("#cabecera_lista").attr("profesor");
+    window.open(Routing.generate('horario_profesor_pdf', {id:id}),"_self");
+    $("#asignar_horario_grupos #cargando_horario_pdf").removeClass('oculto');
+    $("#asignar_horario_grupos #horario_pdf").addClass('oculto');
+    setTimeout(function() {
+      $("#generar_horarios_pdf").load(Routing.generate('horario_profesor_pdf', {id:id}), function(){
+        $("#asignar_horario_grupos #cargando_horario_pdf").addClass('oculto');
+        $("#asignar_horario_grupos #horario_pdf").removeClass('oculto');
+        $('#generar_horarios_pdf').empty();
+      });
+    },20);
+    $('#generar_horarios_pdf').dialog('close');
+  });
 
 
 
