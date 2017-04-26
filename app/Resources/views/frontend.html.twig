@@ -1,7 +1,7 @@
 {% extends  '::base.html.twig' %}
 {% block head %}
     {{parent()}}
-    <title>{% block title %}Bienvenido a la web del centro{% endblock %}</title>
+    <title>{% block title %}CEIP SANTA TERESA{% endblock %}</title>
 
 {% endblock %}
 
@@ -11,6 +11,7 @@
     <link href="{{ asset('bundles/cole/js/e-calendar-master/css/jquery.e-calendar.css') }}" rel="stylesheet" type="text/css" />
     <link href="{{ asset('bundles/cole/js/unitegallery-master/package/unitegallery/css/unite-gallery.css') }}" rel="stylesheet" type="text/css" />
     <link href="{{ asset('bundles/cole/js/unitegallery-master/package/unitegallery/themes/default/ug-theme-default.css') }}" rel="stylesheet" type="text/css" />
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
 
 {% endblock %}
 {% block javascript %}
@@ -23,6 +24,8 @@
     <script type="text/javascript" src="{{asset('bundles/cole/js/unitegallery-master/package/unitegallery/themes/default/ug-theme-default.js')}}"></script>
     <script type="text/javascript" src="{{ asset('bundles/fosjsrouting/js/router.js') }}"></script>
     <script type="text/javascript" src="{{ path('fos_js_routing_js', {'callback': 'fos.Router.setData'}) }}"></script>
+    <script type="text/javascript" src="{{ asset('bundles/intranet/css/bootstrap/bootstrap.min.js') }}"></script>
+
     <script>
     
     $.ajax({
@@ -78,7 +81,7 @@
                                     <p><input  id="acceder" type="submit" name="login" value="ENTRAR" title="Entrar en la zona privada" ></p>
                                 </fieldset>
                                 </form>
-                                <div>
+                                <div class="recuperar">
                                     <p><a href="#" title="Recuperar clave para la zona privada">Contraseña olvidada</a></p>
                                 </div>
                             </div>

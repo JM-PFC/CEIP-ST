@@ -1,3 +1,11 @@
-intranet_homepage:
-    path:     /hello/{name}
+intranet:
+    path:     /intranet
     defaults: { _controller: IntranetBundle:Default:index }
+
+intranet_perfil:
+    path:     /intranet/perfil
+    defaults: { _controller: IntranetBundle:Default:perfil}
+
+intranet_alumno:
+    path:     /intranet/alumno/{id}
+    defaults: { _controller: IntranetBundle:Alumno:index }

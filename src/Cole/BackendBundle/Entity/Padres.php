@@ -3,6 +3,7 @@
 namespace Cole\BackendBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Security\Core\User\UserInterface;
 use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
@@ -18,8 +19,35 @@ use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
  // @UniqueEntity(fields={"dni"}, message="Este valor ya se ha utilizado.")
  // unique=true en dni 
 
-class Padres
+class Padres implements UserInterface, \Serializable
 {
+
+    /* Métodos para el logueo de profesores */
+    function equals(\Symfony\Component\Security\Core\User\UserInterface $padres)
+    {
+        return md5($this->getUsername()) == md5($padres->getUsername());
+    }   
+
+    function eraseCredentials()
+    {
+
+    }
+
+    function getRoles()
+    {
+        return array("$this->role");
+    }
+
+    public function serialize()
+    {
+       return serialize($this->getId());
+    }
+ 
+    public function unserialize($data)
+    {
+        $this->id = unserialize($data);
+    } 
+
     /**
      * @var integer
      *

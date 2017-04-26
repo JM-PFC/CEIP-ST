@@ -3,7 +3,9 @@ fos_js_routing:
 
 intranet:
     resource: "@IntranetBundle/Resources/config/routing.yml"
-    prefix:   /
+    prefix:   /{_locale}
+    requirements:
+        _locale: en|es
 
 cole:
     resource: "@ColeBundle/Resources/config/routing.yml"

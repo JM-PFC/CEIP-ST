@@ -1,0 +1,74 @@
+{% extends  'IntranetBundle:Default:index.html.twig' %}
+
+{% block contenido %}
+{{parent()}}
+    {% for entity in hijos %}
+        <div class="col-md-6 col-sm-6 col-xs-12 bloque-dashboard">
+        	<a href="{{ path('intranet_alumno', { 'id': entity.id }) }}" title="Acceder al área del alumno">
+				<div class="bloque bloque-stats">
+					<div class="informacion">
+						<div class="stats-title">
+							<table><tbody><tr><td>{{ entity }}</td></tr></tbody></table>
+						</div>
+						<div class="foto">
+							{% if entity.foto != null %}
+           						 <img id="foto" class="img-rounded" alt="{{entity}}" src="{{ asset('uploads/images/' ~ entity.foto) }}">
+            				{% else %}
+              					{% if entity.sexo == "Femenino" %}
+                					<img id="sin_foto" class="img-rounded" alt="Sin Foto" src="{{ asset('bundles/backend/images/perfil/SinFoto-niña.png') }}">
+              					{% else %}
+                					<img id="sin_foto" class="img-rounded" alt="Sin Foto" src="{{ asset('bundles/backend/images/perfil/SinFoto-niño.png') }}">
+              					{% endif %}
+   	        				{% endif %}
+						</div>
+
+					</div>
+					<div class="stats-icon stats-icon-lg col-md-4 col-xs-2 icono">
+					</div>
+					<div class="stats-progress progress"></div>
+					<div class="avisos">
+						<ul class="nav navbar-nav">
+							<li id="barramensajesmovil">
+								<span class="fa fa-envelope-o animated swing"></span>
+								<span class="label-as-badge label azul nummensajes">0</span>	
+							</li>
+							<li id="barraanunciosmovil" class="barramensajes">
+								<span class="fa fa-newspaper-o animated swing"></span>
+								<span class="label-as-badge label verde numanuncios">0</span>
+							</li>
+							<li id="barraalertasmovil" class="barramensajes">
+								<span class="fa fa-comments animated swing"></span>
+								<span class="label-as-badge label naranja numalertas">0</span>
+							</li>
+						</ul>
+					</div>
+				</div>
+			</a>
+        </div>
+    {% endfor %}
+{% endblock %}
+
+{% block menu_movil%}
+
+	<li class="active visible-xs" >
+		<a href="{{path('intranet')}}">
+			<i class="fa fa-dashboard"></i>
+			{% trans %}Inicio{% endtrans %}
+		</a>
+	</li>
+
+	<li class="visible-xs">
+		<a href="{{path('intranet_perfil')}}">
+			<i class="fa fa-user"></i>
+			Mi perfil
+		</a>
+	</li>
+	<li class="visible-xs">
+		<a class="c_azul" href="{{path('logout')}}">
+			<strong>
+				<i class="fa fa-sign-out"></i>
+				{% trans %}Cerrar sesión{% endtrans %}
+			</strong>
+		</a>
+	</li>
+{% endblock %}

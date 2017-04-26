@@ -1,17 +1,28 @@
 security:
 
     firewalls:
-        frontend:
+        intranet:
             pattern:  ^/
             anonymous: ~
-            provider: profesores
             form_login:
                 login_path: /login
                 check_path: /login_check
                # use_referer: true
-                default_target_path: /profesor
+                default_target_path: /es/intranet
             logout: ~
+            access_denied_handler: accessdenied_handler
 
+
+        #         frontend:
+        #    pattern:  ^/
+        #    anonymous: ~
+        #    provider: profesores
+        #    form_login:
+         #       login_path: /login
+         #       check_path: /login_check
+        #       # use_referer: true
+        #        default_target_path: /profesor
+        #    logout: ~
 
         #    remember_me:
          #       key:      coleST
@@ -19,18 +30,25 @@ security:
 
     access_control:
         - { path: ^/login, roles: IS_AUTHENTICATED_ANONYMOUSLY }
-        - { path: admin/profesor/, roles: ROLE_ADMIN }
         - { path: usuario/user/, roles: ROLE_PROFESOR }
-        #- { path: ^/admin, roles: ROLE_ADMIN }
+        - { path: ^/(en|es)/intranet/alumno, roles: ROLE_USUARIO }
+        - { path: ^/(en|es)/intranet, roles: [ROLE_USUARIO,ROLE_PROFESOR] }
+        - { path: ^/(en|es)/intranet/, roles: ROLE_PROFESOR }
+
+        - { path: ^/admin, roles: ROLE_ADMIN }
 
     providers:
+        chain_provider:
+            chain:
+                providers: [profesores, padres]
         profesores:
             entity: { class: Cole\BackendBundle\Entity\Profesor, property: username}
-        #padres:
-        #    entity: { class: Cole\BackendBundle\Entity\Padres, property: username}
+        padres:
+            entity: { class: Cole\BackendBundle\Entity\Padres, property: username}
 
     encoders:
 
+      #si no defines un valor para la opción iterations, Symfony2 codifica cada contraseña 5.000 veces consecutivas utilizando el algoritmo SHA 512
        #Cole\BackendBundle\Entity\Profesor: { algorithm: sha512, iterations: 10 }
        Cole\BackendBundle\Entity\Profesor: { algorithm: sha512 }
        Cole\BackendBundle\Entity\Padres: { algorithm: sha512 }
@@ -44,5 +62,6 @@ security:
        #Symfony\Component\Security\Core\User\User: plaintext
 
     role_hierarchy:
-        ROLE_ADMIN:       [ROLE_USUARIO, ROLE_PROFESOR]
+        ROLE_ADMIN:       [ROLE_PROFESOR]
+        ROLE_USER:       [ROLE_USUARIO, ROLE_PROFESOR]
         #ROLE_SUPER_ADMIN: [ROLE_USER, ROLE_ADMIN, ROLE_ALLOWED_TO_SWITCH]

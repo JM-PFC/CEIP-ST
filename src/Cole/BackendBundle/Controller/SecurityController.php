@@ -19,4 +19,14 @@ class SecurityController extends Controller
 			'error'       => $error
 		));
 	}
+	public function denegadaAction(){
+
+      return $this->render('BackendBundle:Security:denegada.html.twig');
+    }
+    
+    public function noencontradaAction(){
+
+      return $this->render('BackendBundle:Security:noencontrada.html.twig');
+    }
+
 }

@@ -44,7 +44,7 @@ class ProfesorRepository extends EntityRepository
 	public function findProfesoresDePrimaria()
 	{
 	return $this->getEntityManager()->createQuery(
-			'SELECT p FROM BackendBundle:Profesor p WHERE p.activo=1  and p.nivel=:nivel ORDER BY p.nombre')
+			' SELECT p FROM BackendBundle:Profesor p WHERE p.activo=1  and p.nivel=:nivel ORDER BY p.nombre')
 			->setParameters(array(
 			'nivel' => "Primaria"))
 		->getResult();

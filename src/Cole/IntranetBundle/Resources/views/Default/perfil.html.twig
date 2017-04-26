@@ -1,0 +1,142 @@
+{% extends  'IntranetBundle:Default:index.html.twig' %}
+
+{% block body %}
+    {{parent()}}
+    <script>
+    	$("#menu li").removeClass('active');
+    	$("#menu #perfil").addClass('active');
+    	$("#responsable").addClass('hidden');
+    </script>
+  {% endblock %}
+
+
+{% block migas %}
+	<li class="tipo">
+		{% trans %}Alumnado{% endtrans %}
+	</li>
+	<li class="active">
+		{% trans %}Mi perfil{% endtrans %}
+	</li>
+{% endblock %}
+
+{% block titulo_cabecera %}
+	<i class="fa fa-user"></i>
+	{% trans %}Mi perfil{% endtrans %}
+{% endblock %}
+
+
+{% block contenido %}
+	<h4 id="titulo-seccion" class="titulo-seccion">{% trans %}Datos personales{% endtrans %}</h4>
+
+	<div  class="col-xs-12 animated fadeIn breadcrumb">
+			<label>{% trans %}DNI{% endtrans %}:</label>
+			<span type="text"> {{entity.dni}}</span>
+			<br>
+			<label>{% trans %}Nombre{% endtrans %}:</label>
+			<span type="text"> {{entity}}</span>
+			<br>
+			<label>{% trans %}Fecha Nacimiento{% endtrans %}:</label>
+			<span type="text"> {{entity.fechaNacimiento|date("d-m-Y")}}</span>
+			<br>
+			{% if entity.estadoCivil != null %}
+				<label>{% trans %}Estado Civil{% endtrans %}:</label>
+				<span type="text"> {{entity.estadoCivil}}</span>
+				<br>
+			{% endif %}
+
+			<label>{% trans %}Último acceso{% endtrans %}:</label>
+			<span type="text"> {{"now"|date("d/m/Y H:i:s")}}</span>	
+
+
+	</div>	
+
+	<h4 id="titulo-seccion" class="titulo-seccion">{% trans %}Datos editables{% endtrans %}</h4>
+
+	<div class="col-xs-12 col-md-6 no_padding_left no_padding_md no_padding_xs">
+		<h4  class="titulo-bloque"><i class="fa fa-phone"></i>{% trans %}Datos de contacto{% endtrans %}</h4>
+		<div  class="animated fadeIn ">
+			<form action="" data-toggle="validator" role="form">
+
+				<div class="form-group has-feedback">
+					<label for="correo" class="sr-only" class="control-label"> {% trans %}Correo{% endtrans %}</label>
+					<div class="input-group">
+						<span class="input-group-addon ">@</span>
+						{% set locale = app.request.getLocale() %}
+						{% if locale == "es" %}
+							<input type="email" class="form-control" data-error="Introduzca un email correcto" id="correo" value="{{entity.email}}" placeholder="Introduzca un email"></input>
+						{% elseif locale == "en" %}
+							<input type="email" class="form-control" data-error="Enter a correct email" id="correo" value="{{entity.email}}" placeholder="Enter an email" required></input>
+						{% endif %}
+					</div>
+    				<span class="glyphicon form-control-feedback" aria-hidden="true"></span>
+    				<div class="help-block with-errors"></div>
+				</div>
+
+				<div class="form-group has-feedback">
+					<label for="movil" class="sr-only" class="control-label">{% trans %}Teléfono Móvil{% endtrans %}</label>
+					<div class="input-group">
+						<span class="input-group-addon "><i class="fa fa-phone"></i></span>
+						{% if locale == "es" %}
+							<input type="text" pattern="(6|7)*([0-9]*){8}" maxlength="9" class="form-control" data-error="Introduzca un teléfono válido" id="movil" value="{{entity.movil}}" placeholder="Introduzca un teléfono móvil"></input>
+						{% elseif locale == "en" %}
+							<input type="text" pattern="(6|7)*([0-9]*){8}" maxlength="9" class="form-control" data-error="Enter a correct phone number" id="movil" value="{{entity.movil}}" placeholder="Enter a mobile phone"></input>
+						{% endif %}
+					</div>
+    				<span class="glyphicon form-control-feedback" aria-hidden="true"></span>
+    				<div class="help-block with-errors"></div>
+				</div>
+
+				<button class="btn btn-primary pull-right">{% trans %}Guardar{% endtrans %}</button>
+			</form>						
+		</div>
+	</div>
+	
+	{% set locale = app.request.getLocale() %}
+
+	<div class="col-xs-12 col-md-6 no_padding_right no_padding_md no_padding_xs">
+
+		<h4 class="titulo-bloque"><i class="fa fa-key"></i>{% trans %}Actualizar contraseña{% endtrans %}</h4>
+		<div  class="animated fadeIn ">
+			<form data-toggle="validator" role="form" id="actualizar_password" class="act_pass_padres" action="">
+				<div class="form-group has-feedback">
+					<label for="old_pass" class="col-md-5">{% trans %}Contraseña actual{% endtrans %}:</label>
+					<div class="col-md-7">
+						{% if locale == "es" %}
+							<input type="password" data-minlength="6" class="form-control" id="old_pass" data-error="Debe introducir un mínimo de 6 caracteres" placeholder="Mínimo 6 caracteres" required>
+						{% elseif locale == "en" %}
+							<input type="password" data-minlength="6" class="form-control" id="old_pass" data-error="You must enter a minimum of 6 characters" placeholder="Minimum of 6 characters" data-required-error="Fill this field" required>
+						{% endif %}
+						<span class="glyphicon form-control-feedback" aria-hidden="true"></span>
+						<div class="help-block with-errors"></div>
+					</div>
+				</div>
+				<div class="form-group has-feedback">
+					<label for="new_pass" class="col-md-5">{% trans %}Nueva contraseña{% endtrans %}:</label>
+					<div class="col-md-7">
+						{% if locale == "es" %}
+							<input type="password" data-minlength="6" class="form-control" data-required-error="Rellene este campo" data-error="Debe introducir un mínimo de 6 caracteres" id="new_pass" placeholder="Mínimo 6 caracteres" required>
+						{% elseif locale == "en" %}
+							<input type="password" data-minlength="6" class="form-control" data-required-error="Fill this field" data-error="You must enter a minimum of 6 characters" id="new_pass" placeholder="Minimum of 6 characters" required>
+						{% endif %}
+						<span class="glyphicon form-control-feedback" aria-hidden="true"></span>
+						<div class="help-block with-errors"></div>
+					</div>
+				</div>
+				<div class="form-group has-feedback">
+					<label for="r_pass" class="col-md-5">{% trans %}Repetir contraseña{% endtrans %}:</label>
+					<div class="col-md-7">
+						{% if locale == "es" %}
+							<input type="password" data-minlength="6" class="form-control" id="r_pass" data-error="Debe introducir un mínimo de 6 caracteres" data-match="#new_pass" placeholder="Confirmar" data-match-error="La contraseña no coincide" required>
+						{% elseif locale == "en" %}
+							<input type="password" data-minlength="6" class="form-control" id="r_pass" data-required-error="Fill this field" data-match-error="Password does not match" data-error="You must enter a minimum of 6 characters"  data-match="#new_pass" placeholder="Confirm"  required>
+						{% endif %}
+						<span class="glyphicon form-control-feedback" aria-hidden="true"></span>
+						<div class="help-block with-errors"></div>
+					</div>
+				</div>
+				<button class="btn btn-success pull-right">{% trans %}Actualizar{% endtrans %}</button>
+			</form>						
+		</div>
+	</div>
+
+{% endblock %}

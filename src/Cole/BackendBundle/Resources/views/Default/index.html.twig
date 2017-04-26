@@ -50,6 +50,10 @@
 	<div class="centrado oculto">
     	<header>
 			<h2> C.E.I.P SANTA TERESA </h2> 
+			{% if is_granted("ROLE_ADMIN") %}
+				<p class="usuario"><span>{{ app.user }} (Director) <a href="{{path('intranet', { '_locale': 'es' })}}" title="Volver a Intranet"><img src="{{ asset('bundles/backend/images/menu/inicio.png')}}"></a></span></p>
+			{% endif %}
+			
 			<h3> Área de Administración</h3>
     	</header>
     	<nav class="barra_menu">
@@ -154,8 +158,7 @@
 						<a id="profesor_asignar_grupo" title="Asignar Profesores" href="{{path('asignar_grupo_profesores_show')}}">
 							<img src="{{ asset('bundles/backend/images/menu/profesor-grupo.png')}}">
 							<span> Asignar <br>Grupo</span>
-						</a>
-												
+						</a>						
 						<span> Asignación Grupos</span>
 					</div>
 					<div>

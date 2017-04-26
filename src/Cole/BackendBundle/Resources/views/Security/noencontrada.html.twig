@@ -1,0 +1,25 @@
+	{% extends '::frontend.html.twig' %}
+
+        {% block main %}
+			
+		 	<div id="div_restringida" class="no-seleccion">
+		 		<div class="hidden-sm hidden-xs visible-md visible-lg">
+		 			<h3 class="col-md-12 col-lg-12">Página no encontrada</h3>
+		 			<div class="contendor">
+		 				<img class="col-md-2 col-lg-2" src="{{ asset('bundles/cole/images/menu/noencontrada.png') }}"/>
+ 						<p class="col-md-10 col-lg-10" >{% trans %}La página a la que usted intenta acceder no ha sido encontrada o no está disponible temporalmente. <br>Si desea volver a la página anterior, presione el botón para volver atrás en el navegador{% endtrans %}.</p>
+		 			</div>
+		 		</div>
+		 		<div class="visible-sm visible-xs hidden-md hidden-lg">
+		 			<img class="col-sm-2 col-xs-2" src="{{ asset('bundles/cole/images/menu/noencontrada.png') }}"/>
+		 			<h3 class="col-sm-8 col-xs-8">Página no encontrada</h3>
+		 			<div class="contendor col-sm-12 col-xs-12">
+ 						<p>{% trans %}La página a la que usted intenta acceder no ha sido encontrada o no está disponible temporalmente. <br><br>Si desea volver a la página anterior, presione el botón para volver atrás en el navegador{% endtrans %}.</p>
+		 			</div>
+		 		</div>
+
+ 				
+ 			</div>
+        {% endblock %}
+
+

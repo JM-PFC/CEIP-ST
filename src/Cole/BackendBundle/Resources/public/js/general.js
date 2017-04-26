@@ -983,7 +983,8 @@ $(document).on('keyup',"input[id$='responsable2_dni']",function(e){
     // Se recorre los campos del formulario mirando si estan validados o no.
     $(this).find("div[id^='tab']").each(function(){
       $(this).find(":input").each(function(){
-        if((!$(this).attr("validated") || !$(this).attr("validated")==false) && $(this).attr("id").substr(0, 20)!= "alumno_responsable2_"){
+        //No se valida el campos DNI del segundo responsable si está vacío y ninguno de sus campos deshabilitados.
+        if((!$(this).attr("validated") || !$(this).attr("validated")==false) && !$(this).is(':disabled') && !($(this).attr("id")=="alumno_responsable2_dni" && $(this).val()=="")){
           if($(this).attr("validation")){
             validation($(this));
           }

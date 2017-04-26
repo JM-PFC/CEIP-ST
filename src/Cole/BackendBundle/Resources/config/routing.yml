@@ -12,6 +12,14 @@ login_check:
 logout:
     path:     /logout
 
+denegada:
+   pattern: /Forbidden
+   defaults: { _controller: BackendBundle:Security:denegada }
+
+noencontrada:
+   pattern: /NotFound
+   defaults: { _controller: BackendBundle:Security:noencontrada }
+
 BackendBundle_profesor:
     resource: "@BackendBundle/Resources/config/routing/profesor.yml"
     prefix:   /profesor

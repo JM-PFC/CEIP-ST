@@ -32,7 +32,7 @@ class Profesor implements UserInterface, \Serializable
 
     function getRoles()
     {
-        return array("ROLE_PROFESOR");
+        return array("$this->role");
     }
         /**
      * Get username
