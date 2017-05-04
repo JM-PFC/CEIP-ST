@@ -19,6 +19,9 @@
 	<script type="text/javascript" src="{{ asset('bundles/intranet/css/bootstrap/bootstrap.min.js') }}"></script>
 	<script type="text/javascript" src="{{ asset('bundles/intranet/js/intranet.js') }}" async="async"></script>
 	<script type="text/javascript" src="{{ asset('bundles/intranet/js/bootstrap-validator/js/validator.js') }}"></script>
+	<script src="{{ asset('bundles/backend/js/jquery.mask.min.js') }}" type="text/javascript"></script>
+	<script type="text/javascript" src="{{ asset('bundles/fosjsrouting/js/router.js') }}"></script>
+	<script type="text/javascript" src="{{ path('fos_js_routing_js', {"callback": "fos.Router.setData"}) }}"></script>
 {% endblock %}
 
 </head>
@@ -43,8 +46,8 @@
 					{% if is_granted("ROLE_ADMIN") %}
 						{% if app.user.sexo == "Masculino" %}
 							<a href="{{path('backend')}}">
-								<img id="img_admin" class="img-responsive btn_admin" alt="Área de Administración" title="Acceder al Área de Administración" src="{{ asset('bundles/intranet/images/btn_admin_m.png')}}">
-								<img id="img_admin_hover" class="img-responsive btn_admin hide" alt="Área de Administración" title="Acceder al Área de Administración" src="{{ asset('bundles/intranet/images/btn_admin_m_hover.png')}}">
+								<img id="img_admin" class="img-responsive btn_admin" alt="Área de Administración" src="{{ asset('bundles/intranet/images/btn_admin_m.png')}}">
+								<img id="img_admin_hover" class="img-responsive btn_admin hide" alt="Área de Administración" data-toggle="tooltip" data-placement="bottom" data-original-title="Área de Administración" src="{{ asset('bundles/intranet/images/btn_admin_m_hover.png')}}">
 							</a>
 						{% else %}
 							<a href="{{path('backend')}}">
@@ -195,10 +198,10 @@
 								<i class="fa fa-dashboard page-header-icon"></i>
 								{% trans %}Inicio{% endtrans %}
 							</h5>
-							<div id="menu_principal" class="visible-sm">
+							<div id="menu_principal" class="visible-sm menu">
 							<ul class="nav navbar-nav navbar-right">
 								{% block barra_tablet %}
-								<li>
+								<li id="perfil">
 									<a href="{{path('intranet_perfil')}}">
 										<i class="fa fa-user"></i>
 										{% trans %}Mi perfil{% endtrans %}
@@ -217,17 +220,16 @@
 							</div>
 						</div>
 						
-						 <div id="menuMovil" class="navbar-collapse submenuMovil collapse" style="height: auto;" >
+						 <div id="menuMovil" class="navbar-collapse submenuMovil collapse menu" style="height: auto;" >
 							<ul class="nav navbar-nav navbar-right">
 							  {% block menu_movil %}
+							  	<li id="inicio" class="active">
+									<a href="{{path('intranet')}}">
+										<i class="fa fa-dashboard"></i>
+										{% trans %}Inicio{% endtrans %}
+									</a>
+								</li>
 							    {% if is_granted("ROLE_PROFESOR") %}
-									<li class="active">
-										<a href="{{path('intranet')}}">
-											<i class="fa fa-dashboard"></i>
-											{% trans %}Inicio{% endtrans %}
-										</a>
-									</li>
-	
 									<li>
 										<a href="#">
 											<i class="fa fa-server"></i>
@@ -295,7 +297,7 @@
 
 								<li class="divider visible-xs" role="presentation"></li>
 
-								<li class="visible-xs">
+								<li id="perfil" class="visible-xs">
 									<a href="{{path('intranet_perfil')}}">
 										<i class="fa fa-user"></i>
 										Mi perfil
@@ -330,7 +332,7 @@
 								<ul class="nav animated fadeInLeft">
 								  {% block sidebar %}
 									{% if is_granted("ROLE_PROFESOR") %}
-									<li class="active">
+									<li id="inicio" class="active">
 										<a href="{{path('intranet')}}">
 											<i class="fa fa-dashboard"></i>
 											{% trans %}Inicio{% endtrans %}
@@ -508,6 +510,11 @@
 									{% endif %}
 
 									<div class="dashboard">
+										{% for flash_message in app.session.flashBag.get('notice') %}
+    										<div class="notificacion alert alert-success fade in">
+        										{{ flash_message }}
+    										</div>
+										{% endfor %}
 										{% block contenido %}
 											<h4 id="titulo-seccion" class="titulo-seccion">Mi panel</h4>
 

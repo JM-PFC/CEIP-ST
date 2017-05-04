@@ -58,7 +58,7 @@
 				</a>
 				<ul id="enlacemiperfil" class="dropdown-menu">
 					<li>
-						<a href="/intranet/es/miperfil">
+						<a href="{{path('intranet_alumno_perfil', { 'id': entity.id })}}">
 							<i class="fa fa-reddit"></i>
   							{% if entity.sexo == "Femenino" %}
                					{% trans %}Perfil alumna{% endtrans %}
@@ -149,7 +149,7 @@
 {% endblock %}
 
 {% block sidebar %}
-	<li class="active">
+	<li id="inicio" class="active">
 		<a href="{{path('intranet')}}">
 			<i class="fa fa-dashboard"></i>
 			{% trans %}Inicio{% endtrans %}
@@ -200,7 +200,7 @@
 {% endblock %}
 
 {% block menu_movil %}
-	<li class="active">
+	<li id="inicio" class="active">
 		<a href="{{path('intranet')}}">
 			<i class="fa fa-dashboard"></i>
 			{% trans %}Inicio{% endtrans %}

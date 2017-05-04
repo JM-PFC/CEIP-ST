@@ -44,9 +44,6 @@ class Profesor implements UserInterface, \Serializable
         
         return $this->username;
     }
-
-
-   
     
     public function serialize()
     {
@@ -57,7 +54,6 @@ class Profesor implements UserInterface, \Serializable
     {
         $this->id = unserialize($data);
     } 
-
 
     /**
      * @var integer
@@ -79,7 +75,8 @@ class Profesor implements UserInterface, \Serializable
      * @var string
      *
      * @ORM\Column(name="nombre", type="string", length=255)
-     * @Assert\NotBlank()
+     * @Assert\NotBlank(message="El campo no puede estar vacío.")
+     * @Assert\Regex(pattern="/^([A-z áéíóúÁÉÍÓÚÑñ]+\s?)*$/",message="Este valor no es válido.")
      */
     private $nombre;
 
@@ -87,7 +84,7 @@ class Profesor implements UserInterface, \Serializable
      * @var string
      *
      * @ORM\Column(name="apellido1", type="string", length=255)
-     * @Assert\NotBlank()
+     * @Assert\NotBlank(message="El campo no puede estar vacío.")
      */
     private $apellido1;
 
@@ -95,7 +92,7 @@ class Profesor implements UserInterface, \Serializable
      * @var string
      *
      * @ORM\Column(name="apellido2", type="string", length=255)
-     * @Assert\NotBlank()
+     * @Assert\NotBlank(message="El campo no puede estar vacío.")
      */
     private $apellido2;
 
@@ -103,7 +100,7 @@ class Profesor implements UserInterface, \Serializable
      * @var string
      *
      * @ORM\Column(name="sexo", type="string", length=9)
-     * @Assert\NotBlank()
+     * @Assert\NotBlank(message="El campo no puede estar vacío.")
      */
     private $sexo;
 
@@ -111,7 +108,7 @@ class Profesor implements UserInterface, \Serializable
      * @var \DateTime
      *
      * @ORM\Column(name="fechaNacimiento", type="date")
-     * @Assert\NotBlank()
+     * @Assert\NotBlank(message="El campo no puede estar vacío.")
      */
     private $fechaNacimiento;
 
@@ -119,7 +116,7 @@ class Profesor implements UserInterface, \Serializable
      * @var string
      *
      * @ORM\Column(name="direccion", type="string", length=255)
-     * @Assert\NotBlank()
+     * @Assert\NotBlank(message="El campo no puede estar vacío.")
      */
     private $direccion;
 
@@ -127,7 +124,7 @@ class Profesor implements UserInterface, \Serializable
      * @var string
      *
      * @ORM\Column(name="localidad", type="string", length=255)
-     * @Assert\NotBlank()
+     * @Assert\NotBlank(message="El campo no puede estar vacío.")
      */
     private $localidad;
 
@@ -135,7 +132,7 @@ class Profesor implements UserInterface, \Serializable
      * @var string
      *
      * @ORM\Column(name="provincia", type="string", length=255)
-     * @Assert\NotBlank()
+     * @Assert\NotBlank(message="El campo no puede estar vacío.")
      */
     private $provincia;
 
@@ -143,7 +140,7 @@ class Profesor implements UserInterface, \Serializable
      * @var string
      *
      * @ORM\Column(name="cp", type="string", length=5)
-     * @Assert\NotBlank()
+     * @Assert\NotBlank(message="El campo no puede estar vacío.")
      */
     private $cp;
 
@@ -152,6 +149,7 @@ class Profesor implements UserInterface, \Serializable
      *
      * @ORM\Column(name="telefono", type="string", length=12, nullable=true)
      * @Assert\Regex(pattern="/^\d{3}([- .]?\d{2}){3}$/",message="No es un número de teléfono válido.")
+     * @Assert\Length(max=12)
      */
     private $telefono;
 
@@ -160,6 +158,7 @@ class Profesor implements UserInterface, \Serializable
      *
      * @ORM\Column(name="movil", type="string", length=12, nullable=true)
      * @Assert\Regex(pattern="/^\d{3}([- .]?\d{2}){3}$/",message="No es un número de teléfono válido.")
+     * @Assert\Length( max=12)
      */
     private $movil;
 
@@ -169,13 +168,14 @@ class Profesor implements UserInterface, \Serializable
      * @ORM\Column(name="email", type="string", length=255, nullable=true)
      * @Assert\Email()
      */
+    //@Assert\Email(groups={"actualizar"})
     private $email;
 
     /**
      * @var \DateTime
      *
      * @ORM\Column(name="fecha_alta", type="datetime")
-     * @Assert\NotBlank()
+     * @Assert\NotBlank(message="El campo no puede estar vacío.")
      */
     private $fechaAlta;
 
@@ -209,6 +209,7 @@ class Profesor implements UserInterface, \Serializable
      * @var string
      *
      * @ORM\Column(name="password", type="string", length=255)
+     * @Assert\Length(min= 6, minMessage = "La contraseña debe tener al menos 6 caracteres")
      */
     private $password;
 
@@ -246,7 +247,7 @@ class Profesor implements UserInterface, \Serializable
      * @var string
      *
      * @ORM\Column(name="nivel", type="string", length=10)
-     * @Assert\NotBlank()
+     * @Assert\NotBlank(message="El campo no puede estar vacío.")
      */
     private $nivel;
 
@@ -254,7 +255,7 @@ class Profesor implements UserInterface, \Serializable
      *
      * @ORM\Column(name="horas", type="decimal", precision=3, scale=1)
      * @Assert\Range(min=15, max=40)
-     * @Assert\NotBlank()
+     * @Assert\NotBlank(message="El campo no puede estar vacío.")
      */
     private $horas;
 
@@ -262,7 +263,7 @@ class Profesor implements UserInterface, \Serializable
      *
      * @ORM\Column(name="lectivas", type="decimal", precision=3, scale=1)
      * @Assert\Range(min=5, max=25)
-     * @Assert\NotBlank()
+     * @Assert\NotBlank(message="El campo no puede estar vacío.")
      */
     private $horasLectivas;
 
@@ -281,6 +282,18 @@ class Profesor implements UserInterface, \Serializable
      */
     private $activo;
 
+        /**
+     * @var \DateTime
+     *
+     * @ORM\Column(name="lastAccess", type="datetime" , nullable=true)
+     */
+    private $lastAccess;
+    /**
+     * @var \DateTime
+     *
+     * @ORM\Column(name="lastAccessAnt", type="datetime" , nullable=true)
+     */
+    private $lastAccessAnt;
     /**
      * @ORM\ManyToOne(targetEntity="Role", cascade={"persist"})
      */
@@ -1049,5 +1062,53 @@ class Profesor implements UserInterface, \Serializable
     public function getHorasLectivas()
     {
         return (float)$this->horasLectivas;
+    }
+
+
+
+    /**
+     * Set lastAccess
+     *
+     * @param \DateTime $lastAccess
+     * @return Profesor
+     */
+    public function setLastAccess($lastAccess)
+    {
+        $this->lastAccess = $lastAccess;
+
+        return $this;
+    }
+
+    /**
+     * Get lastAccess
+     *
+     * @return \DateTime 
+     */
+    public function getLastAccess()
+    {
+        return $this->lastAccess;
+    }
+
+    /**
+     * Set lastAccessAnt
+     *
+     * @param \DateTime $lastAccessAnt
+     * @return Profesor
+     */
+    public function setLastAccessAnt($lastAccessAnt)
+    {
+        $this->lastAccessAnt = $lastAccessAnt;
+
+        return $this;
+    }
+
+    /**
+     * Get lastAccessAnt
+     *
+     * @return \DateTime 
+     */
+    public function getLastAccessAnt()
+    {
+        return $this->lastAccessAnt;
     }
 }

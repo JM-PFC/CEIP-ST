@@ -95,8 +95,9 @@ p>input{
     }
     .contenido-twig {
         margin: 0;
-        padding: 0;
-        position: relative;
+        padding: 0 15px !important;
+        position: relative !important;
+        background: none !important;
         top: -81px;
     }
     .header-usuario {
@@ -185,12 +186,6 @@ p>input{
         border-top: 2px solid lightgrey;
         width: 100%;
     }
-    .contenido-twig {
-        margin: 0;
-        padding: 0 15px !important;
-        position: relative !important;
-        background: none !important;
-    }
     .col-sm-12 {
         width: 100%;
     }
@@ -217,6 +212,14 @@ p>input{
     .copyright {
         padding-left: 150px !important;
     }
+    .foto_perfil img{
+        height: 120px !important;
+        width: 90px !important;
+    }
+    #actualizar_password label {
+        padding: 0 !important;
+    }
+
 }
 /*Estilos para Móvil*/
 @media (max-width: 767px) {
@@ -291,6 +294,7 @@ p>input{
     }
     .contenido-twig {
         background: #fff none repeat scroll 0 0;
+        padding: 0 15px !important;
     }
     .container-fluid .row {
         margin-top: 2px !important;
@@ -343,6 +347,12 @@ p>input{
         margin-top: -33px;
         padding: 4px 0;
     }
+    .menu ul{
+        margin: 0!important;
+    }
+    #actualizar_password label {
+        padding: 0 !important;
+    }
 
 }
 /* Estilos para Pc*/
@@ -381,8 +391,8 @@ p>input{
     box-shadow: 0 1px 1px 1px rgba(0, 0, 0, 0.42);
     margin: 3px;
     padding: 0;
-    width: 48px !important;
-    height: 58px !important;
+    width: 48px ;
+    height: 58px ;
 }
 .img-header{
     width: 50px;
@@ -414,6 +424,9 @@ p>input{
     height: 55px;
     line-height: 20px;
     padding-bottom: 5px !important;
+    padding-top: 5px !important;
+}
+#barramiperfil > a , .barramensajes > a{
     padding-top: 8px !important;
 }
 .nav > li > a {
@@ -589,7 +602,7 @@ img {
     border-radius: 6px;
     font-size: 12px;
     min-height: 40px !important;
-    padding-bottom: 15px !important;
+    padding-bottom: 10px !important;
     padding-top: 6px;
 }
 .enrutaje li + li::before {
@@ -605,6 +618,7 @@ img {
 }
 .breadcrumb {
     padding: 6px 15px !important;
+    margin-bottom: 10px !important;
 }
 .list-inline {
     list-style: outside none none;
@@ -624,6 +638,7 @@ ul, ol {
 #intranet i{
     min-width: 14px !important;
     text-align: center !important;
+    font-size: 18px !important;
 }
 #intranet .titulo{
     color: #334c73;
@@ -706,6 +721,8 @@ ul, ol {
 .copyright {
     color: #123645;
     opacity: 0.6;
+    margin-left: 30px;
+    margin-right: -10px;
 }
 .nombre-usuario{
     padding-top: 5px;
@@ -737,7 +754,7 @@ ul, ol {
 .divider {
     background-color: #e5e5e5;
     height: 2px;
-    margin: 5px 0;
+    margin: 0;
     overflow: hidden;
 }
 .piemovil {
@@ -765,9 +782,11 @@ ul, ol {
 }
 .titulo-seccion {
     border-bottom: 2px solid #123645 !important;
+    clear: both;
     color: #123645;
     line-height: 30px;
     margin-bottom: 15px;
+    margin-top: 0!important;
 }
 #responsable{
     float: right;
@@ -786,6 +805,7 @@ ul, ol {
     cursor: default;}
 .bloque-dashboard {
     padding: 0;
+    min-height: 160px !important;
 }
 .bloque.bloque-stats {
     position: relative;
@@ -910,6 +930,7 @@ ul, ol {
     background-color: #CDD6E0;
     color: #334c73;
     padding: 5px;
+    margin-top: 0!important;
     border-radius: 5px;
     border: 1px solid #334c73;
     margin-bottom: 15px;
@@ -921,5 +942,26 @@ ul, ol {
     padding: 0;
 }
 #actualizar_password label {
-    padding-top: 8px !important;
+    padding-top: 8px ;
+}
+.contenido-twig {
+    padding-bottom: 15px;
+}
+.notificacion{
+    padding: 5px  10px !important;
+    margin: 5px 0 !important;
+}
+.foto_perfil img{
+    height: 130px ;
+    width: 105px ;
+    margin-right: 25px !important;
+}
+.contenido_datos{
+    margin-top: 6px;
+}
+.intranet_edit>div, #actualizar_password>div{
+    margin-bottom: 10px !important;
+}
+.intranet_edit button{
+    margin-bottom: 10px !important;
 }

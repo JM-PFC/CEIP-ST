@@ -127,7 +127,7 @@ class Padres implements UserInterface, \Serializable
      * @var string
      *
      * @ORM\Column(name="password", type="string", length=255, nullable=true)
-     * 
+     * @Assert\Length(min= 6, minMessage = "La contraseña debe tener al menos 6 caracteres")
      */
     private $password;
 
@@ -135,7 +135,6 @@ class Padres implements UserInterface, \Serializable
      * @var string
      *
      * @ORM\Column(name="salt", type="string", length=255)
-     * @Assert\NotBlank()
      */
     private $salt;
 
@@ -155,6 +154,20 @@ class Padres implements UserInterface, \Serializable
      */
     private $activo;
 
+        /**
+     * @var \DateTime
+     *
+     * @ORM\Column(name="lastAccess", type="datetime" , nullable=true)
+     */
+    private $lastAccess;
+
+    /**
+     * @var \DateTime
+     *
+     * @ORM\Column(name="lastAccessAnt", type="datetime" , nullable=true)
+     */
+    private $lastAccessAnt;
+
     /**
      * @ORM\ManyToOne(targetEntity="Role", cascade={"persist"})
     */
@@ -165,6 +178,8 @@ class Padres implements UserInterface, \Serializable
      * @ORM\OneToMany(targetEntity="Alumno", mappedBy="$responsable2")
      */
     private $alumnos;
+
+
 
     public function __construct()
     {
@@ -526,5 +541,53 @@ class Padres implements UserInterface, \Serializable
     public function getAlumnos()
     {
         return $this->alumnos;
+    }
+
+
+
+    /**
+     * Set lastAccess
+     *
+     * @param \DateTime $lastAccess
+     * @return Padres
+     */
+    public function setLastAccess($lastAccess)
+    {
+        $this->lastAccess = $lastAccess;
+
+        return $this;
+    }
+
+    /**
+     * Get lastAccess
+     *
+     * @return \DateTime 
+     */
+    public function getLastAccess()
+    {
+        return $this->lastAccess;
+    }
+
+    /**
+     * Set lastAccessAnt
+     *
+     * @param \DateTime $lastAccessAnt
+     * @return Padres
+     */
+    public function setLastAccessAnt($lastAccessAnt)
+    {
+        $this->lastAccessAnt = $lastAccessAnt;
+
+        return $this;
+    }
+
+    /**
+     * Get lastAccessAnt
+     *
+     * @return \DateTime 
+     */
+    public function getLastAccessAnt()
+    {
+        return $this->lastAccessAnt;
     }
 }

@@ -212,7 +212,7 @@ $(document).ready(function () {
     //Se comprueba que la letra del NIF sea la correcta.
     else{
       /*  Hay que descomentar ésto para que compruebe la letra del DNI (cuando acabemos)!!!!!!!!!!!!!!!!
-
+ut
       //Se le quita el separador para pasar el dni.
       dni=$(field).val().replace("-","");
 

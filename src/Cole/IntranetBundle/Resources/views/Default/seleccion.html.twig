@@ -50,14 +50,14 @@
 
 {% block menu_movil%}
 
-	<li class="active visible-xs" >
+	<li id="inicio" class="active visible-xs" >
 		<a href="{{path('intranet')}}">
 			<i class="fa fa-dashboard"></i>
 			{% trans %}Inicio{% endtrans %}
 		</a>
 	</li>
 
-	<li class="visible-xs">
+	<li id="perfil" class="visible-xs">
 		<a href="{{path('intranet_perfil')}}">
 			<i class="fa fa-user"></i>
 			Mi perfil
