@@ -1,0 +1,208 @@
+{% extends  'IntranetBundle:Alumno:index.html.twig' %}
+
+{% block body %}
+    {{parent()}}
+    <script>
+    	$(".menu li").removeClass('active');
+		$(".menu #curso").addClass('active');
+    </script>
+ {% endblock %}
+
+{% block migas %}
+	<li class="tipo">
+			{% trans %}Alumnado{% endtrans %}
+	</li>
+	<li>
+		<a href="{{path('intranet')}}">
+			{% trans %}Inicio{% endtrans %}
+		</a>
+	</li>
+	<li class="active no-seleccion">
+		{% trans %}Curso actual{% endtrans %}
+	</li>
+{% endblock %}
+
+{% block titulo_cabecera %}
+	<i class="fa fa-book page-header-icon"></i>
+	{% trans %}Curso actual{% endtrans %}
+{% endblock %}
+
+
+{% block contenido %}
+	<h4 id="titulo-seccion" class="titulo-seccion">{% trans %}Datos del curso{% endtrans %}</h4>
+	{% if entity.curso != null and entity.grupo != null %}
+	<div class="container-fluid div_datos_curso">
+		<div class="pull-left col-xs-12 col-sm-4 no-padding datos_curso">
+			<label>{% trans %}Curso{% endtrans %}:</label>
+			<span> {{entity.curso.curso ~ " de " ~ entity.curso.nivel}}</span >
+			<br>
+			<label>{% trans %}Grupo{% endtrans %}:</label>
+			<span> {{entity.grupo.letra}}</span >
+			<br>
+			<label>{% trans %}Año académico{% endtrans %}:</label>
+			<span> {{entity.anyoAcademico}}</span >
+		</div>
+		<div class="pull-left col-xs-12 col-sm-8 no-padding datos_curso">
+			{% if tutor != null %}
+				{% if tutor.foto != null %}
+					<div class="pull-left col-xs-12 col-sm-2 no-padding">
+						<img id="foto_curso" class="img-rounded " alt="{{tutor}}" src="{{ asset('uploads/images/' ~ tutor.foto) }}">
+        			</div>	
+       			{% else %}
+       				{% if tutor.sexo == "Femenino" %}
+						<div class="pull-left col-xs-12 col-sm-2  no-padding">
+							<img id="foto_curso" class="img-rounded " alt="Sin Foto" src="{{ asset('bundles/backend/images/perfil/SinFoto-M.png') }}">
+        				</div>	
+   					{% else %}
+						<div class="pull-left col-xs-12 col-sm-2  no-padding">
+              				<img id="foto_curso" class="img-rounded " alt="Sin Foto" src="{{ asset('bundles/backend/images/perfil/SinFoto-H.png') }}">
+        				</div>	
+           			{% endif %}
+        		{% endif %}
+					 
+				{% if tutor.sexo == "Masculino" %}
+        			<div class="pull-left col-xs-12 col-sm-10 no-padding">
+						<label>{% trans %}Tutor{% endtrans %}:</label>
+						<span> {{tutor}}</span >
+						<br>
+						<button type="button" class="btn btn-info mt5">Contactar</button>
+        			</div>
+				{% else %}
+        			<div class="pull-left col-xs-12 col-sm-10 no-padding">
+						<label>{% trans %}Tutora{% endtrans %}:</label>
+						<span> {{tutor}}</span >
+						<br>
+						<button type="button" class="btn btn-info mt5">{% trans %}Contactar{% endtrans %}</button>
+        			</div>
+				{% endif %}
+			{% else %}
+				<label>Tutor/a:</label>
+				<span class="text-danger">{% trans %}Sin asignar{% endtrans %}</span>
+			{% endif %}
+		</div>
+	</div>
+	{% endif %}
+
+	{% if entity.curso != null and entity.grupo != null %}
+		{% if entity.curso.nivel == "Primaria" %}
+	 	<div role="tabpanel" class="tab_horarios">
+	
+			<ul class="nav nav-tabs" role="tablist">
+				<li role="presentation" class="active"><a href="#horarios" aria-controls="horarios" data-toggle="tab" role="tab">{% trans %}Horario de clase{% endtrans %}</a></li>
+				<li role="presentation"><a href="#profesores" aria-controls="profesores" data-toggle="tab" role="tab">{% trans %}Asignaturas / Maestros{% endtrans %}	</a></li>
+			</ul>
+			<div class="tab-content">
+				<div role="tabpanel" class="tab-pane active clearfix" id="horarios">
+					<div class="col-xs-12">
+					{% if numAsigHorarios %}
+					  <div class="visible-md visible-lg hidden-xs visible-sm">
+						<div id="cabecera_horarios" class="col-xs-12">
+							<div class="row">
+								<div class="col-xs-2"><i class=" fa fa-clock-o"></i></div>
+								<div class="col-xs-2">{% trans %}Lunes{% endtrans %}</div>
+								<div class="col-xs-2">{% trans %}Martes{% endtrans %}</div>
+								<div class="col-xs-2">{% trans %}Miércoles{% endtrans %}</div>
+								<div class="col-xs-2">{% trans %}Jueves{% endtrans %}</div>
+								<div class="col-xs-2">{% trans %}Viernes{% endtrans %}</div>
+							</div>
+						</div>
+						<div id="contenido_horarios" class="col-xs-12">
+							{{render (controller('IntranetBundle:Alumno:HorariosGrupos',{'id': entity.grupo, 'id_alumno': entity.id, 'num': "0" }))}}
+						</div>
+					  </div>
+					  {# Estilo acordeón versión móvil #}	
+     				  <div class="panel-group col-xs-12 hidden-md hidden-lg visible-xs hidden-sm" id="accordion">
+  						<div class="panel panel-default">
+    						<div class="panel-heading">
+      							<h4 class="panel-title">
+        							<a data-toggle="collapse" class="col-xs-12" data-parent="#accordion" href="#collapse1">{% trans %}Lunes{% endtrans %}</a>
+      							</h4>
+    						</div>
+    						<div id="collapse1" class="panel-collapse collapse">
+      							<div id="contenido_horarios" class="panel-body">
+						      		{{render (controller('IntranetBundle:Alumno:HorariosGrupos',{'id': entity.grupo, 'id_alumno': entity.id, 'num': "1" }))}}
+  								</div>
+    						</div>
+  						</div>
+  						
+  						<div class="panel panel-default">
+    						<div class="panel-heading">
+     							<h4 class="panel-title">
+        							<a data-toggle="collapse" class="col-xs-12" data-parent="#accordion" href="#collapse2">{% trans %}Martes{% endtrans %}</a>
+      							</h4>
+    						</div>
+    						<div id="collapse2" class="panel-collapse collapse">
+      							<div id="contenido_horarios" class="panel-body">
+			      					{{render (controller('IntranetBundle:Alumno:HorariosGrupos',{'id': entity.grupo, 'id_alumno': entity.id, 'num': "2" }))}}
+  								</div>
+    						</div>
+  						</div>
+
+  						<div class="panel panel-default">
+    						<div class="panel-heading">
+     							<h4 class="panel-title">
+        							<a data-toggle="collapse"  class="col-xs-12"data-parent="#accordion" href="#collapse3">{% trans %}Miércoles{% endtrans %}</a>
+      							</h4>
+    						</div>
+    						<div id="collapse3" class="panel-collapse collapse">
+      							<div id="contenido_horarios" class="panel-body">
+      								{{render (controller('IntranetBundle:Alumno:HorariosGrupos',{'id': entity.grupo, 'id_alumno': entity.id, 'num': "3" }))}}
+  								</div>
+    						</div>
+  						</div>
+
+  						<div class="panel panel-default">
+    						<div class="panel-heading">
+     							<h4 class="panel-title">
+        							<a data-toggle="collapse"  class="col-xs-12"data-parent="#accordion" href="#collapse3">{% trans %}Jueves{% endtrans %}</a>
+      							</h4>
+    						</div>
+    						<div id="collapse3" class="panel-collapse collapse">
+      							<div id="contenido_horarios" class="panel-body">
+      								{{render (controller('IntranetBundle:Alumno:HorariosGrupos',{'id': entity.grupo, 'id_alumno': entity.id, 'num': "4" }))}}
+  								</div>
+    						</div>
+  						</div>
+  						<div class="panel panel-default">
+    						<div class="panel-heading">
+     							<h4 class="panel-title">
+        							<a data-toggle="collapse"  class="col-xs-12"data-parent="#accordion" href="#collapse3">{% trans %}Viernes{% endtrans %}</a>
+      							</h4>
+    						</div>
+    						<div id="collapse3" class="panel-collapse collapse">
+      							<div id="contenido_horarios" class="panel-body">
+      								{{render (controller('IntranetBundle:Alumno:HorariosGrupos',{'id': entity.grupo, 'id_alumno': entity.id, 'num': "5" }))}}
+  								</div>
+    						</div>
+  						</div>
+
+  					  </div>
+					{% else %}
+    					<div class="alert alert-info alert-block">
+      						<small>
+        						<h4>{% trans %}El horario del grupo no está disponible{% endtrans %}.</h4>
+        						<h6>{% trans %}Estamos trabajando en el nuevo horario del grupo, pronto estará disponible{% endtrans %}.</h6>
+      						</small>
+    					</div>
+					{% endif %}
+					</div>			
+				</div>
+				<div role="tabpanel" class="tab-pane" id="profesores">
+					<h3>Profesores</h3>
+					<p>Velit impedit, saepe mollitia est recusandae vero, quaerat aspernatur dolore quibusdam veritatis voluptate odit harum minus. Perferendis, dolore, porro!</p>
+				</div>
+			</div>
+		</div>
+		{% endif %}
+	{% else %}
+		<div class="alert alert-info alert-block">
+			<small>
+				<h4>{% trans %}El alumno no ha sido matriculado aún en el nuevo curso{% endtrans %}.</h4>
+				<h6>{% trans %}Por favor vuelva en unos días para verificar la matriculación del alumno{% endtrans %}.</h6>
+			</small>
+		</div>
+	{% endif %}
+
+{% endblock %}
+
+

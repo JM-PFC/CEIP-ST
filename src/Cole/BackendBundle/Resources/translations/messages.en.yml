@@ -7,6 +7,8 @@ Clave: Password
 Acceder: Login
 Recuérdame: Remember me
 Contraseña olvidada: Forgot password
+Menú de Navegación: Navigation menu
+Subir: Go up
 Mi perfil: My profile
 Perfil alumno: Profile student
 Perfil alumna: Profile student
@@ -44,3 +46,35 @@ Grupo sanguíneo: Blood type
 Curso matriculado: Registered course
 Grupo: Group
 Número en clase: Class number
+Panel principal: Main panel
+Curso actual: Current course
+Seguimiento: Tracing
+Comunicación: Communication
+Asistencia: Assistance
+Calificaciones: Score
+Expediente: Case file
+Tutorias: Tutorials
+Noticias: News
+Cursos impartidos: Courses taught
+Horario de clases: Class schedule
+Horario de clase: Class schedule
+Reservas: Reservations
+Promocionar: Promote
+Datos del curso: Course Data
+Lunes: Monday
+Martes: Tuesday
+Miércoles: Wednesday
+Jueves: Thursday
+Viernes: Friday
+Asignaturas / Maestros: Subjects / Teachers
+El alumno no ha sido matriculado aún en el nuevo curso: The student has not yet been enrolled in the new course
+Por favor vuelva en unos días para verificar la matriculación del alumno: Please come back in a few days to verify the student's enrollment
+El horario del grupo no está disponible: Group schedule is not available
+Estamos trabajando en el nuevo horario del grupo, pronto estará disponible: We are working on the group's new schedule, it will soon be available
+Curso: Course
+Grupo: Group
+Año académico: Academic year
+Tutor: Tutor
+Tutora: Tutor
+Contactar: Contact
+Sin asignar: Unassigned

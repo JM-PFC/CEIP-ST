@@ -736,6 +736,38 @@ class GrupoController extends Controller
             $data=null;
             return new JsonResponse(array('data' => $data), 200);
         }
+                if($eliminadas){
+          foreach ($eliminadas as $row ) { //$row[0]->ID asignatura  $row[1]->dia $row[2]->Horario.
+            $horario = $em->getRepository('BackendBundle:Horario')->findOneById($row[2]);
+            if (!$horario) {
+                throw $this->createNotFoundException('Unable to find Horario entity.');
+            }
+            if($row[0]!=0){
+
+                $imparte = $em->getRepository('BackendBundle:Imparte')->findByAsignaturaOcupada($grupo, $row[1], $horario);
+                if (!$imparte) {
+                    throw $this->createNotFoundException('Unable to find Imparte entity.');
+                }
+
+                $imparte->setDiaSemanal(null);
+                $imparte->setHorario(null);
+                $em->persist($imparte);
+                $em->flush();
+            }
+            else{
+                $imparte = $em->getRepository('BackendBundle:Imparte')->findByAsignaturasOpOcupada($grupo, $row[1], $horario);
+                if (!$imparte) {
+                    throw $this->createNotFoundException('Unable to find Imparte entity.');
+                }
+                foreach ($imparte as $imparte ){
+                    $imparte->setDiaSemanal(null);
+                    $imparte->setHorario(null);
+                    $em->persist($imparte);
+                    $em->flush();
+                }
+            }
+          }  
+        }
 
         if($modificadas){
           foreach ($modificadas as $row ) { //$row[0]->ID asignatura  $row[1]->dia $row[2]->Horario.
@@ -774,38 +806,7 @@ class GrupoController extends Controller
           }   
         }
 
-        if($eliminadas){
-          foreach ($eliminadas as $row ) { //$row[0]->ID asignatura  $row[1]->dia $row[2]->Horario.
-            $horario = $em->getRepository('BackendBundle:Horario')->findOneById($row[2]);
-            if (!$horario) {
-                throw $this->createNotFoundException('Unable to find Horario entity.');
-            }
-            if($row[0]!=0){
 
-                $imparte = $em->getRepository('BackendBundle:Imparte')->findByAsignaturaOcupada($grupo, $row[1], $horario);
-                if (!$imparte) {
-                    throw $this->createNotFoundException('Unable to find Imparte entity.');
-                }
-
-                $imparte->setDiaSemanal(null);
-                $imparte->setHorario(null);
-                $em->persist($imparte);
-                $em->flush();
-            }
-            else{
-                $imparte = $em->getRepository('BackendBundle:Imparte')->findByAsignaturasOpOcupada($grupo, $row[1], $horario);
-                if (!$imparte) {
-                    throw $this->createNotFoundException('Unable to find Imparte entity.');
-                }
-                foreach ($imparte as $imparte ){
-                    $imparte->setDiaSemanal(null);
-                    $imparte->setHorario(null);
-                    $em->persist($imparte);
-                    $em->flush();
-                }
-            }
-          }  
-        }
         return new JsonResponse(array('data' => $data,'success' => true), 200);
     }
 

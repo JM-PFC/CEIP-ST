@@ -45,6 +45,9 @@
 				</div>
 			</a>
         </div>
+        <script>
+        	$("#wrapper #responsable").removeClass('hidden');
+        </script>
     {% endfor %}
 {% endblock %}
 
@@ -60,7 +63,7 @@
 	<li id="perfil" class="visible-xs">
 		<a href="{{path('intranet_perfil')}}">
 			<i class="fa fa-user"></i>
-			Mi perfil
+			{% trans %}Mi perfil{% endtrans %}
 		</a>
 	</li>
 	<li class="visible-xs">
@@ -72,3 +75,4 @@
 		</a>
 	</li>
 {% endblock %}
+

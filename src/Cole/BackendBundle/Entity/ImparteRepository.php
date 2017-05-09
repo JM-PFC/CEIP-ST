@@ -12,16 +12,6 @@ use Doctrine\ORM\EntityRepository;
  */
 class ImparteRepository extends EntityRepository
 {
-/*
-	public function findByCurso($curso)
-	{
-		return $this->getEntityManager()->createQuery(
-		'SELECT i FROM BackendBundle:Imparte i WHERE i.curso=:curso GROUP BY i.asignatura')
-		->setParameters(array(
-			'curso' => $curso))
-		->getResult();
-	}
-*/
 	public function findByGrupo($grupo)
 	{
 		return $this->getEntityManager()->createQuery(
@@ -199,7 +189,7 @@ class ImparteRepository extends EntityRepository
 		->getResult();
 	}
 
-		public function findAsignaturasSinRepetir($asignatura)
+	public function findAsignaturasSinRepetir($asignatura)
 	{
 		return $this->getEntityManager()->createQuery(
 		'SELECT i FROM BackendBundle:Imparte i INNER JOIN i.asignatura a where a.id=:asignatura GROUP BY i.asignatura')
@@ -211,7 +201,7 @@ class ImparteRepository extends EntityRepository
 
 	public function findAsignacionesNoOpcionales($grupo)
 	{
-	return $this->getEntityManager()->createQuery(
+		return $this->getEntityManager()->createQuery(
 		'SELECT i FROM BackendBundle:Imparte i INNER JOIN i.asignatura a INNER JOIN a.asignatura asig WHERE i.grupo=:grupo and asig.opcional=:opcional')
 		->setParameters(array(
 			'grupo' => $grupo,
@@ -221,7 +211,7 @@ class ImparteRepository extends EntityRepository
 
 	public function findAsignacionesOpcionales($grupo)
 	{
-	return $this->getEntityManager()->createQuery(
+		return $this->getEntityManager()->createQuery(
 		'SELECT i FROM BackendBundle:Imparte i INNER JOIN i.asignatura a INNER JOIN a.asignatura asig WHERE i.grupo=:grupo and asig.opcional=:opcional')
 		->setParameters(array(
 			'grupo' => $grupo,
@@ -229,15 +219,46 @@ class ImparteRepository extends EntityRepository
 		->getResult();
 	}
 
+	public function findNoOpcionalesConHorario($grupo)
+	{
+		return $this->getEntityManager()->createQuery(
+		'SELECT i FROM BackendBundle:Imparte i INNER JOIN i.asignatura a INNER JOIN a.asignatura asig WHERE i.horario IS not NULL and i.grupo=:grupo and asig.opcional=:opcional')
+		->setParameters(array(
+			'grupo' => $grupo,
+			'opcional' => 0))
+		->getResult();
+	}
+
+	public function findOpcionalesConHorario($grupo)
+	{
+		return $this->getEntityManager()->createQuery(
+		'SELECT i FROM BackendBundle:Imparte i INNER JOIN i.asignatura a INNER JOIN a.asignatura asig WHERE i.horario IS not NULL and i.grupo=:grupo and asig.opcional=:opcional')
+		->setParameters(array(
+			'grupo' => $grupo,
+			'opcional' => 1))
+		->getResult();
+	}
 	
 	public function findAsignacionesOtrosGrupos($profesor, $grupo)
 	{
-	return $this->getEntityManager()->createQuery(
+		return $this->getEntityManager()->createQuery(
 		'SELECT i FROM BackendBundle:Imparte i INNER JOIN i.profesor p WHERE i.grupo NOT IN (:grupo) and p=:profesor and i.dia_semanal IS not NULL and i.horario IS not NULL')
 		->setParameters(array(
 			'grupo' => $grupo,
 			'profesor' => $profesor))
 		->getResult();
 	}
+
+	public function findOpcionalesSinRepetir($grupo)
+	{
+		return $this->getEntityManager()->createQuery(
+		'SELECT i FROM BackendBundle:Imparte i INNER JOIN i.asignatura a INNER JOIN a.asignatura asig WHERE i.grupo=:grupo and asig.opcional=:opcional GROUP BY i.asignatura')
+		->setParameters(array(
+			'grupo' => $grupo,
+			'opcional' => 1))
+		->getResult();
+	}
+
+
 
 }

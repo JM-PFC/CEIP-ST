@@ -111,7 +111,7 @@
     beforeStop: function( event, ui ) {
 
     },
-    stop: function(event, ui){ 
+    stop: function(event, ui){
       //ui.item.css("cursor","ponter");
       id=ui.item.attr("id");
 
@@ -150,100 +150,91 @@
             }
 
 
-      //Se comprueba si el elemento asignado se ha añadido por error en una celda o lista no permitida y se cancela la asignación.
-      //También se comprueba en el mouseup (general.js).
-      if(ui.item.closest("td").hasClass('bloqueo') || ui.item.closest("#listas_nulas").size()==1){
-        li.sortable("cancel");
-        $("#asignar_horario_grupo_dialog #tabla_horario td").removeClass('placeholder_list_table_td');
-        error.play();
-      }
+            //Se comprueba si el elemento asignado se ha añadido por error en una celda o lista no permitida y se cancela la asignación.
+            //También se comprueba en el mouseup (general.js).
+            if(ui.item.closest("td").hasClass('bloqueo') || ui.item.closest("#listas_nulas").size()==1){
+              li.sortable("cancel");
+              $("#asignar_horario_grupo_dialog #tabla_horario td").removeClass('placeholder_list_table_td');
+              error.play();
+            }
 
-      if(ui.item.closest("td").size()>0){ //Elemento soltado en la tabla.
-        //Se añade el nombre y un span para quitar el elemento de la tabla.
-        ui.item.text("");
-        ui.item.append('<span class="ui-icon ui-icon-close" role="presentation">Remove Tab</span>'+ui.item.attr("nombre"));
-        //Se añade un efecto de sombra
-        ui.item.addClass('box-shadow');
+            if(ui.item.closest("td").size()>0){ //Elemento soltado en la tabla.
+              //Se añade el nombre y un span para quitar el elemento de la tabla.
+              ui.item.text("");
+              ui.item.append('<span class="ui-icon ui-icon-close" role="presentation">Remove Tab</span>'+ui.item.attr("nombre"));
+              //Se añade un efecto de sombra
+              ui.item.addClass('box-shadow');
 
-        //Se añade la clase "sortable" a las listas de la tabla y se elimina luego a las listas que tienen asignatura asignada para que no pueda añadirse otra.
-        $("#asignar_horario_grupo_dialog #tabla_horario ul").addClass('sortable');
-        $("#asignar_horario_grupo_dialog #tabla_horario li").closest("ul").removeClass('sortable');
+              //Se añade la clase "sortable" a las listas de la tabla y se elimina luego a las listas que tienen asignatura asignada para que no pueda añadirse otra.
+              $("#asignar_horario_grupo_dialog #tabla_horario ul").addClass('sortable');
+              $("#asignar_horario_grupo_dialog #tabla_horario li").closest("ul").removeClass('sortable');
 
-      }
-      else{
-        ui.item.text(ui.item.attr("siglas"));
-      }
-      //Se elimina el placeholder al soltar el elemento.
-      ui.item.closest('ul').removeClass('placeholder_list_table_td');
-      ui.item.closest('td').removeClass('placeholder_list_table_td');
+            }
+            else{
+              ui.item.text(ui.item.attr("siglas"));
+            }
+            //Se elimina el placeholder al soltar el elemento.
+            ui.item.closest('ul').removeClass('placeholder_list_table_td');
+            ui.item.closest('td').removeClass('placeholder_list_table_td');
 
-      //Se elimina la clase "no-last" de las listas de la tabla.
-      $("#asignar_horario_grupo_dialog #tabla_horario li").removeClass('no-last');
-       //Se elimina la clase "box-shadow" de las listas de la lista de asignaturas.
-      $("#asignar_horario_grupo_dialog #pie_horario li").removeClass('box-shadow');
-      //Se oculta las listas que quedan vacía.
-      $("#asignar_horario_grupo_dialog #pie_horario ul:empty").addClass('oculto');
+            //Se elimina la clase "no-last" de las listas de la tabla.
+            $("#asignar_horario_grupo_dialog #tabla_horario li").removeClass('no-last');
+            //Se elimina la clase "box-shadow" de las listas de la lista de asignaturas.
+            $("#asignar_horario_grupo_dialog #pie_horario li").removeClass('box-shadow');
+            //Se oculta las listas que quedan vacía.
+            $("#asignar_horario_grupo_dialog #pie_horario ul:empty").addClass('oculto');
     
-      //Se muestra el contenedor inicial con la info del evento mousenter.
-      $("#asignar_horario_grupo_dialog #contenedor_info").empty();
-      $("#asignar_horario_grupo_dialog #contenedor_info_drag").empty();
-      $("#asignar_horario_grupo_dialog #contenedor_info_drag").addClass('oculto');
-      $("#asignar_horario_grupo_dialog #contenedor_info").removeClass('oculto');
+            //Se muestra el contenedor inicial con la info del evento mousenter.
+            $("#asignar_horario_grupo_dialog #contenedor_info").empty();
+            $("#asignar_horario_grupo_dialog #contenedor_info_drag").empty();
+            $("#asignar_horario_grupo_dialog #contenedor_info_drag").addClass('oculto');
+            $("#asignar_horario_grupo_dialog #contenedor_info").removeClass('oculto');
  
-      $("#asignar_horario_grupo_dialog #tabla_horario td").removeClass('rojo');
-      $("#asignar_horario_grupo_dialog #tabla_horario td").removeClass('bloqueo');
+            $("#asignar_horario_grupo_dialog #tabla_horario td").removeClass('rojo');
+            $("#asignar_horario_grupo_dialog #tabla_horario td").removeClass('bloqueo');
 
-      //Se establece el padding de los elementos que se mueven a la tabla según el numero de módulos existentes.
-      altura=$("#asignar_horario_grupo_dialog #tabla_horario .inner_table tr td").css('height');
+            //Se establece el padding de los elementos que se mueven a la tabla según el numero de módulos existentes.
+            altura=$("#asignar_horario_grupo_dialog #tabla_horario .inner_table tr td").css('height');
 
-      //Se establece el padding para los elementos en la lista.
-      if(ui.item.closest("td").size()==0){
-        ui.item.css("padding","7px");
-      }
-      //Se establece el padding para los elementos en la tabla.
-      else{
-        if(parseInt(altura.slice(0, -2))<30){
-          ui.item.css("padding","1px 3px");
-        }
-        else if(parseInt(altura.slice(0, -2))>40){
-          ui.item.css("padding","8px 3px");
-        }
-        else{
-          ui.item.css("padding","5px 3px");
-        }
-      }
+            //Se establece el padding para los elementos en la lista.
+            if(ui.item.closest("td").size()==0){
+              ui.item.css("padding","7px");
+            }
+            //Se establece el padding para los elementos en la tabla.
+            else{
+              if(parseInt(altura.slice(0, -2))<30){
+                ui.item.css("padding","1px 3px");
+              }
+              else if(parseInt(altura.slice(0, -2))>40){
+                ui.item.css("padding","8px 3px");
+              }
+              else{
+                ui.item.css("padding","5px 3px");
+              }
+            }
 
-      //Se añade la clase asignada o modificada cuando se añade una asignatura a la tabla comparando el atribut "carga" de la lista.
-      if(ui.item.closest("td").size()>0){
-        if(!ui.item.closest("ul").attr("carga") || ui.item.closest("ul").attr("carga")!=ui.item.attr("id")){
-          ui.item.closest("ul").removeClass('asignada');
-          ui.item.closest("ul").addClass('modificada');
-          ui.item.closest("ul").removeClass('eliminada');
-        }
-        else{
-          ui.item.closest("ul").addClass('asignada');
-          ui.item.closest("ul").removeClass('modificada');
-          ui.item.closest("ul").removeClass('eliminada');
-        }
-      }
+            //Se añade la clase asignada o modificada cuando se añade una asignatura a la tabla comparando el atribut "carga" de la lista.
+            if(ui.item.closest("td").size()>0){
+              if(!ui.item.closest("ul").attr("carga") || ui.item.closest("ul").attr("carga")!=ui.item.attr("id")){
+                ui.item.closest("ul").removeClass('asignada');
+                ui.item.closest("ul").addClass('modificada');
+                ui.item.closest("ul").removeClass('eliminada');
+              }
+              else{
+                ui.item.closest("ul").addClass('asignada');
+                ui.item.closest("ul").removeClass('modificada');
+                ui.item.closest("ul").removeClass('eliminada');
+              }
+            }     
 
-      //Se comprueba si hay modificación para mostrar los botones. 
-      $("#asignar_horario_grupo_dialog #horario_grupo_submit").prop("disabled",true);
-      $("#asignar_horario_grupo_dialog #horario_grupo_restablecer").prop("disabled",true);
+            //Se comprueba si hay modificación para mostrar los botones. 
+            $("#asignar_horario_grupo_dialog #horario_grupo_submit").prop("disabled",true);
+            $("#asignar_horario_grupo_dialog #horario_grupo_restablecer").prop("disabled",true);
 
-      if($("#asignar_horario_grupo_dialog #tabla_horario td ul").hasClass('eliminada') || $("#asignar_horario_grupo_dialog #tabla_horario td ul").hasClass('modificada') ){
-        $("#asignar_horario_grupo_dialog #horario_grupo_submit").prop("disabled",false);
-        $("#asignar_horario_grupo_dialog #horario_grupo_restablecer").prop("disabled",false);
-      }
-
-
-
-
-
-
-
-
-
+            if($("#asignar_horario_grupo_dialog #tabla_horario td ul").hasClass('eliminada') || $("#asignar_horario_grupo_dialog #tabla_horario td ul").hasClass('modificada') ){
+              $("#asignar_horario_grupo_dialog #horario_grupo_submit").prop("disabled",false);
+              $("#asignar_horario_grupo_dialog #horario_grupo_restablecer").prop("disabled",false);
+            }
           }
         })
       }
@@ -312,7 +303,7 @@
         }
       }
 
-      //Se añade la clase asignada o modificada cuando se añade una asignatura a la tabla comparando el atribut "carga" de la lista.
+      //Se añade la clase asignada o modificada cuando se añade o se modifica una asignatura en la tabla comparando el atribut "carga" de la lista.
       if(ui.item.closest("td").size()>0){
         if(!ui.item.closest("ul").attr("carga") || ui.item.closest("ul").attr("carga")!=ui.item.attr("id")){
           ui.item.closest("ul").removeClass('asignada');
@@ -324,6 +315,15 @@
           ui.item.closest("ul").removeClass('modificada');
           ui.item.closest("ul").removeClass('eliminada');
         }
+        //Se cambia la clase para eliminar la asignación que tenía la asignatura antes en la tabla imparte.
+        $("#asignar_horario_grupo_dialog #tabla_horario .inner_table .asignada:empty").each (function(){ 
+          $(this).addClass('eliminada');
+          $(this).removeClass('asignada');
+        }); 
+        //Se elimina la clase modificada si se vuelve a modificar para que no se realice ninguna asignación en ese módulo.
+        $("#asignar_horario_grupo_dialog #tabla_horario .inner_table .modificada:empty").each (function(){ 
+          $(this).removeClass('modificada');
+        }); 
       }
 
       //Se comprueba si hay modificación para mostrar los botones. 

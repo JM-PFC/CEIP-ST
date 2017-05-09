@@ -65,6 +65,21 @@ $(div).load(Routing.generate('intranet_perfil', {_locale:"es"}));
 */
 
 
+  //Se cambia el estilo de icono de admin.
+  $('.bloque-menu-alumno a').on('mouseover', function(event) {
+    clase=$(this).attr("color");
+    $(this).closest(".bloque-item-menu").addClass(clase);
+    $(this).find("i").addClass(clase);
+    $(this).closest(".bloque-item-menu").next().addClass(clase);
+  });
+  $('.bloque-menu-alumno a').on('mouseleave', function(event) {
+      clase=$(this).attr("color");
+      $(this).closest(".bloque-item-menu").removeClass(clase);
+      $(this).find("i").removeClass(clase);
+      $(this).closest(".bloque-item-menu").next().removeClass(clase);
+  });
+
+
 
 
 });

@@ -10,6 +10,20 @@ intranet_perfil:
     options:
         expose: true
 
+actualizar_password:
+    path:     /intranet/actualizar_password/{id}
+    defaults: { _controller: IntranetBundle:Default:ActualizarPassword}
+    options:
+        expose: true
+    requirements: { _method: post|put|get }
+
+datos_personales_alumno:
+    path:     /intranet/datos_personales_alumno/{id}
+    defaults: { _controller: IntranetBundle:Alumno:DatosPersonales}
+    options:
+        expose: true
+    requirements: { _method: post|put|get }
+
 intranet_alumno:
     path:     /intranet/alumno/{id}
     defaults: { _controller: IntranetBundle:Alumno:index}
@@ -26,16 +40,6 @@ datos_personales:
         expose: true
     requirements: { _method: post|put|get }
 
-actualizar_password:
-    path:     /intranet/actualizar_password/{id}
-    defaults: { _controller: IntranetBundle:Default:ActualizarPassword}
-    options:
-        expose: true
-    requirements: { _method: post|put|get }
-
-datos_personales_alumno:
-    path:     /intranet/datos_personales_alumno/{id}
-    defaults: { _controller: IntranetBundle:Alumno:DatosPersonales}
-    options:
-        expose: true
-    requirements: { _method: post|put|get }
+intranet_alumno_curso:
+    path:     /intranet/alumno/{id}/curso
+    defaults: { _controller: IntranetBundle:Alumno:curso}

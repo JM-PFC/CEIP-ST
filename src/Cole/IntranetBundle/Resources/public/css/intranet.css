@@ -76,6 +76,9 @@ p>input{
 	background:#b1cce7 ;
 	opacity: 0.3;
 }
+.mt5{
+    margin-top: 5px !important;
+}
 
 /* Estilos Intranet*/
 
@@ -151,7 +154,7 @@ p>input{
         font-weight: bold;
         margin: 11px 0;
         user-select: none;
-        width: 45%;
+        width: 40%;
     }
     .navbar-header {
         height: 40px;
@@ -166,7 +169,7 @@ p>input{
         padding: 5px 15px !important;
     }
     #menu_principal{
-        width: 55%;
+        width: 60%;
         float: right;
     }
     #menuMovil{
@@ -189,10 +192,7 @@ p>input{
     .col-sm-12 {
         width: 100%;
     }
-    .container-fluid .row {
-        margin-left: -35px !important;
-        margin-right: -35px !important;
-    }
+
     #responsable{
         margin-right: 10px;
     }
@@ -219,6 +219,9 @@ p>input{
     #actualizar_password label {
         padding: 0 !important;
     }
+    .header-usuario table th, .header-usuario table td {
+        font-size: 0.9em !important;
+    }
 
 }
 /*Estilos para Móvil*/
@@ -235,7 +238,10 @@ p>input{
     }
     .header-usuario {
         background-color: #31708f;
-        display: block;
+        display: flex !important;
+        display: -webkit-box !important;
+        display: -webkit-flex !important;
+        display: -ms-flexbox !important;
         min-height: 65px;
     }
     #wrapper {
@@ -254,8 +260,8 @@ p>input{
         padding-top: 0px;
     }
     .header-usuario .anuncios-usuario{
-        top: 0 !important;
         border-radius: 0 0 0 5px !important;
+        top: 0 !important;
     }
     .header-usuario .anuncios-usuario a{
         display: block;
@@ -289,7 +295,7 @@ p>input{
         color: #555;
     }
     .navbar-nav > li > a {
-        height: 37px !important;
+        height: 32px !important;
         padding-left: 15px !important;
     }
     .contenido-twig {
@@ -312,6 +318,10 @@ p>input{
     .bloque-dashboard{
         padding: 0 !important;
         margin: 5px 0 !important;
+    }
+    .bloque-menu-alumno{
+        padding-left: 0 !important;
+        padding-right: 0 !important
     }
     .bloque{
         margin:  0 !important;
@@ -344,8 +354,11 @@ p>input{
         text-align: right !important;
     }
     #barraidioma {
-        margin-top: -33px;
+        margin-top: -4px;
         padding: 4px 0;
+    }
+    #barraidioma a img{
+        padding: 4px 9px !important;
     }
     .menu ul{
         margin: 0!important;
@@ -353,7 +366,30 @@ p>input{
     #actualizar_password label {
         padding: 0 !important;
     }
-
+    .contenido_datos{
+        margin-top: 0px !important;
+        margin-right: 50px;
+    }
+    #page-content-wrapper .container-fluid{
+        margin-bottom: 40px;
+    }
+    .datos_curso{
+        padding: 0 !important;
+    }
+    #foto_curso{
+        margin-top: 0!important;
+        margin-bottom: 10px !important;
+    }
+    .header-usuario table{
+        margin: 5px !important;
+    }
+    .div_datos_curso button{
+        margin-left: 100px;
+        margin-top: -190px !important;
+    }
+    .div_datos_curso{
+        margin-bottom: 0 !important;
+    }
 }
 /* Estilos para Pc*/
 #titulo_cabecera{
@@ -389,7 +425,7 @@ p>input{
 .img-title {
     border-radius: 5px !important;
     box-shadow: 0 1px 1px 1px rgba(0, 0, 0, 0.42);
-    margin: 3px;
+    margin: 10px;
     padding: 0;
     width: 48px ;
     height: 58px ;
@@ -402,7 +438,8 @@ p>input{
     width: 45px;
 }
 .navbar .img-title {
-    margin: -3px 3px !important;
+    float: left;
+    margin: 3px !important;
     max-height: 44px;
     width: 37px !important;
 }
@@ -417,17 +454,31 @@ p>input{
     max-width: none;
 }
 .navbar-nav > li > a {
-    padding-bottom: 15px;
-    padding-top: 15px;
-}
-.navbar-nav > li > a {
     height: 55px;
     line-height: 20px;
     padding-bottom: 5px !important;
     padding-top: 5px !important;
+    z-index: 1;
 }
 #barramiperfil > a , .barramensajes > a{
     padding-top: 8px !important;
+}
+#barramiperfil > a {
+    float: left;
+    max-width: 90%;
+}
+#barramiperfil table{
+    margin: 0 !important;
+    float: left;
+}
+#barramiperfil .caret{
+    float: right;
+}
+#barramiperfil table tr {
+    height: 34px;
+}
+#barramiperfil .caret {
+    margin-left: 10px;
 }
 .nav > li > a {
     display: block;
@@ -443,6 +494,8 @@ p>input{
 }
 #barramiperfil{
     padding-left: 10px;
+    max-width: 74%;
+    float: right;
 }
 .navbar-brand-movil {
     float: left;
@@ -617,7 +670,7 @@ img {
     top: 5px;
 }
 .breadcrumb {
-    padding: 6px 15px !important;
+    padding: 6px 0 6px 15px !important;
     margin-bottom: 10px !important;
 }
 .list-inline {
@@ -636,9 +689,9 @@ ul, ol {
     padding-bottom: 0;
 }
 #intranet i{
-    min-width: 14px !important;
+    min-width: 30px !important;
     text-align: center !important;
-    font-size: 18px !important;
+    font-size: 18px ;
 }
 #intranet .titulo{
     color: #334c73;
@@ -694,7 +747,7 @@ ul, ol {
 }
 #barraidioma a img{
     opacity: 0.6;
-    padding: 2px 9px;
+    padding: 0 9px;
     width: 50px;
 }
 #barraidioma a img:hover{
@@ -721,7 +774,7 @@ ul, ol {
 .copyright {
     color: #123645;
     opacity: 0.6;
-    margin-left: 30px;
+    margin-left: 10px;
     margin-right: -10px;
 }
 .nombre-usuario{
@@ -761,13 +814,13 @@ ul, ol {
     background-color: #f4f4f4;
     border-top: 3px solid #e57200;
     box-shadow: 0 1px 3px 0 rgba(50, 50, 50, 0.75);
-    height: 50px;
+    height: 40px;
     list-style: outside none none;
     margin-bottom: 20 !important;
     padding: 0;
 }
 .piemovil li {
-    padding-top: 15px;
+    padding-top: 10px;
     text-align: center;
 }
 .piemovil a {
@@ -794,6 +847,9 @@ ul, ol {
 #responsable>ul{
     margin: 0 !important;
 }
+#responsable #barramiperfil{
+    max-width: 100%!important;  
+}
 .tipo{
     background: #334c73 none repeat scroll 0 0;
     border-radius: 5px 0;
@@ -805,14 +861,14 @@ ul, ol {
     cursor: default;}
 .bloque-dashboard {
     padding: 0;
-    min-height: 160px !important;
+    min-height: 176px !important;
 }
 .bloque.bloque-stats {
     position: relative;
 }
 .bloque {
-    min-height: 125px;
-    margin-bottom: 15px;
+    min-height: 135px;
+    margin-bottom: 31px;
     padding: 0;
     border-radius: 3px;
     color: #fff;
@@ -829,7 +885,7 @@ ul, ol {
 .bloque .foto img{
     box-shadow: 0 0 1px 1px white;
     float: right;
-    height: 70px !important;
+    height: 80px !important;
     margin-top: 5px;
     width: 60px !important;
 }
@@ -841,6 +897,10 @@ ul, ol {
 }
 .bloque .informacion{
     width: 96% !important;
+}
+.bloque .foto{
+    margin-top: 7px;
+    margin-right: 15px;
 }
 .bloque .stats-title {
     color: white;
@@ -867,7 +927,7 @@ ul, ol {
     overflow: hidden;
 }
 .bloque .avisos{
-    height: 20px;
+    height: 25px;
 }
 .bloque .avisos ul{
     color: white !important;
@@ -882,10 +942,9 @@ ul, ol {
     margin: 0 2px;
 }
 .bloque tr{
-
-    height: 60px;
+    height: 80px;
 }
-.active{
+#menu .active, #menuMovil .active{
     color: #23527c;
     -webkit-user-select: none;
     -moz-user-select: none;
@@ -958,10 +1017,251 @@ ul, ol {
 }
 .contenido_datos{
     margin-top: 6px;
+    margin-right: 40px;
 }
 .intranet_edit>div, #actualizar_password>div{
     margin-bottom: 10px !important;
 }
 .intranet_edit button{
     margin-bottom: 10px !important;
+}
+.bloque-menu-alumno{
+    background: #f5f5f5;
+    display: block;
+    width: 100%;
+    border-radius: 5px;
+}
+.bloque-menu-alumno>div{
+    display: table;
+    margin: 0 auto;
+}
+.bloque-menu{
+    padding: 20px 30px !important;
+}
+
+.bloque-item-menu{
+    background: #CDD6E0 none repeat scroll 0 0;
+    border-radius: 50%;
+    color: #31708f;
+    height: 100px;
+    margin-bottom: 10px !important;
+    overflow: hidden;
+    padding: 0;
+    text-align: center;
+    width: 100px;
+    border: 1px solid #31708f;
+    margin: 0 auto;
+
+    -moz-transition: all .1s ease-in;
+    -o-transition: all .1s ease-in;
+    -webkit-transition: all .1s ease-in;
+    transition: all .1s ease-in;
+}
+.bloque-item-menu i {
+    display: block;
+    font-size: 59px !important;
+    margin: 0 auto !important;
+    padding: 20px;
+    -moz-transition: all .1s ease-in;
+    -o-transition: all .1s ease-in;
+    -webkit-transition: all .1s ease-in;
+    transition: all .1s ease-in;
+}
+.bloque-menu a, .bloque-menu-alumno div p {
+    text-decoration: none !important;
+    color: #31708f;
+    text-align: center;
+    font-weight: bold;
+    -moz-transition: all .1s ease-in;
+    -o-transition: all .1s ease-in;
+    -webkit-transition: all .1s ease-in;
+    transition: all .1s ease-in;
+    background: none !important;
+}
+.padding-container{
+    padding: 30px;
+}
+.item-verde { 
+    background: #A6DF95;
+    color: #195C04 !important;
+    border-color: #195C04;
+}
+.item-naranja { 
+    background: #FDD680;
+    color: #E45D03 !important;
+    border-color: #E45D03;
+}
+.item-rojo { 
+    background: #FFC1C1;
+    color: #A62100 !important;
+    border-color: #A62100;
+}
+.item-marron { 
+    background: #F9D083;
+    color: #845805 !important;
+    border-color: #845805;
+}
+.item-amarillo { 
+    background: #F8F68D;
+    color: #F5A12C !important;
+    border-color: #F5A12C;
+}
+.item-lila { 
+    background: #EDA2FF;
+    color: #4B005E !important;
+    border-color: #4B005E;
+}
+.item-azulado{
+     background: #BDDDF2;
+    color: #00725D !important;
+    border-color: #00725D;
+}
+.item-rojizo{
+    background: #FFC591;
+    color: #750202 !important;
+    border-color: #750202;
+}
+.item-verde2{
+     background: #C8FA90;
+    color: #335F00 !important;
+    border-color: #335F00;    
+}
+.i-margin-left-17{
+    padding-left: 17px !important;
+}
+.i-margin-left-15{
+    padding-left: 15px !important;
+}
+.i-margin-left-22{
+    padding-left: 22px !important;
+}
+.nav-tabs .active a{
+    background: #f5f5f5 !important;
+    font-weight: bold;
+}
+.tab-content{
+    background: #f5f5f5 !important;
+    border-bottom: 1px solid #ddd;
+    border-left: 1px solid #ddd;
+    border-right: 1px solid #ddd;
+    padding: 1px 20px;
+}
+.nav-tabs a{
+    border-left: 1px solid #ddd !important;
+    border-right: 1px solid #ddd !important;
+    border-top: 1px solid #ddd !important;
+    color: #555 !important;
+    padding: 5px 15px !important;
+}
+.tab-content, .tab-content .active{
+    color: #555 !important;
+}
+.tab-content{
+    padding: 15px;
+}
+#horarios {
+    text-align: center !important;
+}
+#horarios .row{
+    padding-left: 15px !important;
+    padding-right: 15px !important;
+}
+#horarios #cabecera_horarios{
+    font-weight: bold;
+    height: 30px;
+    padding: 0 !important;
+}
+#horarios #cabecera_horarios .row>div{
+    background: #CDD6E0;
+    border: 1px solid grey;
+    height: 30px;
+    padding-top: 4px !important;
+}
+#horarios .horario>div{
+    height: 34px;
+    border: 1px ridge grey !important
+}
+#horarios #contenido_horarios>div:nth-child(2n) .horas {
+    background-color: #CDD6E0;
+}
+#horarios div{
+    padding: 0;
+}
+#horarios #contenido_horarios .horario{
+    overflow: hidden; 
+}
+#horarios #contenido_horarios .horario{
+     display: table;
+}
+#horarios #contenido_horarios .horario>div{
+    max-width: 150px;
+    display: table-cell;
+    float: none;
+    vertical-align: middle;
+}
+#horarios .horario div:not(.horas):not(.color_azul){
+    color: white;
+}
+#horarios #accordion .panel-heading{
+    border-radius: 2px;
+    border: 1px ridge grey !important;
+    height: 35px;
+}
+#horarios #accordion a{
+    background: #cdd6e0 none repeat scroll 0 0;
+    padding: 7.5px 0;
+}
+#horarios #accordion a:hover{
+    background: lightgrey;
+    text-decoration: none;
+}
+.fondo_claro{
+    background: #f5f5f5 !important;
+}
+.header-usuario table th, .header-usuario table td {
+    text-align: left !important;
+}
+.nav-tabs .active a{
+    color: #334c73 !important;
+}
+#foto_curso{
+    box-shadow: 0 0 2px 1px rgba(0, 0, 0, 0.4);
+    display: block;
+    margin: -7px 0;
+    width: 70px;
+    height: 85px;
+}
+.div_datos_curso{
+    margin-bottom: 25px;
+}
+.div_datos_curso label{
+    background: #f5f5f5 none repeat scroll 0 0;
+    border-radius: 5px;
+    border: 1px solid #e9e9e9;
+    min-width: 76px;
+    padding: 2px 10px !important;
+    text-align: center;
+}
+.datos_curso{
+    margin-top: 10px;
+}
+.datos_curso .text-danger{
+    margin-left: 5px;
+}
+.clear{
+    clear: both;
+}
+.no-padding{
+    padding: 0 !important;
+}
+.color_azul{
+    color: #334c73;
+}
+.barra_cabecera{
+    max-width: 64%;
+}
+.alert{
+    padding: 15px !important;
+    text-align: left;
+    margin-bottom: 0 !important;
 }

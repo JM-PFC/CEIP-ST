@@ -141,15 +141,42 @@
     });
     //Se añade el número de módulos asignados al curso en la cabecera de la tabla.
     setTimeout(function(){
+        modulos={{ modulos_total|json_encode()|raw}};
+
         $("#asignaturas_cursos #contenedor_registro").each(function(){
-            var num=0;
-            $(this).find("table tr:not(.cabecera_tipo) td:nth-child(2)").each(function(){
-                num+=parseInt($(this).text());
-            });
+            //Se comprueba si la tabla no estávacía para calcular el número de módulos asignados en cada grupo.
+            if($(this).find(" #lista_asignaturas .dataTables_empty").size()==0){
+                var no_opcionales=0;
+                var opcionales=0;
+                var num_opcionales=0;
+                $(this).find("table tr:not(.cabecera_tipo) td:nth-child(2)").each(function(){
+                    if($(this).closest("tr").attr("opcional")!=1){
+                        no_opcionales+=parseInt($(this).text());
+                    }
+                });
+
+                $(this).find("table tr[opcional='1'] td:nth-child(2)").each(function(){
+                    opcionales+=parseInt($(this).text());
+                });
+
+                $(this).find("table tr[opcional='1'] td:nth-child(2)").each(function(){
+                    num_opcionales++;
+                });
+                //Las asignaciones optativas se dividen entre el número de optativas, para obtener el número de módulos asignados.
+
+                num=no_opcionales+(opcionales/num_opcionales);
+            }
+            else{
+                num=0;
+            }
+            //Se añade el número de módulos asignados a cada grupo.
             $(this).find("#mod_asignados").text(num);
+            //Se cambia el color si faltan por asignar.
+            if(modulos!=num){
+                $(this).find("#mod_asignados").addClass('faltan');
+            }
         });
     }, 20);
-    
 
     </script>
 {% endblock %}

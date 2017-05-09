@@ -1395,6 +1395,9 @@ form button{
 .red{
 	color: #A80101;
 }
+.faltan{
+	color: #A80101 !important;
+}
 .error_guardar{
 	box-shadow: 0 0px 3px 2px red!important;
 }
@@ -1609,8 +1612,8 @@ form button{
 	margin-top: 5px;
 }
 #asignaturas_cursos #cabecera_lista h2>div>span{
-	font-weight: bold !important;
-	color: #334c73 !important;
+	font-weight: bold ;
+	color: #334c73 ;
 }
 
 #asignaturas_cursos #cabecera_lista h2>span{
@@ -5195,7 +5198,8 @@ tbody.scrollContent tr.alternateRow td {
 .swal2-modal th, .swal2-modal td{
 	font-size: 15px !important;
 	text-align: center;
-	white-space: nowrap;
+	/*white-space: nowrap;*/
+	white-space: normal;
 }
 .swal2-modal td{
 	color: #334c73;

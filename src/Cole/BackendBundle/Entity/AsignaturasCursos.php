@@ -54,6 +54,11 @@ class AsignaturasCursos
     private $imparte;
 
     /**
+    * @ORM\OneToMany(targetEntity="Alumno", mappedBy="optativa")
+    */
+    private $alumnos;
+
+    /**
      * Get id
      *
      * @return integer 
@@ -193,5 +198,38 @@ class AsignaturasCursos
     public function getImparte()
     {
         return $this->imparte;
+    }
+
+    /**
+     * Add alumnos
+     *
+     * @param \Cole\BackendBundle\Entity\Alumno $alumnos
+     * @return AsignaturasCursos
+     */
+    public function addAlumno(\Cole\BackendBundle\Entity\Alumno $alumnos)
+    {
+        $this->alumnos[] = $alumnos;
+
+        return $this;
+    }
+
+    /**
+     * Remove alumnos
+     *
+     * @param \Cole\BackendBundle\Entity\Alumno $alumnos
+     */
+    public function removeAlumno(\Cole\BackendBundle\Entity\Alumno $alumnos)
+    {
+        $this->alumnos->removeElement($alumnos);
+    }
+
+    /**
+     * Get alumnos
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getAlumnos()
+    {
+        return $this->alumnos;
     }
 }

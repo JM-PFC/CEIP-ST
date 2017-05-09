@@ -157,6 +157,12 @@ class Alumno
     private $grupo;
 
     /**
+     * @ORM\ManyToOne(targetEntity="AsignaturasCursos", inversedBy="alumnos")
+     * @ORM\JoinColumn(name="optativa", referencedColumnName="id" ,nullable=true)
+     */
+    private $optativa;
+
+    /**
      * @var string
      *
      * @ORM\Column(name="añoAcademico", type="string", length=30, nullable=true)
@@ -816,5 +822,28 @@ class Alumno
     public function getExpediente()
     {
         return $this->expediente;
+    }
+
+    /**
+     * Set optativa
+     *
+     * @param \Cole\BackendBundle\Entity\AsignaturasCursos $optativa
+     * @return Alumno
+     */
+    public function setOptativa(\Cole\BackendBundle\Entity\AsignaturasCursos $optativa = null)
+    {
+        $this->optativa = $optativa;
+
+        return $this;
+    }
+
+    /**
+     * Get optativa
+     *
+     * @return \Cole\BackendBundle\Entity\AsignaturasCursos 
+     */
+    public function getOptativa()
+    {
+        return $this->optativa;
     }
 }

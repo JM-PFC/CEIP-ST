@@ -3863,10 +3863,24 @@ $(document).on("blur","input[id='edit_profesor_dni']",function() {
     }
 
     //Nº de módulos asignados para comprobar con el nº de módulos permitidos en el horario.
-    modulos=0;
-    $("#asignatura_curso_dialog #contenedor_asignaturas li input[type='number']").each(function(){ 
-      modulos+=parseInt($(this).val());
+    var no_opcionales=0;
+    var opcionales=0;
+    var num_opcionales=0;
+    $("#asignatura_curso_dialog #contenedor_asignaturas li[opcional!='1'] input[type='number']").each(function(){
+        no_opcionales+=parseInt($(this).val());
     });
+
+    $("#asignatura_curso_dialog #contenedor_asignaturas li[opcional='1'] input[type='number']").each(function(){
+        opcionales+=parseInt($(this).val());
+    });
+
+    $("#asignatura_curso_dialog #contenedor_asignaturas li[opcional='1']").each(function(){
+        num_opcionales++;
+    });
+
+    //Las asignaciones optativas se dividen entre el número de optativas, para obtener el número de módulos asignados.
+    modulos=no_opcionales+(opcionales/num_opcionales);
+    alert(modulos);
 
     curso=$("#asignatura_curso_dialog fieldset").attr("id");
     name_curso=$("#asignatura_curso_dialog fieldset").attr("name");
@@ -13292,7 +13306,7 @@ $(document).on("click","#registro_equipamientos td a",function(event){
   //Se restablece el horario editable del grupo.
   $(document).on("click","#asignar_horario_grupo_dialog #horario_grupo_restablecer", function(event){
     event.preventDefault();
-    $("#asignar_horario_grupos #contenedor_registro:not(.oculto) img").click();
+    $("#asignar_horario_grupos #contenedor_registro:not(.oculto) #añadir_modal #img_2").click();
   });
 
 
@@ -13314,7 +13328,7 @@ $(document).on("click","#registro_equipamientos td a",function(event){
     });
 
     var index = 1;
-    // Se obtienen las asignaturas modificadas.(Nuevas/actualizadas)
+    // Se obtienen las asignaturas eliminadas.
     $("#asignar_horario_grupo_dialog #tabla_horario ul[class*='eliminada']").each(function(){
 
       id=$(this).attr("carga");

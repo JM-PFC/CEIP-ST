@@ -1,0 +1,83 @@
+
+  <div class ="visible-md visible-lg hidden-xs visible-sm">
+  {% for entity in entity %}
+    <div id="{{ entity.id }}" class="horario col-xs-12 ">
+      <div class="col-xs-2 horas">{{ entity.inicio|date("H:i") ~ " - " ~ entity.fin|date("H:i")  }}</div>
+      {% if entity.horaClase == "RECREO" or entity.horaClase == "COMIDA" %}
+        <div class="col-xs-10 color_azul">{{ entity.horaClase }}</div>
+      {% else %}
+        <div id="1" class="col-xs-2 dia"></div>
+        <div id="2" class="col-xs-2 dia"></div>
+        <div id="3" class="col-xs-2 dia"></div>
+        <div id="4" class="col-xs-2 dia"></div>
+        <div id="5" class="col-xs-2 dia"></div>
+      {% endif %}
+    </div>
+  {% endfor %}
+ </div>
+
+  <div class="col-xs-12 hidden-md hidden-lg visible-xs hidden-sm">
+  {% for entity in entity %}
+    <div id="{{ entity.id }}" class="horario col-xs-12 ">
+      <div class="horas col-xs-4 fondo_claro">{{ entity.inicio|date("H:i") ~ " - " ~ entity.fin|date("H:i")  }}</div>
+      {% if entity.horaClase == "RECREO" or entity.horaClase == "COMIDA" %}
+        <div class="col-xs-8 color_azul fondo_claro">{{ entity.horaClase }}</div>
+      {% else %}
+        <div id="{{num}}" class="col-xs-8 dia"></div>
+      {% endif %}
+    </div>
+  {% endfor %}
+  </div>
+
+<script>
+  array={{imparte|json_encode()|raw}};//Asignaturas no opcionales
+  for (var key in array){
+    clave=key.split("-");
+    id_horario=clave[0];
+    dia=clave[1];
+    nombre_asig=clave[2];
+    abrev_asig=clave[3];
+    color=clave[4];
+    grupo=clave[5];
+    id_asignatura=array[key];
+    //Si existe alguna asignación con horario se muestra en la tabla.  
+    if(id_horario!=""){
+      $("#horarios #contenido_horarios").find("div[class*='horario'][id='"+id_horario+"'] div[class*='dia'][id='"+dia+"']").text(abrev_asig);
+      //Se crean atributos con los datos para mostrar.
+      $("#horarios #contenido_horarios").find("div[class*='horario'][id='"+id_horario+"'] div[class*='dia'][id='"+dia+"']").attr("asignatura",nombre_asig);
+      $("#horarios #contenido_horarios").find("div[class*='horario'][id='"+id_horario+"'] div[class*='dia'][id='"+dia+"']").attr("color",color);
+      $("#horarios #contenido_horarios").find("div[class*='horario'][id='"+id_horario+"'] div[class*='dia'][id='"+dia+"']").attr("style","background: "+color+" ;");
+    }
+  }
+
+  alumno={{alumno|json_encode()|raw}};
+  array={{imparte_op|json_encode()|raw}};//Asignaturas opcionales.
+  for (var key in array){
+    clave=key.split("-");
+    id_horario=clave[0];
+    dia=clave[1];
+    nombre_asig=clave[2];
+    abrev_asig=clave[3];
+    color=clave[4];
+    grupo=clave[5];
+    id_asignatura=array[key];
+
+    //Si existe alguna asignación con horario se muestra en la tabla.  
+    if(id_horario!="" && id_asignatura==alumno){
+      $("#horarios #contenido_horarios").find("div[class*='horario'][id='"+id_horario+"'] div[class*='dia'][id='"+dia+"']").text(abrev_asig);
+      //Se crean atributos con los datos para mostrar.
+      $("#horarios #contenido_horarios").find("div[class*='horario'][id='"+id_horario+"'] div[class*='dia'][id='"+dia+"']").attr("asignatura",nombre_asig);
+      $("#horarios #contenido_horarios").find("div[class*='horario'][id='"+id_horario+"'] div[class*='dia'][id='"+dia+"']").attr("color",color);
+      $("#horarios #contenido_horarios").find("div[class*='horario'][id='"+id_horario+"'] div[class*='dia'][id='"+dia+"']").attr("style","background: "+color+" ;");
+    }
+  }
+
+  //Se oculta la imagen de "añardir" si no hay asignaturas asignadas al curso.
+  $("#asignar_horario_grupos #contenedor_registro #lista_asignaturas tbody .dataTables_empty").each(function(){ 
+    if($(this).attr("id")=="asignatura"){
+      $(this).closest("#contenedor_registro").find("#cabecera_lista #añadir_modal").addClass('oculto');
+    } 
+  });
+
+
+</script>
