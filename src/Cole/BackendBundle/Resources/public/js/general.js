@@ -3815,9 +3815,14 @@ $(document).on("blur","input[id='edit_profesor_dni']",function() {
       id=$(this).attr("id");
       valor=$(this).find("input[type='number']").val();
       libro=$(this).find("input[type='text']").val();
+      //Se comprueba si se ha modificado el número de módulos, porque si se ha modificado sólo el libro no se eliminará las asignaciones de esa asignatura.
+      cambioModulo=0;
+      if(valor!=$(this).find("input[type='number']").attr("valor")){
+        cambioModulo=1;
+      }
 
       if(valor!=$(this).find("input[type='number']").attr("valor") || libro!=$(this).find("input[type='text']").attr("valor")){
-        asignadas[index++] = [id, valor, libro];  
+        asignadas[index++] = [id, valor, libro, cambioModulo];  
       }
       //Se obtiene las asignaturas a las que se le ha modificado el número de módulos, para mostrar aviso de eliminación de registro de profesores.
       if(valor!=$(this).find("input[type='number']").attr("valor")){
@@ -3880,7 +3885,6 @@ $(document).on("blur","input[id='edit_profesor_dni']",function() {
 
     //Las asignaciones optativas se dividen entre el número de optativas, para obtener el número de módulos asignados.
     modulos=no_opcionales+(opcionales/num_opcionales);
-    alert(modulos);
 
     curso=$("#asignatura_curso_dialog fieldset").attr("id");
     name_curso=$("#asignatura_curso_dialog fieldset").attr("name");

@@ -137,18 +137,41 @@ class AlumnoController extends Controller
         $no_opcionales = $em->getRepository('BackendBundle:Imparte')->findNoOpcionalesConHorario($entity->getGrupo());
         $opcionales=$em->getRepository('BackendBundle:Imparte')->findOpcionalesConHorario($entity->getGrupo());
         $num_opcionales=$em->getRepository('BackendBundle:Imparte')->findOpcionalesSinRepetir($entity->getGrupo());
-        //Las asignaciones de asignaturas optativas se dividen entre el número de optativas, para obtener el número de módulos asignados.
-        if(count($no_opcionales)+(count($opcionales)/count($num_opcionales))==count($clases)*5){
-            $numAsigHorarios=1;
+        if($opcionales){
+            //Las asignaciones de asignaturas optativas se dividen entre el número de optativas, para obtener el número de módulos asignados.
+            if(count($no_opcionales)+(count($opcionales)/count($num_opcionales))==count($clases)*5){
+                $numAsigHorarios=1;
+            }
+            else{
+                $numAsigHorarios=0;
+            }
+        }else{
+            $numAsigHorarios=0;
+        }
+
+        $asignaciones_profesores=$em->getRepository('BackendBundle:Imparte')->findAsignacionesProfesores($entity->getGrupo());
+        $profesores_grupo=$em->getRepository('BackendBundle:Imparte')->findProfesoresGrupoSinRepetir($entity->getGrupo());
+        //Se comprueba si el tutor imparte alguna asignatura en el grupo o sólo tutorias(para lista de profesores/asignaturas).
+        if($tutor){
+            $asignaciones_tutor=$em->getRepository('BackendBundle:Imparte')->findTutorGrupoSinRepetir($tutor,$entity->getGrupo());
+            if($asignaciones_tutor){
+                $asignaturas_tutor=$asignaciones_tutor;
+            }
+            else{
+                $asignaturas_tutor=null;
+            }
         }
         else{
-            $numAsigHorarios=0;
+            $asignaturas_tutor=null;
         }
 
         return $this->render('IntranetBundle:Alumno:curso.html.twig', array(
             'entity' => $entity, 
             'tutor' => $tutor,
-            'numAsigHorarios'=>$numAsigHorarios));
+            'numAsigHorarios'=>$numAsigHorarios,
+            'profesores_grupo'=>$profesores_grupo,
+            'asignaturas_tutor' => $asignaturas_tutor,
+            'asignaciones_profesores'=>$asignaciones_profesores));
     }
 
     public function HorariosGruposAction($id, $id_alumno,$num)
@@ -229,7 +252,13 @@ class AlumnoController extends Controller
            
             $array_op[$horario."-".$dia."-".$registro->getAsignatura()->getAsignatura()->getNombre()."-".$registro->getAsignatura()->getAsignatura()->getAbreviatura()."-".$registro->getAsignatura()->getAsignatura()->getColor()."-".$registro->getGrupo()->getId()]=$registro->getAsignatura()->getId();
         }
-
+        //Asignatura optativa del alumno
+        if($alumno->getOptativa()){
+            $optativa=$alumno->getOptativa()->getId();
+        }
+        else{
+            $optativa=null;
+        }
 
         return $this->render('IntranetBundle:Alumno:datos_horarios.html.twig', array(
             'imparte' => $array,
@@ -239,7 +268,7 @@ class AlumnoController extends Controller
             'completo' => $completo,
             'entity' => $entity,
             'num' => $num,
-            'alumno'=> $alumno->getOptativa()->getId()));
+            'alumno'=> $optativa ));
     }
 
     

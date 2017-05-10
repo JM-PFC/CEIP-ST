@@ -5,6 +5,22 @@
     <script>
     	$(".menu li").removeClass('active');
 		$(".menu #curso").addClass('active');
+
+		//Cambio delicono de mensaje.
+		$('.cabecera_profesor .fa-envelope-o').on('mouseenter', function(event) {
+			$(this).addClass('hidden');
+			$(this).next().removeClass('hidden');
+		});
+		$('.cabecera_profesor .enviar_mensaje').on('mouseleave', function(event) {
+			$(this).find(".fa-envelope").addClass('hidden');
+			$(this).find(".fa-envelope").prev().removeClass('hidden');
+		});
+		//Se elimina el contenedor del tutor si aparece vacío al no impartir otra asignatura en el grupo.
+		if($(".cabecera_profesor div:empty").size()>0){
+			$(".cabecera_profesor div:empty").closest(".cabecera_profesor").prev().remove();
+			$(".cabecera_profesor div:empty").closest(".cabecera_profesor").remove();
+		}
+
     </script>
  {% endblock %}
 
@@ -45,34 +61,32 @@
 		<div class="pull-left col-xs-12 col-sm-8 no-padding datos_curso">
 			{% if tutor != null %}
 				{% if tutor.foto != null %}
-					<div class="pull-left col-xs-12 col-sm-2 no-padding">
+					<div class="pull-left col-xs-2 no-padding">
 						<img id="foto_curso" class="img-rounded " alt="{{tutor}}" src="{{ asset('uploads/images/' ~ tutor.foto) }}">
         			</div>	
        			{% else %}
        				{% if tutor.sexo == "Femenino" %}
-						<div class="pull-left col-xs-12 col-sm-2  no-padding">
+						<div class="pull-left col-xs-2  no-padding">
 							<img id="foto_curso" class="img-rounded " alt="Sin Foto" src="{{ asset('bundles/backend/images/perfil/SinFoto-M.png') }}">
         				</div>	
    					{% else %}
-						<div class="pull-left col-xs-12 col-sm-2  no-padding">
+						<div class="pull-left col-xs-2  no-padding">
               				<img id="foto_curso" class="img-rounded " alt="Sin Foto" src="{{ asset('bundles/backend/images/perfil/SinFoto-H.png') }}">
         				</div>	
            			{% endif %}
         		{% endif %}
 					 
 				{% if tutor.sexo == "Masculino" %}
-        			<div class="pull-left col-xs-12 col-sm-10 no-padding">
+        			<div class="pull-left col-xs-10 ">
 						<label>{% trans %}Tutor{% endtrans %}:</label>
-						<span> {{tutor}}</span >
-						<br>
-						<button type="button" class="btn btn-info mt5">Contactar</button>
-        			</div>
+						<span class="col-xs-12 no-padding"> {{tutor}}</span >
+						<a id="{{tutor.id}}" href="#" class="enviar_mensaje" data-toggle="tooltip" data-placement="bottom" title="" data-original-title="Contactar"><i class="fa fa-envelope"></i></a>
+					</div>
 				{% else %}
-        			<div class="pull-left col-xs-12 col-sm-10 no-padding">
+        			<div class="pull-left col-xs-10">
 						<label>{% trans %}Tutora{% endtrans %}:</label>
-						<span> {{tutor}}</span >
-						<br>
-						<button type="button" class="btn btn-info mt5">{% trans %}Contactar{% endtrans %}</button>
+						<span class="col-xs-12 no-padding"> {{tutor}}</span >
+						<a id="{{tutor.id}}" href="#" class="enviar_mensaje" data-toggle="tooltip" data-placement="bottom" title="" data-original-title="Contactar"><i class="fa fa-envelope"></i></a>
         			</div>
 				{% endif %}
 			{% else %}
@@ -89,9 +103,9 @@
 	
 			<ul class="nav nav-tabs" role="tablist">
 				<li role="presentation" class="active"><a href="#horarios" aria-controls="horarios" data-toggle="tab" role="tab">{% trans %}Horario de clase{% endtrans %}</a></li>
-				<li role="presentation"><a href="#profesores" aria-controls="profesores" data-toggle="tab" role="tab">{% trans %}Asignaturas / Maestros{% endtrans %}	</a></li>
+				<li role="presentation"><a href="#profesores" aria-controls="profesores" data-toggle="tab" role="tab">{% trans %} Maestros / Asignaturas{% endtrans %}</a></li>
 			</ul>
-			<div class="tab-content">
+			<div class="tab-content clearfix">
 				<div role="tabpanel" class="tab-pane active clearfix" id="horarios">
 					<div class="col-xs-12">
 					{% if numAsigHorarios %}
@@ -187,9 +201,192 @@
 					{% endif %}
 					</div>			
 				</div>
-				<div role="tabpanel" class="tab-pane" id="profesores">
-					<h3>Profesores</h3>
-					<p>Velit impedit, saepe mollitia est recusandae vero, quaerat aspernatur dolore quibusdam veritatis voluptate odit harum minus. Perferendis, dolore, porro!</p>
+				<div role="tabpanel" class="tab-pane profesores_grupo" id="profesores">
+				{% for asig_profesor in profesores_grupo %}
+					{# Profesor que no es tutor del grupo #}
+					{% if asig_profesor.grupo.profesor != asig_profesor.profesor %}
+						<div class="col-xs-2 col-sm-1 no-padding">
+							{% if asig_profesor.profesor.foto != null %}
+								<img id="foto_curso" class="img-rounded " alt="{{asig_profesor.profesor}}" src="{{ asset('uploads/images/' ~ asig_profesor.profesor.foto) }}">
+       						{% else %}
+       							{% if asig_profesor.profesor.sexo == "Femenino" %}
+									<img id="foto_curso" class="img-rounded " alt="Sin Foto" src="{{ asset('bundles/backend/images/perfil/SinFoto-M.png') }}">
+   								{% else %}
+              						<img id="foto_curso" class="img-rounded " alt="Sin Foto" src="{{ asset('bundles/backend/images/perfil/SinFoto-H.png') }}">
+           						{% endif %}
+        					{% endif %}
+						</div>
+						<div class="col-xs-10 col-sm-11 no-padding cabecera_profesor">
+							<h5 class="text-info">
+								{{asig_profesor.profesor.apellido1|upper ~ " " ~ asig_profesor.profesor.apellido2|upper ~ ", " ~ asig_profesor.profesor.nombre|upper }} 
+								<a id="{{asig_profesor.profesor.id}}" href="#" class="enviar_mensaje">
+									<i class="fa fa-envelope-o"></i>
+									<i class=" hidden default fa fa-envelope" data-toggle="tooltip" data-placement="bottom" title="" data-original-title="Contactar"></i>
+								</a>
+							</h5>
+							<div class="asignaturas_profesor">
+							{% for imparte in asignaciones_profesores %}
+								{# Se añade las asignaciones de asignaturas del profesor correspondiente #}
+					  			{% if asig_profesor.profesor ==  imparte.profesor%}
+									{% if imparte.asignatura.asignatura.tipo == "Troncal"%}
+										<p>
+											{{imparte.asignatura.asignatura.nombre}}
+											{% if imparte.asignatura.libro %}
+												<span>
+													<i class="fa fa-book"><span>Libro</span></i>
+													{{imparte.asignatura.libro}}
+												</span>
+											{% endif %}
+										</p>
+
+									{% else %}	
+										{#Se muestra sólo los datos de la asignatura opcional asignada al alumno#}
+										{% if imparte.asignatura.asignatura.opcional == "1"%}
+											{% if entity.optativa != null  and imparte.asignatura == entity.optativa %}
+												<p>
+													{{imparte.asignatura.asignatura.nombre}}
+													{% if imparte.asignatura.libro %}
+														<span>
+															<i class="fa fa-book"><span>Libro</span></i>
+															{{imparte.asignatura.libro}}
+														</span>
+													{% endif %}
+												</p>
+											{% endif %}
+										{% else %}
+											<p>
+												{{imparte.asignatura.asignatura.nombre}}
+												{% if imparte.asignatura.libro %}
+													<span>
+														<i class="fa fa-book"><span>Libro</span></i>
+														{{imparte.asignatura.libro}}
+													</span>	
+												{% endif %}
+											</p>
+										{% endif %}
+									{% endif %}
+								{% endif %}
+					  		{% endfor %}
+							</div>	
+						</div>
+					{#El profesor es el tutor del grupo #}
+					{% else %}
+						{# Se comprueba si el/la tutor/a imparte asignaturass en el grupo para mostrar el nombre #}
+						{% if asignaturas_tutor != null %}
+
+							<div class="col-xs-2 col-sm-1 no-padding">
+								{% if asig_profesor.profesor.foto != null %}
+									<img id="foto_curso" class="img-rounded " alt="{{asig_profesor.profesor}}" src="{{ asset('uploads/images/' ~ asig_profesor.profesor.foto) }}">
+       							{% else %}
+       								{% if asig_profesor.profesor.sexo == "Femenino" %}
+										<img id="foto_curso" class="img-rounded " alt="Sin Foto" src="{{ asset('bundles/backend/images/perfil/SinFoto-M.png') }}">
+   									{% else %}
+              							<img id="foto_curso" class="img-rounded " alt="Sin Foto" src="{{ asset('bundles/backend/images/perfil/SinFoto-H.png') }}">
+           							{% endif %}
+        						{% endif %}
+							</div>
+							<div class="col-xs-10 col-sm-11 no-padding cabecera_profesor">
+								<h5 class="text-info">
+									{{asig_profesor.profesor.apellido1|upper ~ " " ~ asig_profesor.profesor.apellido2|upper ~ ", " ~ asig_profesor.profesor.nombre|upper }} 
+									<a id="{{asig_profesor.profesor.id}}" href="#" class="enviar_mensaje">
+										<i class="fa fa-envelope-o"></i>
+										<i class=" hidden default fa fa-envelope" data-toggle="tooltip" data-placement="bottom" title="" data-original-title="Contactar"></i>
+									</a>
+								</h5>
+								<div class="asignaturas_profesor">
+									{% for asig_tutor in asignaturas_tutor %}
+										{% if asig_tutor.asignatura.asignatura.opcional == "1" %}
+											{% if asig_tutor.asignatura == entity.optativa %}
+				
+													{# Se añade las asignaciones de asignaturas del profesor correspondiente #}
+					  								{% if asig_profesor.profesor ==  asig_tutor.profesor%}
+														{% if asig_tutor.asignatura.asignatura.tipo == "Troncal"%}
+															<p>
+																{{asig_tutor.asignatura.asignatura.nombre}}
+																{% if asig_tutor.asignatura.libro %}
+																	<span>
+																		<i class="fa fa-book"><span>Libro</span></i>
+																		{{asig_tutor.asignatura.libro}}
+																	</span>	
+																{% endif %}
+															</p>
+														{% else %}	
+														
+															{#Se muestra sólo los datos de la asignatura opcional asignada al alumno#}
+															{% if asig_tutor.asignatura.asignatura.opcional == "1"%}
+																{% if entity.optativa != null  and asig_tutor.asignatura == entity.optativa %}
+																	<p>
+																		{{asig_tutor.asignatura.asignatura.nombre}}
+																		{% if asig_tutor.asignatura.libro %}
+																			<span>
+																				<i class="fa fa-book"><span>Libro</span></i>
+																				{{asig_tutor.asignatura.libro}}
+																			</span>	
+																		{% endif %}
+																	</p>
+																{% endif %}
+															{% else %}
+																<p>
+																	{{asig_tutor.asignatura.asignatura.nombre}}
+																	{% if asig_tutor.asignatura.libro %}
+																		<span>
+																			<i class="fa fa-book"><span>Libro</span></i>
+																			{{asig_tutor.asignatura.libro}}
+																		</span>	
+																	{% endif %}
+																</p>
+															{% endif %}
+														{% endif %}
+													{% endif %}
+											{% endif %}
+										{% else %}
+												{# Se añade las asignaciones de asignaturas del profesor correspondiente #}
+					  							{% if asig_profesor.profesor ==  asig_tutor.profesor%}
+													{% if asig_tutor.asignatura.asignatura.tipo == "Troncal"%}
+														<p>
+															{{asig_tutor.asignatura.asignatura.nombre}}
+															{% if asig_tutor.asignatura.libro %}
+																<span>
+																	<i class="fa fa-book"><span>Libro</span></i>
+																	{{asig_tutor.asignatura.libro}}
+																</span>	
+															{% endif %}
+														</p>
+													{% else %}	
+														
+														{#Se muestra sólo los datos de la asignatura opcional asignada al alumno#}
+														{% if asig_tutor.asignatura.asignatura.opcional == "1"%}
+															{% if entity.optativa != null  and asig_tutor.asignatura == entity.optativa %}
+																<p>
+																	{{asig_tutor.asignatura.asignatura.nombre}}
+																	{% if asig_tutor.asignatura.libro %}
+																		<span>
+																			<i class="fa fa-book"><span>Libro</span></i>
+																			{{asig_tutor.asignatura.libro}}
+																		</span>	
+																	{% endif %}
+																</p>
+															{% endif %}
+														{% else %}
+															<p>
+																{{asig_tutor.asignatura.asignatura.nombre}}
+																{% if asig_tutor.asignatura.libro %}
+																	<span>
+																		<i class="fa fa-book"><span>Libro</span></i>
+																		{{asig_tutor.asignatura.libro}}
+																	</span>	
+																{% endif %}
+															</p>
+														{% endif %}
+													{% endif %}
+												{% endif %}
+										{% endif %}
+					  				{% endfor %}
+								</div>
+							</div>
+						{% endif %}
+					{% endif %}
+				{% endfor %}
 				</div>
 			</div>
 		</div>

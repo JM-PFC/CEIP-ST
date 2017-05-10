@@ -451,7 +451,7 @@ class AsignaturaController extends Controller
         }
 
         if($asignadas){
-          foreach ($asignadas as $row ) { //$row[0]->ID asignatura  $row[1]->Nº Módulos $row[2]->Libro.
+          foreach ($asignadas as $row ) { //$row[0]->ID asignatura  $row[1]->Nº Módulos $row[2]->Libro $row[3]->cambioModulo.
             $entity = $em->getRepository('BackendBundle:AsignaturasCursos')->findAsignacion($idcurso,$row[0]);
             $entity->setNumModulos($row[1]);
             if($row[2]==""){
@@ -462,11 +462,13 @@ class AsignaturaController extends Controller
             }
             $em->persist($entity);
             $num_actu++; 
+            if($row[3]==1){
+                $imparte= $em->getRepository('BackendBundle:Imparte')->findByAsignatura($entity);
+                foreach ($imparte as $imparte ) {
+                    $em->remove($imparte);
+                }  
+            }
 
-            $imparte= $em->getRepository('BackendBundle:Imparte')->findByAsignatura($entity);
-            foreach ($imparte as $imparte ) {
-                $em->remove($imparte);
-            }  
           }  
         }
         

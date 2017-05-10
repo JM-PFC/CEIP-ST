@@ -108,8 +108,6 @@ class ImparteRepository extends EntityRepository
 			'opcional'=>1))
 		->getResult();
 	}
-
-
 	
 	public function findNumAsignacionesProfesor($profesor)
 	{
@@ -259,6 +257,35 @@ class ImparteRepository extends EntityRepository
 		->getResult();
 	}
 
+	public function findAsignacionesProfesores($grupo)
+	{
+		return $this->getEntityManager()->createQuery(
+		'SELECT i FROM BackendBundle:Imparte i INNER JOIN i.grupo g INNER JOIN i.asignatura a INNER JOIN a.asignatura asig INNER JOIN i.profesor p WHERE i.grupo=:grupo and asig.nombre not like :asignatura GROUP BY i.profesor, i.asignatura ORDER BY p.apellido1, asig.nombre')
+		->setParameters(array(
+			'grupo' => $grupo,
+			'asignatura'=>"Tutoría"))
+		->getResult();
+	}
+
+	public function findProfesoresGrupoSinRepetir($grupo)
+	{
+		return $this->getEntityManager()->createQuery(
+		'SELECT i FROM BackendBundle:Imparte i INNER JOIN i.grupo g INNER JOIN i.profesor p WHERE i.grupo=:grupo GROUP BY i.profesor ORDER BY p.apellido1, p.apellido2')
+		->setParameters(array(
+			'grupo' => $grupo))
+		->getResult();
+	}
+
+	public function findTutorGrupoSinRepetir($profesor, $grupo)
+	{
+		return $this->getEntityManager()->createQuery(
+		'SELECT i FROM BackendBundle:Imparte i INNER JOIN i.grupo g INNER JOIN i.profesor p INNER JOIN i.asignatura a INNER JOIN a.asignatura asig WHERE i.grupo=:grupo and i.profesor=:profesor and asig.nombre not like :asignatura GROUP BY i.profesor, i.asignatura')
+		->setParameters(array(
+			'profesor'=>$profesor,
+			'grupo' => $grupo,
+			'asignatura'=>"Tutoría"))
+		->getResult();
+	}
 
 
 }
