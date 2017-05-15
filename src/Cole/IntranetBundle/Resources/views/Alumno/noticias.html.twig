@@ -1,0 +1,181 @@
+{% extends  'IntranetBundle:Alumno:index.html.twig' %}
+
+{% block body %}
+    {{parent()}}
+    <script>
+    	$(".menu li").removeClass('active');
+		$(".menu #noticias").addClass('active');
+
+		//Cambio delicono de mensaje.
+		$('.cabecera_profesor .fa-envelope-o').on('mouseenter', function(event) {
+			$(this).addClass('hidden');
+			$(this).next().removeClass('hidden');
+		});
+		$('.cabecera_profesor .enviar_mensaje').on('mouseleave', function(event) {
+			$(this).find(".fa-envelope").addClass('hidden');
+			$(this).find(".fa-envelope").prev().removeClass('hidden');
+		});
+		//Se elimina el contenedor del tutor si aparece vacío al no impartir otra asignatura en el grupo.
+		if($(".cabecera_profesor div:empty").size()>0){
+			$(".cabecera_profesor div:empty").closest(".cabecera_profesor").prev().remove();
+			$(".cabecera_profesor div:empty").closest(".cabecera_profesor").remove();
+		}
+
+    </script>
+ {% endblock %}
+
+{% block migas %}
+	<li class="tipo">
+			{% trans %}Alumnado{% endtrans %}
+	</li>
+	<li>
+		<a href="{{path('intranet_alumno', { 'id': entity.id })}}">
+			{% trans %}Panel principal{% endtrans %}
+		</a>
+	</li>
+	<li class="active no-seleccion">
+		{% trans %}Noticias{% endtrans %}
+	</li>
+{% endblock %}
+
+{% block titulo_cabecera %}
+	<i class="fa fa-newspaper-o page-header-icon"></i>
+	{% trans %}Noticias{% endtrans %}
+{% endblock %}
+{% block titulo_cabecera_movil %}
+    <i class="fa fa-newspaper-o page-header-icon"></i>
+    {% trans %}Noticias{% endtrans %}
+{% endblock %}
+
+{% block contenido %}
+  {% if entity.curso.nivel == "Primaria" %}
+	<h4 id="titulo-seccion" class="titulo-seccion">{% trans %}Noticias de Educación Primaria{% endtrans %}</h4>
+  {% else %}
+	<h4 id="titulo-seccion" class="titulo-seccion">{% trans %}Noticias de Educación Infantil{% endtrans %}</h4>
+  {% endif %}
+
+  {% if noticias != null %}
+
+    {% for noticia in pagination %}
+    	<article class="contenedor_noticia visible-md visible-lg hidden-xs visible-sm">
+            {% if noticia.foto != null %}
+                <div class="contenido_noticia">
+                    <div class="imgLiquidFill  img-small imgLiquid  col-xs-12 col-sm-2">
+                        <a href="{{ path('intranet_alumno_noticia', {'id': entity.id, 'num': noticia.id}) }}"><img src="{{ asset('uploads/noticias/'~ noticia.foto)}}" alt="Imagen de la Noticia"></a>
+                    </div>
+            
+                    <a href="{{path('intranet_alumno_noticia', {'id': entity.id, 'num': noticia.id}) }}" class="col-sm-9"><h2 class="no-margin">{{noticia.titulo|capitalize}}</h2></a>
+
+            {% else %}
+                <div class="contenido_noticia no_foto">
+                    <a href="{{path('intranet_alumno_noticia', {'id': entity.id, 'num': noticia.id}) }}" class="col-sm-9"><h2 class="no-margin">{{noticia.titulo|capitalize}}</h2></a>
+
+            {% endif %}
+                    <div class=" col-xs-12 col-sm-9">
+                        <span><strong> {{ noticia.fecha | localizeddate('none', 'none', 'none',none , " d 'de' MMMM 'de' Y '-' H:mm'h.'") | capitalize}}</strong></span>                  
+                        {% set paragraphs = noticia.descripcion|capitalize|striptags|truncate(300,true)|raw|nl2br %}
+            
+                        {% set paragraphs = paragraphs|split('<br />') %}
+
+                        {% set summary = "" %}
+                        {% set cont = 90 %}
+                        {% set type = "" %}
+            
+                        {% if paragraphs|length == 1 %}
+                            {% set summary =  paragraphs[0] %}
+                            {% if summary|length <= 300 %}
+                                {% set type = "" %}
+                            {% else %}
+                                {% set type = "anything" %}
+                            {% endif %}
+                        {% else %}
+                            {% for i in 1..(paragraphs|length) %}
+
+                                {% if summary|length + cont + paragraphs[i-1]|length  <= 500 %}
+                                    {% set summary = summary  ~ "<br>" ~ paragraphs[i-1] %}
+                                    {% set cont = cont + 90 %}
+                                {% else %}
+                                    {% set type = "anything" %}
+                                {% endif %}
+                            {% endfor %}
+                        {% endif %}
+                        {# En el caso de que una descripción tenga menos de 300 caracteres nos e mostraría la opción "Leer más", para ello usamos la variable type anterior.#}
+
+                        {% if type != "" %}
+                            <p>{{ summary|capitalize|striptags|truncate(300,true)|raw }}<a class="href_blue" href="{{ path('intranet_alumno_noticia', {'id': entity.id, 'num': noticia.id}) }}"> <strong> [Leer más] </strong></a></p>
+                        {% else %}
+                            <p>{{ summary|capitalize|striptags|truncate(300,true)|raw|nl2br }}<a class="href_blue" href="{{ path('intranet_alumno_noticia', {'id': entity.id, 'num': noticia.id}) }}"></a></p>
+                        {% endif %}
+		            </div>
+                </div>
+            </article>
+            <article class="contenedor_noticia hidden-md hidden-lg visible-xs hidden-sm ">
+            {% if noticia.foto != null %}
+                <div class="contenido_noticia">
+                    {# Se introduce todo el contenido en el enlace para acceder desde el móvil #}
+                    <a href="{{path('intranet_alumno_noticia', {'id': entity.id, 'num': noticia.id}) }}" class="col-xs-12 no-padding"><h2 class="no-margin"><i class="fa fa-bookmark-o"></i>{{noticia.titulo|capitalize}}</h2>
+            
+            {% else %}
+                <div class="contenido_noticia no_foto">
+                    
+                    {# Se introduce todo el contenido en el enlace para acceder desde el móvil #}
+                    <a href="{{path('intranet_alumno_noticia', {'id': entity.id, 'num': noticia.id}) }}" class="col-xs-12 no-padding"><h2 class="no-margin"><i class="fa fa-bookmark-o"></i>{{noticia.titulo|capitalize}}</h2>
+            {% endif %}
+                      <div class=" col-xs-12 col-sm-9">
+                        <span><strong> {{ noticia.fecha | localizeddate('none', 'none', 'none',none , " d 'de' MMMM 'de' Y '-' H:mm'h.'") | capitalize}}</strong></span>                  
+                        {% set paragraphs = noticia.descripcion|capitalize|striptags|truncate(300,true)|raw|nl2br %}
+            
+                        {% set paragraphs = paragraphs|split('<br />') %}
+
+                        {% set summary = "" %}
+                        {% set cont = 90 %}
+                        {% set type = "" %}
+            
+                        {% if paragraphs|length == 1 %}
+                            {% set summary =  paragraphs[0] %}
+                            {% if summary|length <= 300 %}
+                                {% set type = "" %}
+                            {% else %}
+                                {% set type = "anything" %}
+                            {% endif %}
+                        {% else %}
+                            {% for i in 1..(paragraphs|length) %}
+
+                                {% if summary|length + cont + paragraphs[i-1]|length  <= 500 %}
+                                    {% set summary = summary  ~ "<br>" ~ paragraphs[i-1] %}
+                                    {% set cont = cont + 90 %}
+                                {% else %}
+                                    {% set type = "anything" %}
+                                {% endif %}
+                            {% endfor %}
+                        {% endif %}
+                        {# En el caso de que una descripción tenga menos de 300 caracteres nos e mostraría la opción "Leer más", para ello usamos la variable type anterior.#}
+
+                        {% if type != "" %}
+                            <p>{{ summary|capitalize|striptags|truncate(300,true)|raw }}<a class="href_blue" href="{{ path('intranet_alumno_noticia', {'id': entity.id, 'num': noticia.id}) }}"> <strong class="hidden-xs"> [Leer más] </strong></a></p>
+                        {% else %}
+                            <p>{{ summary|capitalize|striptags|truncate(300,true)|raw|nl2br }}<a class="href_blue" href="{{ path('intranet_alumno_noticia', {'id': entity.id, 'num': noticia.id}) }}"></a></p>
+                        {% endif %}
+                      </div>
+                    </a>
+                </div>
+        </article>
+    {% endfor %}
+
+    {# display navigation #}
+    <div class="navigation text-center">
+        {{ knp_pagination_render(pagination) }}
+    </div>
+  {% else %}
+		<div class="alert alert-info alert-block">
+			<small>
+                {% if entity.curso.nivel == "Primaria" %}
+                    <h4>{% trans %}No hay noticias privadas de Primaria{% endtrans %}.</h4>
+            {% else %}
+                    <h4>{% trans %}No hay noticias privadas de Infantil{% endtrans %}.</h4>
+            {% endif %}
+				<h6>{% trans %}Actualmente no hay noticias privadas del curso actual. Cuando se publique alguna se le notificará en la barra superior o en el menú principal{% endtrans %}.</h6>
+			</small>
+		</div>
+  {% endif %}
+{% endblock %}

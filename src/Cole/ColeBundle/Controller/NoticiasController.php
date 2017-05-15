@@ -525,13 +525,22 @@ class NoticiasController extends Controller
         ));
     }
 
-    public function noticiasAction()
+    public function noticiasAction(Request $request)
     {
         $em = $this->getDoctrine()->getManager();
 
-        $noticias = $em->getRepository('ColeBundle:Noticias')->findAll();
-        return $this->render('ColeBundle:Noticias:noticias.html.twig',
-                array('noticias' => $noticias));
+        $noticias = $em->getRepository('ColeBundle:Noticias')->findBy(array('categoria'=>'general'), array('fecha'=>'DESC'));
+        
+        $paginator  = $this->get('knp_paginator');
+        $pagination = $paginator->paginate(
+            $noticias, /* query NOT result */
+            $request->query->getInt('page', 1)/*page number*/,
+            6/*limit per page*/
+        );
+
+        return $this->render('ColeBundle:Noticias:noticias.html.twig',array(
+            'noticias' => $noticias,
+            'pagination' => $pagination));
     }
 
     public function imagenAction()

@@ -185,7 +185,7 @@ class DefaultController extends Controller
 
         return $this->render('IntranetBundle:Default:perfil.html.twig', array(
             'entity'      => $entity,
-            'edit_form'   => $editForm->createView(),
+            'form'   => $editForm->createView(),
             'delete_form' => $deleteForm->createView(),
         ));
     }

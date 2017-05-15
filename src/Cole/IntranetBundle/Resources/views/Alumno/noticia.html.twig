@@ -1,0 +1,76 @@
+{% extends  'IntranetBundle:Alumno:index.html.twig' %}
+
+{% block body %}
+    {{parent()}}
+    <script>
+    	$(".menu li").removeClass('active');
+		$(".menu #noticias").addClass('active');
+        $(".menu #noticias").addClass('pointer');
+
+		//Cambio delicono de mensaje.
+		$('.cabecera_profesor .fa-envelope-o').on('mouseenter', function(event) {
+			$(this).addClass('hidden');
+			$(this).next().removeClass('hidden');
+		});
+		$('.cabecera_profesor .enviar_mensaje').on('mouseleave', function(event) {
+			$(this).find(".fa-envelope").addClass('hidden');
+			$(this).find(".fa-envelope").prev().removeClass('hidden');
+		});
+		//Se elimina el contenedor del tutor si aparece vacío al no impartir otra asignatura en el grupo.
+		if($(".cabecera_profesor div:empty").size()>0){
+			$(".cabecera_profesor div:empty").closest(".cabecera_profesor").prev().remove();
+			$(".cabecera_profesor div:empty").closest(".cabecera_profesor").remove();
+		}
+
+    </script>
+ {% endblock %}
+
+{% block migas %}
+	<li class="tipo">
+			{% trans %}Alumnado{% endtrans %}
+	</li>
+	<li>
+		<a href="{{path('intranet_alumno', { 'id': entity.id })}}">
+			{% trans %}Panel principal{% endtrans %}
+		</a>
+	</li>
+	<li class="active">
+        <a href="{{path('intranet_alumno_noticias', { 'id': entity.id })}}">
+		  {% trans %}Noticias{% endtrans %}
+        </a>
+	</li>
+    <li class="active no-seleccion">
+        {{noticia.titulo|capitalize|striptags|truncate(20,true)|raw}}
+    </li>
+{% endblock %}
+
+{% block titulo_cabecera %}
+	<i class="fa fa-newspaper-o page-header-icon"></i>
+	{% trans %}Noticias{% endtrans %}
+{% endblock %}
+{% block titulo_cabecera_movil %}
+    <i class="fa fa-newspaper-o page-header-icon"></i>
+    {% trans %}Noticias{% endtrans %}
+{% endblock %}
+
+{% block contenido %}
+    <article >
+        <div class="noticia">
+            <h2>{{noticia.titulo|capitalize}}</h2>
+            <p>{{noticia.descripcion|striptags|raw|nl2br }}</p>
+            {# Sólo se muestra la imagen si no hay galería #}
+            {% if noticia.foto != null and noticia.galeria == null and noticia.mostrarFoto == "yes" %}
+                <div class="imgLiquidFill imgLiquid normal">
+                <a class="no-seleccion-foto" ><img src="{{ asset('uploads/noticias/' ~ noticia.foto)}}" alt="Imagen de la Noticia"></a></div>
+            {% endif %}
+                    
+            {% if noticia.galeria != null %}
+                <div id="gallery" style="display:none;">
+                    {% for imagen in imagenes %}
+                        <img src="{{ asset('uploads/noticias/galeria/' ~ noticia.galeria ~ '/' ~ imagen)}}" data-image="{{ asset('uploads/noticias/galeria/' ~ noticia.galeria ~ '/' ~ imagen)}}">
+                    {% endfor %}
+                </div>
+            {% endif %}
+        </div>
+    </article>
+{% endblock %}

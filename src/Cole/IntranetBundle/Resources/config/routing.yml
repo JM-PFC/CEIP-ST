@@ -43,3 +43,23 @@ datos_personales:
 intranet_alumno_curso:
     path:     /intranet/alumno/{id}/curso
     defaults: { _controller: IntranetBundle:Alumno:curso}
+
+horario_alumno:
+    pattern:  /intranet/alumno/{id}/horario
+    defaults: { _controller: "IntranetBundle:Alumno:Horario"}
+    options:
+      expose: true
+
+horario_alumno_pdf:
+    pattern:  /intranet/alumno/{id}/horarioPdf
+    defaults: { _controller: "IntranetBundle:Alumno:HorarioPdf", _format: pdf}
+    options:
+      expose: true
+
+intranet_alumno_noticias:
+    path:     /intranet/alumno/{id}/noticias
+    defaults: { _controller: IntranetBundle:Alumno:noticias}
+
+intranet_alumno_noticia:
+    path:     /intranet/alumno/{id}/noticia/{num}
+    defaults: { _controller: IntranetBundle:Alumno:noticia}

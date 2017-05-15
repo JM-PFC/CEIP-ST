@@ -1,34 +1,34 @@
 festivos:
-    path:     /
+    path:     /admin/
     defaults: { _controller: "BackendBundle:Festivos:index" }
     options:
         expose: true
         
 festivos_show:
-    path:     /{id}/show
+    path:     /admin/{id}/show
     defaults: { _controller: "BackendBundle:Festivos:show" }
     options:
         expose: true
 
 festivos_new:
-    path:     /new
+    path:     /admin/new
     defaults: { _controller: "BackendBundle:Festivos:new" }
     options:
         expose: true
 
 festivos_create:
-    path:     /create
+    path:     /admin/create
     defaults: { _controller: "BackendBundle:Festivos:create" }
     requirements: { _method: post }
 
 festivos_edit:
-    path:     /{id}/edit
+    path:     /admin/{id}/edit
     defaults: { _controller: "BackendBundle:Festivos:edit" }
     options:
         expose: true
 
 festivos_update:
-    path:     /{id}/update
+    path:     /admin/{id}/update
     defaults: { _controller: "BackendBundle:Festivos:update" }
     requirements: { _method: post|put }
 
@@ -64,19 +64,19 @@ dias_festivos:
         expose: true
 
 registrar_dia_vacaciones:
-    path:     /registrar_dia_vacaciones
+    path:     /admin/registrar_dia_vacaciones
     defaults: { _controller: "BackendBundle:Festivos:RegistrarDiaVacaciones" }
     options:
         expose: true
 
 eliminar_dia_vacaciones:
-    path:     /eliminar_dia_vacaciones
+    path:     /admin/eliminar_dia_vacaciones
     defaults: { _controller: "BackendBundle:Festivos:EliminarDiaVacaciones" }
     options:
         expose: true
 
 registrar_curso:
-    path:     /edit_curso
+    path:     /admin/edit_curso
     defaults: { _controller: "BackendBundle:Festivos:RegistrarCurso" }
     options:
         expose: true

@@ -184,9 +184,7 @@
   if($("#noticias_edit #noticias_galeria").val()!=""){
 
     var imagenes = {{imagenes|json_encode|raw}};
-      /*for (var imagen in imagenes) {
-          alert(imagenes[imagen]);
-      }*/
+
     $("#noticias_edit #galeria_noticia #galeria_show div").remove();
      
      imagenes.forEach(function(item){

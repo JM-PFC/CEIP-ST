@@ -4,17 +4,16 @@
 	<li class="tipo">
 			{% trans %}Alumnado{% endtrans %}
 	</li>
-	<li>
-		<a href="{{path('intranet')}}">
-			{% trans %}Inicio{% endtrans %}
-		</a>
-	</li>
 	<li class="active no-seleccion">
 		{% trans %}Panel principal{% endtrans %}
 	</li>
 {% endblock %}
 
 {% block titulo_cabecera %}
+	<i class="fa fa-th page-header-icon"></i>
+	{% trans %}Panel principal{% endtrans %}
+{% endblock %}
+{% block titulo_cabecera_movil %}
 	<i class="fa fa-th page-header-icon"></i>
 	{% trans %}Panel principal{% endtrans %}
 {% endblock %}
@@ -41,7 +40,7 @@
 				</a>
 			</li>
 			<li id="barramiperfil" class="dropdown">
-				   				{% if entity.foto != null %}
+				{% if entity.foto != null %}
    				 	<img id="foto" class="img-rounded img-title " alt="{{entity}}" src="{{ asset('uploads/images/' ~ entity.foto) }}">
        			{% else %}
        				{% if entity.sexo == "Femenino" %}
@@ -175,44 +174,44 @@
 			{% trans %}Curso actual{% endtrans %}
 		</a>
 	</li>
-	<li>
+	<li id="seguimiento">
 		<a href="#">
 			<i class="fa fa-comments"></i>
 			{% trans %}Seguimiento{% endtrans %}
 		</a>
 	</li>
-	<li>
+	<li id="comunicacion">
 		<a href="#">
 			<i class="fa fa-envelope-o"></i>
 			{% trans %}Comunicación{% endtrans %}
 		</a>
 	</li>
-	<li>
+	<li id="asistencia">
 		<a href="#">
 			<i class="fa fa-calendar-check-o"></i>
 			{% trans %}Asistencia{% endtrans %}
 		</a>
 	</li>
-	<li>
+	<li id="calificaciones">
 		<a href="#">
 			<i class="fa fa-list-alt"></i>
 			{% trans %}Calificaciones{% endtrans %}
 		</a>
 	</li>
-	<li>
+	<li id="expediente">
 		<a href="#">
 			<i class="fa fa-folder-open"></i>
 			{% trans %}Expediente{% endtrans %}
 		</a>
 	</li>
-	<li>
+	<li id="tutorias">
 		<a href="#">
 			<i class="fa fa-users"></i>
 			{% trans %}Tutorias{% endtrans %}
 		</a>
 	</li>
-	<li>
-		<a href="#">
+	<li id="noticias">
+		<a href="{{ path('intranet_alumno_noticias', { 'id': entity.id }) }}">
 			<i class="fa fa-newspaper-o"></i>
 			{% trans %}Noticias{% endtrans %}
 		</a>
@@ -232,45 +231,44 @@
 			{% trans %}Curso actual{% endtrans %}
 		</a>
 	</li>
-	<li>
+	<li id="seguimiento">
 		<a href="#">
 			<i class="fa fa-comments"></i>
 			{% trans %}Seguimiento{% endtrans %}
 		</a>
 	</li>
-	<li>
+	<li id="comunicacion">
 		<a href="#">
 			<i class="fa fa-envelope-o"></i>
 			{% trans %}Comunicación{% endtrans %}
 		</a>
 	</li>
-	<li>
+	<li id="asistencia">
 		<a href="#">
 			<i class="fa fa-calendar-check-o"></i>
 			{% trans %}Asistencia{% endtrans %}
 		</a>
 	</li>
-	<li>
+	<li id="calificaciones">
 		<a href="#">
 			<i class="fa fa-list-alt"></i>
 			{% trans %}Calificaciones{% endtrans %}
 		</a>
 	</li>
-	<li>
+	<li id="expediente">
 		<a href="#">
 			<i class="fa fa-folder-open"></i>
 			{% trans %}Expediente{% endtrans %}
 		</a>
 	</li>
-
-	<li>
+	<li id="tutorias">
 		<a href="#">
 			<i class="fa fa-users"></i>
 			{% trans %}Tutorias{% endtrans %}
 		</a>
 	</li>
-	<li>
-		<a href="#">
+	<li id="noticias">
+		<a href="{{ path('intranet_alumno_noticias', { 'id': entity.id }) }}">
 			<i class="fa fa-newspaper-o"></i>
 			{% trans %}Noticias{% endtrans %}
 		</a>
@@ -367,7 +365,7 @@
         </div>
         <div class="col-md-3 col-sm-3 col-xs-6 bloque-menu">
 			<div class="bloque-item-menu">
-				<a href="{{ path('intranet_alumno', { 'id': entity.id }) }}" color="item-verde2">
+				<a href="{{ path('intranet_alumno_noticias', { 'id': entity.id }) }}" color="item-verde2">
 					<i class="fa fa-newspaper-o i-margin-left-15"></i>
 				</a>
 			</div>

@@ -1054,12 +1054,13 @@ $(document).on('keyup',"input[id$='responsable2_dni']",function(e){
                   out_class: "fadeOutRight",
                 }
               });
-              //Se actualiza la pestaña de anular matrícula y asignar grupo.
+              //Se actualiza la pestaña de anular matrícula, asignar grupo y asignar optativa.
               $("#anular_matricula").update_tab();
               //Se actualiza la pestaña de asignar grupos si está abierta y tiene seleccionado el curso actualizado.
               if($("#asignar_grupos #lista_cursos select option:selected").attr("value")==curso){
                 $("#asignar_grupo").update_tab();   
               }
+              $("#asignar_optativa").update_tab();
             }
           })
           event.stopPropagation();   
@@ -1991,8 +1992,8 @@ $(document).on("submit",".formulario_profesor",function(event){
         success: function(response) {
       
           $("#icono_restablecer").addClass("disable");
-          //Hay que actualizar la pestaña que contiene la tabla de profesores.
-
+          //Hay que actualizar la pestaña que contiene la tabla de alumnos. ###############################
+          $("#asignar_optativa").update_tab();
           
           //Función para retrasar la ejecución siguiente.
           //setTimeout(function(){ 
@@ -2057,6 +2058,7 @@ $(document).on("submit",".formulario_profesor",function(event){
   });
 
   $(document).on("submit","#profesor_edit",function(event) {
+    alert();
     event.preventDefault();
     form= $(this).closest("form");
 
@@ -3558,7 +3560,7 @@ $(document).on("blur","input[id='edit_profesor_dni']",function() {
         aviso.play();
         swal({
           title: "Actualización de Asignatura Opcional",
-          html: "<p class='justificado'>Se va a realizar cambios en una asignatura específica opcional, por lo que se eliminará las asignaciones de todas las asignaturas específicas opcionales del sistema.</p><br>¿Estas seguro de continuar? No podrás deshacer este paso...",
+          html: "<p class='justificado'>Se va a realizar cambios en una asignatura específica opcional, por lo que se eliminará todas las asignaciones de esta asignatura registrada en el sistema.</p><br>¿Estas seguro de continuar? No podrás deshacer este paso...",
           type: "warning",
           showCancelButton: true,
           cancelButtonText: "Cancelar",
@@ -3604,6 +3606,7 @@ $(document).on("blur","input[id='edit_profesor_dni']",function() {
                 $("#asignaturas_cursos").update_tab();
                 $("#profesor_asignar_grupo").update_tab();
                 $("#asignar_horario").update_tab();
+                $("#asignar_optativa").update_tab();
               }
             })
           }, function (dismiss) {
@@ -3651,6 +3654,7 @@ $(document).on("blur","input[id='edit_profesor_dni']",function() {
             $("#asignaturas_cursos").update_tab();
             $("#profesor_asignar_grupo").update_tab();
             $("#asignar_horario").update_tab();
+            $("#asignar_optativa").update_tab();
           }
         })
       }
@@ -3686,6 +3690,7 @@ $(document).on("blur","input[id='edit_profesor_dni']",function() {
             //$("#tabs #lista_asignaturas").load(Routing.generate('alumno_listaAsignatura'));
             $("#asignaturas_cursos").update_tab();
             $("#profesor_asignar_grupo").update_tab();
+            $("#asignar_optativa").update_tab();
           }
         })
       }, function (dismiss) {
@@ -8970,7 +8975,7 @@ $(document).on("click","#registro_equipamientos td a",function(event){
   $(document).on('change','#consulta_antiguo_alumno #lista_cursos select',function(event) {
     event.preventDefault();
     div=$(this).closest("div[class*='antiguo_alumno']");
-    //Se añade reemplaza también una separación andes del "de" para que funcione bien la búsqueda.
+    //Se reemplaza el nombre del select añadiendo también una separación antes del "de" para que funcione bien la búsqueda.
     curso=$(this).find("option:selected").text().replace(" de", "");
 
     //Se elimina el contenido del buscador cuando se selecciona un curso para la búsqueda.
@@ -8978,7 +8983,7 @@ $(document).on("click","#registro_equipamientos td a",function(event){
     div.find("#buscador input").keyup(); 
 
     id=1;
-    //Se asigna el select correspondiente al último curso según la tabla mostrada.
+    //Se asigna el select correspondiente a la columna "último curso" según la tabla mostrada.
     if($(this).parent().attr("class")=="lista_activos"){
       id=1;
     }
@@ -9050,7 +9055,7 @@ $(document).on("click","#registro_equipamientos td a",function(event){
   // Se modifica el select de búsqueda de las tablas de consultas. (Forma General)
   $(document).on('change','.busqueda_general #lista_cursos select',function(event) {
     div=$(this).closest(".busqueda_general");
-    //Se añade reemplaza también una separación andes del "de" para que funcione bien la búsqueda.
+    //Se añade también una separación antes del "de" para que funcione bien la búsqueda.
     curso=$(this).find("option:selected").text().replace(" de", "");
     valor=div.find("#lista_cursos select option:selected").val();
 
@@ -12311,6 +12316,7 @@ $(document).on("click","#registro_equipamientos td a",function(event){
                     });
                     $('#profesor_asignatura_grupo_dialog').dialog('close');
                     $("#asignar_horario").update_tab();
+                    $("#asignar_optativa").update_tab();
                   }, function (dismiss) {
 
                   }
@@ -12349,6 +12355,7 @@ $(document).on("click","#registro_equipamientos td a",function(event){
               });
               $('#profesor_asignatura_grupo_dialog').dialog('close');
               $("#asignar_horario").update_tab();
+              $("#asignar_optativa").update_tab();
             }
           })
         }, function (dismiss) {
@@ -12477,6 +12484,7 @@ $(document).on("click","#registro_equipamientos td a",function(event){
                 });
                 $('#profesor_asignatura_grupo_dialog').dialog('close');
                 $("#asignar_horario").update_tab();
+                $("#asignar_optativa").update_tab();
               }, function (dismiss) {
 
               }
@@ -12515,6 +12523,7 @@ $(document).on("click","#registro_equipamientos td a",function(event){
           });
           $('#profesor_asignatura_grupo_dialog').dialog('close');
           $("#asignar_horario").update_tab();
+          $("#asignar_optativa").update_tab();
         }
       })
     }
@@ -13428,6 +13437,9 @@ $(document).on("click","#registro_equipamientos td a",function(event){
         });
 
         $('#asignar_horario_grupo_dialog').dialog('close');
+        
+        $("#clases_impartidas").update_tab();
+
         //Añadir más donde se muestre el horario de un grupo.
         //$("#profesor_asignar_grupo").update_tab();
 
@@ -13524,6 +13536,287 @@ $(document).on("click","#registro_equipamientos td a",function(event){
     $('#generar_horarios_pdf').dialog('close');
   });
 
+
+/////////////////////////////////////////
+//  Asignación de Asignatura Opcional  //
+/////////////////////////////////////////
+
+  // Se muestra la lista de alumnos sin asignación de la asignatura opcional.
+  $(document).on('click',"#asignar_optativa #btn_no_asignados",function(event){
+    $("#asignar_optativa #asignados").addClass("oculto");
+    $("#asignar_optativa #no_asignados").removeClass("oculto");
+
+    //Se cambia los estilos según el scroll vertical.
+    if( $("#asignar_optativa  #no_asignados").find('table tbody').get(0).scrollHeight>$("#asignar_optativa #no_asignados").find('table tbody').height()){
+        $("#asignar_optativa #no_asignados").find("table thead tr>th:last-child").attr('style', 'width: 10.5% !important');
+    }
+    else{
+        $("#no_asignados").find("table thead tr>th:last-child").attr('style', 'width: 9% !important');
+    }
+  });
+
+  // Se muestra la lista de alumnos con asignación de la asignatura opcional.
+  $(document).on('click',"#asignar_optativa #btn_asignados",function(event){
+
+    $("#asignar_optativa #no_asignados").addClass("oculto");
+    $("#asignar_optativa #asignados").removeClass("oculto");
+
+    //Se cambia los estilos según el scroll vertical.
+
+    if( $("#asignar_optativa #asignados").find('table tbody').get(0).scrollHeight>$("#asignar_optativa #asignados").find('table tbody').height()){
+        $("#asignar_optativa #asignados").find("table thead tr>th:last-child").attr('style', 'width: 10% !important');
+    }
+    else{
+        $("#asignar_optativa #asignados").find("table thead tr>th:last-child").attr('style', 'width: 9% !important');
+    }
+  });
+
+
+  // Se muestra la información del alumno.
+  $(document).on("mouseenter","#asignar_optativa .scrollContent tr", function () {
+    // Se evita que se muestre el mensaje predeterminado si pasamos de un enlace a otro.
+    $(this).closest("div[class*='contenedor_registro']").find(".contenido_info #sin_seleccionar").addClass("oculto");
+    $(this).closest("div[class*='contenedor_registro']").find(".contenido_info #seleccionado").removeClass("oculto");
+
+    tr=$(this);
+    alumno=$(this).attr("id");
+
+    tr.closest("div[class*='contenedor_registro']").find(".contenido_info #seleccionado").load(Routing.generate('datos_alumno_optativas', {id:tr.attr("id")}), function(){
+        });
+  });
+
+  // Se elimina la información mostrada del alumno al quitar el puntero.
+  $(document).on("mouseleave","#asignar_optativa .scrollContent tr", function () {
+    $(this).closest("div[class*='contenedor_registro']").find(".contenido_info #seleccionado").addClass("oculto");
+    $(this).closest("div[class*='contenedor_registro']").find(".contenido_info #seleccionado").empty();
+    $(this).closest("div[class*='contenedor_registro']").find(".contenido_info #sin_seleccionar").removeClass("oculto");
+  });
+
+
+  // Se modifica el select de búsqueda de antiguo alumno.
+  $(document).on('change','#asignar_optativa #lista_cursos select',function(event) {
+    event.preventDefault();
+    div=$(this).closest("div[class*='asignar_optativa']");
+    //Se reemplaza el nombre del select añadiendo también una separación antes del "de" para que funcione bien la búsqueda.
+    curso=$(this).find("option:selected").text().replace(" de", "");
+
+    //Se elimina el contenido del buscador cuando se selecciona un curso para la búsqueda.
+    div.find("#buscador input").val(""); 
+    div.find("#buscador input").keyup(); 
+    
+    //Se asigna el select correspondiente a "Curso Matriculado".
+    id=1; 
+
+    valor=div.find("#lista_cursos select option:selected").val();
+    // Se modifica el valor en las dos listas.
+    if($(".lista_asignados select option:selected").val()!= $(".lista_no_asignados select option:selected").val()){
+      $("#asignar_optativa #lista_cursos select").val(valor).change();
+    }
+    // Se selecciona el option del select oculto con z-index para filtrar el curso.
+    if(div.find("select[class='"+id+"'] option[value='"+curso+"']").length){
+      div.find("#buscador input").prop("disabled",false);    
+      // Se selecciona y se muestra con change().
+      div.find("select[class='"+id+"']").val(curso).change();
+    }
+    else if($(this).find("option:selected").text()=="Todos los cursos"){
+      div.find("#buscador input").prop("disabled",false);
+      div.find("select[class='"+id+"']").val("").change();
+    }
+    else{
+      div.find("tbody").empty();
+      div.find("tbody").append("<tr class='odd no_cursor'><td class='dataTables_empty'>Actualmente no existe antiguos alumnos para el curso seleccionado</td></tr>");
+      div.find("thead tr th").removeClass("sorting_asc");
+      div.find("#buscador input").prop("disabled",true);
+    }
+    //Se cambia los estilos según el scroll vertical.
+    if( div.find('table tbody').get(0).scrollHeight>div.find('table tbody').height()){
+        div.find("table thead tr>th:last-child").attr('style', 'width: 10% !important');
+    }
+    else{
+        div.find("table thead tr>th:last-child").attr('style', 'width: 9% !important');
+    }
+  });
+
+  //Selección de la optativa en la tabla de alumnos sin optativa asignada.
+  $(document).on('click',"#asignar_optativa #no_asignados table button",function(event){ 
+    td= $(this).closest("td");
+
+    // Se marca la asignatura seleccionada.
+    if(!$(this).hasClass("elected")){
+      td.find("button").removeClass("elected"); 
+      $(this).addClass("elected");
+
+      //Se habilita el botón de guardar.
+      $("#asignar_optativa #no_asignados #enviar_select button").prop("disabled",false);
+    }
+    else{
+      $(this).removeClass("elected"); 
+      if($("#asignar_optativa #no_asignados .elected").size()==0){
+        //Se deshabilita el botón de guardar.
+        $("#asignar_optativa #no_asignados #enviar_select button").prop("disabled",true);
+      }
+    }
+ });
+
+  //Cambio del color de los botones de optativas en la tabla.
+  $(document).on('mouseenter','#asignar_optativa table tbody button',function(event) {
+    $(this).attr('style', 'background:'+$(this).attr("color"));
+  });
+    
+  $(document).on('mouseleave','#asignar_optativa table tbody button',function(event) {
+    $(this).attr('style', 'background: ');
+  });
+
+  //Selección de la optativa en la tabla de alumnos con optativa asignada.
+  $(document).on('click',"#asignar_optativa #asignados table button",function(event){ 
+    td= $(this).closest("td");
+    // Se marca la asignatura seleccionada.
+    if(!$(this).hasClass("elected")){
+      td.find("button").removeClass("elected"); 
+      $(this).addClass("elected");
+
+      //Se habilita el botón de guardar.
+      $("#asignar_optativa #asignados #enviar_select button").prop("disabled",false);
+
+      if($("#asignar_optativa #asignados .elected:not(.asignada)").size()==0){
+        //Se deshabilita el botón de guardar.
+        $("#asignar_optativa #asignados #enviar_select button").prop("disabled",true);
+      }
+    }
+  });
+
+  //Se guardan las optativas asignadas de la tabla donde se pulse el botón.
+  $(document).on('click',"#asignar_optativa #enviar_select button",function(event){ 
+    container=$(this).closest(".asignar_optativa");
+
+    asignadas = new Object();
+
+    container.find("table tbody tr .elected:not(.asignada)").each (function(){ 
+      alumno=$(this).closest("tr").attr("id");
+      optativa=$(this).attr("id");
+
+      asignadas[alumno] = [optativa]; 
+    });
+
+    //Se comprueba que hay asignaciones.
+    if($.isEmptyObject(asignadas)){
+      errorPNotify.play();
+
+      new PNotify({
+        text:'No se ha asignado optativa a ningún alumno.',
+        addclass: "custom",
+        type: "error",
+        shadow: true,
+        hide: true,
+        buttons: {
+          sticker: false,
+          labels:{close: "Cerrar"}
+        },
+        stack: right_Stack,
+        animate: {
+          animate: true,
+          in_class: "fadeInRight",
+          out_class: "fadeOutRight",
+        }
+      });
+      container.find(" #enviar_select button").prop('disabled', 'true');
+      return false;
+    }
+
+    $.ajax({
+      type: 'POST',
+      url: Routing.generate('asignar_optativa'),
+      data: {asignadas:asignadas},
+      dataType: 'json',
+      success: function(response) {
+        if(response.data==null){
+          errorPNotify.play();
+
+          new PNotify({
+            text:'No se ha asignado optativa a ningún alumno.',
+            addclass: "custom",
+            type: "error",
+            shadow: true,
+            hide: true,
+            buttons: {
+              sticker: false,
+              labels:{close: "Cerrar"}
+            },
+            stack: right_Stack,
+            animate: {
+              animate: true,
+              in_class: "fadeInRight",
+              out_class: "fadeOutRight",
+            }
+          });
+          container.find(" #enviar_select button").prop('disabled', 'true');
+          return false;
+        }
+      
+        $(".ui-pnotify").remove();
+        exito.play();
+
+        if(response.num==1){
+          new PNotify({
+            text:"1 asignación realizada.",
+            addclass: "custom",
+            type: "success",
+            shadow: true,
+            width: "335px",
+            hide: true,
+            buttons: {
+              sticker: false,
+              labels:{close: "Cerrar"}
+            },
+            stack: right_Stack_dialog,
+            animate: {
+              animate: true,
+              in_class: "fadeInRight",
+              out_class: "fadeOutRight",
+            }
+          });
+        }
+        else{
+          new PNotify({
+            text:response.num+" asignaciones realizadas.",
+            addclass: "custom",
+            type: "success",
+            shadow: true,
+            width: "335px",
+            hide: true,
+            buttons: {
+              sticker: false,
+              labels:{close: "Cerrar"}
+            },
+            stack: right_Stack_dialog,
+            animate: {
+              animate: true,
+              in_class: "fadeInRight",
+              out_class: "fadeOutRight",
+            }
+          });
+        }
+      
+        id=container.find(".btn_2opciones .btn_selected").attr("id");
+        if(id="btn_asignados"){
+          $("#tabs>div[style='display: block']").load(Routing.generate("show_optativas"), function(){
+            $("#asignar_optativa .btn_2opciones label[id='btn_asignados']").click();
+          });
+        }
+        else{
+          $("#tabs>div[style='display: block']").load(Routing.generate("show_optativas"), function(){
+            $("#asignar_optativa .btn_2opciones label[id='btn_no_asignados']").click();
+          });
+        }
+
+        
+        //$("#clases_impartidas").update_tab();
+
+      }
+    })
+
+  });
+  
 
 
 

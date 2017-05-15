@@ -170,7 +170,7 @@ class ImparteRepository extends EntityRepository
 	public function findOcupadoPorProfesor($profesor, $grupo)
 	{
 		return $this->getEntityManager()->createQuery(
-		'SELECT i FROM BackendBundle:Imparte i WHERE i.profesor=:profesor and i.dia_semanal IS not NULL and i.horario IS not NULL and i.grupo NOT IN (:grupo) GROUP BY i.asignatura')
+		'SELECT i FROM BackendBundle:Imparte i WHERE i.profesor=:profesor and i.dia_semanal IS not NULL and i.horario IS not NULL and i.grupo NOT IN (:grupo)')
 		->setParameters(array(
 			'profesor' => $profesor,
 			'grupo' => $grupo))
@@ -214,6 +214,16 @@ class ImparteRepository extends EntityRepository
 		->setParameters(array(
 			'grupo' => $grupo,
 			'opcional' => 1))
+		->getResult();
+	}
+
+	public function findAsignacionesOptativaAlumno($grupo, $asignatura)
+	{
+		return $this->getEntityManager()->createQuery(
+		'SELECT i FROM BackendBundle:Imparte i WHERE i.grupo=:grupo and i.asignatura=:asignatura')
+		->setParameters(array(
+			'grupo' => $grupo,
+			'asignatura' => $asignatura))
 		->getResult();
 	}
 

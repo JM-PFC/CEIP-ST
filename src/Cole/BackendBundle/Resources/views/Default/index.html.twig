@@ -159,7 +159,7 @@
 							<img src="{{ asset('bundles/backend/images/menu/profesor-grupo.png')}}">
 							<span> Asignar <br>Grupo</span>
 						</a>						
-						<span> Asignación Grupos</span>
+						<span> Asignaciones </span>
 					</div>
 					<div>
 						<a id="ficha_profesor" title="Ficha Profesor" href="{{path('profesor_search')}}">
@@ -187,15 +187,22 @@
 							<img src="{{ asset('bundles/backend/images/menu/matricular+.png')}}">
 							<span> Múltiple</span>
 						</a>
-						<a id="asignar_grupo" title="Asignar Alumnos" href="{{path('asignar_grupo')}}">
-							<img src="{{ asset('bundles/backend/images/menu/alumno-grupo.png')}}">
-							<span> Asignar <br>Grupos</span>
-						</a>
 						<a id="anular_matricula" title="Anular Matrícula" href="{{path('show_matriculas')}}">
 							<img src="{{ asset('bundles/backend/images/menu/cancelado.png')}}">
 							<span> Anular <br>Matrícula</span>
 						</a>								
 						<span> Matrícula Alumnos</span>
+					</div>
+					<div>
+						<a id="asignar_grupo" title="Asignar Alumnos" href="{{path('asignar_grupo')}}">
+							<img src="{{ asset('bundles/backend/images/menu/alumno-grupo.png')}}">
+							<span> Asignar <br>Grupos</span>
+						</a>
+						<a id="asignar_optativa" title="Asignar Optativa" href="{{path('show_optativas')}}">
+							<img src="{{ asset('bundles/backend/images/menu/asignar_optativa.png')}}">
+							<span> Asignar <br>Optativa</span>
+						</a>							
+						<span> Asignaciones </span>
 					</div>
 					<div id="segundo">
 						<a id="ficha_alumno" title="Ficha Alumno" href="{{path('alumno_search')}}">
@@ -249,8 +256,8 @@
 							<span> Grupos <br>por curso </span>
 						</a>
 						<a id="ratio_curso" title="Nº Alumnos/grupo" href="{{path('ratio_cursos')}}">
-							<img src="{{ asset('bundles/backend/images/menu/ratio.png')}}">
-							<span>Nº Alumnos <br>por grupo </span>
+							<img src="{{ asset('bundles/backend/images/menu/aula.png')}}">
+							<span>Alumnos <br>por grupo </span>
 						</a>		
 						<a id="consulta_curso" title="Consulta Curso" href="javascript:void(0);">
 							<img src="{{ asset('bundles/backend/images/menu/consultar.png')}}">
@@ -264,7 +271,7 @@
 							<span> Asignar <br>Horario</span>
 						</a>
 						<a id="asignar_aula"  title="Asignar Aula" href="{{path('grupo_show')}}">
-							<img src="{{ asset('bundles/backend/images/menu/aula.png')}}">
+							<img src="{{ asset('bundles/backend/images/menu/asignar_aula.png')}}">
 							<span> Asignar <br>Aula</span>
 						</a>					
 						<a id="consulta_grupo" title="Consulta Grupo" href="javascript:void(0);">

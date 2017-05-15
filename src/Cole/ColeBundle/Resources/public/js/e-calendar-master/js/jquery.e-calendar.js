@@ -219,6 +219,21 @@
                 $("#calendar .c-grid>div[class*='c-day c-pad-top']:nth-child("+i+")").addClass("weekend");
             }
             $("#calendar .c-event-grid .c-event-list").append("<div class='div-over'>(Seleccione un día del calendario)</div>");
+
+            //Se añade los arrow a los títulos de los eventos.
+            //setTimeout(function() {
+                $(".calendar .c-event-list .title").each (function(){ 
+                    $(this).prepend("<div class='arrow-right'></div>");
+                });
+
+                $(".calendar .c-event-list .description").each (function(){ 
+                    $(this).attr("style","display: none;");
+                });
+
+                $("#calendar .c-event").attr("title","Pulse para ver eventos del día.");
+                $("#calendar .c-event-list .title").attr("title","Pulse para ver descripción.");
+            //}, 300); 
+
         }
         return print();
     }

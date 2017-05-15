@@ -22,48 +22,33 @@ $(document).ready(function () {
 		placement: "bottom"
 	});
 
-
-/*
-	//Se actualiza los datos personales de los usuarios.
-  $(document).on("submit","#datos_personales",function(event){
-  	event.preventDefault();
-    form= $(this);
-
-  	//Se comrpueba si hay algún dato erroneo en los input.
-    if($(this).find(".has-error").size()>0){
-    	return false;
-    }
-
-    tipo=$(".tipo").attr("tipo");
-		id=$(".tipo").attr("id");
-
-
-    var datos= new Object();
-    $(this).find("input").each(function(){
-    	elemento=$(this).val().replace(/ /g, "");
-    	if($(this).attr("value")!=elemento){
-				datos[$(this).attr("id")]=$(this).val();
-    	}
-    });
-    if(!$.isEmptyObject(datos)){
-      $.ajax({
-        type: 'POST',
-        url: Routing.generate('datos_personales', {_locale:"es"}),
-        data: {datos:datos, tipo:tipo, id:id},
-        dataType: 'json',
-      success: function(response) {
-          div=form.closest("#intranet").parent();
-
-$(div).load(Routing.generate('intranet_perfil', {_locale:"es"}));
-      	}
-      })
-    }
-
-    event.stopPropagation();   
-
-  });
-*/
-
+  $("#gallery").unitegallery({
+    slider_enable_arrows:true,
+    slider_enable_zoom_panel:false,
+    slider_textpanel_enable_title:true,
+    slider_textpanel_bg_opacity:0,
+    gallery_width:550,              //gallery width  
+    gallery_height:350,             //gallery height 
+    slider_control_zoom:false, 
+    slider_scale_mode: "fill", //fill, fit, down.
+    slider_controls_always_on: true,  
+    slider_enable_progress_indicator: false,
+    gallery_autoplay:true,           //true / false - begin slideshow autoplay on start
+    gallery_play_interval: 6000,        //play interval of the slideshow
+    gallery_pause_on_mouseover: true, 
+    slider_textpanel_text_valign:"top",      //middle, top, bottom - text vertical align
+    thumb_width:120,
+    thumb_height:70,
+    thumb_border_color: "#aea703",
+    thumb_over_border_color: "#ded84d",
+    thumb_selected_border_width:4,
+    thumb_selected_border_color: "#ded84d",
+    thumb_round_corners_radius:5,
+    thumb_transition_easing: "linear",
+    strippanel_enable_buttons:false,
+    strippanel_enable_handle:false,
+    theme_enable_hidepanel_button:false,
+  }); 
 
   //Se cambia el estilo de icono de admin.
   $('.bloque-menu-alumno a').on('mouseover', function(event) {
@@ -79,7 +64,34 @@ $(div).load(Routing.generate('intranet_perfil', {_locale:"es"}));
       $(this).closest(".bloque-item-menu").next().removeClass(clase);
   });
 
+  $(".imgLiquidFill").imgLiquid({
+    fill: true,
+    //horizontalAlign: "center",
+    //verticalAlign: "center"
+    horizontalAlign: "center",
+    verticalAlign: "none"
+  });
 
+
+    //Se incrementa el contador de las noticias.
+  $(document).on('click',".contenido_noticia a",function(event){ 
+
+    href=$(this).attr("href");
+    array=href.split("/");
+    id=array[array.length-1];
+    
+    $.ajax({
+      type: 'POST',
+      url: Routing.generate('contador_noticias'),
+      data:{id:id}, 
+      dataType: 'json',
+      success: function(response){
+
+      }
+    })
+  });
+
+  
 
 
 });

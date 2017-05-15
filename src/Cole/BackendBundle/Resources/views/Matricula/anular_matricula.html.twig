@@ -107,7 +107,7 @@
                                 <thead class="fixedHeader">
                                     <tr>
                                         {#<th class="id">Id</th>#}
-                                        <th class="w15 left">Apellidos, Nombre</th>
+                                        <th class="w20 left">Apellidos, Nombre</th>
                                         <th class="w11">Curso Matriculado</th>
                                         <th class="w11">Año Académido</th>
                                         <th >Fecha</th>
@@ -116,7 +116,7 @@
                                 <tbody class="scrollContent">
                                     {% for entity in entities %}
                                         <tr id="{{entity.alumno.id}}">
-                                            <td class="w15 left">{{ entity.alumno.apellido1 ~ " " ~ entity.alumno.apellido2 ~ ", " ~ entity.alumno.nombre}}</td>
+                                            <td class="w20 left">{{ entity.alumno.apellido1 ~ " " ~ entity.alumno.apellido2 ~ ", " ~ entity.alumno.nombre}}</td>
                                             <td id="{{ entity.curso.id }}" class="w11">{{entity.curso.curso ~ " " ~ entity.curso.nivel}}</td>
                                             {#<td data-order="{{ entity.fecha|date('m/d/Y') }}">{{ "2014/2015" }}</td>#}
 

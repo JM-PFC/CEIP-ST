@@ -101,6 +101,12 @@ datos_alumno:
     options:
         expose: true
 
+datos_alumno_optativas:
+    path:     /datos_alumno_optativas/{id}
+    defaults: { _controller: "BackendBundle:Alumno:DatosAlumnoOptativas" }
+    options:
+        expose: true
+
 antiguos_alumnos_por_curso:
     path:     /antiguos_alumnos_por_curso/{id}
     defaults: { _controller: "BackendBundle:Alumno:AntiguosAlumnosPorCurso" }

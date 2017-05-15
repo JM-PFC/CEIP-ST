@@ -11,12 +11,11 @@
   {% endif %}
   </div>
   <div>
-
     <h3>Responsables:</h3>
     <ul>
-      <li> {{ entity.responsable1.nombre }}</li> {#Se añade el contenido mediante javascript#}
+      <li> {{ entity.responsable1.nombre|truncate(38,true) }}</li>
       {% if entity.responsable2 %}
-      <li> {{ entity.responsable2.nombre }}</li> {#Se añade el contenido mediante javascript#}
+      <li> {{ entity.responsable2.nombre|truncate(38,true) }}</li>
       {% endif %}
     </ul>
 

@@ -9,7 +9,11 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\JsonResponse;
 
 use Cole\BackendBundle\Entity\Alumno;
+use Cole\ColeBundle\Entity\Noticias;
+
 use Cole\BackendBundle\Form\AlumnoIntranetType;
+use Symfony\Component\HttpFoundation\Response;
+
 
 
 class AlumnoController extends Controller
@@ -271,7 +275,284 @@ class AlumnoController extends Controller
             'alumno'=> $optativa ));
     }
 
-    
+    //Función de prueba para ver los resultados del horario en html.
+    public function HorarioAction($id)
+    {
+        $em = $this->getDoctrine()->getManager();
+
+        $alumno= $em->getRepository('BackendBundle:Alumno')->findOneById($id);
+
+        $grupo= $alumno->getGrupo();
+        if (!$grupo) {
+            throw $this->createNotFoundException('Unable to find Grupo.');
+        }
+        $inicio =$em->getRepository('BackendBundle:Centro')->findInicioCurso();
+        $fin =$em->getRepository('BackendBundle:Centro')->findFinCurso();
+
+        $horarios = $em->getRepository('BackendBundle:Horario')->findAll();
+
+        $entities = $em->getRepository('BackendBundle:Imparte')->findByGrupoConHorario($grupo);
+
+        $imparte= $em->getRepository('BackendBundle:Imparte')->findAsignacionesNoOpcionales($grupo);
+
+        $array=[];
+        foreach($imparte as $registro){
+            if($registro->getAula()){
+                $aula=$registro->getAula()->getNombre();
+            }
+            else{
+                $aula="";
+            }
+
+            if($registro->getDiaSemanal()){
+                $dia=$registro->getDiaSemanal();
+            }
+            else{
+                $dia=""; 
+            }
+
+            if($registro->getHorario()){
+                $horario=$registro->getHorario()->getId();
+            }
+            else{
+                $horario="";
+            }
+           
+            $array[$horario."-".$dia."-".$registro->getAsignatura()->getAsignatura()->getNombre()."-".$registro->getAsignatura()->getAsignatura()->getAbreviatura()."-".$aula."-".$registro->getGrupo()->getId()]=$registro->getProfesor()->getNombre()." ".$registro->getProfesor()->getApellido1()." ".$registro->getProfesor()->getApellido2();
+        }
+        //Se obtiene las asignaciones de la asignatura optativa del alumno.
+        if($alumno->getOptativa()){
+            $imparte= $em->getRepository('BackendBundle:Imparte')->findAsignacionesOptativaAlumno($grupo,$alumno->getOptativa());
+
+            $array_op=[];
+            foreach($imparte as $registro){
+                if($registro->getAula()){
+                    $aula=$registro->getAula()->getNombre();
+                }
+                else{
+                    $aula="";
+                }
+
+                if($registro->getDiaSemanal()){
+                    $dia=$registro->getDiaSemanal();
+                }
+                else{
+                    $dia=""; 
+                }
+
+                if($registro->getHorario()){
+                    $horario=$registro->getHorario()->getId();
+                }
+                else{
+                    $horario="";
+                }
+                $asig_op=$em->getRepository('BackendBundle:AsignaturasCursos')->findAsignaturasEspecificasOpcionalesCurso($grupo->getCurso());
+                $num_asig_op=count($asig_op);
+                $array_op[$horario."-".$dia."-".$registro->getAsignatura()->getAsignatura()->getNombre()."-".$registro->getAsignatura()->getAsignatura()->getAbreviatura()."-".$aula."-".$num_asig_op]=$registro->getProfesor()->getNombre()." ".$registro->getProfesor()->getApellido1()." ".$registro->getProfesor()->getApellido2();
+            }
+        }
+        else{
+            $array_op=null;
+        }
+        
+
+        if($grupo->getAula()==null){
+            $aula=null;
+        }
+        else{
+            $aula=$grupo->getAula();
+        }
+
+        return $this->render('IntranetBundle:Alumno:horario_de_clase.html.twig', array(
+            'alumno' => $alumno,
+            'entities' => $entities,
+            'inicio' => $inicio,
+            'fin' => $fin,
+            'horarios' => $horarios,
+            'aula' => $aula,
+            'grupo' => $grupo->getCurso()->getCurso()." ".$grupo->getCurso()->getNivel()." - Grupo ".$grupo->getLetra(),
+            'imparte' => $array,
+            'imparte_op' => $array_op,
+            'profesor' => $grupo->getProfesor(),
+        ));
+        
+    }
+
+    public function HorarioPdfAction($id)
+    {
+       $em = $this->getDoctrine()->getManager();
+
+        $alumno= $em->getRepository('BackendBundle:Alumno')->findOneById($id);
+
+        $grupo= $alumno->getGrupo();
+
+        $inicio =$em->getRepository('BackendBundle:Centro')->findInicioCurso();
+        $fin =$em->getRepository('BackendBundle:Centro')->findFinCurso();
+
+        $horarios = $em->getRepository('BackendBundle:Horario')->findAll();
+        
+        $entities = $em->getRepository('BackendBundle:Imparte')->findByGrupoConHorario($grupo);
+        $imparte= $em->getRepository('BackendBundle:Imparte')->findAsignacionesNoOpcionales($grupo);
+
+        $array=[];
+        foreach($imparte as $registro){
+            if($registro->getAula()){
+                $aula=$registro->getAula()->getNombre();
+            }
+            else{
+                $aula="";
+            }
+
+            if($registro->getDiaSemanal()){
+                $dia=$registro->getDiaSemanal();
+            }
+            else{
+                $dia=""; 
+            }
+
+            if($registro->getHorario()){
+                $horario=$registro->getHorario()->getId();
+            }
+            else{
+                $horario="";
+            }
+           
+            $array[$horario."-".$dia."-".$registro->getAsignatura()->getAsignatura()->getNombre()."-".$registro->getAsignatura()->getAsignatura()->getAbreviatura()."-".$aula."-".$registro->getGrupo()->getId()]=$registro->getProfesor()->getNombre()." ".$registro->getProfesor()->getApellido1()." ".$registro->getProfesor()->getApellido2();
+        }
+
+        //Se obtiene las asignaciones de la asignatura optativa del alumno.
+        if($alumno->getOptativa()){
+            $imparte= $em->getRepository('BackendBundle:Imparte')->findAsignacionesOptativaAlumno($grupo,$alumno->getOptativa());
+
+            $array_op=[];
+            foreach($imparte as $registro){
+                if($registro->getAula()){
+                    $aula=$registro->getAula()->getNombre();
+                }
+                else{
+                    $aula="";
+                }
+
+                if($registro->getDiaSemanal()){
+                    $dia=$registro->getDiaSemanal();
+                }
+                else{
+                    $dia=""; 
+                }
+
+                if($registro->getHorario()){
+                    $horario=$registro->getHorario()->getId();
+                }
+                else{
+                    $horario="";
+                }
+                $asig_op=$em->getRepository('BackendBundle:AsignaturasCursos')->findAsignaturasEspecificasOpcionalesCurso($grupo->getCurso());
+                $num_asig_op=count($asig_op);
+                $array_op[$horario."-".$dia."-".$registro->getAsignatura()->getAsignatura()->getNombre()."-".$registro->getAsignatura()->getAsignatura()->getAbreviatura()."-".$aula."-".$num_asig_op]=$registro->getProfesor()->getNombre()." ".$registro->getProfesor()->getApellido1()." ".$registro->getProfesor()->getApellido2();
+            }
+        }
+        else{
+            $array_op=null;
+        }
+
+        if($grupo->getAula()==null){
+            $aula=null;
+        }
+        else{
+            $aula=$grupo->getAula();
+        }
+
+        $html = $this->renderView('IntranetBundle:Alumno:horario_de_clase.html.twig', array(
+            'alumno' => $alumno,
+            'entities' => $entities,
+            'inicio' => $inicio,
+            'fin' => $fin,
+            'horarios' => $horarios,
+            'aula' => $grupo->getAula(),
+            'grupo' => $grupo->getCurso()->getCurso()." ".$grupo->getCurso()->getNivel()." - Grupo ".$grupo->getLetra(),
+            'imparte' => $array,
+            'imparte_op' => $array_op,
+            'profesor' => $grupo->getProfesor(),
+        ));
+
+        $options = [
+            'margin-top'    => 3,
+            'margin-right'  => 8,
+            'margin-bottom' => 3,
+            'margin-left'   => 8,
+            //Opciones para orientación horizontal.
+            'orientation'=>'Landscape', 
+            'default-header'=>false
+        ];
+        $dato=$alumno->getApellido1()."_".$alumno->getApellido2();
+        return new Response(
+            $this->get('knp_snappy.pdf')->getOutputFromHtml($html,$options),
+            200,
+            array(
+                'Content-Type'        => 'application/pdf',
+                'Content-Disposition' => 'attachment; filename="Horario_'.$dato.'.pdf"'
+            )
+        );
+    }
+
+
+    public function noticiasAction(Request $request, $id)
+    {
+        $this->comprobarHijo($id);
+
+        $em = $this->getDoctrine()->getManager();
+
+        $entity= $em->getRepository('BackendBundle:Alumno')->findOneById($id);
+        if($entity->getCurso()->getNivel()=="Primaria"){
+            $noticias= $em->getRepository('ColeBundle:Noticias')->findBy(array('categoria'=>'primaria'), array('fecha'=>'DESC'));
+        }
+        else{
+            $noticias= $em->getRepository('ColeBundle:Noticias')->findBy(array('categoria'=>'infantil'), array('fecha'=>'DESC'));
+        }
+        $paginator  = $this->get('knp_paginator');
+        $pagination = $paginator->paginate(
+            $noticias, /* query NOT result */
+            $request->query->getInt('page', 1)/*page number*/,
+            6/*limit per page*/
+        );
+
+        return $this->render('IntranetBundle:Alumno:noticias.html.twig', array(
+            'entity' => $entity, 
+            'noticias'=> $noticias,
+            'pagination'=> $pagination));
+    }
+
+    public function noticiaAction($id,$num)
+    {
+        $this->comprobarHijo($id);
+
+        $em = $this->getDoctrine()->getManager();
+
+        $entity= $em->getRepository('BackendBundle:Alumno')->findOneById($id);
+
+        $noticia= $em->getRepository('ColeBundle:Noticias')->findOneById($num);
+     
+        $imagenes = array();
+        if($noticia->getGaleria()!=null) {
+            $photoDir = $this->container->getParameter('kernel.root_dir').'/../web/uploads/noticias/galeria/'.$noticia->getGaleria().'/';
+            
+            foreach (glob($photoDir."*.*") as $nombre_dir) {
+                $nombre_dir = explode("/", $nombre_dir);
+                $nombre_dir =end($nombre_dir);
+                $imagenes[]=$nombre_dir;
+            }
+        }
+
+        return $this->render('IntranetBundle:Alumno:noticia.html.twig', array(
+            'entity' => $entity, 
+            'noticia'=> $noticia,
+            'imagenes' => $imagenes));
+    }
+
+
+
+
+
 
 
 }

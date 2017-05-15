@@ -681,8 +681,8 @@ nav{
 	#tutor_grupos #lista_grupos ul{
 		width: 88% !important;
 	}
-	#multiples_alumnos .columna_foto,#multiples_alumnos img,.tabla_con_seleccion .columna_foto{
-		width: 100% !important;
+	#multiples_alumnos .columna_foto,#consulta_antiguo_alumno .columna_foto,.tabla_con_seleccion .columna_foto{
+		width: 98% !important;
 	}
 	#asignar_profesor .simple_column, #asignar_horario_grupos .simple_column{
 		width: 25% !important;
@@ -702,19 +702,16 @@ nav{
 	#asignar_profesor .simple_column button, #asignar_horario_grupos .simple_column button{
 		margin: 0 2% !important;
 	}
-
 	#asignar_profesor .lista_cursos, #asignar_horario_grupos .lista_cursos {
 		margin: 2% 2% 0 !important;
     	width: 12% !important;
 	}
-
 	#asignar_profesor .lista_cursos, #asignar_horario_grupos .lista_cursos{
 		margin: 0.5% 2% 0 !important;
     	max-height: 75px !important;
     	min-height: 75px !important;
     	width: 71% !important;
 	}
-
 	.lista_cursos .cabecera_lista{
 		height: 18px !important;	
 	}
@@ -745,6 +742,26 @@ nav{
 	.contenedor_principal_reserva button{
 		margin: 10px !important;
 	}
+	.contenido_info ul{
+		margin: 2% 3% 5% 13% !important;
+	}
+	.contenido_info h3{
+		margin: 0 1% !important;
+	}
+	.contenido_info li{
+		font-size: 13px !important;
+    	margin: 4% 0 !important;
+	}
+	.columna_foto {
+    	width: 97% !important;
+	}
+	#asignar_optativa .btn_2opciones {
+    	margin-left: 5% !important;
+	}
+	#asignar_optativa .info_en_tabla ul {
+    	margin: 0px !important;
+	}
+
 }
 
 
@@ -756,7 +773,6 @@ nav{
 	padding-top: 2px;
 	width: 96%;
 }
-
 /*Mensaje máx pestañas*/
 #dialog-message{
 	font-size: 20px;
@@ -1869,6 +1885,9 @@ button[class*="elected"]{
 	float: left;
 	margin: 2% 5%;
 }
+#lista_cursos select{
+	text-align: center;
+}
 .ui-dialog #ordenar_cursos li{
     background: #ffffff none repeat scroll 0 0;
     border: 1px solid #c5c5c5;
@@ -2399,7 +2418,7 @@ button[class*="elected"]{
 }
 .span_title{
 	margin-left: 15%;
-	margin-top: 10px;
+	margin-top: 6px;
 	text-align: left;
 	display: block;
 }
@@ -2562,8 +2581,11 @@ button[class*="elected"]{
 
 .parent_no_form{
 	display: inline-flex;
-	height: 50vh;
+	height: 53vh;
 	width: 100%;
+}
+#registrar_noticias .parent_no_form{
+	height: 50vh !important;
 }
 .parent_no_form button:not(.btn_info){
 	font-size: 1em !important;
@@ -4642,10 +4664,14 @@ input[id="si"]{
 	font-family: Impact,Haettenschweiler,Franklin Gothic Bold,Charcoal,Helvetica Inserat,Bitstream Vera Sans Bold,Arial Black,sans serif;
 	color: #424242;
 }
-
+#contenedor_reserva_horas button[class*="elected"]{
+	cursor: pointer !important;
+	pointer-events: auto !important;
+}
 .contenedor_reserva{
 	max-height: 44vh;
-    overflow: auto;	
+    overflow-y: auto;	
+    overflow-x: hidden !important;
 }
 .calendario_lectivos{
 	margin:3% auto;
@@ -5028,9 +5054,11 @@ tbody.scrollContent tr.alternateRow td {
 #tableContainer table thead th,#tableContainer table tbody td{
 	padding: 3px 1% ;
 }
-
 #tableContainer  tr th,#tableContainer tr td{
 	width: 9% !important;
+}
+#consulta_antiguo_alumno #tableContainer  tr th,#consulta_antiguo_alumno #tableContainer tr td, #multiples_alumnos #tableContainer  tr th,#multiples_alumnos #tableContainer tr td{
+	width: 11% !important;
 }
 #tableContainer  tr th[class*="id"],#tableContainer tr td[class*="id"]{
 	width: 1% !important;
@@ -5324,10 +5352,10 @@ tbody.scrollContent tr.alternateRow td {
 	font-size: 13px;
 	cursor: pointer;
 }
-.btn_2opciones label[for="activos"]{
+.btn_2opciones label[for="activos"], .btn_2opciones label[for="no_asignados"]{
 	border-radius: 5px 0 0 5px !important;
 }
-.btn_2opciones label[for=inactivos]{
+.btn_2opciones label[for=inactivos],.btn_2opciones label[for=asignados]{
 	border-radius: 0 5px 5px 0 !important;
 }
 .btn_selected{
@@ -5404,7 +5432,11 @@ tbody.scrollContent tr.alternateRow td {
 	border-bottom: 1px solid grey;
 	font-family: "Times New Roman",Arial,sans-serif;
 }
-#multiples_alumnos .columna_foto,#multiples_alumnos img,.tabla_con_seleccion .columna_foto{
+#consulta_antiguo_alumno .info_en_tabla{
+	height: 40vh !important;
+	font-family: "Times New Roman",Arial,sans-serif;	
+}
+#multiples_alumnos .columna_foto,#consulta_antiguo_alumno .columna_foto,.tabla_con_seleccion .columna_foto{
 	margin-top: 5px;
 }
 #multiples_alumnos #enviar_select, .tabla_con_seleccion #enviar_select{
@@ -7548,4 +7580,40 @@ cursor: default !important;
     font-size: 15px;
     margin-top: -4%;
     min-width: 100%;
+}
+#asignar_optativa table tbody button {
+    margin: 0 5% !important;
+    min-width: 50px !important; 
+}
+#asignar_optativa #no_asignados button[class*="elected"]{
+	cursor: pointer !important;
+	pointer-events: auto !important;
+}
+#asignar_optativa #asignados button[class*="asignada elected"]{
+	border: 2px inset !important;
+	 background-color: #5cb85c!important;
+    border-color: #4cae4c!important;
+    color: #fff!important;
+}
+#asignar_optativa .img-mini {
+    height: 93px !important;
+    width: 75px !important;
+}
+#asignar_optativa .info_en_tabla h3{
+    text-align: center !important;
+}
+#asignar_optativa .info_en_tabla ul {
+    list-style: outside none none;
+    margin: 0 0 0 10px;
+}
+#asignar_optativa .info_en_tabla button {
+    min-width: 45px !important;
+    margin-right: 5px;
+}
+
+#asignar_optativa #lista_cursos {
+    width: 30%;
+}
+#asignar_optativa .text_cabecera_2 {
+    width: 22%;
 }

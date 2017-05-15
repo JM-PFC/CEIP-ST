@@ -1,0 +1,12 @@
+{% if num_optativas == 0 %}
+    <p class="red">Falta asignar optativas al curso</p>
+{% else %}
+	{% for entity in entities %}
+    	{% set array = entity.asignatura.abreviatura|split(' ') %}
+    	{% if array|length == 1 %}
+			<button color="{{entity.asignatura.color}}" id="{{entity.id}}">{{ entity.asignatura.abreviatura|slice(0, 3)|lower|capitalize ~ "." }}</button>
+    	{% else %}
+        	<button color="{{entity.asignatura.color}}" id="{{entity.id}}">{{ array[0]|slice(0, 1)|lower|capitalize ~ ". " ~ array[1]|slice(0, 1)|lower|capitalize ~ "."}}</button>
+   		{% endif %}
+	{% endfor %}
+{% endif %}

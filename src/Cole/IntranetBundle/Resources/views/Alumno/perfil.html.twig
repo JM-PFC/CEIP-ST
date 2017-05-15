@@ -35,6 +35,32 @@
 	</li>
 {% endblock %}
 
+
+
+{% block sidebar %}
+	<li id="inicio" class="active">
+		<a href="{{path('intranet_alumno', { 'id': entity.id })}}">
+			<i class="fa fa-th"></i>
+			{% trans %}Panel principal{% endtrans %}
+		</a>
+	</li>
+	<li id="perfil">
+		<a href="{{path('intranet_perfil')}}">
+			<i class="fa fa-user"></i>
+			{% trans %}Mi perfil{% endtrans %}
+		</a>
+	</li>
+	<li >
+		<a class="c_azul" href="{{path('logout')}}">
+			<strong>
+				<i class="fa fa-sign-out"></i>
+				{% trans %}Cerrar sesión{% endtrans %}
+			</strong>
+		</a>
+	</li>			
+{% endblock %}
+
+
 {% block titulo_cabecera %}
 	<i class="fa fa-user"></i>
 	{% trans %}Mi perfil{% endtrans %}

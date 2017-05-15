@@ -11,7 +11,7 @@
 
 	 $("#asignar_profesor #cabecera_lista[grupo='"+grupo+"']").next().find(" tr[id='"+asignatura+"'] td:nth-child(2)").text(profesor);
 	 $("#asignar_profesor #cabecera_lista[grupo='"+grupo+"']").next().find(" tr[id='"+asignatura+"'] td:nth-child(2)").removeClass('text_a_c');
-    //Si existe aulaasignada se muestra en la tabla.  
+    //Si existe aula asignada se muestra en la tabla.  
     if(aula!="" ){
       $("#asignar_profesor #cabecera_lista[grupo='"+grupo+"']").next().find(" tr[id='"+asignatura+"'] td:nth-child(3)").text(aula);
       $("#asignar_profesor #cabecera_lista[grupo='"+grupo+"']").next().find(" tr[id='"+asignatura+"'] td:nth-child(3)").removeClass('text_a_c');

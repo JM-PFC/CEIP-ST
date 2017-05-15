@@ -599,7 +599,7 @@ fieldset.fsetoculto {
 .migas{
     margin-top: 70px;
     color: #496A9F;
-    font-size: 1.05em;
+    font-size: 0.95em;
     height: 30px;
 }
 .migas > span{
@@ -660,7 +660,7 @@ fieldset.fsetoculto {
     padding:0 10px;
     color: #001F51;
 }
-.aside_columna p span{
+.horarios p span{
     display: block;
     text-align: center;
     border-left: #334c73 2px solid;
@@ -716,6 +716,10 @@ fieldset.fsetoculto {
     min-height: 160px;
     overflow: hidden;
 }
+.noticia h2{
+    margin-top: 10px !important;
+    margin-bottom: 15px !important;
+}
 .main .contenedor_noticia:last-child{
     border: none !important;
 }
@@ -760,6 +764,9 @@ fieldset.fsetoculto {
     box-sizing: border-box;
     word-wrap: break-word;
 }
+.contenido_noticia p{
+    margin-top: 10px !important;
+}
 #recientes{
     padding: 20px 10px;
 }
@@ -768,6 +775,10 @@ fieldset.fsetoculto {
 }
 #recientes .contenido_noticia{
     width: 89%;
+}
+#recientes .contenido_noticia p{
+    margin-top: 0px !important;
+
 }
 .imgLiquidFill{
     position: relative;
@@ -847,7 +858,6 @@ fieldset.fsetoculto {
     margin: 5px !important;
     padding-left: 0 !important;
 }
-
 #calendar .c-event-item > div{
     white-space: pre-wrap;
 }
@@ -917,7 +927,7 @@ fieldset.fsetoculto {
     background-color: #abd0d5;
     border-radius: 25px;
     margin: 0 2.6%;
-    width: 9.05%;
+    width: 9.1%;
     text-decoration: underline;
     font-weight: bold;
 }
@@ -944,7 +954,6 @@ fieldset.fsetoculto {
     margin: 0;
     width: 14.28%;
 }
-
 .dia_select{
     background: #5cb85c !important;
     color: #001f51 !important;   
@@ -961,52 +970,44 @@ fieldset.fsetoculto {
     width: 16px;
     background-image: url("../images/menu/ui-icons_334c73_256x240.png");
 }
-
 .icon-triangle-1-e {
     background-position: -32px -16px;
 }
-
 .calendar .description{
     background: #abd0d5;
     border-top: 1px solid #001f51 !important;
     padding: 10px;
     border-radius: 5px;
 }
-
 .arrow-right{
-    width: 0;
-    height: 0;
-    border-top: 5px solid transparent;
-    border-bottom: 5px solid transparent;
-    border-left: 5px solid #001f51;
-    float: left;
-    margin-top: 3px;
-    margin-right: 3px;
+    width: 0 !important;
+    height: 0!important;
+    border-top: 5px solid transparent !important;
+    border-bottom: 5px solid transparent !important;
+    border-left: 5px solid #001f51 !important;
+    float: left !important;
+    margin-top: 3px !important;
+    margin-right: 3px !important;
 }
-
 .arrow-down{
-    width: 0;
-    height: 0;
-    border-top: 5px solid #001f51;
-    border-right: 5px solid transparent;
-    border-left: 5px solid transparent;
-    float: left;
-    margin-top: 6px;
-    margin-right: 3px;
+    width: 0 !important;
+    height: 0 !important;
+    border-top: 5px solid #001f51 !important;
+    border-right: 5px solid transparent !important;
+    border-left: 5px solid transparent !important;
+    float: left !important;
+    margin-top: 6px !important;
+    margin-right: 3px !important;
 }
-
 .calendar .c-event-list .title:hover{
     pointer-events: auto !important;
     cursor: pointer !important;
 }
-
 #gallery{
     margin: 50px auto;
     border-radius: 5px;
     box-shadow: 2px 2px 5px grey
 }
-
-
 #pre_footer{
     margin: 0 auto -25px;
     height: 250px;
@@ -1101,9 +1102,26 @@ tbody tr td{
     padding: 0 5px;
 }
 
-
-
-
+.horario_alumno_intranet .aula_horario_intranet{
+    font-size: 17px;
+    vertical-align: middle;
+}
+.horario_alumno_intranet #alumno{
+    clear: none;
+    float: left;
+    font-size: 17px;
+    margin-bottom: 5px;
+    margin-top: 15px;
+    width: 100%;
+}
+.horario_alumno_intranet #alumno .label{
+    display: block;
+    float: left;
+    font-weight: bold;
+    height: 26px;
+    margin-left: 30px;
+    margin-right: 7px;
+}
 
 
 

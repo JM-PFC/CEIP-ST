@@ -32,6 +32,26 @@ class AsignaturaController extends Controller
         ));
     }
 
+    public function showOptativasAction()
+    {
+        $em = $this->getDoctrine()->getManager();
+
+                //Se obtiene los alumnos activos que están matriculados y que no tiene asignada ninguna asignatura de las opcionales.
+        $entities_no_asig = $em->getRepository('BackendBundle:Alumno')->findOptativaNoAsignada(); 
+
+        //Se obtiene los alumnos activos que están matriculados y que tiene asignada la asignatura opcional.
+        $entities_asig = $em->getRepository('BackendBundle:Alumno')->findOptativaAsignada(); 
+
+        return $this->render('BackendBundle:Asignatura:AsignarOptativaAlumno.html.twig', array(
+            'entities_no_asig' => $entities_no_asig,
+            'entities_asig' => $entities_asig,
+        ));
+    }
+
+
+
+
+
     public function asignaturasCursosAction()
     {
         $em = $this->getDoctrine()->getManager();
@@ -297,10 +317,16 @@ class AsignaturaController extends Controller
                     $em->remove($asignaturaCurso);
                     $em->flush();
                 }
+
+                //Eliminación del campo "optativa" en los alumnos si es una asignatura opcional.
+                $alumnos = $em->getRepository('BackendBundle:Alumno')->findAlumnosConAsigComoOptativa($entity);
+
+                foreach ($alumnos as $alumno ) {
+                    $alumno->setOptativa(null);
+                }
             }
 
             $em->flush();
-
             return $this->redirect($this->generateUrl('asignatura_edit', array('id' => $id)));
         }
 
@@ -326,6 +352,10 @@ class AsignaturaController extends Controller
             if (!$entity) {
                 throw $this->createNotFoundException('Unable to find Asignatura entity.');
             }
+
+            //La eliminación de asignaciones de la tabla "AsignaturasCursos" se realiza desde la entidad con cascade={"remove"}
+
+            //Eliminación de las asignaciones de la tabla imparte.
             $asignaciones = $em->getRepository('BackendBundle:AsignaturasCursos')->findByAsignatura($entity);
 
             foreach ($asignaciones as $asignaturacurso ) {
@@ -334,6 +364,15 @@ class AsignaturaController extends Controller
                     $em->remove($asignacion);
                 }
             }  
+
+            //Eliminación del campo "optativa" en los alumnos si es una asignatura opcional.
+            if($entity->getOpcional()==1){
+                $alumnos = $em->getRepository('BackendBundle:Alumno')->findAlumnosConAsigComoOptativa($entity);
+
+                foreach ($alumnos as $alumno ) {
+                    $alumno->setOptativa(null);
+                }
+            }
 
             $em->remove($entity);
             $em->flush();
@@ -571,6 +610,55 @@ class AsignaturaController extends Controller
         }
 
     }
+
+    public function OptativasCursoAction($id)
+    {
+        $em = $this->getDoctrine()->getManager();
+
+        $entities =$em->getRepository('BackendBundle:AsignaturasCursos')->findAsignaturasEspecificasOpcionalesCurso($id);
+        if($entities){
+            $num_optativas=count($entities);
+        }
+        else{
+            $num_optativas=0;
+        }
+        return $this->render('BackendBundle:Asignatura:listaOptativasCurso.html.twig', array(
+            'entities' => $entities,
+            'num_optativas'=> $num_optativas
+        ));
+    }
+
+
+    public function AsignarOptativaAction()
+    {
+        $em = $this->getDoctrine()->getManager();
+
+        $asignadas=$this->get('request')->request->get('asignadas');
+        $num=0;
+        $data=1;
+        if($asignadas==null){
+            $data=null;
+            return new JsonResponse(array('data' => $data), 200);
+        }
+
+        if($asignadas){
+          foreach ($asignadas as $alumno => $optativa) {
+            $entity = $em->getRepository('BackendBundle:Alumno')->findOneById($alumno);
+            $asignatura=$em->getRepository('BackendBundle:AsignaturasCursos')->findOneById($optativa);
+            $entity->setOptativa($asignatura);
+
+            $em->persist($entity);
+            $num++; 
+          }  
+        }
+        $em->flush();
+        
+        return new JsonResponse(array(
+            'data' => $data,            
+            'num' =>  $num,
+            'success' => true), 200);
+    }
+
 
 
 }

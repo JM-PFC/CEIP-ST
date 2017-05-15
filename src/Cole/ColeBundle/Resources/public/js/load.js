@@ -141,7 +141,8 @@ $(document).ready(function () {
       });
     }
   })
-  //Se añade los arrow a los títulos de los eventos.
+  //Se añade los arrow a los títulos de los eventos. //Añadidoen el archivo de e-calendar.js
+  /*
   setTimeout(function() {
     $(".calendar .c-event-list .title").each (function(){ 
       $(this).prepend("<div class='arrow-right'></div>");
@@ -154,7 +155,7 @@ $(document).ready(function () {
     $("#calendar .c-event").attr("title","Pulse para ver eventos del día.");
     $("#calendar .c-event-list .title").attr("title","Pulse para ver descripción.");
   }, 300); 
- 
+ */
   $(document).on('click',".calendar .c-event-list .title",function(event){ 
     event.preventDefault();
 
@@ -260,8 +261,8 @@ $(document).ready(function () {
     slider_scale_mode: "fill", //fill, fit, down.
     slider_controls_always_on: true,  
     slider_enable_progress_indicator: false,
-    gallery_autoplay:false,           //true / false - begin slideshow autoplay on start
-    gallery_play_interval: 3000,        //play interval of the slideshow
+    gallery_autoplay:true,           //true / false - begin slideshow autoplay on start
+    gallery_play_interval: 6000,        //play interval of the slideshow
     gallery_pause_on_mouseover: true, 
     slider_textpanel_text_valign:"top",      //middle, top, bottom - text vertical align
     thumb_width:120,

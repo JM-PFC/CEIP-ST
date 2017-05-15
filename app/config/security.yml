@@ -9,9 +9,12 @@ security:
                 check_path: /login_check
                # use_referer: true
                 default_target_path: /es/intranet
+                require_previous_session: false
             logout: ~
             access_denied_handler: accessdenied_handler
-
+            remember_me:
+                key:      coleST
+                lifetime: 1800
 
         #         frontend:
         #    pattern:  ^/

@@ -18,7 +18,17 @@
             </article>
         {% block aside %}
           {{render (controller('ColeBundle:Cole:HorariosAtencion'))}}
-
+            <article class="aside_columna">
+              <h3>Calendario del curso</h3>
+              <a href="{{ path('calendariopdf') }}">
+                <p> Calendario Escolar</p>
+                <p>
+                  <span id="año_inicio"></span>
+                  /
+                  <span id="año_fin"></span>
+                </p>
+              </a>
+            </article>
             <article class="aside_columna">
                 <h3>Sobre nosotros</h3>
                 <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Eveniet esse, provident architecto dolores odit eius repellendus ex, aut voluptate natus, in officiis! Odio labore, earum, excepturi quod temporibus voluptatem provident. ...</p>

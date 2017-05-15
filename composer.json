@@ -25,7 +25,8 @@
         "knplabs/knp-menu-bundle":"dev-master",
         "knplabs/knp-snappy-bundle": "^1.4",
         "h4cc/wkhtmltopdf-amd64": "^0.12.3",
-        "stfalcon/tinymce-bundle": "~1.0"
+        "stfalcon/tinymce-bundle": "~1.0",
+        "knplabs/knp-paginator-bundle": "^2.5"
 
     },
     "scripts": {

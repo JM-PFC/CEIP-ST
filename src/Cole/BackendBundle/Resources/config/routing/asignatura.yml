@@ -78,3 +78,15 @@ datos_asignatura:
     defaults: { _controller: "BackendBundle:Asignatura:DatosAsignatura" }
     options:
         expose: true
+
+show_optativas:
+    path:     /show_optativas
+    defaults: { _controller: "BackendBundle:Asignatura:showOptativas" }
+    options:
+        expose: true
+
+asignar_optativa:
+    path:     /asignar_optativa
+    defaults: { _controller: "BackendBundle:Asignatura:AsignarOptativa" }
+    options:
+        expose: true

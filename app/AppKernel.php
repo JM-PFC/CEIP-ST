@@ -23,6 +23,7 @@ class AppKernel extends Kernel
             new Cole\IntranetBundle\IntranetBundle(),
             //new Ps\PdfBundle\PsPdfBundle(),
             new Knp\Bundle\SnappyBundle\KnpSnappyBundle(),
+            new Knp\Bundle\PaginatorBundle\KnpPaginatorBundle(),
             new Stfalcon\Bundle\TinymceBundle\StfalconTinymceBundle(),
         );
 

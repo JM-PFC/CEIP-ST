@@ -95,4 +95,36 @@ class AlumnoRepository extends EntityRepository
 			'activo'=>1))
 		->getResult();
 	}
+
+	public function findOptativaNoAsignada()
+	{
+		return $this->getEntityManager()->createQuery(
+		'SELECT a FROM BackendBundle:Alumno a INNER JOIN a.curso c WHERE a.activo=:activo and a.curso IS not NULL and c.nivel=:nivel and a.optativa IS NULL')
+		->setParameters(array(
+			'activo'=>1,
+			'nivel'=>'Primaria'))
+		->getResult();
+	}
+
+	public function findOptativaAsignada()
+	{
+		return $this->getEntityManager()->createQuery(
+		'SELECT a FROM BackendBundle:Alumno a INNER JOIN a.curso c WHERE a.activo=:activo and a.curso IS not NULL and c.nivel=:nivel and a.optativa IS not NULL')
+		->setParameters(array(
+			'activo'=>1,
+			'nivel'=>'Primaria'))
+		->getResult();
+	}
+
+	public function findAlumnosConAsigComoOptativa($asignatura)
+	{
+		return $this->getEntityManager()->createQuery(
+		'SELECT a FROM BackendBundle:Alumno a INNER JOIN a.curso c INNER JOIN a.optativa o INNER JOIN o.asignatura asig WHERE c.nivel=:nivel and asig=:asignatura')
+		->setParameters(array(
+			'asignatura'=>$asignatura,
+			'nivel'=>'Primaria'))
+		->getResult();
+	}
+
+
 }

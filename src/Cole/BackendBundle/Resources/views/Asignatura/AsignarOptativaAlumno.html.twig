@@ -7,13 +7,12 @@
 <script>
 
     // Tabla con la opción de ordenar y búsqueda de antiguos alumnos activos.
-    $('#old_student_active').DataTable( { //on( 'page.dt',   function () { $(".current").prop("disabled", true); } )
-        //"aLengthMenu": [[25, 50, 100, 250, 500, -1], [25, 50, 100, 250, 500, "All"]],
+    $('#t_no_asignados').DataTable( { 
                 initComplete: function () {
             this.api().columns().every( function (e) {
                 var column = this;
                 var select = $('<select class="'+e+'"><option value=""></option></select>')
-                    .appendTo('.select_table_active')
+                    .appendTo('.tabla_no_asignados')
                     .on( 'change', function () {
                         var val = $.fn.dataTable.util.escapeRegex(
                             $(this).val()
@@ -53,15 +52,13 @@
         }
     });
 
-
-    // Tabla con la opción de ordenar y búsqueda de antiguos alumnos inactivos.
-    $('#old_student').DataTable( { //on( 'page.dt',   function () { $(".current").prop("disabled", true); } )
-        //"aLengthMenu": [[25, 50, 100, 250, 500, -1], [25, 50, 100, 250, 500, "All"]],
+    // Tabla con la opción de ordenar y búsqueda de antiguos alumnos activos.
+    $('#t_asignados').DataTable( { 
                 initComplete: function () {
             this.api().columns().every( function (e) {
                 var column = this;
                 var select = $('<select class="'+e+'"><option value=""></option></select>')
-                    .appendTo('.select_table')
+                    .appendTo('.tabla_asignados')
                     .on( 'change', function () {
                         var val = $.fn.dataTable.util.escapeRegex(
                             $(this).val()
@@ -85,7 +82,7 @@
             "orderable": false,} ],
         "language": {
             "zeroRecords": "Lo siento, no se ha encontrado ningún registro coincidente",
-            "emptyTable": "No hay antiguos alumnos en el sistema",
+            "emptyTable": "No hay alumnos en el curso anterior pendientes de matriculación",
             "lengthMenu": "Mostrar _MENU_ entradas",
             "loadingRecords": "Cargando...",
             "processing":     "Processando...",
@@ -101,148 +98,146 @@
         }
     });
 
-    $("#consulta_antiguo_alumno .dataTables_info").addClass("oculto");
-    $("#consulta_antiguo_alumno .dataTables_paginate").addClass("oculto");
-    $("#consulta_antiguo_alumno .dataTables_length").addClass("oculto");
-    $('#consulta_antiguo_alumno .contenedor_registro').each (function(){ 
+    $("#asignar_optativa .dataTables_info").addClass("oculto");
+    $("#asignar_optativa .dataTables_paginate").addClass("oculto");
+    $("#asignar_optativa .dataTables_length").addClass("oculto");
+    $('#asignar_optativa .contenedor_registro').each (function(){ 
       $(this).find(".dataTables_filter").appendTo($(this).find('#buscador'));
     });
 
     // Se comprueba si existe scrol vertical para ajustar el thead
-    if( $('#consulta_antiguo_alumno table tbody').get(0).scrollHeight>$('#consulta_antiguo_alumno table tbody').height()){
-        $("#consulta_antiguo_alumno table thead tr>th:last-child").attr('style', 'width: 10.5% !important');
+    if( $('#asignar_optativa table tbody').get(0).scrollHeight>$('#asignar_optativa table tbody').height()){
+        $("#asignar_optativa table thead tr>th:last-child").attr('style', 'width: 10% !important');
     }
     else{
-        $("#consulta_antiguo_alumno table thead tr>th:last-child").attr('style', 'width: 11% !important');
+        $("#asignar_optativa table thead tr>th:last-child").attr('style', 'width: 9% !important');
     }
     
     $(window).resize(function() {
         //Se comrpueba si está el div con la tabla para cambiar los estilos.
-        if($('#consulta_antiguo_alumno table tbody').length){
-            if($('#consulta_antiguo_alumno table tbody').get(0).scrollHeight>$('#consulta_antiguo_alumno table tbody').height() ){
-                $("#consulta_antiguo_alumno table thead tr>th:last-child").attr('style', 'width: 10.5% !important');
+        if($('#asignar_optativa table tbody').length){
+            if($('#asignar_optativa table tbody').get(0).scrollHeight>$('#asignar_optativa table tbody').height() ){
+                $("#asignar_optativa table thead tr>th:last-child").attr('style', 'width: 10% !important');
             }
             else{
-                $("#consulta_antiguo_alumno table thead tr>th:last-child").attr('style', 'width: 11% !important');
+                $("#asignar_optativa table thead tr>th:last-child").attr('style', 'width: 9% !important');
             }
         }
     });
 
-    $("#consulta_antiguo_alumno tbody tr td[class='dataTables_empty']").closest("tr").addClass("no_cursor");
-    $("#antiguo_alumno_activo tbody tr td:contains('Promociona')").css("color","#0B610B");
-    $("#antiguo_alumno_activo tbody tr td:contains('Repite')").css("color","#bc1010");
+    $("#asignar_optativa tbody tr td[class='dataTables_empty']").closest("tr").addClass("no_cursor");
+
+    //Se añade las siguientes clases para indicar con ambas la opción asignada. 
+    //Se da un estilo con las dos clases juntas en css.
+    $("#asignar_optativa #asignados .asig_asignada").each (function(){ 
+      id=$(this).attr("id");
+      $(this).find("button[id='"+id+"']").addClass('asignada');
+      $(this).find("button[id='"+id+"']").addClass('elected');
+    });
 
 </script>
 
 {% endblock %}
 
 {% block body -%}
-    <div id="consulta_antiguo_alumno" >
+    <div id="asignar_optativa" class="">
         <div class="parent_no_form">
         <div class="child">
-            <div class="contenedor_registro antiguo_alumno" id="antiguo_alumno_activo" >  
+            <div class="contenedor_registro tabla_con_seleccion asignar_optativa" id="no_asignados">  
                 <div>
                     <div id="cabecera_lista">
-                        <div id="lista_cursos" class="lista_activos">
-                         Último curso: {{render(controller("BackendBundle:Curso:listaCursos"))}}
+                        <div id="lista_cursos" class="lista_no_asignados">
+                         Buscar por curso: {{render(controller("BackendBundle:Curso:listaCursosPrimaria"))}}
                         </div>
-                        <h2 class="text_cabecera_2">Antiguos Alumnos</h2>
-                        <div class="opciones btn_2opciones">    
-                            <label class="btn_selected" id="btn_activos" for="activos">Activos</label>
-                            <input type="radio" name="activos" id="activos">
-                            <label for="inactivos" id="btn_inactivos">Inactivos</label>
-                            <input type="radio" name="inactivos" id="inactivos">
-                        </div>
-                        <div id="buscador"> </div>
-                    </div>
-                    <div id="fondo_azul_osc" class="tabla_con_info">
-                        <div id="tableContainer" class="tableContainer inner_table vh45">
-                            <table id="old_student_active" class="scrollTable lista_color">
-                                <thead class="fixedHeader">
-                                    <tr>
-                                        {#<th class="id">Id</th>#}
-                                        <th class="w20 left">Apellidos, Nombre</th>
-                                        <th class="w11">Último curso</th>
-                                        <th class="w11">Año Académido</th>
-                                        <th >Estado</th>
-                                    </tr>
-                                </thead>
-                                <tbody class="scrollContent">
-                                    {% for entity in entities_active %}
-                                        <tr id="{{entity.alumno.id}}">
-                                            <td class="w20 left">{{ entity.alumno.apellido1 ~ " " ~ entity.alumno.apellido2 ~ ", " ~ entity.alumno.nombre}}</td>
-                                            <td class="w11">{{entity.curso ~ " " ~ entity.nivel}}</td>
-                                            {#<td data-order="{{ entity.fecha|date('m/d/Y') }}">{{ "2014/2015" }}</td>#}
-
-                                            <td class="w11">{{ entity.anyoAcademico}}</td>
-                                            {% if entity.promociona %}
-                                            <td >Promociona</td>
-                                            {% else %}
-                                            <td >Repite</td>
-                                            {% endif %}
-                                        </tr>
-                                    {% endfor %}
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-                    <div class="info_en_tabla">
-                        <div class="cabecera_info">
-                            Datos Alumno
-                        </div>
-                        <div class="contenido_info">
-                            <div id="sin_seleccionar">
-                                <p>Para ver detalles seleccione un alumno</p>
-                            </div>
-                            <div id="seleccionado" class="oculto"></div>
-                        </div>             
-                    </div>
-                </div> 
-                <div class="select_table_active select_ord_datatable">
-                </div>         
-            </div>
-
-            {# Antiguos alumnos Inactivos #}
-
-            <div class="contenedor_registro antiguo_alumno oculto" id="antiguo_alumno" >  
-                <div>
-                    <div id="cabecera_lista">
-                        <div id="lista_cursos" class="lista_inactivos">
-                         Último curso: {{render(controller("BackendBundle:Curso:listaCursos"))}}
-                        </div>
-                        <h2 class="text_cabecera_2">Antiguos Alumnos</h2>
+                        <h2 class="text_cabecera_2">Asignar Optativa</h2>
                         <div class="btn_2opciones">    
-                            <label  id="btn_activos" for="activos">Activos</label>
-                            <input type="radio" name="activos" id="activos">
-                            <label class="btn_selected" for="inactivos" id="btn_inactivos">Inactivos</label>
-                            <input type="radio" name="inactivos" id="inactivos">
+                            <label class="btn_selected" id="btn_no_asignados" for="no_asignados">Sin asignar</label>
+                            <input type="radio" name="no_asignados" id="no_asignados">
+                            <label for="inactivos" id="btn_asignados">Asignados</label>
+                            <input type="radio" name="asignados" id="asignados">
                         </div>
                         <div id="buscador"> </div>
                     </div>
                     <div id="fondo_azul_osc" class="tabla_con_info">
                         <div id="tableContainer" class="tableContainer inner_table vh45">
-                            <table id="old_student" class="scrollTable lista_color">
+                            <table id="t_no_asignados" class="scrollTable lista_color">
                                 <thead class="fixedHeader">
                                     <tr>
                                         {#<th class="id">Id</th>#}
                                         <th class="w20 left">Apellidos, Nombre</th>
-                                        <th class="w11">Curso de ingreso</th>
-                                        <th class="w11">Último curso</th>
-                                        <th>Año Académico</th>
+                                        <th class="w11">Curso Matriculado</th>
+                                        <th class="w15">Alternativas</th>
                                     </tr>
                                 </thead>
                                 <tbody class="scrollContent">
-                                {% if entities %}
-                                    {% for entity in entities %}
-                                        <tr id="{{entity.alumno.id}}">
-                                            <td class="w20 left">{{ entity.alumno.apellido1 ~ " " ~ entity.alumno.apellido2 ~ ", " ~ entity.alumno.nombre}}</td>
-                                            <td class="w11">{{ entity.alumno.cursoIngreso}}</td>
-                                            <td class="w11">{{  entity.curso ~ " " ~ entity.nivel}}</td>
-                                            {#<td data-order="{{ entity.fecha|date('m/d/Y') }}">{{ "2014/2015" }}</td>#}
-                                            <td>{{ entity.anyoAcademico}}</td>
+                                    {% for entity in entities_no_asig %}
+                                        <tr id="{{entity.id}}">
+                                            <td class="w20 left">{{ entity.apellido1 ~ " " ~ entity.apellido2 ~ ", " ~ entity.nombre}}</td>
+                                            <td id="{{ entity.curso.id }}" class="w11">{{entity.curso.curso ~ " " ~ entity.curso.nivel}}</td>
+                                            <td class="w15">
+                                                {{render(controller("BackendBundle:Asignatura:OptativasCurso", {id:entity.curso.id}))}}                                            
+                                            </td>
                                         </tr>
                                     {% endfor %}
-                                {% endif %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <div class="info_en_tabla">
+                        <div class="cabecera_info">
+                            Datos Alumno
+                        </div>
+                        <div class="contenido_info">
+                            <div id="sin_seleccionar">
+                                <p>Para ver detalles seleccione un alumno</p>
+                            </div>
+                            <div id="seleccionado" class="oculto"></div>
+                        </div>             
+                    </div >
+                    <div id="enviar_select">
+                        <button disabled="">Enviar Selección</button>
+                    </div>
+                </div> 
+                <div class="tabla_no_asignados select_ord_datatable">
+                </div>         
+            </div>
+
+            <div class="contenedor_registro tabla_con_seleccion asignar_optativa oculto" id="asignados">  
+                <div>
+                    <div id="cabecera_lista">
+                        <div id="lista_cursos" class="lista_asignados">
+                         Buscar por curso: {{render(controller("BackendBundle:Curso:listaCursosPrimaria"))}}
+                        </div>
+                        <h2 class="text_cabecera_2">Asignar Optativa</h2>
+                        <div class="btn_2opciones">    
+                            <label id="btn_no_asignados" for="no_asignados">Sin asignar</label>
+                            <input type="radio" name="no_asignados" id="no_asignados">
+                            <label class="btn_selected" for="inactivos" id="btn_asignados">Asignados</label>
+                            <input type="radio" name="asignados" id="asignados">
+                        </div>
+                        <div id="buscador"> </div>
+                    </div>
+                    <div id="fondo_azul_osc" class="tabla_con_info">
+                        <div id="tableContainer" class="tableContainer inner_table vh45">
+                            <table id="t_asignados" class="scrollTable lista_color">
+                                <thead class="fixedHeader">
+                                    <tr>
+                                        {#<th class="id">Id</th>#}
+                                        <th class="w20 left">Apellidos, Nombre</th>
+                                        <th class="w11">Curso Matriculado</th>
+                                        <th class="w15">Alternativas</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="scrollContent">
+                                    {% for entity in entities_asig %}
+                                        <tr id="{{entity.id}}">
+                                            <td class="w20 left">{{ entity.apellido1 ~ " " ~ entity.apellido2 ~ ", " ~ entity.nombre}}</td>
+                                            <td id="{{ entity.curso.id }}" class="w11">{{entity.curso.curso ~ " " ~ entity.curso.nivel}}</td>
+                                            <td class="w15 asig_asignada" id="{{entity.optativa.id}}">
+                                                {{render(controller("BackendBundle:Asignatura:OptativasCurso", {id:entity.curso.id}))}}
+                                            </td>
+                                        </tr>
+                                    {% endfor %}
                                 </tbody>
                             </table>
                         </div>
@@ -258,11 +253,13 @@
                             <div id="seleccionado" class="oculto"></div>
                         </div>             
                     </div>
+                    <div id="enviar_select">
+                        <button disabled="">Enviar Selección</button>
+                    </div>
                 </div> 
-                <div class="select_table select_ord_datatable">
+                <div class="tabla_asignados select_ord_datatable">
                 </div>         
             </div>
-
 
         </div>
         </div>

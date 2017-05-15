@@ -21,4 +21,6 @@ class NoticiasRepository extends EntityRepository
 		return $consulta->getResult();
 	}
 
+	
+
 }

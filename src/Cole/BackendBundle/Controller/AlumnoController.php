@@ -745,6 +745,21 @@ class AlumnoController extends Controller
             'entity' => $entity,));
     }
 
+    public function DatosAlumnoOptativasAction($id)
+    {
+        $em = $this->getDoctrine()->getManager();
+        $entity = $em->getRepository('BackendBundle:Alumno')->findOneById($id);
+        $curso=$entity->getCurso();
+
+        $optativas=$em->getRepository('BackendBundle:AsignaturasCursos')->findAsignaturasEspecificasOpcionalesCurso($curso->getId());
+
+        return $this->render('BackendBundle:Alumno:datos_alumno_optativas.html.twig', array(
+            'entity' => $entity,
+            'optativas'=>$optativas));
+    }
+
+    
+
     public function AntiguosAlumnosPorCursoAction($id)
     {
 

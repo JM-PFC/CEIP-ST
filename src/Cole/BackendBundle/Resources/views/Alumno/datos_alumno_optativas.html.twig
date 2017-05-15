@@ -1,0 +1,27 @@
+
+  <div class="columna_foto">
+  {% if entity.foto != null %}
+    <img id="foto" class="img-mini" src="{{ asset('uploads/images/' ~ entity.foto) }}">
+  {% else %}
+    {% if entity.sexo == "Femenino" %}
+    <img id="sin_foto" class="img-mini" src="{{ asset('bundles/backend/images/perfil/SinFoto-niña.png') }}">
+    {% else %}
+    <img id="sin_foto" class="img-mini" src="{{ asset('bundles/backend/images/perfil/SinFoto-niño.png') }}">
+    {% endif %}
+  {% endif %}
+  </div>
+
+
+<div>
+  <h3>Optativas del curso:</h3>
+  <ul>
+  {% for entity in optativas %}
+    {% set array = entity.asignatura.abreviatura|split(' ') %}
+    {% if array|length == 1 %}
+      <li><button style="background:{{entity.asignatura.color}};">{{ entity.asignatura.abreviatura|slice(0, 3)|lower|capitalize ~ "." }}</button><span>{{entity.asignatura.abreviatura}}</span></li>
+    {% else %}
+      <li><button style="background:{{entity.asignatura.color}};">{{ array[0]|slice(0, 1)|lower|capitalize ~ ". " ~ array[1]|slice(0, 1)|lower|capitalize ~ "."}}</button><span>{{entity.asignatura.abreviatura}}</span></li>
+    {% endif %}
+  {% endfor %}
+  </ul>
+</div>

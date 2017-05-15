@@ -150,11 +150,11 @@ p>input{
         color: #31708f;
         cursor: default;
         float: left;
-        font-size: 1.4em;
-        font-weight: bold;
+        font-size: 17px;
         margin: 11px 0;
         user-select: none;
         width: 40%;
+        font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
     }
     .navbar-header {
         height: 40px;
@@ -276,10 +276,11 @@ p>input{
         -webkit-user-select: none;
         color: #31708f;
         cursor: default;
-        font-weight: bold;
         padding-left: 15px;
         padding-top: 8px;
         user-select: none;
+        font-size: 17px;
+        font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
     }
     .navbar-default .navbar-toggle {
         border-color: #ddd;
@@ -409,6 +410,59 @@ p>input{
     }
     .asignaturas_profesor>p>span{
         display: block;;
+    }
+    #horarios #horario_pdf{
+        float: none !important;
+        margin-top: 5px !important;
+    }
+    .imgLiquidFill {
+        margin: 0 15% 10px 18% !important;
+        margin-bottom: 10px !important;
+        width: 60% !important;
+    }
+    .contenido_noticia h2 {
+        background: #31708f none repeat scroll 0 0;
+        border-radius: 5px 5px 0 0!important;
+        color: white;
+        font-size: 15px !important;
+        margin-bottom: 0px !important;
+        padding: 4px 9px !important;
+    }
+    .contenido_noticia h2 i{
+        float: right;
+        min-width: 15px !important;
+    }
+    .divider{
+        margin: 5px 0 !important;
+    }
+    .normal {
+        height: 215px !important;
+        width: 100% !important;
+    }
+    .contenedor_noticia {
+        padding: 0;
+        min-height: 120px !important;
+    }
+    .noticia .imgLiquidFill {
+        margin: 0 !important;
+        width: 100% !important;
+    }
+    .contenido_noticia div{
+        background: #f8f8f8;
+        border-left: 1px solid #e7e7e7;
+        border-right: 1px solid #e7e7e7;
+        border-bottom: 1px solid #e7e7e7;
+    }
+    .contenido_noticia div span{
+        margin-top: 5px !important;
+        margin-bottom: 10px !important;
+        display: block;
+    }
+
+    .noticia h2{
+        font-size: 16px;
+        font-weight: bold;
+        border-bottom: 2px solid #123645 !important;
     }
 }
 /* Estilos para Pc*/
@@ -609,8 +663,8 @@ img {
     margin-right: 8px;
 }
 .profile-usermenu ul li.active a {
-    background-color: #4f7692;
-    color: white;
+    background-color: #4f7692 !important;
+    color: white !important;
 }
 .profile-usermenu ul li a:hover:not(.active) {
     background-color: #CDD6E0;
@@ -692,6 +746,10 @@ img {
 .breadcrumb {
     padding: 6px 0 6px 15px !important;
     margin-bottom: 10px !important;
+}
+.breadcrumb span {
+    color: #334c73 !important;
+    margin-left: 5px;
 }
 .list-inline {
     list-style: outside none none;
@@ -848,7 +906,6 @@ ul, ol {
 }
 .contenido-wrapper {
     background: #fff none repeat scroll 0 0;
-    border-radius: 5px;
     overflow: hidden;
     padding: 0 !important;
     /*min-height: 440px !important;*/
@@ -972,6 +1029,9 @@ ul, ol {
     user-select: none;
     cursor: default;
     pointer-events: none; 
+}
+.pointer{
+    pointer-events: auto !important; 
 }
 .barramensajes a{
     padding: 0 5px !important;
@@ -1178,6 +1238,7 @@ ul, ol {
 }
 .tab-content{
     padding: 15px;
+    border-radius: 0 0 5px 5px;
 }
 #horarios {
     text-align: center !important;
@@ -1205,19 +1266,24 @@ ul, ol {
     background-color: #CDD6E0;
 }
 #horarios div{
+    border-radius: 20px;
+    margin-bottom: 2px;
     padding: 0;
 }
 #horarios #contenido_horarios .horario{
+    margin: 2px 0;
     overflow: hidden; 
 }
 #horarios #contenido_horarios .horario{
      display: table;
 }
 #horarios #contenido_horarios .horario>div{
-    max-width: 150px;
+    border-radius: 20px;
     display: table-cell;
     float: none;
+    max-width: 150px;
     vertical-align: middle;
+    background: #cdd6e0 none repeat scroll 0 0;
 }
 #horarios .horario div:not(.horas):not(.color_azul){
     color: white;
@@ -1227,13 +1293,22 @@ ul, ol {
     border: 1px ridge grey !important;
     height: 35px;
 }
-#horarios #accordion a{
+#horarios #accordion div a{
     background: #cdd6e0 none repeat scroll 0 0;
     padding: 7.5px 0 !important;
 }
-#horarios #accordion a:hover{
+#horarios #accordion div a:hover{
     background: lightgrey;
     text-decoration: none;
+}
+#horarios #horario_pdf{
+    color: #333;
+    float: right;
+    height: 30px;
+    margin-top: -53px;
+}
+#horarios #horario_pdf button{
+    padding: 3px 5px 3px 0;
 }
 .fondo_claro{
     background: #f5f5f5 !important;
@@ -1257,7 +1332,7 @@ ul, ol {
 .div_datos_curso label{
     background: #f5f5f5 none repeat scroll 0 0;
     border-radius: 5px;
-    border: 1px solid #e9e9e9;
+    border: 1px solid grey;
     min-width: 76px;
     padding: 2px 10px !important;
     text-align: center;
@@ -1266,7 +1341,7 @@ ul, ol {
     display: inline-block;
     font-size: 25px !important;
     margin-bottom: 5px;
-    margin-left: 6px;
+    padding: 0 10px;
     vertical-align: middle;
 }
 .datos_curso{
@@ -1368,3 +1443,97 @@ ul, ol {
     position: absolute;
     top: -0.5px;
 }
+.nav-tabs > li > a {
+    border-right: 1px solid grey !important;
+    border-left: 1px solid grey !important;
+    border-top: 1px solid grey !important;
+}
+.nav-tabs > li:not(.active) > a:hover {
+    border-bottom: 1px solid grey !important;
+}
+.nav-tabs {
+    border-bottom: 1px solid grey !important;
+}
+.tab-content {
+    border-right: 1px solid grey !important;
+    border-left: 1px solid grey !important;
+    border-bottom: 1px solid grey !important;
+}
+.img-small {
+    background-position: center center;
+    border-radius: 3px !important;
+    float: left;
+    height: 130px !important;
+    margin-bottom: 20px;
+    margin: 0 9px;
+    min-width: 145px;
+}
+.imgLiquidFill {
+    border-radius: 3px !important;
+    box-shadow: 2px 2px 5px #888888;
+    display: block;
+    height: 180px;
+    margin-bottom: 10px;
+    position: relative;
+    width: 100%;
+}
+.contenido_noticia{
+    box-sizing: border-box;
+    display: inline-block;
+    float: left;
+    overflow-wrap: break-word;
+    width: 100%;
+    margin-bottom: 10px;
+}
+.no-margin{
+    margin: 0;
+} 
+.contenido_noticia h2 {
+    font-family: serif;
+    font-size: 25px;
+    margin-bottom: 5px;
+    position: relative;
+}
+.contenido_noticia a {
+    color: #001f51;
+    outline: medium none !important;
+    text-decoration: none !important;
+}
+.contenido_noticia div span{
+    margin-bottom: 10px !important;
+    display: block;
+}
+.navigation{
+    margin: 0 auto !important;
+    display: block;
+    clear: both;
+}
+#gallery {
+    border-radius: 5px;
+    box-shadow: 2px 2px 5px grey;
+    margin: 50px auto;
+}
+.contenedor_noticia {
+    background-clip: padding-box;
+    border-bottom: 2px solid rgba(51, 76, 115, 0.2);
+    box-sizing: border-box;
+    display: inline-block;
+    min-height: 110px;
+    overflow: hidden;
+    padding: 10px;
+    width: 100%;
+}
+.normal{
+    width:530px ; 
+    height:300px;
+    margin: 30px auto;
+    border-radius: 3px !important;
+    background-position: center;/*Se centra la imagen pequeña de la noticia*/
+}
+.noticia h2{
+    border-bottom: 2px solid #123645 !important;
+}
+.noticia p{
+     padding-left: 10px;
+    padding-right: 10px; 
+ }

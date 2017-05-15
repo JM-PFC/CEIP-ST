@@ -29,8 +29,8 @@
 			{% trans %}Alumnado{% endtrans %}
 	</li>
 	<li>
-		<a href="{{path('intranet')}}">
-			{% trans %}Inicio{% endtrans %}
+		<a href="{{path('intranet_alumno', { 'id': entity.id })}}">
+			{% trans %}Panel principal{% endtrans %}
 		</a>
 	</li>
 	<li class="active no-seleccion">
@@ -42,7 +42,10 @@
 	<i class="fa fa-book page-header-icon"></i>
 	{% trans %}Curso actual{% endtrans %}
 {% endblock %}
-
+{% block titulo_cabecera_movil %}
+	<i class="fa fa-book page-header-icon"></i>
+	{% trans %}Curso actual{% endtrans %}
+{% endblock %}
 
 {% block contenido %}
 	<h4 id="titulo-seccion" class="titulo-seccion">{% trans %}Datos del curso{% endtrans %}</h4>
@@ -107,12 +110,14 @@
 			</ul>
 			<div class="tab-content clearfix">
 				<div role="tabpanel" class="tab-pane active clearfix" id="horarios">
+
+					<a id="horario_pdf"class="visible-md visible-lg hidden-xs visible-sm"   href="{{ path('horario_alumno_pdf', { 'id': entity.id }) }}"><button><i class="fa fa-file-pdf-o"></i>Descargar Horario</button></a>
 					<div class="col-xs-12">
 					{% if numAsigHorarios %}
 					  <div class="visible-md visible-lg hidden-xs visible-sm">
 						<div id="cabecera_horarios" class="col-xs-12">
 							<div class="row">
-								<div class="col-xs-2"><i class=" fa fa-clock-o"></i></div>
+								<div class="col-xs-2">{% trans %}Módulos{% endtrans %}</div>
 								<div class="col-xs-2">{% trans %}Lunes{% endtrans %}</div>
 								<div class="col-xs-2">{% trans %}Martes{% endtrans %}</div>
 								<div class="col-xs-2">{% trans %}Miércoles{% endtrans %}</div>
@@ -190,6 +195,8 @@
     						</div>
   						</div>
 
+  						<a id="horario_pdf" class="hidden-md hidden-lg visible-xs hidden-sm" href="{{ path('horario_alumno_pdf', { 'id': entity.id }) }}"><button><i class="fa fa-file-pdf-o"></i>Descargar Horario</button></a>
+					
   					  </div>
 					{% else %}
     					<div class="alert alert-info alert-block">

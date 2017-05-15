@@ -43,7 +43,7 @@
             {% endif %}
 
             {% if type != "" %}
-                <p>{{ summary|striptags|truncate(300,true)|raw|nl2br }}<a class="href_blue" href="{{ path('noticia', {'id': noticia.id}) }}"> <strong> [Leer más] </strong></a></p>
+                <p>{{ summary|striptags|truncate(300,true)|raw }}<a class="href_blue" href="{{ path('noticia', {'id': noticia.id}) }}"> <strong> [Leer más] </strong></a></p>
             {% else %}
                 <p>{{ summary|striptags|truncate(300,true)|raw|nl2br }}<a class="href_blue" href="{{ path('noticia', {'id': noticia.id}) }}"></a></p>
             {% endif %}

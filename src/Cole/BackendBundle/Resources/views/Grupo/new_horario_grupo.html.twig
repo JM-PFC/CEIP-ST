@@ -213,12 +213,12 @@
               }
             }
 
-            //Se añade la clase asignada o modificada cuando se añade una asignatura a la tabla comparando el atribut "carga" de la lista.
+            //Se añade la clase asignada o modificada cuando se añade una asignatura a la tabla comparando el atributo "carga" de la lista.
             if(ui.item.closest("td").size()>0){
               if(!ui.item.closest("ul").attr("carga") || ui.item.closest("ul").attr("carga")!=ui.item.attr("id")){
                 ui.item.closest("ul").removeClass('asignada');
                 ui.item.closest("ul").addClass('modificada');
-                ui.item.closest("ul").removeClass('eliminada');
+                //ui.item.closest("ul").removeClass('eliminada');
               }
               else{
                 ui.item.closest("ul").addClass('asignada');
@@ -308,7 +308,7 @@
         if(!ui.item.closest("ul").attr("carga") || ui.item.closest("ul").attr("carga")!=ui.item.attr("id")){
           ui.item.closest("ul").removeClass('asignada');
           ui.item.closest("ul").addClass('modificada');
-          ui.item.closest("ul").removeClass('eliminada');
+         // ui.item.closest("ul").removeClass('eliminada');
         }
         else{
           ui.item.closest("ul").addClass('asignada');
@@ -389,12 +389,10 @@
     $("#asignar_horario_grupo_dialog #tabla_horario li").css('opacity',"1");
   }, 5);
 
-
   </script>
 {% endblock %}
 
 {% block body -%}
-
     <fieldset id="{{grupo.id}}" name="{{grupo.curso.curso ~ " de " ~ grupo.curso.nivel}}" tipo="{{tipo}}">
       <legend>{{grupo.curso.curso ~ " de " ~ grupo.curso.nivel ~ " - Grupo " ~ grupo.letra}}</legend>
         <div id="tabla_horario">

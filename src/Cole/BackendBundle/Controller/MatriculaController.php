@@ -268,7 +268,8 @@ class MatriculaController extends Controller
 
             //Restablecer contraseña inicial
         }
-        if((int)$alumno->getResponsable2()->getActivo()==0 ){
+        //En el caso del segundo responsable si comprueba si existe.
+        if($alumno->getResponsable2() && (int)$alumno->getResponsable2()->getActivo()==0 ){
             $alumno->getResponsable2()->setActivo(1); 
 
             //Restablecer contraseña inicial

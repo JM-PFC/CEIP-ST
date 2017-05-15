@@ -23,7 +23,7 @@
 {% block migas %}
 	{% if is_granted("ROLE_USUARIO") %}
 	<li class="tipo" tipo="responsable" id="{{entity.id}}">
-		{% trans %}Alumnado{% endtrans %}
+		{% trans %}Responsable{% endtrans %}
 	</li>
 	{% else %}
 	<li class="tipo" tipo="profesor" id="{{entity.id}}">

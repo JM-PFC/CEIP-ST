@@ -44,6 +44,17 @@ class CursoController extends Controller
             'cursos' => $cursos,
         ));
     }
+
+    public function listaCursosPrimariaAction()
+    {
+        $em = $this->getDoctrine()->getManager();
+
+        $cursos = $em->getRepository('BackendBundle:Curso')->findByNivel("Primaria");
+
+        return $this->render('BackendBundle:Curso:listaCursos.html.twig', array(
+            'cursos' => $cursos,
+        ));
+    }
     /**
      * Creates a new Curso entity.
      *
