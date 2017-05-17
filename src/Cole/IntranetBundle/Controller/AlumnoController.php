@@ -42,7 +42,10 @@ class AlumnoController extends Controller
 
 		$entity= $em->getRepository('BackendBundle:Alumno')->findOneById($id);
 
-		return $this->render('IntranetBundle:Alumno:index.html.twig', array('entity' => $entity));
+
+		return $this->render('IntranetBundle:Alumno:index.html.twig', array(
+            'entity' => $entity,
+            'id'=>$entity->getId()));
     }
 
     private function createEditAlumnoForm(Alumno $entity)
@@ -355,7 +358,6 @@ class AlumnoController extends Controller
             $array_op=null;
         }
         
-
         if($grupo->getAula()==null){
             $aula=null;
         }
@@ -503,6 +505,7 @@ class AlumnoController extends Controller
         $em = $this->getDoctrine()->getManager();
 
         $entity= $em->getRepository('BackendBundle:Alumno')->findOneById($id);
+
         if($entity->getCurso()->getNivel()=="Primaria"){
             $noticias= $em->getRepository('ColeBundle:Noticias')->findBy(array('categoria'=>'primaria'), array('fecha'=>'DESC'));
         }
@@ -516,9 +519,39 @@ class AlumnoController extends Controller
             6/*limit per page*/
         );
 
+        if($entity->getAccesoNoticias()){
+            if($entity->getCurso()->getNivel()=="Primaria"){
+                $noticias_nuevas =$em->getRepository('ColeBundle:Noticias')->findNuevasNoticias($entity->getAccesoNoticias(),"primaria");
+            }
+            else{
+                $noticias_nuevas =$em->getRepository('ColeBundle:Noticias')->findNuevasNoticias($entity->getAccesoNoticias(),"infantil");
+            }
+        }
+        else{
+            if($entity->getCurso()->getNivel()=="Primaria"){
+                $noticias_nuevas= $em->getRepository('ColeBundle:Noticias')->findBy(array('categoria'=>'primaria'), array('fecha'=>'DESC'));
+            }
+            else{
+                $noticias_nuevas= $em->getRepository('ColeBundle:Noticias')->findBy(array('categoria'=>'infantil'), array('fecha'=>'DESC'));
+            }
+        }
+
+        $array=[];
+        if($noticias_nuevas){
+            foreach($noticias_nuevas as $noticia){
+                $array[$noticia->getId()]=$noticia->getTitulo();
+            }
+        }
+
+        //Se actualiza la fecha del último acceso a noticias.
+        $entity->setAccesoNoticias(new \DateTime("now"));
+        $em->persist($entity);
+        $em->flush();
+
         return $this->render('IntranetBundle:Alumno:noticias.html.twig', array(
             'entity' => $entity, 
             'noticias'=> $noticias,
+            'noticias_nuevas' => $array,
             'pagination'=> $pagination));
     }
 
@@ -551,7 +584,45 @@ class AlumnoController extends Controller
 
 
 
+    public function comprobarNoticiasNuevasAction($id)
+    {
+        $em = $this->getDoctrine()->getManager();
 
+        $entity= $em->getRepository('BackendBundle:Alumno')->findOneById($id);
+     if($entity->getCurso()){
+        if($entity->getAccesoNoticias()){
+            if($entity->getCurso()->getNivel()=="Primaria"){
+                $noticias =$em->getRepository('ColeBundle:Noticias')->findNuevasNoticias($entity->getAccesoNoticias(),"primaria");
+            }
+            else{
+                $noticias =$em->getRepository('ColeBundle:Noticias')->findNuevasNoticias($entity->getAccesoNoticias(),"infantil");
+            }
+        }
+        else{
+            if($entity->getCurso()->getNivel()=="Primaria"){
+                $noticias= $em->getRepository('ColeBundle:Noticias')->findBy(array('categoria'=>'primaria'), array('fecha'=>'DESC'));
+            }
+            else{
+                $noticias= $em->getRepository('ColeBundle:Noticias')->findBy(array('categoria'=>'infantil'), array('fecha'=>'DESC'));
+            }
+        }
+
+        if($noticias){
+            $num=count($noticias);
+        }
+        else{
+            $num=0;
+        }
+     }
+     else{
+        $num=0;
+     }
+
+        return new JsonResponse(array(
+            'num'=> $num,
+            'id' => $id,
+            'success' => true), 200);
+    }
 
 
 

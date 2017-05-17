@@ -27,7 +27,7 @@ class DefaultController extends Controller
 		}
 		else if($this->get('security.context')->isGranted('ROLE_USUARIO')){
 			$usuario = $this->get('security.context')->getToken()->getUser();
-
+            //Se obtiene los alumnos que están activo y matriculados en un curso, cuyo responsable tambien está activo.
 			$hijos= $em->getRepository('BackendBundle:Alumno')->findByResponsableActivo($usuario);
 			return $this->render('IntranetBundle:Default:seleccion.html.twig', array(
             'hijos' => $hijos));

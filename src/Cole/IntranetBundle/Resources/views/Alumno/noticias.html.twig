@@ -21,6 +21,19 @@
 			$(".cabecera_profesor div:empty").closest(".cabecera_profesor").remove();
 		}
 
+        //Se marca las noticias privadas nuevas sin leer.
+        array={{noticias_nuevas|json_encode()|raw}};// Noticias nuevas.
+
+        for (var key in array){
+            id=key;//Id de las noticias nuevas.
+
+            //Se marca las noticias nuevas en la lista de noticias desde el pc o tablet.
+            $("article[id='"+id+"'] h2").append('<i class="fa fa-plus fa-x2 nueva_noticia"><span >Nueva</span></i>');
+            //Se marca las noticias nuevas enla lista de noticias desde el mócil.
+            $(".contenedor_noticia_movil>div[id='"+id+"'] .fa-bookmark-o").addClass('fa-bookmark');
+            $(".contenedor_noticia_movil>div[id='"+id+"'] .fa-bookmark-o").removeClass('fa-bookmark-o');
+        }
+
     </script>
  {% endblock %}
 
@@ -57,14 +70,18 @@
   {% if noticias != null %}
 
     {% for noticia in pagination %}
-    	<article class="contenedor_noticia visible-md visible-lg hidden-xs visible-sm">
+    	<article id="{{noticia.id}}" class="contenedor_noticia visible-md visible-lg hidden-xs visible-sm">
             {% if noticia.foto != null %}
                 <div class="contenido_noticia">
                     <div class="imgLiquidFill  img-small imgLiquid  col-xs-12 col-sm-2">
                         <a href="{{ path('intranet_alumno_noticia', {'id': entity.id, 'num': noticia.id}) }}"><img src="{{ asset('uploads/noticias/'~ noticia.foto)}}" alt="Imagen de la Noticia"></a>
                     </div>
             
-                    <a href="{{path('intranet_alumno_noticia', {'id': entity.id, 'num': noticia.id}) }}" class="col-sm-9"><h2 class="no-margin">{{noticia.titulo|capitalize}}</h2></a>
+                    <a href="{{path('intranet_alumno_noticia', {'id': entity.id, 'num': noticia.id}) }}" class="col-sm-9">
+                        <h2 class="no-margin">
+                            {{noticia.titulo|capitalize}}
+                        </h2>
+                    </a>
 
             {% else %}
                 <div class="contenido_noticia no_foto">
@@ -109,17 +126,17 @@
 		            </div>
                 </div>
             </article>
-            <article class="contenedor_noticia hidden-md hidden-lg visible-xs hidden-sm ">
+            <article class="contenedor_noticia contenedor_noticia_movil hidden-md hidden-lg visible-xs hidden-sm ">
             {% if noticia.foto != null %}
-                <div class="contenido_noticia">
+                <div id="{{noticia.id}}" class="contenido_noticia">
                     {# Se introduce todo el contenido en el enlace para acceder desde el móvil #}
-                    <a href="{{path('intranet_alumno_noticia', {'id': entity.id, 'num': noticia.id}) }}" class="col-xs-12 no-padding"><h2 class="no-margin"><i class="fa fa-bookmark-o"></i>{{noticia.titulo|capitalize}}</h2>
+                    <a href="{{path('intranet_alumno_noticia', {'id': entity.id, 'num': noticia.id}) }}" class="col-xs-12 no-padding"><h2 class="no-margin"><i class="fa fa-bookmark-o fa-5x"></i>{{noticia.titulo|capitalize}}</h2>
             
             {% else %}
-                <div class="contenido_noticia no_foto">
+                <div id="{{noticia.id}}" class="contenido_noticia no_foto">
                     
                     {# Se introduce todo el contenido en el enlace para acceder desde el móvil #}
-                    <a href="{{path('intranet_alumno_noticia', {'id': entity.id, 'num': noticia.id}) }}" class="col-xs-12 no-padding"><h2 class="no-margin"><i class="fa fa-bookmark-o"></i>{{noticia.titulo|capitalize}}</h2>
+                    <a href="{{path('intranet_alumno_noticia', {'id': entity.id, 'num': noticia.id}) }}" class="col-xs-12 no-padding"><h2 class="no-margin"><i class="fa fa-bookmark-o fa-5x"></i>{{noticia.titulo|capitalize}}</h2>
             {% endif %}
                       <div class=" col-xs-12 col-sm-9">
                         <span><strong> {{ noticia.fecha | localizeddate('none', 'none', 'none',none , " d 'de' MMMM 'de' Y '-' H:mm'h.'") | capitalize}}</strong></span>                  

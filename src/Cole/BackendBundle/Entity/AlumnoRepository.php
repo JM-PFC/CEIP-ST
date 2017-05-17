@@ -89,7 +89,7 @@ class AlumnoRepository extends EntityRepository
 	public function findByResponsableActivo($responsable)
 	{
 		return $this->getEntityManager()->createQuery(
-		'SELECT a FROM BackendBundle:Alumno a WHERE a.responsable1=:responsable OR a.responsable2=:responsable and a.activo=:activo')
+		'SELECT a FROM BackendBundle:Alumno a WHERE (a.responsable1=:responsable OR a.responsable2=:responsable) and a.activo=:activo and a.curso IS not NULL ')
 		->setParameters(array(
 			'responsable' => $responsable,
 			'activo'=>1))

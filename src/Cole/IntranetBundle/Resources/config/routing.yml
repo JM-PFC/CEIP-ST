@@ -24,15 +24,6 @@ datos_personales_alumno:
         expose: true
     requirements: { _method: post|put|get }
 
-intranet_alumno:
-    path:     /intranet/alumno/{id}
-    defaults: { _controller: IntranetBundle:Alumno:index}
-
-intranet_alumno_perfil:
-    path:     /intranet/alumno/{id}/perfil
-    defaults: { _controller: IntranetBundle:Alumno:perfil}
-
-
 datos_personales:
     path:     /intranet/datos_personales/{id}
     defaults: { _controller: IntranetBundle:Default:DatosPersonales}
@@ -40,26 +31,6 @@ datos_personales:
         expose: true
     requirements: { _method: post|put|get }
 
-intranet_alumno_curso:
-    path:     /intranet/alumno/{id}/curso
-    defaults: { _controller: IntranetBundle:Alumno:curso}
-
-horario_alumno:
-    pattern:  /intranet/alumno/{id}/horario
-    defaults: { _controller: "IntranetBundle:Alumno:Horario"}
-    options:
-      expose: true
-
-horario_alumno_pdf:
-    pattern:  /intranet/alumno/{id}/horarioPdf
-    defaults: { _controller: "IntranetBundle:Alumno:HorarioPdf", _format: pdf}
-    options:
-      expose: true
-
-intranet_alumno_noticias:
-    path:     /intranet/alumno/{id}/noticias
-    defaults: { _controller: IntranetBundle:Alumno:noticias}
-
-intranet_alumno_noticia:
-    path:     /intranet/alumno/{id}/noticia/{num}
-    defaults: { _controller: IntranetBundle:Alumno:noticia}
+IntranetBundle_alumnos:
+    resource: "@IntranetBundle/Resources/config/routing/alumnos.yml"
+    prefix:   /intranet/alumno/{id}

@@ -430,6 +430,8 @@ p>input{
     }
     .contenido_noticia h2 i{
         float: right;
+        font-size: 20px !important;
+        margin-top: -2px;
         min-width: 15px !important;
     }
     .divider{
@@ -458,7 +460,6 @@ p>input{
         margin-bottom: 10px !important;
         display: block;
     }
-
     .noticia h2{
         font-size: 16px;
         font-weight: bold;
@@ -777,6 +778,9 @@ ul, ol {
     font-size: 12px;
     font-weight: bold;
     padding: 5px;
+}
+.c_amarillo{
+    color: yellow !important;
 }
 .c_naranja{
     color: #e57200;
@@ -1537,3 +1541,44 @@ ul, ol {
      padding-left: 10px;
     padding-right: 10px; 
  }
+ .aviso_rojo{
+    background: red none repeat scroll 0 0;
+    border-radius: 50%;
+    color: white;
+    cursor: default;
+    font-size: 11px;
+    font-weight: bold;
+    left: 61%;
+    margin: 0 15px;
+    padding: 2px 6px !important;
+    position: relative;
+    top: -40px;
+ }
+ .nueva_noticia{
+    background: #699b54 none repeat scroll 0 0;
+    border-radius: 4px 4px 4px 3px;
+    color: white;
+    font-size: 13px !important;
+    margin-left: 10px;
+    margin-right: 10px;
+    padding: 2px 6px;
+    vertical-align: middle;
+ }
+ .nueva_noticia span::after {
+    border-color: transparent #699b54 transparent transparent;
+    border-style: solid;
+    border-width: 9.5px;
+    content: "";
+    left: -17px;
+    position: absolute;
+    top: 1px;
+}
+ .nueva_noticia span {
+    background: #699b54 none repeat scroll 0 0 !important;
+    border-radius: 2px 0 0 2px;
+    float: right;
+    font-size: 15px;
+    padding-left: 8px;
+    padding-right: 8px;
+    vertical-align: middle;
+}

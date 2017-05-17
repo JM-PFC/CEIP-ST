@@ -1,0 +1,37 @@
+intranet_alumno:
+    path:     /
+    defaults: { _controller: IntranetBundle:Alumno:index}
+
+intranet_alumno_perfil:
+    path:     /perfil
+    defaults: { _controller: IntranetBundle:Alumno:perfil}
+
+intranet_alumno_curso:
+    path:     /curso
+    defaults: { _controller: IntranetBundle:Alumno:curso}
+
+horario_alumno:
+    pattern:  /horario
+    defaults: { _controller: "IntranetBundle:Alumno:Horario"}
+    options:
+      expose: true
+
+horario_alumno_pdf:
+    pattern:  /horarioPdf
+    defaults: { _controller: "IntranetBundle:Alumno:HorarioPdf", _format: pdf}
+    options:
+      expose: true
+
+intranet_alumno_noticias:
+    path:     /noticias
+    defaults: { _controller: IntranetBundle:Alumno:noticias}
+
+intranet_alumno_noticia:
+    path:     /noticia/{num}
+    defaults: { _controller: IntranetBundle:Alumno:noticia}
+
+nuevas_noticias_alumno:
+    path:     /nuevas_noticias
+    defaults: { _controller: IntranetBundle:Alumno:comprobarNoticiasNuevas}
+    options:
+        expose: true

@@ -218,6 +218,14 @@ class Alumno
     private $activo;
 
     /**
+     * @var \DateTime
+     *
+     * @ORM\Column(name="accesoNoticias", type="datetime", nullable=true)
+     * 
+     */
+    private $accesoNoticias;
+    
+    /**
     * @ORM\OneToMany(targetEntity="Expediente", mappedBy="alumno", cascade={"remove"})
     */
     private $expediente;
@@ -845,5 +853,31 @@ class Alumno
     public function getOptativa()
     {
         return $this->optativa;
+    }
+
+
+
+
+    /**
+     * Set accesoNoticias
+     *
+     * @param \DateTime $accesoNoticias
+     * @return Alumno
+     */
+    public function setAccesoNoticias($accesoNoticias)
+    {
+        $this->accesoNoticias = $accesoNoticias;
+
+        return $this;
+    }
+
+    /**
+     * Get accesoNoticias
+     *
+     * @return \DateTime 
+     */
+    public function getAccesoNoticias()
+    {
+        return $this->accesoNoticias;
     }
 }

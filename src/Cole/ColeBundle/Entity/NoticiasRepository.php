@@ -21,6 +21,17 @@ class NoticiasRepository extends EntityRepository
 		return $consulta->getResult();
 	}
 
+	public function findNuevasNoticias($ultimo_acceso, $categoria)
+	{
+	return $this->getEntityManager()->createQuery(
+		'SELECT n FROM ColeBundle:Noticias n WHERE n.categoria=:categoria AND n.fecha>:ultimo_acceso ORDER BY n.fecha DESC')
+		->setParameters(array(
+			'categoria' => $categoria,
+			'ultimo_acceso'=>$ultimo_acceso))
+		->getResult();
+	}
+
+
 	
 
 }

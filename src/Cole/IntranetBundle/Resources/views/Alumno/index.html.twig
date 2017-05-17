@@ -1,5 +1,29 @@
 {% extends  'IntranetBundle:Default:index.html.twig' %}
 
+{% block javascript %}
+	{{parent()}}
+	<script>
+
+  	id={{entity.id|json_encode()|raw}};//Id del alumno.
+
+    $.ajax({
+        type: 'POST',
+        url: Routing.generate('nuevas_noticias_alumno', {id:id, _locale:"es"}),
+        success: function(response){
+            //Si hay nuevas noticias sin leer, se indica en la barra superior y en el panel principal.
+            if(response.num!=0){
+                $("#barraanunciosmovil span:nth-child(2)").text(response.num);
+				$("#barraanunciosmovil span:nth-child(2)").addClass('c_amarillo');
+				$(".numanuncios").text(response.num);
+            }
+            else{
+            	$(".bloque-menu .numanuncios").remove();
+            }
+        }
+    })
+	</script>
+{% endblock %}
+
 {% block migas %}
 	<li class="tipo">
 			{% trans %}Alumnado{% endtrans %}
@@ -370,6 +394,7 @@
 				</a>
 			</div>
 			<p>{% trans %}Noticias{% endtrans %}</p>
+			<span class="aviso_rojo numanuncios" data-toggle="tooltip" data-placement="bottom" title="" data-original-title="Noticias Nuevas">0</span>
         </div>
 	</div>
 
