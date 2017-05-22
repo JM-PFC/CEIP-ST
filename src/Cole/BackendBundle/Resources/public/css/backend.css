@@ -7577,8 +7577,8 @@ cursor: default !important;
 #horario_profesor_pdf .aula {
     display: block;
     font-family: "Times New Roman";
-    font-size: 15px;
-    margin-top: -4%;
+    font-size: 13px;
+    margin-top: -3%;
     min-width: 100%;
 }
 #asignar_optativa table tbody button {

@@ -392,7 +392,6 @@ class ImparteController extends Controller
         if(!$tipo_horario){//Horario Automático. Se valida las horas disponibles de los profesores.
             if($asignaciones){
               foreach ($asignaciones as $row ) { //$row[0]->ID asignatura  $row[1]->Id profesor $row[2]->Id aula.
-
                 $profesor = $em->getRepository('BackendBundle:Profesor')->findOneById($row[1]);
                 if (!$profesor) {
                     throw $this->createNotFoundException('Unable to find Profesor entity.');

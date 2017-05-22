@@ -1,0 +1,82 @@
+
+  <div class ="visible-md visible-lg hidden-xs visible-sm">
+  {% for entity in entity %}
+    <div id="{{ entity.id }}" class="horario col-xs-12 ">
+      <div class="col-xs-2 horas">{{ entity.inicio|date("H:i") ~ " - " ~ entity.fin|date("H:i")  }}</div>
+      {% if entity.horaClase == "RECREO" or entity.horaClase == "COMIDA" %}
+        <div class="col-xs-10 color_azul placeholder_list_table_td_mod ">{{ entity.horaClase }}</div>
+      {% else %}
+        <div id="1" class="col-xs-2 dia">
+          <p id="curso"></p>
+          <p id="asig"></p>
+          <p id="aula"></p>
+        </div>
+        <div id="2" class="col-xs-2 dia">          
+          <p id="curso"></p>
+          <p id="asig"></p>
+          <p id="aula"></p>
+        </div>
+        <div id="3" class="col-xs-2 dia">          
+          <p id="curso"></p>
+          <p id="asig"></p>
+          <p id="aula"></p>
+        </div>
+        <div id="4" class="col-xs-2 dia">          
+          <p id="curso"></p>
+          <p id="asig"></p>
+          <p id="aula"></p>
+        </div>
+        <div id="5" class="col-xs-2 dia">          
+          <p id="curso"></p>
+          <p id="asig"></p>
+          <p id="aula"></p>
+        </div>
+      {% endif %}
+    </div>
+  {% endfor %}
+ </div>
+
+  <div class="col-xs-12 hidden-md hidden-lg visible-xs hidden-sm">
+  {% for entity in entity %}
+    <div id="{{ entity.id }}" class="horario col-xs-12 ">
+      <div class="horas col-xs-4 fondo_claro">{{ entity.inicio|date("H:i") ~ " - " ~ entity.fin|date("H:i")  }}</div>
+      {% if entity.horaClase == "RECREO" or entity.horaClase == "COMIDA" %}
+        <div class="col-xs-8 color_azul placeholder_list_table_td_mod fondo_claro">{{ entity.horaClase }}</div>
+      {% else %}
+        <div id="{{num}}" class="col-xs-8 dia">
+          <p id="curso"></p>
+          <p id="asig"></p>
+          <p id="aula"></p>
+        </div>
+      {% endif %}
+    </div>
+  {% endfor %}
+  </div>
+
+<script>
+  array={{imparte|json_encode()|raw}};//Asignaturas no opcionales
+  for (var key in array){
+    clave=key.split("-");
+    id_horario=clave[0];
+    dia=clave[1];
+    nombre_asig=clave[2];
+    abrev_asig=clave[3];
+    aula=clave[4];
+    grupo=clave[5];
+    id_asignatura=array[key];
+    //Si existe alguna asignación con horario se muestra en la tabla.  
+    if(id_horario!=""){
+      $("#horarios #contenido_horarios").find("div[class*='horario'][id='"+id_horario+"'] div[class*='dia'][id='"+dia+"'] #asig").text(abrev_asig);
+      $("#horarios #contenido_horarios").find("div[class*='horario'][id='"+id_horario+"'] div[class*='dia'][id='"+dia+"'] #curso").text(grupo);
+      if(aula){
+        $("#horarios #contenido_horarios").find("div[class*='horario'][id='"+id_horario+"'] div[class*='dia'][id='"+dia+"'] #aula").text(" ("+aula+")");
+      }
+      //Se crean atributos con los datos para mostrar.
+      $("#horarios #contenido_horarios").find("div[class*='horario'][id='"+id_horario+"'] div[class*='dia'][id='"+dia+"']").attr("asignatura",nombre_asig);
+            $(".color_azul").parent().addClass("no_clase");
+    }
+  }
+
+
+
+</script>

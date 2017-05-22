@@ -282,7 +282,15 @@ class Profesor implements UserInterface, \Serializable
      */
     private $activo;
 
-        /**
+    /**
+     * @var \DateTime
+     *
+     * @ORM\Column(name="accesoNoticias", type="datetime", nullable=true)
+     * 
+     */
+    private $accesoNoticias;
+    
+    /**
      * @var \DateTime
      *
      * @ORM\Column(name="lastAccess", type="datetime" , nullable=true)
@@ -1110,5 +1118,28 @@ class Profesor implements UserInterface, \Serializable
     public function getLastAccessAnt()
     {
         return $this->lastAccessAnt;
+    }
+
+    /**
+     * Set accesoNoticias
+     *
+     * @param \DateTime $accesoNoticias
+     * @return Profesor
+     */
+    public function setAccesoNoticias($accesoNoticias)
+    {
+        $this->accesoNoticias = $accesoNoticias;
+
+        return $this;
+    }
+
+    /**
+     * Get accesoNoticias
+     *
+     * @return \DateTime 
+     */
+    public function getAccesoNoticias()
+    {
+        return $this->accesoNoticias;
     }
 }

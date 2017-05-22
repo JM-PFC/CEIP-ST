@@ -11,7 +11,7 @@
         	type: 'POST',
         	url: Routing.generate('nuevas_noticias_alumno', {id:id, _locale:"es"}),
         	success: function(response){
-            	//Si hay nuevas noticias sin leer, se indica en la barra superior y en el panel principal.
+            	//Si hay nuevas noticias sin leer, se indica en el contenedor de selección de cada alumno.
             	if(response.num!=0){
                 	$(".dashboard div[id='"+response.id+"'] #barraanunciosmovil span:nth-child(2)").text(response.num);
 					$(".dashboard div[id='"+response.id+"'] #barraanunciosmovil span:nth-child(2)").addClass('c_amarillo');
@@ -28,7 +28,7 @@
  {% if hijos != null %}
     {% for entity in hijos %}
         <div class="col-md-6 col-sm-6 col-xs-12 bloque-dashboard" id="{{entity.id}}">
-        	<a href="{{ path('intranet_alumno', { 'id': entity.id }) }}" title="Acceder al área del alumno">
+        	<a href="{{ path('intranet_alumno', { 'id': entity.id }) }}" title="{% trans %}Acceder al área del alumno{% endtrans %}">
 				<div class="bloque bloque-stats">
 					<div class="informacion">
 						<div class="stats-title">

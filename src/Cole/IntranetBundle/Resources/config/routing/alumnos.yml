@@ -35,3 +35,4 @@ nuevas_noticias_alumno:
     defaults: { _controller: IntranetBundle:Alumno:comprobarNoticiasNuevas}
     options:
         expose: true
+

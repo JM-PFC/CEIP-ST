@@ -1,0 +1,40 @@
+
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta content="Horario del grupo" name="description" />
+    <meta content="CEIP, SANTA TERESA, CÁDIZ, WEB, COLEGIO" name="keywords" />
+    <link id="favicon" rel="icon" type="image/x-icon" href="{{ asset('favicon.ico') }}" />
+	  <link href="{{ app.request.scheme ~ '://' ~ app.request.httpHost ~ asset('bundles/cole/css/estilo.css') }}" rel="stylesheet" type="text/css" />
+	  <link href="{{app.request.scheme ~ '://' ~ app.request.httpHost ~ asset('bundles/backend/js/jquery-ui/	jquery-ui.css') }}" rel="stylesheet" type="text/css" />
+    <script src="{{app.request.scheme ~ '://' ~ app.request.httpHost ~ asset('bundles/cole/js/jquery-1.11.2.js')}}" type="text/javascript"></script>
+    <script type="text/javascript" src="{{app.request.scheme ~ '://' ~ app.request.httpHost ~ asset('bundles/backend/js/jquery-ui/jquery-ui.js') }}"></script>
+  </head>
+    
+
+  <body id="cabecera_listado">
+    <div>
+ 
+				<img id="logo" alt="logo del colegio"   src= " {{ app.request.scheme ~ '://' ~ app.request.httpHost ~ asset('bundles/backend/images/logo_trans.png') }} ">
+ 
+    	<div class="titulo">
+				Colegio de Educación Infantil y Primaria
+				<br>
+				<strong>Santa Teresa</strong>
+				<br>
+				Cádiz
+			</div>
+			<div id="curso">
+        <h6> {{"Curso " ~ inicio.inicioCurso|date('Y') ~ " / " ~  fin.finCurso|date('Y') }}</h6>
+        <h5> Lista de Clase </h5>
+			</div>
+      <div id="grupo">
+      <h3>
+        {{ grupo.curso.curso ~ " de " ~ grupo.curso.nivel ~ " - Grupo " ~ grupo.letra }}
+        </h3>
+      </div>
+    </div>
+    </div>
+  </body>
+</html>

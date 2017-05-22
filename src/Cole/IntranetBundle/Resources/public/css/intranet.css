@@ -153,7 +153,7 @@ p>input{
         font-size: 17px;
         margin: 11px 0;
         user-select: none;
-        width: 40%;
+        width: 38%;
         font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
     }
     .navbar-header {
@@ -169,7 +169,7 @@ p>input{
         padding: 5px 15px !important;
     }
     #menu_principal{
-        width: 60%;
+        width: 62%;
         float: right;
     }
     #menuMovil{
@@ -388,16 +388,19 @@ p>input{
     .div_datos_curso{
         margin-bottom: 0 !important;
     }
-    .profesores_grupo h5 {
+    .profesores_grupo h5, .alumnos_grupo h5 {
         font-size: 12px !important;
         line-height: 22px !important;
         margin-top: 0 !important;
         padding: 2px 7px 5px !important;
         margin-left: 5px !important;
     }
-    .profesores_grupo .enviar_mensaje i {
+    .profesores_grupo .i_hover i, .alumnos_grupo .i_hover i {
         padding: 0 !important;
         min-width: 25px !important;
+    }
+    .profesores_grupo .i_hover, .alumnos_grupo .i_hover{
+        margin-left: 5px !important;
     }
     .div_datos_curso .col-xs-10 span, .div_datos_curso .col-xs-10 label{
         margin-left:15px !important ;
@@ -450,10 +453,12 @@ p>input{
         width: 100% !important;
     }
     .contenido_noticia div{
-        background: #f8f8f8;
-        border-left: 1px solid #e7e7e7;
-        border-right: 1px solid #e7e7e7;
+        background: #f8f8f8 none repeat scroll 0 0;
         border-bottom: 1px solid #e7e7e7;
+        border-left: 1px solid #e7e7e7;
+        border-radius: 0 0 5px 5px;
+        border-right: 1px solid #e7e7e7;
+        padding-bottom: 5px;
     }
     .contenido_noticia div span{
         margin-top: 5px !important;
@@ -465,6 +470,28 @@ p>input{
         font-weight: bold;
         border-bottom: 2px solid #123645 !important;
     }
+    .contenedor_noticia_movil a {
+        color: black !important;
+    }
+    #tutor, #tutor .cabecera_profesor{
+    padding-left: 0 !important;
+    }
+    #tutor .label_tutor{
+        margin-right: 15px !important;
+    }
+    .aviso_listado {
+        font-size: 1em !important;
+        margin-top: 40px !important;
+    }
+    .tab-content {
+        min-height: 150px !important;
+    }
+    #alumnos_grupo_pdf {
+        float: none !important;
+        margin-top: 5px !important;
+        text-align: center;
+    }
+
 }
 /* Estilos para Pc*/
 #titulo_cabecera{
@@ -1269,7 +1296,7 @@ ul, ol {
 #horarios #contenido_horarios>div:nth-child(2n) .horas {
     background-color: #CDD6E0;
 }
-#horarios div{
+#horarios div:not(.alert){
     border-radius: 20px;
     margin-bottom: 2px;
     padding: 0;
@@ -1305,13 +1332,17 @@ ul, ol {
     background: lightgrey;
     text-decoration: none;
 }
-#horarios #horario_pdf{
+#horarios #accordion div a[aria-expanded="true"]{
+    background: #31708f;
+    color: white;
+}
+.descargar-datos{
     color: #333;
     float: right;
     height: 30px;
     margin-top: -53px;
 }
-#horarios #horario_pdf button{
+.descargar-datos button{
     padding: 3px 5px 3px 0;
 }
 .fondo_claro{
@@ -1341,7 +1372,7 @@ ul, ol {
     padding: 2px 10px !important;
     text-align: center;
 }
-.div_datos_curso .enviar_mensaje i {
+.div_datos_curso .i_hover i {
     display: inline-block;
     font-size: 25px !important;
     margin-bottom: 5px;
@@ -1366,21 +1397,21 @@ ul, ol {
 .barra_cabecera{
     max-width: 64%;
 }
-.alert{
+.alert:not(.notificacion){
     padding: 15px !important;
     text-align: left;
     margin-bottom: 0 !important;
 }
-.profesores_grupo>div{
+.profesores_grupo>div, .alumnos_grupo #tutor>div{
     display: block;
     margin-bottom: 10px;
     min-height: 100px;
     padding: 10px 15px 0;
 }
-.profesores_grupo img{
+.profesores_grupo img, .alumnos_grupo img{
     margin: 0 auto !important;
 }
-.profesores_grupo h5{
+.profesores_grupo h5, .alumnos_grupo  h5{
     background: #31708f none repeat scroll 0 0;
     border-radius: 5px;
     color: white;
@@ -1390,7 +1421,7 @@ ul, ol {
     margin-top: 0 !important;
     padding: 2px 15px 5px;
 }
-.profesores_grupo #foto_curso {
+.profesores_grupo #foto_curso, .alumnos_grupo #foto_curso {
     box-shadow: 0 0 1px 1px rgba(0, 0, 0, 0.4);
     display: block;
     height: 75px;
@@ -1400,15 +1431,14 @@ ul, ol {
 .cabecera_profesor{
     padding-left: 15px !important;
 }
-.enviar_mensaje i{
-    font-size: 25px !important;
-    margin-bottom: 10px;
-}
-.profesores_grupo .enviar_mensaje i{
+.profesores_grupo .i_hover i, .alumnos_grupo .i_hover i{
     font-size: 20px !important;
-    padding: 0 20px;
+    padding: 0;
     color: white;
-    margin: 0 !important
+    margin:0 !important
+}
+.profesores_grupo .i_hover, .alumnos_grupo .i_hover{
+    margin-left: 15px;
 }
 .profesores_grupo .asignaturas_profesor{
     padding-left: 15px !important;
@@ -1421,7 +1451,7 @@ ul, ol {
 }
 .profesores_grupo .asignaturas_profesor i{
     background: #699b54 none repeat scroll 0 0;
-    border-radius: 3px 0 0 3px;
+    border-radius: 3px 2px 2px 3px;
     color: white;
     font-size: 16.5px !important;
     margin-left: 30px;
@@ -1462,6 +1492,7 @@ ul, ol {
     border-right: 1px solid grey !important;
     border-left: 1px solid grey !important;
     border-bottom: 1px solid grey !important;
+    min-height: 270px ;
 }
 .img-small {
     background-position: center center;
@@ -1581,4 +1612,121 @@ ul, ol {
     padding-left: 8px;
     padding-right: 8px;
     vertical-align: middle;
+}
+#cursos_profesores label{
+    min-width: 135px !important;
+    margin-bottom: 10px !important;
+    margin-right: 5px;
+}
+#contenedor_cursos_profesor button{
+    margin: 0 5px 10px;
+    border: 2px outset black;
+}
+#contenedor_cursos_profesor button[class*="active"]{
+    border: 2px inset black;
+}
+.horario-profesor div {
+    border-radius: 0 !important;
+}
+.horario-profesor p {
+    margin: 0px !important;
+    color: #23527c !important;
+}
+.horario-profesor .horario:not(.no_clase) > div{
+    height: 55px !important;
+}
+.horario-profesor .horas, .horario-profesor #cabecera_horarios .row > div{
+    background: #31708f !important;
+    color: white !important;
+    border-color: white !important;
+}
+.placeholder_list_table_td_mod{
+    border:none;
+    background: #FFCC7E !important;
+}
+.horario-profesor #curso{
+    font-weight: bold;
+}
+.horario-profesor #aula{
+    color: #e57200 !important;
+}
+.horario-profesor #aula{
+    font-size: 12px;
+}
+#tutor .label_tutor{
+    font-family: "verdana";
+    text-align: center;
+    font-weight: bold;
+    box-shadow: 0 1px 1px 1px rgba(0, 0, 0, 0.42);
+    border-radius: 3px;
+    padding: 2px 0 !important;
+    background: #cdd6e0;
+    color: #334c73;
+    min-width: 85px;
+}
+#tutor .label_tutor img{
+    margin-top: 5px !important;
+}
+#tutor {
+    margin-bottom: 15px !important;
+}
+#tutor h5{
+    margin: 0 !important;
+}
+.alumnos_grupo #tutor > div {
+    display: block;
+    margin-bottom: 10px;
+    min-height: 26px;
+    padding: 10px 15px 0;
+}
+.lista-alumnos thead tr{
+    background: #cdd6e0 !important;
+}
+.lista-alumnos tr{
+    border: 1px solid grey !important;
+    border-color: grey !important;
+    background: white !important;
+}
+.lista-alumnos tr td{
+    border-top: 1px solid grey !important;
+    border-bottom: 1px solid grey !important;
+    padding: 4px !important;
+}
+.lista-alumnos tr th{
+    border: 0 !important;
+    padding: 6px !important;
+}
+.lista-alumnos{
+    margin-top: 20px !important;
+}
+.center{
+    text-align: center;
+}
+.titulo_curso{
+    text-align: center;
+    color: #31708f;
+    text-decoration: underline;
+    font-size: 16px;
+    font-weight: bold;
+    font-family: Georgia;
+}
+.titulo_curso span{
+    text-align: center;
+    color: #e57200 !important;
+}
+.lista-alumnos tr:nth-child(2n){
+    background: #EFF3F9 !important;
+}
+.aviso_listado {
+    font-size: 1.2em;
+    color: #414141;
+    margin-top: 100px;
+    text-align: center;
+    font-family: "verdana";
+}
+table tr td i{
+    color: #31708f!important;
+}
+table tr td a{
+    text-decoration: none !important;
 }

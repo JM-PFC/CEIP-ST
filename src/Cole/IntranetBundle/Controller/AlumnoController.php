@@ -15,7 +15,6 @@ use Cole\BackendBundle\Form\AlumnoIntranetType;
 use Symfony\Component\HttpFoundation\Response;
 
 
-
 class AlumnoController extends Controller
 {
 
@@ -476,7 +475,6 @@ class AlumnoController extends Controller
             'imparte_op' => $array_op,
             'profesor' => $grupo->getProfesor(),
         ));
-
         $options = [
             'margin-top'    => 3,
             'margin-right'  => 8,
@@ -484,15 +482,15 @@ class AlumnoController extends Controller
             'margin-left'   => 8,
             //Opciones para orientación horizontal.
             'orientation'=>'Landscape', 
-            'default-header'=>false
         ];
-        $dato=$alumno->getApellido1()."_".$alumno->getApellido2();
+        $iniciales=substr($alumno->getNombre(), 0, 1).substr($alumno->getApellido1(), 0, 1).substr($alumno->getApellido2(), 0, 1);
+
         return new Response(
             $this->get('knp_snappy.pdf')->getOutputFromHtml($html,$options),
             200,
             array(
                 'Content-Type'        => 'application/pdf',
-                'Content-Disposition' => 'attachment; filename="Horario_'.$dato.'.pdf"'
+                'Content-Disposition' => 'attachment; filename="Horario_Alumno_'.$iniciales.'.pdf"'
             )
         );
     }
@@ -623,6 +621,11 @@ class AlumnoController extends Controller
             'id' => $id,
             'success' => true), 200);
     }
+
+
+
+
+
 
 
 

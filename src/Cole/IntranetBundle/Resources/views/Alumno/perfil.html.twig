@@ -38,7 +38,7 @@
 
 
 {% block sidebar %}
-	<li id="inicio" class="active">
+	<li id="inicio">
 		<a href="{{path('intranet_alumno', { 'id': entity.id })}}">
 			<i class="fa fa-th"></i>
 			{% trans %}Panel principal{% endtrans %}
@@ -59,13 +59,64 @@
 		</a>
 	</li>			
 {% endblock %}
+{% block barra_tablet %}
+	<li id="inicio">
+		<a href="{{path('intranet_alumno', { 'id': entity.id })}}">
+			<i class="fa fa-th"></i>
+			{% trans %}Panel principal{% endtrans %}
+		</a>
+	</li>
+								<li id="perfil" class="active">
+									<a href="{{path('intranet_perfil')}}">
+										<i class="fa fa-user"></i>
+										{% trans %}Mi perfil{% endtrans %}
+									</a>
+								</li>
+								<li>
+									<a class="c_azul" href="{{path('logout')}}">
+										<strong>
+											<i class="fa fa-sign-out"></i>
+											{% trans %}Cerrar sesión{% endtrans %}
+										</strong>
+									</a>
+								</li>
 
+{% endblock %}
 
+{% block menu_movil %}
+							  	<li id="inicio" class="hidden-sm">
+									<a href="{{path('intranet_alumno', { 'id': entity.id })}}">
+										<i class="fa fa-th"></i>
+										{% trans %}Panel principal{% endtrans %}
+									</a>
+								</li>
+
+								<li class="divider visible-xs" role="presentation"></li>
+
+								<li id="perfil" class="visible-xs active">
+									<a href="{{path('intranet_perfil')}}">
+										<i class="fa fa-user"></i>
+										{% trans %}Mi perfil{% endtrans %}
+									</a>
+								</li>
+								<li class="visible-xs">
+									<a class="c_azul" href="{{path('logout')}}">
+										<strong>
+											<i class="fa fa-sign-out"></i>
+											{% trans %}Cerrar sesión{% endtrans %}
+										</strong>
+									</a>
+								</li>
+
+{% endblock %}
 {% block titulo_cabecera %}
 	<i class="fa fa-user"></i>
 	{% trans %}Mi perfil{% endtrans %}
 {% endblock %}
-
+{% block titulo_cabecera_movil %}
+	<i class="fa fa-user"></i>
+	{% trans %}Mi perfil{% endtrans %}
+{% endblock %}
 
 {% block contenido %}
 

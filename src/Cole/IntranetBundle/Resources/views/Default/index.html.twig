@@ -51,12 +51,12 @@
 						{% if app.user.sexo == "Masculino" %}
 							<a href="{{path('backend')}}">
 								<img id="img_admin" class="img-responsive btn_admin" alt="Área de Administración" src="{{ asset('bundles/intranet/images/btn_admin_m.png')}}">
-								<img id="img_admin_hover" class="img-responsive btn_admin hide" alt="Área de Administración" data-toggle="tooltip" data-placement="bottom" data-original-title="Área de Administración" src="{{ asset('bundles/intranet/images/btn_admin_m_hover.png')}}">
+								<img id="img_admin_hover" class="img-responsive btn_admin hide" alt="Área de Administración" data-toggle="tooltip" data-placement="bottom" data-original-title="{% trans %}Área de Administración{% endtrans %}" src="{{ asset('bundles/intranet/images/btn_admin_m_hover.png')}}">
 							</a>
 						{% else %}
 							<a href="{{path('backend')}}">
-								<img id="img_admin" class="img-responsive btn_admin" alt="Área de Administración" title="Acceder al Área de Administración" src="{{ asset('bundles/intranet/images/btn_admin_f.png')}}">
-								<img id="img_admin_hover" class="img-responsive btn_admin hide" alt="Área de Administración" title="Acceder al Área de Administración" src="{{ asset('bundles/intranet/images/btn_admin_f_hover.png')}}">
+								<img id="img_admin" class="img-responsive btn_admin" alt="Área de Administración" src="{{ asset('bundles/intranet/images/btn_admin_f.png')}}">
+								<img id="img_admin_hover" class="img-responsive btn_admin hide" alt="Área de Administración" data-toggle="tooltip" data-placement="bottom" data-original-title="{% trans %}Área de Administración{% endtrans %}" src="{{ asset('bundles/intranet/images/btn_admin_f_hover.png')}}">
 							</a>
 						{% endif %}
 					{% endif %}
@@ -68,19 +68,19 @@
 						<li id="barramensajesmovil" class="barramensajes">
 							<a href="/intranet/dashboard">
 								<span class="fa fa-envelope-o animated swing"></span>
-								<span class="label-as-badge label azul nummensajes" data-toggle="tooltip" data-placement="bottom" title="" data-original-title="Mensajes de correo sin leer">0</span>
+								<span class="label-as-badge label azul nummensajes" data-toggle="tooltip" data-placement="bottom" title="" data-original-title="{% trans %}Mensajes de correo sin leer{% endtrans %}">0</span>
 							</a>
 						</li>
 						<li id="barraanunciosmovil" class="barramensajes">
 							<a href="/intranet/dashboard">
 								<span class="fa fa-newspaper-o animated swing"></span>
-								<span class="label-as-badge label verde numanuncios" data-toggle="tooltip" data-placement="bottom" title="" data-original-title="Noticias Nuevas">0</span>
+								<span class="label-as-badge label verde numanuncios" data-toggle="tooltip" data-placement="bottom" title="" data-original-title="{% trans %}Noticias Nuevas{% endtrans %}">0</span>
 							</a>
 						</li>
 						<li id="barraalertasmovil" class="barramensajes">
 							<a href="/intranet/es/dashboard">
 								<span class="fa fa-comments animated swing"></span>
-								<span class="label-as-badge label naranja numalertas" data-toggle="tooltip" data-placement="bottom" title="" data-original-title="Avisos de seguimiento sin leer">0</span>
+								<span class="label-as-badge label naranja numalertas" data-toggle="tooltip" data-placement="bottom" title="" data-original-title="{% trans %}Avisos de seguimiento sin leer{% endtrans %}">0</span>
 							</a>
 						</li>
 
@@ -159,19 +159,19 @@
 									<li id="barramensajesmovil">
 										<a href="/intranet/dashboard">
 											<span class="fa fa-envelope-o animated swing"></span>
-											<span class="label-as-badge label azul nummensajes" data-toggle="tooltip" data-placement="bottom" title="" data-original-title="Mensajes de correo sin leer">0</span>
+											<span class="label-as-badge label azul nummensajes" data-toggle="tooltip" data-placement="bottom" title="" data-original-title="{% trans %}Mensajes de correo sin leer{% endtrans %}">0</span>
 										</a>
 									</li>
 									<li id="barraanunciosmovil" class="barramensajes">
 										<a href="/intranet/dashboard">
 											<span class="fa fa-newspaper-o animated swing"></span>
-											<span class="label-as-badge label verde numanuncios" data-toggle="tooltip" data-placement="bottom" title="" data-original-title="Noticias Nuevas">0</span>
+											<span class="label-as-badge label verde numanuncios" data-toggle="tooltip" data-placement="bottom" title="" data-original-title="{% trans %}Noticias Nuevas{% endtrans %}">0</span>
 										</a>
 									</li>
 									<li id="barraalertasmovil" class="barramensajes">
 										<a href="/intranet/es/dashboard">
 											<span class="fa fa-comments animated swing"></span>
-											<span class="label-as-badge label naranja numalertas" data-toggle="tooltip" data-placement="bottom" title="" data-original-title="Avisos de seguimiento sin leer">0</span>
+											<span class="label-as-badge label naranja numalertas" data-toggle="tooltip" data-placement="bottom" title="" data-original-title="{% trans %}Avisos de seguimiento sin leer{% endtrans %}">0</span>
 										</a>
 									</li>
 								</ul>
@@ -208,12 +208,21 @@
 							<div id="menu_principal" class="visible-sm menu">
 							<ul class="nav navbar-nav navbar-right">
 								{% block barra_tablet %}
-								<li id="inicio">
+								{% if is_granted("ROLE_USUARIO") %}
+							  		<li id="inicio" class="active">
+										<a href="{{path('intranet_responsable')}}">
+											<i class="fa fa-dashboard"></i>
+											{% trans %}Inicio{% endtrans %}
+										</a>
+									</li>
+								{% elseif is_granted("ROLE_PROFESOR")%}
+								<li id="inicio" class="active">
 									<a href="{{path('intranet')}}">
-										<i class="fa fa-dashboard"></i>
-										{% trans %}Inicio{% endtrans %}
+										<i class="fa fa-th"></i>
+										{% trans %}Panel principal{% endtrans %}
 									</a>
 								</li>
+								{% endif %}
 								<li id="perfil">
 									<a href="{{path('intranet_perfil')}}">
 										<i class="fa fa-user"></i>
@@ -236,71 +245,72 @@
 						 <div id="menuMovil" class="navbar-collapse submenuMovil collapse menu" style="height: auto;" >
 							<ul class="nav navbar-nav navbar-right">
 							  {% block menu_movil %}
-							  	<li id="inicio" class="active hidden-sm">
-									<a href="{{path('intranet')}}">
-										<i class="fa fa-dashboard"></i>
-										{% trans %}Inicio{% endtrans %}
-									</a>
-								</li>
+							  	{% if is_granted("ROLE_USUARIO") %}
+							  		<li id="inicio" class="active hidden-sm">
+										<a href="{{path('intranet_responsable')}}">
+											<i class="fa fa-dashboard"></i>
+											{% trans %}Inicio{% endtrans %}
+										</a>
+									</li>
+								{% endif %}
 							    {% if is_granted("ROLE_PROFESOR") %}
-									<li>
-										<a href="#">
+							 		<li id="inicio" class="active hidden-sm">
+										<a href="{{path('intranet')}}">
+											<i class="fa fa-th"></i>
+											{% trans %}Panel principal{% endtrans %}
+										</a>
+									</li>
+									<li id="cursos">
+										<a href="{{ path('intranet_profesor_cursos') }}">
 											<i class="fa fa-server"></i>
 											{% trans %}Cursos impartidos{% endtrans %}
 										</a>
 									</li>
-									<li>
-										<a href="#">
-											<i class="fa fa-calendar-check-o"></i>
-											{% trans %}Asistencia{% endtrans %}
-										</a>
-									</li>
-									<li>
-										<a href="#">
-											<i class="fa fa-check-square-o"></i>
-											{% trans %}Calificaciones{% endtrans %}
-										</a>
-									</li>
-									<li>
-										<a href="#">
-											<i class="fa fa-weixin"></i>
+									<li id="seguimiento">
+										<a href="{{path('intranet')}}">
+											<i class="fa fa-comments"></i>
 											{% trans %}Seguimiento{% endtrans %}
 										</a>
 									</li>
-									<li>
-										<a href="#">
+									<li id="comunicacion">
+										<a href="{{path('intranet')}}">
 											<i class="fa fa-envelope-o"></i>
 											{% trans %}Comunicación{% endtrans %}
 										</a>
 									</li>
-									<li>
-										<a href="#">
-											<i class="fa fa-users"></i>
-											{% trans %}Tutorias{% endtrans %}
+									<li id="asistencia">
+										<a href="{{path('intranet')}}">
+											<i class="fa fa-calendar-check-o"></i>
+											{% trans %}Asistencia{% endtrans %}
 										</a>
 									</li>
-
-									<li>
-										<a href="#">
-											<i class="fa fa-newspaper-o"></i>
-											{% trans %}Noticias{% endtrans %}
+									<li id="calificaciones">
+										<a href="{{path('intranet')}}">
+											<i class="fa fa-check-square-o"></i>
+											{% trans %}Calificaciones{% endtrans %}
 										</a>
 									</li>
-									<li>
-										<a href="#">
-											<i class="fa fa-calendar"></i>
-											{% trans %}Horario de clases{% endtrans %}
-										</a>
-									</li>
-									<li>
-										<a href="#">
+									<li id="reservas">
+										<a href="{{path('intranet')}}">
 											<i class="fa fa-unlock-alt"></i>
 											{% trans %}Reservas{% endtrans %}
 										</a>
 									</li>
+									<li id="tutorias">
+										<a href="{{path('intranet')}}">
+											<i class="fa fa-users"></i>
+											{% trans %}Tutorias{% endtrans %}
+										</a>
+									</li>
+									<li id="noticias">
+										<a href="{{ path('intranet_profesor_noticias') }}">
+											<i class="fa fa-newspaper-o"></i>
+											{% trans %}Noticias{% endtrans %}
+										</a>
+									</li>
 									{% if 'now'|date('m') == "04" or 'now'|date('m') == "05" %}
-										<li>
-											<a class="c_verde" href="#">
+										<li id="promocionar">
+											<a class="c_verde" href="{{path('intranet')}}">
 												<i class="fa fa-graduation-cap"></i>
 												{% trans %}Promocionar{% endtrans %}
 											</a>
@@ -347,79 +357,71 @@
 									{% if is_granted("ROLE_PROFESOR") %}
 									<li id="inicio" class="active">
 										<a href="{{path('intranet')}}">
-											<i class="fa fa-dashboard"></i>
-											{% trans %}Inicio{% endtrans %}
+											<i class="fa fa-th"></i>
+											{% trans %}Panel principal{% endtrans %}
 										</a>
 									</li>
-	
-									<li>
-										<a href="#">
+									<li id="cursos">
+										<a href="{{ path('intranet_profesor_cursos') }}">
 											<i class="fa fa-server"></i>
 											{% trans %}Cursos impartidos{% endtrans %}
 										</a>
 									</li>
-									<li>
-										<a href="#">
-											<i class="fa fa-calendar-check-o"></i>
-											{% trans %}Asistencia{% endtrans %}
-										</a>
-									</li>
-									<li>
-										<a href="#">
-											<i class="fa fa-check-square-o"></i>
-											{% trans %}Calificaciones{% endtrans %}
-										</a>
-									</li>
-									<li>
-										<a href="#">
-											<i class="fa fa-weixin"></i>
+									<li id="seguimiento">
+										<a href="{{path('intranet')}}">
+											<i class="fa fa-comments"></i>
 											{% trans %}Seguimiento{% endtrans %}
 										</a>
 									</li>
-									<li>
-										<a href="#">
+									<li id="comunicacion">
+										<a href="{{path('intranet')}}">
 											<i class="fa fa-envelope-o"></i>
 											{% trans %}Comunicación{% endtrans %}
 										</a>
 									</li>
-									<li>
-										<a href="#">
-											<i class="fa fa-users"></i>
-											{% trans %}Tutorias{% endtrans %}
+									<li id="asistencia">
+										<a href="{{path('intranet')}}">
+											<i class="fa fa-calendar-check-o"></i>
+											{% trans %}Asistencia{% endtrans %}
 										</a>
 									</li>
-
-									<li>
-										<a href="#">
-											<i class="fa fa-newspaper-o"></i>
-											{% trans %}Noticias{% endtrans %}
+									<li id="calificaciones">
+										<a href="{{path('intranet')}}">
+											<i class="fa fa-check-square-o"></i>
+											{% trans %}Calificaciones{% endtrans %}
 										</a>
 									</li>
-									<li>
-										<a href="#">
-											<i class="fa fa-calendar"></i>
-											{% trans %}Horario de clases{% endtrans %}
-										</a>
-									</li>
-									<li>
-										<a href="#">
+									<li id="reservas">
+										<a href="{{path('intranet')}}">
 											<i class="fa fa-unlock-alt"></i>
 											{% trans %}Reservas{% endtrans %}
 										</a>
 									</li>
-									{% if 'now'|date('m') == "04" or 'now'|date('m') == "05" %}
-										<li>
-											<a class="c_verde" href="#">
+									<li id="tutorias">
+										<a href="{{path('intranet')}}">
+											<i class="fa fa-users"></i>
+											{% trans %}Tutorias{% endtrans %}
+										</a>
+									</li>
+									<li id="noticias">
+										<a href="{{ path('intranet_profesor_noticias') }}">
+											<i class="fa fa-newspaper-o"></i>
+											{% trans %}Noticias{% endtrans %}
+										</a>
+									</li>
+									  {% if 'now'|date('m') == "04" or 'now'|date('m') == "05" %}
+									  	<li id="promocionar">
+											<a class="c_verde" href="{{path('intranet')}}">
 												<i class="fa fa-graduation-cap"></i>
 												{% trans %}Promocionar{% endtrans %}
 											</a>
 										</li>
-									{% endif %}	
+									  {% endif %}	
 									{% endif %}
 
 								{% if is_granted("ROLE_USUARIO") %}
 									<li id="inicio" class="active">
-										<a href="{{path('intranet')}}">
+										<a href="{{path('intranet_responsable')}}">
 											<i class="fa fa-dashboard"></i>
 											{% trans %}Inicio{% endtrans %}
 										</a>
@@ -486,7 +488,7 @@
 													{% trans %}Profesorado{% endtrans %}
 												</li>
 												<li class="active">						
-													{% trans %}Inicio{% endtrans %}
+													{% trans %}Panel principal{% endtrans %}
 												</li>
 											{% elseif is_granted("ROLE_USUARIO") %}
 												<li class="tipo">

@@ -67,6 +67,10 @@ Miércoles: Wednesday
 Jueves: Thursday
 Viernes: Friday
 Maestros / Asignaturas: Teachers / Subjects
+Alumnos / Grupos: Students / Groups
+Alumnos del grupo: Group Students
+Mi grupo: My group
+Apellidos, Nombre: Surname, Name
 El alumno no ha sido matriculado aún en el nuevo curso: The student has not yet been enrolled in the new course
 Por favor vuelva en unos días para verificar la matriculación del alumno: Please come back in a few days to verify the student's enrollment
 El horario del grupo no está disponible: Group schedule is not available
@@ -76,12 +80,31 @@ Grupo: Group
 Año académico: Academic year
 Tutor: Tutor
 Tutora: Tutor
+Tutor del grupo: Group tutor
+Tutora del grupo: Group tutor
+Nivel impartido: Level imparted
 Contactar: Contact
 Sin asignar: Unassigned
 Módulos: Modules
+Descargar Horario: Download Schedule
+Descargar Lista de Alumnos: Download List of Students
 Noticias de Primaria: News of Primary Education
 Noticias de Infantil: News of Child Education
-No hay noticias privadas de Primaria: There is no private news of Primary Education
-No hay noticias privadas de Infantil: There is no private news of Child Education
+Noticias de profesores: News from teachers
+No hay noticias privadas para Primaria: There is no private news for Primary Education
+No hay noticias privadas para Infantil: There is no private news for Child Education
+No hay noticias privadas para profesores: There is no private news for teachers
+No tienes ningún curso asignado: You have no assigned course
+Espere a que se realicen todas las asignaciones de los cursos: Wait for all courses assignments to be made
 Actualmente no tienes hijos matriculados en el sistema: You currently have no children enrolled in the system
 Por favor verifica que el proceso de matriculación ha finalizado o pongase en contacto con el centro: Please verify that the enrollment process has ended or contact the school
+Actualmente no hay noticias privadas del curso actual. Cuando se publiquen, se notificarán en la barra superior o en el panel principal: Currently there are no private news of the current course. When they are published, they will be reported in the top bar or in the main panel
+Seleccione un curso de la lista superior para mostrar el listado de alumnos: Select a course from the top list to display the list of students
+Seleccione un curso de la lista superior para mostrar la lista de alumnos: Select a course from the top list to display the list of students
+Ver info: See info
+Contactar: Contact
+Noticias Nuevas: New news
+Mensajes de correo sin leer: Unread mail
+Avisos de seguimiento sin leer: Unread Tracking Warnings
+Área de Administración: Administration area
+Acceder al área del alumno : Access the student area

@@ -4,6 +4,10 @@ intranet:
     options:
         expose: true
 
+intranet_responsable:
+    path:     /intranet/responsable
+    defaults: { _controller: IntranetBundle:Default:responsable}
+
 intranet_perfil:
     path:     /intranet/perfil
     defaults: { _controller: IntranetBundle:Default:perfil}
@@ -31,6 +35,16 @@ datos_personales:
         expose: true
     requirements: { _method: post|put|get }
 
+alumnos_grupo_pdf:    
+    path:     /alumnos_grupo_pdf/{id}
+    defaults: { _controller: IntranetBundle:Default:ListaAlumnosGrupoPdf}
+    options:
+        expose: true
+
 IntranetBundle_alumnos:
     resource: "@IntranetBundle/Resources/config/routing/alumnos.yml"
     prefix:   /intranet/alumno/{id}
+
+IntranetBundle_profesores:
+    resource: "@IntranetBundle/Resources/config/routing/profesores.yml"
+    prefix:   /intranet

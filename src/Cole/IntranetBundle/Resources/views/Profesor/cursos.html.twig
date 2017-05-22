@@ -1,0 +1,285 @@
+{% extends  'IntranetBundle:Profesor:index.html.twig' %}
+
+{% block body %}
+    {{parent()}}
+    <script>
+    	$(".menu li").removeClass('active');
+		$(".menu #cursos").addClass('active');
+
+	
+		//Se elimina el contenedor del tutor si aparece vacío al no impartir otra asignatura en el grupo.
+		if($(".cabecera_profesor div:empty").size()>0){
+			$(".cabecera_profesor div:empty").closest(".cabecera_profesor").prev().remove();
+			$(".cabecera_profesor div:empty").closest(".cabecera_profesor").remove();
+		}
+
+		//Se hace marca el botón del curso seleccionado y se obtiene la listade alumnos en el contenedor correspondiente.
+  		$('#contenedor_cursos_profesor button').on('click', function(event) {
+  			if(!$(this).hasClass("disabled")) {
+	   			$('#contenedor_cursos_profesor button').removeClass('active');
+	    		$(this).addClass('active');
+	    	}
+
+	    	if($('#alumnos').hasClass('active')){
+	    		id=$(this).attr("id");
+	    		locale=$(this).parent().attr("locale");
+    			$('#alumnos #lista_alumnos').load(Routing.generate("datos_alumnos_grupo", {id:id, _locale:locale}), function(){
+      				$("#alumnos_grupo_pdf button").removeClass('hidden');
+      				$("#alumnos_grupo_pdf").attr("grupo",id);
+
+      				//Se modifica el id del grupo en la url del enlace para descargar la lista de alumnos del grupo mostrado.
+      				var str = $("#alumnos_grupo_pdf").attr("href");
+					var n = str.lastIndexOf("/");
+					var dir=$("#alumnos_grupo_pdf").attr("href").substring(0,n+1);
+					$("#alumnos_grupo_pdf").attr("href",dir+id);
+    			}); 
+  			}
+		});
+
+  		$('#tab_prof_horarios').on('click', function(event) {
+	   		$('#contenedor_cursos_profesor button').addClass('disabled');
+  		});
+  		$('#tab_prof_alumnos').on('click', function(event) {
+	   		$('#contenedor_cursos_profesor button').removeClass('disabled');
+  		});
+
+  		//En el caso de infantil se carga directamente la lista de alumnos del grupo que tutoriza el profesor.
+  		if($('#contenedor_cursos_profesor button').size()==1){
+	    	id=$('#contenedor_cursos_profesor button').attr("id");
+	    	locale=$(this).parent().attr("locale");
+    		$('#alumnos #lista_alumnos').load(Routing.generate("datos_alumnos_grupo", {id:id, _locale:locale}), function(){	
+    		}); 	
+  		}
+    </script>
+ {% endblock %}
+
+{% block migas %}
+	<li class="tipo">
+			{% trans %}Profesorado{% endtrans %}
+	</li>
+	<li>
+		<a href="{{path('intranet_profesor')}}">
+			{% trans %}Panel principal{% endtrans %}
+		</a>
+	</li>
+	<li class="active no-seleccion">
+		{% trans %}Cursos impartidos{% endtrans %}
+	</li>
+{% endblock %}
+
+{% block titulo_cabecera %}
+	<i class="fa fa-server page-header-icon"></i>
+	{% trans %}Cursos impartidos{% endtrans %}
+{% endblock %}
+{% block titulo_cabecera_movil %}
+	<i class="fa fa-server page-header-icon"></i>
+	{% trans %}Cursos impartidos{% endtrans %}
+{% endblock %}
+
+{% block contenido %}
+	<h4 id="titulo-seccion" class="titulo-seccion">{% trans %}Datos del curso{% endtrans %}</h4>
+	{% if cursos != null %}
+
+	<div id="cursos_profesores" class="container-fluid div_datos_curso">
+		<div class="pull-left col-xs-12 col-sm-5 no-padding datos_curso">
+			{% if entity.sexo == "Masculino" %}
+				<label>{% trans %}Tutor del grupo{% endtrans %}:</label>
+			{% else %}
+				<label>{% trans %}Tutora del grupo{% endtrans %}:</label>
+			{% endif %}
+			
+			{% if tutor_grupo %}
+				<span> {{tutor_grupo.curso.curso ~ " " ~ tutor_grupo.letra}}</span >
+			{% else %}
+				<span class="text-danger">{% trans %}Sin asignar{% endtrans %}</span>
+			{% endif %}
+			<br>
+			<label>{% trans %}Nivel impartido{% endtrans %}:</label>
+			{% if entity.nivel == "Primaria" %}
+				{% if  app.request.getLocale() == "es" %}
+					<span> {{"Ed. Primaria"}}</span >
+				{% else %}
+					<span> {{"Primary Ed."}}</span >
+				{% endif %}
+			{% else %}
+				{% if  app.request.getLocale() == "es" %}
+					<span> {{"Ed. Infantil"}}</span >
+				{% else %}
+					<span> {{"Child Ed."}}</span >
+				{% endif %}
+			{% endif %}
+			<br>
+			<label>{% trans %}Año académico{% endtrans %}:</label>
+			<span> {{inicio.inicioCurso|date('Y') ~ " / " ~ fin.finCurso|date('Y')}}</span >
+		</div>
+		
+		{% if entity.nivel == "Primaria" %}
+		  <div class="pull-left col-xs-12 col-sm-6 no-padding datos_curso">
+			<label>{% trans %}Cursos impartidos{% endtrans %}:</label>
+			<div id="contenedor_cursos_profesor" locale="{{ app.request.getLocale() }}">
+				{% for curso in cursos %}
+					<button id="{{curso.grupo.id}}" class="btn btn-primary disabled">{{curso.grupo.curso.curso ~ " " ~ curso.grupo.letra}}</button>
+				{% endfor %}
+			</div>
+		  </div>
+		{% endif %}
+	</div>
+
+	 	<div role="tabpanel" class="tab_horarios">
+	
+			<ul class="nav nav-tabs" role="tablist">
+				{% if entity.nivel == "Primaria" %}
+					<li role="presentation" class="active"><a id="tab_prof_horarios" href="#horarios" aria-controls="horarios" data-toggle="tab" role="tab">{% trans %}Horario de clases{% endtrans %}</a></li>
+					<li role="presentation"><a id="tab_prof_alumnos" href="#alumnos" aria-controls="alumnos" data-toggle="tab" role="tab">{% trans %} Alumnos / Grupos{% endtrans %}</a></li>
+				</div>
+				{% else %}
+					{% if tutor_grupo %}
+						<li role="presentation" class="active"><a id="tab_prof_alumnos" href="#alumnos" aria-controls="alumnos" data-toggle="tab" role="tab">{% trans %}Alumnos del grupo{% endtrans %}</a></li>
+					{% endif %}
+				{% endif %}
+			</ul>
+			<div class="tab-content clearfix">
+				{% if entity.nivel == "Primaria" %}
+				<div role="tabpanel" class="tab-pane active clearfix horario-profesor" id="horarios">
+
+					<a id="horario_pdf"class=" descargar-datos descargar-datos visible-md visible-lg hidden-xs visible-sm"   href="{{ path('horario_profesor_pdf', { 'id': entity.id }) }}"><button><i class="fa fa-file-pdf-o"></i>{% trans %}Descargar Horario{% endtrans %}</button></a>
+					<div class="col-xs-12">
+					  <div class="visible-md visible-lg hidden-xs visible-sm">
+						<div id="cabecera_horarios" class="col-xs-12">
+							<div class="row">
+								<div class="col-xs-2">{% trans %}Módulos{% endtrans %}</div>
+								<div class="col-xs-2">{% trans %}Lunes{% endtrans %}</div>
+								<div class="col-xs-2">{% trans %}Martes{% endtrans %}</div>
+								<div class="col-xs-2">{% trans %}Miércoles{% endtrans %}</div>
+								<div class="col-xs-2">{% trans %}Jueves{% endtrans %}</div>
+								<div class="col-xs-2">{% trans %}Viernes{% endtrans %}</div>
+							</div>
+						</div>
+						<div id="contenido_horarios" class="col-xs-12">
+							{{render (controller('IntranetBundle:Profesor:HorariosProfesor',{ 'num': "0" }))}}
+						</div>
+					  </div>
+					  {# Estilo acordeón versión móvil #}	
+     				  <div class="panel-group col-xs-12 hidden-md hidden-lg visible-xs hidden-sm" id="accordion">
+  						<div class="panel panel-default">
+    						<div class="panel-heading">
+      							<h4 class="panel-title">
+        							<a data-toggle="collapse" class="col-xs-12" data-parent="#accordion" href="#collapse1">{% trans %}Lunes{% endtrans %}</a>
+      							</h4>
+    						</div>
+    						<div id="collapse1" class="panel-collapse collapse">
+      							<div id="contenido_horarios" class="panel-body">
+						      		
+						      		{{render (controller('IntranetBundle:Profesor:HorariosProfesor',{ 'num': "1" }))}}
+						      		
+  								</div>
+    						</div>
+  						</div>
+  						
+  						<div class="panel panel-default">
+    						<div class="panel-heading">
+     							<h4 class="panel-title">
+        							<a data-toggle="collapse" class="col-xs-12" data-parent="#accordion" href="#collapse2">{% trans %}Martes{% endtrans %}</a>
+      							</h4>
+    						</div>
+    						<div id="collapse2" class="panel-collapse collapse">
+      							<div id="contenido_horarios" class="panel-body">
+									{{render (controller('IntranetBundle:Profesor:HorariosProfesor',{ 'num': "2" }))}}	      					
+  								</div>
+    						</div>
+  						</div>
+
+  						<div class="panel panel-default">
+    						<div class="panel-heading">
+     							<h4 class="panel-title">
+        							<a data-toggle="collapse"  class="col-xs-12"data-parent="#accordion" href="#collapse3">{% trans %}Miércoles{% endtrans %}</a>
+      							</h4>
+    						</div>
+    						<div id="collapse3" class="panel-collapse collapse">
+      							<div id="contenido_horarios" class="panel-body">
+									{{render (controller('IntranetBundle:Profesor:HorariosProfesor',{ 'num': "3" }))}}
+  								</div>
+    						</div>
+  						</div>
+
+  						<div class="panel panel-default">
+    						<div class="panel-heading">
+     							<h4 class="panel-title">
+        							<a data-toggle="collapse"  class="col-xs-12"data-parent="#accordion" href="#collapse3">{% trans %}Jueves{% endtrans %}</a>
+      							</h4>
+    						</div>
+    						<div id="collapse3" class="panel-collapse collapse">
+      							<div id="contenido_horarios" class="panel-body">
+									{{render (controller('IntranetBundle:Profesor:HorariosProfesor',{ 'num': "4" }))}}
+  								</div>
+    						</div>
+  						</div>
+  						<div class="panel panel-default">
+    						<div class="panel-heading">
+     							<h4 class="panel-title">
+        							<a data-toggle="collapse"  class="col-xs-12"data-parent="#accordion" href="#collapse3">{% trans %}Viernes{% endtrans %}</a>
+      							</h4>
+    						</div>
+    						<div id="collapse3" class="panel-collapse collapse">
+      							<div id="contenido_horarios" class="panel-body">
+									{{render (controller('IntranetBundle:Profesor:HorariosProfesor',{ 'num': "5" }))}}
+  								</div>
+    						</div>
+  						</div>
+
+  						<a id="horario_pdf" class="descargar-datos hidden-md hidden-lg visible-xs hidden-sm" href="{{ path('horario_profesor_pdf', { 'id': entity.id }) }}"><button><i class="fa fa-file-pdf-o"></i>{% trans %}Descargar Horario{% endtrans %}</button></a>
+					
+  					  </div>
+					</div>			
+				</div>
+				{% endif %}
+
+				{% if entity.nivel == "Primaria" %}
+					<div role="tabpanel" class="tab-pane clearfix alumnos_grupo" id="alumnos">
+						<a id="alumnos_grupo_pdf"class=" descargar-datos visible-md visible-lg hidden-xs visible-sm"   href="{{ path('alumnos_grupo_pdf', { 'id': entity.id }) }}">
+							<button class="hidden"><i class="fa fa-file-pdf-o"></i>{% trans %}Descargar Lista de Alumnos{% endtrans %}</button>
+						</a>
+						<div id="lista_alumnos">
+							<p class="aviso_listado">{% trans %}Seleccione un curso de la lista superior para mostrar la lista de alumnos{% endtrans %}</p>
+						</div>
+
+						<a id="alumnos_grupo_pdf"class=" descargar-datos hidden-md hidden-lg visible-xs hidden-sm"   href="{{ path('alumnos_grupo_pdf', { 'id': entity.id }) }}">
+							<button class="hidden"><i class="fa fa-file-pdf-o"></i>{% trans %}Descargar Lista de Alumnos{% endtrans %}</button>
+						</a>
+
+					</div>
+				{% else %}
+					{% if tutor_grupo %}
+					<div role="tabpanel" class="tab-pane active clearfix alumnos_grupo" id="alumnos">
+						<a id="alumnos_grupo_pdf"class=" descargar-datos visible-md visible-lg hidden-xs visible-sm"   href="{{ path('alumnos_grupo_pdf', { 'id': entity.id }) }}">
+							<button ><i class="fa fa-file-pdf-o"></i>{% trans %}Descargar Lista de Alumnos{% endtrans %}</button>
+						</a>
+
+						<div id="lista_alumnos">
+							{{render (controller('IntranetBundle:Profesor:HorariosProfesor',{ 'num': "1" }))}}
+						</div>
+
+						<a id="alumnos_grupo_pdf"class=" descargar-datos hidden-md hidden-lg visible-xs hidden-sm"   href="{{ path('alumnos_grupo_pdf', { 'id': entity.id }) }}">
+							<button class="hidden"><i class="fa fa-file-pdf-o"></i>{% trans %}Descargar Lista de Alumnos{% endtrans %}</button>
+						</a>
+					</div>
+					{% endif %}
+				{% endif %}
+
+
+
+
+			</div>
+		</div>
+		
+
+	{% else %}
+		<div class="alert alert-info alert-block">
+			<small>
+				<h4>{% trans %}No tienes ningún curso asignado{% endtrans %}.</h4>
+				<h6>{% trans %}Espere a que se realicen todas las asignaciones de los cursos{% endtrans %}.</h6>
+			</small>
+		</div>
+
+	{% endif %}
+{% endblock %}

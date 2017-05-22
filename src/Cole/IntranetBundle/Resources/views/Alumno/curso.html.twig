@@ -6,15 +6,6 @@
     	$(".menu li").removeClass('active');
 		$(".menu #curso").addClass('active');
 
-		//Cambio delicono de mensaje.
-		$('.cabecera_profesor .fa-envelope-o').on('mouseenter', function(event) {
-			$(this).addClass('hidden');
-			$(this).next().removeClass('hidden');
-		});
-		$('.cabecera_profesor .enviar_mensaje').on('mouseleave', function(event) {
-			$(this).find(".fa-envelope").addClass('hidden');
-			$(this).find(".fa-envelope").prev().removeClass('hidden');
-		});
 		//Se elimina el contenedor del tutor si aparece vacío al no impartir otra asignatura en el grupo.
 		if($(".cabecera_profesor div:empty").size()>0){
 			$(".cabecera_profesor div:empty").closest(".cabecera_profesor").prev().remove();
@@ -53,7 +44,20 @@
 	<div class="container-fluid div_datos_curso">
 		<div class="pull-left col-xs-12 col-sm-4 no-padding datos_curso">
 			<label>{% trans %}Curso{% endtrans %}:</label>
-			<span> {{entity.curso.curso ~ " de " ~ entity.curso.nivel}}</span >
+			{% if entity.curso.nivel == "Primaria" %}
+				{% if  app.request.getLocale() == "es" %}
+					<span> {{entity.curso.curso ~ " de Primaria" }}</span >
+				{% else %}
+					<span> {{entity.curso.curso ~ " of Primary Education" }}</span >
+				{% endif %}
+			{% else %}
+				{% if  app.request.getLocale() == "es" %}
+					<span> {{entity.curso.curso ~ " de Infantil" }}</span >
+				{% else %}
+					<span> {{entity.curso.curso ~ " of Child Education" }}</span >
+				{% endif %}
+			{% endif %}
+
 			<br>
 			<label>{% trans %}Grupo{% endtrans %}:</label>
 			<span> {{entity.grupo.letra}}</span >
@@ -83,13 +87,19 @@
         			<div class="pull-left col-xs-10 ">
 						<label>{% trans %}Tutor{% endtrans %}:</label>
 						<span class="col-xs-12 no-padding"> {{tutor}}</span >
-						<a id="{{tutor.id}}" href="#" class="enviar_mensaje" data-toggle="tooltip" data-placement="bottom" title="" data-original-title="Contactar"><i class="fa fa-envelope"></i></a>
+						<a id="{{tutor.id}}" href="javascript:void(0);" class="i_hover" data-toggle="tooltip" data-placement="bottom" title="" data-original-title="{% trans %}Contactar{% endtrans %}">
+							<i id="first" class="fa fa-envelope"></i>
+							<i id="second" class=" hidden fa fa-envelope-o"></i>
+						</a>
 					</div>
 				{% else %}
         			<div class="pull-left col-xs-10">
 						<label>{% trans %}Tutora{% endtrans %}:</label>
 						<span class="col-xs-12 no-padding"> {{tutor}}</span >
-						<a id="{{tutor.id}}" href="#" class="enviar_mensaje" data-toggle="tooltip" data-placement="bottom" title="" data-original-title="Contactar"><i class="fa fa-envelope"></i></a>
+						<a id="{{tutor.id}}" href="javascript:void(0);" class="i_hover" data-toggle="tooltip" data-placement="bottom" title="" data-original-title="{% trans %}Contactar{% endtrans %}">
+							<i id="first" class="fa fa-envelope"></i>
+							<i id="second" class=" hidden fa fa-envelope-o"></i>
+						</a>
         			</div>
 				{% endif %}
 			{% else %}
@@ -111,7 +121,7 @@
 			<div class="tab-content clearfix">
 				<div role="tabpanel" class="tab-pane active clearfix" id="horarios">
 
-					<a id="horario_pdf"class="visible-md visible-lg hidden-xs visible-sm"   href="{{ path('horario_alumno_pdf', { 'id': entity.id }) }}"><button><i class="fa fa-file-pdf-o"></i>Descargar Horario</button></a>
+					<a id="horario_pdf" class="descargar-datos visible-md visible-lg hidden-xs visible-sm"   href="{{ path('horario_alumno_pdf', { 'id': entity.id }) }}"><button><i class="fa fa-file-pdf-o"></i>{% trans %}Descargar Horario{% endtrans %}</button></a>
 					<div class="col-xs-12">
 					{% if numAsigHorarios %}
 					  <div class="visible-md visible-lg hidden-xs visible-sm">
@@ -195,7 +205,7 @@
     						</div>
   						</div>
 
-  						<a id="horario_pdf" class="hidden-md hidden-lg visible-xs hidden-sm" href="{{ path('horario_alumno_pdf', { 'id': entity.id }) }}"><button><i class="fa fa-file-pdf-o"></i>Descargar Horario</button></a>
+  						<a id="horario_pdf" class="descargar-datos hidden-md hidden-lg visible-xs hidden-sm" href="{{ path('horario_alumno_pdf', { 'id': entity.id }) }}"><button><i class="fa fa-file-pdf-o"></i>{% trans %}Descargar Horario{% endtrans %}</button></a>
 					
   					  </div>
 					{% else %}
@@ -226,9 +236,9 @@
 						<div class="col-xs-10 col-sm-11 no-padding cabecera_profesor">
 							<h5 class="text-info">
 								{{asig_profesor.profesor.apellido1|upper ~ " " ~ asig_profesor.profesor.apellido2|upper ~ ", " ~ asig_profesor.profesor.nombre|upper }} 
-								<a id="{{asig_profesor.profesor.id}}" href="#" class="enviar_mensaje">
-									<i class="fa fa-envelope-o"></i>
-									<i class=" hidden default fa fa-envelope" data-toggle="tooltip" data-placement="bottom" title="" data-original-title="Contactar"></i>
+								<a id="{{asig_profesor.profesor.id}}" href="javascript:void(0);" class="i_hover">
+									<i id="first" class="fa fa-envelope-o"></i>
+									<i id="second" class=" hidden fa fa-envelope" data-toggle="tooltip" data-placement="bottom" title="" data-original-title="{% trans %}Contact{% endtrans %}"></i>
 								</a>
 							</h5>
 							<div class="asignaturas_profesor">
@@ -295,9 +305,9 @@
 							<div class="col-xs-10 col-sm-11 no-padding cabecera_profesor">
 								<h5 class="text-info">
 									{{asig_profesor.profesor.apellido1|upper ~ " " ~ asig_profesor.profesor.apellido2|upper ~ ", " ~ asig_profesor.profesor.nombre|upper }} 
-									<a id="{{asig_profesor.profesor.id}}" href="#" class="enviar_mensaje">
-										<i class="fa fa-envelope-o"></i>
-										<i class=" hidden default fa fa-envelope" data-toggle="tooltip" data-placement="bottom" title="" data-original-title="Contactar"></i>
+									<a id="{{asig_profesor.profesor.id}}" href="javascript:void(0);" class="i_hover">
+										<i id="first" class="fa fa-envelope-o"></i>
+										<i id="second" class=" hidden fa fa-envelope" data-toggle="tooltip" data-placement="bottom" title="" data-original-title="{% trans %}Contactar{% endtrans %}"></i>
 									</a>
 								</h5>
 								<div class="asignaturas_profesor">
@@ -408,5 +418,6 @@
 	{% endif %}
 
 {% endblock %}
+
 
 

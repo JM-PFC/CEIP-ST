@@ -31,7 +31,7 @@
 			</div>
 			<div id="curso">
         <h2> Horario de Clase </h2>
-        <h3> Curso <span id="año_inicio"> {{ inicio.inicioCurso|date('Y') }}</span>/<span id="año_fin">{{ fin.finCurso|date('Y') }}</span></h3>
+        <h3> {{"Curso " ~ inicio.inicioCurso|date('Y') ~ " / " ~  fin.finCurso|date('Y') }}</h3>
 			</div>
     </div>
     <div>

@@ -1,4 +1,4 @@
-{% extends  'IntranetBundle:Alumno:index.html.twig' %}
+{% extends  'IntranetBundle:Profesor:index.html.twig' %}
 
 {% block body %}
     {{parent()}}
@@ -12,15 +12,15 @@
 
 {% block migas %}
 	<li class="tipo">
-		{% trans %}Alumnado{% endtrans %}
+		{% trans %}Profesorado{% endtrans %}
 	</li>
 	<li>
-		<a href="{{path('intranet_alumno', { 'id': entity.id })}}">
+		<a href="{{path('intranet_profesor')}}">
 			{% trans %}Panel principal{% endtrans %}
 		</a>
 	</li>
 	<li class="active">
-        <a href="{{path('intranet_alumno_noticias', { 'id': entity.id })}}">
+        <a href="{{path('intranet_profesor_noticias', { 'id': entity.id })}}">
 		  {% trans %}Noticias{% endtrans %}
         </a>
 	</li>

@@ -1,0 +1,39 @@
+intranet_profesor:
+    path:     /
+    defaults: { _controller: IntranetBundle:Profesor:index}
+
+intranet_profesor_cursos:
+    path:     /cursos
+    defaults: { _controller: IntranetBundle:Profesor:cursos}
+
+horario_profesor:
+    pattern:  /horario
+    defaults: { _controller: "IntranetBundle:Profesor:Horario"}
+    options:
+      expose: true
+
+#horario_alumno_pdf:
+#    pattern:  /horarioPdf
+#    defaults: { _controller: "IntranetBundle:Alumno:HorarioPdf", _format: pdf}
+#    options:
+#      expose: true
+
+intranet_profesor_noticias:
+    path:     /noticias
+    defaults: { _controller: IntranetBundle:Profesor:noticias}
+
+intranet_profesor_noticia:
+    path:     /noticia/{id}
+    defaults: { _controller: IntranetBundle:Profesor:noticia}
+
+nuevas_noticias_profesor:
+    path:     /{id}/nuevas_noticias
+    defaults: { _controller: IntranetBundle:Profesor:comprobarNoticiasNuevas}
+    options:
+        expose: true
+
+datos_alumnos_grupo:
+    path:     /datos_alumnos_grupo/{id}
+    defaults: { _controller: IntranetBundle:Profesor:datosAlumnosGrupo}
+    options:
+        expose: true

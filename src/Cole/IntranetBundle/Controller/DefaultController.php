@@ -9,6 +9,7 @@ use Symfony\Component\HttpFoundation\Response;
 
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 
 use Cole\BackendBundle\Entity\Profesor;
 use Cole\BackendBundle\Form\ProfesorType;
@@ -17,15 +18,41 @@ use Cole\BackendBundle\Form\PadresType;
 
 class DefaultController extends Controller
 {
-    public function indexAction()
+
+        public function indexAction()
+    {
+        $em = $this->getDoctrine()->getManager();
+        $usuario = $this->get('security.context')->getToken()->getUser();
+
+        if ($this->get('security.context')->isGranted('ROLE_PROFESOR'))
+        {
+            $profesor=$em->getRepository('BackendBundle:Profesor')->findOneById($usuario);
+            return new RedirectResponse($this->generateUrl('intranet_profesor'));
+        }
+        else if($this->get('security.context')->isGranted('ROLE_USUARIO')){
+            //Se obtiene los alumnos que están activo y matriculados en un curso, cuyo responsable tambien está activo.
+            $hijos= $em->getRepository('BackendBundle:Alumno')->findByResponsableActivo($usuario);
+            
+            if(count($hijos)==1){
+                foreach($hijos as $entity){
+                    return new RedirectResponse($this->generateUrl('intranet_alumno', array('id' => $entity->getId())));
+                }
+            }
+            else{
+                return $this->render('IntranetBundle:Default:seleccion.html.twig', array(
+                    'hijos' => $hijos));
+            }
+        }
+        else{
+            throw new AccessDeniedException();
+        }
+    }
+
+    public function responsableAction()
     {
     	$em = $this->getDoctrine()->getManager();
 
-    	if ($this->get('security.context')->isGranted('ROLE_PROFESOR'))
-		{
-			return $this->render('IntranetBundle:Default:index.html.twig');
-		}
-		else if($this->get('security.context')->isGranted('ROLE_USUARIO')){
+    	if($this->get('security.context')->isGranted('ROLE_USUARIO')){
 			$usuario = $this->get('security.context')->getToken()->getUser();
             //Se obtiene los alumnos que están activo y matriculados en un curso, cuyo responsable tambien está activo.
 			$hijos= $em->getRepository('BackendBundle:Alumno')->findByResponsableActivo($usuario);
@@ -122,26 +149,6 @@ class DefaultController extends Controller
             'delete_form' => $deleteForm->createView(),
         ));
     }
-/*
-    public function DatosPersonalesAction()
-    {
-        $em = $this->getDoctrine()->getManager();
-        $entity = $this->get('security.context')->getToken()->getUser();
-
-       
-         $template = $this->forward('IntranetBundle:Default:perfil.html.twig')->getContent();
-
-    $json = json_encode($template);
-    $response = new Response($json, 200);
-    $response->headers->set('Content-Type', 'application/json');
-    return $response;
-
-    }
-*/
-
-
-
-
 
     public function DatosPersonalesAction(Request $request, $id)
     {
@@ -244,99 +251,62 @@ class DefaultController extends Controller
             'edit_form'   => $editForm->createView(),
             'delete_form' => $deleteForm->createView(),
         ));
-
-/*
-        $em = $this->getDoctrine()->getEntityManager();
-
-        $entity = $em->getRepository('miomioBundle:Empleado')->find($id);
-        $pass = $entity->getPassword();
-        $salt = $entity->getSalt();
-        $encoder = new MessageDigestPasswordEncoder('sha1');
-
-        if (!$entity) {
-            throw $this->createNotFoundException('Unable to find Empleado entity.');
-        }
-
-        $editForm   = $this->createForm(new EmpleadoType(), $entity);
-        $deleteForm = $this->createDeleteForm($id);
-
-        $request = $this->getRequest();
-
-        $editForm->bindRequest($request);
-
-        if ($editForm->get('generar')->getData() == true){
-
-                $salt1 = md5(time());
-                $psswd = substr( md5(microtime()), 1, 8);
-
-                $message = \Swift_Message::newInstance()
-              ->setSubject("Nueva contraseña generada")
-              ->setFrom('paradasymfony@alwaysdata.com')
-              ->setTo($entity->getEmail())
-              ->setBody('Hola '.$entity->getNombre().' '.$entity->getApellido1().' '.$entity->getApellido2().'.<br/><br/>'.
-                            'Se ha generado una nueva contraseña en el sistema Optinet.Le adjunto los datos para que usted pueda entrar al sistema:<br/>'.
-                            'Nombre usuario:  '.$entity->getUsername().'<br/>'.
-                            'Contraseña:     '.$psswd.'<br/><br/>'.
-                            'Un saludo.'
-                            ,'text/html');
-                $this->get('mailer')->send($message);
-
-                $password = $encoder->encodePassword($psswd, $salt1);
-
-               if ($editForm->isValid()) {
-                $em->persist($entity);
-                $entity->setPassword($password);
-                $entity->setSalt($salt1);
-                $em->persist($entity);
-                $em->flush();
-                 $t = $this->get('translator')->trans(
-                    'El empleado %nombre% ha sido modificado correctamente.',
-                    array('%nombre%' => $entity->getNombre())
-                );
-                $this->get('session')->setFlash('confirmacion',$t);
-                return $this->redirect($this->generateUrl('empleado_edit', array('id' => $id)));
-            }
-            $t = $this->get('translator')->trans('Se ha producido algún error. Revise los datos.');
-            $this->get('session')->setFlash('errorempleado',$t);
-
-            return array(
-                'entity'      => $entity,
-                'edit_form'   => $editForm->createView(),
-                'delete_form' => $deleteForm->createView(),
-            );
-        }
-        else{
-            $salt1 = md5(time());
-            $password = $encoder->encodePassword($editForm->get('password')->getData(), $salt1);
-            $entity->setPassword($password);
-            $entity->setSalt($salt1);
-
-            if ($editForm->isValid()) {
-               if ($editForm->get('password')->getData() == ''){ 
-                    $entity->setPassword($pass);
-                    $entity->setSalt($salt);
-                }
-                $em->persist($entity);
-                $em->flush();
-                 $t = $this->get('translator')->trans(
-                    'El empleado %nombre% ha sido modificado correctamente.',
-                    array('%nombre%' => $entity->getNombre())
-                );
-                $this->get('session')->setFlash('confirmacion',$t);
-                return $this->redirect($this->generateUrl('empleado_edit', array('id' => $id)));
-            }
-            $t = $this->get('translator')->trans('Se ha producido algún error. Revise los datos.');
-            $this->get('session')->setFlash('errorempleado',$t);
-
-            return array(
-                'entity'      => $entity,
-                'edit_form'   => $editForm->createView(),
-                'delete_form' => $deleteForm->createView(),
-            );
-        }
-        */
     }
+    public function ListaAlumnosGrupoPdfAction($id)
+    {
+        $em = $this->getDoctrine()->getManager();
 
+        $grupo=$em->getRepository('BackendBundle:Grupo')->findOneById($id);
+
+        $entities=$em->getRepository('BackendBundle:Alumno')->findByGrupo($grupo);
+        
+        $inicio =$em->getRepository('BackendBundle:Centro')->findInicioCurso();
+        $fin =$em->getRepository('BackendBundle:Centro')->findFinCurso();
+
+        $html = $this->renderView('IntranetBundle:Default:lista_alumnos_grupo.html.twig', array(
+            'entities' => $entities,
+            'grupo' => $grupo
+        ));
+        $header = $this->renderView('IntranetBundle:Default:header.html.twig', array(
+            'inicio' => $inicio,
+            'fin' => $fin,
+            'grupo' => $grupo
+        ));
+        $options = [
+            'margin-top'    => 30,
+            'margin-right'  => 7,
+            'margin-bottom' => 20,
+            'margin-left'   => 7,
+          //Opciones para orientación horizontal.
+            //'orientation'=>'Landscape', 
+            //'default-header'=>false,
+            //'header-html' =>'http://www.pikemere.co.uk/testerpdf.html',
+            
+    //'footer-right'=>utf8_decode('Seite [page] von [topage] - '.date('\ d.m.Y\ H:i')),
+    //'footer-left'=>utf8_decode('Klaus Müller'),
+             //'header-left' => 'nothing',
+        'header-html' => $header,
+
+            'footer-center' => '[page] / [topage]',
+            'footer-font-size' => 8,
+            //'footer-left' => 'Confidential',
+            //'page-size' => 'A4',
+
+            'header-spacing' => 5, 
+            'footer-spacing' => 10
+        ];
+        //$iniciales=substr($alumno->getNombre(), 0, 1).substr($alumno->getApellido1(), 0, 1).substr($alumno->getApellido2(), 0, 1);
+
+        return new Response(
+            $this->get('knp_snappy.pdf')->getOutputFromHtml($html,$options),
+            200,
+            array(
+                'Content-Type'        => 'application/pdf',
+                'Content-Disposition' => 'attachment; filename="prueba.pdf"'
+            )
+        );
+        
+    }
 
     
 }

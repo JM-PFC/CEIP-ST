@@ -1095,7 +1095,7 @@ thead tr th {
     font: 1em solid ;
     color:white;
 }
-tbody tr td{
+tbody:not(.lista_alumnos) tr td{
     background: #b1cce7;
     min-width: 80px !important;
     text-align: left;
@@ -1123,8 +1123,63 @@ tbody tr td{
     margin-right: 7px;
 }
 
+thead{display: table-header-group;}
+tfoot {display: table-row-group;}
+tr {page-break-inside: avoid;}
+
+.cabecera_listado .horario_grupo_pdf  img{
+    height: 30px;
+    vertical-align: middle;
+    width: 30px;
+    float: left;
+}
+#cabecera_listado #logo{
+    float: left;
+    width: 60px !important;
+    height: 60px !important;
+    margin-top: 5px;
+}
+#cabecera_listado .titulo{
+    font-size: 12px !important;
+    float:left!important;
+}
+#cabecera_listado #curso{
+    margin-top: 15px;
+    font-size: 1em!important;
+    float:right!important;
+    margin-right: 5px;
+}
+#cabecera_listado #curso h6{
+    font-weight: normal;
+    margin-bottom: 5px !important;
+    margin-top: -3px;
+}
+#cabecera_listado #grupo{
+    clear: both;
+    text-align: center;
+}
 
 
+#alumnos_grupo_pdf tr th:first-child,#alumnos_grupo_pdf tr td:first-child{
+    text-align: center !important;
+    width: 100px !important;
+}
+#alumnos_grupo_pdf tr th:last-child,#alumnos_grupo_pdf tr td:last-child{
+    padding-left: 10px;
+}
+
+#alumnos_grupo_pdf tr th{
+    line-height: 0.9 !important;
+    padding-top: 7px !important;
+    padding-bottom: 7px !important;
+    font-size: 14px !important;
+}
+#alumnos_grupo_pdf tr td{
+    line-height: 0.9 !important;
+    padding-top: 6px !important;
+    padding-bottom: 6px !important;
+    font-size: 13px !important;
+}
 
 
 

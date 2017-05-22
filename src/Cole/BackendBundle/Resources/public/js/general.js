@@ -2058,7 +2058,6 @@ $(document).on("submit",".formulario_profesor",function(event){
   });
 
   $(document).on("submit","#profesor_edit",function(event) {
-    alert();
     event.preventDefault();
     form= $(this).closest("form");
 

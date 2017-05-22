@@ -73,7 +73,8 @@ $(document).ready(function () {
   });
 
 
-    //Se incrementa el contador de las noticias.
+
+  //Se incrementa el contador de las noticias.
   $(document).on('click',".contenido_noticia a",function(event){ 
 
     href=$(this).attr("href");
@@ -90,6 +91,19 @@ $(document).ready(function () {
       }
     })
   });
+
+  //Se cambia el icono de enviar mensaje a profesores.
+  $(document).on('mouseenter',".i_hover",function(event){ 
+    $(this).find("#second").removeClass('hidden');
+    $(this).find("#first").addClass('hidden');
+  });
+
+  $(document).on('mouseleave',".i_hover",function(event){ 
+    $(this).find("#second").addClass('hidden');
+    $(this).find("#first").removeClass('hidden');
+  });
+
+
 
 
 
