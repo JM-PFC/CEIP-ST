@@ -93,17 +93,16 @@ class ProfesorController extends Controller
             $entity->setPassword($password);
             $role = $em->getRepository('BackendBundle:Role')->find(2);
             $entity->setRole($role);
-
             $entity->setFechaAlta(new \DateTime("now"));
-     
             $entity->setActivo(true);
+            $entity->setAccesoNoticias(null);
+            $entity->setNoticiasNuevas(null);
 
             $entity->setUsername("p".substr($entity->getDni(), 0, -2));
             $entity->setClaveUsuario("profe: ".substr($entity->getDni(), 0, -2).substr($entity->getDni(), -1));
 
             //Se obtiene la foto subida y se guarda en la carpeta destino, asignandole un nombre único.
-           
-                $file = $entity->getFoto();    
+            $file = $entity->getFoto();    
         
             if($entity->getFoto()!=null){
                 $fileName = uniqid().'.'.$file->guessExtension();

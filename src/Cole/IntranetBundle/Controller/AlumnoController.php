@@ -516,7 +516,7 @@ class AlumnoController extends Controller
             $request->query->getInt('page', 1)/*page number*/,
             6/*limit per page*/
         );
-
+/*
         if($entity->getAccesoNoticias()){
             if($entity->getCurso()->getNivel()=="Primaria"){
                 $noticias_nuevas =$em->getRepository('ColeBundle:Noticias')->findNuevasNoticias($entity->getAccesoNoticias(),"primaria");
@@ -538,6 +538,16 @@ class AlumnoController extends Controller
         if($noticias_nuevas){
             foreach($noticias_nuevas as $noticia){
                 $array[$noticia->getId()]=$noticia->getTitulo();
+            }
+        }
+*/
+        //Se obtiene los id de las noticias nuevas mediante el string del campo NoticiasNuevas en alumno.
+        $noticias_nuevas=$entity->getNoticiasNuevas();
+        $id_noticias = explode("|", $noticias_nuevas);
+        $array=[];
+        foreach($id_noticias as $id){
+            if($id!=""){
+                $array[$id]=$id;
             }
         }
 
@@ -573,6 +583,12 @@ class AlumnoController extends Controller
                 $imagenes[]=$nombre_dir;
             }
         }
+        //Se elimina el id de la noticia mostrada del string en el campo NoticiasNuevas del alumno.
+        $string=$entity->getNoticiasNuevas();
+        $new_string= str_replace("|".$num."|", "|", $string);
+        $entity->setNoticiasNuevas($new_string);
+        $em->persist($entity);
+        $em->flush();
 
         return $this->render('IntranetBundle:Alumno:noticia.html.twig', array(
             'entity' => $entity, 
@@ -587,34 +603,54 @@ class AlumnoController extends Controller
         $em = $this->getDoctrine()->getManager();
 
         $entity= $em->getRepository('BackendBundle:Alumno')->findOneById($id);
-     if($entity->getCurso()){
-        if($entity->getAccesoNoticias()){
-            if($entity->getCurso()->getNivel()=="Primaria"){
-                $noticias =$em->getRepository('ColeBundle:Noticias')->findNuevasNoticias($entity->getAccesoNoticias(),"primaria");
-            }
-            else{
-                $noticias =$em->getRepository('ColeBundle:Noticias')->findNuevasNoticias($entity->getAccesoNoticias(),"infantil");
-            }
-        }
-        else{
-            if($entity->getCurso()->getNivel()=="Primaria"){
-                $noticias= $em->getRepository('ColeBundle:Noticias')->findBy(array('categoria'=>'primaria'), array('fecha'=>'DESC'));
-            }
-            else{
-                $noticias= $em->getRepository('ColeBundle:Noticias')->findBy(array('categoria'=>'infantil'), array('fecha'=>'DESC'));
-            }
-        }
-
-        if($noticias){
-            $num=count($noticias);
-        }
-        else{
-            $num=0;
-        }
-     }
-     else{
         $num=0;
-     }
+
+        if($entity->getCurso()){
+            if($entity->getAccesoNoticias()){
+                if($entity->getCurso()->getNivel()=="Primaria"){
+                    $noticias =$em->getRepository('ColeBundle:Noticias')->findNuevasNoticias($entity->getAccesoNoticias(),"primaria");
+                }
+                else{
+                    $noticias =$em->getRepository('ColeBundle:Noticias')->findNuevasNoticias($entity->getAccesoNoticias(),"infantil");
+                }
+            }
+            else{
+                if($entity->getCurso()->getNivel()=="Primaria"){
+                    $noticias= $em->getRepository('ColeBundle:Noticias')->findBy(array('categoria'=>'primaria'), array('fecha'=>'DESC'));
+                }
+                else{
+                    $noticias= $em->getRepository('ColeBundle:Noticias')->findBy(array('categoria'=>'infantil'), array('fecha'=>'DESC'));
+                }
+            }
+
+            //Si hay noticias nuevas se añade los id en el campo NoticiasNuevas del alumno.
+            if($noticias){
+                if($entity->getNoticiasNuevas()){
+                    $string=$entity->getNoticiasNuevas();
+                }
+                else{
+                    $string="|";
+                }
+                
+                foreach($noticias as $noticia){
+                    $string=$string.$noticia->getId()."|";
+                }
+                //Se actualiza la fecha del último acceso a noticias.
+                $entity->setAccesoNoticias(new \DateTime("now"));
+                $entity->setNoticiasNuevas($string);
+                $em->persist($entity);
+                $em->flush();
+            }
+            //Se obtiene el número de noticias nuevas mediante los id del campo NoticiasNuevas del alumno.
+            $noticias_nuevas=$entity->getNoticiasNuevas();
+            $id_noticias = explode("|", $noticias_nuevas);
+
+            foreach($id_noticias as $noticia){
+                if($noticia!=""){
+                    $num++;
+                }
+            }   
+        }
 
         return new JsonResponse(array(
             'num'=> $num,

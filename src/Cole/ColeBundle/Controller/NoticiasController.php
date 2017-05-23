@@ -460,9 +460,32 @@ class NoticiasController extends Controller
 
         $em->flush();
 
+        //Se elimina posible el id de la noticia eliminada en todos los alumnos o profesores por si lo tiene añadido en el campo NoticiasNuevas.
+        $categoria=$entity->getCategoria();
+
+        if($categoria=="primaria"){
+            $entities= $em->getRepository('BackendBundle:Alumno')->findByNivel("Primaria");
+        }
+        else if($categoria=="infantil"){
+            $entities= $em->getRepository('BackendBundle:Alumno')->findByNivel("Infantil");
+        }
+        else if($categoria=="profesores"){
+            $entities= $em->getRepository('BackendBundle:Profesor')->findBy(array('activo'=>1));
+        }
+
+        //Se elimina el id de la noticia eliminada en el string en el campo NoticiasNuevas de todos los.
+        foreach ($entities as $user) {
+            $string=$user->getNoticiasNuevas();
+            $new_string= str_replace("|".$id."|", "|", $string);
+            $user->setNoticiasNuevas($new_string);
+            $em->persist($user);
+            $em->flush();    
+        }
+
         $query = $em->createQuery('DELETE ColeBundle:Noticias r WHERE r.id = :Id')->setParameter("Id", $id);
 
         $query->execute();
+
         return new JsonResponse(array('success' => true), 200);
 
     }

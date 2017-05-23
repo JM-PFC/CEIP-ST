@@ -85,6 +85,7 @@ class Noticias
      */
     private $contador;
 
+ 
 
     /**
      * Get id

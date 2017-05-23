@@ -23,7 +23,7 @@ intranet_profesor_noticias:
     defaults: { _controller: IntranetBundle:Profesor:noticias}
 
 intranet_profesor_noticia:
-    path:     /noticia/{id}
+    path:     /noticia/{num}
     defaults: { _controller: IntranetBundle:Profesor:noticia}
 
 nuevas_noticias_profesor:

@@ -14,8 +14,8 @@
             id=key;//Id de las noticias nuevas.
 
             //Se marca las noticias nuevas en la lista de noticias desde el pc o tablet.
-            $("article[id='"+id+"'] h2").append('<i class="fa fa-plus fa-x2 nueva_noticia"><span >Nueva</span></i>');
-            //Se marca las noticias nuevas enla lista de noticias desde el mócil.
+            $("article[id='"+id+"'] h2").append('<i class="fa nueva_noticia"><span>{% trans %}Nueva{% endtrans %}</span></i>');
+            //Se marca las noticias nuevas enla lista de noticias desde el móvil.
             $(".contenedor_noticia_movil>div[id='"+id+"'] .fa-bookmark-o").addClass('fa-bookmark');
             $(".contenedor_noticia_movil>div[id='"+id+"'] .fa-bookmark-o").removeClass('fa-bookmark-o');
         }
@@ -56,10 +56,10 @@
             {% if noticia.foto != null %}
                 <div class="contenido_noticia">
                     <div class="imgLiquidFill  img-small imgLiquid  col-xs-12 col-sm-2">
-                        <a href="{{ path('intranet_profesor_noticia', {'id': noticia.id}) }}"><img src="{{ asset('uploads/noticias/'~ noticia.foto)}}" alt="Imagen de la Noticia"></a>
+                        <a href="{{ path('intranet_profesor_noticia', { 'num': noticia.id}) }}"><img src="{{ asset('uploads/noticias/'~ noticia.foto)}}" alt="Imagen de la Noticia"></a>
                     </div>
             
-                    <a href="{{ path('intranet_profesor_noticia', {'id': noticia.id}) }}" class="col-sm-9">
+                    <a href="{{ path('intranet_profesor_noticia', { 'num': noticia.id}) }}" class="col-sm-9">
                         <h2 class="no-margin">
                             {{noticia.titulo|capitalize}}
                         </h2>
@@ -67,7 +67,7 @@
 
             {% else %}
                 <div class="contenido_noticia no_foto">
-                    <a href="{{ path('intranet_profesor_noticia', {'id': noticia.id}) }}" class="col-sm-9"><h2 class="no-margin">{{noticia.titulo|capitalize}}</h2></a>
+                    <a href="{{ path('intranet_profesor_noticia', { 'num': noticia.id}) }}" class="col-sm-9"><h2 class="no-margin">{{noticia.titulo|capitalize}}</h2></a>
 
             {% endif %}
                     <div class=" col-xs-12 col-sm-9">
@@ -101,9 +101,9 @@
                         {# En el caso de que una descripción tenga menos de 300 caracteres nos e mostraría la opción "Leer más", para ello usamos la variable type anterior.#}
 
                         {% if type != "" %}
-                            <p>{{ summary|capitalize|striptags|truncate(300,true)|raw }}<a class="href_blue" href="{{ path('intranet_profesor_noticia', {'id': noticia.id}) }}"> <strong> [Leer más] </strong></a></p>
+                            <p>{{ summary|capitalize|striptags|truncate(300,true)|raw }}<a class="href_blue" href="{{ path('intranet_profesor_noticia', { 'num': noticia.id}) }}"> <strong> [Leer más] </strong></a></p>
                         {% else %}
-                            <p>{{ summary|capitalize|striptags|truncate(300,true)|raw|nl2br }}<a class="href_blue" href="{{ path('intranet_profesor_noticia', {'id': noticia.id}) }}"></a></p>
+                            <p>{{ summary|capitalize|striptags|truncate(300,true)|raw|nl2br }}<a class="href_blue" href="{{ path('intranet_profesor_noticia', { 'num': noticia.id}) }}"></a></p>
                         {% endif %}
 		            </div>
                 </div>
@@ -112,13 +112,13 @@
             {% if noticia.foto != null %}
                 <div id="{{noticia.id}}" class="contenido_noticia">
                     {# Se introduce todo el contenido en el enlace para acceder desde el móvil #}
-                    <a href="{{ path('intranet_profesor_noticia', {'id': noticia.id}) }}" class="col-xs-12 no-padding"><h2 class="no-margin"><i class="fa fa-bookmark-o fa-5x"></i>{{noticia.titulo|capitalize}}</h2>
+                    <a href="{{ path('intranet_profesor_noticia', { 'num': noticia.id}) }}" class="col-xs-12 no-padding"><h2 class="no-margin"><i class="fa fa-bookmark-o fa-5x"></i>{{noticia.titulo|capitalize}}</h2>
             
             {% else %}
                 <div id="{{noticia.id}}" class="contenido_noticia no_foto">
                     
                     {# Se introduce todo el contenido en el enlace para acceder desde el móvil #}
-                    <a href="{{ path('intranet_profesor_noticia', {'id': noticia.id}) }}" class="col-xs-12 no-padding"><h2 class="no-margin"><i class="fa fa-bookmark-o fa-5x"></i>{{noticia.titulo|capitalize}}</h2>
+                    <a href="{{ path('intranet_profesor_noticia', { 'num': noticia.id}) }}" class="col-xs-12 no-padding"><h2 class="no-margin"><i class="fa fa-bookmark-o fa-5x"></i>{{noticia.titulo|capitalize}}</h2>
             {% endif %}
                       <div class=" col-xs-12 col-sm-9">
                         <span><strong> {{ noticia.fecha | localizeddate('none', 'none', 'none',none , " d 'de' MMMM 'de' Y '-' H:mm'h.'") | capitalize}}</strong></span>                  
@@ -151,9 +151,9 @@
                         {# En el caso de que una descripción tenga menos de 300 caracteres nos e mostraría la opción "Leer más", para ello usamos la variable type anterior.#}
 
                         {% if type != "" %}
-                            <p>{{ summary|capitalize|striptags|truncate(300,true)|raw }}<a class="href_blue" href="{{ path('intranet_profesor_noticia', {'id': noticia.id}) }}"> <strong class="hidden-xs"> [Leer más] </strong></a></p>
+                            <p>{{ summary|capitalize|striptags|truncate(300,true)|raw }}<a class="href_blue" href="{{ path('intranet_profesor_noticia', { 'num': noticia.id}) }}"> <strong class="hidden-xs"> [Leer más] </strong></a></p>
                         {% else %}
-                            <p>{{ summary|capitalize|striptags|truncate(300,true)|raw|nl2br }}<a class="href_blue" href="{{ path('intranet_profesor_noticia', {'id': noticia.id}) }}"></a></p>
+                            <p>{{ summary|capitalize|striptags|truncate(300,true)|raw|nl2br }}<a class="href_blue" href="{{ path('intranet_profesor_noticia', { 'num': noticia.id}) }}"></a></p>
                         {% endif %}
                       </div>
                     </a>

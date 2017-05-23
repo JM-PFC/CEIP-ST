@@ -230,6 +230,13 @@ class Alumno
     */
     private $expediente;
 
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="noticiasNuevas", type="string", length=500, nullable=true)
+     * 
+     */
+    private $noticiasNuevas;
 
     /**
      * Get id
@@ -879,5 +886,28 @@ class Alumno
     public function getAccesoNoticias()
     {
         return $this->accesoNoticias;
+    }
+
+    /**
+     * Set noticiasNuevas
+     *
+     * @param string $noticiasNuevas
+     * @return Alumno
+     */
+    public function setNoticiasNuevas($noticiasNuevas)
+    {
+        $this->noticiasNuevas = $noticiasNuevas;
+
+        return $this;
+    }
+
+    /**
+     * Get noticiasNuevas
+     *
+     * @return string 
+     */
+    public function getNoticiasNuevas()
+    {
+        return $this->noticiasNuevas;
     }
 }

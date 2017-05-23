@@ -13,8 +13,8 @@
             id=key;//Id de las noticias nuevas.
 
             //Se marca las noticias nuevas en la lista de noticias desde el pc o tablet.
-            $("article[id='"+id+"'] h2").append('<i class="fa fa-plus fa-x2 nueva_noticia"><span >Nueva</span></i>');
-            //Se marca las noticias nuevas enla lista de noticias desde el mócil.
+            $("article[id='"+id+"'] h2").append('<i class="fa  nueva_noticia"><span>{% trans %}Nueva{% endtrans %}</span></i>');
+            //Se marca las noticias nuevas enla lista de noticias desde el móvil.
             $(".contenedor_noticia_movil>div[id='"+id+"'] .fa-bookmark-o").addClass('fa-bookmark');
             $(".contenedor_noticia_movil>div[id='"+id+"'] .fa-bookmark-o").removeClass('fa-bookmark-o');
         }

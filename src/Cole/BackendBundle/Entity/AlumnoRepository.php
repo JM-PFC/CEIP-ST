@@ -30,6 +30,16 @@ class AlumnoRepository extends EntityRepository
 		->getOneOrNullResult();
 	}
 
+	public function findByNivel($nivel)
+	{
+	return $this->getEntityManager()->createQuery(
+		'SELECT a FROM BackendBundle:Alumno a INNER JOIN a.curso c WHERE a.activo=:activo AND c.nivel=:nivel ORDER BY a.apellido1')
+		->setParameters(array(
+			'nivel' => $nivel,
+			'activo'=>1))
+		->getResult();
+	}
+
 	public function findAlumnosPorCurso($id)
 	{
 	return $this->getEntityManager()->createQuery(
