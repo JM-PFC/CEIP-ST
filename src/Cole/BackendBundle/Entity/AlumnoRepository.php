@@ -136,5 +136,25 @@ class AlumnoRepository extends EntityRepository
 		->getResult();
 	}
 
+	public function findAlumnosOptativaGrupo($optativa, $grupo)
+	{
+		return $this->getEntityManager()->createQuery(
+		'SELECT a FROM BackendBundle:Alumno a INNER JOIN a.grupo g INNER JOIN a.optativa o WHERE g=:grupo and o=:optativa ORDER BY a.numAlum,a.apellido1, a.apellido2, a.nombre')
+		->setParameters(array(
+			'optativa'=>$optativa,
+			'grupo'=>$grupo))
+		->getResult();
+	}
+
+	public function findByGrupoOrdenado($grupo)
+	{
+		return $this->getEntityManager()->createQuery(
+		'SELECT a FROM BackendBundle:Alumno a INNER JOIN a.grupo g WHERE g=:grupo ORDER BY a.numAlum, a.apellido1, a.apellido2, a.nombre')
+		->setParameters(array(
+			'grupo'=>$grupo))
+		->getResult();
+	}
+
+
 
 }

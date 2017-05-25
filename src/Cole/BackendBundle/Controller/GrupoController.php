@@ -435,29 +435,32 @@ class GrupoController extends Controller
         
         $em = $this->getDoctrine()->getEntityManager();
 
-        $alum=$this->get('request')->request->get('alumno');
-        $letra=$this->get('request')->request->get('letra');
-        $alumno=$em->getRepository('BackendBundle:Alumno')->findOneById($alum);
-        if (!$alumno) {
+        $asignaciones=$this->get('request')->request->get('asignaciones');
+
+          foreach ($asignaciones as $row ) { //$row[0]->ID alumno  $row[1]->orden $row[2]->letra.
+          
+            $alumno=$em->getRepository('BackendBundle:Alumno')->findOneById($row[0]);
+            if (!$alumno) {
                 throw $this->createNotFoundException('Unable to find Alumno entity.');
             }
 
-        $grupo=$em->getRepository('BackendBundle:Grupo')->findGrupoByLetter($alumno->getCurso(),$letra);
+            $grupo=$em->getRepository('BackendBundle:Grupo')->findGrupoByLetter($alumno->getCurso(),$row[2]);
 
-        $alumno->setGrupo($grupo);
-        $em->persist($alumno);
+            $alumno->setGrupo($grupo);
+            $alumno->setNumAlum($row[1]);
+            $em->persist($alumno);
 
-        $matricula=$em->getRepository('BackendBundle:Matricula')->findPorAño($alumno,$alumno->getAnyoAcademico());
-        if (!$matricula) {
+            $matricula=$em->getRepository('BackendBundle:Matricula')->findPorAño($alumno,$alumno->getAnyoAcademico());
+            if (!$matricula) {
                 throw $this->createNotFoundException('Unable to find Matricula entity.');
             }
-        $matricula->setGrupo($grupo);
-        $em->persist($matricula);
+            $matricula->setGrupo($grupo);
+            $em->persist($matricula);
 
-        $em->flush();
-        
-        if ($request->isXmlHttpRequest()) {
-                return new JsonResponse(array(
+            $em->flush();
+          }  
+
+        if ($request->isXmlHttpRequest()) {return new JsonResponse(array(
                     'message' => 'Success!',
                     'success' => true), 200);
         }
@@ -736,7 +739,7 @@ class GrupoController extends Controller
             $data=null;
             return new JsonResponse(array('data' => $data), 200);
         }
-                if($eliminadas){
+        if($eliminadas){
           foreach ($eliminadas as $row ) { //$row[0]->ID asignatura  $row[1]->dia $row[2]->Horario.
             $horario = $em->getRepository('BackendBundle:Horario')->findOneById($row[2]);
             if (!$horario) {

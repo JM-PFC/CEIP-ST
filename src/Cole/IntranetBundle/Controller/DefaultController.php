@@ -168,7 +168,9 @@ class DefaultController extends Controller
         if (!$entity) {
             throw $this->createNotFoundException('Unable to find Usuario entity.');
         }
-
+        //Se optiene el password para asignarlo de nuevo ya que se modifica la contraseña con el valor de la nueva que está vacío(oculto).
+        $password=$entity->getPassword();
+        
         $deleteForm = $this->createDeleteForm($id);
 
         $editForm->handleRequest($request);
@@ -179,6 +181,8 @@ class DefaultController extends Controller
             {
                 $entity->setFoto($foto);
             }
+            $entity->setPassword($password);
+            
             $em->persist($entity);
 
             $em->flush();
@@ -258,11 +262,13 @@ class DefaultController extends Controller
 
         $grupo=$em->getRepository('BackendBundle:Grupo')->findOneById($id);
 
-        $entities=$em->getRepository('BackendBundle:Alumno')->findByGrupo($grupo);
+        $entities=$em->getRepository('BackendBundle:Alumno')->findByGrupoOrdenado($grupo);
         
         $inicio =$em->getRepository('BackendBundle:Centro')->findInicioCurso();
         $fin =$em->getRepository('BackendBundle:Centro')->findFinCurso();
-
+        
+        $titulo="Lista de Clase";
+        $subtitulo=null;
         $html = $this->renderView('IntranetBundle:Default:lista_alumnos_grupo.html.twig', array(
             'entities' => $entities,
             'grupo' => $grupo
@@ -270,10 +276,12 @@ class DefaultController extends Controller
         $header = $this->renderView('IntranetBundle:Default:header.html.twig', array(
             'inicio' => $inicio,
             'fin' => $fin,
-            'grupo' => $grupo
+            'grupo' => $grupo,
+            'titulo' => $titulo,
+            'subtitulo' =>$subtitulo
         ));
         $options = [
-            'margin-top'    => 30,
+            'margin-top'    => 40,
             'margin-right'  => 7,
             'margin-bottom' => 20,
             'margin-left'   => 7,
@@ -296,17 +304,88 @@ class DefaultController extends Controller
             'footer-spacing' => 10
         ];
         //$iniciales=substr($alumno->getNombre(), 0, 1).substr($alumno->getApellido1(), 0, 1).substr($alumno->getApellido2(), 0, 1);
-
+            $curso=$grupo->getCurso()->getCurso().$grupo->getLetra();
         return new Response(
             $this->get('knp_snappy.pdf')->getOutputFromHtml($html,$options),
             200,
             array(
                 'Content-Type'        => 'application/pdf',
-                'Content-Disposition' => 'attachment; filename="prueba.pdf"'
+                'Content-Disposition' => 'attachment; filename="Alumnos_'. $curso.'.pdf"'
             )
-        );
-        
+        );  
     }
 
-    
+    public function ListaAlumnosOptativasPdfAction($id)
+    {
+        $em = $this->getDoctrine()->getManager();
+
+        $grupo=$em->getRepository('BackendBundle:Grupo')->findOneById($id);
+        $profesor = $this->get('security.context')->getToken()->getUser();
+        $grupo_tutorizado= $em->getRepository('BackendBundle:Grupo')->findOneByProfesor($profesor);
+
+        if($grupo!=$grupo_tutorizado){
+            $opcional=$em->getRepository('BackendBundle:Imparte')->findOpcionalProfesorGrupo($profesor, $grupo);
+            $entities=$em->getRepository('BackendBundle:Alumno')->findAlumnosOptativaGrupo($opcional->getAsignatura(), $grupo);
+            $html = $this->renderView('IntranetBundle:Default:lista_alumnos_grupo.html.twig', array(
+                'entities' => $entities,
+                'grupo' => $grupo
+            ));
+            $titulo="Lista de Optativa";
+            $subtitulo=$opcional->getAsignatura()->getAsignatura()->getAbreviatura();
+        }
+        else{
+            $titulo="Lista de Clase";
+            $subtitulo=null;
+
+            //Se imprime la lista de todas las asigmaturas
+        }
+        
+        $inicio =$em->getRepository('BackendBundle:Centro')->findInicioCurso();
+        $fin =$em->getRepository('BackendBundle:Centro')->findFinCurso();
+
+        $header = $this->renderView('IntranetBundle:Default:header.html.twig', array(
+            'inicio' => $inicio,
+            'fin' => $fin,
+            'grupo' => $grupo,
+            'titulo' => $titulo,
+            'subtitulo' => $subtitulo
+        ));
+        $options = [
+            'margin-top'    => 40,
+            'margin-right'  => 7,
+            'margin-bottom' => 20,
+            'margin-left'   => 7,
+          //Opciones para orientación horizontal.
+            //'orientation'=>'Landscape', 
+            //'default-header'=>false,
+            //'header-html' =>'http://www.pikemere.co.uk/testerpdf.html',
+            
+    //'footer-right'=>utf8_decode('Seite [page] von [topage] - '.date('\ d.m.Y\ H:i')),
+    //'footer-left'=>utf8_decode('Klaus Müller'),
+             //'header-left' => 'nothing',
+        'header-html' => $header,
+
+            'footer-center' => '[page] / [topage]',
+            'footer-font-size' => 8,
+            //'footer-left' => 'Confidential',
+            //'page-size' => 'A4',
+
+            'header-spacing' => 5, 
+            'footer-spacing' => 10
+        ];
+        //$iniciales=substr($alumno->getNombre(), 0, 1).substr($alumno->getApellido1(), 0, 1).substr($alumno->getApellido2(), 0, 1);
+            $curso=$grupo->getCurso()->getCurso().$grupo->getLetra();
+            $asignatura=$opcional->getAsignatura()->getAsignatura()->getAbreviatura();
+        return new Response(
+            $this->get('knp_snappy.pdf')->getOutputFromHtml($html,$options),
+            200,
+            array(
+                'Content-Type'        => 'application/pdf',
+                'Content-Disposition' => 'attachment; filename="Alumnos_'.$asignatura.'_'. $curso.'.pdf"'
+            )
+        );  
+    }
+
+
+
 }

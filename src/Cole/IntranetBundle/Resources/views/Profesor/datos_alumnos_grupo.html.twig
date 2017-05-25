@@ -1,16 +1,29 @@
-{% if tutor and tutor.id != profesor.id %}
-	{% if  app.request.getLocale() == "es" %}
-		<p class="titulo_curso">{{grupo.curso.curso ~ " " ~ "de Primaria"  ~ " - "  }} <span> {{"Grupo" ~ " " ~ grupo.letra }} </span></p>
+	{% if grupo.curso.nivel == "Primaria" %}
+		{% if  app.request.getLocale() == "es" %}
+			<p class="titulo_curso">{{grupo.curso.curso ~ " " ~ "de Primaria"  ~ " - "  }} <span> {{"Grupo" ~ " " ~ grupo.letra }} </span></p>
+		{% else %}
+			<p class="titulo_curso">{{grupo.curso.curso ~ " " ~ "of Primary Education"  ~ " - "  }} <span> {{"Group" ~ " " ~ grupo.letra }} </span></p>
+		{% endif %}
 	{% else %}
-		<p class="titulo_curso">{{grupo.curso.curso ~ " " ~ "of Primary Education"  ~ " - "  }} <span> {{"Group" ~ " " ~ grupo.letra }} </span></p>
+		{% if  app.request.getLocale() == "es" %}
+			<p class="titulo_curso">{{grupo.curso.curso ~ " " ~ "de Infantil"  ~ " - "  }} <span> {{"Grupo" ~ " " ~ grupo.letra }} </span></p>
+		{% else %}
+			<p class="titulo_curso">{{grupo.curso.curso ~ " " ~ "of Child Education"  ~ " - "  }} <span> {{"Group" ~ " " ~ grupo.letra }} </span></p>
+		{% endif %}
+	{% endif %}
+	{% if opcional %}
+	  	<div class="aviso_optativa col-xs-12 hidden alumnos_optativa">
+	  		<p class="aviso_optativa col-xs-12 col-sm-offset-3  col-sm-6 col-md-offset-4 col-md-4 ">{{ "Alumnos de " ~ opcional.asignatura.asignatura.abreviatura }}</p>
+	  	</div>
 	{% endif %}
 
+{% if tutor and tutor.id != profesor.id %}
 	<div id="tutor" class="col-xs-12 no-padding">
 		<div class="col-xs-1 no-padding label_tutor">
 		{% if tutor.sexo == "Femenino" %}
-			{% trans %}Tutora{% endtrans %}:
+			{% trans %}Tutora{% endtrans %}
    		{% else %}
-   			{% trans %}Tutor{% endtrans %}: 
+   			{% trans %}Tutor{% endtrans %} 
         {% endif %}	
 		</div>
 		
@@ -25,64 +38,135 @@
 		</div>
 	</div>
 {% endif %}
-
-{% if tutor and tutor.id == profesor.id %}
-	{% if grupo.curso.nivel == "Primaria" %}
-		{% if  app.request.getLocale() == "es" %}
-			<p class="titulo_curso">{{grupo.curso.curso ~ " " ~ "de Primaria"  ~ " - "  }} <span> {{"Grupo" ~ " " ~ grupo.letra }} </span></p>
-		{% else %}
-			<p class="titulo_curso">{{grupo.curso.curso ~ " " ~ "of Primary Education"  ~ " - "  }} <span> {{"Group" ~ " " ~ grupo.letra }} </span></p>
-		{% endif %}
-	{% else %}
-		{% if  app.request.getLocale() == "es" %}
-			<p class="titulo_curso">{{grupo.curso.curso ~ " " ~ "de Infantil"  ~ " - "  }} <span> {{"Grupo" ~ " " ~ grupo.letra }} </span></p>
-		{% else %}
-			<p class="titulo_curso">{{grupo.curso.curso ~ " " ~ "of Child Education"  ~ " - "  }} <span> {{"Group" ~ " " ~ grupo.letra }} </span></p>
-		{% endif %}
-	{% endif %}
-	
-
+{% if not tutor %}
 	<div id="tutor" class="col-xs-12 no-padding">
-		<div class="col-xs-1 no-padding label_tutor">{% trans %}Mi grupo{% endtrans %}</div>
-		
+		<div class="col-xs-2 no-padding label_tutor">
+			{% trans %}Sin tutor/a{% endtrans %}
+		</div>
 	</div>
 {% endif %}
 
+{% if tutor and tutor.id == profesor.id %}
+	{% if grupo.curso.nivel == "Primaria" %}
+	<div id="tutor" class="col-xs-12 no-padding">
+		<div class="col-xs-1 no-padding label_tutor mi_grupo">{% trans %}Mi grupo{% endtrans %}</div>
 
-<table class="lista-alumnos table table-striped">
-	<thead  >
-		<tr>
-			<th class="col-xs-1 center">Nº</th>
-			<th class="col-xs-8 col-sm-9">{% trans %}Apellidos, Nombre{% endtrans %}</th>
-			<th class="col-xs-3 col-sm-2 center"></th>
-		</tr>
-	</thead> 
-	<tbody>
-		{% for entity in entities %}
-		<tr>
-			<td class="col-xs-1 center">
-				{{ loop.index }}
-			</td>
-			<td class="col-xs-8 col-sm-9 ">
-				{{entity.apellido1 ~ " " ~ entity.apellido2 ~ ", " ~ entity.nombre }} 
-			</td>
-			<td class="col-xs-3 col-sm-2 center">
-				<a id="{{entity.id}}" href="javascript:void(0);" class="i_hover" data-toggle="tooltip" data-placement="bottom" title="" data-original-title="{% trans %}Contactar{% endtrans %}">
-					<i id="first" class="fa fa-envelope-o"></i>
-					<i id="second" class=" hidden fa fa-envelope"></i>
-				</a>
-				{% if tutor and tutor.id == profesor.id %}
+		<button id="#1" class=" active col-sm-offset-1 col-sm-2 btn btn-default">{% trans %}Alumnos{% endtrans %}</button>
+		<button id="#2" class="col-sm-offset-0 col-sm-2 btn btn-default">{% trans %}Horario{% endtrans %}</button>
+		<button id="#3" class="col-sm-offset-0 col-sm-2 btn btn-default">{% trans %}Profesores{% endtrans %}</button>
+		<button id="#4" class="col-sm-offset-0 col-sm-2 btn btn-default">{% trans %}Optativas{% endtrans %}</button>
+	</div>
+	{% endif %}
+{% endif %}
 
-				<a id="{{entity.id}}" href="javascript:void(0);" class="i_hover" data-toggle="tooltip" data-placement="bottom" title="" data-original-title="{% trans %}Ver info{% endtrans %}">
-					<i id="first" class="fa fa-info"></i>
-					<i id="second" class=" hidden fa fa-info-circle"></i>
-				</a>
-				{% endif %}
-			</td>
-		</tr>
-		{% endfor %}
-	</tbody>
-</table>
+{% if tipos == "ambos" %}
+<div id="tipo_lista">
+	<button id="alumnos_del_grupo" class="active">Alumnos / Grupo</button><button id="alumnos_optativa">Alumnos / Optativa</button>
+</div>
+{% endif %}
+
+<div id="contenido_mi_grupo">
+	{% if tipos == "ambos"  or tipos == "no_opcionales" %}
+	<div id="#1" class="alumnos_del_grupo">
+		<table class="lista-alumnos table table-striped">
+			<thead >
+				<tr>
+					<th class="col-xs-1 center">Nº</th>
+					<th class="col-xs-8 col-sm-9">{% trans %}Apellidos, Nombre{% endtrans %}</th>
+					<th class="col-xs-3 col-sm-2 center"></th>
+				</tr>
+			</thead> 
+			<tbody>
+				{% for entity in entities %}
+				<tr>
+					<td class="col-xs-1 center">
+						{#{{ loop.index }}#}
+						{{ entity.numAlum }}
+					</td>
+					<td class="col-xs-8 col-sm-9 ">
+						{{entity.apellido1 ~ " " ~ entity.apellido2 ~ ", " ~ entity.nombre }} 
+					</td>
+					<td class="col-xs-3 col-sm-2 center">
+						<a id="{{entity.id}}" href="javascript:void(0);" class="i_hover contacto_responsable" data-toggle="tooltip" data-placement="bottom" title="" data-original-title="{% trans %}Contactar{% endtrans %}">
+							<i id="first" class="fa fa-envelope-o"></i>
+							<i id="second" class=" hidden fa fa-envelope"></i>
+						</a>
+						{% if tutor and tutor.id == profesor.id %}
+
+						<a id="{{entity.id}}" href="#info_alumno_modal" class="i_hover info_alumno" data-toggle="modal" data-placement="bottom" title="" data-original-title="{% trans %}Ver info{% endtrans %}">
+							<i id="first" class="fa fa-info"></i>
+							<i id="second" class=" hidden fa fa-info-circle"></i>
+						</a>
+						{% endif %}
+					</td>
+				</tr>
+				{% endfor %}
+			</tbody>
+		</table>
+	</div>
+	{% endif %}
+
+	{% if tipos == "ambos"  or tipos == "opcional" %}
+	  {# Si imparte ambos tipos se oculta por defecto la lista de alumnos de la optativa #}
+	  {% if tipos == "ambos"%}
+	  <div id="#1" class="hidden alumnos_optativa">
+	  {% else %}
+	  <div id="#1" class="alumnos_optativa">
+	  {% endif %}
+		<table class="lista-alumnos table table-striped">
+			<thead >
+				<tr>
+					<th class="col-xs-1 center">Nº</th>
+					<th class="col-xs-8 col-sm-9">{% trans %}Apellidos, Nombre{% endtrans %}</th>
+					<th class="col-xs-3 col-sm-2 center"></th>
+				</tr>
+			</thead> 
+			<tbody>
+				{% for entity in alumnos_optativa %}
+				<tr>
+					<td class="col-xs-1 center">
+						{#{{ loop.index }}#}
+						{{ entity.numAlum }}
+					</td>
+					<td class="col-xs-8 col-sm-9 ">
+						{{entity.apellido1 ~ " " ~ entity.apellido2 ~ ", " ~ entity.nombre }} 
+					</td>
+					<td class="col-xs-3 col-sm-2 center">
+						<a id="{{entity.id}}" href="javascript:void(0);" class="i_hover contacto_responsable" data-toggle="tooltip" data-placement="bottom" title="" data-original-title="{% trans %}Contactar{% endtrans %}">
+							<i id="first" class="fa fa-envelope-o"></i>
+							<i id="second" class=" hidden fa fa-envelope"></i>
+						</a>
+						{% if tutor and tutor.id == profesor.id %}
+
+						<a id="{{entity.id}}" href="#info_alumno_modal" class="i_hover info_alumno" data-toggle="modal" data-placement="bottom" title="" data-original-title="{% trans %}Ver info{% endtrans %}">
+							<i id="first" class="fa fa-info"></i>
+							<i id="second" class=" hidden fa fa-info-circle"></i>
+						</a>
+						{% endif %}
+					</td>
+				</tr>
+				{% endfor %}
+			</tbody>
+		</table>
+	  </div>
+	{% endif %}
+
+	{% if grupo.curso.nivel == "Primaria" %}
+
+	  <div id="#2" class="hidden">
+		<p>horario</p>
+	  </div>
+	
+	  <div id="#3" class="hidden">
+		<p>Profesores</p>
+	  </div>
+		<div id="#4" class="hidden">
+		<p>optativas</p>
+	  </div>
+
+	{% endif %}
+</div>
+
 	
 <script>
   $("*").tooltip({

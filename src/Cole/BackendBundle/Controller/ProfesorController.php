@@ -140,6 +140,25 @@ class ProfesorController extends Controller
         ));
     }
 
+    public function RestablecerPasswordAction($id)
+    {
+        $em = $this->getDoctrine()->getManager();
+
+        $entity = $em->getRepository('BackendBundle:Profesor')->find($id);
+        if (!$entity) {
+            throw $this->createNotFoundException('Unable to find Profesor entity.');
+        }
+
+        $factory = $this->get('security.encoder_factory'); 
+        $encoder = $factory->getEncoder($entity);
+        $entity->setSalt(base_convert(sha1(uniqid(mt_rand(),true)), 16, 36));
+        $password = $encoder->encodePassword("p".substr($entity->getDni(), 0, -2), $entity->getSalt());
+        $entity->setPassword($password);
+        $em->persist($entity);
+        $em->flush();
+
+        return new JsonResponse(array('success' => true), 200);
+    }
 
     /**
      * Creates a form to create a Profesor entity.

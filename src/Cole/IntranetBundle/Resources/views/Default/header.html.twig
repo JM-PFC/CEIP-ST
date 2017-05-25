@@ -19,15 +19,18 @@
 				<img id="logo" alt="logo del colegio"   src= " {{ app.request.scheme ~ '://' ~ app.request.httpHost ~ asset('bundles/backend/images/logo_trans.png') }} ">
  
     	<div class="titulo">
-				Colegio de Educación Infantil y Primaria
+				{% trans %}Colegio de Educación Infantil y Primaria{% endtrans %}
 				<br>
-				<strong>Santa Teresa</strong>
+				<strong>{% trans %}Santa Teresa{% endtrans %}</strong>
 				<br>
-				Cádiz
+				{% trans %}Cádiz{% endtrans %}
 			</div>
 			<div id="curso">
         <h6> {{"Curso " ~ inicio.inicioCurso|date('Y') ~ " / " ~  fin.finCurso|date('Y') }}</h6>
-        <h5> Lista de Clase </h5>
+        <h5> {{titulo}} </h5>
+        {% if subtitulo %}
+          <h6 class="subtitulo"> {{subtitulo}}</h6>
+        {% endif %}
 			</div>
       <div id="grupo">
       <h3>

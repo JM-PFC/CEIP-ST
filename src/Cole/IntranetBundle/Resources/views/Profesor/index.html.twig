@@ -43,7 +43,11 @@
 					<i class="fa fa-server"></i>
 				</a>
 			</div>
-			<p>{% trans %}Cursos impartidos{% endtrans %}</p>
+			{% if app.user.nivel == "Primaria" %}
+				<p>{% trans %}Cursos impartidos{% endtrans %}</p>
+			{% else %}
+				<p>{% trans %}Curso actual{% endtrans %}</p>
+			{% endif %}
         </div>
         <div class="col-md-3 col-sm-3 col-xs-6 bloque-menu">
 			<div class="bloque-item-menu">

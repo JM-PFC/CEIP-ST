@@ -2508,6 +2508,13 @@ button[class*="elected"]{
 .edit_profesor input[type='file']{
 	display:none;
 }
+.btn_restablecer{
+    background: #e4e0e0 none repeat scroll 0 0;
+    height: 40px;
+    margin-left: 20px;
+    margin-top: 10px;
+}
+
 .datos_registro{
 	display: inline-block;
 	width: 100%;
@@ -7493,6 +7500,11 @@ cursor: default !important;
 }
 #clases_impartidas #contenedor_registro h2 span {
     color: #334c73;
+}
+#clases_impartidas #profesor button{
+    text-align: left;
+    padding-left: 10px;
+    padding-right: 10px;
 }
 .lista_profesores{
     background: #b1cce7 none repeat scroll 0 0;

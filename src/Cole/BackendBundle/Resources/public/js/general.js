@@ -2189,6 +2189,59 @@ $(document).on("submit",".formulario_profesor",function(event){
  
     }
   });
+
+  //Se restablece la contraseña del profesor.
+  $(document).on("click","#profesor_edit .btn_restablecer",function(event) {
+    event.preventDefault();
+    id=$(this).attr("id");
+
+    aviso.play();
+    swal({
+      title: "Restablecer contraseña del profesor",
+      html: "<p class='justificado'>Se va a restablecer la contraseña del profesor a la inicial y no se podrá recuperar la actual. ¿Estas seguro de continuar?</p>",
+      type: "warning",
+      showCancelButton: true,
+      cancelButtonText: "Cancelar",
+      confirmButtonColor: color,
+      confirmButtonText: "¡Adelante!"
+      }).then(function () {
+
+        $.ajax({
+          type: 'POST',
+          url: Routing.generate('restablecer_contraseña_profesor', {id:id}),
+          data:{id:id},
+          dataType: 'json',
+  
+          success: function(response) {
+            // Notificación de confirmación.
+            $(".ui-pnotify").remove();
+            exito.play();
+
+            new PNotify({
+              text:"Contraseña restablecida.",
+              addclass: "custom",
+              type: "success",
+              shadow: true,
+              hide: true,
+              buttons: {
+                sticker: false,
+                labels:{close: "Cerrar"}
+              },
+              stack: right_Stack,
+              animate: {
+                animate: true,
+                in_class: "fadeInRight",
+                out_class: "fadeOutRight",
+              }
+            });
+          }
+        })
+      }, function (dismiss) {
+
+      }
+    ); 
+  });
+
   //Se comprueba que el DNI no existe en el sistema si se modifica a un responsable.
   $(document).on("blur","input[id^='edit_alumno_responsable_dni_']",function() {
     form= $(this).closest("form");
@@ -10015,8 +10068,6 @@ $(document).on("click","#registro_equipamientos td a",function(event){
       } 
     });
 
-
-
   });
 
   //Se restablece la listas del curso seleccionado.
@@ -10029,67 +10080,96 @@ $(document).on("click","#registro_equipamientos td a",function(event){
   $(document).on('click',"#asignar_grupos #button_grupos_all",function(event){
     event.preventDefault();
     div= $(this).closest("div[id^='tabs']");
-
+    var asignaciones = new Object();
+    var index = 1;
     $("#asignar_grupos #contenedor_asignar_grupos").each(function(){ 
       letra=$(this).find("ol").attr("id").replace("grupo_","");
+      orden=1;
       $(this).find("ol li").each(function(){ 
-
-        if(!$(this).attr('grupo') || $(this).hasClass('cambio_grupo')){
-
           alumno=$(this).attr("id").replace("curso-","");
-          error=0;
+          
+          asignaciones[index++]=[alumno, orden, letra];  
 
-          $.ajax({
-            type: 'POST',
-            url: Routing.generate('asignar_grupo_update'),
-            data: {alumno:alumno, letra:letra},
-            dataType: 'json',
-            success: function(response) {
-
-              // Se actualiza todas las pestañas que utilicen grupos.
-              //$("#alumnos_multiple").update_tab();
-            },
-            error: function (response, desc, err){
-              error=1;
-
-              error.play();
-              swal({
-                title: "Error en el sistema",
-                html: "Se ha producido un error en el sistema, por favor cierra la pestaña <span class='negrita'>Asignar Grupos</span> y vuelva a intentarlo de nuevo.",
-                type: "error",
-                showCancelButton: false,
-                confirmButtonColor: color
-              });
-            }
-          })
-        }
+          orden++;
       });
     });
 
-    if(!error){
-      // Notificación de confirmación
-      exito.play();
-            
+    //Se avisa si no existe cambios.
+    if($.isEmptyObject(asignaciones)){
+      $(".ui-pnotify").remove();
+
+      errorPNotify.play();
+
       new PNotify({
-        text:"Grupo Asignado",
+        text:'No se ha asignado ningún alumno a los grupos.',
         addclass: "custom",
-        type: "success",
+        type: "error",
         shadow: true,
         hide: true,
         buttons: {
           sticker: false,
           labels:{close: "Cerrar"}
         },
-          stack: right_Stack,
-          animate: {
-            animate: true,
-            in_class: "fadeInRight",
-            out_class: "fadeOutRight",
-          }
+        stack: right_Stack,
+        animate: {
+          animate: true,
+          in_class: "fadeInRight",
+          out_class: "fadeOutRight",
+        }
       });
-      div.load(Routing.generate('asignar_grupo'));
+      return false;
     }
+
+    $.ajax({
+      type: 'POST',
+      url: Routing.generate('asignar_grupo_update'),
+      data: {asignaciones:asignaciones},
+      dataType: 'json',
+      success: function(response) {
+        // Notificación de confirmación
+        exito.play();
+        if($("#asignar_grupos #contenedor_asignar_grupos:not(.container_disabled)").size()>1){
+          texto="Grupos Asignados";
+        }
+        else{
+          texto="Grupo Asignado";
+        }
+
+        new PNotify({
+          text:texto,
+          addclass: "custom",
+          type: "success",
+          shadow: true,
+          hide: true,
+          buttons: {
+            sticker: false,
+            labels:{close: "Cerrar"}
+          },
+            stack: right_Stack,
+            animate: {
+              animate: true,
+              in_class: "fadeInRight",
+              out_class: "fadeOutRight",
+            }
+        });
+        div.load(Routing.generate('asignar_grupo'));
+        
+        // Se actualiza todas las pestañas que utilicen grupos.
+        //$("#alumnos_multiple").update_tab();
+      },
+      error: function (response, desc, err){
+        error.play();
+        swal({
+          title: "Error en el sistema",
+          html: "Se ha producido un error en el sistema, por favor cierra la pestaña <span class='negrita'>Asignar Grupos</span> y vuelva a intentarlo de nuevo.",
+          type: "error",
+          showCancelButton: false,
+          confirmButtonColor: color
+        });
+      }
+    })
   });
+
 
   ///////////////////////////////////////////
   //      Asignar tutor a los grupos       //

@@ -1,0 +1,120 @@
+<div class="media">
+	<div class="media-left  media-middle div_foto">
+		{% if entity.foto != null %}
+			<img id="foto_info" class="img-rounded " alt="{{entity}}" src="{{ asset('uploads/images/' ~ entity.foto) }}">
+        {% else %}
+       		{% if entity.sexo == "Femenino" %}
+				<img id="foto_info" class="img-rounded " alt="Sin Foto" src="{{ asset('bundles/backend/images/perfil/SinFoto-niña.png') }}">
+   			{% else %}
+              	<img id="foto_info" class="img-rounded " alt="Sin Foto" src="{{ asset('bundles/backend/images/perfil/SinFoto-niño.png') }}">
+           	{% endif %}
+        {% endif %}
+	</div>
+	<div class="media-body">
+		<div>
+			<label class="col-xs-2">{% trans %}Nombre{% endtrans %}:</label> <span>{{entity}}</span>	
+		</div>
+		<div class="doble_dato visible-sm hidden-xs visible-md visible-lg">
+			<label class="col-sm-2">{% trans %}Edad{% endtrans %}:</label> 
+			<span class="col-sm-3 no-padding">{{edad ~ " "}} {% trans %}años{% endtrans %}</span>
+			{% if entity.grupoSangre != null %}
+				<label class="col-sm-2">{% trans %}Sangre{% endtrans %}:</label>
+				<span class="col-sm-2 no-padding" >{{entity.grupoSangre}}</span>
+			{% else %}
+				<label class="col-sm-2">{% trans %}Sangre{% endtrans %}:</label>
+				<span class="col-sm-2 no-padding color_rojo" >{% trans %}No disponible{% endtrans %}</span>
+			{% endif %}
+		</div>
+		<div class="hidden-sm visible-xs hidden-md hidden-lg">
+			<label class="col-xs-2" >{% trans %}Edad{% endtrans %}:</label> <span>{{edad ~ " "}} {% trans %}años{% endtrans %}</span>	
+		</div>
+		
+		{% if entity.grupoSangre != null %}
+		<div class="hidden-sm visible-xs hidden-md hidden-lg">
+			<label class="col-xs-2" >{% trans %}Sangre{% endtrans %}:</label> <span>{{entity.grupoSangre}}</span>	
+		</div>
+		{% else %}
+			<div>
+				<label class="col-xs-2">{% trans %}Sangre{% endtrans %}:</label> <span class="color_rojo">{% trans %}No disponible{% endtrans %}</span>	
+			</div>
+		{% endif %}
+
+		{% if entity.telefono != null %}
+			<div class="visible-sm hidden-xs visible-md visible-lg">
+				<label class="col-sm-2">{% trans %}Teléfono{% endtrans %}:</label> <span class="col-sm-3 no-padding">{{entity.telefono}}</span>	
+			</div>
+			<div class="hidden-sm visible-xs hidden-md hidden-lg">
+				<label class="col-xs-2">{% trans %}Teléfono{% endtrans %}:</label> <span>{{entity.telefono}}</span>	
+			</div>
+		{% else %}
+			<div>
+				<label class="col-xs-2">{% trans %}Teléfono{% endtrans %}:</label> <span class="color_rojo">{% trans %}No disponible{% endtrans %}</span>	
+			</div>
+		{% endif %}
+	</div>
+</div>
+<h4 class="titulo-seccion">{% trans %}Responsables{% endtrans %}</h4>
+
+{% if entity.responsable1 != null %}
+	<h4 class="titulo-bloque" >
+		<i class="fa fa-user"></i>
+		{{entity.responsable1}}
+	</h4>
+	
+	<div class="doble_dato visible-sm hidden-xs visible-md visible-lg mb15">
+		{% if entity.responsable1.movil != null %}
+			<label class="col-sm-2">{% trans %}Móvil{% endtrans %}:</label> <span class="col-sm-3 no-padding">{{entity.responsable1.movil}}</span>
+		{% else %}
+			<label class="col-sm-2">{% trans %}Móvil{% endtrans %}:</label> <span class="color_rojo col-sm-3 no-padding">{% trans %}No disponible{% endtrans %}</span>	
+		{% endif %}
+
+		{% if entity.responsable1.email != null %}
+			<label class="col-sm-2">{% trans %}Email{% endtrans %}:</label> <span class="col-sm-4 no-padding overf_auto">{{entity.responsable1.email}}</span>	
+		{% else %}
+			<label class="col-sm-2">{% trans %}Email{% endtrans %}:</label> <span class="color_rojo col-sm-4 no-padding">{% trans %}No disponible{% endtrans %}</span>	
+		{% endif %}
+	</div>
+
+	<div class="hidden-sm visible-xs hidden-md hidden-lg">
+		{% if entity.responsable1.movil != null %}
+			<label class="col-xs-2">{% trans %}Móvil{% endtrans %}:</label> <span class="col-xs-8 no-padding">{{entity.responsable1.movil}}</span>
+		{% else %}
+			<label class="col-xs-2">{% trans %}Móvil{% endtrans %}:</label> <span class="color_rojo col-xs-8 no-padding">{% trans %}No disponible{% endtrans %}</span>	
+		{% endif %}	
+	</div>
+
+	<div class="hidden-sm visible-xs hidden-md hidden-lg">
+		{% if entity.responsable1.email != null %}
+			<label class="col-xs-2">{% trans %}Email{% endtrans %}:</label> <span class="col-xs-8 no-padding overf_auto">{{entity.responsable1.email}}</span>	
+		{% else %}
+			<label class="col-xs-2">{% trans %}Email{% endtrans %}:</label> <span class="color_rojo col-xs-8 no-padding">{% trans %}No disponible{% endtrans %}</span>	
+		{% endif %}
+	</div>
+{% endif %}
+
+{% if entity.responsable2 != null %}
+	<h4 class="titulo-bloque">
+		<i class="fa fa-user"></i>
+		{{entity.responsable2}}
+	</h4>
+
+	<div class="doble_dato visible-sm hidden-xs visible-md visible-lg mb15">
+		{% if entity.responsable2.movil != null %}
+			<label class="col-sm-2">{% trans %}Móvil{% endtrans %}:</label> <span class="col-sm-3 no-padding">{{entity.responsable2.movil}}</span>
+		{% else %}
+			<label class="col-sm-2">{% trans %}Móvil{% endtrans %}:</label> <span class="color_rojo col-sm-3 no-padding">{% trans %}No disponible{% endtrans %}</span>	
+		{% endif %}
+
+		{% if entity.responsable2.email != null %}
+			<label class="col-sm-2">{% trans %}Email{% endtrans %}:</label> <span class="col-sm-4 no-padding overf_auto">{{entity.responsable2.email}}</span>	
+		{% else %}
+			<label class="col-sm-2">{% trans %}Email{% endtrans %}:</label> <span class="color_rojo col-sm-4 no-padding">{% trans %}No disponible{% endtrans %}</span>	
+		{% endif %}
+	</div>
+{% endif %}
+{% if entity.observaciones != null %}
+	<h4 class="titulo-seccion">{% trans %}Observaciones{% endtrans %}</h4>
+	<div>
+		<p>{{entity.observaciones}}</p>
+	</div>
+{% endif %}

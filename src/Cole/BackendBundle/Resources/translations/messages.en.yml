@@ -16,8 +16,11 @@ Alumnado: Students
 Profesorado: Teachers
 Inicio: Home
 Cerrar sesión: Close sessions
+Cerrar: Close
 Datos personales: Personal information
 Nombre: Name
+Edad: Age
+años: years
 Fecha Nacimiento: Birth date
 Estado Civil: Civil status
 Último acceso: Last access
@@ -26,8 +29,10 @@ Datos editables: Editable information
 Datos de contacto: Contact information
 Teléfono de contacto: Telephone contact
 Correo: Email
+Email: Email
 Teléfono: Phone
 Teléfono Móvil: Mobile phone
+Móvil: Mobile
 Guardar: Save
 Guardar cambios: Save changes
 Actualizar contraseña: Update password
@@ -67,7 +72,6 @@ Miércoles: Wednesday
 Jueves: Thursday
 Viernes: Friday
 Maestros / Asignaturas: Teachers / Subjects
-Alumnos / Grupos: Students / Groups
 Alumnos del grupo: Group Students
 Mi grupo: My group
 Apellidos, Nombre: Surname, Name
@@ -80,14 +84,15 @@ Grupo: Group
 Año académico: Academic year
 Tutor: Tutor
 Tutora: Tutor
+Sin tutor/a: Without tutor
 Tutor del grupo: Group tutor
 Tutora del grupo: Group tutor
 Nivel impartido: Level imparted
 Contactar: Contact
 Sin asignar: Unassigned
 Módulos: Modules
-Descargar Horario: Download Schedule
-Descargar Lista de Alumnos: Download List of Students
+Horario PDF: PDF Schedule
+Lista de Alumnos PDF: PDF List of Students
 Noticias de Primaria: News of Primary Education
 Noticias de Infantil: News of Child Education
 Noticias de profesores: News from teachers
@@ -110,3 +115,12 @@ Avisos de seguimiento sin leer: Unread Tracking Warnings
 Acceder al área del alumno : Access the student area
 Nueva: New
 Nuevo: New
+Información del alumno: Student Information
+Sangre: Blood
+No disponible: Not available
+Responsables: Responsible
+Observaciones: Observations
+Alumnos: Students
+Horario: Schedule
+Profesores: Teachers
+Optativas: Optional

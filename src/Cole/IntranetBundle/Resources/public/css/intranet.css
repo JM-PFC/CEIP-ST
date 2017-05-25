@@ -87,6 +87,10 @@ p>input{
     html, body {
         overflow-x: hidden;
     }
+    .modal-dialog {
+        left: 32% !important;
+        width: 65% !important;
+    }
     #wrapper {
         padding-left: 0 !important;
     }
@@ -228,6 +232,9 @@ p>input{
 @media (max-width: 767px) {
     html, body {
         overflow-x: hidden;
+    }
+    .modal-dialog {
+        left: 47% !important;
     }
     .botonsubir {
         margin-bottom: 20px;
@@ -491,7 +498,28 @@ p>input{
         margin-top: 5px !important;
         text-align: center;
     }
-
+    #intranet .div_foto{
+        display: block !important;
+    }
+    #intranet #foto_info{
+        margin: 0 auto !important;
+    }
+    .alumnos_grupo #tutor .mi_grupo {
+        margin-top: 25px !important;
+    }
+    #tutor button {
+        border-radius: 0 !important;
+        margin: 4px 2px;
+        max-width: 225px;
+        min-width: 85px;
+        padding: 5px !important;
+    }
+    #contenedor_cursos_profesor{
+        text-align: center !important;;
+    }
+    #tipo_lista {
+        text-align: center;
+    }
 }
 /* Estilos para Pc*/
 #titulo_cabecera{
@@ -657,7 +685,7 @@ img {
     width: 250px;
 }
 .sidebar-nav li {
-    line-height: 31px;
+    line-height: 28px;
     text-indent: 5px;
 }
 .menu {
@@ -805,6 +833,9 @@ ul, ol {
     font-size: 12px;
     font-weight: bold;
     padding: 5px;
+}
+.color_rojo{
+    color: #bc1010;
 }
 .c_amarillo{
     color: yellow !important;
@@ -1104,6 +1135,7 @@ ul, ol {
     border-radius: 5px;
     border: 1px solid #334c73;
     margin-bottom: 15px;
+    clear: both;
 }
 .titulo-bloque i{
     margin: 0 20px 0 10px;
@@ -1361,14 +1393,20 @@ ul, ol {
     margin: -7px auto 0;
     width: 70px;
 }
+#foto_info {
+    box-shadow: 0 0 2px 1px rgba(0, 0, 0, 0.4);
+    display: block;
+    height: 85px;
+    width: 70px;
+}
 .div_datos_curso{
     margin-bottom: 25px;
 }
-.div_datos_curso label{
+.div_datos_curso label, #intranet .modal label{
     background: #f5f5f5 none repeat scroll 0 0;
     border-radius: 5px;
     border: 1px solid grey;
-    min-width: 76px;
+    min-width: 80px;
     padding: 2px 10px !important;
     text-align: center;
 }
@@ -1618,6 +1656,10 @@ ul, ol {
     margin-bottom: 10px !important;
     margin-right: 5px;
 }
+#cursos_profesores .datos_infantil div{
+    float: left;
+    margin-right: 5%;
+}
 #contenedor_cursos_profesor button{
     margin: 0 5px 10px;
     border: 2px outset black;
@@ -1676,6 +1718,7 @@ ul, ol {
 .alumnos_grupo #tutor > div {
     display: block;
     margin-bottom: 10px;
+    margin-top: 10px;
     min-height: 26px;
     padding: 10px 15px 0;
 }
@@ -1730,3 +1773,126 @@ table tr td i{
 table tr td a{
     text-decoration: none !important;
 }
+.modal-dialog {
+  position: absolute;
+  top: 45%;
+  left: 25%;
+  transform: translate(-50%, -50%) !important;
+}
+#intranet .modal-header {
+    border-bottom: 1px solid grey;
+    padding: 5px 15px;
+    background: #cdd6e0;
+    border-radius: 5px 5px 0 0;
+}
+#intranet .close {
+    opacity: 0.8;
+}
+#intranet .close:hover {
+    opacity: 0.8;
+    color: red;
+}
+#intranet .modal button:not(.close) {
+    margin: 5px 10px;
+    min-width: 80px;
+}
+#intranet .class-footer{
+    text-align: right;
+    border-top: 1px solid grey;
+}
+#intranet .class-footer .btn-default{
+    background: #ddd;
+}
+#intranet .modal-body {
+    padding: 15px 20px;
+}
+#intranet .modal-body div{
+    margin-bottom: 5px;
+    margin-top: 5px;
+    clear: both;
+}
+#intranet .modal .media{
+    margin-bottom: 15px;
+}
+#intranet .modal span{
+    margin-top: 3px;
+} 
+#intranet .doble_dato{
+    min-height: 27px !important;
+}
+#intranet .modal .media label{
+    min-width: 90px !important;
+}
+#intranet .modal label{
+    margin-right: 10px !important;
+}
+.overf_auto{
+    overflow: auto !important;
+}
+.mb15{
+    margin-bottom: 15px !important;
+}
+#intranet .modal .titulo-bloque{
+    font-size: 15px !important;
+}
+#intranet .modal .titulo-bloque i{
+    margin: 0 !important;
+}
+#intranet #info_alumno_modal .class-footer{
+    text-align: center !important;
+}
+#intranet #tutor button{
+    max-width: 225px;
+    border-radius: 0px;
+}
+#intranet #tutor button[id="#1"]{
+    border-radius: 5px 0 0 5px;
+}
+#intranet #tutor button:last-child{
+    border-radius: 0 5px 5px 0;
+}
+#intranet #tutor .active{
+    pointer-events: none;
+}
+#tipo_lista{
+    clear: both;
+    margin-bottom: -10px;
+}
+#tipo_lista .active{
+    -moz-user-select: none;
+    background: #23527c !important;
+    cursor: default;
+    pointer-events: none;
+    color: white !important;
+}
+#tipo_lista button{
+    padding: 0 10px;
+    background: white;
+    border: 1px solid grey;
+}
+#tipo_lista button:hover{
+    background: #ddd;
+}
+#tipo_lista button:first-child{
+    border-radius: 5px 0 0 5px !important;
+    border-right: 0 !important;
+}
+#tipo_lista button:last-child{
+    border-radius: 0 5px 5px 0 !important;
+    border-left: 0 !important;
+}
+
+#lista_alumnos .aviso_optativa{
+    clear: both;
+    margin-bottom: 0;
+}
+#lista_alumnos .aviso_optativa p{
+    text-align: center;
+    background: #ffcc7e;
+    color: #31708f;
+    font-weight: bold;
+    border-radius: 3px;
+    box-shadow: 0 1px 1px 1px rgba(0, 0, 0, 0.42);
+}
+
+

@@ -21,6 +21,8 @@ horario_profesor:
 intranet_profesor_noticias:
     path:     /noticias
     defaults: { _controller: IntranetBundle:Profesor:noticias}
+    options:
+        expose: true
 
 intranet_profesor_noticia:
     path:     /noticia/{num}
@@ -35,5 +37,11 @@ nuevas_noticias_profesor:
 datos_alumnos_grupo:
     path:     /datos_alumnos_grupo/{id}
     defaults: { _controller: IntranetBundle:Profesor:datosAlumnosGrupo}
+    options:
+        expose: true
+
+info_alumno:
+    path:     /info_alumno/{id}
+    defaults: { _controller: IntranetBundle:Profesor:InfoAlumno}
     options:
         expose: true

@@ -114,3 +114,9 @@ horario_profesor_pdf:
     defaults: { _controller: "BackendBundle:Profesor:HorarioDelProfesorPdf", _format: pdf}
     options:
       expose: true
+
+restablecer_contraseña_profesor:
+    pattern:  /restablecer_contraseña/{id}
+    defaults: { _controller: "BackendBundle:Profesor:RestablecerPassword"}
+    options:
+      expose: true

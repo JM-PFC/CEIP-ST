@@ -13,7 +13,7 @@
 			$(".cabecera_profesor div:empty").closest(".cabecera_profesor").remove();
 		}
 
-		//Se hace marca el botón del curso seleccionado y se obtiene la listade alumnos en el contenedor correspondiente.
+		//Se hace marca el botón del curso seleccionado y se obtiene la lista de alumnos en el contenedor correspondiente.
   		$('#contenedor_cursos_profesor button').on('click', function(event) {
   			if(!$(this).hasClass("disabled")) {
 	   			$('#contenedor_cursos_profesor button').removeClass('active');
@@ -24,7 +24,9 @@
 	    		id=$(this).attr("id");
 	    		locale=$(this).parent().attr("locale");
     			$('#alumnos #lista_alumnos').load(Routing.generate("datos_alumnos_grupo", {id:id, _locale:locale}), function(){
-      				$("#alumnos_grupo_pdf button").removeClass('hidden');
+    									//Se oculta los botones de descarga por si existe alguno.
+					$("#alumnos a button").addClass('hidden');
+      				$("#alumnos_grupo_pdf[class*='#1'] button").removeClass('hidden');
       				$("#alumnos_grupo_pdf").attr("grupo",id);
 
       				//Se modifica el id del grupo en la url del enlace para descargar la lista de alumnos del grupo mostrado.
@@ -32,6 +34,7 @@
 					var n = str.lastIndexOf("/");
 					var dir=$("#alumnos_grupo_pdf").attr("href").substring(0,n+1);
 					$("#alumnos_grupo_pdf").attr("href",dir+id);
+
     			}); 
   			}
 		});
@@ -46,10 +49,11 @@
   		//En el caso de infantil se carga directamente la lista de alumnos del grupo que tutoriza el profesor.
   		if($('#contenedor_cursos_profesor button').size()==1){
 	    	id=$('#contenedor_cursos_profesor button').attr("id");
-	    	locale=$(this).parent().attr("locale");
+	    	locale=$('#contenedor_cursos_profesor button').parent().attr("locale");
     		$('#alumnos #lista_alumnos').load(Routing.generate("datos_alumnos_grupo", {id:id, _locale:locale}), function(){	
     		}); 	
   		}
+
     </script>
  {% endblock %}
 
@@ -63,74 +67,139 @@
 		</a>
 	</li>
 	<li class="active no-seleccion">
-		{% trans %}Cursos impartidos{% endtrans %}
+		{% if app.user.nivel == "Primaria" %}
+			{% trans %}Cursos impartidos{% endtrans %}
+		{% else %}
+			{% trans %}Curso actual{% endtrans %}
+		{% endif %}
 	</li>
 {% endblock %}
 
 {% block titulo_cabecera %}
 	<i class="fa fa-server page-header-icon"></i>
-	{% trans %}Cursos impartidos{% endtrans %}
+	{% if app.user.nivel == "Primaria" %}
+		{% trans %}Cursos impartidos{% endtrans %}
+	{% else %}
+		{% trans %}Curso actual{% endtrans %}
+	{% endif %}
 {% endblock %}
+
 {% block titulo_cabecera_movil %}
 	<i class="fa fa-server page-header-icon"></i>
-	{% trans %}Cursos impartidos{% endtrans %}
+	{% if app.user.nivel == "Primaria" %}
+		{% trans %}Cursos impartidos{% endtrans %}
+	{% else %}
+		{% trans %}Curso actual{% endtrans %}
+	{% endif %}
 {% endblock %}
 
 {% block contenido %}
 	<h4 id="titulo-seccion" class="titulo-seccion">{% trans %}Datos del curso{% endtrans %}</h4>
 	{% if cursos != null %}
 
-	<div id="cursos_profesores" class="container-fluid div_datos_curso">
-		<div class="pull-left col-xs-12 col-sm-5 no-padding datos_curso">
-			{% if entity.sexo == "Masculino" %}
-				<label>{% trans %}Tutor del grupo{% endtrans %}:</label>
-			{% else %}
-				<label>{% trans %}Tutora del grupo{% endtrans %}:</label>
-			{% endif %}
-			
-			{% if tutor_grupo %}
-				<span> {{tutor_grupo.curso.curso ~ " " ~ tutor_grupo.letra}}</span >
-			{% else %}
-				<span class="text-danger">{% trans %}Sin asignar{% endtrans %}</span>
-			{% endif %}
-			<br>
-			<label>{% trans %}Nivel impartido{% endtrans %}:</label>
+		<div id="cursos_profesores" class="container-fluid div_datos_curso">
 			{% if entity.nivel == "Primaria" %}
-				{% if  app.request.getLocale() == "es" %}
-					<span> {{"Ed. Primaria"}}</span >
-				{% else %}
-					<span> {{"Primary Ed."}}</span >
-				{% endif %}
+				<div class="pull-left col-xs-12 col-sm-5 no-padding datos_curso">
+					<label>{% trans %}Nivel impartido{% endtrans %}:</label>
+					{% if entity.nivel == "Primaria" %}
+						{% if  app.request.getLocale() == "es" %}
+							<span> {{"Ed. Primaria"}}</span >
+						{% else %}
+							<span> {{"Primary Ed."}}</span >
+						{% endif %}
+					{% else %}
+						{% if  app.request.getLocale() == "es" %}
+							<span> {{"Ed. Infantil"}}</span >
+						{% else %}
+							<span> {{"Child Ed."}}</span >
+						{% endif %}
+					{% endif %}
+					<br>
+
+					<label>{% trans %}Año académico{% endtrans %}:</label>
+					<span> {{inicio.inicioCurso|date('Y') ~ " / " ~ fin.finCurso|date('Y')}}</span >
+					
+					<br>	
+
+					{% if entity.sexo == "Masculino" %}
+						<label>{% trans %}Tutor del grupo{% endtrans %}:</label>
+					{% else %}
+						<label>{% trans %}Tutora del grupo{% endtrans %}:</label>
+					{% endif %}
+			
+					{% if tutor_grupo %}
+						<span> {{tutor_grupo.curso.curso ~ " " ~ tutor_grupo.letra}}</span >
+					{% else %}
+						<span class="text-danger">{% trans %}Sin asignar{% endtrans %}</span>
+					{% endif %}
+					
+				</div>
+
+
+		  		<div class="pull-left col-xs-12 col-sm-6 no-padding datos_curso">
+					<label>{% trans %}Cursos impartidos{% endtrans %}:</label>
+					<div id="contenedor_cursos_profesor" locale="{{ app.request.getLocale() }}">
+						{% for curso in cursos %}
+							<button id="{{curso.grupo.id}}" class="btn btn-primary disabled">{{curso.grupo.curso.curso ~ " " ~ curso.grupo.letra}}</button>
+						{% endfor %}
+					</div>
+		  		</div>
 			{% else %}
-				{% if  app.request.getLocale() == "es" %}
-					<span> {{"Ed. Infantil"}}</span >
-				{% else %}
-					<span> {{"Child Ed."}}</span >
-				{% endif %}
+
+				<div class="pull-left col-xs-12 no-padding datos_curso datos_infantil">
+					<div>
+						<label>{% trans %}Nivel impartido{% endtrans %}:</label>
+						{% if entity.nivel == "Primaria" %}
+							{% if  app.request.getLocale() == "es" %}
+								<span> {{"Ed. Primaria"}}</span >
+							{% else %}
+								<span> {{"Primary Ed."}}</span >
+							{% endif %}
+						{% else %}
+							{% if  app.request.getLocale() == "es" %}
+								<span> {{"Ed. Infantil"}}</span >
+							{% else %}
+								<span> {{"Child Ed."}}</span >
+							{% endif %}
+						{% endif %}
+					</div>
+					
+					<div>
+						<label>{% trans %}Año académico{% endtrans %}:</label>
+						<span> {{inicio.inicioCurso|date('Y') ~ " / " ~ fin.finCurso|date('Y')}}</span >
+					</div>
+					
+					<div>
+						{% if entity.sexo == "Masculino" %}
+							<label>{% trans %}Tutor del grupo{% endtrans %}:</label>
+						{% else %}
+							<label>{% trans %}Tutora del grupo{% endtrans %}:</label>
+						{% endif %}
+			
+						{% if tutor_grupo %}
+							<span> {{tutor_grupo.curso.curso ~ " " ~ tutor_grupo.letra}}</span >
+						{% else %}
+							<span class="text-danger">{% trans %}Sin asignar{% endtrans %}</span>
+						{% endif %}
+					</div>
+				</div>
+
+
+		  		<div class="pull-left col-xs-12 col-sm-6 no-padding datos_curso hidden">
+					<label>{% trans %}Cursos impartidos{% endtrans %}:</label>
+					<div id="contenedor_cursos_profesor" locale="{{ app.request.getLocale() }}">
+						<button id="{{cursos.id}}" class="btn btn-primary">{{cursos.curso.curso ~ " " ~ cursos.letra}}</button>
+					</div>
+		  		</div>
 			{% endif %}
-			<br>
-			<label>{% trans %}Año académico{% endtrans %}:</label>
-			<span> {{inicio.inicioCurso|date('Y') ~ " / " ~ fin.finCurso|date('Y')}}</span >
 		</div>
-		
-		{% if entity.nivel == "Primaria" %}
-		  <div class="pull-left col-xs-12 col-sm-6 no-padding datos_curso">
-			<label>{% trans %}Cursos impartidos{% endtrans %}:</label>
-			<div id="contenedor_cursos_profesor" locale="{{ app.request.getLocale() }}">
-				{% for curso in cursos %}
-					<button id="{{curso.grupo.id}}" class="btn btn-primary disabled">{{curso.grupo.curso.curso ~ " " ~ curso.grupo.letra}}</button>
-				{% endfor %}
-			</div>
-		  </div>
-		{% endif %}
-	</div>
 
 	 	<div role="tabpanel" class="tab_horarios">
 	
 			<ul class="nav nav-tabs" role="tablist">
 				{% if entity.nivel == "Primaria" %}
 					<li role="presentation" class="active"><a id="tab_prof_horarios" href="#horarios" aria-controls="horarios" data-toggle="tab" role="tab">{% trans %}Horario de clases{% endtrans %}</a></li>
-					<li role="presentation"><a id="tab_prof_alumnos" href="#alumnos" aria-controls="alumnos" data-toggle="tab" role="tab">{% trans %} Alumnos / Grupos{% endtrans %}</a></li>
+					<li role="presentation"><a id="tab_prof_alumnos" href="#alumnos" aria-controls="alumnos" data-toggle="tab" role="tab">{% trans %}Cursos impartidos{% endtrans %}</a></li>
 				</div>
 				{% else %}
 					{% if tutor_grupo %}
@@ -142,7 +211,7 @@
 				{% if entity.nivel == "Primaria" %}
 				<div role="tabpanel" class="tab-pane active clearfix horario-profesor" id="horarios">
 
-					<a id="horario_pdf"class=" descargar-datos descargar-datos visible-md visible-lg hidden-xs visible-sm"   href="{{ path('horario_profesor_pdf', { 'id': entity.id }) }}"><button><i class="fa fa-file-pdf-o"></i>{% trans %}Descargar Horario{% endtrans %}</button></a>
+					<a id="horario_pdf"class=" descargar-datos descargar-datos visible-md visible-lg hidden-xs visible-sm"   href="{{ path('horario_profesor_pdf', { 'id': entity.id }) }}"><button><i class="fa fa-file-pdf-o"></i>{% trans %}Horario PDF{% endtrans %}</button></a>
 					<div class="col-xs-12">
 					  <div class="visible-md visible-lg hidden-xs visible-sm">
 						<div id="cabecera_horarios" class="col-xs-12">
@@ -227,7 +296,7 @@
     						</div>
   						</div>
 
-  						<a id="horario_pdf" class="descargar-datos hidden-md hidden-lg visible-xs hidden-sm" href="{{ path('horario_profesor_pdf', { 'id': entity.id }) }}"><button><i class="fa fa-file-pdf-o"></i>{% trans %}Descargar Horario{% endtrans %}</button></a>
+  						<a id="horario_pdf" class="descargar-datos hidden-md hidden-lg visible-xs hidden-sm" href="{{ path('horario_profesor_pdf', { 'id': entity.id }) }}"><button><i class="fa fa-file-pdf-o"></i>{% trans %}Horario PDF{% endtrans %}</button></a>
 					
   					  </div>
 					</div>			
@@ -236,43 +305,54 @@
 
 				{% if entity.nivel == "Primaria" %}
 					<div role="tabpanel" class="tab-pane clearfix alumnos_grupo" id="alumnos">
-						<a id="alumnos_grupo_pdf"class=" descargar-datos visible-md visible-lg hidden-xs visible-sm"   href="{{ path('alumnos_grupo_pdf', { 'id': entity.id }) }}">
-							<button class="hidden"><i class="fa fa-file-pdf-o"></i>{% trans %}Descargar Lista de Alumnos{% endtrans %}</button>
+						<a id="alumnos_grupo_pdf"class=" descargar-datos visible-md visible-lg hidden-xs visible-sm #1"   href="{{ path('alumnos_grupo_pdf', { 'id': entity.id }) }}">
+							<button class="hidden"><i class="fa fa-file-pdf-o"></i>{% trans %}Lista de Alumnos PDF{% endtrans %}</button>
+						</a>
+						<a id="alumnos_grupo_pdf"class=" descargar-datos visible-md visible-lg hidden-xs visible-sm #2"   href="{{ path('alumnos_grupo_pdf', { 'id': entity.id }) }}">
+							<button class="hidden"><i class="fa fa-file-pdf-o"></i>{% trans %}Horario del Grupo PDF{% endtrans %}</button>
+						</a>
+						<a id="alumnos_grupo_pdf"class=" descargar-datos visible-md visible-lg hidden-xs visible-sm #4"   href="{{ path('alumnos_grupo_pdf', { 'id': entity.id }) }}">
+							<button class="hidden"><i class="fa fa-file-pdf-o"></i>{% trans %}Alumnos por optativas PDF{% endtrans %}</button>
+						</a>
+						<a id="alumnos_optativas_pdf" class=" descargar-datos visible-md visible-lg hidden-xs visible-sm"   href="{{ path('alumnos_optativas_pdf', { 'id': entity.id }) }}">
+							<button class="hidden alumnos_optativa"><i class="fa fa-file-pdf-o"></i>{% trans %}Alumnos por optativas PDF{% endtrans %}</button>
 						</a>
 						<div id="lista_alumnos">
 							<p class="aviso_listado">{% trans %}Seleccione un curso de la lista superior para mostrar la lista de alumnos{% endtrans %}</p>
 						</div>
 
-						<a id="alumnos_grupo_pdf"class=" descargar-datos hidden-md hidden-lg visible-xs hidden-sm"   href="{{ path('alumnos_grupo_pdf', { 'id': entity.id }) }}">
-							<button class="hidden"><i class="fa fa-file-pdf-o"></i>{% trans %}Descargar Lista de Alumnos{% endtrans %}</button>
+						<a id="alumnos_grupo_pdf"class=" descargar-datos hidden-md hidden-lg visible-xs hidden-sm #1"   href="{{ path('alumnos_grupo_pdf', { 'id': entity.id }) }}">
+							<button class="hidden"><i class="fa fa-file-pdf-o"></i>{% trans %}Lista de Alumnos PDF{% endtrans %}</button>
 						</a>
-
+						<a id="alumnos_grupo_pdf"class=" descargar-datos hidden-md hidden-lg visible-xs hidden-sm #2"   href="{{ path('alumnos_grupo_pdf', { 'id': entity.id }) }}">
+							<button class="hidden"><i class="fa fa-file-pdf-o"></i>{% trans %}Horario del Grupo PDF{% endtrans %}</button>
+						</a>
+						<a id="alumnos_grupo_pdf"class=" descargar-datos hidden-md hidden-lg visible-xs hidden-sm #4"   href="{{ path('alumnos_grupo_pdf', { 'id': entity.id }) }}">
+							<button class="hidden"><i class="fa fa-file-pdf-o"></i>{% trans %}Alumnos por optativas PDF{% endtrans %}</button>
+						</a>
+						<a id="alumnos_optativas_pdf"class=" descargar-datos hidden-md hidden-lg visible-xs hidden-sm #4"   href="{{ path('alumnos_optativas_pdf', { 'id': entity.id }) }}">
+							<button class="hidden alumnos_optativa"><i class="fa fa-file-pdf-o"></i>{% trans %}Alumnos por optativas PDF{% endtrans %}</button>
+						</a>
 					</div>
 				{% else %}
 					{% if tutor_grupo %}
 					<div role="tabpanel" class="tab-pane active clearfix alumnos_grupo" id="alumnos">
 						<a id="alumnos_grupo_pdf"class=" descargar-datos visible-md visible-lg hidden-xs visible-sm"   href="{{ path('alumnos_grupo_pdf', { 'id': entity.id }) }}">
-							<button ><i class="fa fa-file-pdf-o"></i>{% trans %}Descargar Lista de Alumnos{% endtrans %}</button>
+							<button ><i class="fa fa-file-pdf-o"></i>{% trans %}Lista de Alumnos PDF{% endtrans %}</button>
 						</a>
 
 						<div id="lista_alumnos">
-							{{render (controller('IntranetBundle:Profesor:HorariosProfesor',{ 'num': "1" }))}}
+							<p class="aviso_listado">{% trans %}Seleccione un curso de la lista superior para mostrar la lista de alumnos{% endtrans %}</p>
 						</div>
 
 						<a id="alumnos_grupo_pdf"class=" descargar-datos hidden-md hidden-lg visible-xs hidden-sm"   href="{{ path('alumnos_grupo_pdf', { 'id': entity.id }) }}">
-							<button class="hidden"><i class="fa fa-file-pdf-o"></i>{% trans %}Descargar Lista de Alumnos{% endtrans %}</button>
+							<button class="hidden"><i class="fa fa-file-pdf-o"></i>{% trans %}Lista de Alumnos PDF{% endtrans %}</button>
 						</a>
 					</div>
 					{% endif %}
 				{% endif %}
-
-
-
-
 			</div>
 		</div>
-		
-
 	{% else %}
 		<div class="alert alert-info alert-block">
 			<small>
@@ -280,6 +360,24 @@
 				<h6>{% trans %}Espere a que se realicen todas las asignaciones de los cursos{% endtrans %}.</h6>
 			</small>
 		</div>
-
 	{% endif %}
+	
+	<div id="info_alumno_modal" class="modal fade " role="dialog" data-backdrop="true" >
+		<div class="modal-dialog ">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+					<h4 class="modal-title">{% trans %}Información del alumno{% endtrans %}</h4>
+				</div>
+				<div class="modal-body"></div>
+				<div class="class-footer">
+					{#<button type="button" class="btn btn-primary">Guardar</button>#}
+					<button type="button" class="btn btn-primary" data-dismiss="modal">{% trans %}Cerrar{% endtrans %}</button>
+				</div>
+			</div>
+		</div>
+	</div>
+
+
+
 {% endblock %}

@@ -8,11 +8,11 @@ $(document).ready(function () {
   }, 8000);
 
 	//Se cambia el estilo de icono de admin.
-	$('#img_admin').on('mouseover', function(event) {
+  $(document).on('mouseenter',"#img_admin",function(event){ 
 		$(this).addClass('hide');
 		$('#img_admin_hover').removeClass('hide');
 	});
-	$('#img_admin_hover').on('mouseleave', function(event) {
+  $(document).on('mouseleave',"#img_admin_hover",function(event){ 
 		$(this).addClass('hide');
 		$('#img_admin').removeClass('hide');
 	});
@@ -50,7 +50,7 @@ $(document).ready(function () {
     theme_enable_hidepanel_button:false,
   }); 
 
-  //Se cambia el estilo de icono de admin.
+
   $('.bloque-menu-alumno a').on('mouseover', function(event) {
     clase=$(this).attr("color");
     $(this).closest(".bloque-item-menu").addClass(clase);
@@ -103,8 +103,64 @@ $(document).ready(function () {
     $(this).find("#first").removeClass('hidden');
   });
 
+  ///////////////////////////////////////////
+  //      Cursos impartidos Profesor       //
+  ///////////////////////////////////////////
 
+  $(document).on('click',"#lista_alumnos .info_alumno",function(){ 
+    locale=$("#contenedor_cursos_profesor").attr("locale");
+    id=$(this).attr("id");
 
+    $("#info_alumno_modal .modal-body").load(Routing.generate("info_alumno", {id:id, _locale:locale}), function(){
+
+    
+    });
+  });
+  /*
+$('#info_alumno_modal').on('hidden.bs.modal', function (e) {
+})
+*/
+  //Se cambia las opciones de cursos impartidos por el tutor.
+  $(document).on('click',".alumnos_grupo #tutor button",function(){ 
+    $('.alumnos_grupo #tutor button').removeClass('active');
+    $(this).addClass('active');
+
+    $('.alumnos_grupo  #contenido_mi_grupo>div').addClass('hidden');
+    id=$(this).attr("id");
+    $('.alumnos_grupo #contenido_mi_grupo>div[id="'+id+'"]').removeClass('hidden');
+
+    $("#alumnos .descargar-datos button").addClass('hidden');
+    $("#alumnos .descargar-datos[class*='"+id+"'] button").removeClass('hidden');
+  });
+
+  //Se cambia el listado de alumnos del grupo o de la optativa impartida en ese grupo por el profesor.
+  $(document).on('click',"#tipo_lista #alumnos_del_grupo",function(){ 
+    $('#tipo_lista #alumnos_del_grupo').addClass('active');
+    $('#tipo_lista #alumnos_optativa').removeClass('active');
+
+    $(".alumnos_optativa").addClass('hidden');
+    $(".alumnos_del_grupo").removeClass('hidden');
+    
+    $("#alumnos_grupo_pdf[class*='#1'] button").removeClass('hidden');
+
+  });
+
+  $(document).on('click',"#tipo_lista #alumnos_optativa",function(){ 
+    $('#tipo_lista #alumnos_del_grupo').removeClass('active');
+    $('#tipo_lista #alumnos_optativa').addClass('active');
+
+    $(".alumnos_optativa").removeClass('hidden');
+    $(".alumnos_del_grupo").addClass('hidden');
+
+    $("#alumnos_grupo_pdf[class*='#1'] button").addClass('hidden');
+    
+    //Se modifica el id del grupo en la url del enlace para descargar la lista de alumnos de la optativa.
+    var str = $("#alumnos_optativas_pdf").attr("href");
+    var n = str.lastIndexOf("/");
+    var dir=$("#alumnos_optativas_pdf").attr("href").substring(0,n+1);
+    $("#alumnos_optativas_pdf").attr("href",dir+id);
+
+  });
 
 
 });

@@ -25,7 +25,10 @@
         <tbody class="lista_alumnos">
         {% for entity in entities %}
           <tr id="{{ entity.id }}">
-            <td class="cold-md-1">{{ loop.index }}</td>
+            <td class="cold-md-1">
+              {#{{ loop.index }}#}
+              {{ entity.numAlum }}
+            </td>
             <td class="cold-md-11" >{{entity.apellido1 ~ " " ~ entity.apellido2 ~ ", " ~ entity.nombre }}</td>
           </tr>
         {% endfor %}

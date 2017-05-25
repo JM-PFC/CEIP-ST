@@ -122,7 +122,7 @@ class ImparteRepository extends EntityRepository
 	public function findAsignacionesProfesor($profesor)
 	{
 		return $this->getEntityManager()->createQuery(
-		'SELECT i FROM BackendBundle:Imparte i WHERE i.profesor=:profesor GROUP BY i.asignatura, i.grupo')
+		'SELECT i FROM BackendBundle:Imparte i INNER JOIN i.grupo g INNER JOIN g.curso c INNER JOIN i.asignatura a INNER JOIN a.asignatura asig  WHERE i.profesor=:profesor GROUP BY i.grupo, i.profesor ORDER BY c.numOrden, g.letra')
 		->setParameters(array(
 			'profesor' => $profesor))
 		->getResult();
@@ -305,6 +305,29 @@ class ImparteRepository extends EntityRepository
 			'grupo' => $grupo,
 			'asignatura'=>"Tutoría"))
 		->getResult();
+	}
+
+	public function findNoOpcionalesProfesorGrupo($profesor, $grupo)
+	{
+		return $this->getEntityManager()->createQuery(
+		'SELECT i FROM BackendBundle:Imparte i INNER JOIN i.grupo g INNER JOIN i.profesor p INNER JOIN i.asignatura a INNER JOIN a.asignatura asig WHERE p=:profesor and  i.grupo=:grupo and asig.opcional=:opcional GROUP BY i.asignatura')
+		->setParameters(array(
+			'profesor'=>$profesor,
+			'grupo' => $grupo,
+			'opcional'=>0))
+		->getResult();
+	}
+
+	public function findOpcionalProfesorGrupo($profesor, $grupo)
+	{
+		return $this->getEntityManager()->createQuery(
+		'SELECT i FROM BackendBundle:Imparte i INNER JOIN i.grupo g INNER JOIN i.profesor p INNER JOIN i.asignatura a INNER JOIN a.asignatura asig WHERE p=:profesor and  i.grupo=:grupo and asig.opcional=:opcional GROUP BY i.asignatura')
+		->setParameters(array(
+			'profesor'=>$profesor,
+			'grupo' => $grupo,
+			'opcional'=>1))
+		->setMaxResults(1)
+		->getOneOrNullResult();
 	}
 
 

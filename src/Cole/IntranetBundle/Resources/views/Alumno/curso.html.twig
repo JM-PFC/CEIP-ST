@@ -121,7 +121,7 @@
 			<div class="tab-content clearfix">
 				<div role="tabpanel" class="tab-pane active clearfix" id="horarios">
 
-					<a id="horario_pdf" class="descargar-datos visible-md visible-lg hidden-xs visible-sm"   href="{{ path('horario_alumno_pdf', { 'id': entity.id }) }}"><button><i class="fa fa-file-pdf-o"></i>{% trans %}Descargar Horario{% endtrans %}</button></a>
+					<a id="horario_pdf" class="descargar-datos visible-md visible-lg hidden-xs visible-sm"   href="{{ path('horario_alumno_pdf', { 'id': entity.id }) }}"><button><i class="fa fa-file-pdf-o"></i>{% trans %}Horario PDF{% endtrans %}</button></a>
 					<div class="col-xs-12">
 					{% if numAsigHorarios %}
 					  <div class="visible-md visible-lg hidden-xs visible-sm">
@@ -205,7 +205,7 @@
     						</div>
   						</div>
 
-  						<a id="horario_pdf" class="descargar-datos hidden-md hidden-lg visible-xs hidden-sm" href="{{ path('horario_alumno_pdf', { 'id': entity.id }) }}"><button><i class="fa fa-file-pdf-o"></i>{% trans %}Descargar Horario{% endtrans %}</button></a>
+  						<a id="horario_pdf" class="descargar-datos hidden-md hidden-lg visible-xs hidden-sm" href="{{ path('horario_alumno_pdf', { 'id': entity.id }) }}"><button><i class="fa fa-file-pdf-o"></i>{% trans %}Horario PDF{% endtrans %}</button></a>
 					
   					  </div>
 					{% else %}

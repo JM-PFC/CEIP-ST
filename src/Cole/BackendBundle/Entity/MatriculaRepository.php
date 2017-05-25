@@ -63,7 +63,7 @@ class MatriculaRepository extends EntityRepository
 	public function findMatriculadosConGrupo($curso,$year,$letra)
 	{
 	return $this->getEntityManager()->createQuery(
-		'SELECT m FROM BackendBundle:Matricula m LEFT JOIN m.alumno a LEFT JOIN m.grupo g WHERE m.anyoAcademico=:year AND m.curso=:curso AND g.letra=:letra ORDER BY a.apellido1')
+		'SELECT m FROM BackendBundle:Matricula m LEFT JOIN m.alumno a LEFT JOIN m.grupo g WHERE m.anyoAcademico=:year AND m.curso=:curso AND g.letra=:letra ORDER BY a.numAlum')
 		->setParameters(array(
 			'letra' => $letra,
 			'curso' => $curso,

@@ -36,8 +36,14 @@ datos_personales:
     requirements: { _method: post|put|get }
 
 alumnos_grupo_pdf:    
-    path:     /alumnos_grupo_pdf/{id}
+    path:     /alumnos/{id}
     defaults: { _controller: IntranetBundle:Default:ListaAlumnosGrupoPdf}
+    options:
+        expose: true
+
+alumnos_optativas_pdf:
+    path:     /alumnos/optativas/{id}
+    defaults: { _controller: IntranetBundle:Default:ListaAlumnosOptativasPdf}
     options:
         expose: true
 

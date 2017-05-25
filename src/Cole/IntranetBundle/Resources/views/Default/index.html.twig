@@ -263,7 +263,11 @@
 									<li id="cursos">
 										<a href="{{ path('intranet_profesor_cursos') }}">
 											<i class="fa fa-server"></i>
-											{% trans %}Cursos impartidos{% endtrans %}
+											{% if app.user.nivel == "Primaria" %}
+												{% trans %}Cursos impartidos{% endtrans %}
+											{% else %}
+												{% trans %}Curso actual{% endtrans %}
+											{% endif %}
 										</a>
 									</li>
 									<li id="seguimiento">
@@ -364,7 +368,11 @@
 									<li id="cursos">
 										<a href="{{ path('intranet_profesor_cursos') }}">
 											<i class="fa fa-server"></i>
-											{% trans %}Cursos impartidos{% endtrans %}
+											{% if app.user.nivel == "Primaria" %}
+												{% trans %}Cursos impartidos{% endtrans %}
+											{% else %}
+												{% trans %}Curso actual{% endtrans %}
+											{% endif %}
 										</a>
 									</li>
 									<li id="seguimiento">

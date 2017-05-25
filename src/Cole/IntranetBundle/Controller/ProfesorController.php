@@ -38,13 +38,50 @@ class ProfesorController extends Controller
         $grupo=$em->getRepository('BackendBundle:Grupo')->findOneById($id);
 
         $tutor=$grupo->getProfesor();
-        $entities=$em->getRepository('BackendBundle:Alumno')->findByGrupo($grupo);
+        $entities=$em->getRepository('BackendBundle:Alumno')->findByGrupoOrdenado($grupo);
+
+        $no_opcionales=$em->getRepository('BackendBundle:Imparte')->findNoOpcionalesProfesorGrupo($profesor, $grupo);   
+        $opcional=$em->getRepository('BackendBundle:Imparte')->findOpcionalProfesorGrupo($profesor, $grupo);
+        if($no_opcionales && $opcional){
+            $tipos="ambos";
+        }
+        else if($no_opcionales){
+            $tipos="no_opcionales";
+        }
+        else{
+            $tipos="opcional";
+        } 
+
+        if($opcional){
+            $alumnos_optativa=$em->getRepository('BackendBundle:Alumno')->findAlumnosOptativaGrupo($opcional->getAsignatura(), $grupo);
+        }
+        else{
+            $alumnos_optativa=null;
+        }
 
         return $this->render('IntranetBundle:Profesor:datos_alumnos_grupo.html.twig', array(
             'profesor' => $profesor,
             'entities'=>$entities,
             'grupo'=> $grupo,
+            'tipos'=> $tipos,
+            'opcional'=>$opcional,
+            'alumnos_optativa' => $alumnos_optativa,
             'tutor'=>$tutor));
+    }
+
+    public function InfoAlumnoAction($id)
+    {
+        $em = $this->getDoctrine()->getManager();
+
+        $profesor = $this->get('security.context')->getToken()->getUser();
+        $entity=$em->getRepository('BackendBundle:Alumno')->findOneById($id);
+        //Se obtiene la edad del alumno mediante la fecha de nacimiento.
+        $edad = date_diff($entity->getFechaNacimiento(), date_create('now'))->y;
+
+        return $this->render('IntranetBundle:Profesor:info_alumno.html.twig', array(
+            'profesor' => $profesor,
+            'entity'=>$entity,
+            'edad'=>$edad));
     }
 
     public function cursosAction()
@@ -57,9 +94,14 @@ class ProfesorController extends Controller
         $inicio =$em->getRepository('BackendBundle:Centro')->findInicioCurso();
         $fin =$em->getRepository('BackendBundle:Centro')->findFinCurso();
 
-        $cursos = $em->getRepository('BackendBundle:Imparte')->findAsignacionesProfesor($entity);
+        if($entity->getNivel()=="Primaria"){
+            $cursos = $em->getRepository('BackendBundle:Imparte')->findAsignacionesProfesor($entity);
+        }
+        else{
+            //Para los profesores de infantil se asigna sólo el grupo que es tutor.
+            $cursos=$tutor_grupo;
+        }
   
-
         return $this->render('IntranetBundle:Profesor:cursos.html.twig', array(
             'entity' => $entity, 
             'tutor_grupo' => $tutor_grupo,
