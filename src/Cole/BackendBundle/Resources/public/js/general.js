@@ -2189,6 +2189,58 @@ $(document).on("submit",".formulario_profesor",function(event){
  
     }
   });
+  //Se restablece la contraseña del responsable del alumno.
+  $(document).on("click","#alumno_edit .restablecer_password",function(event) {
+    event.preventDefault();
+    id=$(this).attr("id");
+    nombre=$(this).closest("div").find(".full_name_div input").attr("value");
+    aviso.play();
+    swal({
+      title: "Restablecer contraseña del responsable",
+      html: "<p class='justificado'>Se va a restablecer la contraseña inicial del responsable <strong class='negrita'>"+nombre+"</strong> y no se podrá recuperar la contraseña actual. ¿Estas seguro de continuar?</p>",
+      type: "warning",
+      showCancelButton: true,
+      cancelButtonText: "Cancelar",
+      confirmButtonColor: color,
+      confirmButtonText: "¡Adelante!"
+      }).then(function () {
+
+        $.ajax({
+          type: 'POST',
+          url: Routing.generate('restablecer_contraseña_responsable', {id:id}),
+          data:{id:id},
+          dataType: 'json',
+  
+          success: function(response) {
+            // Notificación de confirmación.
+            $(".ui-pnotify").remove();
+            exito.play();
+
+            new PNotify({
+              text:"Contraseña restablecida.",
+              addclass: "custom",
+              type: "success",
+              shadow: true,
+              hide: true,
+              buttons: {
+                sticker: false,
+                labels:{close: "Cerrar"}
+              },
+              stack: right_Stack,
+              animate: {
+                animate: true,
+                in_class: "fadeInRight",
+                out_class: "fadeOutRight",
+              }
+            });
+          }
+        })
+      }, function (dismiss) {
+
+      }
+    ); 
+  });
+
 
   //Se restablece la contraseña del profesor.
   $(document).on("click","#profesor_edit .btn_restablecer",function(event) {

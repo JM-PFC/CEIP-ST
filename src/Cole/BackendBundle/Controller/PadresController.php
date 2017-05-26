@@ -398,4 +398,23 @@ class PadresController extends Controller
         return new JsonResponse(array('data'=>$array, 200));
     }
 
+    public function RestablecerPasswordAction($id)
+    {
+        $em = $this->getDoctrine()->getManager();
+
+        $entity = $em->getRepository('BackendBundle:Padres')->findOneById($id);
+        if (!$entity) {
+            throw $this->createNotFoundException('Unable to find Padres entity.');
+        }
+
+        $factory = $this->get('security.encoder_factory'); 
+        $encoder = $factory->getEncoder($entity);
+        $entity->setSalt(base_convert(sha1(uniqid(mt_rand(),true)), 16, 36));
+        $password = $encoder->encodePassword("u".substr($entity->getDni(), 0, -2), $entity->getSalt());
+        $entity->setPassword($password);
+        $em->persist($entity);
+        $em->flush();
+
+        return new JsonResponse(array('success' => true), 200);
+    }
 }

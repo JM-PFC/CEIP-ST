@@ -1,0 +1,65 @@
+<div class="media">
+	<div class="media-left  media-middle div_foto">
+		{% if entity.foto != null %}
+			<img id="foto_info" class="img-rounded " alt="{{entity}}" src="{{ asset('uploads/images/' ~ entity.foto) }}">
+        {% else %}
+       		{% if entity.sexo == "Femenino" %}
+				<img id="foto_info" class="img-rounded " alt="Sin Foto" src="{{ asset('bundles/backend/images/perfil/SinFoto-M.png') }}">
+   			{% else %}
+              	<img id="foto_info" class="img-rounded " alt="Sin Foto" src="{{ asset('bundles/backend/images/perfil/SinFoto-H.png') }}">
+           	{% endif %}
+        {% endif %}
+	</div>
+	<div class="media-body">
+		<div>
+			<label class="col-xs-2">{% trans %}Nombre{% endtrans %}:</label> <span>{{entity}}</span>	
+		</div>
+
+		{% if entity.movil != null %}
+			<div class="visible-sm hidden-xs visible-md visible-lg">
+				<label class="col-sm-2">{% trans %}Móvil{% endtrans %}:</label> <span class="col-sm-3 no-padding">{{entity.movil}}</span>	
+			</div>
+			<div class="hidden-sm visible-xs hidden-md hidden-lg">
+				<label class="col-xs-2">{% trans %}Móvil{% endtrans %}:</label> <span>{{entity.movil}}</span>	
+			</div>
+		{% else %}
+			<div>
+				<label class="col-xs-2">{% trans %}Móvil{% endtrans %}:</label> <span class="color_rojo">{% trans %}No disponible{% endtrans %}</span>	
+			</div>
+		{% endif %}
+
+		{% if entity.email != null %}
+			<div class="visible-sm hidden-xs visible-md visible-lg">
+				<label class="col-sm-2">{% trans %}Email{% endtrans %}:</label> <span class="col-sm-3 no-padding">{{entity.email}}</span>	
+			</div>
+			<div class="hidden-sm visible-xs hidden-md hidden-lg">
+				<label class="col-xs-2">{% trans %}Email{% endtrans %}:</label> <span>{{entity.email}}</span>	
+			</div>
+		{% else %}
+			<div>
+				<label class="col-xs-2">{% trans %}Email{% endtrans %}:</label> <span class="color_rojo">{% trans %}No disponible{% endtrans %}</span>	
+			</div>
+		{% endif %}
+	</div>
+</div>
+<h4 class="titulo-seccion">{% trans %}Datos Académicos{% endtrans %}</h4>
+
+<div class="visible-sm hidden-xs visible-md visible-lg">
+	<label class="nivel col-sm-3">{% trans %}Nivel impartido{% endtrans %}:</label> <span class="col-sm-3 no-padding">{{entity.nivel}}</span>	
+</div>
+<div class="hidden-sm visible-xs hidden-md hidden-lg">
+	<label class="nivel col-xs-3">{% trans %}Nivel impartido{% endtrans %}:</label> <span>{{entity.nivel}}</span>	
+</div>
+
+{% if grupo %}
+	<div class="visible-sm hidden-xs visible-md visible-lg">
+		<label class="grupo col-sm-2">{% trans %}Tutor de{% endtrans %}:</label> <span class="col-sm-3 no-padding">{{grupo.curso.curso ~ " de " ~ grupo.curso.nivel ~ " - Grupo " ~ grupo.letra  }}</span>	
+	</div>
+	<div class="hidden-sm visible-xs hidden-md hidden-lg">
+		<label class="grupo col-xs-2">{% trans %}Tutor de{% endtrans %}:</label> <span>{{grupo.curso.curso ~ " " ~ grupo.letra}}</span>	
+			</div>
+{% else %}
+	<div>
+		<label class="grupo col-xs-2">{% trans %}Tutor de{% endtrans %}:</label> <span class="color_rojo">{% trans %}No disponible{% endtrans %}</span>	
+	</div>
+{% endif %}

@@ -539,7 +539,7 @@ nav{
 
 #tabs .ui-tabs-nav li a{
 	min-height: 19px;
-	padding: 3% 12% 3% 3%;
+	padding: 3% 12% 3% 3% !important;
 	text-align: center;
 	width: 83%;
 	font-size: 1.05em;
@@ -715,7 +715,7 @@ nav{
 	.lista_cursos .cabecera_lista{
 		height: 18px !important;	
 	}
-	.lista_cursos .contenido_lista{
+	#lista_cursos .contenido_lista{
 		max-height: 46px !important;
 	}
 	#asignar_profesor .block_insert h2, #asignar_horario_grupos .block_insert h2,#asignaturas_cursos .block_insert h2{
@@ -755,13 +755,30 @@ nav{
 	.columna_foto {
     	width: 97% !important;
 	}
+	.columna_foto {
+    	width: 97% !important;
+	}
+	#profesor_edit	.columna_foto,#alumno_edit .columna_foto {
+    	width: 13% !important;
+	}
 	#asignar_optativa .btn_2opciones {
     	margin-left: 5% !important;
 	}
 	#asignar_optativa .info_en_tabla ul {
     	margin: 0px !important;
 	}
-
+	#consulta_antiguo_profesor .img-mini {
+    	height: 85px !important;
+    	width: 70px !important;
+	}
+	#consulta_antiguo_profesor .old_t_data span {
+    	padding-bottom: 5px !important;
+    	margin-top: 0 !important;
+    	margin-left: 4% !important;
+	}
+	.registro_equipamientos .block_insert h2{
+		font-size: 1.1em;
+	}
 }
 
 
@@ -2510,9 +2527,11 @@ button[class*="elected"]{
 }
 .btn_restablecer{
     background: #e4e0e0 none repeat scroll 0 0;
-    height: 40px;
-    margin-left: 20px;
-    margin-top: 10px;
+    height: 44px;
+    margin-top: 15px;
+    width: 135px !important;
+    font-weight: bold;
+    font-family: 'Liberation Sans' !important;
 }
 
 .datos_registro{
@@ -2769,8 +2788,8 @@ button[class*="elected"]{
 	border-radius: 7px;
 	float: right;
 	margin-right: 12px;
-	margin-bottom: 2px;
-	margin-top: -9px;
+	margin-bottom: 5px;
+	margin-top: -7px;
 	height: 25px;
 	font: bold 12px Verdana,Arial;
 }
@@ -2783,12 +2802,24 @@ button[class*="elected"]{
 	border-radius: 7px;
 	float: right;
 	margin-right: 12px;
-	margin-bottom: 2px;
-	margin-top: -9px;
+	margin-bottom: 5px;
+	margin-top: -7px;
 	height: 25px;
 	font: bold 12px Verdana,Arial;
 }
-
+.restablecer_password{
+    background: -webkit-linear-gradient(#82C78A 0%, #CBEACF 96%);
+    background: -o-linear-gradient(#82C78A 0%, #CBEACF 96%);
+    background: linear-gradient(#82C78A 0%, #CBEACF 96%);
+    box-shadow: 0 1px 1px 0px rgba(0, 0, 0, 0.5)inset;
+    box-shadow: 0 1px 1px 0px rgba(0, 0, 0, 0.5);
+	border-radius: 7px;
+	float: right;
+	margin-right: 12px;
+	margin-bottom: 5px;
+	height: 25px;
+	font: bold 12px Verdana,Arial;
+}
 button[class="responsable_modal"]:hover{
     background: -webkit-linear-gradient(#fa8258 0%, #f5d0a9 96%);
     background: -o-linear-gradient(#fa8258 0%, #f5d0a9 96%);
@@ -2800,6 +2831,12 @@ button[class="eliminar_responsable_modal"]:hover{
     background: -webkit-linear-gradient(#FA5858 0%, #f5d0a9 96%);
     background: -o-linear-gradient(#FA5858 0%, #f5d0a9 96%);
     background: linear-gradient(#FA5858 0%, #f5d0a9 96%);
+    box-shadow: none;
+}
+button[class="restablecer_password"]:hover{
+    background: -webkit-linear-gradient(#82C78A 0%, #CBEACF 96%);
+    background: -o-linear-gradient(#82C78A 0%, #CBEACF 96%);
+    background: linear-gradient(#82C78A 0%, #CBEACF 96%);
     box-shadow: none;
 }
 button[class$="responsable_modal"]:focus{
@@ -4871,7 +4908,7 @@ margin:120px 9px;
 		margin-left: 10%;
 	}
 	.columna_foto{
-		width: 103px !important;
+		width: 103px;
 	}
 	#antiguo_alumno_edit #edit_alumno_responsable1_estadoCivil{
 		width: 120px;

@@ -181,6 +181,7 @@
                 </div>
               </div>
             </div>
+            <button id="{{entity.responsable1.id}}" title="Restablecer a la contraseña inicial" class="restablecer_password" type="button">Restablecer Contraseña</button>
           </fieldset >
           </div>
           {% if entity.responsable2 != null %}
@@ -212,6 +213,9 @@
                 </div>
               </div>
             </div>
+            {% if entity.responsable2 != null %}
+              <button id="{{entity.responsable2.id}}" title="Restablecer a la contraseña inicial" class="restablecer_password" type="button">Restablecer Contraseña</button>
+            {% endif %}
             </fieldset >
           </div>
 

@@ -4,16 +4,20 @@
 		"selected_items":
 		[
 			[
+				"margin",
+				"margin-left"
+			],
+			[
+				"border-ri",
+				"border-right-color"
+			],
+			[
 				"border",
 				"border-radius"
 			],
 			[
 				"font",
 				"font-weight"
-			],
-			[
-				"margin",
-				"margin-bottom"
 			],
 			[
 				"mar",
@@ -307,7 +311,7 @@
 			"file": "src/Cole/IntranetBundle/Resources/public/css/intranet.css",
 			"settings":
 			{
-				"buffer_size": 40562,
+				"buffer_size": 40824,
 				"line_ending": "Unix"
 			}
 		},
@@ -315,7 +319,7 @@
 			"file": "src/Cole/IntranetBundle/Resources/public/js/intranet.js",
 			"settings":
 			{
-				"buffer_size": 5020,
+				"buffer_size": 8109,
 				"line_ending": "Unix",
 				"name": "dsf"
 			}
@@ -357,7 +361,7 @@
 			"file": "src/Cole/BackendBundle/Resources/translations/messages.en.yml",
 			"settings":
 			{
-				"buffer_size": 4724,
+				"buffer_size": 4798,
 				"line_ending": "Unix"
 			}
 		},
@@ -424,7 +428,7 @@
 			"file": "src/Cole/IntranetBundle/Controller/ProfesorController.php",
 			"settings":
 			{
-				"buffer_size": 18343,
+				"buffer_size": 20226,
 				"line_ending": "Unix"
 			}
 		},
@@ -508,10 +512,18 @@
 			}
 		},
 		{
+			"file": "src/Cole/BackendBundle/Resources/views/Asignatura/AsignarOptativaAlumno.html.twig",
+			"settings":
+			{
+				"buffer_size": 13978,
+				"line_ending": "Unix"
+			}
+		},
+		{
 			"file": "src/Cole/ColeBundle/Resources/public/css/estilo.css",
 			"settings":
 			{
-				"buffer_size": 25242,
+				"buffer_size": 25651,
 				"line_ending": "Unix"
 			}
 		},
@@ -607,18 +619,15 @@
 			"file": "src/Cole/BackendBundle/Resources/config/routing/profesor.yml",
 			"settings":
 			{
-				"buffer_size": 3276,
+				"buffer_size": 3274,
 				"line_ending": "Unix"
 			}
 		},
 		{
-			"contents": "<?php\n\nnamespace Cole\\BackendBundle\\Controller;\n\nuse Symfony\\Component\\HttpFoundation\\Request;\nuse Symfony\\Bundle\\FrameworkBundle\\Controller\\Controller;\nuse Symfony\\Component\\HttpFoundation\\JsonResponse;\n\nuse Cole\\BackendBundle\\Entity\\Grupo;\nuse Cole\\BackendBundle\\Entity\\Curso;\nuse Cole\\BackendBundle\\Entity\\Matricula;\nuse Cole\\BackendBundle\\Form\\GrupoType;\nuse Symfony\\Component\\HttpFoundation\\Response;\n\n/**\n * Grupo controller.\n *\n */\nclass GrupoController extends Controller\n{\n\n    /**\n     * Lists all Grupo entities.\n     *\n     */\n    public function indexAction()\n    {\n        $em = $this->getDoctrine()->getManager();\n\n        $entities = $em->getRepository('BackendBundle:Grupo')->findAll();\n\n        return $this->render('BackendBundle:Grupo:index.html.twig', array(\n            'entities' => $entities,\n        ));\n    }\n    /**\n     * Creates a new Grupo entity.\n     *\n     */\n    public function createAction(Request $request)\n    {\n        $entity = new Grupo();\n        $form = $this->createCreateForm($entity);\n        $form->handleRequest($request);\n\n        if ($form->isValid()) {\n            $em = $this->getDoctrine()->getManager();\n            $em->persist($entity);\n            $em->flush();\n\n            return $this->redirect($this->generateUrl('grupo_show', array('id' => $entity->getId())));\n        }\n\n        return $this->render('BackendBundle:Grupo:new.html.twig', array(\n            'entity' => $entity,\n            'form'   => $form->createView(),\n        ));\n    }\n\n    /**\n     * Creates a form to create a Grupo entity.\n     *\n     * @param Grupo $entity The entity\n     *\n     * @return \\Symfony\\Component\\Form\\Form The form\n     */\n    private function createCreateForm(Grupo $entity)\n    {\n        $form = $this->createForm(new GrupoType(), $entity, array(\n            'action' => $this->generateUrl('grupo_create'),\n            'method' => 'POST',\n        ));\n\n        $form->add('submit', 'submit', array('label' => 'Create'));\n\n        return $form;\n    }\n\n    /**\n     * Displays a form to create a new Grupo entity.\n     *\n     */\n    public function newAction()\n    {\n        $entity = new Grupo();\n        $form   = $this->createCreateForm($entity);\n\n        return $this->render('BackendBundle:Grupo:new.html.twig', array(\n            'entity' => $entity,\n            'form'   => $form->createView(),\n        ));\n    }\n    public function AsignarHorarioGrupoNewAction($id)\n    {\n        $em = $this->getDoctrine()->getManager();\n        $grupo= $em->getRepository('BackendBundle:Grupo')->findOneById($id);\n        $horario = $em->getRepository('BackendBundle:Horario')->findAll();\n\n        $entities_troncales = $em->getRepository('BackendBundle:AsignaturasCursos')->findAsignaturasTroncalesCurso($grupo->getCurso());\n        $entities_especificas_no_opcional = $em->getRepository('BackendBundle:AsignaturasCursos')->findAsignaturasEspecificasNoOpcionalesCurso($grupo->getCurso());\n        $entities_especificas_opcional = $em->getRepository('BackendBundle:AsignaturasCursos')->findAsignaturasEspecificasOpcionalesCurso($grupo->getCurso());\n        $imparte= $em->getRepository('BackendBundle:Imparte')->findAsignacionesNoOpcionales($grupo);\n        $array=[];\n        foreach($imparte as $registro){\n            if($registro->getAula()){\n                $array[$registro->getAsignatura()->getId()]=$registro->getProfesor()->getId().\"-\".$registro->getAula()->getId();\n            }\n            else{\n                $array[$registro->getAsignatura()->getId()]=$registro->getProfesor()->getId().\"-\";\n            }\n        }\n\n        $imparte= $em->getRepository('BackendBundle:Imparte')->findAsignacionesOpcionales($grupo);\n        $array_op=[];\n        foreach($imparte as $registro){\n            if($registro->getAula()){\n                $array_op[$registro->getAsignatura()->getId()]=$registro->getProfesor()->getId().\"-\".$registro->getAula()->getId();\n            }\n            else{\n                $array_op[$registro->getAsignatura()->getId()]=$registro->getProfesor()->getId().\"-\";\n            }\n        }\n        //Se optiene el tipo de horario para indicarlo para la comprobación de nº de horas de profesores en manual.\n        $tipo_horario = $em->getRepository('BackendBundle:Horario')->findByTipo(\"manual\");\n        if(!$tipo_horario){\n            $tipo=\"automatico\";\n        }\n        else{\n            $tipo=\"manual\";\n        }\n        return $this->render('BackendBundle:Grupo:new_horario_grupo.html.twig', array(\n            'grupo' => $grupo,\n            'horario' => $horario,\n            'entities_troncales' => $entities_troncales,\n            'entities_especificas_no_op' => $entities_especificas_no_opcional,\n            'entities_especificas_op' => $entities_especificas_opcional,\n            'imparte' => $array,\n            'imparte_op' => $array_op, \n            'tipo' => $tipo\n        ));\n    }\n    /**\n     * Finds and displays a Grupo entity.\n     *\n     */\n    public function showAction()\n    {\n        $em = $this->getDoctrine()->getManager();\n\n        $entities = $em->getRepository('BackendBundle:Grupo')->findAllByCurso();\n\n           return $this->render('BackendBundle:Grupo:show.html.twig', array(\n            'entities' => $entities,\n        ));\n    }\n\n    public function AsignarHorarioGrupoShowAction()\n    {\n        $em = $this->getDoctrine()->getManager();\n\n        $asignaturas= $em->getRepository('BackendBundle:Asignatura')->findNumAsignaturas();\n        $profesores= $em->getRepository('BackendBundle:Profesor')->findProfesoresDePrimaria();\n        if (!$profesores) {\n            $numProfesores=0;\n        }\n        else{\n            $numProfesores=1;\n        }\n\n        $asignaturasCursos= $em->getRepository('BackendBundle:AsignaturasCursos')->findAll();\n        if (!$asignaturasCursos) {\n            $numAsignaturasCursos=0;\n        }\n        else{\n            $numAsignaturasCursos=1;\n        }\n\n        $horarios=$em->getRepository('BackendBundle:Horario')->findAll();\n        if (!$horarios) {\n            $horario=0;\n        }\n        else{\n            $horario=1;\n        }\n\n        $entities=$em->getRepository('BackendBundle:Grupo')->findGruposByNivel(\"Primaria\");\n\n        return $this->render('BackendBundle:Grupo:asignar_horarios_show.html.twig', array(\n            'entities' => $entities,\n            'numAsignaturas' => (int)$asignaturas[1],\n            'numProfesores' => $numProfesores,\n            'numAsignaturasCursos' => $numAsignaturasCursos,\n            'horario' => $horario,\n        ));\n    }\n\n\n    /**\n     * Displays a form to edit an existing Grupo entity.\n     *\n     */\n    public function editAction($id)\n    {\n        $em = $this->getDoctrine()->getManager();\n\n        $entity = $em->getRepository('BackendBundle:Grupo')->find($id);\n\n        if (!$entity) {\n            throw $this->createNotFoundException('Unable to find Grupo entity.');\n        }\n\n        $editForm = $this->createEditForm($entity);\n        $deleteForm = $this->createDeleteForm($id);\n\n        return $this->render('BackendBundle:Grupo:edit.html.twig', array(\n            'entity'      => $entity,\n            'edit_form'   => $editForm->createView(),\n            'delete_form' => $deleteForm->createView(),\n        ));\n    }\n\n    /**\n    * Creates a form to edit a Grupo entity.\n    *\n    * @param Grupo $entity The entity\n    *\n    * @return \\Symfony\\Component\\Form\\Form The form\n    */\n    private function createEditForm(Grupo $entity)\n    {\n        $form = $this->createForm(new GrupoType(), $entity, array(\n            'action' => $this->generateUrl('grupo_update', array('id' => $entity->getId())),\n            'method' => 'PUT',\n        ));\n\n        $form->add('submit', 'submit', array('label' => 'Update'));\n\n        return $form;\n    }\n    /**\n     * Edits an existing Grupo entity.\n     *\n     */\n    public function updateAction(Request $request, $id)\n    {\n        $em = $this->getDoctrine()->getManager();\n\n        $entity = $em->getRepository('BackendBundle:Grupo')->find($id);\n\n        if (!$entity) {\n            throw $this->createNotFoundException('Unable to find Grupo entity.');\n        }\n\n        $deleteForm = $this->createDeleteForm($id);\n        $editForm = $this->createEditForm($entity);\n        $editForm->handleRequest($request);\n\n        if ($editForm->isValid()) {\n            $em->flush();\n\n            return $this->redirect($this->generateUrl('grupo_edit', array('id' => $id)));\n        }\n\n        return $this->render('BackendBundle:Grupo:edit.html.twig', array(\n            'entity'      => $entity,\n            'edit_form'   => $editForm->createView(),\n            'delete_form' => $deleteForm->createView(),\n        ));\n    }\n    /**\n     * Deletes a Grupo entity.\n     *\n     */\n    public function deleteAction(Request $request, $id)\n    {\n        $form = $this->createDeleteForm($id);\n        $form->handleRequest($request);\n\n        if ($form->isValid()) {\n            $em = $this->getDoctrine()->getManager();\n            $entity = $em->getRepository('BackendBundle:Grupo')->find($id);\n\n            if (!$entity) {\n                throw $this->createNotFoundException('Unable to find Grupo entity.');\n            }\n\n            $em->remove($entity);\n            $em->flush();\n        }\n\n        return $this->redirect($this->generateUrl('grupo'));\n    }\n\n    /**\n     * Creates a form to delete a Grupo entity by id.\n     *\n     * @param mixed $id The entity id\n     *\n     * @return \\Symfony\\Component\\Form\\Form The form\n     */\n    private function createDeleteForm($id)\n    {\n        return $this->createFormBuilder()\n            ->setAction($this->generateUrl('grupo_delete', array('id' => $id)))\n            ->setMethod('DELETE')\n            ->add('submit', 'submit', array('label' => 'Delete'))\n            ->getForm()\n        ;\n    }\n\n    public function AsignarAulaAction(Request $request)\n    {\n        // if request is XmlHttpRequest (AJAX) but not a POSt, throw an exception\n        if ($request->isXmlHttpRequest() && !$request->isMethod('POST')) {\n            throw new HttpException('XMLHttpRequests/AJAX calls must be POSTed');\n        }\n\n\n        $grupo=$this->get('request')->request->get('grupo');\n        $aula=$this->get('request')->request->get('aula');\n\n        $em = $this->getDoctrine()->getManager();\n\n        $grupo = $em->getRepository('BackendBundle:Grupo')->findOneById($grupo);\n        if (!$grupo) {\n                throw $this->createNotFoundException('Unable to find Grupo entity.');\n            }\n        if($aula!=null){\n            $aula = $em->getRepository('BackendBundle:Equipamiento')->findOneById($aula);\n            if (!$aula ) {\n                throw $this->createNotFoundException('Unable to find Aula entity.');\n            }\n\n            $grupo->setAula($aula); \n        }\n        else{\n            $grupo->setAula(NULL);\n        }\n    \n        $em->persist($grupo);\n        $em->flush();\n        \n        if ($request->isXmlHttpRequest()) {\n                return new JsonResponse(array(\n                    'message' => 'Success!',\n                    'success' => true), 200);\n        }\n    }\n\n    public function VaciarAulasAction(Request $request)\n    {\n        // if request is XmlHttpRequest (AJAX) but not a POSt, throw an exception\n        if ($request->isXmlHttpRequest() && !$request->isMethod('POST')) {\n            throw new HttpException('XMLHttpRequests/AJAX calls must be POSTed');\n        }\n\n        $em = $this->getDoctrine()->getManager();\n\n        $grupos = $em->getRepository('BackendBundle:Grupo')->findAll();\n\n        foreach ($grupos as $grupo) {\n            $grupo->setAula(NULL);\n            $em->persist($grupo);\n        }\n\n        $em->flush();\n        \n        if ($request->isXmlHttpRequest()) {\n                return new JsonResponse(array(\n                    'message' => 'Success!',\n                    'success' => true), 200);\n        }\n    }\n\n    public function AsignarGrupoAction()\n    {\n        $em = $this->getDoctrine()->getManager();\n\n        $entities = $em->getRepository('BackendBundle:Grupo')->findAllByCurso();\n\n        // Se obtiene el curso académico actual.\n        if(date(\"n\")>=6){\n            $actual=date(\"Y\").\" / \".(date(\"Y\")+1);\n        }\n        else{\n            $actual=(date(\"Y\")-1).\" / \".date(\"Y\");\n        }\n\n        $alumnos= $em->getRepository('BackendBundle:Matricula')->findOneByAnyoAcademico($actual);\n           return $this->render('BackendBundle:Grupo:AsignarGrupo.html.twig', array(\n            'entities' => $entities,\n            'alumnos' => $alumnos\n        ));\n    }\n\n    public function CursoAsignarGrupoAction($curso)\n    {\n\n        $em = $this->getDoctrine()->getManager();\n\n        $c = $em->getRepository('BackendBundle:Curso')->findOneById($curso);\n\n        $num_grupos=$c->getNumGrupos();\n\n        // Se obtiene el curso académico actual.\n        if(date(\"n\")>=6){\n            $actual=date(\"Y\").\" / \".(date(\"Y\")+1);\n        }\n        else{\n            $actual=(date(\"Y\")-1).\" / \".date(\"Y\");\n        }\n\n        $alumnos_sin_grupo= $em->getRepository('BackendBundle:Matricula')->findMatriculadosSinGrupo($c,$actual);\n        $alumnos_A= $em->getRepository('BackendBundle:Matricula')->findMatriculadosConGrupo($c,$actual,\"A\");\n        $alumnos_B= $em->getRepository('BackendBundle:Matricula')->findMatriculadosConGrupo($c,$actual,\"B\");\n        $alumnos_C= $em->getRepository('BackendBundle:Matricula')->findMatriculadosConGrupo($c,$actual,\"C\");\n\n           return $this->render('BackendBundle:Grupo:AsignarGrupoConCurso.html.twig', array(\n            'alumnos_A' => $alumnos_A,\n            'alumnos_B' => $alumnos_B,\n            'alumnos_C' =>$alumnos_C,\n            'alumnos_sin_grupo' => $alumnos_sin_grupo,\n            'curso' => $curso,\n            'num_grupos' => $num_grupos,\n            'ratio' => $c->getRatio(),\n        ));\n    }\n\n    public function AsignarGrupoUpdateAction(Request $request)\n    {\n        // if request is XmlHttpRequest (AJAX) but not a POSt, throw an exception\n        if ($request->isXmlHttpRequest() && !$request->isMethod('POST')) {\n            throw new HttpException('XMLHttpRequests/AJAX calls must be POSTed');\n        }\n        \n        $em = $this->getDoctrine()->getEntityManager();\n\n        $alum=$this->get('request')->request->get('alumno');\n        $letra=$this->get('request')->request->get('letra');\n        $alumno=$em->getRepository('BackendBundle:Alumno')->findOneById($alum);\n        if (!$alumno) {\n                throw $this->createNotFoundException('Unable to find Alumno entity.');\n            }\n\n        $grupo=$em->getRepository('BackendBundle:Grupo')->findGrupoByLetter($alumno->getCurso(),$letra);\n\n        $alumno->setGrupo($grupo);\n        $em->persist($alumno);\n\n        $matricula=$em->getRepository('BackendBundle:Matricula')->findPorAño($alumno,$alumno->getAnyoAcademico());\n        if (!$matricula) {\n                throw $this->createNotFoundException('Unable to find Matricula entity.');\n            }\n        $matricula->setGrupo($grupo);\n        $em->persist($matricula);\n\n        $em->flush();\n        \n        if ($request->isXmlHttpRequest()) {\n                return new JsonResponse(array(\n                    'message' => 'Success!',\n                    'success' => true), 200);\n        }\n    }\n\n\n    public function TutorGrupoAction()\n    {\n        $em = $this->getDoctrine()->getManager();\n\n        $entities = $em->getRepository('BackendBundle:Grupo')->findAllByCurso();\n        $profesores = $em->getRepository('BackendBundle:Profesor')->findByActivo(1);\n\n           return $this->render('BackendBundle:Grupo:tutor_grupo.html.twig', array(\n            'entities' => $entities,\n            'profesores' => $profesores\n        ));\n    }\n\n    public function AsignarTutorGrupoAction()\n    {\n        $em = $this->getDoctrine()->getManager();\n\n        $asignaciones=$this->get('request')->request->get('asignaciones');\n        $eliminados=$this->get('request')->request->get('eliminados');\n\n        $data=1;\n        if($asignaciones==null && $eliminados==null){\n            $data=null;\n            return new JsonResponse(array('data' => $data), 200);\n        }\n\n        if($asignaciones){\n          foreach ($asignaciones as $grupo => $id ) {\n            $grupo = $em->getRepository('BackendBundle:Grupo')->findOneById($grupo);\n            if (!$grupo) {\n                throw $this->createNotFoundException('Unable to find Grupo entity.');\n            }\n            $profesor = $em->getRepository('BackendBundle:Profesor')->findOneById($id);\n            if (!$profesor) {\n                throw $this->createNotFoundException('Unable to find Profesor entity.');\n            }\n            $grupo->setProfesor($profesor);\n            $em->persist($grupo);\n          }   \n        }\n\n        if($eliminados){\n          foreach ($eliminados as $grupo ) {\n            $grupo = $em->getRepository('BackendBundle:Grupo')->findOneById($grupo);\n            if (!$grupo) {\n                throw $this->createNotFoundException('Unable to find Grupo entity.');\n            }\n\n            $grupo->setProfesor(null);\n            $em->persist($grupo);\n          }  \n        }\n        $em->flush();\n        return new JsonResponse(array('data' => $data,'success' => true), 200);\n    }\n\n    public function HorariosGruposAction($id)\n    {\n        $em = $this->getDoctrine()->getManager();\n        $grupo = $em->getRepository('BackendBundle:Grupo')->findOneById($id);\n        $entity = $em->getRepository('BackendBundle:Horario')->findAll();\n        \n        $imparte = $em->getRepository('BackendBundle:Imparte')->findByGrupo($id);\n\n        $asignaciones = $em->getRepository('BackendBundle:Imparte')->findByGrupoConHorario($grupo);\n        if($asignaciones){\n            $numAsigHorarios=1;\n        }\n        else{\n            $numAsigHorarios=0;\n        }\n\n        $asignaciones = $em->getRepository('BackendBundle:AsignaturasCursos')->findByCurso($grupo->getCurso());\n        if($asignaciones){\n            $numAsigCurso=1;\n        }\n        else{\n            $numAsigCurso=0;\n        }\n        $asignaturas=$em->getRepository('BackendBundle:AsignaturasCursos')->findByCurso($grupo->getCurso());\n        if(count($asignaturas)==count($imparte)){\n            $completo=1;\n        }\n        else{\n            $completo=0;\n        }\n\n        $imparte= $em->getRepository('BackendBundle:Imparte')->findAsignacionesNoOpcionales($grupo);\n\n        $array=[];\n        foreach($imparte as $registro){\n            if($registro->getAula()){\n                $aula=$registro->getAula()->getNombre();\n            }\n            else{\n                $aula=\"\";\n            }\n\n            if($registro->getDiaSemanal()){\n                $dia=$registro->getDiaSemanal();\n            }\n            else{\n                $dia=\"\"; \n            }\n\n            if($registro->getHorario()){\n                $horario=$registro->getHorario()->getId();\n            }\n            else{\n                $horario=\"\";\n            }\n           \n            $array[$horario.\"-\".$dia.\"-\".$registro->getAsignatura()->getAsignatura()->getNombre().\"-\".$registro->getAsignatura()->getAsignatura()->getAbreviatura().\"-\".$aula.\"-\".$registro->getGrupo()->getId()]=$registro->getProfesor()->getNombre().\" \".$registro->getProfesor()->getApellido1().\" \".$registro->getProfesor()->getApellido2();\n        }\n\n        $imparte= $em->getRepository('BackendBundle:Imparte')->findAsignacionesOpcionales($grupo);\n\n        $array_op=[];\n        foreach($imparte as $registro){\n            if($registro->getAula()){\n                $aula=$registro->getAula()->getNombre();\n            }\n            else{\n                $aula=\"\";\n            }\n\n            if($registro->getDiaSemanal()){\n                $dia=$registro->getDiaSemanal();\n            }\n            else{\n                $dia=\"\"; \n            }\n\n            if($registro->getHorario()){\n                $horario=$registro->getHorario()->getId();\n            }\n            else{\n                $horario=\"\";\n            }\n           \n            $array_op[$horario.\"-\".$dia.\"-\".$registro->getAsignatura()->getAsignatura()->getNombre().\"-\".$registro->getAsignatura()->getAsignatura()->getAbreviatura().\"-\".$aula.\"-\".$registro->getGrupo()->getId()]=$registro->getProfesor()->getNombre().\" \".$registro->getProfesor()->getApellido1().\" \".$registro->getProfesor()->getApellido2();\n        }\n\n\n        return $this->render('BackendBundle:Grupo:datos_horarios.html.twig', array(\n            'imparte' => $array,\n            'imparte_op' => $array_op,\n            'numAsigHorarios' => $numAsigHorarios,\n            'numAsigCurso' => $numAsigCurso,\n            'completo' => $completo,\n            'entity' => $entity));\n    }\n\n    public function HorariosGruposNewAction($id)\n    {\n        $em = $this->getDoctrine()->getManager();\n        $grupo = $em->getRepository('BackendBundle:Grupo')->findOneById($id);\n        $entity = $em->getRepository('BackendBundle:Horario')->findAll();\n\n        $asignaciones = $em->getRepository('BackendBundle:Imparte')->findByGrupoConHorario($grupo);\n        if($asignaciones){\n            $numAsigHorarios=1;\n        }\n        else{\n            $numAsigHorarios=0;\n        }\n\n        $asignaciones = $em->getRepository('BackendBundle:AsignaturasCursos')->findByCurso($grupo->getCurso());\n        if($asignaciones){\n            $numAsigCurso=1;\n        }\n        else{\n            $numAsigCurso=0;\n        }\n        //Se obtiene los registros con asignaturas opcionales\n        $opcional = $em->getRepository('BackendBundle:Imparte')->findOpcionalesGrupo($grupo);\n\n        //Asignaturas opcionales registradas\n        $asig_op = $em->getRepository('BackendBundle:AsignaturasCursos')->findAsignaturasEspecificasOpcionalesCurso($grupo->getCurso());\n\n        //Obtenemos el número de módulos opcionales asignados\n        $modulos=count($opcional)/count($asig_op);\n        //echo $modulos; // hay que modificar imparte para añadir tantos registros como nº de modulos en asignar asignaturas curso\n\n\n        $imparte= $em->getRepository('BackendBundle:Imparte')->findAsignacionesNoOpcionales($grupo);\n        \n        $array=[];\n        foreach($imparte as $registro){\n            if($registro->getAula()){\n                $aula=$registro->getAula()->getNombre();\n            }\n            else{\n                $aula=\"\";\n            }\n\n            if($registro->getDiaSemanal()){\n                $dia=$registro->getDiaSemanal();\n            }\n            else{\n                $dia=\"\"; \n            }\n\n            if($registro->getHorario()){\n                $horario=$registro->getHorario()->getId();\n            }\n            else{\n                $horario=\"\";\n            }\n           \n            //$array[$horario.\"-\".$dia.\"-\".$registro->getAsignatura()->getAsignatura()->getNombre().\"-\".$registro->getAsignatura()->getAsignatura()->getAbreviatura().\"-\".$aula.\"-\".$registro->getGrupo()->getId()]=$registro->getProfesor()->getNombre().\" \".$registro->getProfesor()->getApellido1().\" \".$registro->getProfesor()->getApellido2();\n            $array[$horario.\"-\".$dia]=$registro->getAsignatura()->getId();\n\n        }\n\n\n        $imparte= $em->getRepository('BackendBundle:Imparte')->findAsignacionesOpcionales($grupo);\n\n        $array_op=[];\n        foreach($imparte as $registro){\n            if($registro->getAula()){\n                $aula=$registro->getAula()->getNombre();\n            }\n            else{\n                $aula=\"\";\n            }\n\n            if($registro->getDiaSemanal()){\n                $dia=$registro->getDiaSemanal();\n            }\n            else{\n                $dia=\"\"; \n            }\n\n            if($registro->getHorario()){\n                $horario=$registro->getHorario()->getId();\n            }\n            else{\n                $horario=\"\";\n            }\n           \n            //$array[$horario.\"-\".$dia.\"-\".$registro->getAsignatura()->getAsignatura()->getNombre().\"-\".$registro->getAsignatura()->getAsignatura()->getAbreviatura().\"-\".$aula.\"-\".$registro->getGrupo()->getId()]=$registro->getProfesor()->getNombre().\" \".$registro->getProfesor()->getApellido1().\" \".$registro->getProfesor()->getApellido2();\n            $array_op[$horario.\"-\".$dia]=$registro->getAsignatura()->getId();\n        }\n\n        return $this->render('BackendBundle:Grupo:datos_horarios_new.html.twig', array(\n            'imparte' => $array,\n            'imparte_op' => $array_op,\n            'numAsigHorarios' => $numAsigHorarios,\n            'numAsigCurso' => $numAsigCurso,\n            'entity' => $entity));\n    }\n\n    \n    public function AsignarHorarioGrupoAction()\n    {\n        $em = $this->getDoctrine()->getManager();\n\n        $idgrupo=$this->get('request')->request->get('grupo');\n        $modificadas=$this->get('request')->request->get('modificadas');\n        $eliminadas=$this->get('request')->request->get('eliminadas');\n\n        $grupo=$em->getRepository('BackendBundle:Grupo')->findOneById($idgrupo);\n        if (!$grupo) {\n            throw $this->createNotFoundException('Unable to find Grupo entity.');\n        }\n\n        $data=1;\n        if($modificadas==null && $eliminadas==null ){\n            $data=null;\n            return new JsonResponse(array('data' => $data), 200);\n        }\n        if($eliminadas){\n          foreach ($eliminadas as $row ) { //$row[0]->ID asignatura  $row[1]->dia $row[2]->Horario.\n            $horario = $em->getRepository('BackendBundle:Horario')->findOneById($row[2]);\n            if (!$horario) {\n                throw $this->createNotFoundException('Unable to find Horario entity.');\n            }\n            if($row[0]!=0){\n\n                $imparte = $em->getRepository('BackendBundle:Imparte')->findByAsignaturaOcupada($grupo, $row[1], $horario);\n                if (!$imparte) {\n                    throw $this->createNotFoundException('Unable to find Imparte entity.');\n                }\n\n                $imparte->setDiaSemanal(null);\n                $imparte->setHorario(null);\n                $em->persist($imparte);\n                $em->flush();\n            }\n            else{\n                $imparte = $em->getRepository('BackendBundle:Imparte')->findByAsignaturasOpOcupada($grupo, $row[1], $horario);\n                if (!$imparte) {\n                    throw $this->createNotFoundException('Unable to find Imparte entity.');\n                }\n                foreach ($imparte as $imparte ){\n                    $imparte->setDiaSemanal(null);\n                    $imparte->setHorario(null);\n                    $em->persist($imparte);\n                    $em->flush();\n                }\n            }\n          }  \n        }\n\n        if($modificadas){\n          foreach ($modificadas as $row ) { //$row[0]->ID asignatura  $row[1]->dia $row[2]->Horario.\n            $horario = $em->getRepository('BackendBundle:Horario')->findOneById($row[2]);\n            if (!$horario) {\n                throw $this->createNotFoundException('Unable to find Horario entity.');\n            }\n            if($row[0]!=0){\n                $asignatura = $em->getRepository('BackendBundle:AsignaturasCursos')->findOneById($row[0]);\n                if (!$asignatura) {\n                    throw $this->createNotFoundException('Unable to find Asignatura Cursos entity.');\n                }\n\n                $imparte = $em->getRepository('BackendBundle:Imparte')->findByAsignaturaLibre($grupo, $asignatura);\n                if (!$imparte) {\n                    throw $this->createNotFoundException('Unable to find Imparte entity.');\n                }\n\n                $imparte->setDiaSemanal($row[1]);\n                $imparte->setHorario($horario);\n                $em->persist($imparte);\n                $em->flush();\n            }\n            else{\n                $imparte = $em->getRepository('BackendBundle:Imparte')->findByAsignaturasOpLibre($grupo);\n                if (!$imparte) {\n                    throw $this->createNotFoundException('Unable to find Imparte entity.');\n                }\n                foreach ($imparte as $imparte ){\n                    $imparte->setDiaSemanal($row[1]);\n                    $imparte->setHorario($horario);\n                    $em->persist($imparte);\n                    $em->flush();\n                }\n            }\n          }   \n        }\n\n\n        return new JsonResponse(array('data' => $data,'success' => true), 200);\n    }\n\n\n\n    public function EliminarHorarioGrupoAction()\n    {\n        $em = $this->getDoctrine()->getManager();\n\n        $idgrupo=$this->get('request')->request->get('grupo');\n\n        $grupo = $em->getRepository('BackendBundle:Grupo')->findOneById($idgrupo);\n        if (!$grupo) {\n            throw $this->createNotFoundException('Unable to find Grupo entity.');\n        }\n\n        $imparte= $em->getRepository('BackendBundle:Imparte')->findByGrupo($grupo);\n        \n        $data=1;\n        if(!$imparte){\n            $data=null;\n            return new JsonResponse(array('data' => $data), 200);\n        }\n        else{\n            foreach ($imparte as $asignacion ) {\n                $asignacion->setHorario(null);\n                $asignacion->setDiaSemanal(null);\n                $em->persist($asignacion);\n            }  \n            $em->flush();\n            return new JsonResponse(array('data' => $data,'success' => true), 200);\n        }\n    }\n\n    public function EliminarTodosHorariosGrupoAction()\n    {\n        $em = $this->getDoctrine()->getManager();\n\n        $imparte= $em->getRepository('BackendBundle:Imparte')->findAll();\n        \n        $data=1;\n        if(!$imparte){\n            $data=null;\n            return new JsonResponse(array('data' => $data), 200);\n        }\n        else{\n            foreach ($imparte as $asignacion ) {\n                $asignacion->setHorario(null);\n                $asignacion->setDiaSemanal(null);\n                $em->persist($asignacion);\n            }  \n            $em->flush();\n            return new JsonResponse(array('data' => $data,'success' => true), 200);\n        }\n    }\n\n\n    //Función de prueba para ver los resultados del horario en html.\n    public function HorarioDelGrupoAction($id)\n    {\n\n        $em = $this->getDoctrine()->getManager();\n\n        $grupo= $em->getRepository('BackendBundle:Grupo')->findOneById($id);\n                if (!$grupo) {\n            throw $this->createNotFoundException('Unable to find Grupo entity.');\n        }\n        $inicio =$em->getRepository('BackendBundle:Centro')->findInicioCurso();\n        $fin =$em->getRepository('BackendBundle:Centro')->findFinCurso();\n\n        $horarios = $em->getRepository('BackendBundle:Horario')->findAll();\n\n        $entities = $em->getRepository('BackendBundle:Imparte')->findByGrupoConHorario($grupo);\n\n        $imparte= $em->getRepository('BackendBundle:Imparte')->findAsignacionesNoOpcionales($grupo);\n\n        $array=[];\n        foreach($imparte as $registro){\n            if($registro->getAula()){\n                $aula=$registro->getAula()->getNombre();\n            }\n            else{\n                $aula=\"\";\n            }\n\n            if($registro->getDiaSemanal()){\n                $dia=$registro->getDiaSemanal();\n            }\n            else{\n                $dia=\"\"; \n            }\n\n            if($registro->getHorario()){\n                $horario=$registro->getHorario()->getId();\n            }\n            else{\n                $horario=\"\";\n            }\n           \n            $array[$horario.\"-\".$dia.\"-\".$registro->getAsignatura()->getAsignatura()->getNombre().\"-\".$registro->getAsignatura()->getAsignatura()->getAbreviatura().\"-\".$aula.\"-\".$registro->getGrupo()->getId()]=$registro->getProfesor()->getNombre().\" \".$registro->getProfesor()->getApellido1().\" \".$registro->getProfesor()->getApellido2();\n        }\n\n        $imparte= $em->getRepository('BackendBundle:Imparte')->findAsignacionesOpcionales($grupo);\n\n        $array_op=[];\n        foreach($imparte as $registro){\n            if($registro->getAula()){\n                $aula=$registro->getAula()->getNombre();\n            }\n            else{\n                $aula=\"\";\n            }\n\n            if($registro->getDiaSemanal()){\n                $dia=$registro->getDiaSemanal();\n            }\n            else{\n                $dia=\"\"; \n            }\n\n            if($registro->getHorario()){\n                $horario=$registro->getHorario()->getId();\n            }\n            else{\n                $horario=\"\";\n            }\n            $asig_op=$em->getRepository('BackendBundle:AsignaturasCursos')->findAsignaturasEspecificasOpcionalesCurso($grupo->getCurso());\n            $num_asig_op=count($asig_op);\n            $array_op[$horario.\"-\".$dia.\"-\".$registro->getAsignatura()->getAsignatura()->getNombre().\"-\".$registro->getAsignatura()->getAsignatura()->getAbreviatura().\"-\".$aula.\"-\".$num_asig_op]=$registro->getProfesor()->getNombre().\" \".$registro->getProfesor()->getApellido1().\" \".$registro->getProfesor()->getApellido2();\n        }\n        if($grupo->getAula()==null){\n            $aula=null;\n        }\n        else{\n            $aula=$grupo->getAula();\n        }\n\n        return $this->render('BackendBundle:Grupo:horario_del_grupo.html.twig', array(\n            'entities' => $entities,\n            'inicio' => $inicio,\n            'fin' => $fin,\n            'horarios' => $horarios,\n            'aula' => $aula,\n            'grupo' => $grupo->getCurso()->getCurso().\" \".$grupo->getCurso()->getNivel().\" - Grupo \".$grupo->getLetra(),\n            'imparte' => $array,\n            'imparte_op' => $array_op,\n            'profesor' => $grupo->getProfesor(),\n        ));\n        \n    }\n\n    public function HorarioDelGrupoPdfAction($id)\n    {\n       $em = $this->getDoctrine()->getManager();\n\n        $grupo= $em->getRepository('BackendBundle:Grupo')->findOneById($id);\n        $inicio =$em->getRepository('BackendBundle:Centro')->findInicioCurso();\n        $fin =$em->getRepository('BackendBundle:Centro')->findFinCurso();\n\n        $horarios = $em->getRepository('BackendBundle:Horario')->findAll();\n        \n        $entities = $em->getRepository('BackendBundle:Imparte')->findByGrupoConHorario($grupo);\n        $imparte= $em->getRepository('BackendBundle:Imparte')->findAsignacionesNoOpcionales($grupo);\n\n        $array=[];\n        foreach($imparte as $registro){\n            if($registro->getAula()){\n                $aula=$registro->getAula()->getNombre();\n            }\n            else{\n                $aula=\"\";\n            }\n\n            if($registro->getDiaSemanal()){\n                $dia=$registro->getDiaSemanal();\n            }\n            else{\n                $dia=\"\"; \n            }\n\n            if($registro->getHorario()){\n                $horario=$registro->getHorario()->getId();\n            }\n            else{\n                $horario=\"\";\n            }\n           \n            $array[$horario.\"-\".$dia.\"-\".$registro->getAsignatura()->getAsignatura()->getNombre().\"-\".$registro->getAsignatura()->getAsignatura()->getAbreviatura().\"-\".$aula.\"-\".$registro->getGrupo()->getId()]=$registro->getProfesor()->getNombre().\" \".$registro->getProfesor()->getApellido1().\" \".$registro->getProfesor()->getApellido2();\n        }\n\n        $imparte= $em->getRepository('BackendBundle:Imparte')->findAsignacionesOpcionales($grupo);\n\n        $array_op=[];\n        foreach($imparte as $registro){\n            if($registro->getAula()){\n                $aula=$registro->getAula()->getNombre();\n            }\n            else{\n                $aula=\"\";\n            }\n\n            if($registro->getDiaSemanal()){\n                $dia=$registro->getDiaSemanal();\n            }\n            else{\n                $dia=\"\"; \n            }\n\n            if($registro->getHorario()){\n                $horario=$registro->getHorario()->getId();\n            }\n            else{\n                $horario=\"\";\n            }\n            $asig_op=$em->getRepository('BackendBundle:AsignaturasCursos')->findAsignaturasEspecificasOpcionalesCurso($grupo->getCurso());\n            $num_asig_op=count($asig_op);\n            $array_op[$horario.\"-\".$dia.\"-\".$registro->getAsignatura()->getAsignatura()->getNombre().\"-\".$registro->getAsignatura()->getAsignatura()->getAbreviatura().\"-\".$aula.\"-\".$num_asig_op]=$registro->getProfesor()->getNombre().\" \".$registro->getProfesor()->getApellido1().\" \".$registro->getProfesor()->getApellido2();\n        }\n\n        $html = $this->renderView('BackendBundle:Grupo:horario_del_grupo.html.twig', array(\n            'entities' => $entities,\n            'inicio' => $inicio,\n            'fin' => $fin,\n            'horarios' => $horarios,\n            'aula' => $grupo->getAula(),\n            'grupo' => $grupo->getCurso()->getCurso().\" \".$grupo->getCurso()->getNivel().\" - Grupo \".$grupo->getLetra(),\n            'imparte' => $array,\n            'imparte_op' => $array_op,\n            'profesor' => $grupo->getProfesor(),\n        ));\n\n        $options = [\n            'margin-top'    => 3,\n            'margin-right'  => 8,\n            'margin-bottom' => 3,\n            'margin-left'   => 8,\n            //Opciones para orientación horizontal.\n            'orientation'=>'Landscape', \n            'default-header'=>false\n        ];\n        $dato=$grupo->getCurso()->getCurso().\"_\".$grupo->getLetra();\n        return new Response(\n            $this->get('knp_snappy.pdf')->getOutputFromHtml($html,$options),\n            200,\n            array(\n                'Content-Type'        => 'application/pdf',\n                'Content-Disposition' => 'attachment; filename=\"Horario_'.$dato.'.pdf\"'\n            )\n        );\n    }\n\n    public function HorariosGruposPdfAction()\n    {\n       $em = $this->getDoctrine()->getManager();\n       $html = array();\n\n       $grupo= $em->getRepository('BackendBundle:Grupo')->findPrimariaByCurso();\n       foreach($grupo as $grupo){\n\n        $inicio =$em->getRepository('BackendBundle:Centro')->findInicioCurso();\n        $fin =$em->getRepository('BackendBundle:Centro')->findFinCurso();\n\n        $horarios = $em->getRepository('BackendBundle:Horario')->findAll();\n        \n        $entities = $em->getRepository('BackendBundle:Imparte')->findByGrupoConHorario($grupo);\n        $imparte= $em->getRepository('BackendBundle:Imparte')->findAsignacionesNoOpcionales($grupo);\n\n        $array=[];\n        foreach($imparte as $registro){\n            if($registro->getAula()){\n                $aula=$registro->getAula()->getNombre();\n            }\n            else{\n                $aula=\"\";\n            }\n\n            if($registro->getDiaSemanal()){\n                $dia=$registro->getDiaSemanal();\n            }\n            else{\n                $dia=\"\"; \n            }\n\n            if($registro->getHorario()){\n                $horario=$registro->getHorario()->getId();\n            }\n            else{\n                $horario=\"\";\n            }\n           \n            $array[$horario.\"-\".$dia.\"-\".$registro->getAsignatura()->getAsignatura()->getNombre().\"-\".$registro->getAsignatura()->getAsignatura()->getAbreviatura().\"-\".$aula.\"-\".$registro->getGrupo()->getId()]=$registro->getProfesor()->getNombre().\" \".$registro->getProfesor()->getApellido1().\" \".$registro->getProfesor()->getApellido2();\n        }\n\n        $imparte= $em->getRepository('BackendBundle:Imparte')->findAsignacionesOpcionales($grupo);\n\n        $array_op=[];\n        foreach($imparte as $registro){\n            if($registro->getAula()){\n                $aula=$registro->getAula()->getNombre();\n            }\n            else{\n                $aula=\"\";\n            }\n\n            if($registro->getDiaSemanal()){\n                $dia=$registro->getDiaSemanal();\n            }\n            else{\n                $dia=\"\"; \n            }\n\n            if($registro->getHorario()){\n                $horario=$registro->getHorario()->getId();\n            }\n            else{\n                $horario=\"\";\n            }\n            $asig_op=$em->getRepository('BackendBundle:AsignaturasCursos')->findAsignaturasEspecificasOpcionalesCurso($grupo->getCurso());\n            $num_asig_op=count($asig_op);\n            $array_op[$horario.\"-\".$dia.\"-\".$registro->getAsignatura()->getAsignatura()->getNombre().\"-\".$registro->getAsignatura()->getAsignatura()->getAbreviatura().\"-\".$aula.\"-\".$num_asig_op]=$registro->getProfesor()->getNombre().\" \".$registro->getProfesor()->getApellido1().\" \".$registro->getProfesor()->getApellido2();\n        }\n        $html[] = $this->renderView('BackendBundle:Grupo:horario_del_grupo.html.twig', array(\n            'entities' => $entities,\n            'inicio' => $inicio,\n            'fin' => $fin,\n            'horarios' => $horarios,\n            'aula' => $grupo->getAula(),\n            'grupo' => $grupo->getCurso()->getCurso().\" \".$grupo->getCurso()->getNivel().\" - Grupo \".$grupo->getLetra(),\n            'imparte' => $array,\n            'imparte_op' => $array_op,\n            'profesor' => $grupo->getProfesor(),\n        ));\n       }\n\n        $options = [\n            'margin-top'    => 3,\n            'margin-right'  => 8,\n            'margin-bottom' => 3,\n            'margin-left'   => 8,\n            //Opciones para orientación horizontal.\n            'orientation'=>'Landscape', \n            'javascript-delay' => 1000, \n            'default-header'=>false\n        ];\n        $dato=$grupo->getCurso()->getCurso().\"_\".$grupo->getLetra();\n        return new Response(\n            $this->get('knp_snappy.pdf')->getOutputFromHtml($html,$options),\n            200,\n            array(\n                'Content-Type'        => 'application/pdf',\n                'Content-Disposition' => 'attachment; filename=\"Horarios_Cursos.pdf\"'\n            )\n        );\n    }\n\n\n    public function GenerarHorariosPdfAction($id)\n    {\n        $em = $this->getDoctrine()->getManager();\n\n        $grupo= $em->getRepository('BackendBundle:Grupo')->findOneById($id);\n\n        return $this->render('BackendBundle:Grupo:generar_horarios_pdf.html.twig', array(\n            'grupo' => $grupo,\n        ));\n    }\n\n\n}\n",
 			"file": "src/Cole/BackendBundle/Controller/GrupoController.php",
-			"file_size": 41864,
-			"file_write_time": 1494449725000000,
 			"settings":
 			{
-				"buffer_size": 41844,
+				"buffer_size": 41981,
 				"line_ending": "Unix"
 			}
 		},
@@ -658,7 +667,7 @@
 			"file": "src/Cole/IntranetBundle/Controller/DefaultController.php",
 			"settings":
 			{
-				"buffer_size": 11263,
+				"buffer_size": 16732,
 				"line_ending": "Unix"
 			}
 		},
@@ -666,7 +675,7 @@
 			"file": "src/Cole/IntranetBundle/Resources/config/routing.yml",
 			"settings":
 			{
-				"buffer_size": 1476,
+				"buffer_size": 1811,
 				"line_ending": "Unix"
 			}
 		},
@@ -706,7 +715,7 @@
 			"file": "src/Cole/IntranetBundle/Resources/views/Alumno/curso.html.twig",
 			"settings":
 			{
-				"buffer_size": 18559,
+				"buffer_size": 18558,
 				"line_ending": "Unix"
 			}
 		},
@@ -714,7 +723,7 @@
 			"file": "src/Cole/IntranetBundle/Resources/views/Profesor/cursos.html.twig",
 			"settings":
 			{
-				"buffer_size": 16037,
+				"buffer_size": 32227,
 				"line_ending": "Unix"
 			}
 		},
@@ -722,7 +731,7 @@
 			"file": "src/Cole/IntranetBundle/Resources/views/Profesor/datos_alumnos_grupo.html.twig",
 			"settings":
 			{
-				"buffer_size": 6364,
+				"buffer_size": 26192,
 				"line_ending": "Unix"
 			}
 		},
@@ -770,7 +779,7 @@
 			"file": "src/Cole/IntranetBundle/Resources/views/Default/lista_alumnos_grupo.html.twig",
 			"settings":
 			{
-				"buffer_size": 1881,
+				"buffer_size": 1948,
 				"line_ending": "Unix"
 			}
 		},
@@ -818,7 +827,23 @@
 			"file": "src/Cole/IntranetBundle/Resources/views/Default/header.html.twig",
 			"settings":
 			{
-				"buffer_size": 1632,
+				"buffer_size": 1802,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "src/Cole/BackendBundle/Resources/config/routing/padres.yml",
+			"settings":
+			{
+				"buffer_size": 1628,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "src/Cole/BackendBundle/Controller/PadresController.php",
+			"settings":
+			{
+				"buffer_size": 13601,
 				"line_ending": "Unix"
 			}
 		},
@@ -826,7 +851,7 @@
 			"file": "src/Cole/BackendBundle/Resources/public/css/backend.css",
 			"settings":
 			{
-				"buffer_size": 165606,
+				"buffer_size": 166512,
 				"line_ending": "Unix"
 			}
 		},
@@ -883,7 +908,7 @@
 			"file": "src/Cole/BackendBundle/Resources/public/js/general.js",
 			"settings":
 			{
-				"buffer_size": 571467,
+				"buffer_size": 573854,
 				"line_ending": "Unix"
 			}
 		},
@@ -1011,7 +1036,7 @@
 			"file": "src/Cole/BackendBundle/Entity/AlumnoRepository.php",
 			"settings":
 			{
-				"buffer_size": 4558,
+				"buffer_size": 4865,
 				"line_ending": "Unix"
 			}
 		},
@@ -1020,6 +1045,30 @@
 			"settings":
 			{
 				"buffer_size": 11770,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "src/Cole/BackendBundle/Entity/MatriculaRepository.php",
+			"settings":
+			{
+				"buffer_size": 2290,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "src/Cole/BackendBundle/Entity/GrupoRepository.php",
+			"settings":
+			{
+				"buffer_size": 1509,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "src/Cole/BackendBundle/Resources/views/Alumno/edit.html.twig",
+			"settings":
+			{
+				"buffer_size": 15916,
 				"line_ending": "Unix"
 			}
 		}
@@ -1131,6 +1180,29 @@
 		"case_sensitive": false,
 		"find_history":
 		[
+			"entity",
+			"profesor",
+			"entity",
+			"alumnos_optativa_pdf",
+			"cursos.html",
+			"cursos.h",
+			"One",
+			"loop",
+			"findByGrupo",
+			"CursoAsignarGrupo",
+			"asignar_grupos",
+			"row",
+			"asignaciones",
+			"index++",
+			"asignaciones",
+			"index++",
+			"object",
+			"asignar_grupos",
+			"opcional",
+			"n+1",
+			"2n",
+			"n",
+			"2n",
 			"alumnos_grupo",
 			"cursos",
 			"opcionales",
@@ -1235,30 +1307,7 @@
 			"title",
 			"data-original-title",
 			"Noticias Nuevas",
-			"data-original-title",
-			"Contactar",
-			"_locale",
-			"Mi grupo",
-			"RECREO",
-			"Cursos impartidos",
-			"Descargar Listado de Alumnos",
-			"Descargar Lista de Alumnos",
-			"Descargar Horario",
-			"i_hover",
-			"enviar_mensaje",
-			"Seleccione",
-			"tutor",
-			"entity",
-			"cabecera_profesor ",
-			"profesores_grupo",
-			"descargar horario",
-			"profesores_grupo",
-			"profesor_grupo",
-			"pointer-events: none;",
-			"asig_profesor.profesor",
-			"load",
-			"tab_prof_curso",
-			"load"
+			"data-original-title"
 		],
 		"highlight": true,
 		"in_selection": false,
@@ -3923,7 +3972,7 @@
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 7317.0,
+						"translation.y": 1520.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"
@@ -4427,15 +4476,15 @@
 					"file": "src/Cole/IntranetBundle/Resources/public/css/intranet.css",
 					"settings":
 					{
-						"buffer_size": 40562,
+						"buffer_size": 40824,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								36847,
-								36847
+								40824,
+								40824
 							]
 						],
 						"settings":
@@ -4584,7 +4633,7 @@
 							"translate_tabs_to_spaces": true
 						},
 						"translation.x": 0.0,
-						"translation.y": 29068.0,
+						"translation.y": 32232.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"
@@ -4594,15 +4643,15 @@
 					"file": "src/Cole/IntranetBundle/Resources/public/js/intranet.js",
 					"settings":
 					{
-						"buffer_size": 5020,
+						"buffer_size": 8109,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								4825,
-								4825
+								7645,
+								7645
 							]
 						],
 						"settings":
@@ -4751,7 +4800,7 @@
 							"translate_tabs_to_spaces": true
 						},
 						"translation.x": 0.0,
-						"translation.y": 2251.0,
+						"translation.y": 3490.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"
@@ -5423,15 +5472,15 @@
 					"file": "src/Cole/BackendBundle/Resources/translations/messages.en.yml",
 					"settings":
 					{
-						"buffer_size": 4724,
+						"buffer_size": 4798,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								2599,
-								2599
+								4724,
+								4724
 							]
 						],
 						"settings":
@@ -5577,7 +5626,7 @@
 							"syntax": "Packages/YAML/YAML.tmLanguage"
 						},
 						"translation.x": 0.0,
-						"translation.y": 1938.0,
+						"translation.y": 2125.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"
@@ -5924,8 +5973,8 @@
 						"selection":
 						[
 							[
-								3087,
-								3087
+								5004,
+								5004
 							]
 						],
 						"settings":
@@ -6073,7 +6122,7 @@
 							"translate_tabs_to_spaces": true
 						},
 						"translation.x": 0.0,
-						"translation.y": 3784.0,
+						"translation.y": 3070.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"
@@ -6588,8 +6637,8 @@
 						"selection":
 						[
 							[
-								21325,
-								21325
+								6200,
+								6200
 							]
 						],
 						"settings":
@@ -6737,7 +6786,7 @@
 							"translate_tabs_to_spaces": true
 						},
 						"translation.x": 0.0,
-						"translation.y": 9163.0,
+						"translation.y": 2822.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"
@@ -6747,15 +6796,15 @@
 					"file": "src/Cole/IntranetBundle/Controller/ProfesorController.php",
 					"settings":
 					{
-						"buffer_size": 18343,
+						"buffer_size": 20226,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								3364,
-								3364
+								3762,
+								3762
 							]
 						],
 						"settings":
@@ -6903,7 +6952,7 @@
 							"translate_tabs_to_spaces": true
 						},
 						"translation.x": 0.0,
-						"translation.y": 2103.0,
+						"translation.y": 1642.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"
@@ -8564,27 +8613,193 @@
 						"zoom_level": 1.0
 					},
 					"type": "text"
-				}
-			]
-		},
-		{
-			"selected": 26,
-			"sheets":
-			[
+				},
 				{
 					"buffer": 44,
-					"file": "src/Cole/ColeBundle/Resources/public/css/estilo.css",
+					"file": "src/Cole/BackendBundle/Resources/views/Asignatura/AsignarOptativaAlumno.html.twig",
 					"settings":
 					{
-						"buffer_size": 25242,
+						"buffer_size": 13978,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								23956,
-								23956
+								498,
+								498
+							]
+						],
+						"settings":
+						{
+							"BracketHighlighterBusy": false,
+							"annotations":
+							[
+								"TODO",
+								"README",
+								"FIXME"
+							],
+							"bh_regions":
+							[
+								"bh_regex",
+								"bh_regex_center",
+								"bh_regex_open",
+								"bh_regex_close",
+								"bh_double_quote",
+								"bh_double_quote_center",
+								"bh_double_quote_open",
+								"bh_double_quote_close",
+								"bh_square",
+								"bh_square_center",
+								"bh_square_open",
+								"bh_square_close",
+								"bh_angle",
+								"bh_angle_center",
+								"bh_angle_open",
+								"bh_angle_close",
+								"bh_curly",
+								"bh_curly_center",
+								"bh_curly_open",
+								"bh_curly_close",
+								"bh_c_define",
+								"bh_c_define_center",
+								"bh_c_define_open",
+								"bh_c_define_close",
+								"bh_default",
+								"bh_default_center",
+								"bh_default_open",
+								"bh_default_close",
+								"bh_unmatched",
+								"bh_unmatched_center",
+								"bh_unmatched_open",
+								"bh_unmatched_close",
+								"bh_round",
+								"bh_round_center",
+								"bh_round_open",
+								"bh_round_close",
+								"bh_tag",
+								"bh_tag_center",
+								"bh_tag_open",
+								"bh_tag_close",
+								"bh_single_quote",
+								"bh_single_quote_center",
+								"bh_single_quote_open",
+								"bh_single_quote_close"
+							],
+							"csslint_options":
+							{
+								"adjoining-classes": "warning",
+								"box-model": true,
+								"box-sizing": "warning",
+								"compatible-vendor-prefixes": "warning",
+								"display-property-grouping": true,
+								"duplicate-background-images": "warning",
+								"duplicate-properties": true,
+								"empty-rules": true,
+								"errors": true,
+								"fallback-colors": "warning",
+								"floats": "warning",
+								"font-faces": "warning",
+								"font-sizes": "warning",
+								"gradients": "warning",
+								"ids": "warning",
+								"import": "warning",
+								"important": "warning",
+								"known-properties": true,
+								"outline-none": "warning",
+								"overqualified-elements": "warning",
+								"qualified-headings": "warning",
+								"regex-selectors": "warning",
+								"rules-count": "warning",
+								"shorthand": "warning",
+								"star-property-hack": "warning",
+								"text-indent": "warning",
+								"underscore-property-hack": "warning",
+								"unique-headings": "warning",
+								"universal-selector": "warning",
+								"vendor-prefix": true,
+								"zero-units": "warning"
+							},
+							"gjslint_ignore":
+							[
+								110
+							],
+							"gjslint_options":
+							[
+							],
+							"javascript_linter": "jshint",
+							"jshint_options":
+							{
+								"browser": true,
+								"devel": true,
+								"evil": true,
+								"regexdash": true,
+								"sub": true,
+								"trailing": true,
+								"wsh": true
+							},
+							"pep8": true,
+							"pep8_ignore":
+							[
+								"E501"
+							],
+							"perl_linter": "perlcritic",
+							"pyflakes_ignore":
+							[
+							],
+							"pyflakes_ignore_import_*": true,
+							"sublimelinter": "load-save",
+							"sublimelinter_delay": 2,
+							"sublimelinter_disable":
+							[
+							],
+							"sublimelinter_executable_map":
+							{
+							},
+							"sublimelinter_fill_outlines": false,
+							"sublimelinter_gutter_marks": true,
+							"sublimelinter_gutter_marks_theme": "simple",
+							"sublimelinter_mark_style": "none",
+							"sublimelinter_notes": false,
+							"sublimelinter_objj_check_ascii": false,
+							"sublimelinter_popup_errors_on_save": false,
+							"sublimelinter_syntax_map":
+							{
+								"C++": "c",
+								"Python Django": "python",
+								"Ruby on Rails": "ruby"
+							},
+							"sublimelinter_wrap_find": true,
+							"syntax": "Packages/Twig/Syntaxes/HTML (Twig).tmLanguage",
+							"tab_size": 4,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 219.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				}
+			]
+		},
+		{
+			"selected": 25,
+			"sheets":
+			[
+				{
+					"buffer": 45,
+					"file": "src/Cole/ColeBundle/Resources/public/css/estilo.css",
+					"settings":
+					{
+						"buffer_size": 25651,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								24055,
+								24055
 							]
 						],
 						"settings":
@@ -8732,13 +8947,13 @@
 							"translate_tabs_to_spaces": true
 						},
 						"translation.x": 0.0,
-						"translation.y": 19311.0,
+						"translation.y": 19564.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"
 				},
 				{
-					"buffer": 45,
+					"buffer": 46,
 					"file": "src/Cole/ColeBundle/Resources/public/js/e-calendar-master/js/jquery.e-calendar.js",
 					"settings":
 					{
@@ -8904,7 +9119,7 @@
 					"type": "text"
 				},
 				{
-					"buffer": 46,
+					"buffer": 47,
 					"file": "src/Cole/BackendBundle/Resources/views/Profesor/horario_del_profesor.html.twig",
 					"settings":
 					{
@@ -9070,7 +9285,7 @@
 					"type": "text"
 				},
 				{
-					"buffer": 47,
+					"buffer": 48,
 					"file": "src/Cole/BackendBundle/Resources/views/Grupo/new_horario_grupo.html.twig",
 					"settings":
 					{
@@ -9236,7 +9451,7 @@
 					"type": "text"
 				},
 				{
-					"buffer": 48,
+					"buffer": 49,
 					"file": "src/Cole/BackendBundle/Resources/views/Grupo/generar_horarios_pdf.html.twig",
 					"settings":
 					{
@@ -9402,7 +9617,7 @@
 					"type": "text"
 				},
 				{
-					"buffer": 49,
+					"buffer": 50,
 					"file": "src/Cole/BackendBundle/Resources/views/Grupo/AsignarGrupo.html.twig",
 					"settings":
 					{
@@ -9562,13 +9777,13 @@
 							"translate_tabs_to_spaces": true
 						},
 						"translation.x": 0.0,
-						"translation.y": 0.0,
+						"translation.y": 255.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"
 				},
 				{
-					"buffer": 50,
+					"buffer": 51,
 					"file": "src/Cole/BackendBundle/Resources/views/Grupo/datos_horarios.html.twig",
 					"settings":
 					{
@@ -9734,7 +9949,7 @@
 					"type": "text"
 				},
 				{
-					"buffer": 51,
+					"buffer": 52,
 					"file": "src/Cole/BackendBundle/Resources/views/Profesor/datos_horarios.html.twig",
 					"settings":
 					{
@@ -9900,7 +10115,7 @@
 					"type": "text"
 				},
 				{
-					"buffer": 52,
+					"buffer": 53,
 					"file": "src/Cole/BackendBundle/Resources/views/Asignatura/datos_asignatura.html.twig",
 					"settings":
 					{
@@ -10066,7 +10281,7 @@
 					"type": "text"
 				},
 				{
-					"buffer": 53,
+					"buffer": 54,
 					"file": "src/Cole/BackendBundle/Form/AsignaturaType.php",
 					"settings":
 					{
@@ -10232,7 +10447,7 @@
 					"type": "text"
 				},
 				{
-					"buffer": 54,
+					"buffer": 55,
 					"file": "src/Cole/BackendBundle/Resources/views/Horario/show.html.twig",
 					"settings":
 					{
@@ -10398,7 +10613,7 @@
 					"type": "text"
 				},
 				{
-					"buffer": 55,
+					"buffer": 56,
 					"file": "src/Cole/BackendBundle/Resources/config/routing/grupo.yml",
 					"settings":
 					{
@@ -10409,8 +10624,8 @@
 						"selection":
 						[
 							[
-								2358,
-								2358
+								1366,
+								1366
 							]
 						],
 						"settings":
@@ -10558,25 +10773,25 @@
 							"translate_tabs_to_spaces": true
 						},
 						"translation.x": 0.0,
-						"translation.y": 1783.0,
+						"translation.y": 847.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"
 				},
 				{
-					"buffer": 56,
+					"buffer": 57,
 					"file": "src/Cole/BackendBundle/Resources/config/routing/profesor.yml",
 					"settings":
 					{
-						"buffer_size": 3276,
+						"buffer_size": 3274,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								3242,
-								3242
+								3162,
+								3162
 							]
 						],
 						"settings":
@@ -10730,19 +10945,19 @@
 					"type": "text"
 				},
 				{
-					"buffer": 57,
+					"buffer": 58,
 					"file": "src/Cole/BackendBundle/Controller/GrupoController.php",
 					"settings":
 					{
-						"buffer_size": 41844,
+						"buffer_size": 41981,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								11908,
-								11908
+								13186,
+								13186
 							]
 						],
 						"settings":
@@ -10890,13 +11105,13 @@
 							"translate_tabs_to_spaces": true
 						},
 						"translation.x": 0.0,
-						"translation.y": 6255.0,
+						"translation.y": 6824.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"
 				},
 				{
-					"buffer": 58,
+					"buffer": 59,
 					"file": "src/Cole/BackendBundle/Controller/ProfesorController.php",
 					"settings":
 					{
@@ -10907,8 +11122,8 @@
 						"selection":
 						[
 							[
-								5867,
-								5867
+								5179,
+								5179
 							]
 						],
 						"settings":
@@ -11056,13 +11271,13 @@
 							"translate_tabs_to_spaces": true
 						},
 						"translation.x": 0.0,
-						"translation.y": 2357.0,
+						"translation.y": 2329.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"
 				},
 				{
-					"buffer": 59,
+					"buffer": 60,
 					"file": "src/Cole/BackendBundle/Resources/views/Grupo/AsignarGrupoConCurso.html.twig",
 					"settings":
 					{
@@ -11228,7 +11443,7 @@
 					"type": "text"
 				},
 				{
-					"buffer": 60,
+					"buffer": 61,
 					"file": "src/Cole/BackendBundle/Entity/Padres.php",
 					"settings":
 					{
@@ -11394,7 +11609,7 @@
 					"type": "text"
 				},
 				{
-					"buffer": 61,
+					"buffer": 62,
 					"file": "/media/Data/MEMORIA/Proyecto Parada/optinet-master/optinet-master/src/mio/mioBundle/Controller/EmpleadoController.php",
 					"settings":
 					{
@@ -11560,19 +11775,19 @@
 					"type": "text"
 				},
 				{
-					"buffer": 62,
+					"buffer": 63,
 					"file": "src/Cole/IntranetBundle/Controller/DefaultController.php",
 					"settings":
 					{
-						"buffer_size": 11263,
+						"buffer_size": 16732,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								6532,
-								6532
+								14618,
+								14618
 							]
 						],
 						"settings":
@@ -11720,25 +11935,25 @@
 							"translate_tabs_to_spaces": true
 						},
 						"translation.x": 0.0,
-						"translation.y": 2838.0,
+						"translation.y": 6507.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"
 				},
 				{
-					"buffer": 63,
+					"buffer": 64,
 					"file": "src/Cole/IntranetBundle/Resources/config/routing.yml",
 					"settings":
 					{
-						"buffer_size": 1476,
+						"buffer_size": 1811,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								1224,
-								1224
+								1408,
+								1408
 							]
 						],
 						"settings":
@@ -11886,13 +12101,13 @@
 							"translate_tabs_to_spaces": true
 						},
 						"translation.x": 0.0,
-						"translation.y": 510.0,
+						"translation.y": 561.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"
 				},
 				{
-					"buffer": 64,
+					"buffer": 65,
 					"file": "src/Cole/IntranetBundle/Resources/config/routing/alumnos.yml",
 					"settings":
 					{
@@ -12052,13 +12267,13 @@
 							"translate_tabs_to_spaces": true
 						},
 						"translation.x": 0.0,
-						"translation.y": 255.0,
+						"translation.y": 85.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"
 				},
 				{
-					"buffer": 65,
+					"buffer": 66,
 					"file": "src/Cole/IntranetBundle/Resources/config/routing/profesores.yml",
 					"settings":
 					{
@@ -12069,8 +12284,8 @@
 						"selection":
 						[
 							[
-								1262,
-								1262
+								1082,
+								1082
 							]
 						],
 						"settings":
@@ -12218,13 +12433,13 @@
 							"translate_tabs_to_spaces": true
 						},
 						"translation.x": 0.0,
-						"translation.y": 606.0,
+						"translation.y": 561.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"
 				},
 				{
-					"buffer": 66,
+					"buffer": 67,
 					"file": "src/Cole/IntranetBundle/Resources/views/Alumno/index.html.twig",
 					"settings":
 					{
@@ -12389,7 +12604,7 @@
 					"type": "text"
 				},
 				{
-					"buffer": 67,
+					"buffer": 68,
 					"file": "src/Cole/IntranetBundle/Resources/views/Profesor/index.html.twig",
 					"settings":
 					{
@@ -12554,19 +12769,19 @@
 					"type": "text"
 				},
 				{
-					"buffer": 68,
+					"buffer": 69,
 					"file": "src/Cole/IntranetBundle/Resources/views/Alumno/curso.html.twig",
 					"settings":
 					{
-						"buffer_size": 18559,
+						"buffer_size": 18558,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								9346,
-								9346
+								13001,
+								13001
 							]
 						],
 						"settings":
@@ -12713,190 +12928,25 @@
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 145.0,
-						"zoom_level": 1.0
-					},
-					"type": "text"
-				},
-				{
-					"buffer": 69,
-					"file": "src/Cole/IntranetBundle/Resources/views/Profesor/cursos.html.twig",
-					"settings":
-					{
-						"buffer_size": 16037,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								4970,
-								4970
-							]
-						],
-						"settings":
-						{
-							"BracketHighlighterBusy": false,
-							"annotations":
-							[
-								"TODO",
-								"README",
-								"FIXME"
-							],
-							"bh_regions":
-							[
-								"bh_regex",
-								"bh_regex_center",
-								"bh_regex_open",
-								"bh_regex_close",
-								"bh_double_quote",
-								"bh_double_quote_center",
-								"bh_double_quote_open",
-								"bh_double_quote_close",
-								"bh_square",
-								"bh_square_center",
-								"bh_square_open",
-								"bh_square_close",
-								"bh_angle",
-								"bh_angle_center",
-								"bh_angle_open",
-								"bh_angle_close",
-								"bh_curly",
-								"bh_curly_center",
-								"bh_curly_open",
-								"bh_curly_close",
-								"bh_c_define",
-								"bh_c_define_center",
-								"bh_c_define_open",
-								"bh_c_define_close",
-								"bh_default",
-								"bh_default_center",
-								"bh_default_open",
-								"bh_default_close",
-								"bh_unmatched",
-								"bh_unmatched_center",
-								"bh_unmatched_open",
-								"bh_unmatched_close",
-								"bh_round",
-								"bh_round_center",
-								"bh_round_open",
-								"bh_round_close",
-								"bh_tag",
-								"bh_tag_center",
-								"bh_tag_open",
-								"bh_tag_close",
-								"bh_single_quote",
-								"bh_single_quote_center",
-								"bh_single_quote_open",
-								"bh_single_quote_close"
-							],
-							"csslint_options":
-							{
-								"adjoining-classes": "warning",
-								"box-model": true,
-								"box-sizing": "warning",
-								"compatible-vendor-prefixes": "warning",
-								"display-property-grouping": true,
-								"duplicate-background-images": "warning",
-								"duplicate-properties": true,
-								"empty-rules": true,
-								"errors": true,
-								"fallback-colors": "warning",
-								"floats": "warning",
-								"font-faces": "warning",
-								"font-sizes": "warning",
-								"gradients": "warning",
-								"ids": "warning",
-								"import": "warning",
-								"important": "warning",
-								"known-properties": true,
-								"outline-none": "warning",
-								"overqualified-elements": "warning",
-								"qualified-headings": "warning",
-								"regex-selectors": "warning",
-								"rules-count": "warning",
-								"shorthand": "warning",
-								"star-property-hack": "warning",
-								"text-indent": "warning",
-								"underscore-property-hack": "warning",
-								"unique-headings": "warning",
-								"universal-selector": "warning",
-								"vendor-prefix": true,
-								"zero-units": "warning"
-							},
-							"gjslint_ignore":
-							[
-								110
-							],
-							"gjslint_options":
-							[
-							],
-							"javascript_linter": "jshint",
-							"jshint_options":
-							{
-								"browser": true,
-								"devel": true,
-								"evil": true,
-								"regexdash": true,
-								"sub": true,
-								"trailing": true,
-								"wsh": true
-							},
-							"pep8": true,
-							"pep8_ignore":
-							[
-								"E501"
-							],
-							"perl_linter": "perlcritic",
-							"pyflakes_ignore":
-							[
-							],
-							"pyflakes_ignore_import_*": true,
-							"sublimelinter": "load-save",
-							"sublimelinter_delay": 2,
-							"sublimelinter_disable":
-							[
-							],
-							"sublimelinter_executable_map":
-							{
-							},
-							"sublimelinter_fill_outlines": false,
-							"sublimelinter_gutter_marks": true,
-							"sublimelinter_gutter_marks_theme": "simple",
-							"sublimelinter_mark_style": "none",
-							"sublimelinter_notes": false,
-							"sublimelinter_objj_check_ascii": false,
-							"sublimelinter_popup_errors_on_save": false,
-							"sublimelinter_syntax_map":
-							{
-								"C++": "c",
-								"Python Django": "python",
-								"Ruby on Rails": "ruby"
-							},
-							"sublimelinter_wrap_find": true,
-							"syntax": "Packages/Twig/Syntaxes/HTML (Twig).tmLanguage",
-							"translate_tabs_to_spaces": false
-						},
-						"translation.x": 0.0,
-						"translation.y": 1254.0,
+						"translation.y": 204.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"
 				},
 				{
 					"buffer": 70,
-					"file": "src/Cole/IntranetBundle/Resources/views/Profesor/datos_alumnos_grupo.html.twig",
+					"file": "src/Cole/IntranetBundle/Resources/views/Profesor/cursos.html.twig",
 					"settings":
 					{
-						"buffer_size": 6364,
+						"buffer_size": 32227,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								828,
-								828
+								32227,
+								32227
 							]
 						],
 						"settings":
@@ -13043,13 +13093,178 @@
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 102.0,
+						"translation.y": 13783.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"
 				},
 				{
 					"buffer": 71,
+					"file": "src/Cole/IntranetBundle/Resources/views/Profesor/datos_alumnos_grupo.html.twig",
+					"settings":
+					{
+						"buffer_size": 26192,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								14424,
+								14424
+							]
+						],
+						"settings":
+						{
+							"BracketHighlighterBusy": false,
+							"annotations":
+							[
+								"TODO",
+								"README",
+								"FIXME"
+							],
+							"bh_regions":
+							[
+								"bh_regex",
+								"bh_regex_center",
+								"bh_regex_open",
+								"bh_regex_close",
+								"bh_double_quote",
+								"bh_double_quote_center",
+								"bh_double_quote_open",
+								"bh_double_quote_close",
+								"bh_square",
+								"bh_square_center",
+								"bh_square_open",
+								"bh_square_close",
+								"bh_angle",
+								"bh_angle_center",
+								"bh_angle_open",
+								"bh_angle_close",
+								"bh_curly",
+								"bh_curly_center",
+								"bh_curly_open",
+								"bh_curly_close",
+								"bh_c_define",
+								"bh_c_define_center",
+								"bh_c_define_open",
+								"bh_c_define_close",
+								"bh_default",
+								"bh_default_center",
+								"bh_default_open",
+								"bh_default_close",
+								"bh_unmatched",
+								"bh_unmatched_center",
+								"bh_unmatched_open",
+								"bh_unmatched_close",
+								"bh_round",
+								"bh_round_center",
+								"bh_round_open",
+								"bh_round_close",
+								"bh_tag",
+								"bh_tag_center",
+								"bh_tag_open",
+								"bh_tag_close",
+								"bh_single_quote",
+								"bh_single_quote_center",
+								"bh_single_quote_open",
+								"bh_single_quote_close"
+							],
+							"csslint_options":
+							{
+								"adjoining-classes": "warning",
+								"box-model": true,
+								"box-sizing": "warning",
+								"compatible-vendor-prefixes": "warning",
+								"display-property-grouping": true,
+								"duplicate-background-images": "warning",
+								"duplicate-properties": true,
+								"empty-rules": true,
+								"errors": true,
+								"fallback-colors": "warning",
+								"floats": "warning",
+								"font-faces": "warning",
+								"font-sizes": "warning",
+								"gradients": "warning",
+								"ids": "warning",
+								"import": "warning",
+								"important": "warning",
+								"known-properties": true,
+								"outline-none": "warning",
+								"overqualified-elements": "warning",
+								"qualified-headings": "warning",
+								"regex-selectors": "warning",
+								"rules-count": "warning",
+								"shorthand": "warning",
+								"star-property-hack": "warning",
+								"text-indent": "warning",
+								"underscore-property-hack": "warning",
+								"unique-headings": "warning",
+								"universal-selector": "warning",
+								"vendor-prefix": true,
+								"zero-units": "warning"
+							},
+							"gjslint_ignore":
+							[
+								110
+							],
+							"gjslint_options":
+							[
+							],
+							"javascript_linter": "jshint",
+							"jshint_options":
+							{
+								"browser": true,
+								"devel": true,
+								"evil": true,
+								"regexdash": true,
+								"sub": true,
+								"trailing": true,
+								"wsh": true
+							},
+							"pep8": true,
+							"pep8_ignore":
+							[
+								"E501"
+							],
+							"perl_linter": "perlcritic",
+							"pyflakes_ignore":
+							[
+							],
+							"pyflakes_ignore_import_*": true,
+							"sublimelinter": "load-save",
+							"sublimelinter_delay": 2,
+							"sublimelinter_disable":
+							[
+							],
+							"sublimelinter_executable_map":
+							{
+							},
+							"sublimelinter_fill_outlines": false,
+							"sublimelinter_gutter_marks": true,
+							"sublimelinter_gutter_marks_theme": "simple",
+							"sublimelinter_mark_style": "none",
+							"sublimelinter_notes": false,
+							"sublimelinter_objj_check_ascii": false,
+							"sublimelinter_popup_errors_on_save": false,
+							"sublimelinter_syntax_map":
+							{
+								"C++": "c",
+								"Python Django": "python",
+								"Ruby on Rails": "ruby"
+							},
+							"sublimelinter_wrap_find": true,
+							"syntax": "Packages/Twig/Syntaxes/HTML (Twig).tmLanguage",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 6031.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 72,
 					"file": "src/Cole/IntranetBundle/Resources/views/Profesor/info_alumno.html.twig",
 					"settings":
 					{
@@ -13214,7 +13429,7 @@
 					"type": "text"
 				},
 				{
-					"buffer": 72,
+					"buffer": 73,
 					"file": "src/Cole/IntranetBundle/Resources/views/Alumno/noticias.html.twig",
 					"settings":
 					{
@@ -13380,7 +13595,7 @@
 					"type": "text"
 				},
 				{
-					"buffer": 73,
+					"buffer": 74,
 					"file": "src/Cole/IntranetBundle/Resources/views/Profesor/noticias.html.twig",
 					"settings":
 					{
@@ -13546,7 +13761,7 @@
 					"type": "text"
 				},
 				{
-					"buffer": 74,
+					"buffer": 75,
 					"file": "src/Cole/IntranetBundle/Resources/views/Alumno/noticia.html.twig",
 					"settings":
 					{
@@ -13712,7 +13927,7 @@
 					"type": "text"
 				},
 				{
-					"buffer": 75,
+					"buffer": 76,
 					"file": "src/Cole/IntranetBundle/Resources/views/Profesor/noticia.html.twig",
 					"settings":
 					{
@@ -13878,19 +14093,19 @@
 					"type": "text"
 				},
 				{
-					"buffer": 76,
+					"buffer": 77,
 					"file": "src/Cole/IntranetBundle/Resources/views/Default/lista_alumnos_grupo.html.twig",
 					"settings":
 					{
-						"buffer_size": 1881,
+						"buffer_size": 1948,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								1326,
-								1326
+								1712,
+								1712
 							]
 						],
 						"settings":
@@ -14038,13 +14253,13 @@
 							"translate_tabs_to_spaces": true
 						},
 						"translation.x": 0.0,
-						"translation.y": 204.0,
+						"translation.y": 408.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"
 				},
 				{
-					"buffer": 77,
+					"buffer": 78,
 					"file": "src/Cole/IntranetBundle/Resources/views/Alumno/datos_horarios.html.twig",
 					"settings":
 					{
@@ -14210,7 +14425,7 @@
 					"type": "text"
 				},
 				{
-					"buffer": 78,
+					"buffer": 79,
 					"file": "src/Cole/IntranetBundle/Resources/views/Profesor/datos_horario.html.twig",
 					"settings":
 					{
@@ -14376,7 +14591,7 @@
 					"type": "text"
 				},
 				{
-					"buffer": 79,
+					"buffer": 80,
 					"file": "src/Cole/BackendBundle/Form/PadresType.php",
 					"settings":
 					{
@@ -14542,7 +14757,7 @@
 					"type": "text"
 				},
 				{
-					"buffer": 80,
+					"buffer": 81,
 					"file": "src/Cole/BackendBundle/Form/AlumnoType.php",
 					"settings":
 					{
@@ -14708,7 +14923,7 @@
 					"type": "text"
 				},
 				{
-					"buffer": 81,
+					"buffer": 82,
 					"file": "src/Cole/IntranetBundle/Resources/views/Alumno/horario_de_clase.html.twig",
 					"settings":
 					{
@@ -14874,19 +15089,19 @@
 					"type": "text"
 				},
 				{
-					"buffer": 82,
+					"buffer": 83,
 					"file": "src/Cole/IntranetBundle/Resources/views/Default/header.html.twig",
 					"settings":
 					{
-						"buffer_size": 1632,
+						"buffer_size": 1802,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								1442,
-								1442
+								1356,
+								1356
 							]
 						],
 						"settings":
@@ -15034,7 +15249,339 @@
 							"translate_tabs_to_spaces": true
 						},
 						"translation.x": 0.0,
-						"translation.y": 330.0,
+						"translation.y": 398.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 84,
+					"file": "src/Cole/BackendBundle/Resources/config/routing/padres.yml",
+					"settings":
+					{
+						"buffer_size": 1628,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								1289,
+								1289
+							]
+						],
+						"settings":
+						{
+							"BracketHighlighterBusy": false,
+							"annotations":
+							[
+								"TODO",
+								"README",
+								"FIXME"
+							],
+							"bh_regions":
+							[
+								"bh_regex",
+								"bh_regex_center",
+								"bh_regex_open",
+								"bh_regex_close",
+								"bh_double_quote",
+								"bh_double_quote_center",
+								"bh_double_quote_open",
+								"bh_double_quote_close",
+								"bh_square",
+								"bh_square_center",
+								"bh_square_open",
+								"bh_square_close",
+								"bh_angle",
+								"bh_angle_center",
+								"bh_angle_open",
+								"bh_angle_close",
+								"bh_curly",
+								"bh_curly_center",
+								"bh_curly_open",
+								"bh_curly_close",
+								"bh_c_define",
+								"bh_c_define_center",
+								"bh_c_define_open",
+								"bh_c_define_close",
+								"bh_default",
+								"bh_default_center",
+								"bh_default_open",
+								"bh_default_close",
+								"bh_unmatched",
+								"bh_unmatched_center",
+								"bh_unmatched_open",
+								"bh_unmatched_close",
+								"bh_round",
+								"bh_round_center",
+								"bh_round_open",
+								"bh_round_close",
+								"bh_tag",
+								"bh_tag_center",
+								"bh_tag_open",
+								"bh_tag_close",
+								"bh_single_quote",
+								"bh_single_quote_center",
+								"bh_single_quote_open",
+								"bh_single_quote_close"
+							],
+							"csslint_options":
+							{
+								"adjoining-classes": "warning",
+								"box-model": true,
+								"box-sizing": "warning",
+								"compatible-vendor-prefixes": "warning",
+								"display-property-grouping": true,
+								"duplicate-background-images": "warning",
+								"duplicate-properties": true,
+								"empty-rules": true,
+								"errors": true,
+								"fallback-colors": "warning",
+								"floats": "warning",
+								"font-faces": "warning",
+								"font-sizes": "warning",
+								"gradients": "warning",
+								"ids": "warning",
+								"import": "warning",
+								"important": "warning",
+								"known-properties": true,
+								"outline-none": "warning",
+								"overqualified-elements": "warning",
+								"qualified-headings": "warning",
+								"regex-selectors": "warning",
+								"rules-count": "warning",
+								"shorthand": "warning",
+								"star-property-hack": "warning",
+								"text-indent": "warning",
+								"underscore-property-hack": "warning",
+								"unique-headings": "warning",
+								"universal-selector": "warning",
+								"vendor-prefix": true,
+								"zero-units": "warning"
+							},
+							"gjslint_ignore":
+							[
+								110
+							],
+							"gjslint_options":
+							[
+							],
+							"javascript_linter": "jshint",
+							"jshint_options":
+							{
+								"browser": true,
+								"devel": true,
+								"evil": true,
+								"regexdash": true,
+								"sub": true,
+								"trailing": true,
+								"wsh": true
+							},
+							"pep8": true,
+							"pep8_ignore":
+							[
+								"E501"
+							],
+							"perl_linter": "perlcritic",
+							"pyflakes_ignore":
+							[
+							],
+							"pyflakes_ignore_import_*": true,
+							"sublimelinter": "load-save",
+							"sublimelinter_delay": 2,
+							"sublimelinter_disable":
+							[
+							],
+							"sublimelinter_executable_map":
+							{
+							},
+							"sublimelinter_fill_outlines": false,
+							"sublimelinter_gutter_marks": true,
+							"sublimelinter_gutter_marks_theme": "simple",
+							"sublimelinter_mark_style": "none",
+							"sublimelinter_notes": false,
+							"sublimelinter_objj_check_ascii": false,
+							"sublimelinter_popup_errors_on_save": false,
+							"sublimelinter_syntax_map":
+							{
+								"C++": "c",
+								"Python Django": "python",
+								"Ruby on Rails": "ruby"
+							},
+							"sublimelinter_wrap_find": true,
+							"syntax": "Packages/YAML/YAML.tmLanguage",
+							"tab_size": 4,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 735.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 85,
+					"file": "src/Cole/BackendBundle/Controller/PadresController.php",
+					"settings":
+					{
+						"buffer_size": 13601,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								13140,
+								13140
+							]
+						],
+						"settings":
+						{
+							"BracketHighlighterBusy": false,
+							"annotations":
+							[
+								"TODO",
+								"README",
+								"FIXME"
+							],
+							"bh_regions":
+							[
+								"bh_regex",
+								"bh_regex_center",
+								"bh_regex_open",
+								"bh_regex_close",
+								"bh_double_quote",
+								"bh_double_quote_center",
+								"bh_double_quote_open",
+								"bh_double_quote_close",
+								"bh_square",
+								"bh_square_center",
+								"bh_square_open",
+								"bh_square_close",
+								"bh_angle",
+								"bh_angle_center",
+								"bh_angle_open",
+								"bh_angle_close",
+								"bh_curly",
+								"bh_curly_center",
+								"bh_curly_open",
+								"bh_curly_close",
+								"bh_c_define",
+								"bh_c_define_center",
+								"bh_c_define_open",
+								"bh_c_define_close",
+								"bh_default",
+								"bh_default_center",
+								"bh_default_open",
+								"bh_default_close",
+								"bh_unmatched",
+								"bh_unmatched_center",
+								"bh_unmatched_open",
+								"bh_unmatched_close",
+								"bh_round",
+								"bh_round_center",
+								"bh_round_open",
+								"bh_round_close",
+								"bh_tag",
+								"bh_tag_center",
+								"bh_tag_open",
+								"bh_tag_close",
+								"bh_single_quote",
+								"bh_single_quote_center",
+								"bh_single_quote_open",
+								"bh_single_quote_close"
+							],
+							"csslint_options":
+							{
+								"adjoining-classes": "warning",
+								"box-model": true,
+								"box-sizing": "warning",
+								"compatible-vendor-prefixes": "warning",
+								"display-property-grouping": true,
+								"duplicate-background-images": "warning",
+								"duplicate-properties": true,
+								"empty-rules": true,
+								"errors": true,
+								"fallback-colors": "warning",
+								"floats": "warning",
+								"font-faces": "warning",
+								"font-sizes": "warning",
+								"gradients": "warning",
+								"ids": "warning",
+								"import": "warning",
+								"important": "warning",
+								"known-properties": true,
+								"outline-none": "warning",
+								"overqualified-elements": "warning",
+								"qualified-headings": "warning",
+								"regex-selectors": "warning",
+								"rules-count": "warning",
+								"shorthand": "warning",
+								"star-property-hack": "warning",
+								"text-indent": "warning",
+								"underscore-property-hack": "warning",
+								"unique-headings": "warning",
+								"universal-selector": "warning",
+								"vendor-prefix": true,
+								"zero-units": "warning"
+							},
+							"gjslint_ignore":
+							[
+								110
+							],
+							"gjslint_options":
+							[
+							],
+							"javascript_linter": "jshint",
+							"jshint_options":
+							{
+								"browser": true,
+								"devel": true,
+								"evil": true,
+								"regexdash": true,
+								"sub": true,
+								"trailing": true,
+								"wsh": true
+							},
+							"pep8": true,
+							"pep8_ignore":
+							[
+								"E501"
+							],
+							"perl_linter": "perlcritic",
+							"pyflakes_ignore":
+							[
+							],
+							"pyflakes_ignore_import_*": true,
+							"sublimelinter": "load-save",
+							"sublimelinter_delay": 2,
+							"sublimelinter_disable":
+							[
+							],
+							"sublimelinter_executable_map":
+							{
+							},
+							"sublimelinter_fill_outlines": false,
+							"sublimelinter_gutter_marks": true,
+							"sublimelinter_gutter_marks_theme": "simple",
+							"sublimelinter_mark_style": "none",
+							"sublimelinter_notes": false,
+							"sublimelinter_objj_check_ascii": false,
+							"sublimelinter_popup_errors_on_save": false,
+							"sublimelinter_syntax_map":
+							{
+								"C++": "c",
+								"Python Django": "python",
+								"Ruby on Rails": "ruby"
+							},
+							"sublimelinter_wrap_find": true,
+							"syntax": "Packages/PHP/PHP.tmLanguage",
+							"tab_size": 4,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 6767.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"
@@ -15042,23 +15589,23 @@
 			]
 		},
 		{
-			"selected": 24,
+			"selected": 0,
 			"sheets":
 			[
 				{
-					"buffer": 83,
+					"buffer": 86,
 					"file": "src/Cole/BackendBundle/Resources/public/css/backend.css",
 					"settings":
 					{
-						"buffer_size": 165606,
+						"buffer_size": 166512,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								52667,
-								52667
+								113927,
+								113927
 							]
 						],
 						"settings":
@@ -15204,13 +15751,13 @@
 							"syntax": "Packages/CSS/CSS.tmLanguage"
 						},
 						"translation.x": 0.0,
-						"translation.y": 42503.0,
+						"translation.y": 91999.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"
 				},
 				{
-					"buffer": 84,
+					"buffer": 87,
 					"file": "src/Cole/BackendBundle/Resources/views/Matricula/anular_matricula.html.twig",
 					"settings":
 					{
@@ -15376,7 +15923,7 @@
 					"type": "text"
 				},
 				{
-					"buffer": 85,
+					"buffer": 88,
 					"file": "src/Cole/BackendBundle/Entity/ProfesorRepository.php",
 					"settings":
 					{
@@ -15541,7 +16088,7 @@
 					"type": "text"
 				},
 				{
-					"buffer": 86,
+					"buffer": 89,
 					"file": "/media/Data/MEMORIA/Proyecto Parada/optinet-master/optinet-master/src/mio/mioBundle/AuthenticationHandler.php",
 					"settings":
 					{
@@ -15707,7 +16254,7 @@
 					"type": "text"
 				},
 				{
-					"buffer": 87,
+					"buffer": 90,
 					"file": "src/Cole/ColeBundle/ListenerExcepcion.php",
 					"settings":
 					{
@@ -15871,7 +16418,7 @@
 					"type": "text"
 				},
 				{
-					"buffer": 88,
+					"buffer": 91,
 					"file": "src/Cole/ColeBundle/InteractiveLoginListener.php",
 					"settings":
 					{
@@ -16037,7 +16584,7 @@
 					"type": "text"
 				},
 				{
-					"buffer": 89,
+					"buffer": 92,
 					"file": "src/Cole/ColeBundle/AccessDeniedHandler.php",
 					"settings":
 					{
@@ -16048,8 +16595,8 @@
 						"selection":
 						[
 							[
-								266,
-								266
+								623,
+								623
 							]
 						],
 						"settings":
@@ -16204,19 +16751,19 @@
 					"type": "text"
 				},
 				{
-					"buffer": 90,
+					"buffer": 93,
 					"file": "src/Cole/BackendBundle/Resources/public/js/general.js",
 					"settings":
 					{
-						"buffer_size": 571467,
+						"buffer_size": 573854,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								82335,
-								82335
+								228457,
+								228457
 							]
 						],
 						"settings":
@@ -16364,13 +16911,13 @@
 							"translate_tabs_to_spaces": true
 						},
 						"translation.x": 0.0,
-						"translation.y": 37009.0,
+						"translation.y": 96392.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"
 				},
 				{
-					"buffer": 91,
+					"buffer": 94,
 					"file": "src/Cole/BackendBundle/Resources/config/routing/asignatura.yml",
 					"settings":
 					{
@@ -16536,7 +17083,7 @@
 					"type": "text"
 				},
 				{
-					"buffer": 92,
+					"buffer": 95,
 					"file": "src/Cole/BackendBundle/Resources/views/Profesor/clases_impartidas.html.twig",
 					"settings":
 					{
@@ -16702,7 +17249,7 @@
 					"type": "text"
 				},
 				{
-					"buffer": 93,
+					"buffer": 96,
 					"file": "src/Cole/BackendBundle/Resources/views/Profesor/edit.html.twig",
 					"settings":
 					{
@@ -16868,7 +17415,7 @@
 					"type": "text"
 				},
 				{
-					"buffer": 94,
+					"buffer": 97,
 					"file": "src/Cole/BackendBundle/Resources/views/Grupo/tutor_grupo.html.twig",
 					"settings":
 					{
@@ -17034,7 +17581,7 @@
 					"type": "text"
 				},
 				{
-					"buffer": 95,
+					"buffer": 98,
 					"file": "src/Cole/BackendBundle/Resources/views/Asignatura/asignaturas_cursos_show.html.twig",
 					"settings":
 					{
@@ -17200,7 +17747,7 @@
 					"type": "text"
 				},
 				{
-					"buffer": 96,
+					"buffer": 99,
 					"file": "src/Cole/BackendBundle/Entity/FestivosRepository.php",
 					"settings":
 					{
@@ -17365,7 +17912,7 @@
 					"type": "text"
 				},
 				{
-					"buffer": 97,
+					"buffer": 100,
 					"file": "src/Cole/BackendBundle/Resources/config/routing/alumno.yml",
 					"settings":
 					{
@@ -17525,13 +18072,13 @@
 							"translate_tabs_to_spaces": true
 						},
 						"translation.x": 0.0,
-						"translation.y": 1322.0,
+						"translation.y": 2087.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"
 				},
 				{
-					"buffer": 98,
+					"buffer": 101,
 					"file": "src/Cole/BackendBundle/Controller/CursoController.php",
 					"settings":
 					{
@@ -17697,7 +18244,7 @@
 					"type": "text"
 				},
 				{
-					"buffer": 99,
+					"buffer": 102,
 					"file": "src/Cole/BackendBundle/Controller/MatriculaController.php",
 					"settings":
 					{
@@ -17708,8 +18255,8 @@
 						"selection":
 						[
 							[
-								14933,
-								14933
+								14574,
+								14574
 							]
 						],
 						"settings":
@@ -17857,13 +18404,13 @@
 							"translate_tabs_to_spaces": true
 						},
 						"translation.x": 0.0,
-						"translation.y": 7032.0,
+						"translation.y": 6879.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"
 				},
 				{
-					"buffer": 100,
+					"buffer": 103,
 					"file": "src/Cole/BackendBundle/Resources/views/Asignatura/listaOptativasCurso.html.twig",
 					"settings":
 					{
@@ -18027,7 +18574,7 @@
 					"type": "text"
 				},
 				{
-					"buffer": 101,
+					"buffer": 104,
 					"file": "src/Cole/BackendBundle/Resources/views/Alumno/search_multiple.html.twig",
 					"settings":
 					{
@@ -18193,7 +18740,7 @@
 					"type": "text"
 				},
 				{
-					"buffer": 102,
+					"buffer": 105,
 					"file": "src/Cole/BackendBundle/Resources/config/routing/equipamiento.yml",
 					"settings":
 					{
@@ -18359,7 +18906,7 @@
 					"type": "text"
 				},
 				{
-					"buffer": 103,
+					"buffer": 106,
 					"file": "src/Cole/ColeBundle/Entity/NoticiasRepository.php",
 					"settings":
 					{
@@ -18524,7 +19071,7 @@
 					"type": "text"
 				},
 				{
-					"buffer": 104,
+					"buffer": 107,
 					"file": "src/Cole/BackendBundle/Controller/AlumnoController.php",
 					"settings":
 					{
@@ -18535,8 +19082,8 @@
 						"selection":
 						[
 							[
-								2749,
-								2749
+								2782,
+								2782
 							]
 						],
 						"settings":
@@ -18690,7 +19237,7 @@
 					"type": "text"
 				},
 				{
-					"buffer": 105,
+					"buffer": 108,
 					"file": "src/Cole/ColeBundle/Resources/views/Noticias/index.html.twig",
 					"settings":
 					{
@@ -18856,19 +19403,19 @@
 					"type": "text"
 				},
 				{
-					"buffer": 106,
+					"buffer": 109,
 					"file": "src/Cole/BackendBundle/Entity/AlumnoRepository.php",
 					"settings":
 					{
-						"buffer_size": 4558,
+						"buffer_size": 4865,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								4184,
-								4184
+								4434,
+								4434
 							]
 						],
 						"settings":
@@ -19015,13 +19562,13 @@
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 2285.0,
+						"translation.y": 2304.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"
 				},
 				{
-					"buffer": 107,
+					"buffer": 110,
 					"file": "src/Cole/BackendBundle/Entity/ImparteRepository.php",
 					"settings":
 					{
@@ -19184,6 +19731,502 @@
 						"zoom_level": 1.0
 					},
 					"type": "text"
+				},
+				{
+					"buffer": 111,
+					"file": "src/Cole/BackendBundle/Entity/MatriculaRepository.php",
+					"settings":
+					{
+						"buffer_size": 2290,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								1852,
+								1852
+							]
+						],
+						"settings":
+						{
+							"BracketHighlighterBusy": false,
+							"annotations":
+							[
+								"TODO",
+								"README",
+								"FIXME"
+							],
+							"bh_regions":
+							[
+								"bh_regex",
+								"bh_regex_center",
+								"bh_regex_open",
+								"bh_regex_close",
+								"bh_double_quote",
+								"bh_double_quote_center",
+								"bh_double_quote_open",
+								"bh_double_quote_close",
+								"bh_square",
+								"bh_square_center",
+								"bh_square_open",
+								"bh_square_close",
+								"bh_angle",
+								"bh_angle_center",
+								"bh_angle_open",
+								"bh_angle_close",
+								"bh_curly",
+								"bh_curly_center",
+								"bh_curly_open",
+								"bh_curly_close",
+								"bh_c_define",
+								"bh_c_define_center",
+								"bh_c_define_open",
+								"bh_c_define_close",
+								"bh_default",
+								"bh_default_center",
+								"bh_default_open",
+								"bh_default_close",
+								"bh_unmatched",
+								"bh_unmatched_center",
+								"bh_unmatched_open",
+								"bh_unmatched_close",
+								"bh_round",
+								"bh_round_center",
+								"bh_round_open",
+								"bh_round_close",
+								"bh_tag",
+								"bh_tag_center",
+								"bh_tag_open",
+								"bh_tag_close",
+								"bh_single_quote",
+								"bh_single_quote_center",
+								"bh_single_quote_open",
+								"bh_single_quote_close"
+							],
+							"csslint_options":
+							{
+								"adjoining-classes": "warning",
+								"box-model": true,
+								"box-sizing": "warning",
+								"compatible-vendor-prefixes": "warning",
+								"display-property-grouping": true,
+								"duplicate-background-images": "warning",
+								"duplicate-properties": true,
+								"empty-rules": true,
+								"errors": true,
+								"fallback-colors": "warning",
+								"floats": "warning",
+								"font-faces": "warning",
+								"font-sizes": "warning",
+								"gradients": "warning",
+								"ids": "warning",
+								"import": "warning",
+								"important": "warning",
+								"known-properties": true,
+								"outline-none": "warning",
+								"overqualified-elements": "warning",
+								"qualified-headings": "warning",
+								"regex-selectors": "warning",
+								"rules-count": "warning",
+								"shorthand": "warning",
+								"star-property-hack": "warning",
+								"text-indent": "warning",
+								"underscore-property-hack": "warning",
+								"unique-headings": "warning",
+								"universal-selector": "warning",
+								"vendor-prefix": true,
+								"zero-units": "warning"
+							},
+							"gjslint_ignore":
+							[
+								110
+							],
+							"gjslint_options":
+							[
+							],
+							"javascript_linter": "jshint",
+							"jshint_options":
+							{
+								"browser": true,
+								"devel": true,
+								"evil": true,
+								"regexdash": true,
+								"sub": true,
+								"trailing": true,
+								"wsh": true
+							},
+							"pep8": true,
+							"pep8_ignore":
+							[
+								"E501"
+							],
+							"perl_linter": "perlcritic",
+							"pyflakes_ignore":
+							[
+							],
+							"pyflakes_ignore_import_*": true,
+							"sublimelinter": "load-save",
+							"sublimelinter_delay": 2,
+							"sublimelinter_disable":
+							[
+							],
+							"sublimelinter_executable_map":
+							{
+							},
+							"sublimelinter_fill_outlines": false,
+							"sublimelinter_gutter_marks": true,
+							"sublimelinter_gutter_marks_theme": "simple",
+							"sublimelinter_mark_style": "none",
+							"sublimelinter_notes": false,
+							"sublimelinter_objj_check_ascii": false,
+							"sublimelinter_popup_errors_on_save": false,
+							"sublimelinter_syntax_map":
+							{
+								"C++": "c",
+								"Python Django": "python",
+								"Ruby on Rails": "ruby"
+							},
+							"sublimelinter_wrap_find": true,
+							"syntax": "Packages/PHP/PHP.tmLanguage",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 240.0,
+						"translation.y": 1032.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 112,
+					"file": "src/Cole/BackendBundle/Entity/GrupoRepository.php",
+					"settings":
+					{
+						"buffer_size": 1509,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								1506,
+								1506
+							]
+						],
+						"settings":
+						{
+							"BracketHighlighterBusy": false,
+							"annotations":
+							[
+								"TODO",
+								"README",
+								"FIXME"
+							],
+							"bh_regions":
+							[
+								"bh_regex",
+								"bh_regex_center",
+								"bh_regex_open",
+								"bh_regex_close",
+								"bh_double_quote",
+								"bh_double_quote_center",
+								"bh_double_quote_open",
+								"bh_double_quote_close",
+								"bh_square",
+								"bh_square_center",
+								"bh_square_open",
+								"bh_square_close",
+								"bh_angle",
+								"bh_angle_center",
+								"bh_angle_open",
+								"bh_angle_close",
+								"bh_curly",
+								"bh_curly_center",
+								"bh_curly_open",
+								"bh_curly_close",
+								"bh_c_define",
+								"bh_c_define_center",
+								"bh_c_define_open",
+								"bh_c_define_close",
+								"bh_default",
+								"bh_default_center",
+								"bh_default_open",
+								"bh_default_close",
+								"bh_unmatched",
+								"bh_unmatched_center",
+								"bh_unmatched_open",
+								"bh_unmatched_close",
+								"bh_round",
+								"bh_round_center",
+								"bh_round_open",
+								"bh_round_close",
+								"bh_tag",
+								"bh_tag_center",
+								"bh_tag_open",
+								"bh_tag_close",
+								"bh_single_quote",
+								"bh_single_quote_center",
+								"bh_single_quote_open",
+								"bh_single_quote_close"
+							],
+							"csslint_options":
+							{
+								"adjoining-classes": "warning",
+								"box-model": true,
+								"box-sizing": "warning",
+								"compatible-vendor-prefixes": "warning",
+								"display-property-grouping": true,
+								"duplicate-background-images": "warning",
+								"duplicate-properties": true,
+								"empty-rules": true,
+								"errors": true,
+								"fallback-colors": "warning",
+								"floats": "warning",
+								"font-faces": "warning",
+								"font-sizes": "warning",
+								"gradients": "warning",
+								"ids": "warning",
+								"import": "warning",
+								"important": "warning",
+								"known-properties": true,
+								"outline-none": "warning",
+								"overqualified-elements": "warning",
+								"qualified-headings": "warning",
+								"regex-selectors": "warning",
+								"rules-count": "warning",
+								"shorthand": "warning",
+								"star-property-hack": "warning",
+								"text-indent": "warning",
+								"underscore-property-hack": "warning",
+								"unique-headings": "warning",
+								"universal-selector": "warning",
+								"vendor-prefix": true,
+								"zero-units": "warning"
+							},
+							"gjslint_ignore":
+							[
+								110
+							],
+							"gjslint_options":
+							[
+							],
+							"javascript_linter": "jshint",
+							"jshint_options":
+							{
+								"browser": true,
+								"devel": true,
+								"evil": true,
+								"regexdash": true,
+								"sub": true,
+								"trailing": true,
+								"wsh": true
+							},
+							"pep8": true,
+							"pep8_ignore":
+							[
+								"E501"
+							],
+							"perl_linter": "perlcritic",
+							"pyflakes_ignore":
+							[
+							],
+							"pyflakes_ignore_import_*": true,
+							"sublimelinter": "load-save",
+							"sublimelinter_delay": 2,
+							"sublimelinter_disable":
+							[
+							],
+							"sublimelinter_executable_map":
+							{
+							},
+							"sublimelinter_fill_outlines": false,
+							"sublimelinter_gutter_marks": true,
+							"sublimelinter_gutter_marks_theme": "simple",
+							"sublimelinter_mark_style": "none",
+							"sublimelinter_notes": false,
+							"sublimelinter_objj_check_ascii": false,
+							"sublimelinter_popup_errors_on_save": false,
+							"sublimelinter_syntax_map":
+							{
+								"C++": "c",
+								"Python Django": "python",
+								"Ruby on Rails": "ruby"
+							},
+							"sublimelinter_wrap_find": true,
+							"syntax": "Packages/PHP/PHP.tmLanguage",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 831.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 113,
+					"file": "src/Cole/BackendBundle/Resources/views/Alumno/edit.html.twig",
+					"settings":
+					{
+						"buffer_size": 15916,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								12027,
+								12027
+							]
+						],
+						"settings":
+						{
+							"BracketHighlighterBusy": false,
+							"annotations":
+							[
+								"TODO",
+								"README",
+								"FIXME"
+							],
+							"bh_regions":
+							[
+								"bh_regex",
+								"bh_regex_center",
+								"bh_regex_open",
+								"bh_regex_close",
+								"bh_double_quote",
+								"bh_double_quote_center",
+								"bh_double_quote_open",
+								"bh_double_quote_close",
+								"bh_square",
+								"bh_square_center",
+								"bh_square_open",
+								"bh_square_close",
+								"bh_angle",
+								"bh_angle_center",
+								"bh_angle_open",
+								"bh_angle_close",
+								"bh_curly",
+								"bh_curly_center",
+								"bh_curly_open",
+								"bh_curly_close",
+								"bh_c_define",
+								"bh_c_define_center",
+								"bh_c_define_open",
+								"bh_c_define_close",
+								"bh_default",
+								"bh_default_center",
+								"bh_default_open",
+								"bh_default_close",
+								"bh_unmatched",
+								"bh_unmatched_center",
+								"bh_unmatched_open",
+								"bh_unmatched_close",
+								"bh_round",
+								"bh_round_center",
+								"bh_round_open",
+								"bh_round_close",
+								"bh_tag",
+								"bh_tag_center",
+								"bh_tag_open",
+								"bh_tag_close",
+								"bh_single_quote",
+								"bh_single_quote_center",
+								"bh_single_quote_open",
+								"bh_single_quote_close"
+							],
+							"csslint_options":
+							{
+								"adjoining-classes": "warning",
+								"box-model": true,
+								"box-sizing": "warning",
+								"compatible-vendor-prefixes": "warning",
+								"display-property-grouping": true,
+								"duplicate-background-images": "warning",
+								"duplicate-properties": true,
+								"empty-rules": true,
+								"errors": true,
+								"fallback-colors": "warning",
+								"floats": "warning",
+								"font-faces": "warning",
+								"font-sizes": "warning",
+								"gradients": "warning",
+								"ids": "warning",
+								"import": "warning",
+								"important": "warning",
+								"known-properties": true,
+								"outline-none": "warning",
+								"overqualified-elements": "warning",
+								"qualified-headings": "warning",
+								"regex-selectors": "warning",
+								"rules-count": "warning",
+								"shorthand": "warning",
+								"star-property-hack": "warning",
+								"text-indent": "warning",
+								"underscore-property-hack": "warning",
+								"unique-headings": "warning",
+								"universal-selector": "warning",
+								"vendor-prefix": true,
+								"zero-units": "warning"
+							},
+							"gjslint_ignore":
+							[
+								110
+							],
+							"gjslint_options":
+							[
+							],
+							"javascript_linter": "jshint",
+							"jshint_options":
+							{
+								"browser": true,
+								"devel": true,
+								"evil": true,
+								"regexdash": true,
+								"sub": true,
+								"trailing": true,
+								"wsh": true
+							},
+							"pep8": true,
+							"pep8_ignore":
+							[
+								"E501"
+							],
+							"perl_linter": "perlcritic",
+							"pyflakes_ignore":
+							[
+							],
+							"pyflakes_ignore_import_*": true,
+							"sublimelinter": "load-save",
+							"sublimelinter_delay": 2,
+							"sublimelinter_disable":
+							[
+							],
+							"sublimelinter_executable_map":
+							{
+							},
+							"sublimelinter_fill_outlines": false,
+							"sublimelinter_gutter_marks": true,
+							"sublimelinter_gutter_marks_theme": "simple",
+							"sublimelinter_mark_style": "none",
+							"sublimelinter_notes": false,
+							"sublimelinter_objj_check_ascii": false,
+							"sublimelinter_popup_errors_on_save": false,
+							"sublimelinter_syntax_map":
+							{
+								"C++": "c",
+								"Python Django": "python",
+								"Ruby on Rails": "ruby"
+							},
+							"sublimelinter_wrap_find": true,
+							"syntax": "Packages/Twig/Syntaxes/HTML (Twig).tmLanguage",
+							"tab_size": 2,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 3989.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
 				}
 			]
 		}
@@ -19227,8 +20270,8 @@
 		"rows":
 		[
 			0.0,
-			0.124076809453,
-			0.771055222991,
+			0.428360413589,
+			0.828909177306,
 			1.0
 		]
 	},
@@ -19262,6 +20305,6 @@
 	"show_open_files": false,
 	"show_tabs": true,
 	"side_bar_visible": true,
-	"side_bar_width": 50.0,
+	"side_bar_width": 150.0,
 	"status_bar_visible": true
 }

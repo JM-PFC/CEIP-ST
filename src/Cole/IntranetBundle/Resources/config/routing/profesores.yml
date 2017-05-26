@@ -45,3 +45,9 @@ info_alumno:
     defaults: { _controller: IntranetBundle:Profesor:InfoAlumno}
     options:
         expose: true
+
+info_profesor:
+    path:     /info_profesor/{id}
+    defaults: { _controller: IntranetBundle:Profesor:InfoProfesor}
+    options:
+        expose: true

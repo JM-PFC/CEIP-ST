@@ -387,5 +387,57 @@ class DefaultController extends Controller
     }
 
 
+    public function ListaAlumnosOptativaPdfAction($id)
+    {
+        $em = $this->getDoctrine()->getManager();
+
+        $grupo=$em->getRepository('BackendBundle:Grupo')->findOneById($id);
+        $profesor = $this->get('security.context')->getToken()->getUser();
+        $grupo_tutorizado= $em->getRepository('BackendBundle:Grupo')->findOneByProfesor($profesor);
+
+        $opcional=$em->getRepository('BackendBundle:Imparte')->findOpcionalProfesorGrupo($profesor, $grupo);
+        $entities=$em->getRepository('BackendBundle:Alumno')->findAlumnosOptativaGrupo($opcional->getAsignatura(), $grupo);
+        
+        $html = $this->renderView('IntranetBundle:Default:lista_alumnos_grupo.html.twig', array(
+            'entities' => $entities,
+            'grupo' => $grupo
+        ));
+        
+        $titulo="Alumnos de la Optativa";
+        $subtitulo=$opcional->getAsignatura()->getAsignatura()->getAbreviatura();
+        $inicio =$em->getRepository('BackendBundle:Centro')->findInicioCurso();
+        $fin =$em->getRepository('BackendBundle:Centro')->findFinCurso();
+
+        $header = $this->renderView('IntranetBundle:Default:header.html.twig', array(
+            'inicio' => $inicio,
+            'fin' => $fin,
+            'grupo' => $grupo,
+            'titulo' => $titulo,
+            'subtitulo' => $subtitulo
+        ));
+        $options = [
+            'margin-top'    => 40,
+            'margin-right'  => 7,
+            'margin-bottom' => 20,
+            'margin-left'   => 7,
+            'header-html' => $header,
+            'footer-center' => '[page] / [topage]',
+            'footer-font-size' => 8,
+            'page-size' => 'A4',
+            'header-spacing' => 5, 
+            'footer-spacing' => 10
+        ];
+        $curso=$grupo->getCurso()->getCurso().$grupo->getLetra();
+        $asignatura=$opcional->getAsignatura()->getAsignatura()->getAbreviatura();
+        return new Response(
+            $this->get('knp_snappy.pdf')->getOutputFromHtml($html,$options),
+            200,
+            array(
+                'Content-Type'        => 'application/pdf',
+                'Content-Disposition' => 'attachment; filename="Alumnos_'.$asignatura.'_'. $curso.'.pdf"'
+            )
+        );  
+    }
+
 
 }

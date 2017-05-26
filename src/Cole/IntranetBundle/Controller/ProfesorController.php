@@ -59,6 +59,44 @@ class ProfesorController extends Controller
             $alumnos_optativa=null;
         }
 
+
+        //Se comprueba si está asignado todo el horario del grupo para mostrarlo o no.
+        /*$clases=$em->getRepository('BackendBundle:Horario')->findClases();
+
+        $no_opcionales = $em->getRepository('BackendBundle:Imparte')->findNoOpcionalesConHorario($entity->getGrupo());
+        $opcionales=$em->getRepository('BackendBundle:Imparte')->findOpcionalesConHorario($entity->getGrupo());
+        $num_opcionales=$em->getRepository('BackendBundle:Imparte')->findOpcionalesSinRepetir($entity->getGrupo());
+        if($opcionales){
+            //Las asignaciones de asignaturas optativas se dividen entre el número de optativas, para obtener el número de módulos asignados.
+            if(count($no_opcionales)+(count($opcionales)/count($num_opcionales))==count($clases)*5){
+                $numAsigHorarios=1;
+            }
+            else{
+                $numAsigHorarios=0;
+            }
+        }else{
+            $numAsigHorarios=0;
+        }
+*/
+        $asignaciones_profesores=$em->getRepository('BackendBundle:Imparte')->findAsignacionesProfesores($grupo);
+        $profesores_grupo=$em->getRepository('BackendBundle:Imparte')->findProfesoresGrupoSinRepetir($grupo);
+        //Se comprueba si el tutor imparte alguna asignatura en el grupo o sólo tutorias(para lista de profesores/asignaturas).
+        if($tutor){
+            $asignaciones_tutor=$em->getRepository('BackendBundle:Imparte')->findTutorGrupoSinRepetir($tutor,$grupo);
+            if($asignaciones_tutor){
+                $asignaturas_tutor=$asignaciones_tutor;
+            }
+            else{
+                $asignaturas_tutor=null;
+            }
+        }
+        else{
+            $asignaturas_tutor=null;
+        }
+
+
+
+
         return $this->render('IntranetBundle:Profesor:datos_alumnos_grupo.html.twig', array(
             'profesor' => $profesor,
             'entities'=>$entities,
@@ -66,7 +104,10 @@ class ProfesorController extends Controller
             'tipos'=> $tipos,
             'opcional'=>$opcional,
             'alumnos_optativa' => $alumnos_optativa,
-            'tutor'=>$tutor));
+            'tutor'=>$tutor,
+            'profesores_grupo'=>$profesores_grupo,
+            'asignaturas_tutor' => $asignaturas_tutor,
+            'asignaciones_profesores'=>$asignaciones_profesores));
     }
 
     public function InfoAlumnoAction($id)
@@ -83,6 +124,19 @@ class ProfesorController extends Controller
             'entity'=>$entity,
             'edad'=>$edad));
     }
+
+    public function InfoProfesorAction($id)
+    {
+        $em = $this->getDoctrine()->getManager();
+
+        $entity=$em->getRepository('BackendBundle:Profesor')->findOneById($id);
+        $tutor_grupo= $em->getRepository('BackendBundle:Grupo')->findOneByProfesor($entity);
+
+        return $this->render('IntranetBundle:Profesor:info_profesor.html.twig', array(
+            'grupo' => $tutor_grupo,
+            'entity'=>$entity));
+    }
+
 
     public function cursosAction()
     {

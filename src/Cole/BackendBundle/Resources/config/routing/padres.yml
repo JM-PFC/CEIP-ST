@@ -53,3 +53,9 @@ comprobar_dni_padre_editado:
     defaults: { _controller: "BackendBundle:Padres:ComprobarDniPadreEditado" }
     options:
         expose: true
+
+restablecer_contraseña_responsable:
+    pattern:  /restablecer_password/{id}
+    defaults: { _controller: "BackendBundle:Padres:RestablecerPassword"}
+    options:
+      expose: true

@@ -11,15 +11,10 @@
 			<p class="titulo_curso">{{grupo.curso.curso ~ " " ~ "of Child Education"  ~ " - "  }} <span> {{"Group" ~ " " ~ grupo.letra }} </span></p>
 		{% endif %}
 	{% endif %}
-	{% if opcional %}
-	  	<div class="aviso_optativa col-xs-12 hidden alumnos_optativa">
-	  		<p class="aviso_optativa col-xs-12 col-sm-offset-3  col-sm-6 col-md-offset-4 col-md-4 ">{{ "Alumnos de " ~ opcional.asignatura.asignatura.abreviatura }}</p>
-	  	</div>
-	{% endif %}
-
+{# Grupo con tutor distinto al profesor actual #}
 {% if tutor and tutor.id != profesor.id %}
 	<div id="tutor" class="col-xs-12 no-padding">
-		<div class="col-xs-1 no-padding label_tutor">
+		<div class="col-xs-13  col-sm-1 no-padding label_tutor">
 		{% if tutor.sexo == "Femenino" %}
 			{% trans %}Tutora{% endtrans %}
    		{% else %}
@@ -38,6 +33,8 @@
 		</div>
 	</div>
 {% endif %}
+
+{# Grupo sin tutor #}
 {% if not tutor %}
 	<div id="tutor" class="col-xs-12 no-padding">
 		<div class="col-xs-2 no-padding label_tutor">
@@ -46,28 +43,37 @@
 	</div>
 {% endif %}
 
+{# Grupo con profesor actual como tutor #}
 {% if tutor and tutor.id == profesor.id %}
 	{% if grupo.curso.nivel == "Primaria" %}
 	<div id="tutor" class="col-xs-12 no-padding">
-		<div class="col-xs-1 no-padding label_tutor mi_grupo">{% trans %}Mi grupo{% endtrans %}</div>
+		<div class="col-xs-13 col-sm-1  no-padding label_tutor mi_grupo">{% trans %}Mi grupo{% endtrans %}</div>
 
-		<button id="#1" class=" active col-sm-offset-1 col-sm-2 btn btn-default">{% trans %}Alumnos{% endtrans %}</button>
-		<button id="#2" class="col-sm-offset-0 col-sm-2 btn btn-default">{% trans %}Horario{% endtrans %}</button>
-		<button id="#3" class="col-sm-offset-0 col-sm-2 btn btn-default">{% trans %}Profesores{% endtrans %}</button>
-		<button id="#4" class="col-sm-offset-0 col-sm-2 btn btn-default">{% trans %}Optativas{% endtrans %}</button>
+		<button id="#1" class=" active col-sm-offset-1 col-xs-5 col-sm-2 btn btn-default">{% trans %}Alumnos{% endtrans %}</button>
+		<button id="#2" class="col-sm-offset-0 col-xs-5 col-sm-2 btn btn-default">{% trans %}Horario{% endtrans %}</button>
+		<button id="#3" class="col-sm-offset-0 col-xs-5 col-sm-2 btn btn-default">{% trans %}Profesores{% endtrans %}</button>
+		<button id="#4" class="col-sm-offset-0 col-xs-5 col-sm-2 btn btn-default">{% trans %}Optativas{% endtrans %}</button>
 	</div>
 	{% endif %}
 {% endif %}
 
-{% if tipos == "ambos" %}
-<div id="tipo_lista">
-	<button id="alumnos_del_grupo" class="active">Alumnos / Grupo</button><button id="alumnos_optativa">Alumnos / Optativa</button>
-</div>
-{% endif %}
-
+{# Contenido de las opciones del grupo con profesor actual como tutor #}
 <div id="contenido_mi_grupo">
 	{% if tipos == "ambos"  or tipos == "no_opcionales" %}
+	{# Lista de Alumnos del grupo #}
 	<div id="#1" class="alumnos_del_grupo">
+		{# Elemento para descargar la lista de alumnos del grupo desde el móvil #}
+		<a id="alumnos_grupo_pdf"class=" descargar-datos hidden-md hidden-lg hidden-sm #1"   href="{{ path('alumnos_grupo_pdf', { 'id': grupo.id }) }}">
+			<button class="hidden"><i class="fa fa-file-pdf-o"></i>{% trans %}Lista de Alumnos PDF{% endtrans %}</button>
+		</a>
+
+		{# Opciones para el profesor que imparte asignatura opcional y no opcional #}
+		{% if tipos == "ambos" %}
+			<div id="tipo_lista">
+				<button id="alumnos_del_grupo" class="active">Alumnos / Grupo</button><button id="alumnos_optativa">Alumnos / Optativa</button>
+			</div>
+		{% endif %}
+
 		<table class="lista-alumnos table table-striped">
 			<thead >
 				<tr>
@@ -93,7 +99,7 @@
 						</a>
 						{% if tutor and tutor.id == profesor.id %}
 
-						<a id="{{entity.id}}" href="#info_alumno_modal" class="i_hover info_alumno" data-toggle="modal" data-placement="bottom" title="" data-original-title="{% trans %}Ver info{% endtrans %}">
+						<a id="{{entity.id}}" href="#info_alumno" class="i_hover info_alumno" data-toggle="modal" data-placement="bottom" title="" data-original-title="{% trans %}Ver info{% endtrans %}">
 							<i id="first" class="fa fa-info"></i>
 							<i id="second" class=" hidden fa fa-info-circle"></i>
 						</a>
@@ -107,69 +113,204 @@
 	{% endif %}
 
 	{% if tipos == "ambos"  or tipos == "opcional" %}
-	  {# Si imparte ambos tipos se oculta por defecto la lista de alumnos de la optativa #}
-	  {% if tipos == "ambos"%}
-	  <div id="#1" class="hidden alumnos_optativa">
-	  {% else %}
-	  <div id="#1" class="alumnos_optativa">
-	  {% endif %}
-		<table class="lista-alumnos table table-striped">
-			<thead >
-				<tr>
-					<th class="col-xs-1 center">Nº</th>
-					<th class="col-xs-8 col-sm-9">{% trans %}Apellidos, Nombre{% endtrans %}</th>
-					<th class="col-xs-3 col-sm-2 center"></th>
-				</tr>
-			</thead> 
-			<tbody>
-				{% for entity in alumnos_optativa %}
-				<tr>
-					<td class="col-xs-1 center">
-						{#{{ loop.index }}#}
-						{{ entity.numAlum }}
-					</td>
-					<td class="col-xs-8 col-sm-9 ">
-						{{entity.apellido1 ~ " " ~ entity.apellido2 ~ ", " ~ entity.nombre }} 
-					</td>
-					<td class="col-xs-3 col-sm-2 center">
-						<a id="{{entity.id}}" href="javascript:void(0);" class="i_hover contacto_responsable" data-toggle="tooltip" data-placement="bottom" title="" data-original-title="{% trans %}Contactar{% endtrans %}">
-							<i id="first" class="fa fa-envelope-o"></i>
-							<i id="second" class=" hidden fa fa-envelope"></i>
-						</a>
-						{% if tutor and tutor.id == profesor.id %}
 
-						<a id="{{entity.id}}" href="#info_alumno_modal" class="i_hover info_alumno" data-toggle="modal" data-placement="bottom" title="" data-original-title="{% trans %}Ver info{% endtrans %}">
-							<i id="first" class="fa fa-info"></i>
-							<i id="second" class=" hidden fa fa-info-circle"></i>
-						</a>
-						{% endif %}
-					</td>
-				</tr>
-				{% endfor %}
-			</tbody>
-		</table>
-	  </div>
+		{# Lista de Alumnos de la optativaimpartida por el profesor actual #}
+
+	  	{# Si imparte ambos tipos se oculta por defecto la lista de alumnos de la optativa #}
+	  	{% if tipos == "ambos"%}
+	  	<div id="#1" class="hidden alumnos_optativa">
+	  	{% else %}
+	  	<div id="#1" class="alumnos_optativa">
+	  	{% endif %}
+
+			{# Elemento para descargar sólo la lista de alumnos de la optativa que imparte el profesor en el grupo desde el móvil #}
+			<a id="alumnos_optativa_pdf"class="hidden descargar-datos hidden-md hidden-lg hidden-sm "   href="{{ path('alumnos_optativa_pdf', { 'id': grupo.id }) }}">
+				<button class="hidden alumnos_optativa"><i class="fa fa-file-pdf-o"></i>{% trans %}Alumnos de la optativa PDF{% endtrans %}</button>
+			</a>
+			{# Se muestra un aviso para los alumnos de la optativa #}
+			{% if opcional %}
+				{% if tipos == "ambos" %}
+	  				<div class="aviso_optativa col-xs-12 hidden alumnos_optativa">
+	  					<p class="aviso_optativa col-xs-12 col-sm-offset-3  col-sm-6 col-md-offset-4 col-md-4 ">{{ "Alumnos de " ~ opcional.asignatura.asignatura.abreviatura }}</p>
+	  				</div>
+	  			{% else %}
+	  				<div id="solo_optativa" class="aviso_optativa col-xs-12 alumnos_optativa">
+	  					<p class="aviso_optativa col-xs-12 col-sm-offset-3  col-sm-6 col-md-offset-4 col-md-4 ">{{ "Alumnos de " ~ opcional.asignatura.asignatura.abreviatura }}</p>
+	  				</div>
+	  			{% endif %}
+			{% endif %}
+
+	  		{% if tipos == "ambos" %}
+				<div id="tipo_lista">
+					<button id="alumnos_del_grupo" class="active">Alumnos / Grupo</button><button id="alumnos_optativa">Alumnos / Optativa</button>
+				</div>
+			{% endif %}
+
+			<table class="lista-alumnos table table-striped">
+				<thead >
+					<tr>
+						<th class="col-xs-1 center">Nº</th>
+						<th class="col-xs-8 col-sm-9">{% trans %}Apellidos, Nombre{% endtrans %}</th>
+						<th class="col-xs-3 col-sm-2 center"></th>
+					</tr>
+				</thead> 
+				<tbody>
+					{% for entity in alumnos_optativa %}
+					<tr>
+						<td class="col-xs-1 center">
+							{#{{ loop.index }}#}
+							{{ entity.numAlum }}
+						</td>
+						<td class="col-xs-8 col-sm-9 ">
+							{{entity.apellido1 ~ " " ~ entity.apellido2 ~ ", " ~ entity.nombre }} 
+						</td>
+						<td class="col-xs-3 col-sm-2 center">
+							<a id="{{entity.id}}" href="javascript:void(0);" class="i_hover contacto_responsable" data-toggle="tooltip" data-placement="bottom" title="" data-original-title="{% trans %}Contactar{% endtrans %}">
+								<i id="first" class="fa fa-envelope-o"></i>
+								<i id="second" class=" hidden fa fa-envelope"></i>
+							</a>
+							{% if tutor and tutor.id == profesor.id %}
+
+								<a id="{{entity.id}}" href="#info_alumno" class="i_hover info_alumno" data-toggle="modal" data-placement="bottom" title="" data-original-title="{% trans %}Ver info{% endtrans %}">
+									<i id="first" class="fa fa-info"></i>
+									<i id="second" class=" hidden fa fa-info-circle"></i>
+								</a>
+							{% endif %}
+						</td>
+					</tr>
+					{% endfor %}
+				</tbody>
+			</table>
+	  	</div>
 	{% endif %}
 
 	{% if grupo.curso.nivel == "Primaria" %}
+		{# Horario del grupo #}
+	 	<div id="#2" class="hidden">
+	  		<a id="alumnos_grupo_pdf"class="hidden descargar-datos hidden-md hidden-lg hidden-sm #2"   href="{{ path('alumnos_grupo_pdf', { 'id': grupo.id }) }}">
+				<button class="hidden"><i class="fa fa-file-pdf-o"></i>{% trans %}Horario del Grupo PDF{% endtrans %}</button>
+			</a>
+			<p>horario</p>
+	  	</div>
+		{# Profesores del grupo #}
+	  	<div id="#3" class="hidden profesores_grupo">
+				{% for asig_profesor in profesores_grupo %}
+					{# Profesor que no es tutor del grupo #}
+					{% if asig_profesor.grupo.profesor != asig_profesor.profesor %}
+						<div class="col-xs-2 col-sm-1 no-padding">
+							{% if asig_profesor.profesor.foto != null %}
+								<img id="foto_curso" class="img-rounded " alt="{{asig_profesor.profesor}}" src="{{ asset('uploads/images/' ~ asig_profesor.profesor.foto) }}">
+       						{% else %}
+       							{% if asig_profesor.profesor.sexo == "Femenino" %}
+									<img id="foto_curso" class="img-rounded " alt="Sin Foto" src="{{ asset('bundles/backend/images/perfil/SinFoto-M.png') }}">
+   								{% else %}
+              						<img id="foto_curso" class="img-rounded " alt="Sin Foto" src="{{ asset('bundles/backend/images/perfil/SinFoto-H.png') }}">
+           						{% endif %}
+        					{% endif %}
+						</div>
+						<div class="col-xs-10 col-sm-11 no-padding cabecera_profesor">
+							<h5 class="text-info">
+								{{asig_profesor.profesor.apellido1|upper ~ " " ~ asig_profesor.profesor.apellido2|upper ~ ", " ~ asig_profesor.profesor.nombre|upper }} 
+								<a id="{{asig_profesor.profesor.id}}" href="javascript:void(0);" class="i_hover">
+									<i id="first" class="fa fa-envelope-o"></i>
+									<i id="second" class=" hidden fa fa-envelope" data-toggle="tooltip" data-placement="bottom" title="" data-original-title="{% trans %}Contactar{% endtrans %}"></i>
+								</a>
+								<a id="{{asig_profesor.profesor.id}}" href="#info_profesor" class="i_hover info_profesor" data-toggle="modal" data-placement="bottom" title="" data-original-title="{% trans %}Ver info{% endtrans %}">
+									<i id="first" class="fa fa-info"></i>
+									<i id="second" class=" hidden fa fa-info-circle"></i>
+								</a>
+							</h5>
+							<div class="asignaturas_profesor">
+							{% for imparte in asignaciones_profesores %}
+								{# Se añade las asignaciones de asignaturas del profesor correspondiente #}
+					  			{% if asig_profesor.profesor ==  imparte.profesor%}
+									<p>
+										{{imparte.asignatura.asignatura.nombre}}
+									</p>
+								{% endif %}
+					  		{% endfor %}
+							</div>	
+						</div>
+					{#El profesor es el tutor del grupo #}
+					{% else %}
+						{# Se comprueba si el/la tutor/a imparte asignaturas en el grupo para mostrar el nombre #}
+						{% if asignaturas_tutor != null %}
 
-	  <div id="#2" class="hidden">
-		<p>horario</p>
-	  </div>
-	
-	  <div id="#3" class="hidden">
-		<p>Profesores</p>
-	  </div>
+							<div class="col-xs-2 col-sm-1 no-padding">
+								{% if asig_profesor.profesor.foto != null %}
+									<img id="foto_curso" class="img-rounded " alt="{{asig_profesor.profesor}}" src="{{ asset('uploads/images/' ~ asig_profesor.profesor.foto) }}">
+       							{% else %}
+       								{% if asig_profesor.profesor.sexo == "Femenino" %}
+										<img id="foto_curso" class="img-rounded " alt="Sin Foto" src="{{ asset('bundles/backend/images/perfil/SinFoto-M.png') }}">
+   									{% else %}
+              							<img id="foto_curso" class="img-rounded " alt="Sin Foto" src="{{ asset('bundles/backend/images/perfil/SinFoto-H.png') }}">
+           							{% endif %}
+        						{% endif %}
+							</div>
+							<div class="col-xs-10 col-sm-11 no-padding cabecera_profesor">
+								<h5 class="text-info">
+									{{asig_profesor.profesor.apellido1|upper ~ " " ~ asig_profesor.profesor.apellido2|upper ~ ", " ~ asig_profesor.profesor.nombre|upper }} 
+									<a id="{{asig_profesor.profesor.id}}" href="javascript:void(0);" class="i_hover">
+										<i id="first" class="fa fa-envelope-o"></i>
+										<i id="second" class=" hidden fa fa-envelope" data-toggle="tooltip" data-placement="bottom" title="" data-original-title="{% trans %}Contactar{% endtrans %}"></i>
+									</a>
+								<a id="{{asig_profesor.profesor.id}}" href="#info_profesor" class="i_hover info_profesor" data-toggle="modal" data-placement="bottom" title="" data-original-title="{% trans %}Ver info{% endtrans %}">
+									<i id="first" class="fa fa-info"></i>
+									<i id="second" class=" hidden fa fa-info-circle"></i>
+								</a>
+								</h5>
+								<div class="asignaturas_profesor">
+									{% for asig_tutor in asignaturas_tutor %}
+										<p>
+											{{asig_tutor.asignatura.asignatura.nombre}}
+								
+										</p>
+					  				{% endfor %}
+								</div>
+							</div>
+						{% endif %}
+					{% endif %}
+				{% endfor %}
+	  	</div>
+
+	  	{# Lista de alumnos dividida por optativas #}
 		<div id="#4" class="hidden">
-		<p>optativas</p>
-	  </div>
-
+			<a id="alumnos_optativas_pdf"class="hidden descargar-datos hidden-md hidden-lg hidden-sm #4"   href="{{ path('alumnos_optativas_pdf', { 'id': grupo.id }) }}">
+				<button class="hidden"><i class="fa fa-file-pdf-o"></i>{% trans %}Alumnos por optativas PDF{% endtrans %}</button>
+			</a>
+			<p>optativas</p>
+	  	</div>
 	{% endif %}
 </div>
 
 	
 <script>
-  $("*").tooltip({
-    placement: "bottom"
-  });
+  	$("*").tooltip({
+    	placement: "bottom"
+  	});
+  
+  	//Se elimina posibles contenedores vacíos que puedan quedar(caso de que un profesor distinto del tutor realice las tutorias).
+	$("#contenido_mi_grupo .profesores_grupo .asignaturas_profesor").each(function(){
+		string=$(this).text().replace(/\s/g,'');
+		if(string==""){
+			$(this).closest(".cabecera_profesor").prev().remove();
+			$(this).closest(".cabecera_profesor").remove();
+		}
+	});
+
+	if($("#solo_optativa").size()>0 && !$("#solo_optativa").hasClass('hidden')){
+		setTimeout(function(){
+		   	$("#alumnos_grupo_pdf button").addClass('hidden');
+			$("#alumnos_optativa_pdf button").removeClass('hidden');
+			$("#contenido_mi_grupo #alumnos_optativa_pdf").removeClass('hidden');
+		 }, 10);
+	}
+
 </script>
+
+
+
+
+
+
+

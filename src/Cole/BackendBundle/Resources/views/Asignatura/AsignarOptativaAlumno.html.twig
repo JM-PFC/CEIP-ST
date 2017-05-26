@@ -166,6 +166,7 @@
                                         {#<th class="id">Id</th>#}
                                         <th class="w20 left">Apellidos, Nombre</th>
                                         <th class="w11">Curso Matriculado</th>
+                                        <th class="w5">Grupo</th>
                                         <th class="w15">Alternativas</th>
                                     </tr>
                                 </thead>
@@ -174,6 +175,11 @@
                                         <tr id="{{entity.id}}">
                                             <td class="w20 left">{{ entity.apellido1 ~ " " ~ entity.apellido2 ~ ", " ~ entity.nombre}}</td>
                                             <td id="{{ entity.curso.id }}" class="w11">{{entity.curso.curso ~ " " ~ entity.curso.nivel}}</td>
+                                            {% if entity.grupo %}
+                                                <td id="{{ entity.curso.id }}" class="w5">{{entity.grupo.letra}}</td>
+                                            {% else %}
+                                                <td id="{{ entity.curso.id }}" class="w5">-</td>
+                                            {% endif %}
                                             <td class="w15">
                                                 {{render(controller("BackendBundle:Asignatura:OptativasCurso", {id:entity.curso.id}))}}                                            
                                             </td>
@@ -225,6 +231,7 @@
                                         {#<th class="id">Id</th>#}
                                         <th class="w20 left">Apellidos, Nombre</th>
                                         <th class="w11">Curso Matriculado</th>
+                                        <th class="w5">Grupo</th>
                                         <th class="w15">Alternativas</th>
                                     </tr>
                                 </thead>
@@ -233,6 +240,11 @@
                                         <tr id="{{entity.id}}">
                                             <td class="w20 left">{{ entity.apellido1 ~ " " ~ entity.apellido2 ~ ", " ~ entity.nombre}}</td>
                                             <td id="{{ entity.curso.id }}" class="w11">{{entity.curso.curso ~ " " ~ entity.curso.nivel}}</td>
+                                            {% if entity.grupo %}
+                                                <td id="{{ entity.curso.id }}" class="w5">{{entity.grupo.letra}}</td>
+                                            {% else %}
+                                                <td id="{{ entity.curso.id }}" class="w5">-</td>
+                                            {% endif %}
                                             <td class="w15 asig_asignada" id="{{entity.optativa.id}}">
                                                 {{render(controller("BackendBundle:Asignatura:OptativasCurso", {id:entity.curso.id}))}}
                                             </td>

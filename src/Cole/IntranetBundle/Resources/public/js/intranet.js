@@ -111,15 +111,102 @@ $(document).ready(function () {
     locale=$("#contenedor_cursos_profesor").attr("locale");
     id=$(this).attr("id");
 
-    $("#info_alumno_modal .modal-body").load(Routing.generate("info_alumno", {id:id, _locale:locale}), function(){
-
-    
+    $("#info_alumno .modal-body").load(Routing.generate("info_alumno", {id:id, _locale:locale}), function(){
     });
   });
   /*
-$('#info_alumno_modal').on('hidden.bs.modal', function (e) {
+$('#info_alumno').on('hidden.bs.modal', function (e) {
 })
 */
+
+  $(document).on('click',".info_profesor",function(){ 
+
+    locale=$("#contenedor_cursos_profesor").attr("locale");
+    id=$(this).attr("id");
+
+    $("#info_profesor .modal-body").load(Routing.generate("info_profesor", {id:id, _locale:locale}), function(){
+    });
+  });
+
+
+  //Se cambia las opciones de cursos impartidos por el tutor.
+  $(document).on('click',".alumnos_grupo #tutor button",function(){ 
+    $('.alumnos_grupo #tutor button').removeClass('active');
+    $(this).addClass('active');
+
+    $('.alumnos_grupo  #contenido_mi_grupo>div').addClass('hidden');
+    id=$(this).attr("id");
+    $('.alumnos_grupo #contenido_mi_grupo>div[id="'+id+'"]').first().removeClass('hidden');
+    //Se muestra la primera opción en caso de que un profesor imparta optativa
+    $("#alumnos_del_grupo").addClass('active');
+    $("#alumnos_optativa").removeClass('active');
+
+    $("#alumnos .descargar-datos button").addClass('hidden');
+    $("#alumnos .descargar-datos[class*='"+id+"'] button").removeClass('hidden');
+
+    $("#contenido_mi_grupo .descargar-datos button").addClass('hidden');
+    $("#contenido_mi_grupo .descargar-datos[class*='"+id+"'] button").removeClass('hidden');
+    
+    $("#contenido_mi_grupo .descargar-datos").addClass('hidden');
+    $("#contenido_mi_grupo .descargar-datos[class*='"+id+"']").removeClass('hidden');
+
+
+    if($(this).attr("id")=="#1"){
+      $("#solo_optativa").removeClass('hidden');
+      
+      if($("#solo_optativa").size()>0 && !$("#solo_optativa").hasClass('hidden')){
+        $("#alumnos_grupo_pdf button").addClass('hidden');
+        $("#alumnos_optativa_pdf button").removeClass('hidden');
+        $("#contenido_mi_grupo #alumnos_optativa_pdf").removeClass('hidden');
+      }
+    }
+    else{
+      $("#solo_optativa").addClass('hidden');
+      $("#lista_alumnos .alumnos_optativa").addClass('hidden');
+    }
+  });
+
+  //Se cambia el listado de alumnos del grupo o de la optativa impartida en ese grupo por el profesor.
+  $(document).on('click',"#tipo_lista #alumnos_del_grupo",function(){ 
+    $('#tipo_lista #alumnos_del_grupo').addClass('active');
+    $('#tipo_lista #alumnos_optativa').removeClass('active');
+
+    $(".alumnos_optativa").addClass('hidden');
+    $(".alumnos_del_grupo ").removeClass('hidden');
+
+    $(".alumnos_optativa #alumnos_optativa_pdf").addClass('hidden');
+    $(".alumnos_del_grupo #alumnos_grupo_pdf").removeClass('hidden');
+    
+    $("#alumnos_grupo_pdf[class*='#1'] button").removeClass('hidden');
+
+     //   $("#contenido_mi_grupo a").removeClass('hidden');
+    //$("#contenido_mi_grupo button").hasClass('hidden').closest("a").addClass('hidden');
+
+  });
+
+  $(document).on('click',"#tipo_lista #alumnos_optativa",function(){ 
+    $('#tipo_lista #alumnos_del_grupo').removeClass('active');
+    $('#tipo_lista #alumnos_optativa').addClass('active');
+
+    $(".alumnos_optativa #alumnos_optativa_pdf").removeClass('hidden');
+    $(".alumnos_del_grupo #alumnos_grupo_pdf").addClass('hidden');
+
+    $(".alumnos_optativa").removeClass('hidden');
+    $(".alumnos_del_grupo ").addClass('hidden');
+
+    $("#alumnos_grupo_pdf[class*='#1'] button").addClass('hidden');
+    
+    //Se modifica el id del grupo en la url del enlace para descargar la lista de alumnos de la optativa.
+    var str = $("#alumnos_optativas_pdf").attr("href");
+    var n = str.lastIndexOf("/");
+    var dir=$("#alumnos_optativas_pdf").attr("href").substring(0,n+1);
+    $("#alumnos_optativas_pdf").attr("href",dir+id);
+
+  });
+
+
+
+  /*
   //Se cambia las opciones de cursos impartidos por el tutor.
   $(document).on('click',".alumnos_grupo #tutor button",function(){ 
     $('.alumnos_grupo #tutor button').removeClass('active');
@@ -161,6 +248,11 @@ $('#info_alumno_modal').on('hidden.bs.modal', function (e) {
     $("#alumnos_optativas_pdf").attr("href",dir+id);
 
   });
+
+
+
+
+  */
 
 
 });

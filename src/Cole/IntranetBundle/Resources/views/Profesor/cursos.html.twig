@@ -24,7 +24,7 @@
 	    		id=$(this).attr("id");
 	    		locale=$(this).parent().attr("locale");
     			$('#alumnos #lista_alumnos').load(Routing.generate("datos_alumnos_grupo", {id:id, _locale:locale}), function(){
-    									//Se oculta los botones de descarga por si existe alguno.
+    				//Se oculta los botones de descarga por si existe alguno.
 					$("#alumnos a button").addClass('hidden');
       				$("#alumnos_grupo_pdf[class*='#1'] button").removeClass('hidden');
       				$("#alumnos_grupo_pdf").attr("grupo",id);
@@ -305,34 +305,23 @@
 
 				{% if entity.nivel == "Primaria" %}
 					<div role="tabpanel" class="tab-pane clearfix alumnos_grupo" id="alumnos">
-						<a id="alumnos_grupo_pdf"class=" descargar-datos visible-md visible-lg hidden-xs visible-sm #1"   href="{{ path('alumnos_grupo_pdf', { 'id': entity.id }) }}">
+						<a id="alumnos_grupo_pdf"class=" descargar-datos hidden-xs #1"   href="{{ path('alumnos_grupo_pdf', { 'id': entity.id }) }}">
 							<button class="hidden"><i class="fa fa-file-pdf-o"></i>{% trans %}Lista de Alumnos PDF{% endtrans %}</button>
 						</a>
-						<a id="alumnos_grupo_pdf"class=" descargar-datos visible-md visible-lg hidden-xs visible-sm #2"   href="{{ path('alumnos_grupo_pdf', { 'id': entity.id }) }}">
+						<a id="alumnos_grupo_pdf"class=" descargar-datos hidden-xs #2"   href="{{ path('alumnos_grupo_pdf', { 'id': entity.id }) }}">
 							<button class="hidden"><i class="fa fa-file-pdf-o"></i>{% trans %}Horario del Grupo PDF{% endtrans %}</button>
 						</a>
-						<a id="alumnos_grupo_pdf"class=" descargar-datos visible-md visible-lg hidden-xs visible-sm #4"   href="{{ path('alumnos_grupo_pdf', { 'id': entity.id }) }}">
+						<a id="alumnos_optativas_pdf"class=" descargar-datos hidden-xs #4"   href="{{ path('alumnos_optativas_pdf', { 'id': entity.id }) }}">
 							<button class="hidden"><i class="fa fa-file-pdf-o"></i>{% trans %}Alumnos por optativas PDF{% endtrans %}</button>
 						</a>
-						<a id="alumnos_optativas_pdf" class=" descargar-datos visible-md visible-lg hidden-xs visible-sm"   href="{{ path('alumnos_optativas_pdf', { 'id': entity.id }) }}">
-							<button class="hidden alumnos_optativa"><i class="fa fa-file-pdf-o"></i>{% trans %}Alumnos por optativas PDF{% endtrans %}</button>
+						<a id="alumnos_optativa_pdf" class=" descargar-datos hidden-xs"   href="{{ path('alumnos_optativa_pdf', { 'id': entity.id }) }}">
+							<button class="hidden alumnos_optativa"><i class="fa fa-file-pdf-o"></i>{% trans %}Alumnos de la optativa PDF{% endtrans %}</button>
 						</a>
 						<div id="lista_alumnos">
 							<p class="aviso_listado">{% trans %}Seleccione un curso de la lista superior para mostrar la lista de alumnos{% endtrans %}</p>
 						</div>
 
-						<a id="alumnos_grupo_pdf"class=" descargar-datos hidden-md hidden-lg visible-xs hidden-sm #1"   href="{{ path('alumnos_grupo_pdf', { 'id': entity.id }) }}">
-							<button class="hidden"><i class="fa fa-file-pdf-o"></i>{% trans %}Lista de Alumnos PDF{% endtrans %}</button>
-						</a>
-						<a id="alumnos_grupo_pdf"class=" descargar-datos hidden-md hidden-lg visible-xs hidden-sm #2"   href="{{ path('alumnos_grupo_pdf', { 'id': entity.id }) }}">
-							<button class="hidden"><i class="fa fa-file-pdf-o"></i>{% trans %}Horario del Grupo PDF{% endtrans %}</button>
-						</a>
-						<a id="alumnos_grupo_pdf"class=" descargar-datos hidden-md hidden-lg visible-xs hidden-sm #4"   href="{{ path('alumnos_grupo_pdf', { 'id': entity.id }) }}">
-							<button class="hidden"><i class="fa fa-file-pdf-o"></i>{% trans %}Alumnos por optativas PDF{% endtrans %}</button>
-						</a>
-						<a id="alumnos_optativas_pdf"class=" descargar-datos hidden-md hidden-lg visible-xs hidden-sm #4"   href="{{ path('alumnos_optativas_pdf', { 'id': entity.id }) }}">
-							<button class="hidden alumnos_optativa"><i class="fa fa-file-pdf-o"></i>{% trans %}Alumnos por optativas PDF{% endtrans %}</button>
-						</a>
+
 					</div>
 				{% else %}
 					{% if tutor_grupo %}
@@ -362,7 +351,7 @@
 		</div>
 	{% endif %}
 	
-	<div id="info_alumno_modal" class="modal fade " role="dialog" data-backdrop="true" >
+	<div id="info_alumno" class="modal fade " role="dialog" data-backdrop="true" >
 		<div class="modal-dialog ">
 			<div class="modal-content">
 				<div class="modal-header">
@@ -378,6 +367,23 @@
 		</div>
 	</div>
 
-
+	<div id="info_profesor" class="modal fade " role="dialog" data-backdrop="true" >
+		<div class="modal-dialog ">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+					<h4 class="modal-title">{% trans %}Información del profesor{% endtrans %}</h4>
+				</div>
+				<div class="modal-body"></div>
+				<div class="class-footer">
+					{#<button type="button" class="btn btn-primary">Guardar</button>#}
+					<button type="button" class="btn btn-primary" data-dismiss="modal">{% trans %}Cerrar{% endtrans %}</button>
+				</div>
+			</div>
+		</div>
+	</div>
 
 {% endblock %}
+
+
+

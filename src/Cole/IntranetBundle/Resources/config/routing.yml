@@ -47,6 +47,12 @@ alumnos_optativas_pdf:
     options:
         expose: true
 
+alumnos_optativa_pdf:
+    path:     /alumnos/optativa/{id}
+    defaults: { _controller: IntranetBundle:Default:ListaAlumnosOptativaPdf}
+    options:
+        expose: true
+
 IntranetBundle_alumnos:
     resource: "@IntranetBundle/Resources/config/routing/alumnos.yml"
     prefix:   /intranet/alumno/{id}
