@@ -18,6 +18,7 @@ Inicio: Home
 Cerrar sesión: Close sessions
 Cerrar: Close
 Datos personales: Personal information
+Datos Académicos: Academic information
 Nombre: Name
 Edad: Age
 años: years
@@ -84,6 +85,8 @@ Grupo: Group
 Año académico: Academic year
 Tutor: Tutor
 Tutora: Tutor
+Tutor de: Tutor of
+Tutora de: Tutor of
 Sin tutor/a: Without tutor
 Tutor del grupo: Group tutor
 Tutora del grupo: Group tutor
@@ -93,6 +96,9 @@ Sin asignar: Unassigned
 Módulos: Modules
 Horario PDF: PDF Schedule
 Lista de Alumnos PDF: PDF List of Students
+Alumnos de la optativa PDF: Students of the optional PDF
+Horario del Grupo PDF: Group Schedule PDF
+Alumnos por optativas PDF: Students by elective PDF
 Noticias de Primaria: News of Primary Education
 Noticias de Infantil: News of Child Education
 Noticias de profesores: News from teachers
@@ -116,8 +122,10 @@ Acceder al área del alumno : Access the student area
 Nueva: New
 Nuevo: New
 Información del alumno: Student Information
+Información del profesor: Teacher Information
 Sangre: Blood
 No disponible: Not available
+No asignado: Not assigned
 Responsables: Responsible
 Observaciones: Observations
 Alumnos: Students
@@ -126,3 +134,6 @@ Profesores: Teachers
 Optativas: Optional
 Alumnos / Grupo: Students / Group
 Alumnos / Optativa: Students / Optional
+Alumnos de: Students of
+Impartiendo clase en: Teaching class in
+No tiene grupo asignado a esta hora: No group assigned at this time

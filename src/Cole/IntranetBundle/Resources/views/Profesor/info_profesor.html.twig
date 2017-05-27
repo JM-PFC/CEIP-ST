@@ -45,7 +45,7 @@
 <h4 class="titulo-seccion">{% trans %}Datos Académicos{% endtrans %}</h4>
 
 <div class="visible-sm hidden-xs visible-md visible-lg">
-	<label class="nivel col-sm-3">{% trans %}Nivel impartido{% endtrans %}:</label> <span class="col-sm-3 no-padding">{{entity.nivel}}</span>	
+	<label class="nivel col-sm-3">{% trans %}Nivel impartido{% endtrans %}:</label> <span class="col-sm-6 no-padding">{{entity.nivel}}</span>	
 </div>
 <div class="hidden-sm visible-xs hidden-md hidden-lg">
 	<label class="nivel col-xs-3">{% trans %}Nivel impartido{% endtrans %}:</label> <span>{{entity.nivel}}</span>	
@@ -53,13 +53,34 @@
 
 {% if grupo %}
 	<div class="visible-sm hidden-xs visible-md visible-lg">
-		<label class="grupo col-sm-2">{% trans %}Tutor de{% endtrans %}:</label> <span class="col-sm-3 no-padding">{{grupo.curso.curso ~ " de " ~ grupo.curso.nivel ~ " - Grupo " ~ grupo.letra  }}</span>	
+		{% if entity.sexo == "Femenino" %}
+			<label class="grupo col-sm-2">{% trans %}Tutora de{% endtrans %}:</label> <span class="col-sm-6 no-padding">{{grupo.curso.curso ~ " " ~ grupo.letra  }}</span>	
+		{% else %}
+			<label class="grupo col-sm-2">{% trans %}Tutor de{% endtrans %}:</label> <span class="col-sm-6 no-padding">{{grupo.curso.curso ~ " " ~ grupo.letra  }}</span>	
+		{% endif %}
 	</div>
 	<div class="hidden-sm visible-xs hidden-md hidden-lg">
-		<label class="grupo col-xs-2">{% trans %}Tutor de{% endtrans %}:</label> <span>{{grupo.curso.curso ~ " " ~ grupo.letra}}</span>	
+		{% if entity.sexo == "Femenino" %}
+			<label class="grupo col-xs-2">{% trans %}Tutora de{% endtrans %}:</label> <span >{{grupo.curso.curso ~ " " ~ grupo.letra  }}</span>	
+		{% else %}
+			<label class="grupo col-xs-2">{% trans %}Tutor de{% endtrans %}:</label> <span >{{grupo.curso.curso ~ " " ~ grupo.letra  }}</span>	
+		{% endif %}
 			</div>
 {% else %}
 	<div>
-		<label class="grupo col-xs-2">{% trans %}Tutor de{% endtrans %}:</label> <span class="color_rojo">{% trans %}No disponible{% endtrans %}</span>	
+		<label class="grupo col-xs-2">{% trans %}Tutor de{% endtrans %}:</label> <span class="color_rojo">{% trans %}No asignado{% endtrans %}</span>	
 	</div>
+{% endif %}
+
+{# Se muestra el curso que está impartiendo en ese momento el profesor si se consulta dentro del horario escolar.#}
+{% if clase != "fuera de horario" and dia != 6 and dia != 7 %}
+	{% if clase %}
+		<div class="visible-sm hidden-xs visible-md visible-lg">
+			<label class="col-xs-5 col-md-4">{% trans %}Impartiendo clase en{% endtrans %}:</label> <span class="color_verde col-sm-6 no-padding">{{clase}}</span>	
+		</div>
+	{% else %}
+		<div>
+			<label class="col-xs-5 col-md-4">{% trans %}Impartiendo clase en{% endtrans %}:</label> <span class="color_rojo">{% trans %}No tiene grupo asignado a esta hora{% endtrans %}.</span>	
+		</div>
+	{% endif %}
 {% endif %}

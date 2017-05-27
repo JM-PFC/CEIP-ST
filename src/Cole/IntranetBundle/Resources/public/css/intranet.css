@@ -2,7 +2,12 @@
     margin: 0;
     padding: 0;
 }
-
+/*Se cambia el cursor en espera.  Usar: 
+$('body').addClass('waiting');
+$('body').removeClass('waiting'); */
+body.waiting * {
+    cursor: wait;
+}
 /*Formulario Lógin*/
 .login{
 	width: 400px;
@@ -64,6 +69,9 @@ p>label{
 p>input{
 	display: inline-block;
 	width: 12em;
+}
+tr td, tr th{
+    vertical-align: middle !important;
 }
 #recuerdame{
     display: inline-block;
@@ -532,6 +540,12 @@ p>input{
         padding-left: 0 !important;
         padding-right: 0 !important;
     }
+    #info_profesor .modal-body div, #info_alumno .modal-body div{
+        margin: 5px 0px !important;
+    }
+    .lista-alumnos tr td {
+        padding: 4px 0 !important;
+    }
 }
 /* Estilos para Pc*/
 #titulo_cabecera{
@@ -849,15 +863,19 @@ ul, ol {
 .color_rojo{
     color: #bc1010;
 }
+.color_verde{
+    color: #1E631E !important;
+    font-weight: bold;
+}
 .c_amarillo{
     color: yellow !important;
 }
 .c_naranja{
     color: #e57200;
 }
-.c_naranja:hover{
+/*.c_naranja:hover{
     font-weight: bold;
-}
+}*/
 .c_verde{
     color: #1E631E !important;
     font-weight: bold;
@@ -1679,17 +1697,20 @@ ul, ol {
 #contenedor_cursos_profesor button[class*="active"]{
     border: 2px inset black;
 }
-.horario-profesor div {
+.horario_intranet div {
     border-radius: 0 !important;
 }
-.horario-profesor p {
+.horario_intranet p {
     margin: 0px !important;
     color: #23527c !important;
 }
-.horario-profesor .horario:not(.no_clase) > div{
+.horario_intranet div{
+    color: #23527c !important;
+}
+.horario_intranet .horario:not(.no_clase) > div{
     height: 55px !important;
 }
-.horario-profesor .horas, .horario-profesor #cabecera_horarios .row > div{
+.horario_intranet .horas, .horario_intranet #cabecera_horarios .row > div{
     background: #31708f !important;
     color: white !important;
     border-color: white !important;
@@ -1698,13 +1719,13 @@ ul, ol {
     border:none;
     background: #FFCC7E !important;
 }
-.horario-profesor #curso{
+.horario_intranet #curso{
     font-weight: bold;
 }
-.horario-profesor #aula{
+.horario_intranet #aula{
     color: #e57200 !important;
 }
-.horario-profesor #aula{
+.horario_intranet #aula{
     font-size: 12px;
 }
 #tutor .label_tutor{
@@ -1754,7 +1775,7 @@ ul, ol {
 .lista-alumnos tr td{
     border-top: 1px solid grey !important;
     border-bottom: 1px solid grey !important;
-    padding: 4px !important;
+    padding: 4px ;
 }
 .lista-alumnos tr th{
     border: 0 !important;
@@ -1831,6 +1852,10 @@ table tr td a{
     margin-bottom: 5px;
     margin-top: 5px;
     clear: both;
+    min-height: 30px;
+}
+#info_profesor .modal-body div, #info_alumno .modal-body div{
+    margin: 5px 15px;
 }
 #intranet .modal .media{
     margin-bottom: 15px;
@@ -1864,14 +1889,12 @@ table tr td a{
 }
 #intranet #tutor button{
     border-radius: 0px;
-    margin-top: 3px;
+    margin-top: 5px;
     max-width: 225px;
+    padding: 2px 0 !important;
 }
 #intranet #tutor button[id="#1"]{
     border-radius: 5px 0 0 5px;
-}
-#intranet #tutor button{
-    padding: 4px 0px !important
 }
 #intranet #tutor button:last-child{
     border-radius: 0 5px 5px 0;
@@ -1926,4 +1949,14 @@ table tr td a{
 #info_profesor .grupo {
     width: 85px !important;
 }
-
+.aula_horario{
+    color: #e57200 !important;
+    font-size: 12px;
+}
+.horario_grupo p{
+    margin-bottom: -10px;
+    margin-top: 5px !important;
+}
+.m_op{
+    margin-bottom: 0 !important;
+}

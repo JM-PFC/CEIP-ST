@@ -104,13 +104,13 @@ eliminar_todos_horarios_grupos:
         expose: true
 
 horario_grupo:
-    pattern:  /{id}/horario
+    pattern:  /horario/{id}
     defaults: { _controller: "BackendBundle:Grupo:HorarioDelGrupo"}
     options:
       expose: true
 
 horario_grupo_pdf:
-    pattern:  /{id}/horarioPdf
+    pattern:  /horarioPdf/{id}
     defaults: { _controller: "BackendBundle:Grupo:HorarioDelGrupoPdf", _format: pdf}
     options:
       expose: true

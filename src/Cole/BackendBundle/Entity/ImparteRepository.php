@@ -330,5 +330,17 @@ class ImparteRepository extends EntityRepository
 		->getOneOrNullResult();
 	}
 
+	public function findExistence($profesor, $dia, $hora)
+	{
+		return $this->getEntityManager()->createQuery(
+			'SELECT i FROM BackendBundle:Imparte i WHERE i.profesor=:profesor and i.dia_semanal=:dia and i.horario=:hora ')
+		->setParameters(array(
+			'profesor' => $profesor,
+			'dia' => $dia, 
+			'hora' => $hora))
+		->setMaxResults(1)
+		->getOneOrNullResult();
+	}
+
 
 }

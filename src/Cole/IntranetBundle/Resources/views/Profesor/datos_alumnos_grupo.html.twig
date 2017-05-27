@@ -70,7 +70,7 @@
 		{# Opciones para el profesor que imparte asignatura opcional y no opcional #}
 		{% if tipos == "ambos" %}
 			<div id="tipo_lista">
-				<button id="alumnos_del_grupo" class="active">Alumnos / Grupo</button><button id="alumnos_optativa">Alumnos / Optativa</button>
+				<button id="alumnos_del_grupo" class="active">{% trans %}Alumnos / Grupo{% endtrans %}</button><button id="alumnos_optativa">{% trans %}Alumnos / Optativa{% endtrans %}</button>
 			</div>
 		{% endif %}
 
@@ -131,18 +131,18 @@
 			{% if opcional %}
 				{% if tipos == "ambos" %}
 	  				<div class="aviso_optativa col-xs-12 hidden alumnos_optativa">
-	  					<p class="aviso_optativa col-xs-12 col-sm-offset-3  col-sm-6 col-md-offset-4 col-md-4 ">{{ "Alumnos de " ~ opcional.asignatura.asignatura.abreviatura }}</p>
+	  					<p class="aviso_optativa col-xs-12 col-sm-offset-3  col-sm-6 col-md-offset-4 col-md-4 ">{% trans %}Alumnos de{% endtrans %} {{ opcional.asignatura.asignatura.abreviatura }}</p>
 	  				</div>
 	  			{% else %}
 	  				<div id="solo_optativa" class="aviso_optativa col-xs-12 alumnos_optativa">
-	  					<p class="aviso_optativa col-xs-12 col-sm-offset-3  col-sm-6 col-md-offset-4 col-md-4 ">{{ "Alumnos de " ~ opcional.asignatura.asignatura.abreviatura }}</p>
+	  					<p class="aviso_optativa col-xs-12 col-sm-offset-3  col-sm-6 col-md-offset-4 col-md-4 ">{% trans %}Alumnos de{% endtrans %} {{opcional.asignatura.asignatura.abreviatura }}</p>
 	  				</div>
 	  			{% endif %}
 			{% endif %}
 
 	  		{% if tipos == "ambos" %}
 				<div id="tipo_lista">
-					<button id="alumnos_del_grupo" class="active">Alumnos / Grupo</button><button id="alumnos_optativa">Alumnos / Optativa</button>
+					<button id="alumnos_del_grupo" class="active">{% trans %}Alumnos / Grupo{% endtrans %}</button><button id="alumnos_optativa">{% trans %}Alumnos / Optativa{% endtrans %}</button>
 				</div>
 			{% endif %}
 
@@ -184,13 +184,104 @@
 	  	</div>
 	{% endif %}
 
-	{% if grupo.curso.nivel == "Primaria" %}
+	{% if tutor and tutor.id == profesor.id and grupo.curso.nivel == "Primaria" %}
 		{# Horario del grupo #}
 	 	<div id="#2" class="hidden">
-	  		<a id="alumnos_grupo_pdf"class="hidden descargar-datos hidden-md hidden-lg hidden-sm #2"   href="{{ path('alumnos_grupo_pdf', { 'id': grupo.id }) }}">
+	  		<a id="alumnos_grupo_pdf"class="hidden descargar-datos hidden-md hidden-lg hidden-sm #2"   href="{{ path('horario_grupo_pdf', { 'id': grupo.id }) }}">
 				<button class="hidden"><i class="fa fa-file-pdf-o"></i>{% trans %}Horario del Grupo PDF{% endtrans %}</button>
 			</a>
-			<p>horario</p>
+
+			<div id="horarios" class="horario_intranet horario_grupo">
+
+				<div class="col-xs-12">
+					<div class="visible-md visible-lg hidden-xs visible-sm">
+						<div id="cabecera_horarios" class="col-xs-12">
+							<div class="row">
+								<div class="col-xs-2">{% trans %}Módulos{% endtrans %}</div>
+								<div class="col-xs-2">{% trans %}Lunes{% endtrans %}</div>
+								<div class="col-xs-2">{% trans %}Martes{% endtrans %}</div>
+								<div class="col-xs-2">{% trans %}Miércoles{% endtrans %}</div>
+								<div class="col-xs-2">{% trans %}Jueves{% endtrans %}</div>
+								<div class="col-xs-2">{% trans %}Viernes{% endtrans %}</div>
+							</div>
+						</div>
+						<div id="contenido_horarios" class="col-xs-12">
+							{{render (controller('IntranetBundle:Default:HorariosGrupo',{'id': grupo.id, 'num': "0" }))}}
+						</div>
+					</div>
+					{# Estilo acordeón versión móvil #}	
+     				<div class="panel-group col-xs-12 hidden-md hidden-lg visible-xs hidden-sm" id="accordion">
+  						<div class="panel panel-default">
+    						<div class="panel-heading">
+      							<h4 class="panel-title">
+        							<a data-toggle="collapse" class="col-xs-12" data-parent="#accordion" href="#dia1">{% trans %}Lunes{% endtrans %}</a>
+      							</h4>
+    						</div>
+    						<div id="dia1" class="panel-collapse collapse">
+      							<div id="contenido_horarios" class="panel-body">
+						      		
+									{{render (controller('IntranetBundle:Default:HorariosGrupo',{'id': grupo.id, 'num': "1" }))}}
+						      		
+  								</div>
+    						</div>
+  						</div>
+  						
+  						<div class="panel panel-default">
+    						<div class="panel-heading">
+     							<h4 class="panel-title">
+        							<a data-toggle="collapse" class="col-xs-12" data-parent="#accordion" href="#dia2">{% trans %}Martes{% endtrans %}</a>
+      							</h4>
+    						</div>
+    						<div id="dia2" class="panel-collapse collapse">
+      							<div id="contenido_horarios" class="panel-body">
+									{{render (controller('IntranetBundle:Default:HorariosGrupo',{'id': grupo.id, 'num': "2" }))}}
+  								</div>
+    						</div>
+  						</div>
+
+  						<div class="panel panel-default">
+    						<div class="panel-heading">
+     							<h4 class="panel-title">
+        							<a data-toggle="collapse"  class="col-xs-12"data-parent="#accordion" href="#dia3">{% trans %}Miércoles{% endtrans %}</a>
+      							</h4>
+    						</div>
+    						<div id="dia3" class="panel-collapse collapse">
+      							<div id="contenido_horarios" class="panel-body">
+									{{render (controller('IntranetBundle:Default:HorariosGrupo',{'id': grupo.id, 'num': "3" }))}}
+  								</div>
+    						</div>
+  						</div>
+
+  						<div class="panel panel-default">
+    						<div class="panel-heading">
+     							<h4 class="panel-title">
+        							<a data-toggle="collapse"  class="col-xs-12"data-parent="#accordion" href="#dia4">{% trans %}Jueves{% endtrans %}</a>
+      							</h4>
+    						</div>
+    						<div id="dia4" class="panel-collapse collapse">
+      							<div id="contenido_horarios" class="panel-body">
+									{{render (controller('IntranetBundle:Default:HorariosGrupo',{'id': grupo.id, 'num': "4" }))}}
+  								</div>
+    						</div>
+  						</div>
+  						<div class="panel panel-default">
+    						<div class="panel-heading">
+     							<h4 class="panel-title">
+        							<a data-toggle="collapse"  class="col-xs-12"data-parent="#accordion" href="#dia5">{% trans %}Viernes{% endtrans %}</a>
+      							</h4>
+    						</div>
+    						<div id="dia5" class="panel-collapse collapse">
+      							<div id="contenido_horarios" class="panel-body">
+									{{render (controller('IntranetBundle:Default:HorariosGrupo',{'id': grupo.id, 'num': "5" }))}}
+  								</div>
+    						</div>
+  						</div>
+  						{% if grupo.aula %}
+  							<p id="aula_grupo" class="col-xs-12 ">Aula del grupo: <span class="c_naranja">{{grupo.aula.nombre}}</span></p>	
+  						{% endif %}	
+  					</div>
+				</div>
+			</div>
 	  	</div>
 		{# Profesores del grupo #}
 	  	<div id="#3" class="hidden profesores_grupo">
@@ -278,7 +369,36 @@
 			<a id="alumnos_optativas_pdf"class="hidden descargar-datos hidden-md hidden-lg hidden-sm #4"   href="{{ path('alumnos_optativas_pdf', { 'id': grupo.id }) }}">
 				<button class="hidden"><i class="fa fa-file-pdf-o"></i>{% trans %}Alumnos por optativas PDF{% endtrans %}</button>
 			</a>
-			<p>optativas</p>
+			
+			<table class="lista-alumnos table table-striped">
+				<thead >
+					<tr>
+						<th class="col-xs-1 center">Nº</th>
+						<th class="col-xs-6 col-sm-8">{% trans %}Apellidos, Nombre{% endtrans %}</th>
+						<th class="col-xs-4 col-sm-3 center">{% trans %}Optativas{% endtrans %}</th>
+					</tr>
+				</thead> 
+				<tbody>
+					{% for entity in entities %}
+					<tr>
+						<td class="col-xs-1 center">
+							{#{{ loop.index }}#}
+							{{ entity.numAlum }}
+						</td>
+						<td class="col-xs-6 col-sm-7 ">
+							{{entity.apellido1 ~ " " ~ entity.apellido2 ~ ", " ~ entity.nombre }} 
+						</td>
+						{% if entity.optativa %}	
+							<td class="col-xs-4 col-sm-3 center" style="background:{{entity.optativa.asignatura.color}};">
+								{{entity.optativa.asignatura.abreviatura }} 
+							</td>
+						{% else %}
+							<td class="col-xs-4 col-sm-3 center"> - </td>
+						{% endif %}
+					</tr>
+					{% endfor %}
+				</tbody>
+			</table>
 	  	</div>
 	{% endif %}
 </div>

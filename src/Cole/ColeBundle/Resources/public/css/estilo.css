@@ -1098,7 +1098,7 @@ thead tr th {
 tbody:not(.lista_alumnos) tr td{
     background: #b1cce7;
     min-width: 80px !important;
-    text-align: left;
+    /*text-align: left;*/
     padding: 0 5px;
 }
 
@@ -1149,6 +1149,7 @@ tr {page-break-inside: avoid;}
     float:right!important;
     margin-right: 10px;
     text-align: right;
+    width: 300px;
 }
 #cabecera_listado #curso h6{
     font-weight: normal;
@@ -1158,41 +1159,52 @@ tr {page-break-inside: avoid;}
 #cabecera_listado .subtitulo{
     margin-top: 5px !important;
 }
+/*Se usa para mostrar diferentes subtitulos en varias páginas (Ej. Lista de alumnos por optativas)*/
+.subtitulo_pdf{
+    color: #e57200;
+    font-size: 1.1em !important;
+    float:right!important;
+    margin-right: 10px;
+    text-align: right;
+    width: 100%;
+    font-weight: bold;
+}
+
 #cabecera_listado #grupo{
     clear: both;
     text-align: center;
 }
 
-#alumnos_grupo_pdf tr th:first-child,#alumnos_grupo_pdf tr td:first-child{
+.lista_pdf tr th:first-child,.lista_pdf tr td:first-child{
     text-align: center !important;
     width: 100px !important;
 }
-#alumnos_grupo_pdf tr th:last-child,#alumnos_grupo_pdf tr td:last-child{
+.lista_pdf tr th:last-child,.lista_pdf tr td:last-child{
     padding-left: 10px;
 }
 
-#alumnos_grupo_pdf tr th{
+.lista_pdf tr th{
     line-height: 0.9 !important;
     padding-top: 7px !important;
     padding-bottom: 7px !important;
     font-size: 14px !important;
 }
-#alumnos_grupo_pdf tr td{
+.lista_pdf tr td{
     line-height: 0.9 !important;
     padding-top: 6px !important;
     padding-bottom: 6px !important;
     font-size: 13px !important;
 }
-#alumnos_grupo_pdf tr:nth-child(2n+1){
+.lista_pdf tr:nth-child(2n+1){
     background: #eff3f9 !important;
 }
-#alumnos_grupo_pdf tr td, #alumnos_grupo_pdf thead tr{
+.lista_pdf tr td, .lista_pdf thead tr{
     border: 1px solid grey ;
 }
-#alumnos_grupo_pdf tr th{
+.lista_pdf tr th{
     border: none ;
 }
-#alumnos_grupo_pdf tr th:first-child{
+.lista_pdf tr th:first-child{
     border-right: 1px solid #ddd !important;
 }
 

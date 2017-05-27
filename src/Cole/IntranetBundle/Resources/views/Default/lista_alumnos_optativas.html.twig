@@ -14,7 +14,9 @@
     <script type="text/javascript" src="{{ app.request.scheme ~ '://' ~ app.request.httpHost ~  asset('bundles/intranet/js/bootstrap/bootstrap.min.js') }}"></script>
   </head>
     
-  <body id="alumnos_grupo_pdf" class="lista_pdf">
+  <body id="alumnos_optativas_pdf" class="lista_pdf" >
+      {#Se muestra el nombre de cada asignatura arriba de la tabla#}
+      <span class="subtitulo_pdf">{{asignatura}}</span>
       <table class="table table-striped table-bordered">
         <thead>
           <tr >

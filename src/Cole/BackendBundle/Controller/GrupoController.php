@@ -1154,7 +1154,7 @@ class GrupoController extends Controller
             'javascript-delay' => 1000, 
             'default-header'=>false
         ];
-        $dato=$grupo->getCurso()->getCurso()."_".$grupo->getLetra();
+        $dato=$grupo->getCurso()->getCurso().$grupo->getLetra();
         return new Response(
             $this->get('knp_snappy.pdf')->getOutputFromHtml($html,$options),
             200,

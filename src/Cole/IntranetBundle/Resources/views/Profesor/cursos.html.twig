@@ -15,6 +15,8 @@
 
 		//Se hace marca el botón del curso seleccionado y se obtiene la lista de alumnos en el contenedor correspondiente.
   		$('#contenedor_cursos_profesor button').on('click', function(event) {
+  			//Cambiamos el cursor a espera.
+  			$('body').addClass('waiting');
   			if(!$(this).hasClass("disabled")) {
 	   			$('#contenedor_cursos_profesor button').removeClass('active');
 	    		$(this).addClass('active');
@@ -29,12 +31,15 @@
       				$("#alumnos_grupo_pdf[class*='#1'] button").removeClass('hidden');
       				$("#alumnos_grupo_pdf").attr("grupo",id);
 
-      				//Se modifica el id del grupo en la url del enlace para descargar la lista de alumnos del grupo mostrado.
-      				var str = $("#alumnos_grupo_pdf").attr("href");
-					var n = str.lastIndexOf("/");
-					var dir=$("#alumnos_grupo_pdf").attr("href").substring(0,n+1);
-					$("#alumnos_grupo_pdf").attr("href",dir+id);
-
+      				//Se modifica el id del grupo en la url de todos los enlaces de descargas que tiene por defectoe l id del profesor.
+      				$("#alumnos .descargar-datos").each(function(index, el) {
+      					str = $(this).attr("href");
+						n = str.lastIndexOf("/");
+						dir=str.substring(0,n+1);
+						$(this).attr("href",dir+id);
+      				});
+      				//Eliminamos el cursor de espera al finalizar.
+					$('body').removeClass('waiting');
     			}); 
   			}
 		});
@@ -209,9 +214,10 @@
 			</ul>
 			<div class="tab-content clearfix">
 				{% if entity.nivel == "Primaria" %}
-				<div role="tabpanel" class="tab-pane active clearfix horario-profesor" id="horarios">
+				<div role="tabpanel" class="tab-pane active clearfix horario-profesor horario_intranet" id="horarios">
 
 					<a id="horario_pdf"class=" descargar-datos descargar-datos visible-md visible-lg hidden-xs visible-sm"   href="{{ path('horario_profesor_pdf', { 'id': entity.id }) }}"><button><i class="fa fa-file-pdf-o"></i>{% trans %}Horario PDF{% endtrans %}</button></a>
+
 					<div class="col-xs-12">
 					  <div class="visible-md visible-lg hidden-xs visible-sm">
 						<div id="cabecera_horarios" class="col-xs-12">
@@ -308,7 +314,7 @@
 						<a id="alumnos_grupo_pdf"class=" descargar-datos hidden-xs #1"   href="{{ path('alumnos_grupo_pdf', { 'id': entity.id }) }}">
 							<button class="hidden"><i class="fa fa-file-pdf-o"></i>{% trans %}Lista de Alumnos PDF{% endtrans %}</button>
 						</a>
-						<a id="alumnos_grupo_pdf"class=" descargar-datos hidden-xs #2"   href="{{ path('alumnos_grupo_pdf', { 'id': entity.id }) }}">
+						<a id="alumnos_grupo_pdf"class=" descargar-datos hidden-xs #2"   href="{{ path('horario_grupo_pdf', { 'id': entity.id }) }}">
 							<button class="hidden"><i class="fa fa-file-pdf-o"></i>{% trans %}Horario del Grupo PDF{% endtrans %}</button>
 						</a>
 						<a id="alumnos_optativas_pdf"class=" descargar-datos hidden-xs #4"   href="{{ path('alumnos_optativas_pdf', { 'id': entity.id }) }}">

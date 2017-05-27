@@ -7386,6 +7386,8 @@ cursor: default !important;
     font-family: "Times New Roman";
     font-size: 15px;
     min-width: 100%;
+    font-weight: bold;
+    color: #e57200;
 }
 .horario_grupo_pdf  table .asignatura{
     display: block;
@@ -7423,6 +7425,8 @@ cursor: default !important;
     margin-right: 3%;
     width: 42%;
     text-align: center;
+        font-weight: bold;
+    color: #e57200;
 }
 .horario_grupo_pdf  table .asignatura_op_siglas{
     border-right: 2px solid #fafafa;

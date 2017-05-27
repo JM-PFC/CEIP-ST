@@ -114,10 +114,11 @@ $(document).ready(function () {
     $("#info_alumno .modal-body").load(Routing.generate("info_alumno", {id:id, _locale:locale}), function(){
     });
   });
-  /*
-$('#info_alumno').on('hidden.bs.modal', function (e) {
-})
-*/
+
+  //Se oculta el aviso mostrado del enlace cuando se abre una ventana modal.
+  $('.modal').on('show.bs.modal', function (e) {
+    $(".tooltip").remove();
+  })
 
   $(document).on('click',".info_profesor",function(){ 
 
@@ -127,7 +128,6 @@ $('#info_alumno').on('hidden.bs.modal', function (e) {
     $("#info_profesor .modal-body").load(Routing.generate("info_profesor", {id:id, _locale:locale}), function(){
     });
   });
-
 
   //Se cambia las opciones de cursos impartidos por el tutor.
   $(document).on('click',".alumnos_grupo #tutor button",function(){ 
@@ -179,9 +179,6 @@ $('#info_alumno').on('hidden.bs.modal', function (e) {
     
     $("#alumnos_grupo_pdf[class*='#1'] button").removeClass('hidden');
 
-     //   $("#contenido_mi_grupo a").removeClass('hidden');
-    //$("#contenido_mi_grupo button").hasClass('hidden').closest("a").addClass('hidden');
-
   });
 
   $(document).on('click',"#tipo_lista #alumnos_optativa",function(){ 
@@ -196,63 +193,7 @@ $('#info_alumno').on('hidden.bs.modal', function (e) {
 
     $("#alumnos_grupo_pdf[class*='#1'] button").addClass('hidden');
     
-    //Se modifica el id del grupo en la url del enlace para descargar la lista de alumnos de la optativa.
-    var str = $("#alumnos_optativas_pdf").attr("href");
-    var n = str.lastIndexOf("/");
-    var dir=$("#alumnos_optativas_pdf").attr("href").substring(0,n+1);
-    $("#alumnos_optativas_pdf").attr("href",dir+id);
-
   });
-
-
-
-  /*
-  //Se cambia las opciones de cursos impartidos por el tutor.
-  $(document).on('click',".alumnos_grupo #tutor button",function(){ 
-    $('.alumnos_grupo #tutor button').removeClass('active');
-    $(this).addClass('active');
-
-    $('.alumnos_grupo  #contenido_mi_grupo>div').addClass('hidden');
-    id=$(this).attr("id");
-    $('.alumnos_grupo #contenido_mi_grupo>div[id="'+id+'"]').removeClass('hidden');
-
-    $("#alumnos .descargar-datos button").addClass('hidden');
-    $("#alumnos .descargar-datos[class*='"+id+"'] button").removeClass('hidden');
-  });
-
-  //Se cambia el listado de alumnos del grupo o de la optativa impartida en ese grupo por el profesor.
-  $(document).on('click',"#tipo_lista #alumnos_del_grupo",function(){ 
-    $('#tipo_lista #alumnos_del_grupo').addClass('active');
-    $('#tipo_lista #alumnos_optativa').removeClass('active');
-
-    $(".alumnos_optativa").addClass('hidden');
-    $(".alumnos_del_grupo").removeClass('hidden');
-    
-    $("#alumnos_grupo_pdf[class*='#1'] button").removeClass('hidden');
-
-  });
-
-  $(document).on('click',"#tipo_lista #alumnos_optativa",function(){ 
-    $('#tipo_lista #alumnos_del_grupo').removeClass('active');
-    $('#tipo_lista #alumnos_optativa').addClass('active');
-
-    $(".alumnos_optativa").removeClass('hidden');
-    $(".alumnos_del_grupo").addClass('hidden');
-
-    $("#alumnos_grupo_pdf[class*='#1'] button").addClass('hidden');
-    
-    //Se modifica el id del grupo en la url del enlace para descargar la lista de alumnos de la optativa.
-    var str = $("#alumnos_optativas_pdf").attr("href");
-    var n = str.lastIndexOf("/");
-    var dir=$("#alumnos_optativas_pdf").attr("href").substring(0,n+1);
-    $("#alumnos_optativas_pdf").attr("href",dir+id);
-
-  });
-
-
-
-
-  */
 
 
 });

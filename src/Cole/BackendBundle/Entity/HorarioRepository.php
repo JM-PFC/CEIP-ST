@@ -51,5 +51,16 @@ class HorarioRepository extends EntityRepository
 		->setMaxResults(1)
 		->getOneOrNullResult();
 	}
+	
+	public function findByHora($hora)
+	{
+		return $this->getEntityManager()->createQuery(
+		'SELECT h FROM BackendBundle:Horario h WHERE h.inicio<=:hora and h.fin>=:hora')
+		->setParameters(array(
+			'hora' => $hora))
+		->setMaxResults(1)
+		->getOneOrNullResult();
+	}
+	
 
 }

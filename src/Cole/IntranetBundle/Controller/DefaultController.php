@@ -318,70 +318,56 @@ class DefaultController extends Controller
     public function ListaAlumnosOptativasPdfAction($id)
     {
         $em = $this->getDoctrine()->getManager();
+        $html = array();
 
         $grupo=$em->getRepository('BackendBundle:Grupo')->findOneById($id);
         $profesor = $this->get('security.context')->getToken()->getUser();
-        $grupo_tutorizado= $em->getRepository('BackendBundle:Grupo')->findOneByProfesor($profesor);
-
-        if($grupo!=$grupo_tutorizado){
-            $opcional=$em->getRepository('BackendBundle:Imparte')->findOpcionalProfesorGrupo($profesor, $grupo);
-            $entities=$em->getRepository('BackendBundle:Alumno')->findAlumnosOptativaGrupo($opcional->getAsignatura(), $grupo);
-            $html = $this->renderView('IntranetBundle:Default:lista_alumnos_grupo.html.twig', array(
-                'entities' => $entities,
-                'grupo' => $grupo
-            ));
-            $titulo="Lista de Optativa";
-            $subtitulo=$opcional->getAsignatura()->getAsignatura()->getAbreviatura();
-        }
-        else{
-            $titulo="Lista de Clase";
-            $subtitulo=null;
-
-            //Se imprime la lista de todas las asigmaturas
-        }
         
         $inicio =$em->getRepository('BackendBundle:Centro')->findInicioCurso();
         $fin =$em->getRepository('BackendBundle:Centro')->findFinCurso();
+        
+        //Se optiene las optativas del grupo.
+        $optativas=$em->getRepository('BackendBundle:Imparte')->findOpcionalesSinRepetir($grupo);
+        $titulo="Asignaturas Opcionales";
+        $subtitulo=null;
+        foreach($optativas as $optativa){
+            $entities=$em->getRepository('BackendBundle:Alumno')->findAlumnosOptativaGrupo($optativa->getAsignatura(), $grupo);
+            $asignatura=$optativa->getAsignatura()->getAsignatura()->getAbreviatura();
+            $html[]  = $this->renderView('IntranetBundle:Default:lista_alumnos_optativas.html.twig', array(
+                'entities' => $entities,
+                'grupo' => $grupo,
+                'asignatura' => $asignatura
+            ));
 
+        }
         $header = $this->renderView('IntranetBundle:Default:header.html.twig', array(
             'inicio' => $inicio,
             'fin' => $fin,
             'grupo' => $grupo,
             'titulo' => $titulo,
-            'subtitulo' => $subtitulo
+            'subtitulo' =>$subtitulo
         ));
+
         $options = [
             'margin-top'    => 40,
             'margin-right'  => 7,
             'margin-bottom' => 20,
             'margin-left'   => 7,
-          //Opciones para orientación horizontal.
-            //'orientation'=>'Landscape', 
-            //'default-header'=>false,
-            //'header-html' =>'http://www.pikemere.co.uk/testerpdf.html',
-            
-    //'footer-right'=>utf8_decode('Seite [page] von [topage] - '.date('\ d.m.Y\ H:i')),
-    //'footer-left'=>utf8_decode('Klaus Müller'),
-             //'header-left' => 'nothing',
-        'header-html' => $header,
-
-            'footer-center' => '[page] / [topage]',
+            'header-html' => $header,
+            //'footer-center' => '[page] / [topage]',
             'footer-font-size' => 8,
-            //'footer-left' => 'Confidential',
-            //'page-size' => 'A4',
-
-            'header-spacing' => 5, 
+            'page-size' => 'A4',
+            'header-spacing' => 0, 
             'footer-spacing' => 10
         ];
-        //$iniciales=substr($alumno->getNombre(), 0, 1).substr($alumno->getApellido1(), 0, 1).substr($alumno->getApellido2(), 0, 1);
-            $curso=$grupo->getCurso()->getCurso().$grupo->getLetra();
-            $asignatura=$opcional->getAsignatura()->getAsignatura()->getAbreviatura();
+   
+        $curso=$grupo->getCurso()->getCurso().$grupo->getLetra();
         return new Response(
             $this->get('knp_snappy.pdf')->getOutputFromHtml($html,$options),
             200,
             array(
                 'Content-Type'        => 'application/pdf',
-                'Content-Disposition' => 'attachment; filename="Alumnos_'.$asignatura.'_'. $curso.'.pdf"'
+                'Content-Disposition' => 'attachment; filename="Alumnos_'.$curso.'_optativas.pdf"'
             )
         );  
     }
@@ -403,7 +389,7 @@ class DefaultController extends Controller
             'grupo' => $grupo
         ));
         
-        $titulo="Alumnos de la Optativa";
+        $titulo="Asignatura Opcional";
         $subtitulo=$opcional->getAsignatura()->getAsignatura()->getAbreviatura();
         $inicio =$em->getRepository('BackendBundle:Centro')->findInicioCurso();
         $fin =$em->getRepository('BackendBundle:Centro')->findFinCurso();
@@ -438,6 +424,85 @@ class DefaultController extends Controller
             )
         );  
     }
+
+    public function HorariosGrupoAction($id, $num)
+    {
+        $em = $this->getDoctrine()->getManager();
+        $grupo = $em->getRepository('BackendBundle:Grupo')->findOneById($id);
+        $entity = $em->getRepository('BackendBundle:Horario')->findAll();
+        if($grupo->getAula()){
+            $aula_grupo=$grupo->getAula()->getNombre();
+        }
+        else{
+           $aula_grupo=null;
+        }
+        
+        $imparte= $em->getRepository('BackendBundle:Imparte')->findAsignacionesNoOpcionales($grupo);
+
+        $array=[];
+        foreach($imparte as $registro){
+            if($registro->getAula()){
+                $aula=$registro->getAula()->getNombre();
+            }
+            else{
+                $aula="";
+            }
+
+            if($registro->getDiaSemanal()){
+                $dia=$registro->getDiaSemanal();
+            }
+            else{
+                $dia=""; 
+            }
+
+            if($registro->getHorario()){
+                $horario=$registro->getHorario()->getId();
+            }
+            else{
+                $horario="";
+            }
+           
+            $array[$horario."-".$dia."-".$registro->getAsignatura()->getAsignatura()->getNombre()."-".$registro->getAsignatura()->getAsignatura()->getAbreviatura()."-".$aula."-".$registro->getGrupo()->getId()]=$registro->getProfesor()->getNombre()." ".$registro->getProfesor()->getApellido1()." ".$registro->getProfesor()->getApellido2();
+        }
+
+        $imparte= $em->getRepository('BackendBundle:Imparte')->findAsignacionesOpcionales($grupo);
+
+        $array_op=[];
+        foreach($imparte as $registro){
+            if($registro->getAula()){
+                $aula=$registro->getAula()->getNombre();
+            }
+            else{
+                $aula="";
+            }
+
+            if($registro->getDiaSemanal()){
+                $dia=$registro->getDiaSemanal();
+            }
+            else{
+                $dia=""; 
+            }
+
+            if($registro->getHorario()){
+                $horario=$registro->getHorario()->getId();
+            }
+            else{
+                $horario="";
+            }
+           
+            $array_op[$horario."-".$dia."-".$registro->getAsignatura()->getAsignatura()->getNombre()."-".$registro->getAsignatura()->getAsignatura()->getAbreviatura()."-".$aula."-".$registro->getGrupo()->getId()]=$registro->getProfesor()->getNombre()." ".$registro->getProfesor()->getApellido1()." ".$registro->getProfesor()->getApellido2();
+        }
+
+
+        return $this->render('IntranetBundle:Default:datos_horario_grupo.html.twig', array(
+            'imparte' => $array,
+            'imparte_op' => $array_op,
+            'entity' => $entity,
+            'num' => $num,
+            'aula_grupo' =>$aula_grupo));
+    }
+
+
 
 
 }

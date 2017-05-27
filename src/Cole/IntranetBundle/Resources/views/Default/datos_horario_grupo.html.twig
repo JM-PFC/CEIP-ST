@@ -1,0 +1,102 @@
+  <div class ="visible-md visible-lg hidden-xs visible-sm">
+  {% for entity in entity %}
+    <div id="{{ entity.id }}" class="horario col-xs-12 ">
+      <div class="col-xs-2 horas">{{ entity.inicio|date("H:i") ~ " - " ~ entity.fin|date("H:i")  }}</div>
+      {% if entity.horaClase == "RECREO" or entity.horaClase == "COMIDA" %}
+        <div class="col-xs-10 color_azul placeholder_list_table_td_mod ">{{ entity.horaClase }}</div>
+      {% else %}
+        <div id="1" class="col-xs-2 dia"></div>
+        <div id="2" class="col-xs-2 dia"></div>
+        <div id="3" class="col-xs-2 dia"></div>
+        <div id="4" class="col-xs-2 dia"></div>
+        <div id="5" class="col-xs-2 dia"></div>
+      {% endif %}
+    </div>
+  {% endfor %}
+  {% if aula_grupo %}
+    <p class="col-xs-12">Aula del grupo: <span class="c_naranja">{{aula_grupo}}</span></p>
+  {% endif %}
+ </div>
+
+  <div class="col-xs-12 hidden-md hidden-lg visible-xs hidden-sm">
+  {% for entity in entity %}
+    <div id="{{ entity.id }}" class="horario col-xs-12 ">
+      <div class="horas col-xs-4 fondo_claro">{{ entity.inicio|date("H:i") ~ " - " ~ entity.fin|date("H:i")  }}</div>
+      {% if entity.horaClase == "RECREO" or entity.horaClase == "COMIDA" %}
+        <div class="col-xs-8 color_azul placeholder_list_table_td_mod">{{ entity.horaClase }}</div>
+      {% else %}
+        <div id="{{num}}" class="col-xs-8 dia"></div>
+      {% endif %}
+    </div>
+  {% endfor %}
+  {# El aula para la versión móvil se asigna en la plantilla datos_alumnos_grupo #}
+  </div>
+
+
+<script>
+  aula_grupo={{aula_grupo|json_encode()|raw}};//Aula del grupo para no mostrar el aula en las asignaturas con ese aula.
+  array={{imparte|json_encode()|raw}};//Asignaturas no opcionales
+  for (var key in array){
+    clave=key.split("-");
+    id_horario=clave[0];
+    dia=clave[1];
+    nombre_asig=clave[2];
+    abrev_asig=clave[3];
+    aula=clave[4];
+    grupo=clave[5];
+    id_asignatura=array[key];
+    //Si existe alguna asignación con horario se muestra en la tabla.  
+    if(id_horario!=""){
+      if(aula_grupo && aula_grupo==aula){
+        $(".horario_grupo #contenido_horarios").find("div[class*='horario'][id='"+id_horario+"'] div[class*='dia'][id='"+dia+"']").html(abrev_asig); 
+      }
+      else{
+        if(aula){
+          $(".horario_grupo #contenido_horarios").find("div[class*='horario'][id='"+id_horario+"'] div[class*='dia'][id='"+dia+"']").html(abrev_asig+" <span class='aula_horario'>("+aula+")</span> ");
+        }
+        else{
+          $(".horario_grupo #contenido_horarios").find("div[class*='horario'][id='"+id_horario+"'] div[class*='dia'][id='"+dia+"']").html(abrev_asig); 
+        }
+      }
+      $(".color_azul").parent().addClass("no_clase");
+    }
+  }
+
+  array={{imparte_op|json_encode()|raw}};//Asignaturas opcionales.
+  for (var key in array){
+    clave=key.split("-");
+    id_horario=clave[0];
+    dia=clave[1];
+    nombre_asig=clave[2];
+    abrev_asig=clave[3];
+    aula=clave[4];
+    grupo=clave[5];
+    id_asignatura=array[key];
+
+    //Si existe alguna asignación con horario se muestra en la tabla.  
+    if(id_horario!=""){
+
+      if(aula_grupo && aula_grupo==aula){
+        if($(".horario_grupo #contenido_horarios div[class*='horario'][id='"+id_horario+"'] div[class*='dia'][id='"+dia+"'] p[id='"+abrev_asig+"']").size()==0){
+
+            $(".horario_grupo #contenido_horarios").find("div[class*='horario'][id='"+id_horario+"'] div[class*='dia'][id='"+dia+"']").append("<p  id='"+abrev_asig+"' class='m_op'>"+abrev_asig+"</p>"); 
+          }
+      }
+      else{
+        if($(".horario_grupo #contenido_horarios div[class*='horario'][id='"+id_horario+"'] div[class*='dia'][id='"+dia+"'] p[id='"+abrev_asig+"']").size()==0){
+          if(aula){
+            $(".horario_grupo #contenido_horarios").find("div[class*='horario'][id='"+id_horario+"'] div[class*='dia'][id='"+dia+"']").append("<p id='"+abrev_asig+"' class='m_op'>"+abrev_asig+" <span class='aula_horario'>("+aula+")</span></p>");
+          }
+          else{
+            $(".horario_grupo #contenido_horarios").find("div[class*='horario'][id='"+id_horario+"'] div[class*='dia'][id='"+dia+"']").append("<p  id='"+abrev_asig+"' class='m_op'>"+abrev_asig+"</p>"); 
+          }
+        }
+      }
+   
+      $(".color_azul").parent().addClass("no_clase");
+    }
+  }
+
+
+
+</script>
