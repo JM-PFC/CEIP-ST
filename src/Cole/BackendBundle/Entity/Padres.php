@@ -179,7 +179,10 @@ class Padres implements UserInterface, \Serializable
      */
     private $alumnos;
 
-
+    /**
+    * @ORM\OneToMany(targetEntity="Cole\IntranetBundle\Entity\Seguimiento", mappedBy="responsable", cascade={"remove"})
+    */
+    private $seguimiento;
 
     public function __construct()
     {
@@ -589,5 +592,38 @@ class Padres implements UserInterface, \Serializable
     public function getLastAccessAnt()
     {
         return $this->lastAccessAnt;
+    }
+
+    /**
+     * Add seguimiento
+     *
+     * @param \Cole\BackendBundle\Entity\Seguimiento $seguimiento
+     * @return Padres
+     */
+    public function addSeguimiento(\Cole\IntranetBundle\Entity\Seguimiento $seguimiento)
+    {
+        $this->seguimiento[] = $seguimiento;
+
+        return $this;
+    }
+
+    /**
+     * Remove seguimiento
+     *
+     * @param \Cole\BackendBundle\Entity\Seguimiento $seguimiento
+     */
+    public function removeSeguimiento(\Cole\IntranetBundle\Entity\Seguimiento $seguimiento)
+    {
+        $this->seguimiento->removeElement($seguimiento);
+    }
+
+    /**
+     * Get seguimiento
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getSeguimiento()
+    {
+        return $this->seguimiento;
     }
 }

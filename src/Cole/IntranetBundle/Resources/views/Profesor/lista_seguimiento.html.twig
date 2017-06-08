@@ -1,0 +1,70 @@
+
+            {% for seguimiento in seguimientos %}
+            <div id="{{seguimiento.id}}" class="seguimiento">
+                <div class="header col-xs-12 clearfix no-padding">
+                    {% if seguimiento.alumno%}
+                        <div class="icono">
+                            <i class="fa fa-user "></i>
+                        </div>
+                    {% else %}
+                        <div class="icono">
+                            <i class="fa fa-users "></i>
+                        </div>
+                    {% endif %}
+                    <div class="nombre col-xs-12">
+                        <div>
+                            {% if seguimiento.asignatura %}
+                                <p class="fw_bold">{{seguimiento.grupo.curso.curso ~ seguimiento.grupo.letra ~ " " ~ seguimiento.grupo.curso.nivel ~ " - "}}<span class="c_naranja"> {{seguimiento.asignatura.asignatura.abreviatura}}</span></p>
+                                {% if seguimiento.alumno%}
+                                    <p>{{seguimiento.alumno}}</p>
+                                {% endif %} 
+                            {% else %}
+                                <p class="fw_bold">{{seguimiento.grupo.curso.curso ~ seguimiento.grupo.letra ~ " " ~ seguimiento.grupo.curso.nivel }}</p>
+                                {% if seguimiento.alumno%}
+                                    <p class="c_naranja">{{seguimiento.alumno}}</p>
+                                {% endif %} 
+                            {% endif %} 
+                        </div>
+                    </div>
+                    <div class="aviso hidden-xs">
+                        <p  class="pull-right">{% trans %}Actualizado{% endtrans %}</p>
+                    </div>
+                </div>             
+                <div class="body clearfix">
+                    <div class="fecha">
+
+                        <p  class=" pull-right">{{ seguimiento.fecha | localizeddate('long', 'none', app.request.getLocale()) | capitalize}}</p>
+                    </div>
+                    <div>
+                        <p class="descripcion">{{seguimiento.descripcion|nl2br}}</p>
+                        <div class="botones_seguimiento">
+                            {% if seguimiento.respuesta %}
+                                <a id="consultar" href="{{path('intranet_profesor_seguimiento', {'num': seguimiento.id}) }}" class="btn btn_azul col-xs-2">
+                                    <i class="fa fa-search"></i>
+                                    {% trans %}Consultar{% endtrans %}
+                                </a>
+                            {% endif %}
+                            <span id="edicion" class="pull-right hidden-xs visible-sm visible-md visible-lg">
+                                <a id="btn_editar" href="#" class="btn btn-default" data-target="#editar_seguimiento_modal" data-toggle="modal" data-backdrop="static" data-keyboard="false">
+                                    <i class="fa fa-pencil"></i>{% trans %}Editar{% endtrans %}
+                                </a>
+                                <a id="btn_eliminar" href="" class="btn btn-default" data-target="#eliminar_seguimiento_modal" data-toggle="modal" data-backdrop="static" data-keyboard="false">
+                                    <i class="fa fa-trash-o"></i>{% trans %}Eliminar{% endtrans %}
+                                </a>
+                            </span>
+                            <span id="edicion" class="pull-right visible-xs hidden-sm hidden-md hidden-lg">
+                                <a href="" class="btn btn-default">
+                                    <i class="fa fa-pencil"></i>
+                                </a>
+                                <a href="" class="btn btn-default ">
+                                    <i class="fa fa-trash-o"></i>
+                                </a>
+                            </span>
+                        </div>
+                    </div>
+                    
+                </div>
+            </div>
+          {% endfor %}
+
+

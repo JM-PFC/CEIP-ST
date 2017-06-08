@@ -1,0 +1,61 @@
+seguimiento:
+    path:     /
+    defaults: { _controller: "IntranetBundle:Seguimiento:index" }
+
+seguimiento_show:
+    path:     /{id}/consultar
+    defaults: { _controller: "IntranetBundle:Seguimiento:show" }
+
+seguimiento_new:
+    path:     /nuevo
+    defaults: { _controller: "IntranetBundle:Seguimiento:new" }
+
+seguimiento_create:
+    path:     /create
+    defaults: { _controller: "IntranetBundle:Seguimiento:create" }
+    requirements: { _method: post }
+
+seguimiento_create_respuesta:
+    path:     /create/respuesta
+    defaults: { _controller: "IntranetBundle:Seguimiento:createRespuesta" }
+    requirements: { _method: post }
+
+seguimiento_edit:
+    path:     /{id}/edit
+    defaults: { _controller: "IntranetBundle:Seguimiento:edit" }
+    options:
+        expose: true
+seguimiento_eliminar:
+    path:     /{id}/eliminar
+    defaults: { _controller: "IntranetBundle:Seguimiento:eliminarSeguimiento" }
+    options:
+        expose: true
+seguimiento_update:
+    path:     /{id}/update
+    defaults: { _controller: "IntranetBundle:Seguimiento:update" }
+    requirements: { _method: post|put }
+
+seguimiento_delete:
+    path:     /{id}/delete
+    defaults: { _controller: "IntranetBundle:Seguimiento:delete" }
+    requirements: { _method: post|delete }
+    options:
+        expose: true
+
+seguimiento_leido:
+    path:     /{id}/leido/{alumno}
+    defaults: { _controller: "IntranetBundle:Seguimiento:seguimientoLeido" }
+    options:
+        expose: true
+
+seguimiento_consultado:
+    path:     /{id}/consultado/{tipo}/{user}
+    defaults: { _controller: "IntranetBundle:Seguimiento:seguimientoConsultado" }
+    options:
+        expose: true
+
+respuesta_seguimiento:
+    path:     /{id}/respuesta
+    defaults: { _controller: "IntranetBundle:Seguimiento:respuestaSeguimiento" }
+    options:
+        expose: true

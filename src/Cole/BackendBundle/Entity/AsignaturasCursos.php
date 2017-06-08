@@ -59,6 +59,11 @@ class AsignaturasCursos
     private $alumnos;
 
     /**
+    * @ORM\OneToMany(targetEntity="Cole\IntranetBundle\Entity\Seguimiento", mappedBy="asignatura")
+    */
+    private $seguimiento;
+
+    /**
      * Get id
      *
      * @return integer 
@@ -231,5 +236,43 @@ class AsignaturasCursos
     public function getAlumnos()
     {
         return $this->alumnos;
+    }
+
+    /**
+     * Add seguimiento
+     *
+     * @param \Cole\IntranetBundle\Entity\Seguimiento $seguimiento
+     * @return AsignaturasCursos
+     */
+    public function addSeguimiento(\Cole\IntranetBundle\Entity\Seguimiento $seguimiento)
+    {
+        $this->seguimiento[] = $seguimiento;
+
+        return $this;
+    }
+
+    /**
+     * Remove seguimiento
+     *
+     * @param \Cole\IntranetBundle\Entity\Seguimiento $seguimiento
+     */
+    public function removeSeguimiento(\Cole\IntranetBundle\Entity\Seguimiento $seguimiento)
+    {
+        $this->seguimiento->removeElement($seguimiento);
+    }
+
+    /**
+     * Get seguimiento
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getSeguimiento()
+    {
+        return $this->seguimiento;
+    }
+
+    public function __toString()
+    {
+        return $this->getCurso()->getCurso()." - ".  $this->getAsignatura()->getNombre();
     }
 }

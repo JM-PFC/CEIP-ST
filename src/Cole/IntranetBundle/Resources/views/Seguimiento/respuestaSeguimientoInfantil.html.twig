@@ -1,0 +1,28 @@
+
+<script>
+	grupo={{principal.grupo.id|json_encode()|raw}};
+	alumno={{principal.alumno.id|json_encode()|raw}};
+	seguimiento={{principal.id|json_encode()|raw}};
+	profesor={{principal.profesor.id|json_encode()|raw}};
+
+	//Se selecciona los valores de los select ocultos.
+    $("#seguimiento_grupo option[value='"+grupo+"']").prop('selected', true);
+    $("#seguimiento_alumno option[value='"+alumno+"']").prop('selected', true);
+    $("#seguimiento_seguimiento option[value='"+seguimiento+"']").prop('selected', true);
+    $("#seguimiento_profesor option[value='"+profesor+"']").prop('selected', true);
+
+</script>
+
+{{ form_start (form)}}
+	
+	<label for="seguimiento_descripcion">{% trans %}Respuesta{% endtrans %}</label>
+	{{ form_widget(form.descripcion) }}
+	<div class="class-footer">
+		<button class="btn btn-primary" type="button" data-dismiss="modal" title="">{% trans %}Cancelar{% endtrans %}</button>
+		{{ form_widget(form.submit) }}
+	</div>
+	<div class="hidden">
+		{{ form_rest(form) }}
+	</div>
+
+	{{ form_end (form)}}

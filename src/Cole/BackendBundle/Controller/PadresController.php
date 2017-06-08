@@ -289,12 +289,15 @@ class PadresController extends Controller
         if (!$entity) {
             throw $this->createNotFoundException('Unable to find Padres entity.');
         }
-
+        //Se optiene el password para asignarlo de nuevo ya que se modifica la contraseña con el valor de la nueva que está vacío(oculto).
+        $password=$entity->getPassword();
+            
         $deleteForm = $this->createDeleteForm($id);
         $editForm = $this->createEditForm($entity);
         $editForm->handleRequest($request);
 
         if ($editForm->isValid()) {
+            $entity->setPassword($password);
             $em->flush();
 
             return $this->redirect($this->generateUrl('padres_edit', array('id' => $id)));

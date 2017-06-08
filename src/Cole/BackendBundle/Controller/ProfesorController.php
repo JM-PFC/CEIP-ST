@@ -311,6 +311,8 @@ class ProfesorController extends Controller
             throw $this->createNotFoundException('Unable to find Profesor entity.');
         }
         $fileOriginal=$entity->getFoto();
+        //Se optiene el password para asignarlo de nuevo ya que se modifica la contraseña con el valor de la nueva que está vacío(oculto).
+        $password=$entity->getPassword();
 
         $deleteForm = $this->createDeleteForm($id);
         $editForm = $this->createEditForm($entity);
@@ -363,6 +365,7 @@ class ProfesorController extends Controller
                 }
                 $entity->setFoto(NULL);
             }
+            $entity->setPassword($password);
             $entity->setHoras($horas);
             $entity->setHorasLectivas($lectivas);
             $em->flush();

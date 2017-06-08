@@ -1,6 +1,40 @@
 $(document).ready(function () {
+
+  locale=$("#intranet").attr("locale");
+
 	//Mascaras
 	$('.telefono').mask('000 00 00 00'); 
+
+  // Se establece las variables con los audios para las notificaciones.
+  if (navigator.userAgent.search("Firefox") >= 0) { //Firefox solo admite archivos .ogg
+    var aviso = new Audio();
+    aviso.src = "/Symfony/web/bundles/backend/sounds/aviso.ogg";
+    var ok = new Audio();
+    ok.src = "/Symfony/web/bundles/backend/sounds/ok.ogg"
+    var exito = new Audio();
+    exito.src = "/Symfony/web/bundles/backend/sounds/exito.ogg";
+    var error = new Audio();
+    error.src = "/Symfony/web/bundles/backend/sounds/error.ogg";
+    var errorPNotify = new Audio();
+    errorPNotify.src = "/Symfony/web/bundles/backend/sounds/errorPNotify.ogg";
+    var blocker = new Audio();
+    blocker.src = "/Symfony/web/bundles/backend/sounds/blocker.ogg";   
+  }
+  else{
+    var aviso = new Audio();
+    aviso.src = "/Symfony/web/bundles/backend/sounds/aviso.mp3";
+    var ok = new Audio();
+    ok.src = "/Symfony/web/bundles/backend/sounds/ok.mp3"
+    var exito = new Audio();
+    exito.src = "/Symfony/web/bundles/backend/sounds/exito.mp3";
+    var error = new Audio();
+    error.src = "/Symfony/web/bundles/backend/sounds/error.mp3";
+    var errorPNotify = new Audio();
+    errorPNotify.src = "/Symfony/web/bundles/backend/sounds/errorPNotify.mp3";
+    var blocker = new Audio();
+    blocker.src = "/Symfony/web/bundles/backend/sounds/blocker.mp3";
+  }
+
 
   //Se oculta los mensajes flash tras un tiempo.
   setTimeout(function() {
@@ -50,6 +84,24 @@ $(document).ready(function () {
     theme_enable_hidepanel_button:false,
   }); 
 
+  //Se alinea la ventana modal al centro de la pantalla.
+  function alignModal(){
+    var modalDialog = $(this).find(".modal-dialog");
+    /* Se le aplica la alineación vertical al margen superior*/
+      modalDialog.css("margin-top", Math.max(0, ($(window).height() - modalDialog.height()) / 2)-50); //Se le ha restado 50 para que suba un poco de la mitad
+    }
+
+    // Se alinea la ventana modal cuando se muestra.
+    $(".fade-scale").on("shown.bs.modal", alignModal);
+    //Se añade efecto de sonido a los avisos.
+    $('.fade-scale').on('show.bs.modal', function (e) {
+      aviso.play();
+    })
+    //Se alinea la ventana cuando se cambia el tamaño de la pantalla.
+    $(window).on("resize", function(){
+        $(".modal:visible").each(alignModal);
+    }); 
+
 
   $('.bloque-menu-alumno a').on('mouseover', function(event) {
     clase=$(this).attr("color");
@@ -73,6 +125,14 @@ $(document).ready(function () {
   });
 
 
+  //Se cambia el cursor a espera cuando se hace click en los elemento con la clase "waiting".
+  $(document).on('click',".waiting",function(event){ 
+    $('body').addClass('waiting');
+  });
+
+  $(document).on('click',".sidebar-nav a, .enrutaje a, #enlacemiperfil a, .contenedor_noticia a, .barramensajes a, .modal #form_submit,.boton_enviar button, .modal button[type='submit'], #consultar",function(event){ 
+    $('body').addClass('waiting');
+  });
 
   //Se incrementa el contador de las noticias.
   $(document).on('click',".contenido_noticia a",function(event){ 
@@ -193,6 +253,302 @@ $(document).ready(function () {
 
     $("#alumnos_grupo_pdf[class*='#1'] button").addClass('hidden');
     
+  });
+
+  ///////////////////////////////////////////
+  //         Seguimientos Profesor         //
+  ///////////////////////////////////////////
+
+
+  //Efectos sobre el botón de añadir seguimientos.
+  $(document).on('mouseenter',".add_seguimiento_scroll",function(event){ 
+    $(this).animate({'right': -10,opacity: 1 },500);
+  });
+
+  $(document).on('mouseleave',".add_seguimiento_scroll",function(event){ 
+     $(this).animate({'right': -150, opacity: 0.8 },500);
+  });
+
+  //Se pulsa un botón en las opciones de selección.
+  $(document).on('click',"#seleccion_nuevo_seguimiento button",function(event){ 
+    div=$(this).closest("div");
+    div.find("button").removeClass('active');
+    $(this).addClass('active');
+
+    //Se deshabilita el formulario y el botón de enviar hasta que cumpla las condiciones que se comprueban luego.
+    $("#seguimiento_descripcion").prop("disabled", true);
+    $("#formulario_nuevo_seguimiento .boton_enviar button").prop('disabled', true);
+    //Se oculta el nombre del alumno por si se cambia de opción.
+    $(".nombre_alumno_seguimiento").addClass('hidden');
+    
+    locale=$("#seleccion_nuevo_seguimiento").attr("locale");
+    orden=$(this).closest("div").parent();
+    //Se marca la opción actual.
+    $("#seleccion_nuevo_seguimiento #orden").css("background-color", "#337ab7");
+    if(orden.attr("id")=="1"){
+      $("#seleccion_nuevo_seguimiento #2 #orden").css("background-color", "#ea9239");
+      $("#seleccion_nuevo_seguimiento #2").removeClass('hidden');
+      $("#seleccion_nuevo_seguimiento #3 button").removeClass('active');
+
+      if ($(window).width() < 768) {
+        var pos = $("#seleccion_nuevo_seguimiento #2").offset().top;
+        $("html").scrollTop(pos-300);
+      }
+      id=$(this).attr("id");
+      //Se obtiene las asignaturas impartidas por el profesor en ese grupo.
+      $.ajax({
+          type: 'POST',
+          url: Routing.generate('asignaturasGrupo_profesor', {id:id, _locale:locale}),
+          success: function(response){
+           $("#seleccion_nuevo_seguimiento #asignatura").empty();
+            for(key in response.asignaturas){
+              $("#seleccion_nuevo_seguimiento #asignatura").append('<button id="'+response.asignaturas[key]["id"]+'" class="btn btn-primary col-xs-12 ">'+response.asignaturas[key]["abreviatura"]+'</button>');
+            }
+
+            $("#seleccion_nuevo_seguimiento #3").addClass('hidden');
+          }
+      })
+      //Se selecciona el grupo en el select oculto.
+      $("#seguimiento_grupo option[value='"+id+"']").prop('selected', true);
+    }
+    else if(orden.attr("id")=="2"){
+      id=$(this).attr("id");
+      $("#seleccion_nuevo_seguimiento #3 button").removeClass('active');
+      $("#seleccion_nuevo_seguimiento #3 #orden").css("background-color", "#ea9239");
+      $("#seleccion_nuevo_seguimiento #3").removeClass('hidden');
+
+      if ($(window).width() < 768) {
+        var pos = $("#seleccion_nuevo_seguimiento #3").offset().top;
+        $("html").scrollTop(pos-300);
+      }
+      //Se selecciona el grupo en el select oculto.
+      $("#seguimiento_asignatura option[value='"+id+"']").prop('selected', true);
+    }
+    else{
+      if($(this).attr("id")=="grupo"){
+        $("#seguimiento_descripcion").prop("disabled", false);
+        if ($(window).width() < 768) {
+          var pos = $("#seguimiento_descripcion").offset().top;
+          $("html").scrollTop(pos);
+        }
+        if($("#seguimiento_descripcion").val().length == 0){
+          $("#formulario_nuevo_seguimiento .boton_enviar button").prop('disabled', true);
+        }
+        else{
+          $("#formulario_nuevo_seguimiento .boton_enviar button").prop('disabled', false);
+        }
+      }
+      else{
+
+        grupo=$("#seleccion_nuevo_seguimiento #cursos .active").attr("id");
+        asignatura=$("#seleccion_nuevo_seguimiento #asignatura .active").attr("id");
+        if(asignatura){
+          $("#lista_alumnos_seguimiento .modal-body").load(Routing.generate("AlumnosGrupoAsignatura", {id:grupo, asig:asignatura, _locale:locale}), function(){
+        
+          });
+        }
+        else{//Para Infantil
+          $("#lista_alumnos_seguimiento .modal-body").load(Routing.generate("AlumnosGrupo", {id:grupo, _locale:locale}), function(){
+            });
+        }
+             
+      }
+    }
+  });
+
+  // Se desactiva el botón de alumno de la opción de destinatario cuando cerramos la ventana modal sin elegir alumno.
+  $(document).on('click','#lista_alumnos_seguimiento .close, #lista_alumnos_seguimiento .class-footer button' ,function() {
+    $("#seleccion_nuevo_seguimiento #3 button").removeClass('active');
+  });
+
+
+  // Se muestra el alumno elegido de la venatan modal de la opción destinatario.
+  $(document).on('click','#lista_alumnos_seguimiento tr' ,function() {
+    nombre=$(this).attr("nombre");
+    id=$(this).attr("id");
+
+    if($(this).attr("sexo")=="Masculino"){
+      $(".alumno").text(nombre);
+      $(".alumno").parent().removeClass('hidden');
+      $(".alumno").parent().attr('id',id);
+    }
+    else{
+      $(".alumna").text(nombre);
+      $(".alumna").parent().removeClass('hidden');
+      $(".alumna").parent().attr('id',id);
+    }
+    //Se selecciona el alumno en el select oculto.
+    $("#seguimiento_alumno option[value='"+id+"']").prop('selected', true);
+
+    //Se cierra la ventana modal.
+    $('#lista_alumnos_seguimiento').modal('toggle');
+
+    $("#seguimiento_descripcion").prop("disabled", false);
+    if ($(window).width() < 768) {
+      var pos = $("#seguimiento_descripcion").offset().top;
+      $("html").scrollTop(pos);
+    }
+    if($("#seguimiento_descripcion").val().length == 0){
+      $("#formulario_nuevo_seguimiento .boton_enviar button").prop('disabled', true);
+    }
+    else{
+      $("#formulario_nuevo_seguimiento .boton_enviar button").prop('disabled', false);
+    }
+  });
+
+  
+  $(document).on('keyup paste cut','#seguimiento_descripcion' ,function() {
+    if($(this).val().length == 0){
+      $("#formulario_nuevo_seguimiento .boton_enviar button").prop('disabled', true);
+    }
+    else{
+      $("#formulario_nuevo_seguimiento .boton_enviar button").prop('disabled', false);
+    }
+  });
+
+  //Se añade el id del seguimiento en botón de eliminar de la ventana modal para luegp generar la ruta.
+  $(document).on('click','#contenedor_seguimientos #btn_eliminar' ,function() {
+    id=$(this).closest('.seguimiento').attr("id");
+    $("#eliminar_seguimiento_modal .modal-body").load(Routing.generate("seguimiento_eliminar", {id:id, _locale:locale}), function(){
+    }); 
+  });
+
+  $(document).on('click','#eliminar_seguimiento_modal #eliminar' ,function() {
+    $('#eliminar_seguimiento_modal').modal('toggle');
+    id=$(this).attr("seguimiento");
+    $.ajax({
+      type: 'POST',
+      url: Routing.generate("seguimiento_delete", {id:id, _locale:locale}),        
+      success: function() {
+
+      }
+    })
+  });
+
+    //Se añade el id del seguimiento en botón de editar de la ventana modal para luegp generar la ruta.
+  $(document).on('click','#contenedor_seguimientos #btn_editar' ,function() {
+    id=$(this).closest('.seguimiento').attr("id");
+    $("#editar_seguimiento_modal .modal-body").load(Routing.generate("seguimiento_edit", {id:id, _locale:locale}), function(){
+    }); 
+  });
+
+  $(document).on('click','#editar_seguimiento_modal #editar' ,function() {
+    $('#editar_seguimiento_modal').modal('toggle');
+    id=$(this).attr("seguimiento");
+    $.ajax({
+      type: 'POST',
+      url: Routing.generate("seguimiento_update", {id:id, _locale:locale}),        
+      success: function() {
+
+      }
+    })
+  });
+
+  ///////////////////////////////////////////
+  //          Seguimientos Alumno          //
+  ///////////////////////////////////////////
+
+  //Se marca el seguimiento como leido.
+  $(document).on('click','#leido' ,function() {
+    boton=$(this);
+    id=$(this).closest(".seguimiento").attr("id");
+    alumno=$(this).closest("#contenedor_seguimientos").attr("alumno");
+    $(this).closest(".seguimiento").animate({'right': -1000,opacity: 1 },400, function() {
+
+      //Se elimina de la tabla de avisos el seguimiento leido.
+      $.ajax({
+        url: Routing.generate('seguimiento_leido', {_locale:"es",id:id, alumno:alumno}),
+        dataType: 'json',
+        success: function(response) {
+
+        }
+      });
+
+      //Se actualiza el número de avisos en la barra superior.
+      num_avisos=parseInt($(".barra_cabecera #barraalertasmovil .numalertas").text())-parseInt(1);
+      $("#barraalertasmovil .numalertas").text(num_avisos);
+
+      if($(".seguimiento:not([fecha])").size()>0 && $(".seguimiento:not([fecha])").last().attr("id")<id){
+        index=0;
+        $(".seguimiento:not([fecha])").each(function(){
+          if($(this).attr("id")>id){
+            index=$(this).attr("id");
+          }
+        });
+        //Se elimina los estilos de seguimiento actualizado.
+        $(this).closest(".seguimiento").find(".aviso").remove();
+        boton.remove(); 
+        $(this).closest(".seguimiento").find(".icono i").removeClass('c_naranja');
+
+        if(index==0){
+          id=$(".seguimiento:not([fecha])").first().attr("id");
+          $(this).closest(".seguimiento").insertBefore($(".seguimiento[id='"+id+"']"));
+          $(this).closest(".seguimiento").animate({'right': 0,opacity: 1 },400);
+        }
+        else{
+          $(this).closest(".seguimiento").insertAfter($(".seguimiento[id='"+index+"']"));
+          $(this).closest(".seguimiento").animate({'right': 0,opacity: 1 },400);
+        }
+      }
+      else{ 
+        //Se elimina el seguimiento y se marca como leido en la base de datos, para que se pueda cargar en su posición.
+        $(this).closest(".seguimiento").remove();
+
+        //Se carga nuevos seguimientos en el contenedor si sólo quedan 3.
+        if($(".seguimiento[fecha]").size()==3){
+          id=$("#contenedor_seguimientos").attr("alumno");
+          fecha=$("#contenedor_seguimientos>div").not(':hidden').last().attr("fecha");
+                
+          if(fecha){
+            $.ajax({
+              url: Routing.generate('cargar_nuevos_seguimientos_alumno', {_locale:"es",id:id ,fecha:fecha}),
+              dataType: 'json',
+              success: function(response) {
+                $('#contenedor_seguimientos').append(response.html);
+              }
+            });
+          }
+          else{
+            iden=$("#contenedor_seguimientos>div").not(':hidden').last().attr("id");
+            $.ajax({
+              url: Routing.generate('cargar_seguimientos_alumno', {_locale:"es",id:id ,iden:iden}),
+              dataType: 'json',
+              success: function(response) {
+                $('#contenedor_seguimientos').append(response.html);
+              }
+            });
+          }
+        }
+      }
+    });
+  });
+
+  //Se marca el seguimiento como leido.
+  $(document).on('click','#consultar' ,function() {
+    boton=$(this);
+    id=$(this).closest(".seguimiento").attr("id");
+    if($(this).closest("#contenedor_seguimientos").attr("profesor")){
+      user=$(this).closest("#contenedor_seguimientos").attr("profesor");
+      tipo="Profesor";
+    }else{
+      user=$(this).closest("#contenedor_seguimientos").attr("alumno");
+      tipo="Alumno";
+    }
+      //Se elimina de la tabla de avisos el seguimiento seleccionado.
+      $.ajax({
+        url: Routing.generate('seguimiento_consultado', {_locale:"es",id:id, user:user, tipo:tipo}),
+        dataType: 'json',
+        success: function(response) {
+
+        }
+      });
+  });
+
+  //Se carga la ventana modal para responder un seguimiento.
+  $(document).on('click','#btn_responder' ,function() {
+    id=$(this).prev().find(".consulta_seguimiento").attr("id");
+    $("#responder_seguimiento_modal .modal-body").load(Routing.generate("respuesta_seguimiento", {id:id, _locale:locale}), function(){
+    }); 
   });
 
 

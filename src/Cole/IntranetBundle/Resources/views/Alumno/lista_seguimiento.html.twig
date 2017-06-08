@@ -1,0 +1,115 @@
+          {% for seguimiento in seguimientosNuevos %}
+            <div id="{{seguimiento.id}}" class="seguimiento" fecha="{{seguimiento.fechaActualizada | date('Y-m-d H:i:s')}}">
+                <div class="header col-xs-12 clearfix no-padding">
+                    {% if seguimiento.alumno%}
+                        <div class="icono">
+                            <i class="fa fa-user c_naranja"></i>
+                        </div>
+                    {% else %}
+                        <div class="icono">
+                            <i class="fa fa-users c_naranja"></i>
+                        </div>
+                    {% endif %}
+                    <div class="nombre col-xs-12">
+                        <div>
+                            {% if seguimiento.asignatura %}
+                                <p class="fw_bold hidden-xs"> {{seguimiento.asignatura.asignatura.nombre}}</p>
+                                <p class="fw_bold hidden-sm hidden-md hidden-lg">{{seguimiento.asignatura.asignatura.abreviatura}}</p>
+                            {% else %}
+                                <p class="fw_bold">{{seguimiento.grupo.curso.nivel ~ " - " ~ seguimiento.grupo}}</p>
+                            {% endif %}
+                            <p><span class="c_naranja">{{seguimiento.profesor}}</span></p>
+                        </div>
+                    </div>
+                    <div class="aviso hidden-xs">
+                        <p  class="pull-right">{% trans %}Actualizado{% endtrans %}</p>
+                    </div>
+                </div>             
+                <div class="body clearfix">
+                    <div class="fecha">
+
+                        <p  class=" pull-right">{{ seguimiento.fecha | localizeddate('long', 'none', app.request.getLocale()) | capitalize}}</p>
+                    </div>
+                    <div>
+                        <p class="descripcion">{{seguimiento.descripcion|nl2br}}</p>
+                        <div class="botones_seguimiento">
+                          <div>
+                            {% if not seguimiento.respuesta %}
+                                <button id="leido" class="btn btn-success">
+                                    <i class="fa fa-check" ></i>
+                                    {% trans %}Leido{% endtrans %}
+                                </button>
+                            {% endif %}
+                            {% if seguimiento.alumno %}
+                                {% if not seguimiento.respuesta %}
+                                    <a id="consultar" href="{{path('intranet_alumno_seguimiento', {'id': entity.id, 'num': seguimiento.id}) }}" class="btn btn_azul">
+                                        <i class="fa  fa-pencil-square-o"></i>
+                                        {% trans %}Responder{% endtrans %}
+                                    </a>
+                                {% else %}
+                                    <a id="consultar" href="{{path('intranet_alumno_seguimiento', {'id': entity.id, 'num': seguimiento.id}) }}" class="btn btn_azul">
+                                        <i class="fa fa-search"></i>
+                                        {% trans %}Consultar{% endtrans %}
+                                    </a>
+                                {% endif %}
+                            {% endif %}
+                          </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+          {% endfor %}
+
+          {% for seguimiento in seguimientos %}
+            <div id="{{seguimiento.id}}" class="seguimiento">
+                <div class="header col-xs-12 clearfix no-padding">
+                    {% if seguimiento.alumno%}
+                        <div class="icono">
+                            <i class="fa fa-user"></i>
+                        </div>
+                    {% else %}
+                        <div class="icono">
+                            <i class="fa fa-users"></i>
+                        </div>
+                    {% endif %}
+                    <div class="nombre col-xs-12">
+                        <div>
+                            {% if seguimiento.asignatura %}
+                                <p class="fw_bold hidden-xs"> {{seguimiento.asignatura.asignatura.nombre}}</p>
+                                <p class="fw_bold hidden-sm hidden-md hidden-lg">{{seguimiento.asignatura.asignatura.abreviatura}}</p>
+                            {% else %}
+                                <p class="fw_bold">{{seguimiento.grupo.curso.nivel ~ " - " ~ seguimiento.grupo}}</p>
+                            {% endif %}
+                            <p><span class="c_naranja">{{seguimiento.profesor}}</span></p>
+                        </div>
+                    </div>
+                </div>             
+                <div class="body clearfix">
+                    <div class="fecha">
+
+                        <p  class=" pull-right">{{ seguimiento.fecha | localizeddate('long', 'none', app.request.getLocale()) | capitalize}}</p>
+                    </div>
+                    <div>
+                        <p class="descripcion">{{seguimiento.descripcion|nl2br}}</p>
+                        <div class="botones_seguimiento">
+                          <div>
+                            {% if seguimiento.alumno %}
+                                {% if not seguimiento.respuesta %}
+                                    <a id="consultar" href="{{path('intranet_alumno_seguimiento', {'id': entity.id, 'num': seguimiento.id}) }}" class="btn btn_azul">
+                                        <i class="fa  fa-pencil-square-o"></i>
+                                        {% trans %}Responder{% endtrans %}
+                                    </a>
+                                {% else %}
+                                    <a id="consultar" href="{{path('intranet_alumno_seguimiento', {'id': entity.id, 'num': seguimiento.id}) }}" class="btn btn_azul">
+                                        <i class="fa fa-search"></i>
+                                        {% trans %}Consultar{% endtrans %}
+                                    </a>
+                                {% endif %}
+                            {% endif %}
+                          </div>
+                        </div>
+                    </div>
+                    
+                </div>
+            </div>
+          {% endfor %}

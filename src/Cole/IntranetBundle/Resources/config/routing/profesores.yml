@@ -18,6 +18,22 @@ horario_profesor:
 #    options:
 #      expose: true
 
+intranet_profesor_seguimientos:
+    path:     /seguimiento
+    defaults: { _controller: IntranetBundle:Profesor:seguimientos}
+    options:
+        expose: true
+
+intranet_profesor_seguimiento:
+    path:     /{num}/seguimiento/
+    defaults: { _controller: IntranetBundle:Profesor:seguimiento}
+
+cargar_seguimientos_profesor:
+    path:     /cargar_seguimientos/{id}
+    defaults: { _controller: IntranetBundle:Profesor:CargarSeguimientos}
+    options:
+        expose: true
+
 intranet_profesor_noticias:
     path:     /noticias
     defaults: { _controller: IntranetBundle:Profesor:noticias}
@@ -31,6 +47,12 @@ intranet_profesor_noticia:
 nuevas_noticias_profesor:
     path:     /{id}/nuevas_noticias
     defaults: { _controller: IntranetBundle:Profesor:comprobarNoticiasNuevas}
+    options:
+        expose: true
+
+nuevos_seguimientos_profesor:
+    path:     /{id}/nuevos_seguimientos
+    defaults: { _controller: IntranetBundle:Profesor:comprobarSeguimientosNuevos}
     options:
         expose: true
 
@@ -49,5 +71,23 @@ info_alumno:
 info_profesor:
     path:     /info_profesor/{id}
     defaults: { _controller: IntranetBundle:Profesor:InfoProfesor}
+    options:
+        expose: true
+
+asignaturasGrupo_profesor:
+    path:     /asignaturas/profesor/{id}
+    defaults: { _controller: IntranetBundle:Profesor:AsignaturasGrupoProfesor}
+    options:
+        expose: true
+
+AlumnosGrupoAsignatura:
+    path:     /GrupoAsignatura/{id}/{asig}
+    defaults: { _controller: IntranetBundle:Profesor:AlumnosGrupoAsignatura}
+    options:
+        expose: true
+
+AlumnosGrupo:
+    path:     /GrupoAsignatura/{id}
+    defaults: { _controller: IntranetBundle:Profesor:AlumnosGrupo}
     options:
         expose: true

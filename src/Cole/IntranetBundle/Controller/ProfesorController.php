@@ -10,6 +10,8 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 
 use Cole\BackendBundle\Entity\Profesor;
 use Cole\ColeBundle\Entity\Noticias;
+use Cole\IntranetBundle\Entity\Avisos;
+
 
 use Cole\BackendBundle\Form\AlumnoIntranetType;
 use Symfony\Component\HttpFoundation\Response;
@@ -59,25 +61,6 @@ class ProfesorController extends Controller
             $alumnos_optativa=null;
         }
 
-
-        //Se comprueba si está asignado todo el horario del grupo para mostrarlo o no.
-        /*$clases=$em->getRepository('BackendBundle:Horario')->findClases();
-
-        $no_opcionales = $em->getRepository('BackendBundle:Imparte')->findNoOpcionalesConHorario($entity->getGrupo());
-        $opcionales=$em->getRepository('BackendBundle:Imparte')->findOpcionalesConHorario($entity->getGrupo());
-        $num_opcionales=$em->getRepository('BackendBundle:Imparte')->findOpcionalesSinRepetir($entity->getGrupo());
-        if($opcionales){
-            //Las asignaciones de asignaturas optativas se dividen entre el número de optativas, para obtener el número de módulos asignados.
-            if(count($no_opcionales)+(count($opcionales)/count($num_opcionales))==count($clases)*5){
-                $numAsigHorarios=1;
-            }
-            else{
-                $numAsigHorarios=0;
-            }
-        }else{
-            $numAsigHorarios=0;
-        }
-*/
         $asignaciones_profesores=$em->getRepository('BackendBundle:Imparte')->findAsignacionesProfesores($grupo);
         $profesores_grupo=$em->getRepository('BackendBundle:Imparte')->findProfesoresGrupoSinRepetir($grupo);
         //Se comprueba si el tutor imparte alguna asignatura en el grupo o sólo tutorias(para lista de profesores/asignaturas).
@@ -93,9 +76,6 @@ class ProfesorController extends Controller
         else{
             $asignaturas_tutor=null;
         }
-
-
-
 
         return $this->render('IntranetBundle:Profesor:datos_alumnos_grupo.html.twig', array(
             'profesor' => $profesor,
@@ -350,6 +330,183 @@ class ProfesorController extends Controller
         
     }
 
+    public function seguimientosAction(Request $request)
+    {
+        $em = $this->getDoctrine()->getManager();
+
+        $entity = $this->get('security.context')->getToken()->getUser();
+        $seguimientosNuevos=$em->getRepository('IntranetBundle:Seguimiento')->findNuevosSeguimientos($entity);
+        if(count($seguimientosNuevos)<5){
+            $seguimientos= $em->getRepository('IntranetBundle:Seguimiento')->findAntiguosSeguimientosContador($entity, 5-count($seguimientosNuevos));
+        }
+        else{
+            $seguimientos=null;
+        }
+/*
+        $paginator  = $this->get('knp_paginator');
+        $pagination = $paginator->paginate(
+            $noticias, 
+            $request->query->getInt('page', 1),
+            6
+        );
+
+        $noticias_nuevas=$entity->getNoticiasNuevas();
+        $id_noticias = explode("|", $noticias_nuevas);
+        $array=[];
+        foreach($id_noticias as $id){
+            if($id!=""){
+                $array[$id]=$id;
+            }
+        }
+
+        //Se actualiza la fecha del último acceso a noticias.
+        $entity->setAccesoNoticias(new \DateTime("now"));
+        $em->persist($entity);
+        $em->flush();
+*/
+        return $this->render('IntranetBundle:Profesor:seguimientos.html.twig', array(
+            'entity' => $entity, 
+            'seguimientosNuevos' => $seguimientosNuevos,
+            'seguimientos'=> $seguimientos,
+            //'noticias_nuevas' => $array,
+            //'pagination'=> $pagination
+            ));
+    }
+
+    public function seguimientoAction(Request $request, $num)
+    {
+        $em = $this->getDoctrine()->getManager();
+        $entity = $this->get('security.context')->getToken()->getUser();
+        $seguimiento=$em->getRepository('IntranetBundle:Seguimiento')->findOneById($num);
+        $respuestas=$em->getRepository('IntranetBundle:Seguimiento')->findRespuestas($num);
+
+        return $this->render('IntranetBundle:Profesor:seguimiento.html.twig', array(
+            'entity' => $entity, 
+            'seguimiento'=> $seguimiento,
+            'respuestas' => $respuestas,
+            ));
+    }
+
+    public function CargarSeguimientosAction(Request $request, $id)
+    {
+        $em = $this->getDoctrine()->getManager();
+
+        $entity = $this->get('security.context')->getToken()->getUser();
+        $seguimientos= $em->getRepository('IntranetBundle:Seguimiento')->findCargaSeguimientosProfesor($entity, $id);
+
+        return new JsonResponse(array(
+            'seguimientos' => $seguimientos,
+            'html' => $this->renderView('IntranetBundle:Profesor:lista_seguimiento.html.twig', array(
+            'seguimientos' => $seguimientos)),
+            'success' => true
+            ), 200);
+    }
+   
+    public function comprobarSeguimientosNuevosAction($id)
+    {
+        $em = $this->getDoctrine()->getManager();
+
+        $entity= $em->getRepository('BackendBundle:Profesor')->findOneById($id);
+        $num=0;
+
+            if($entity->getAccesoSeguimientos()){
+                $seguimientos =$em->getRepository('IntranetBundle:Seguimiento')->findNuevosSeguimientosProfesor($entity->getAccesoSeguimientos(),$entity);
+            }
+            else{
+                $seguimientos =$em->getRepository('IntranetBundle:Seguimiento')->findNuevosSeguimientosInicioProfesor($entity);
+            }
+        
+            //Si hay seguimientos nuevos se añade los id a la tabla Avisos.
+            if($seguimientos){
+                foreach($seguimientos as $seguimiento){
+                    if($seguimiento->getSeguimiento() == null){
+                        $existencia=$em->getRepository('IntranetBundle:Avisos')->findExistenciaAviso($entity->getId(), "Profesor",$seguimiento->getId(), "Seguimiento" );
+                        if(!$existencia){
+                            $aviso = new Avisos();
+                            $aviso->setIdUsuario($entity->getId());
+                            $aviso->setTipoUsuario("Profesor");
+                            $aviso->setIdAviso($seguimiento->getId());
+                            $aviso->setTipoAviso("Seguimiento");
+                            $em->persist($aviso);
+                        }
+                    }
+                    else{
+                        $existencia=$em->getRepository('IntranetBundle:Avisos')->findExistenciaAviso($entity->getId(), "Profesor",$seguimiento->getSeguimiento(), "Seguimiento" );
+                        if(!$existencia){
+                            $aviso = new Avisos();
+                            $aviso->setIdUsuario($entity->getId());
+                            $aviso->setTipoUsuario("Profesor");
+                            $aviso->setIdAviso($seguimiento->getSeguimiento());
+                            $aviso->setTipoAviso("Seguimiento");
+                            $em->persist($aviso);
+                        }
+                    } 
+                }
+
+                //Se actualiza la fecha del último acceso a noticias.
+                $entity->setAccesoSeguimientos(new \DateTime("now"));
+                $em->persist($entity);
+                $em->flush();
+            }
+            //Se obtiene el número de seguimientos nuevos.
+            $avisos =$em->getRepository('IntranetBundle:Avisos')->findAvisosAlumno($entity, "Profesor", "Seguimiento");
+            $num=count($avisos);
+
+        return new JsonResponse(array(
+            'num'=> $num,
+            'id' => $id,
+            'success' => true), 200);
+    }
+
+    public function  AsignaturasGrupoProfesorAction(Request $request, $id)
+    {
+        $em = $this->getDoctrine()->getManager();
+
+        $entity = $this->get('security.context')->getToken()->getUser();
+        $grupo= $em->getRepository('BackendBundle:Grupo')->findOneById($id);
+        
+        #Se devuelve sólo el id, abreviatura y nombre para mostrarlo por ajax.
+        $asignaturas= $em->getRepository('BackendBundle:Imparte')->findAsignaturasProfesorGrupo($entity, $grupo);
+
+        return new JsonResponse(array(
+            'asignaturas' => $asignaturas
+            ), 200);
+    }
+
+
+    public function AlumnosGrupoAsignaturaAction($id, $asig)
+    {
+        $em = $this->getDoctrine()->getManager();
+
+        $profesor = $this->get('security.context')->getToken()->getUser();
+        $grupo=$em->getRepository('BackendBundle:Grupo')->findOneById($id);
+        $asignatura=$em->getRepository('BackendBundle:AsignaturasCursos')->findOneById($asig);
+        //Se comprueba si la asignatura es opcional para obtener sólo los alumnos que imparten la asignatura.
+        if($asignatura->getAsignatura()->getOpcional()==0){
+            $entities=$em->getRepository('BackendBundle:Alumno')->findBy( array("grupo"=>$grupo),array("numAlum"=>"ASC"));
+        }
+        else{
+            $entities=$em->getRepository('BackendBundle:Alumno')->findBy(array("optativa"=>$asignatura),array("numAlum"=>"ASC"));
+        }
+
+        return $this->render('IntranetBundle:Profesor:alumnos_grupo_asignatura.html.twig', array(
+            'entities'=>$entities));
+    }
+
+    public function AlumnosGrupoAction($id)
+    {
+        $em = $this->getDoctrine()->getManager();
+
+        $profesor = $this->get('security.context')->getToken()->getUser();
+        $grupo=$em->getRepository('BackendBundle:Grupo')->findOneById($id);
+    
+        $entities=$em->getRepository('BackendBundle:Alumno')->findByGrupo($grupo);
+
+        return $this->render('IntranetBundle:Profesor:alumnos_grupo_asignatura.html.twig', array(
+            'entities'=>$entities));
+    }
+
+
 
     public function noticiasAction(Request $request)
     {
@@ -363,7 +520,7 @@ class ProfesorController extends Controller
         $pagination = $paginator->paginate(
             $noticias, /* query NOT result */
             $request->query->getInt('page', 1)/*page number*/,
-            6/*limit per page*/
+            10/*limit per page*/
         );
 /*
         if($entity->getAccesoNoticias()){

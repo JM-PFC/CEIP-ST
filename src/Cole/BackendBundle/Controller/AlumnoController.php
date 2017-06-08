@@ -93,6 +93,7 @@ class AlumnoController extends Controller
             $entity->setNumAlum(null);
             $entity->setActivo(true);
             $entity->setAccesoNoticias(null);
+            $entity->setAccesoSeguimientos(null);
             $entity->setNoticiasNuevas(null);
             if(date("n")>=6){
                 $entity->setAnyoAcademico(date("Y")." / ".(date("Y")+1));

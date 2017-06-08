@@ -73,6 +73,10 @@ Miércoles: Wednesday
 Jueves: Thursday
 Viernes: Friday
 Maestros / Asignaturas: Teachers / Subjects
+Maestro: Teacher
+Maestra: Teacher
+Asignatura: Subject
+Fecha: Date
 Alumnos del grupo: Group Students
 Mi grupo: My group
 Apellidos, Nombre: Surname, Name
@@ -137,3 +141,36 @@ Alumnos / Optativa: Students / Optional
 Alumnos de: Students of
 Impartiendo clase en: Teaching class in
 No tiene grupo asignado a esta hora: No group assigned at this time
+Seguimiento del curso: Course Tracking
+No hay ningún seguimiento: There is no follow-up
+No has realizado ningún seguimiento de alumno o grupo. Puedes realizar en cualquier momento un seguimiento pulsando en la opción "añadir nuevo seguimiento" en la parte superior: You have not followed a student or group. You can make a follow-up at any time by clicking on the "add new tracking" option at the top
+No se ha realizado ningún seguimiento del alumno o grupo. Cuando tenga un nuevo seguimiento se le notificará en los avisos de la barra superior: There was no follow-up of the student or group. When you have a new follow up you will be notified in the announcements of the top bar
+Actualizado: Updated
+Nuevo Seguimiento: New Tracking
+Nuevo seguimiento creado.: New tracking created.
+Consulta de Seguimiento: Follow-up Consultation
+Consultar: Consult
+Respuesta: Answer
+Respuesta de: Answer of
+Leido: Read
+Responder: Answer
+Editar: Edit
+Eliminar: Delete
+Seleccione un grupo: Select a group
+Seleccione una asignatura: Select a subject
+Seleccione destinatario: Select recipient
+Alumnos del grupo: Group Students
+Alumno: Student
+Alumna: Student
+Enviar: Submit
+Cancelar: Cancel
+Eliminación del Seguimiento: Elimination of Follow-up
+Se va a eliminar el seguimiento del sistema y no se podrá recuperar: System Tracking will be deleted and can not be recovered
+¿Estas seguro de continuar?: Are you sure to continue?
+El seguimiento ha sido actualizado correctamente.: Tracking has been successfully updated.
+El seguimiento ha sido eliminado correctamente.: Tracking has been successfully deleted
+Descripción: Description
+Edición del Seguimiento: Tracking Editing
+Seguimientos Nuevos: New Tracking
+Respuesta del Seguimiento: Follow-up Response
+Nueva respuesta añadida. : New answer added.

@@ -1,0 +1,311 @@
+{% extends  'IntranetBundle:Profesor:index.html.twig' %}
+
+{% block body %}
+    {{parent()}}
+    <script>
+    	$(".menu li").removeClass('active');
+		$(".menu #seguimiento").addClass('active');
+        locale=$("#intranet").attr("locale");
+
+        //Se marca las noticias privadas nuevas sin leer.
+
+        /*
+        //-->>>>>>>>>>>>>>>>>>>>>obtener seguimientos nuevos como noticias nuevas que he tenido que borrar porque daba error
+
+        for (var key in array){
+            id=key;//Id de las noticias nuevas.
+
+            //Se marca las noticias nuevas en la lista de noticias desde el pc o tablet.
+            $("article[id='"+id+"'] h2").append('<i class="fa nueva_noticia"><span>{% trans %}Nueva{% endtrans %}</span></i>');
+            //Se marca las noticias nuevas enla lista de noticias desde el móvil.
+            $(".contenedor_noticia_movil>div[id='"+id+"'] .fa-bookmark-o").addClass('fa-bookmark');
+            $(".contenedor_noticia_movil>div[id='"+id+"'] .fa-bookmark-o").removeClass('fa-bookmark-o');
+        }
+
+        */
+
+        //Se muestra elementos según la posición de la ventana del navegador.
+        function ComprobarPosicion() {
+                
+        if ($(window).width() < 768) {
+            var bottom_of_object = $("#add_seguimiento").offset().top;
+            var bottom_of_window = $(window).scrollTop();
+            
+            if( bottom_of_window > bottom_of_object ){
+                $("#add_seguimiento_movil").removeClass('hidden');
+                $(".barramenu").addClass('barramenu_scroll');
+                $(".botonsubir a").removeClass('hidden');
+            }
+            else{
+                $("#add_seguimiento_movil").addClass('hidden');
+                $(".barramenu").removeClass('barramenu_scroll');
+                $(".botonsubir a").addClass('hidden');
+            }
+        }
+        else  {
+            $(".barramenu").removeClass('barramenu_scroll');
+
+            var bottom_of_object = $("#add_seguimiento").offset().top+$("#add_seguimiento").outerHeight();
+            var bottom_of_navbar= $(".navbar").offset().top+$(".navbar").outerHeight();
+                    
+            if( bottom_of_navbar > bottom_of_object ){
+                $("#add_seguimiento_scroll").removeClass('hidden');
+                if ($(window).width() < 992) {
+                    $(".botonsubir a").removeClass('hidden');
+                }
+            }
+            else{
+                $("#add_seguimiento_scroll").addClass('hidden');
+                if ($(window).width() < 992) {
+                    $(".botonsubir a").addClass('hidden');
+                }
+            }
+        }
+    }
+
+    //Se muestran antiguos seguimientos cuando desplazamos el scroll hacia abajo.
+    //Se utiliza un temporizador para que no se dispare el evento varias veces seguidas al desplazar el scrollalfinal de la ventana.    
+    var tmr = 0;
+    $(window).scroll(function() {
+        clearTimeout(tmr);
+        tmr = setTimeout(function () {
+            if ($(window).scrollTop() >= $(document).height() - $(window).height() - 10) {
+                    //$('#loading').show();
+                id=$("#contenedor_seguimientos>div").not(':hidden').last().attr("id");
+                $.ajax({
+                    url: Routing.generate('cargar_seguimientos_profesor', {_locale:locale, id:id}),
+                    dataType: 'json',
+                    success: function(response) {
+                        //$('#posts').append(html);
+                        //$('#loading').hide();
+                     $('#contenedor_seguimientos').append(response.html);
+                    }
+                });
+            }
+        }, 100); 
+        //Se muestra diferentes elementos al hacer scroll.
+        ComprobarPosicion();
+
+    });
+    
+    //Se muestra diferentes elementos al cambiar el tamaño de la ventana segun la posición.
+    $(window).resize(function() {
+        ComprobarPosicion();
+    });
+
+
+    </script>
+ {% endblock %}
+
+{% block migas %}
+	<li class="tipo">
+			{% trans %}Profesorado{% endtrans %}
+	</li>
+	<li>
+		<a href="{{path('intranet_profesor')}}">
+			{% trans %}Panel principal{% endtrans %}
+		</a>
+	</li>
+	<li class="active no-seleccion">
+		{% trans %}Seguimiento{% endtrans %}
+	</li>
+{% endblock %}
+
+{% block titulo_cabecera %}
+	<i class="fa fa-comments page-header-icon"></i>
+	{% trans %}Seguimiento{% endtrans %}
+{% endblock %}
+{% block titulo_cabecera_movil %}
+    <i class="fa fa-comments page-header-icon"></i>
+    {% trans %}Seguimiento{% endtrans %}
+{% endblock %}
+
+{% block contenido %}
+    <h4 id="titulo-seccion" class="titulo-seccion">{% trans %}Seguimiento del curso{% endtrans %}</h4>
+        <div class=" col-sm-offset-6 col-sm-2 ">             
+            <a id="add_seguimiento" href="{{path('seguimiento_new')}}"  class="add_seguimiento btn btn-success pull-right waiting"><i class="fa fa-plus"> </i>{% trans %}Nuevo Seguimiento{% endtrans %}</a>
+        </div>
+    {% if not (seguimientosNuevos == null and seguimientos == null ) %}
+        <div id="contenedor_seguimientos" profesor="{{entity.id}}" class="col-xs-12">
+          {% for seguimiento in seguimientosNuevos %}
+            <div id="{{seguimiento.id}}" class="seguimiento">
+                <div class="header col-xs-12 clearfix no-padding">
+                    {% if seguimiento.alumno%}
+                        <div class="icono">
+                            <i class="fa fa-user c_naranja"></i>
+                        </div>
+                    {% else %}
+                        <div class="icono">
+                            <i class="fa fa-users "></i>
+                        </div>
+                    {% endif %}
+                    <div class="nombre col-xs-12">
+                        <div>
+                            {% if seguimiento.asignatura %}
+                                <p class="fw_bold">{{seguimiento.grupo.curso.curso ~ seguimiento.grupo.letra ~ " " ~ seguimiento.grupo.curso.nivel ~ " - "}}<span class="c_naranja"> {{seguimiento.asignatura.asignatura.abreviatura}}</span></p>
+                                {% if seguimiento.alumno%}
+                                    <p>{{seguimiento.alumno}}</p>
+                                {% endif %} 
+                            {% else %}
+                                <p class="fw_bold">{{seguimiento.grupo.curso.curso ~ seguimiento.grupo.letra ~ " " ~ seguimiento.grupo.curso.nivel }}</p>
+                                {% if seguimiento.alumno%}
+                                    <p class="c_naranja">{{seguimiento.alumno}}</p>
+                                {% endif %} 
+                            {% endif %}
+                        </div>
+                    </div>
+                    <div class="aviso hidden-xs">
+                        <p  class="pull-right">{% trans %}Actualizado{% endtrans %}</p>
+                    </div>
+                </div>             
+                <div class="body clearfix">
+                    <div class="fecha">
+
+                        <p  class=" pull-right">{{ seguimiento.fecha | localizeddate('long', 'none', app.request.getLocale()) | capitalize}}</p>
+                    </div>
+                    <div>
+                        <p class="descripcion">{{seguimiento.descripcion|nl2br }}</p>
+                        <div class="botones_seguimiento">
+                            <div>
+                            {% if seguimiento.respuesta %}
+                                <a id="consultar" href="{{path('intranet_profesor_seguimiento', {'num': seguimiento.id}) }}" class="btn btn_azul col-xs-2">
+                                    <i class="fa fa-search"></i>
+                                    {% trans %}Consultar{% endtrans %}
+                                </a>
+                            {% endif %}
+                            </div>
+                            <span id="edicion" class="pull-right hidden-xs visible-sm visible-md visible-lg">
+                                <a id="btn_editar" href="#" class="btn btn-default" data-target="#editar_seguimiento_modal" data-toggle="modal" data-backdrop="static" data-keyboard="false">
+                                    <i class="fa fa-pencil"></i>{% trans %}Editar{% endtrans %}
+                                </a>
+                                <a id="btn_eliminar" href="" class="btn btn-default" data-target="#eliminar_seguimiento_modal" data-toggle="modal" data-backdrop="static" data-keyboard="false">
+                                    <i class="fa fa-trash-o"></i>{% trans %}Eliminar{% endtrans %}
+                                </a>
+                            </span>
+                            <span id="edicion" class="pull-right visible-xs hidden-sm hidden-md hidden-lg">
+                                <a href="" class="btn btn-default">
+                                    <i class="fa fa-pencil"></i>
+                                </a>
+                                <a href="" class="btn btn-default ">
+                                    <i class="fa fa-trash-o"></i>
+                                </a>
+                            </span>
+                        </div>
+                    </div>
+                    
+                </div>
+            </div>
+          {% endfor %}
+
+          {% for seguimiento in seguimientos %}
+    	    <div id="{{seguimiento.id}}" class="seguimiento">
+                <div class="header col-xs-12 clearfix no-padding">
+                    {% if seguimiento.alumno%}
+                        <div class="icono">
+                            <i class="fa fa-user "></i>
+                        </div>
+                    {% else %}
+                        <div class="icono">
+                            <i class="fa fa-users "></i>
+                        </div>
+                    {% endif %}
+                    <div class="nombre col-xs-12">
+                        <div>
+                            {% if seguimiento.asignatura %}
+                                <p class="fw_bold">{{seguimiento.grupo.curso.curso ~ seguimiento.grupo.letra ~ " " ~ seguimiento.grupo.curso.nivel ~ " - "}}<span class="c_naranja"> {{seguimiento.asignatura.asignatura.abreviatura}}</span></p>
+                                {% if seguimiento.alumno%}
+                                    <p>{{seguimiento.alumno}}</p>
+                                {% endif %} 
+                            {% else %}
+                                <p class="fw_bold">{{seguimiento.grupo.curso.curso ~ seguimiento.grupo.letra ~ " " ~ seguimiento.grupo.curso.nivel }}</p>
+                                {% if seguimiento.alumno%}
+                                    <p class="c_naranja">{{seguimiento.alumno}}</p>
+                                {% endif %} 
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>             
+                <div class="body clearfix">
+                    <div class="fecha">
+
+                        <p  class=" pull-right">{{ seguimiento.fecha | localizeddate('long', 'none', app.request.getLocale()) | capitalize}}</p>
+                    </div>
+                    <div>
+                        <p class="descripcion">{{seguimiento.descripcion|nl2br }}</p>
+                        <div class="botones_seguimiento">
+                            {% if seguimiento.respuesta %}
+                                <a id="consultar" href="{{path('intranet_profesor_seguimiento', {'num': seguimiento.id}) }}" class="btn btn_azul col-xs-2">
+                                    <i class="fa fa-search"></i>
+                                    {% trans %}Consultar{% endtrans %}
+                                </a>
+                            {% endif %}
+                            <span id="edicion" class="pull-right hidden-xs visible-sm visible-md visible-lg">
+                                <a id="btn_editar" href="#" class="btn btn-default" data-target="#editar_seguimiento_modal" data-toggle="modal" data-backdrop="static" data-keyboard="false">
+                                    <i class="fa fa-pencil"></i>{% trans %}Editar{% endtrans %}
+                                </a>
+                                <a id="btn_eliminar" href="" class="btn btn-default" data-target="#eliminar_seguimiento_modal" data-toggle="modal" data-backdrop="static" data-keyboard="false">
+                                    <i class="fa fa-trash-o"></i>{% trans %}Eliminar{% endtrans %}
+                                </a>
+                            </span>
+                            <span id="edicion" class="pull-right visible-xs hidden-sm hidden-md hidden-lg">
+                                <a href="" class="btn btn-default">
+                                    <i class="fa fa-pencil"></i>
+                                </a>
+                                <a href="" class="btn btn-default ">
+                                    <i class="fa fa-trash-o"></i>
+                                </a>
+                            </span>
+                        </div>
+                    </div>
+                    
+                </div>
+            </div>
+          {% endfor %}
+        </div>
+        <div class=" col-sm-2 visible-md visible-lg hidden-xs visible-sm">
+            <a id="add_seguimiento_scroll" href="{{path('seguimiento_new')}}"  class="add_seguimiento_scroll add_seguimiento  btn btn-success hidden waiting"><i class="fa fa-plus"> </i>{% trans %}Nuevo Seguimiento{% endtrans %}</a>
+        </div>
+        <div class="col-xs-3 col-sm-3 visible-xs visible-sm botonsubir">
+            <a class="go-top btn btn-default  hidden" href="#">
+                <i class="fa fa-arrow-up"></i>{% trans %}Subir{% endtrans %}
+            </a>
+        </div>
+        <div class="hidden-md hidden-lg visible-xs hidden-sm">
+            <a id="add_seguimiento_movil" href="{{path('seguimiento_new')}}"  class="add_seguimiento_movil add_seguimiento  btn btn-success hidden waiting"><i class="fa fa-plus"> </i>{% trans %}Nuevo{% endtrans %}</a>
+        </div>
+    {% else %}
+		<div class="alert alert-info alert-block m_top60">
+			<small>
+                <h4>{% trans %}No hay ningún seguimiento{% endtrans %}.</h4>
+                <h6>{% trans %}No has realizado ningún seguimiento de alumno o grupo. Puedes realizar en cualquier momento un seguimiento pulsando en la opción "añadir nuevo seguimiento" en la parte superior{% endtrans %}.</h6>
+			</small>
+		</div>
+  {% endif %}
+
+    <!-- Ventana modal de eliminación de seguimiento -->
+  <div id="eliminar_seguimiento_modal" class="modal fade-scale aviso"  tabindex="-1" role="dialog" data-backdrop="true" >
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+        <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            <h4 class="modal-title" id="myModalLabel">{% trans %}Eliminación del Seguimiento{% endtrans %}</h4>
+        </div>
+        <div class="modal-body"></div>
+        </div>
+    </div>
+  </div>
+
+    <!-- Ventana modal de edición de seguimiento -->
+    <div id="editar_seguimiento_modal" class="modal fade aviso" role="dialog" data-backdrop="true" >
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    <h4 class="modal-title">{% trans %}Edición del Seguimiento{% endtrans %}</h4>
+                </div>
+                <div class="modal-body"></div>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}

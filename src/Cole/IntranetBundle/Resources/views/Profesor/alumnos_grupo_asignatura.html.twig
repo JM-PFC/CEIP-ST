@@ -1,0 +1,24 @@
+	
+<div class="panel panel-default">
+      <table class="table table-striped">
+        <thead>
+          <tr >
+            <th class="cold-md-1">Nº de clase</th>
+            <th class="cold-md-11">Apellidos, Nombre</th>
+          </tr>
+        </thead>
+        <tbody class="">
+        {% for entity in entities %}
+          <tr id="{{ entity.id }}" nombre="{{entity}}" sexo="{{entity.sexo}}">
+            <td class="cold-md-1">
+              {{ entity.numAlum }}
+            </td>
+            <td class="cold-md-11" >
+            	{{entity.apellido1 ~ " " ~ entity.apellido2 ~ ", " ~ entity.nombre }}
+            </td>
+          </tr>
+        {% endfor %}
+        </tbody>
+      </table>
+</div>
+

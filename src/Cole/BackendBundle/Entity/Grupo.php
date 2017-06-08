@@ -64,6 +64,11 @@ class Grupo
     private $matricula;
 
     /**
+    * @ORM\OneToMany(targetEntity="Cole\IntranetBundle\Entity\Seguimiento", mappedBy="grupo", cascade={"remove"})
+    */
+    private $seguimiento;
+
+    /**
      * Get id
      *
      * @return integer 
@@ -161,7 +166,7 @@ class Grupo
 
     public function __toString()
     {
-        return $this->getLetra();
+        return $this->getCurso()->getCurso()." ".$this->getLetra();
     }
 
     /**
@@ -274,5 +279,38 @@ class Grupo
     public function getMatricula()
     {
         return $this->matricula;
+    }
+
+    /**
+     * Add seguimiento
+     *
+     * @param \Cole\IntranetBundle\Entity\Seguimiento $seguimiento
+     * @return Grupo
+     */
+    public function addSeguimiento(\Cole\IntranetBundle\Entity\Seguimiento $seguimiento)
+    {
+        $this->seguimiento[] = $seguimiento;
+
+        return $this;
+    }
+
+    /**
+     * Remove seguimiento
+     *
+     * @param \Cole\IntranetBundle\Entity\Seguimiento $seguimiento
+     */
+    public function removeSeguimiento(\Cole\IntranetBundle\Entity\Seguimiento $seguimiento)
+    {
+        $this->seguimiento->removeElement($seguimiento);
+    }
+
+    /**
+     * Get seguimiento
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getSeguimiento()
+    {
+        return $this->seguimiento;
     }
 }

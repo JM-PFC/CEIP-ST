@@ -22,6 +22,24 @@ horario_alumno_pdf:
     options:
       expose: true
 
+intranet_alumno_seguimientos:
+    path:     /seguimiento
+    defaults: { _controller: IntranetBundle:Alumno:seguimientos}
+    options:
+        expose: true
+
+cargar_seguimientos_alumno:
+    path:     /cargar_seguimientos/{iden}
+    defaults: { _controller: IntranetBundle:Alumno:CargarSeguimientos}
+    options:
+        expose: true
+
+cargar_nuevos_seguimientos_alumno:
+    path:     /cargar_nuevos_seguimientos/{fecha}
+    defaults: { _controller: IntranetBundle:Alumno:CargarNuevosSeguimientos}
+    options:
+        expose: true
+
 intranet_alumno_noticias:
     path:     /noticias
     defaults: { _controller: IntranetBundle:Alumno:noticias}
@@ -35,4 +53,14 @@ nuevas_noticias_alumno:
     defaults: { _controller: IntranetBundle:Alumno:comprobarNoticiasNuevas}
     options:
         expose: true
+
+nuevos_seguimientos_alumno:
+    path:     /nuevos_seguimientos
+    defaults: { _controller: IntranetBundle:Alumno:comprobarSeguimientosNuevos}
+    options:
+        expose: true
+
+intranet_alumno_seguimiento:
+    path:     /seguimiento/{num}
+    defaults: { _controller: IntranetBundle:Alumno:seguimiento}
 

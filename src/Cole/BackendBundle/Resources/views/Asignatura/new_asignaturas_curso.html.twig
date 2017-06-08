@@ -55,6 +55,10 @@
     $("#asignatura_curso_dialog #contenedor_asignaturas .aviso").addClass('oculto');
     $("#asignatura_curso_dialog #contenedor_asignaturas #cabecera_especifica_opcional").removeClass('oculto');
   }
+  //Se coloca en primera posición el botón de Tutoría y se le modifica el color.
+  $("#lista_troncal button[title='Tutoría']").prependTo("#lista_troncal");
+  $("#lista_troncal button[title='Tutoría']").css("background","#F7E26B");
+  
 
 
   </script>

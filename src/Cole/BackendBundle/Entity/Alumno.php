@@ -110,8 +110,6 @@ class Alumno
      * @Assert\NotBlank()
      */
     private $fechaNacimiento;
-
-
     /**
      * 
      * @ORM\ManyToOne(targetEntity="Padres", inversedBy="alumnos", cascade={"persist"})
@@ -218,17 +216,25 @@ class Alumno
     private $activo;
 
     /**
+    * @ORM\OneToMany(targetEntity="Expediente", mappedBy="alumno", cascade={"remove"})
+    */
+    private $expediente;
+
+    /**
      * @var \DateTime
      *
      * @ORM\Column(name="accesoNoticias", type="datetime", nullable=true)
      * 
      */
     private $accesoNoticias;
-    
+
     /**
-    * @ORM\OneToMany(targetEntity="Expediente", mappedBy="alumno", cascade={"remove"})
-    */
-    private $expediente;
+     * @var \DateTime
+     *
+     * @ORM\Column(name="accesoSeguimientos", type="datetime", nullable=true)
+     * 
+     */
+    private $accesoSeguimientos;
 
     /**
      * @var string
@@ -237,6 +243,11 @@ class Alumno
      * 
      */
     private $noticiasNuevas;
+
+    /**
+    * @ORM\OneToMany(targetEntity="Cole\IntranetBundle\Entity\Seguimiento", mappedBy="alumno", cascade={"remove"})
+    */
+    private $seguimiento;
 
     /**
      * Get id
@@ -687,7 +698,7 @@ class Alumno
         return $this->activo;
     }
 
-        public function __toString()
+    public function __toString()
     {
         return $this->getNombre().' '.$this->getApellido1().' '.$this->getApellido2();
     }
@@ -909,5 +920,61 @@ class Alumno
     public function getNoticiasNuevas()
     {
         return $this->noticiasNuevas;
+    }
+
+    /**
+     * Add seguimiento
+     *
+     * @param \Cole\IntranetBundle\Entity\Seguimiento $seguimiento
+     * @return Alumno
+     */
+    public function addSeguimiento(\Cole\IntranetBundle\Entity\Seguimiento $seguimiento)
+    {
+        $this->seguimiento[] = $seguimiento;
+
+        return $this;
+    }
+
+    /**
+     * Remove seguimiento
+     *
+     * @param \Cole\IntranetBundle\Entity\Seguimiento $seguimiento
+     */
+    public function removeSeguimiento(\Cole\IntranetBundle\Entity\Seguimiento $seguimiento)
+    {
+        $this->seguimiento->removeElement($seguimiento);
+    }
+
+    /**
+     * Get seguimiento
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getSeguimiento()
+    {
+        return $this->seguimiento;
+    }
+
+    /**
+     * Set accesoSeguimientos
+     *
+     * @param \DateTime $accesoSeguimientos
+     * @return Alumno
+     */
+    public function setAccesoSeguimientos($accesoSeguimientos)
+    {
+        $this->accesoSeguimientos = $accesoSeguimientos;
+
+        return $this;
+    }
+
+    /**
+     * Get accesoSeguimientos
+     *
+     * @return \DateTime 
+     */
+    public function getAccesoSeguimientos()
+    {
+        return $this->accesoSeguimientos;
     }
 }

@@ -202,7 +202,7 @@
               <ol id="cabecera_troncal" class="oculto">Troncales</ol>
               <input id="all" type="checkbox" title="Seleccionar asignaturas troncales"></input>
                 {% for entity in entities_troncales %}
-                  <li id="{{ entity.id }}" tipo="{{ entity.asignatura.tipo }}" >
+                  <li id="{{ entity.id }}" nombre="{{ entity.asignatura.nombre }}" tipo="{{ entity.asignatura.tipo }}" >
                     <div id="no_asignado">
                       <input type="checkbox"></input>
                       {% if entity.numModulos == 1  %}

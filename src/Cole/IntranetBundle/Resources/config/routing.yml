@@ -60,3 +60,7 @@ IntranetBundle_alumnos:
 IntranetBundle_profesores:
     resource: "@IntranetBundle/Resources/config/routing/profesores.yml"
     prefix:   /intranet
+
+IntranetBundle_seguimiento:
+        resource: "@IntranetBundle/Resources/config/routing/seguimiento.yml"
+        prefix:   /intranet/seguimiento

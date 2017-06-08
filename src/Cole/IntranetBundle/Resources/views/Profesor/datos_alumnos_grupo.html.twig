@@ -99,7 +99,7 @@
 						</a>
 						{% if tutor and tutor.id == profesor.id %}
 
-						<a id="{{entity.id}}" href="#info_alumno" class="i_hover info_alumno" data-toggle="modal" data-placement="bottom" title="" data-original-title="{% trans %}Ver info{% endtrans %}">
+						<a id="{{entity.id}}" data-target="#info_alumno" class="i_hover info_alumno" data-toggle="modal" data-backdrop="static" data-placement="bottom" title="" data-original-title="{% trans %}Ver info{% endtrans %}">
 							<i id="first" class="fa fa-info"></i>
 							<i id="second" class=" hidden fa fa-info-circle"></i>
 						</a>
@@ -171,7 +171,7 @@
 							</a>
 							{% if tutor and tutor.id == profesor.id %}
 
-								<a id="{{entity.id}}" href="#info_alumno" class="i_hover info_alumno" data-toggle="modal" data-placement="bottom" title="" data-original-title="{% trans %}Ver info{% endtrans %}">
+								<a id="{{entity.id}}" data-target="#info_alumno" class="i_hover info_alumno" data-toggle="modal" data-backdrop="static" data-placement="bottom" title="" data-original-title="{% trans %}Ver info{% endtrans %}">
 									<i id="first" class="fa fa-info"></i>
 									<i id="second" class=" hidden fa fa-info-circle"></i>
 								</a>
@@ -306,7 +306,7 @@
 									<i id="first" class="fa fa-envelope-o"></i>
 									<i id="second" class=" hidden fa fa-envelope" data-toggle="tooltip" data-placement="bottom" title="" data-original-title="{% trans %}Contactar{% endtrans %}"></i>
 								</a>
-								<a id="{{asig_profesor.profesor.id}}" href="#info_profesor" class="i_hover info_profesor" data-toggle="modal" data-placement="bottom" title="" data-original-title="{% trans %}Ver info{% endtrans %}">
+								<a id="{{asig_profesor.profesor.id}}" data-target="#info_profesor" class="i_hover info_profesor" data-toggle="modal" data-backdrop="static" data-placement="bottom" title="" data-original-title="{% trans %}Ver info{% endtrans %}">
 									<i id="first" class="fa fa-info"></i>
 									<i id="second" class=" hidden fa fa-info-circle"></i>
 								</a>
@@ -345,7 +345,7 @@
 										<i id="first" class="fa fa-envelope-o"></i>
 										<i id="second" class=" hidden fa fa-envelope" data-toggle="tooltip" data-placement="bottom" title="" data-original-title="{% trans %}Contactar{% endtrans %}"></i>
 									</a>
-								<a id="{{asig_profesor.profesor.id}}" href="#info_profesor" class="i_hover info_profesor" data-toggle="modal" data-placement="bottom" title="" data-original-title="{% trans %}Ver info{% endtrans %}">
+								<a id="{{asig_profesor.profesor.id}}" data-target="#info_profesor" class="i_hover info_profesor" data-toggle="modal" data-backdrop="static" data-placement="bottom" title="" data-original-title="{% trans %}Ver info{% endtrans %}">
 									<i id="first" class="fa fa-info"></i>
 									<i id="second" class=" hidden fa fa-info-circle"></i>
 								</a>

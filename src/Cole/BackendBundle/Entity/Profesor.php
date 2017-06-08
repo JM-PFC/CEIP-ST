@@ -289,6 +289,14 @@ class Profesor implements UserInterface, \Serializable
      * 
      */
     private $accesoNoticias;
+
+    /**
+     * @var \DateTime
+     *
+     * @ORM\Column(name="accesoSeguimientos", type="datetime", nullable=true)
+     * 
+     */
+    private $accesoSeguimientos;
     
     /**
      * @var \DateTime
@@ -329,6 +337,11 @@ class Profesor implements UserInterface, \Serializable
      * @ORM\OneToMany(targetEntity="Reserva", mappedBy="profesor")
      */
     private $reserva;
+
+    /**
+    * @ORM\OneToMany(targetEntity="Cole\IntranetBundle\Entity\Seguimiento", mappedBy="profesor", cascade={"remove"})
+    */
+    private $seguimiento;
     
     public function __construct()
     {
@@ -1172,5 +1185,61 @@ class Profesor implements UserInterface, \Serializable
     public function getNoticiasNuevas()
     {
         return $this->noticiasNuevas;
+    }
+
+    /**
+     * Add seguimiento
+     *
+     * @param \Cole\IntranetBundle\Entity\Seguimiento $seguimiento
+     * @return Profesor
+     */
+    public function addSeguimiento(\Cole\IntranetBundle\Entity\Seguimiento $seguimiento)
+    {
+        $this->seguimiento[] = $seguimiento;
+
+        return $this;
+    }
+
+    /**
+     * Remove seguimiento
+     *
+     * @param \Cole\IntranetBundle\Entity\Seguimiento $seguimiento
+     */
+    public function removeSeguimiento(\Cole\IntranetBundle\Entity\Seguimiento $seguimiento)
+    {
+        $this->seguimiento->removeElement($seguimiento);
+    }
+
+    /**
+     * Get seguimiento
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getSeguimiento()
+    {
+        return $this->seguimiento;
+    }
+
+    /**
+     * Set accesoSeguimientos
+     *
+     * @param \DateTime $accesoSeguimientos
+     * @return Profesor
+     */
+    public function setAccesoSeguimientos($accesoSeguimientos)
+    {
+        $this->accesoSeguimientos = $accesoSeguimientos;
+
+        return $this;
+    }
+
+    /**
+     * Get accesoSeguimientos
+     *
+     * @return \DateTime 
+     */
+    public function getAccesoSeguimientos()
+    {
+        return $this->accesoSeguimientos;
     }
 }

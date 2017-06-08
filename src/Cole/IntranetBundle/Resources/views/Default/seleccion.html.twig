@@ -18,6 +18,18 @@
             	}
         	}
     	})
+
+    	$.ajax({
+        	type: 'POST',
+        	url: Routing.generate('nuevos_seguimientos_alumno', {id:id, _locale:"es"}),
+        	success: function(response){
+            	//Si hay nuevas noticias sin leer, se indica en el contenedor de selección de cada alumno.
+            	if(response.num!=0){
+                	$(".dashboard div[id='"+response.id+"'] #barraalertasmovil span:nth-child(2)").text(response.num);
+					$(".dashboard div[id='"+response.id+"'] #barraalertasmovil span:nth-child(2)").addClass('c_amarillo');
+            	}
+        	}
+    	})
     });
   }, 5);
 </script>

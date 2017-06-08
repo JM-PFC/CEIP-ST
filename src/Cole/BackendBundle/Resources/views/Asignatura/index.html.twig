@@ -78,7 +78,8 @@
                 <div class="inner_table">
                     <table id="lista_color">
                     {% for entity in entities %}
-                        {% if entity.tipo == "Troncal" %}
+                        {#Se muestra todas las asignaturas excepto Tutoría para que no se pueda modificar ó eliminar del sistema#}
+                        {% if entity.tipo == "Troncal" and  entity.nombre != "Tutoría" %}
                         <tr title="Modificar Asignatura Troncal">
                             <td><a cargar-href="off" href="{{ path('asignatura_edit', { 'id': entity.id }) }}">{{ entity.nombre }}</a></td>
                             <td><a cargar-href="off" href="{{ path('asignatura_edit', { 'id': entity.id }) }}">{{ entity.abreviatura }}</a></td>

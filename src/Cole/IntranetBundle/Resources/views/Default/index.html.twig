@@ -3,10 +3,10 @@
 <html lang="es">
 <head>
 	<meta charset="UTF-8">
-	<title>Intranet CEIP SANTA TERESA</title>
+	<title>CEIP SANTA TERESA - Intranet</title>
 	<meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
 	<meta name="author" content="CEIP SANTA TERESA">
-	<meta name="description" content="Intranet CEIP SANTA TERESA">
+	<meta name="description" content="CEIP SANTA TERESA - Intranet">
 	<link rel="shortcut icon" type="image/x-icon" href="{{ asset('favicon.ico') }}">
 
 	<link rel="stylesheet" href="{{ asset('bundles/intranet/css/intranet.css') }}">
@@ -26,11 +26,52 @@
 	<script type="text/javascript" src="{{asset('bundles/cole/js/imgLiquid-min.js')}}"></script>
 	<script type="text/javascript" src="{{asset('bundles/cole/js/unitegallery-master/dist/js/unitegallery.min.js')}}"></script>
     <script type="text/javascript" src="{{asset('bundles/cole/js/unitegallery-master/package/unitegallery/themes/default/ug-theme-default.js')}}"></script>
+  {# Se muestra los avisos nuevo s#}
+  {% if is_granted("ROLE_PROFESOR") %}
+	<script>
+  		id={{entity.id|json_encode()|raw}};//Id del profesor.
+
+    	$.ajax({
+        	type: 'POST',
+        	url: Routing.generate('nuevas_noticias_profesor', {id:id, _locale:"es"}),
+        	success: function(response){
+            	//Si hay nuevas noticias sin leer, se indica en la barra superior y en el panel principal.
+            	if(response.num!=0){
+                	$("#barraanunciosmovil span:nth-child(2)").text(response.num);
+					$("#barraanunciosmovil span:nth-child(2)").addClass('c_amarillo');
+					$(".numanuncios").text(response.num);
+            	}
+            	else{
+            		$(".bloque-menu .numanuncios").remove();
+            	}
+        	}
+    	})
+    	$.ajax({
+        	type: 'POST',
+        	url: Routing.generate('nuevos_seguimientos_profesor', {id:id, _locale:"es"}),
+        	success: function(response){
+            	//Si hay nuevas noticias sin leer, se indica en la barra superior y en el panel principal.
+            	if(response.num!=0){
+                	$("#barraalertasmovil span:nth-child(2)").text(response.num);
+					$("#barraalertasmovil span:nth-child(2)").addClass('c_amarillo');
+					$(".numalertas").text(response.num);
+					$(".bloque-menu-alumno .numalertas").removeClass('hidden');
+            	}
+            	else{
+            		$(".bloque-menu .numalertas").remove();
+            	}
+        	}
+    	})
+	</script>
+  {% endif %}
+
 {% endblock %}
+
+
 
 </head>
 
-<body id="intranet">
+<body id="intranet" locale="{{ app.request.getLocale() }}">
 {% block body %}
 	<header id="barra">
 		{# Barra de navegación normal #}
@@ -78,7 +119,7 @@
 							</a>
 						</li>
 						<li id="barraalertasmovil" class="barramensajes">
-							<a href="/intranet/es/dashboard">
+							<a href="{{ path('intranet_profesor_seguimientos') }}"href="/intranet/es/dashboard">
 								<span class="fa fa-comments animated swing"></span>
 								<span class="label-as-badge label naranja numalertas" data-toggle="tooltip" data-placement="bottom" title="" data-original-title="{% trans %}Avisos de seguimiento sin leer{% endtrans %}">0</span>
 							</a>
@@ -169,7 +210,7 @@
 										</a>
 									</li>
 									<li id="barraalertasmovil" class="barramensajes">
-										<a href="/intranet/es/dashboard">
+										<a href="{{ path('intranet_profesor_seguimientos') }}">
 											<span class="fa fa-comments animated swing"></span>
 											<span class="label-as-badge label naranja numalertas" data-toggle="tooltip" data-placement="bottom" title="" data-original-title="{% trans %}Avisos de seguimiento sin leer{% endtrans %}">0</span>
 										</a>
@@ -271,7 +312,7 @@
 										</a>
 									</li>
 									<li id="seguimiento">
-										<a href="{{path('intranet')}}">
+										<a href="{{ path('intranet_profesor_seguimientos') }}">
 											<i class="fa fa-comments"></i>
 											{% trans %}Seguimiento{% endtrans %}
 										</a>
@@ -360,13 +401,13 @@
 								  {% block sidebar %}
 									{% if is_granted("ROLE_PROFESOR") %}
 									<li id="inicio" class="active">
-										<a href="{{path('intranet')}}">
+										<a href="{{path('intranet')}}" class="waiting">
 											<i class="fa fa-th"></i>
 											{% trans %}Panel principal{% endtrans %}
 										</a>
 									</li>
 									<li id="cursos">
-										<a href="{{ path('intranet_profesor_cursos') }}">
+										<a href="{{ path('intranet_profesor_cursos') }}" class="waiting">
 											<i class="fa fa-server"></i>
 											{% if app.user.nivel == "Primaria" %}
 												{% trans %}Cursos impartidos{% endtrans %}
@@ -376,50 +417,50 @@
 										</a>
 									</li>
 									<li id="seguimiento">
-										<a href="{{path('intranet')}}">
+										<a href="{{ path('intranet_profesor_seguimientos') }}" class="waiting">
 											<i class="fa fa-comments"></i>
 											{% trans %}Seguimiento{% endtrans %}
 										</a>
 									</li>
 									<li id="comunicacion">
-										<a href="{{path('intranet')}}">
+										<a href="{{path('intranet')}}" class="waiting">
 											<i class="fa fa-envelope-o"></i>
 											{% trans %}Comunicación{% endtrans %}
 										</a>
 									</li>
 									<li id="asistencia">
-										<a href="{{path('intranet')}}">
+										<a href="{{path('intranet')}}" class="waiting">
 											<i class="fa fa-calendar-check-o"></i>
 											{% trans %}Asistencia{% endtrans %}
 										</a>
 									</li>
 									<li id="calificaciones">
-										<a href="{{path('intranet')}}">
+										<a href="{{path('intranet')}}" class="waiting">
 											<i class="fa fa-check-square-o"></i>
 											{% trans %}Calificaciones{% endtrans %}
 										</a>
 									</li>
 									<li id="reservas">
-										<a href="{{path('intranet')}}">
+										<a href="{{path('intranet')}}" class="waiting">
 											<i class="fa fa-unlock-alt"></i>
 											{% trans %}Reservas{% endtrans %}
 										</a>
 									</li>
 									<li id="tutorias">
-										<a href="{{path('intranet')}}">
+										<a href="{{path('intranet')}}" class="waiting">
 											<i class="fa fa-users"></i>
 											{% trans %}Tutorias{% endtrans %}
 										</a>
 									</li>
 									<li id="noticias">
-										<a href="{{ path('intranet_profesor_noticias') }}">
+										<a href="{{ path('intranet_profesor_noticias') }}" class="waiting">
 											<i class="fa fa-newspaper-o"></i>
 											{% trans %}Noticias{% endtrans %}
 										</a>
 									</li>
 									  {% if 'now'|date('m') == "04" or 'now'|date('m') == "05" %}
 									  	<li id="promocionar">
-											<a class="c_verde" href="{{path('intranet')}}">
+											<a class="c_verde" href="{{path('intranet')}}" class="waiting">
 												<i class="fa fa-graduation-cap"></i>
 												{% trans %}Promocionar{% endtrans %}
 											</a>
@@ -429,13 +470,13 @@
 
 								{% if is_granted("ROLE_USUARIO") %}
 									<li id="inicio" class="active">
-										<a href="{{path('intranet_responsable')}}">
+										<a href="{{path('intranet_responsable')}} " class="waiting">
 											<i class="fa fa-dashboard"></i>
 											{% trans %}Inicio{% endtrans %}
 										</a>
 									</li>
 									<li id="perfil">
-										<a href="{{path('intranet_perfil')}}">
+										<a href="{{path('intranet_perfil')}}" class="waiting">
 											<i class="fa fa-user"></i>
 											{% trans %}Mi perfil{% endtrans %}
 										</a>
@@ -547,7 +588,7 @@
 								</div>
 								
 								<div class="col-xs-3 col-sm-3 visible-xs visible-sm pull-right botonsubir wow fadeInLeft">
-									<a class="go-top btn btn-default" href="#" style="display: none;">s
+									<a class="go-top btn btn-default" href="#" style="display: none;">
 										<i class="fa fa-arrow-up"></i>
 										{% trans %}Subir{% endtrans %}
 									</a>

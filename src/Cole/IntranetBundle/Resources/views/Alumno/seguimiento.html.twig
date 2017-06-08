@@ -1,0 +1,163 @@
+{% extends  'IntranetBundle:Alumno:index.html.twig' %}
+
+{% block body %}
+    {{parent()}}
+    <script>
+        $(".menu li").removeClass('active');
+        $(".menu #seguimiento").addClass('active');
+        $(".menu #seguimiento").addClass('click');
+
+        //Se muestra elementos según la posición de la ventana del navegador.
+        function ComprobarPosicion() {
+
+                
+            if ($(window).width() < 768) {
+                var bottom_of_object = $("#wrapper").offset().top;
+                var bottom_of_window = $(window).scrollTop();
+
+                if( bottom_of_window > bottom_of_object ){
+                    $(".botonsubir a").removeClass('hidden');
+                }
+                else{
+                    $(".botonsubir a").addClass('hidden');
+                }
+            }
+            else  {
+                var bottom_of_object = $("#wrapper").offset().top;
+                var bottom_of_navbar = $(window).scrollTop();
+                    
+                if( bottom_of_navbar >= bottom_of_object ){
+                    if ($(window).width() < 992) {
+                        $(".botonsubir a").removeClass('hidden');
+                    }
+                }
+                else{
+                    if ($(window).width() < 992) {
+                        $(".botonsubir a").addClass('hidden');
+                    }
+                }
+            }
+        }
+        $(window).scroll(function() {
+            //Se muestra diferentes elementos al hacer scroll.
+            ComprobarPosicion();
+        });
+        
+        //Se muestra el botón de subir al cambiar el tamaño de la ventana segun la posición.
+        $(window).resize(function() {
+            ComprobarPosicion();
+        });
+    </script>
+ {% endblock %}
+
+{% block migas %}
+    <li class="tipo">
+            {% trans %}Alumnado{% endtrans %}
+    </li>
+    <li>
+        <a href="{{path('intranet_alumno', { 'id': entity.id })}}">
+            {% trans %}Panel principal{% endtrans %}
+        </a>
+    </li>
+    <li>
+        <a href="{{ path('intranet_alumno_seguimientos', { 'id': entity.id }) }}">
+            {% trans %}Seguimiento{% endtrans %}
+        </a>
+    </li>
+    <li class="active no-seleccion">
+        {% trans %}Consulta de Seguimiento{% endtrans %}
+    </li>
+{% endblock %}
+
+{% block titulo_cabecera %}
+    <i class="fa fa-comments page-header-icon"></i>
+    {% trans %}Seguimiento{% endtrans %}
+{% endblock %}
+{% block titulo_cabecera_movil %}
+    <i class="fa fa-comments page-header-icon"></i>
+    {% trans %}Seguimiento{% endtrans %}
+{% endblock %}
+
+{% block contenido %}
+    <h4 id="titulo-seccion" class="titulo-seccion">{% trans %}Consulta de Seguimiento{% endtrans %}.</h4>
+    <div id="contenedor_seguimientos" alumno="{{entity.id}}" class="col-xs-12">
+        <div id="{{seguimiento.id}}" class="consulta_seguimiento">
+            <div class="header col-xs-12 clearfix no-padding">
+                <div class="pull-right fecha hidden-xs">
+                    <p>{{ seguimiento.fecha | localizeddate('full', 'none', app.request.getLocale()) | capitalize}}</p>
+                </div>
+                <div>
+                    {% if seguimiento.profesor.sexo == "Masculino" %}
+                        <label for="">{% trans %}Maestro{% endtrans %}:</label>
+                    {% else %}
+                        <label for="">{% trans %}Maestra{% endtrans %}:</label>
+                    {% endif %}
+                    <span>{{seguimiento.profesor}}</span>
+                </div>
+                {% if seguimiento.asignatura %}
+                <div class="hidden-xs">
+                    <label for="">{% trans %}Asignatura{% endtrans %}:</label>
+                    <span>{{seguimiento.asignatura.asignatura.nombre}}</span>
+                </div>
+                <div class="hidden-sm hidden-md hidden-lg">
+                    <label for="">{% trans %}Asignatura{% endtrans %}: </label>
+                    <span>{{seguimiento.asignatura.asignatura.abreviatura}}</span>
+                </div>
+                {% else %}
+                <div>
+                    <label for="">{% trans %}Curso{% endtrans %}:</label>
+                    <span>{{seguimiento.grupo ~ " - " ~ seguimiento.grupo.curso.nivel}}</span>
+                </div>
+                {% endif %}
+                <div class="hidden-sm hidden-md hidden-lg">
+                    <label for="">{% trans %}Fecha{% endtrans %}: </label>
+                    <span>{{ seguimiento.fecha | localizeddate('full', 'none', app.request.getLocale()) | capitalize}}</span>
+                </div>
+            </div>             
+            <div class="body clearfix">
+                <div>
+                    <p class="descripcion">{{seguimiento.descripcion|nl2br}}</p>
+                </div>  
+            </div>
+            {% for seguimiento in respuestas %}
+                <div class="respuesta">
+                    <header class="hidden-xs">
+                        {% if seguimiento.tipoUser == 1 %}
+                            <i class="fa fa-share color_rojo"></i>
+                        {% else %}
+                            <i class="fa fa-reply color_verde"></i>
+                        {% endif %}
+
+                        {% trans %}Respuesta de{% endtrans %}: <span class="c_naranja">{{seguimiento.responsable}}</span> <span class="pull-right fecha">{{ seguimiento.fecha | localizeddate('short', 'short', app.request.getLocale())}} </span>
+                    </header>
+                    <header class="hidden-sm hidden-md hidden-lg">
+                        <p><span class="fecha">{{ seguimiento.fecha | localizeddate('short','short', app.request.getLocale())}} </span></p> 
+                        <p>{% trans %}Respuesta de{% endtrans %}:  </p>   
+                        <span class="c_naranja">{{seguimiento.responsable}}</span>                      
+                    </header>
+                    <div>
+                        <p class="descripcion">{{seguimiento.descripcion|nl2br}}</p>
+                    </div> 
+                </div>
+            {% endfor %}
+            </div>
+        </div>
+        <a id="btn_responder" class="btn_responder btn btn-primary" data-target="#responder_seguimiento_modal" data-toggle="modal" data-backdrop="static" data-keyboard="false">{% trans %}Responder{% endtrans %}</a>
+        <div class="col-xs-3 col-sm-3 visible-xs visible-sm botonsubir">
+            <a class="go-top btn btn-default  hidden" href="#">
+                <i class="fa fa-arrow-up"></i>{% trans %}Subir{% endtrans %}
+            </a>
+        </div>
+    <!-- Ventana modal de respuesta del seguimiento -->
+    <div id="responder_seguimiento_modal" class="modal fade aviso" role="dialog" data-backdrop="true" >
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    <h4 class="modal-title">{% trans %}Respuesta del Seguimiento{% endtrans %}</h4>
+                </div>
+                <div class="modal-body"></div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

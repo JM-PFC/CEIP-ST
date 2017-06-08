@@ -10,6 +10,8 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 
 use Cole\BackendBundle\Entity\Alumno;
 use Cole\ColeBundle\Entity\Noticias;
+use Cole\IntranetBundle\Entity\Avisos;
+
 
 use Cole\BackendBundle\Form\AlumnoIntranetType;
 use Symfony\Component\HttpFoundation\Response;
@@ -495,6 +497,136 @@ class AlumnoController extends Controller
         );
     }
 
+
+    public function seguimientosAction(Request $request, $id)
+    {
+        $em = $this->getDoctrine()->getManager();
+        $entity= $em->getRepository('BackendBundle:Alumno')->findOneById($id);
+        $seguimientosNuevos=$em->getRepository('IntranetBundle:Seguimiento')->findSeguimientosActualizadosAlumno($entity, $entity->getGrupo());
+        if(count($seguimientosNuevos)<5){
+            $seguimientos= $em->getRepository('IntranetBundle:Seguimiento')->findAntiguosSeguimientosContadorAlumno($entity, $entity->getGrupo(), 5-count($seguimientosNuevos));
+        }
+        else{
+            $seguimientos=null;
+        }
+
+        return $this->render('IntranetBundle:Alumno:seguimientos.html.twig', array(
+            'entity' => $entity, 
+            'seguimientosNuevos' => $seguimientosNuevos,
+            'seguimientos'=> $seguimientos,
+        ));
+    }
+
+    public function seguimientoAction(Request $request, $id, $num)
+    {
+        $em = $this->getDoctrine()->getManager();
+        $entity= $em->getRepository('BackendBundle:Alumno')->findOneById($id);
+        $seguimiento=$em->getRepository('IntranetBundle:Seguimiento')->findOneById($num);
+        $respuestas=$em->getRepository('IntranetBundle:Seguimiento')->findRespuestas($num);
+
+        return $this->render('IntranetBundle:Alumno:seguimiento.html.twig', array(
+            'entity' => $entity, 
+            'seguimiento'=> $seguimiento,
+            'respuestas' => $respuestas,
+            ));
+    }
+
+    public function CargarNuevosSeguimientosAction(Request $request, $id, $fecha)
+    {
+        $em = $this->getDoctrine()->getManager();
+        $entity= $em->getRepository('BackendBundle:Alumno')->findOneById($id);
+
+        $seguimientosNuevos=$em->getRepository('IntranetBundle:Seguimiento')->findCargaSeguimientosNuevosAlumno($fecha, $entity, $entity->getGrupo());
+
+        if(count($seguimientosNuevos)<5){
+            $seguimientos= $em->getRepository('IntranetBundle:Seguimiento')->findCargaSeguimientosInicialAlumno($entity, $entity->getGrupo(), 5-count($seguimientosNuevos));
+        }
+        else{
+            $seguimientos=null;
+        }
+        return new JsonResponse(array(
+            'seguimientos' => $seguimientos,
+            'seguimientosNuevos' => $seguimientosNuevos,
+            'html' => $this->renderView('IntranetBundle:Alumno:lista_seguimiento.html.twig', array(
+            'seguimientos' => $seguimientos, 'seguimientosNuevos' => $seguimientosNuevos, 'entity'=>$entity)),
+            'success' => true
+            ), 200);
+    }
+
+    public function CargarSeguimientosAction(Request $request, $id, $iden)
+    {
+        $em = $this->getDoctrine()->getManager();
+        $entity= $em->getRepository('BackendBundle:Alumno')->findOneById($id);
+        
+        $seguimientos= $em->getRepository('IntranetBundle:Seguimiento')->findCargaSeguimientosAlumno($entity, $iden, $entity->getGrupo());
+
+        return new JsonResponse(array(
+            'seguimientos' => $seguimientos,
+            'seguimientosNuevos' => null,
+            'html' => $this->renderView('IntranetBundle:Alumno:lista_seguimiento.html.twig', array(
+            'seguimientos' => $seguimientos, 'seguimientosNuevos' => null, 'entity'=>$entity)),
+            'success' => true
+            ), 200);
+    }
+
+    public function comprobarSeguimientosNuevosAction($id)
+    {
+        $em = $this->getDoctrine()->getManager();
+
+        $entity= $em->getRepository('BackendBundle:Alumno')->findOneById($id);
+        $num=0;
+
+        if($entity->getCurso() && $entity->getGrupo()){
+            if($entity->getAccesoSeguimientos()){
+                $seguimientos =$em->getRepository('IntranetBundle:Seguimiento')->findNuevosSeguimientosAlumno($entity->getAccesoSeguimientos(),$entity, $entity->getGrupo());
+            }
+            else{
+                $seguimientos =$em->getRepository('IntranetBundle:Seguimiento')->findNuevosSeguimientosInicioAlumno($entity, $entity->getGrupo());
+            }
+
+            //Si hay seguimientos nuevos se añade los id a la tabla Avisos.
+            if($seguimientos){
+                foreach($seguimientos as $seguimiento){
+
+                    if($seguimiento->getSeguimiento() == null){
+                        $existencia=$em->getRepository('IntranetBundle:Avisos')->findExistenciaAviso($entity->getId(), "Alumno",$seguimiento->getId(), "Seguimiento" );
+                        if(!$existencia){
+                            $aviso = new Avisos();
+                            $aviso->setIdUsuario($entity->getId());
+                            $aviso->setTipoUsuario("Alumno");
+                            $aviso->setIdAviso($seguimiento->getId());
+                            $aviso->setTipoAviso("Seguimiento");
+                            $em->persist($aviso);
+                        }
+                    }
+                    else{
+                        $existencia=$em->getRepository('IntranetBundle:Avisos')->findExistenciaAviso($entity->getId(), "Alumno",$seguimiento->getSeguimiento(), "Seguimiento" );
+                        if(!$existencia){
+                            $aviso = new Avisos();
+                            $aviso->setIdUsuario($entity->getId());
+                            $aviso->setTipoUsuario("Alumno");
+                            $aviso->setIdAviso($seguimiento->getSeguimiento());
+                            $aviso->setTipoAviso("Seguimiento");
+                            $em->persist($aviso);
+                        }
+                    } 
+                }
+
+                //Se actualiza la fecha del último acceso a noticias.
+                $entity->setAccesoSeguimientos(new \DateTime("now"));
+                $em->persist($entity);
+                $em->flush();
+            }
+            //Se obtiene el número de seguimientos nuevos.
+            $avisos =$em->getRepository('IntranetBundle:Avisos')->findAvisosAlumno($entity, "Alumno", "Seguimiento");
+            $num=count($avisos);
+        }
+
+        return new JsonResponse(array(
+            'num'=> $num,
+            'id' => $id,
+            'success' => true), 200);
+    }
 
     public function noticiasAction(Request $request, $id)
     {

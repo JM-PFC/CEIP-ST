@@ -493,7 +493,6 @@ class DefaultController extends Controller
             $array_op[$horario."-".$dia."-".$registro->getAsignatura()->getAsignatura()->getNombre()."-".$registro->getAsignatura()->getAsignatura()->getAbreviatura()."-".$aula."-".$registro->getGrupo()->getId()]=$registro->getProfesor()->getNombre()." ".$registro->getProfesor()->getApellido1()." ".$registro->getProfesor()->getApellido2();
         }
 
-
         return $this->render('IntranetBundle:Default:datos_horario_grupo.html.twig', array(
             'imparte' => $array,
             'imparte_op' => $array_op,

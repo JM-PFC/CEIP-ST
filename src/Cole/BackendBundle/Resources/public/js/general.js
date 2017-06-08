@@ -10109,7 +10109,6 @@ $(document).on("click","#registro_equipamientos td a",function(event){
     curso=$(this).find("option:selected").val();
      // Se añade un gif para la espera de la carga del contenido actualizado.
     $("#asignar_grupos #loading").html('<div class="ajaxload"><img src="/Symfony/web/bundles/backend/images/loading.gif"/></div>');
-
     div.load(Routing.generate('curso_asignar_grupo', {curso:curso}), function(){
       //Se muestra el select cuando se devuelve un alumno nuevo al contenedor inicial. 
       if($("#asignar_grupos #contenedor_cursos li").size()>0){
@@ -12076,33 +12075,40 @@ $(document).on("click","#registro_equipamientos td a",function(event){
 
     profesor=$("#profesor_asignatura_grupo_dialog .elected").text();
     id=$("#profesor_asignatura_grupo_dialog .elected").attr("id");
+    tutoria_no_asignada=0;
     //Se asignan las asignaturas troncales y específicas(excepto las opcionales)
     $("#profesor_asignatura_grupo_dialog #contenedor_asignaturas li[opcional!='1'] div:not('.oculto') input:checkbox:checked").each (function(){ 
-      $(this).closest("#no_asignado").addClass('oculto');
-      $(this).closest("#no_asignado").next().removeClass('oculto');
-      $(this).closest("#no_asignado").next().find('input[type="text"]').attr("value",profesor);
-      $(this).closest("#no_asignado").next().find('input[type="text"]').attr("id",id);
-      $(this).closest("li").removeClass();
+      //Se comrpueba que el profesor seleccionado es el tutor del grupo para poder asignarle la Tutoría.
+      if($(this).closest("li").attr("nombre")=="Tutoría" && $("#profesor_asignatura_grupo_dialog #tutor .elected").size()==0){
+        tutoria_no_asignada=1;
+      }
+      else{
+        $(this).closest("#no_asignado").addClass('oculto');
+        $(this).closest("#no_asignado").next().removeClass('oculto');
+        $(this).closest("#no_asignado").next().find('input[type="text"]').attr("value",profesor);
+        $(this).closest("#no_asignado").next().find('input[type="text"]').attr("id",id);
+        $(this).closest("li").removeClass();
       
-      $("#profesor_asignatura_grupo_dialog #div_lista .elected").removeClass('elected');
-      $(this).prop("checked", false);
-      if($(this).closest("#no_asignado").next().find('input[type="text"]').attr("value")==$(this).closest("#no_asignado").next().find('input[type="text"]').attr("valor")){
-        //Se le asigna un color y un title a los profesores ya asignados.
-        $(this).closest("li").addClass("back_asignado");
-        $(this).closest("#no_asignado").next().find('input[type="text"]').attr("title","Profesor Asignado");
+        $("#profesor_asignatura_grupo_dialog #div_lista .elected").removeClass('elected');
+        $(this).prop("checked", false);
+        if($(this).closest("#no_asignado").next().find('input[type="text"]').attr("value")==$(this).closest("#no_asignado").next().find('input[type="text"]').attr("valor")){
+          //Se le asigna un color y un title a los profesores ya asignados.
+          $(this).closest("li").addClass("back_asignado");
+          $(this).closest("#no_asignado").next().find('input[type="text"]').attr("title","Profesor Asignado");
 
-        aula= $(this).closest("#no_asignado").next().find('select').attr("valor");
-        $(this).closest("#no_asignado").next().find('select').val(aula);
-        $(this).closest("#no_asignado").next().find('select').attr("title",$(this).closest("#no_asignado").next().find('select option:selected').text());
+          aula= $(this).closest("#no_asignado").next().find('select').attr("valor");
+          $(this).closest("#no_asignado").next().find('select').val(aula);
+          $(this).closest("#no_asignado").next().find('select').attr("title",$(this).closest("#no_asignado").next().find('select option:selected').text());
 
-      }else{
-         //Se le asigna un color y un title a los profesores pendientes de asignar.
-        $(this).closest("li").addClass("back_modificado");
-        $(this).closest("#no_asignado").next().find('input[type="text"]').attr("title","Profesor pendiente de Asignar");
+        }else{
+          //Se le asigna un color y un title a los profesores pendientes de asignar.
+          $(this).closest("li").addClass("back_modificado");
+          $(this).closest("#no_asignado").next().find('input[type="text"]').attr("title","Profesor pendiente de Asignar");
 
-        aula=$(this).closest("fieldset").attr("aula");
-        $(this).closest("#no_asignado").next().find('select').val(aula);
-        $(this).closest("#no_asignado").next().find('select').attr("title",$(this).closest("#no_asignado").next().find('select option:selected').text());
+          aula=$(this).closest("fieldset").attr("aula");
+          $(this).closest("#no_asignado").next().find('select').val(aula);
+          $(this).closest("#no_asignado").next().find('select').attr("title",$(this).closest("#no_asignado").next().find('select option:selected').text());
+        }
       }
     });
     var asignaturas = Array();
@@ -12182,18 +12188,50 @@ $(document).on("click","#registro_equipamientos td a",function(event){
 
     //Se elimina la clase elected del profesor seleccionado.
     $("#profesor_asignatura_grupo_dialog #div_lista .elected").removeClass('elected');
-
-    //Se informa la asignacion de la asignatura específica opcional no se ha realizado.
-    if(asignaturas.length){
-      texto="<table><p class='justificado'>La asignación siguiente no se ha realizado ya que el profesor tiene asignada una asignatura opcional en el grupo.<br></p><thead><tr><th>Profesor</th><th>Asignatura</th></tr></thead><tbody>"
+    
+    //Se informa de que el profesor no es tutor del grupo y que no se realiza la asignacion de la tutoria del grupo al profesor.
+    if(tutoria_no_asignada==1 && !asignaturas.length){
+      texto="<p class='justificado'>No se puede asignar la tutoría de este grupo al profesor seleccionado ya que no es el tutor del grupo.<br></p>"
+          error.play();
+      swal({
+        title: "Asignación no permitida",
+        html: texto,
+        type: "error",
+        width: "500px",
+        confirmButtonColor: color,
+        showCancelButton: false
+      });
+    }
+    //Se informa de que la asignacion de la asignatura específica opcional no se ha realizado ya que el profesor está asignado a otra.
+    else if(tutoria_no_asignada==0 && asignaturas.length){
+      texto="<table><p class='justificado'>La asignación siguiente no se puede realizar ya que el profesor tiene asignada una asignatura opcional en el grupo.<br></p><thead><tr><th>Profesor</th><th>Asignatura</th></tr></thead><tbody>"
       for (var asignatura in asignaturas) { 
         texto+="<tr><td>"+profesor+"</td><td>"+asignaturas[asignatura]+"</td></tr>";
       }
       texto+="</tbody><br></p></table>"
-  
+
+            error.play();
+      swal({
+        title: "Asignación no permitida",
+        html: texto,
+        type: "error",
+        width: "500px",
+        confirmButtonColor: color,
+        showCancelButton: false
+      });
+    }
+    //Se informa los dos casos anteriores a la vez al coincidir con el mismo profesor.
+    else if(tutoria_no_asignada==1 && asignaturas.length){
+      texto="<table><p class='justificado'>La asignación siguiente no se puede realizar ya que el profesor tiene asignada una asignatura opcional en el grupo.<br></p><thead><tr><th>Profesor</th><th>Asignatura</th></tr></thead><tbody>"
+      for (var asignatura in asignaturas) { 
+        texto+="<tr><td>"+profesor+"</td><td>"+asignaturas[asignatura]+"</td></tr>";
+      }
+      texto+="</tbody><br></p></table>"
+      texto+="<br><p class='justificado'>Además, no se puede asignar la tutoría de este grupo al profesor ya que no es el tutor del grupo.<br></p>"
+
       error.play();
       swal({
-        title: "Profesor Asignado",
+        title: "Asignaciones no permitidas",
         html: texto,
         type: "error",
         width: "500px",

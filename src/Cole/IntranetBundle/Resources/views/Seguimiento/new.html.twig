@@ -1,0 +1,167 @@
+{% extends  'IntranetBundle:Profesor:index.html.twig' %}
+
+{% block body %}
+    {{parent()}}
+    <script>
+    	$(".menu li").removeClass('active');
+		$(".menu #seguimiento").addClass('active');
+        $(".menu #seguimiento").addClass('click');
+
+    nivel={{entity.nivel|json_encode()|raw}};
+    if(nivel=="Infantil"){
+        grupo={{tutor_grupo.id|json_encode()|raw}};
+        profesor={{entity.id|json_encode()|raw}};
+    
+        //Se selecciona los valores de los select ocultos.
+        $("#seguimiento_grupo option[value='"+grupo+"']").prop('selected', true);
+        $("#seguimiento_profesor option[value='"+profesor+"']").prop('selected', true);
+    }
+
+
+
+    </script>
+ {% endblock %}
+
+{% block migas %}
+	<li class="tipo">
+			{% trans %}Profesorado{% endtrans %}
+	</li>
+	<li>
+		<a href="{{path('intranet_profesor')}}">
+			{% trans %}Panel principal{% endtrans %}
+		</a>
+	</li>
+	<li>
+		<a href="{{path('intranet_profesor_seguimientos')}}">
+			{% trans %}Seguimiento{% endtrans %}
+		</a>
+	</li>
+	<li class="active no-seleccion">
+		{% trans %}Nuevo Seguimiento{% endtrans %}
+	</li>
+{% endblock %}
+
+{% block titulo_cabecera %}
+	<i class="fa fa-comments page-header-icon"></i>
+	{% trans %}Seguimiento{% endtrans %}
+{% endblock %}
+{% block titulo_cabecera_movil %}
+    <i class="fa fa-comments page-header-icon"></i>
+    {% trans %}Seguimiento{% endtrans %}
+{% endblock %}
+
+{% block contenido %}
+    <h4 id="titulo-seccion" class="titulo-seccion">{% trans %}Nuevo Seguimiento{% endtrans %}</h4>
+
+	<div id="seleccion_nuevo_seguimiento" class="seleccion_nuevo_seguimiento col-sm-12" locale="{{ app.request.getLocale() }}" >
+      {% if entity.nivel == "Primaria"%}
+		<div id="1" class="col-sm-4 center">
+			<p>{% trans %}Seleccione un grupo{% endtrans %}:</p>
+
+    		<div id="cursos" class="seleccion" locale="{{ app.request.getLocale() }}">
+				{% for curso in cursos %}
+					<button id="{{curso.grupo.id}}" class="btn btn-primary">{{curso.grupo.curso.curso ~ " " ~ curso.grupo.letra}}</button>
+				{% endfor %}
+			</div>
+			<span id="orden">1</span>
+		</div>
+
+		<div id="2" class="col-sm-4 center hidden">
+			<p>{% trans %}Seleccione una asignatura{% endtrans %}:</p>
+    		<div id="asignatura" class="seleccion"></div>
+			<span id="orden">2</span>
+		</div>
+
+		<div id="3" class="col-sm-4 center hidden">
+			<p>{% trans %}Seleccione destinatario{% endtrans %}:</p>
+    		<div id="alumnos" class="seleccion center" locale="{{ app.request.getLocale() }}">
+    			<div class="div_btn">
+    				<button id="individual" data-target="#lista_alumnos_seguimiento" class="btn btn-primary" data-toggle="modal" data-backdrop="static" data-keyboard="false"><i class="fa fa-user"></i> Alumno </button>
+    				<button id="grupo" class="btn btn-primary" ><i class="fa fa-users"></i> Grupo</button>
+    			</div>
+			</div>	
+			<span id="orden">3</span>
+		</div>
+      {% else %}
+
+        <div id="1" class="col-sm-4 center">
+            <p>{% trans %}Seleccione un grupo{% endtrans %}:</p>
+
+            <div id="cursos" class="seleccion" locale="{{ app.request.getLocale() }}">
+                <button id="{{cursos.id}}" class="btn btn-primary  active">{{cursos}}</button>
+            </div>
+            <span id="orden" style="background-color: rgb(51, 122, 183);">1</span>
+        </div>
+        <div id="3" class="col-sm-4 center">
+            <p>{% trans %}Seleccione destinatario{% endtrans %}:</p>
+            <div id="alumnos" class="seleccion center" locale="{{ app.request.getLocale() }}">
+                <div class="div_btn">
+                    <button id="individual" data-target="#lista_alumnos_seguimiento" class="btn btn-primary" data-toggle="modal" data-backdrop="static" data-keyboard="false"><i class="fa fa-user"></i> Alumno </button>
+                    <button id="grupo" class="btn btn-primary" ><i class="fa fa-users"></i> Grupo</button>
+                </div>
+            </div>  
+            <span id="orden">2</span>
+        </div>
+
+      {% endif %}
+
+
+
+
+	</div>
+
+	<p class="nombre_alumno_seguimiento hidden hidden-xs"><span>{% trans %}Alumno{% endtrans %}:</span> <b class="alumno"></b></p>
+    <p class="nombre_alumno_seguimiento hidden hidden-xs"><span>{% trans %}Alumna{% endtrans %}:</span> <b class="alumna"></b></p>
+
+    {% set locale = app.request.getLocale() %}
+
+	{{form_start(form, {'method':'Post','attr':{'id':'seguimiento_nuevo', 'data-toggle':"validator", 'role':"form" ,'novalidate':'novalidate', 'autocomplete':'off'}})}}
+		<div id="formulario_nuevo_seguimiento" class="col-xs-12" >
+            <p class="nombre_alumno_seguimiento hidden hidden-sm hidden-md hidden-lg"><span>{% trans %}Alumno{% endtrans %}:</span> <b class="alumno"></b></p>
+            <p class="nombre_alumno_seguimiento hidden hidden-sm hidden-md hidden-lg"><span>{% trans %}Alumna{% endtrans %}:</span> <b class="alumna"></b></p> 
+			{{ form_errors(form) }}
+			<div class="col-xs-12 col-sm-10">
+				<div class="form-group has-feedback">
+                  {% if locale == "es" %}
+                    {{ form_label(form.descripcion, 'Descripción del seguimiento:',{'label_attr':{'class': ' '}}) }}
+                  {% elseif locale == "en" %}
+                    {{ form_label(form.descripcion, 'Tracking Description:',{'label_attr':{'class': ' '}}) }}
+                  {% endif %}
+					<div class="input-group col-xs-12">
+
+                    {% if locale == "es" %}
+                        {{ form_widget(form.descripcion,{'attr':{'class': 'form-control formulario_seguimiento', 'type': 'textarea','data-error': 'Debes añadir una descripción', 'placeholder': 'Inserta una descripción', 'disabled':'disabled' }}) }}
+                    {% elseif locale == "en" %}
+                        {{ form_widget(form.descripcion,{'attr':{'class': 'form-control formulario_seguimiento', 'type': 'textarea','data-error': 'You must add a description', 'placeholder': 'Insert a description', 'disabled':'disabled' }}) }}
+                    {% endif %}
+					</div>
+    				<div class="help-block with-errors"></div>
+				</div>
+			</div>
+
+			<div class="boton_enviar col-sm-2"> 
+				{{ form_row(form.submit,{'id':'intranet_'~form.submit.vars.id , 'attr':{'class': 'btn btn-success pull-right' }}) }}
+			</div>
+		</div>
+		<div class="hidden">
+			{{ form_rest(form) }}
+		</div>
+	{{ form_end(form) }}
+
+
+
+    <div id="lista_alumnos_seguimiento" class="modal fade " role="dialog" data-backdrop="true" >
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    <h4 class="modal-title">{% trans %}Alumnos del grupo{% endtrans %}</h4>
+                </div>
+                <div class="modal-body"></div>
+                <div class="class-footer">
+                    <button type="button" class="btn btn-primary" data-dismiss="modal">{% trans %}Cerrar{% endtrans %}</button>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
