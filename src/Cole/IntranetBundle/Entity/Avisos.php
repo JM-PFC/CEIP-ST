@@ -31,6 +31,13 @@ class Avisos
     /**
      * @var string
      *
+     * @ORM\Column(name="idResponsable", type="string", length=20 , nullable=true)
+     */
+    private $idResponsable;
+
+    /**
+     * @var string
+     *
      * @ORM\Column(name="tipoUsuario", type="string", length=50)
      */
     private $tipoUsuario;
@@ -150,5 +157,28 @@ class Avisos
     public function getTipoAviso()
     {
         return $this->tipoAviso;
+    }
+
+    /**
+     * Set idResponsable
+     *
+     * @param string $idResponsable
+     * @return Avisos
+     */
+    public function setIdResponsable($idResponsable)
+    {
+        $this->idResponsable = $idResponsable;
+
+        return $this;
+    }
+
+    /**
+     * Get idResponsable
+     *
+     * @return string 
+     */
+    public function getIdResponsable()
+    {
+        return $this->idResponsable;
     }
 }

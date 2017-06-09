@@ -31,7 +31,34 @@ class NoticiasRepository extends EntityRepository
 		->getResult();
 	}
 
+	public function findSNoticiasNuevasAlumno($alumno, $categoria)
+	{
+		return $this->getEntityManager()->createQuery(
+			'SELECT n.id FROM ColeBundle:Noticias n WHERE n.categoria=:categoria AND 
+			n.id IN(select a.idAviso FROM IntranetBundle:Avisos a where a.idUsuario=:alumno AND a.tipoUsuario=:tipoUsuario  AND a.tipoAviso=:tipoAviso) ORDER BY n.fecha DESC')
+		->setParameters(array(
+			'alumno' => $alumno,
+			'categoria' => $categoria,
+			'tipoUsuario'=>"Alumno",
+			'tipoAviso' => "Noticia"))
+		->getResult();
+	}
 
-	
+	public function findNoticiasNuevasProfesor($profesor, $categoria)
+	{
+		return $this->getEntityManager()->createQuery(
+			'SELECT n.id FROM ColeBundle:Noticias n WHERE n.categoria=:categoria AND 
+			n.id IN(select a.idAviso FROM IntranetBundle:Avisos a where a.idUsuario=:profesor AND a.tipoUsuario=:tipoUsuario  AND a.tipoAviso=:tipoAviso) ORDER BY n.fecha DESC')
+		->setParameters(array(
+			'profesor' => $profesor,
+			'categoria' => $categoria,
+			'tipoUsuario'=>"Profesor",
+			'tipoAviso' => "Noticia"))
+		->getResult();
+	}
+
+
+
+
 
 }

@@ -310,14 +310,6 @@ class Profesor implements UserInterface, \Serializable
      * @ORM\Column(name="lastAccessAnt", type="datetime" , nullable=true)
      */
     private $lastAccessAnt;
-
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="noticiasNuevas", type="string", length=500, nullable=true)
-     * 
-     */
-    private $noticiasNuevas;
     /**
      * @ORM\ManyToOne(targetEntity="Role", cascade={"persist"})
      */
@@ -1162,29 +1154,6 @@ class Profesor implements UserInterface, \Serializable
     public function getAccesoNoticias()
     {
         return $this->accesoNoticias;
-    }
-
-    /**
-     * Set noticiasNuevas
-     *
-     * @param string $noticiasNuevas
-     * @return Profesor
-     */
-    public function setNoticiasNuevas($noticiasNuevas)
-    {
-        $this->noticiasNuevas = $noticiasNuevas;
-
-        return $this;
-    }
-
-    /**
-     * Get noticiasNuevas
-     *
-     * @return string 
-     */
-    public function getNoticiasNuevas()
-    {
-        return $this->noticiasNuevas;
     }
 
     /**

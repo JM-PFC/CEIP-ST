@@ -342,34 +342,11 @@ class ProfesorController extends Controller
         else{
             $seguimientos=null;
         }
-/*
-        $paginator  = $this->get('knp_paginator');
-        $pagination = $paginator->paginate(
-            $noticias, 
-            $request->query->getInt('page', 1),
-            6
-        );
 
-        $noticias_nuevas=$entity->getNoticiasNuevas();
-        $id_noticias = explode("|", $noticias_nuevas);
-        $array=[];
-        foreach($id_noticias as $id){
-            if($id!=""){
-                $array[$id]=$id;
-            }
-        }
-
-        //Se actualiza la fecha del último acceso a noticias.
-        $entity->setAccesoNoticias(new \DateTime("now"));
-        $em->persist($entity);
-        $em->flush();
-*/
         return $this->render('IntranetBundle:Profesor:seguimientos.html.twig', array(
             'entity' => $entity, 
             'seguimientosNuevos' => $seguimientosNuevos,
             'seguimientos'=> $seguimientos,
-            //'noticias_nuevas' => $array,
-            //'pagination'=> $pagination
             ));
     }
 
@@ -387,17 +364,40 @@ class ProfesorController extends Controller
             ));
     }
 
+    public function CargarNuevosSeguimientosAction(Request $request, $fecha)
+    {
+        $em = $this->getDoctrine()->getManager();
+        $entity = $this->get('security.context')->getToken()->getUser();
+
+        $seguimientosNuevos=$em->getRepository('IntranetBundle:Seguimiento')->findCargaSeguimientosNuevosProfesor($fecha, $entity);
+
+        if(count($seguimientosNuevos)<5){
+            $seguimientos= $em->getRepository('IntranetBundle:Seguimiento')->findCargaSeguimientosInicialProfesor($entity, 5-count($seguimientosNuevos));
+        }
+        else{
+            $seguimientos=null;
+        }
+        return new JsonResponse(array(
+            'seguimientos' => $seguimientos,
+            'seguimientosNuevos' => $seguimientosNuevos,
+            'html' => $this->renderView('IntranetBundle:Profesor:lista_seguimiento.html.twig', array(
+            'seguimientos' => $seguimientos, 'seguimientosNuevos' => $seguimientosNuevos, 'entity'=>$entity)),
+            'success' => true
+            ), 200);
+    }
+
     public function CargarSeguimientosAction(Request $request, $id)
     {
         $em = $this->getDoctrine()->getManager();
-
         $entity = $this->get('security.context')->getToken()->getUser();
+        
         $seguimientos= $em->getRepository('IntranetBundle:Seguimiento')->findCargaSeguimientosProfesor($entity, $id);
 
         return new JsonResponse(array(
             'seguimientos' => $seguimientos,
+            'seguimientosNuevos' => null,
             'html' => $this->renderView('IntranetBundle:Profesor:lista_seguimiento.html.twig', array(
-            'seguimientos' => $seguimientos)),
+            'seguimientos' => $seguimientos, 'seguimientosNuevos' => null, 'entity'=>$entity)),
             'success' => true
             ), 200);
     }
@@ -411,6 +411,7 @@ class ProfesorController extends Controller
 
             if($entity->getAccesoSeguimientos()){
                 $seguimientos =$em->getRepository('IntranetBundle:Seguimiento')->findNuevosSeguimientosProfesor($entity->getAccesoSeguimientos(),$entity);
+                
             }
             else{
                 $seguimientos =$em->getRepository('IntranetBundle:Seguimiento')->findNuevosSeguimientosInicioProfesor($entity);
@@ -420,10 +421,11 @@ class ProfesorController extends Controller
             if($seguimientos){
                 foreach($seguimientos as $seguimiento){
                     if($seguimiento->getSeguimiento() == null){
-                        $existencia=$em->getRepository('IntranetBundle:Avisos')->findExistenciaAviso($entity->getId(), "Profesor",$seguimiento->getId(), "Seguimiento" );
+                        $existencia=$em->getRepository('IntranetBundle:Avisos')->findExistenciaAviso($entity->getId(),null, "Profesor",$seguimiento->getId(), "Seguimiento" );
                         if(!$existencia){
                             $aviso = new Avisos();
                             $aviso->setIdUsuario($entity->getId());
+                            $aviso->setIdResponsable(null);
                             $aviso->setTipoUsuario("Profesor");
                             $aviso->setIdAviso($seguimiento->getId());
                             $aviso->setTipoAviso("Seguimiento");
@@ -431,10 +433,11 @@ class ProfesorController extends Controller
                         }
                     }
                     else{
-                        $existencia=$em->getRepository('IntranetBundle:Avisos')->findExistenciaAviso($entity->getId(), "Profesor",$seguimiento->getSeguimiento(), "Seguimiento" );
+                        $existencia=$em->getRepository('IntranetBundle:Avisos')->findExistenciaAviso($entity->getId(),null, "Profesor",$seguimiento->getSeguimiento(), "Seguimiento" );
                         if(!$existencia){
                             $aviso = new Avisos();
                             $aviso->setIdUsuario($entity->getId());
+                            $aviso->setIdResponsable(null);
                             $aviso->setTipoUsuario("Profesor");
                             $aviso->setIdAviso($seguimiento->getSeguimiento());
                             $aviso->setTipoAviso("Seguimiento");
@@ -449,7 +452,7 @@ class ProfesorController extends Controller
                 $em->flush();
             }
             //Se obtiene el número de seguimientos nuevos.
-            $avisos =$em->getRepository('IntranetBundle:Avisos')->findAvisosAlumno($entity, "Profesor", "Seguimiento");
+            $avisos =$em->getRepository('IntranetBundle:Avisos')->findAvisos($entity,NULL, "Profesor", "Seguimiento");
             $num=count($avisos);
 
         return new JsonResponse(array(
@@ -514,7 +517,8 @@ class ProfesorController extends Controller
 
         $entity = $this->get('security.context')->getToken()->getUser();
 
-        $noticias= $em->getRepository('ColeBundle:Noticias')->findBy(array('categoria'=>'profesores'), array('fecha'=>'DESC'));
+        $noticias= $em->getRepository('ColeBundle:Noticias')->findBy(array('categoria'=>'profesor'), array('fecha'=>'DESC'));
+        $noticiasNuevas=$em->getRepository('ColeBundle:Noticias')->findNoticiasNuevasProfesor($entity,"profesor" );
 
         $paginator  = $this->get('knp_paginator');
         $pagination = $paginator->paginate(
@@ -522,50 +526,19 @@ class ProfesorController extends Controller
             $request->query->getInt('page', 1)/*page number*/,
             10/*limit per page*/
         );
-/*
-        if($entity->getAccesoNoticias()){
-            $noticias_nuevas =$em->getRepository('ColeBundle:Noticias')->findNuevasNoticias($entity->getAccesoNoticias(),"profesores");
-        }
-        else{
-            $noticias_nuevas= $em->getRepository('ColeBundle:Noticias')->findBy(array('categoria'=>'profesores'), array('fecha'=>'DESC'));
-
-        }
-
-        $array=[];
-        if($noticias_nuevas){
-            foreach($noticias_nuevas as $noticia){
-                $array[$noticia->getId()]=$noticia->getTitulo();
-            }
-        }
-*/
-        $noticias_nuevas=$entity->getNoticiasNuevas();
-        $id_noticias = explode("|", $noticias_nuevas);
-        $array=[];
-        foreach($id_noticias as $id){
-            if($id!=""){
-                $array[$id]=$id;
-            }
-        }
-
-        //Se actualiza la fecha del último acceso a noticias.
-        $entity->setAccesoNoticias(new \DateTime("now"));
-        $em->persist($entity);
-        $em->flush();
 
         return $this->render('IntranetBundle:Profesor:noticias.html.twig', array(
             'entity' => $entity, 
             'noticias'=> $noticias,
-            'noticias_nuevas' => $array,
+            'noticias_nuevas' => $noticiasNuevas,
             'pagination'=> $pagination));
     }
 
     public function noticiaAction($num)
     {
-
         $em = $this->getDoctrine()->getManager();
 
         $entity = $this->get('security.context')->getToken()->getUser();
-
         $noticia= $em->getRepository('ColeBundle:Noticias')->findOneById($num);
      
         $imagenes = array();
@@ -579,11 +552,11 @@ class ProfesorController extends Controller
             }
         }
 
-        //Se elimina el id de la noticia mostrada del string en el campo NoticiasNuevas del profesor.
-        $string=$entity->getNoticiasNuevas();
-        $new_string= str_replace("|".$num."|", "|", $string);
-        $entity->setNoticiasNuevas($new_string);
-        $em->persist($entity);
+        //Se elimina el id de la noticia mostrada en la tabla de avisos.
+        $aviso= $em->getRepository('IntranetBundle:Avisos')->findnoticiaMostrada($entity->getId(), null, $num, "Profesor");
+        if($aviso){
+            $em->remove($aviso);
+        }
         $em->flush();
 
         return $this->render('IntranetBundle:Profesor:noticia.html.twig', array(
@@ -602,39 +575,36 @@ class ProfesorController extends Controller
         $num=0;
 
         if($entity->getAccesoNoticias()){
-            $noticias =$em->getRepository('ColeBundle:Noticias')->findNuevasNoticias($entity->getAccesoNoticias(),"profesores");
+            $noticias =$em->getRepository('ColeBundle:Noticias')->findNuevasNoticias($entity->getAccesoNoticias(),"profesor");
         }
         else{
-            $noticias= $em->getRepository('ColeBundle:Noticias')->findBy(array('categoria'=>'profesores'), array('fecha'=>'DESC'));
+            $noticias= $em->getRepository('ColeBundle:Noticias')->findBy(array('categoria'=>'profesor'), array('fecha'=>'DESC'));
         }
 
-        //Si hay noticias nuevas se añade los id en el campo NoticiasNuevas del profesor.
+        //Si hay noticias nuevas se añade los id a la tabla Avisos.
         if($noticias){
-            if($entity->getNoticiasNuevas()){
-                $string=$entity->getNoticiasNuevas();
-            }
-            else{
-                $string="|";
-            }
-                
             foreach($noticias as $noticia){
-                $string=$string.$noticia->getId()."|";
+                $existencia=$em->getRepository('IntranetBundle:Avisos')->findExistenciaAviso($entity->getId(),null, "Profesor",$noticia->getId(), "Noticia" );
+                if(!$existencia){
+                    $aviso = new Avisos();
+                    $aviso->setIdUsuario($entity->getId());
+                    $aviso->setIdResponsable(null);
+                    $aviso->setTipoUsuario("Profesor");
+                    $aviso->setIdAviso($noticia->getId());
+                    $aviso->setTipoAviso("Noticia");
+                    $em->persist($aviso);
+                }
             }
+
+
             //Se actualiza la fecha del último acceso a noticias.
             $entity->setAccesoNoticias(new \DateTime("now"));
-            $entity->setNoticiasNuevas($string);
             $em->persist($entity);
             $em->flush();
         }
-        //Se obtiene el número de noticias nuevas mediante los id del campo NoticiasNuevas del alumno.
-        $noticias_nuevas=$entity->getNoticiasNuevas();
-        $id_noticias = explode("|", $noticias_nuevas);
-
-        foreach($id_noticias as $noticia){
-            if($noticia!=""){
-                $num++;
-            }
-        }   
+        //Se obtiene el número de noticias nuevas.
+        $avisos =$em->getRepository('IntranetBundle:Avisos')->findAvisos($entity,null, "Profesor", "Noticia");
+        $num=count($avisos);
 
         return new JsonResponse(array(
             'num'=> $num,

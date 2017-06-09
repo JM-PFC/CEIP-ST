@@ -47,6 +47,12 @@
         $(window).resize(function() {
             ComprobarPosicion();
         });
+        
+        //Se carga la plantilla de respuesta en la ventana modal para luego mostrarlo correctamente.
+        locale=$("#intranet").attr("locale");
+        id=$("#contenedor_seguimientos .consulta_seguimiento").attr("id");
+        $("#responder_seguimiento_modal .modal-body").load(Routing.generate("respuesta_seguimiento", {id:id, _locale:locale}), function(){
+        }); 
     </script>
  {% endblock %}
 
@@ -128,7 +134,15 @@
                             <i class="fa fa-reply color_verde"></i>
                         {% endif %}
 
-                        {% trans %}Respuesta de{% endtrans %}: <span class="c_naranja">{{seguimiento.responsable}}</span> <span class="pull-right fecha">{{ seguimiento.fecha | localizeddate('short', 'short', app.request.getLocale())}} </span>
+                        {% trans %}Respuesta de{% endtrans %}: 
+
+                        {% if seguimiento.tipoUser == 0 %}
+                            <span class="c_naranja">{{seguimiento.responsable}}</span> 
+                        {% else %}
+                            <span class="c_naranja">{{seguimiento.profesor}}</span> 
+                        {% endif %} 
+                        
+                        <span class="pull-right fecha">{{ seguimiento.fecha | localizeddate('short', 'short', app.request.getLocale())}} </span>
                     </header>
                     <header class="hidden-sm hidden-md hidden-lg">
                         <p><span class="fecha">{{ seguimiento.fecha | localizeddate('short','short', app.request.getLocale())}} </span></p> 

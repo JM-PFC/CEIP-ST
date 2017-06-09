@@ -223,26 +223,33 @@ class Alumno
     /**
      * @var \DateTime
      *
-     * @ORM\Column(name="accesoNoticias", type="datetime", nullable=true)
+     * @ORM\Column(name="accesoNoticiasResponsable1", type="datetime", nullable=true)
      * 
      */
-    private $accesoNoticias;
+    private $accesoNoticiasResponsable1;
+    /**
+     * @var \DateTime
+     *
+     * @ORM\Column(name="accesoNoticiasResponsable2", type="datetime", nullable=true)
+     * 
+     */
+    private $accesoNoticiasResponsable2;
 
     /**
      * @var \DateTime
      *
-     * @ORM\Column(name="accesoSeguimientos", type="datetime", nullable=true)
+     * @ORM\Column(name="accesoSeguimientosResponsable1", type="datetime", nullable=true)
      * 
      */
-    private $accesoSeguimientos;
+    private $accesoSeguimientosResponsable1;
 
     /**
-     * @var string
+     * @var \DateTime
      *
-     * @ORM\Column(name="noticiasNuevas", type="string", length=500, nullable=true)
+     * @ORM\Column(name="accesoSeguimientosResponsable2", type="datetime", nullable=true)
      * 
      */
-    private $noticiasNuevas;
+    private $accesoSeguimientosResponsable2;
 
     /**
     * @ORM\OneToMany(targetEntity="Cole\IntranetBundle\Entity\Seguimiento", mappedBy="alumno", cascade={"remove"})
@@ -873,55 +880,6 @@ class Alumno
         return $this->optativa;
     }
 
-
-
-
-    /**
-     * Set accesoNoticias
-     *
-     * @param \DateTime $accesoNoticias
-     * @return Alumno
-     */
-    public function setAccesoNoticias($accesoNoticias)
-    {
-        $this->accesoNoticias = $accesoNoticias;
-
-        return $this;
-    }
-
-    /**
-     * Get accesoNoticias
-     *
-     * @return \DateTime 
-     */
-    public function getAccesoNoticias()
-    {
-        return $this->accesoNoticias;
-    }
-
-    /**
-     * Set noticiasNuevas
-     *
-     * @param string $noticiasNuevas
-     * @return Alumno
-     */
-    public function setNoticiasNuevas($noticiasNuevas)
-    {
-        $this->noticiasNuevas = $noticiasNuevas;
-
-        return $this;
-    }
-
-    /**
-     * Get noticiasNuevas
-     *
-     * @return string 
-     */
-    public function getNoticiasNuevas()
-    {
-        return $this->noticiasNuevas;
-    }
-
     /**
      * Add seguimiento
      *
@@ -955,26 +913,97 @@ class Alumno
         return $this->seguimiento;
     }
 
+  
+
     /**
-     * Set accesoSeguimientos
+     * Set accesoNoticiasResponsable1
      *
-     * @param \DateTime $accesoSeguimientos
+     * @param \DateTime $accesoNoticiasResponsable1
      * @return Alumno
      */
-    public function setAccesoSeguimientos($accesoSeguimientos)
+    public function setAccesoNoticiasResponsable1($accesoNoticiasResponsable1)
     {
-        $this->accesoSeguimientos = $accesoSeguimientos;
+        $this->accesoNoticiasResponsable1 = $accesoNoticiasResponsable1;
 
         return $this;
     }
 
     /**
-     * Get accesoSeguimientos
+     * Get accesoNoticiasResponsable1
      *
      * @return \DateTime 
      */
-    public function getAccesoSeguimientos()
+    public function getAccesoNoticiasResponsable1()
     {
-        return $this->accesoSeguimientos;
+        return $this->accesoNoticiasResponsable1;
+    }
+
+    /**
+     * Set accesoNoticiasResponsable2
+     *
+     * @param \DateTime $accesoNoticiasResponsable2
+     * @return Alumno
+     */
+    public function setAccesoNoticiasResponsable2($accesoNoticiasResponsable2)
+    {
+        $this->accesoNoticiasResponsable2 = $accesoNoticiasResponsable2;
+
+        return $this;
+    }
+
+    /**
+     * Get accesoNoticiasResponsable2
+     *
+     * @return \DateTime 
+     */
+    public function getAccesoNoticiasResponsable2()
+    {
+        return $this->accesoNoticiasResponsable2;
+    }
+
+    /**
+     * Set accesoSeguimientosResponsable1
+     *
+     * @param \DateTime $accesoSeguimientosResponsable1
+     * @return Alumno
+     */
+    public function setAccesoSeguimientosResponsable1($accesoSeguimientosResponsable1)
+    {
+        $this->accesoSeguimientosResponsable1 = $accesoSeguimientosResponsable1;
+
+        return $this;
+    }
+
+    /**
+     * Get accesoSeguimientosResponsable1
+     *
+     * @return \DateTime 
+     */
+    public function getAccesoSeguimientosResponsable1()
+    {
+        return $this->accesoSeguimientosResponsable1;
+    }
+
+    /**
+     * Set accesoSeguimientosResponsable2
+     *
+     * @param \DateTime $accesoSeguimientosResponsable2
+     * @return Alumno
+     */
+    public function setAccesoSeguimientosResponsable2($accesoSeguimientosResponsable2)
+    {
+        $this->accesoSeguimientosResponsable2 = $accesoSeguimientosResponsable2;
+
+        return $this;
+    }
+
+    /**
+     * Get accesoSeguimientosResponsable2
+     *
+     * @return \DateTime 
+     */
+    public function getAccesoSeguimientosResponsable2()
+    {
+        return $this->accesoSeguimientosResponsable2;
     }
 }

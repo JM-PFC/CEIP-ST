@@ -34,6 +34,12 @@ cargar_seguimientos_profesor:
     options:
         expose: true
 
+cargar_nuevos_seguimientos_profesor:
+    path:     /cargar_nuevos_seguimientos/{fecha}
+    defaults: { _controller: IntranetBundle:Profesor:CargarNuevosSeguimientos}
+    options:
+        expose: true
+
 intranet_profesor_noticias:
     path:     /noticias
     defaults: { _controller: IntranetBundle:Profesor:noticias}

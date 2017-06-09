@@ -500,6 +500,8 @@ class AlumnoController extends Controller
 
     public function seguimientosAction(Request $request, $id)
     {
+        $this->comprobarHijo($id);
+
         $em = $this->getDoctrine()->getManager();
         $entity= $em->getRepository('BackendBundle:Alumno')->findOneById($id);
         $seguimientosNuevos=$em->getRepository('IntranetBundle:Seguimiento')->findSeguimientosActualizadosAlumno($entity, $entity->getGrupo());
@@ -519,6 +521,8 @@ class AlumnoController extends Controller
 
     public function seguimientoAction(Request $request, $id, $num)
     {
+        $this->comprobarHijo($id);
+
         $em = $this->getDoctrine()->getManager();
         $entity= $em->getRepository('BackendBundle:Alumno')->findOneById($id);
         $seguimiento=$em->getRepository('IntranetBundle:Seguimiento')->findOneById($num);
@@ -557,7 +561,7 @@ class AlumnoController extends Controller
     {
         $em = $this->getDoctrine()->getManager();
         $entity= $em->getRepository('BackendBundle:Alumno')->findOneById($id);
-        
+
         $seguimientos= $em->getRepository('IntranetBundle:Seguimiento')->findCargaSeguimientosAlumno($entity, $iden, $entity->getGrupo());
 
         return new JsonResponse(array(
@@ -574,11 +578,19 @@ class AlumnoController extends Controller
         $em = $this->getDoctrine()->getManager();
 
         $entity= $em->getRepository('BackendBundle:Alumno')->findOneById($id);
+        $responsable = $this->get('security.context')->getToken()->getUser();
+        if($entity->getResponsable1()==$responsable){
+            $acceso=$entity->getAccesoSeguimientosResponsable1();
+        }
+        else{
+            $acceso=$entity->getAccesoSeguimientosResponsable2();
+        }
+
         $num=0;
 
         if($entity->getCurso() && $entity->getGrupo()){
-            if($entity->getAccesoSeguimientos()){
-                $seguimientos =$em->getRepository('IntranetBundle:Seguimiento')->findNuevosSeguimientosAlumno($entity->getAccesoSeguimientos(),$entity, $entity->getGrupo());
+            if($acceso){
+                $seguimientos =$em->getRepository('IntranetBundle:Seguimiento')->findNuevosSeguimientosAlumno($acceso,$entity, $entity->getGrupo());
             }
             else{
                 $seguimientos =$em->getRepository('IntranetBundle:Seguimiento')->findNuevosSeguimientosInicioAlumno($entity, $entity->getGrupo());
@@ -587,12 +599,13 @@ class AlumnoController extends Controller
             //Si hay seguimientos nuevos se añade los id a la tabla Avisos.
             if($seguimientos){
                 foreach($seguimientos as $seguimiento){
-
+                    //Se añade el id del responsable en la tabla de avisos, para que ambos responsable tenga sus propios avisos.
                     if($seguimiento->getSeguimiento() == null){
-                        $existencia=$em->getRepository('IntranetBundle:Avisos')->findExistenciaAviso($entity->getId(), "Alumno",$seguimiento->getId(), "Seguimiento" );
+                        $existencia=$em->getRepository('IntranetBundle:Avisos')->findExistenciaAviso($entity->getId(),$responsable->getId(), "Alumno",$seguimiento->getId(), "Seguimiento" );
                         if(!$existencia){
                             $aviso = new Avisos();
                             $aviso->setIdUsuario($entity->getId());
+                            $aviso->setIdResponsable($responsable->getId());
                             $aviso->setTipoUsuario("Alumno");
                             $aviso->setIdAviso($seguimiento->getId());
                             $aviso->setTipoAviso("Seguimiento");
@@ -600,10 +613,11 @@ class AlumnoController extends Controller
                         }
                     }
                     else{
-                        $existencia=$em->getRepository('IntranetBundle:Avisos')->findExistenciaAviso($entity->getId(), "Alumno",$seguimiento->getSeguimiento(), "Seguimiento" );
+                        $existencia=$em->getRepository('IntranetBundle:Avisos')->findExistenciaAviso($entity->getId(),$responsable->getId(), "Alumno",$seguimiento->getSeguimiento(), "Seguimiento" );
                         if(!$existencia){
                             $aviso = new Avisos();
                             $aviso->setIdUsuario($entity->getId());
+                            $aviso->setIdResponsable($responsable->getId());
                             $aviso->setTipoUsuario("Alumno");
                             $aviso->setIdAviso($seguimiento->getSeguimiento());
                             $aviso->setTipoAviso("Seguimiento");
@@ -612,13 +626,18 @@ class AlumnoController extends Controller
                     } 
                 }
 
-                //Se actualiza la fecha del último acceso a noticias.
-                $entity->setAccesoSeguimientos(new \DateTime("now"));
+                //Se actualiza la fecha del último acceso del responsable correspondiente.
+                if($entity->getResponsable1()==$responsable){
+                    $entity->setAccesoSeguimientosResponsable1(new \DateTime("now"));
+                }
+                else{
+                    $entity->setAccesoSeguimientosResponsable2(new \DateTime("now"));
+                }
                 $em->persist($entity);
                 $em->flush();
             }
             //Se obtiene el número de seguimientos nuevos.
-            $avisos =$em->getRepository('IntranetBundle:Avisos')->findAvisosAlumno($entity, "Alumno", "Seguimiento");
+            $avisos =$em->getRepository('IntranetBundle:Avisos')->findAvisos($entity, $responsable, "Alumno", "Seguimiento");
             $num=count($avisos);
         }
 
@@ -638,9 +657,11 @@ class AlumnoController extends Controller
 
         if($entity->getCurso()->getNivel()=="Primaria"){
             $noticias= $em->getRepository('ColeBundle:Noticias')->findBy(array('categoria'=>'primaria'), array('fecha'=>'DESC'));
+            $noticiasNuevas=$em->getRepository('ColeBundle:Noticias')->findSNoticiasNuevasAlumno($entity,"primaria" );
         }
         else{
             $noticias= $em->getRepository('ColeBundle:Noticias')->findBy(array('categoria'=>'infantil'), array('fecha'=>'DESC'));
+            $noticiasNuevas=$em->getRepository('ColeBundle:Noticias')->findSNoticiasNuevasAlumno($entity,"infantil");
         }
         $paginator  = $this->get('knp_paginator');
         $pagination = $paginator->paginate(
@@ -648,52 +669,14 @@ class AlumnoController extends Controller
             $request->query->getInt('page', 1)/*page number*/,
             6/*limit per page*/
         );
-/*
-        if($entity->getAccesoNoticias()){
-            if($entity->getCurso()->getNivel()=="Primaria"){
-                $noticias_nuevas =$em->getRepository('ColeBundle:Noticias')->findNuevasNoticias($entity->getAccesoNoticias(),"primaria");
-            }
-            else{
-                $noticias_nuevas =$em->getRepository('ColeBundle:Noticias')->findNuevasNoticias($entity->getAccesoNoticias(),"infantil");
-            }
-        }
-        else{
-            if($entity->getCurso()->getNivel()=="Primaria"){
-                $noticias_nuevas= $em->getRepository('ColeBundle:Noticias')->findBy(array('categoria'=>'primaria'), array('fecha'=>'DESC'));
-            }
-            else{
-                $noticias_nuevas= $em->getRepository('ColeBundle:Noticias')->findBy(array('categoria'=>'infantil'), array('fecha'=>'DESC'));
-            }
-        }
-
-        $array=[];
-        if($noticias_nuevas){
-            foreach($noticias_nuevas as $noticia){
-                $array[$noticia->getId()]=$noticia->getTitulo();
-            }
-        }
-*/
-        //Se obtiene los id de las noticias nuevas mediante el string del campo NoticiasNuevas en alumno.
-        $noticias_nuevas=$entity->getNoticiasNuevas();
-        $id_noticias = explode("|", $noticias_nuevas);
-        $array=[];
-        foreach($id_noticias as $id){
-            if($id!=""){
-                $array[$id]=$id;
-            }
-        }
-
-        //Se actualiza la fecha del último acceso a noticias.
-        $entity->setAccesoNoticias(new \DateTime("now"));
-        $em->persist($entity);
-        $em->flush();
 
         return $this->render('IntranetBundle:Alumno:noticias.html.twig', array(
             'entity' => $entity, 
+            'noticias_nuevas' => $noticiasNuevas,
             'noticias'=> $noticias,
-            'noticias_nuevas' => $array,
             'pagination'=> $pagination));
     }
+
 
     public function noticiaAction($id,$num)
     {
@@ -702,8 +685,8 @@ class AlumnoController extends Controller
         $em = $this->getDoctrine()->getManager();
 
         $entity= $em->getRepository('BackendBundle:Alumno')->findOneById($id);
-
         $noticia= $em->getRepository('ColeBundle:Noticias')->findOneById($num);
+        $responsable = $this->get('security.context')->getToken()->getUser();
      
         $imagenes = array();
         if($noticia->getGaleria()!=null) {
@@ -715,11 +698,12 @@ class AlumnoController extends Controller
                 $imagenes[]=$nombre_dir;
             }
         }
-        //Se elimina el id de la noticia mostrada del string en el campo NoticiasNuevas del alumno.
-        $string=$entity->getNoticiasNuevas();
-        $new_string= str_replace("|".$num."|", "|", $string);
-        $entity->setNoticiasNuevas($new_string);
-        $em->persist($entity);
+
+        //Se elimina el id de la noticia mostrada en la tabla de avisos.
+        $aviso= $em->getRepository('IntranetBundle:Avisos')->findnoticiaMostrada($id, $responsable->getId(), $num, "Alumno");
+        if($aviso){
+            $em->remove($aviso);
+        }
         $em->flush();
 
         return $this->render('IntranetBundle:Alumno:noticia.html.twig', array(
@@ -729,21 +713,28 @@ class AlumnoController extends Controller
     }
 
 
-
     public function comprobarNoticiasNuevasAction($id)
     {
         $em = $this->getDoctrine()->getManager();
 
+        $responsable = $this->get('security.context')->getToken()->getUser();
         $entity= $em->getRepository('BackendBundle:Alumno')->findOneById($id);
         $num=0;
 
-        if($entity->getCurso()){
-            if($entity->getAccesoNoticias()){
+        if($entity->getResponsable1()==$responsable){
+            $acceso=$entity->getAccesoNoticiasResponsable1();
+        }
+        else{
+            $acceso=$entity->getAccesoNoticiasResponsable2();
+        }
+
+        if($entity->getCurso() && $entity->getGrupo()){
+            if($acceso){
                 if($entity->getCurso()->getNivel()=="Primaria"){
-                    $noticias =$em->getRepository('ColeBundle:Noticias')->findNuevasNoticias($entity->getAccesoNoticias(),"primaria");
+                    $noticias =$em->getRepository('ColeBundle:Noticias')->findNuevasNoticias($acceso,"primaria");
                 }
                 else{
-                    $noticias =$em->getRepository('ColeBundle:Noticias')->findNuevasNoticias($entity->getAccesoNoticias(),"infantil");
+                    $noticias =$em->getRepository('ColeBundle:Noticias')->findNuevasNoticias($acceso,"infantil");
                 }
             }
             else{
@@ -755,33 +746,35 @@ class AlumnoController extends Controller
                 }
             }
 
-            //Si hay noticias nuevas se añade los id en el campo NoticiasNuevas del alumno.
+            //Si hay noticias nuevas se añade los id a la tabla Avisos.
             if($noticias){
-                if($entity->getNoticiasNuevas()){
-                    $string=$entity->getNoticiasNuevas();
+                foreach($noticias as $noticia){
+                    $existencia=$em->getRepository('IntranetBundle:Avisos')->findExistenciaAviso($entity->getId(),$responsable->getId(), "Alumno",$noticia->getId(), "Noticia" );
+                    if(!$existencia){
+                        $aviso = new Avisos();
+                        $aviso->setIdUsuario($entity->getId());
+                        $aviso->setIdResponsable($responsable->getId());
+                        $aviso->setTipoUsuario("Alumno");
+                        $aviso->setIdAviso($noticia->getId());
+                        $aviso->setTipoAviso("Noticia");
+                        $em->persist($aviso);
+                    }
+                }
+
+                //Se actualiza la fecha del último acceso del responsable correspondiente.
+                if($entity->getResponsable1()==$responsable){
+                    $entity->setAccesoNoticiasResponsable1(new \DateTime("now"));
                 }
                 else{
-                    $string="|";
+                    $entity->setAccesoNoticiasResponsable2(new \DateTime("now"));
                 }
-                
-                foreach($noticias as $noticia){
-                    $string=$string.$noticia->getId()."|";
-                }
-                //Se actualiza la fecha del último acceso a noticias.
-                $entity->setAccesoNoticias(new \DateTime("now"));
-                $entity->setNoticiasNuevas($string);
+
                 $em->persist($entity);
                 $em->flush();
             }
-            //Se obtiene el número de noticias nuevas mediante los id del campo NoticiasNuevas del alumno.
-            $noticias_nuevas=$entity->getNoticiasNuevas();
-            $id_noticias = explode("|", $noticias_nuevas);
-
-            foreach($id_noticias as $noticia){
-                if($noticia!=""){
-                    $num++;
-                }
-            }   
+            //Se obtiene el número de noticias nuevas.
+            $avisos =$em->getRepository('IntranetBundle:Avisos')->findAvisos($entity,$responsable, "Alumno", "Noticia");
+            $num=count($avisos);
         }
 
         return new JsonResponse(array(
@@ -789,8 +782,6 @@ class AlumnoController extends Controller
             'id' => $id,
             'success' => true), 200);
     }
-
-
 
 
 

@@ -6,16 +6,16 @@
     	$(".menu li").removeClass('active');
 		$(".menu #seguimiento").addClass('active');
         $(".menu #seguimiento").addClass('click');
-
-    nivel={{entity.nivel|json_encode()|raw}};
-    if(nivel=="Infantil"){
-        grupo={{tutor_grupo.id|json_encode()|raw}};
-        profesor={{entity.id|json_encode()|raw}};
-    
+        
         //Se selecciona los valores de los select ocultos.
-        $("#seguimiento_grupo option[value='"+grupo+"']").prop('selected', true);
+        profesor={{entity.id|json_encode()|raw}};
         $("#seguimiento_profesor option[value='"+profesor+"']").prop('selected', true);
-    }
+
+        nivel={{entity.nivel|json_encode()|raw}};
+        if(nivel=="Infantil"){
+            grupo={{tutor_grupo.id|json_encode()|raw}};
+            $("#seguimiento_grupo option[value='"+grupo+"']").prop('selected', true);
+        }
 
 
 

@@ -65,6 +65,7 @@ class SeguimientoController extends Controller
         ));
     }
 
+    //Se crean la respuesta del seguimiento.
     public function createRespuestaAction(Request $request)
     {        
         $user = $this->get('security.context')->getToken()->getUser();
@@ -82,7 +83,6 @@ class SeguimientoController extends Controller
                 $entity->setTipo(0);
                 $entity->setTipoUser(1);
                 $entity->setRespuesta(0);
-
             }
             else if ($this->get('security.context')->isGranted('ROLE_USUARIO')){
                 $entity->setFecha(new \DateTime("now"));
@@ -203,8 +203,6 @@ class SeguimientoController extends Controller
                 'form'   => $form->createView(),
             ));
         }
-
-
     }
     
 
@@ -351,20 +349,6 @@ class SeguimientoController extends Controller
         $ms = $this->get('translator')->trans('El seguimiento ha sido eliminado correctamente.');
         $this->get('session')->getFlashBag()->add('notice',$ms);
         return $this->redirect($this->generateUrl('intranet_profesor_seguimientos'));
-
-
-         /*
-        $em = $this->getDoctrine()->getManager();
-        $query = $em->createQuery('DELETE IntranetBundle:Seguimiento s WHERE s.id = :sId')->setParameter("sId", $id);
-
-        $query->execute();
-
-        $ms = $this->get('translator')->trans('Seguimiento eliminado correctamente.');
-        $this->get('session')->getFlashBag()->add('notice',$ms);
-
-        return $this->redirect($this->generateUrl('intranet_profesor_seguimientos'));
-
-        */
     }
 
     /**
@@ -389,8 +373,10 @@ class SeguimientoController extends Controller
     public function seguimientoLeidoAction($id, $alumno)
     {
         $em = $this->getDoctrine()->getManager();
+        $entity = $this->get('security.context')->getToken()->getUser();
 
-        $aviso= $em->getRepository('IntranetBundle:Avisos')->findseguimientoLeido($alumno, $id);
+
+        $aviso= $em->getRepository('IntranetBundle:Avisos')->findseguimientoLeido($alumno, $entity->getId(), $id);
         $em->remove($aviso);
         $em->flush();
 
@@ -400,8 +386,16 @@ class SeguimientoController extends Controller
     public function seguimientoConsultadoAction($id,$user,$tipo)
     {
         $em = $this->getDoctrine()->getManager();
+        $entity = $this->get('security.context')->getToken()->getUser();
 
-        $aviso= $em->getRepository('IntranetBundle:Avisos')->findseguimientoConsultado($id,$user,$tipo);
+        if ($this->get('security.context')->isGranted('ROLE_PROFESOR')) {
+            $responsable=null;
+        }
+        else if ($this->get('security.context')->isGranted('ROLE_USUARIO')){
+            $responsable=$entity;
+        }
+
+        $aviso= $em->getRepository('IntranetBundle:Avisos')->findseguimientoConsultado($id,$user,$responsable,$tipo);
         $em->remove($aviso);
         $em->flush();
 

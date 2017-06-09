@@ -130,7 +130,7 @@ $(document).ready(function () {
     $('body').addClass('waiting');
   });
 
-  $(document).on('click',".sidebar-nav a, .enrutaje a, #enlacemiperfil a, .contenedor_noticia a, .barramensajes a, .modal #form_submit,.boton_enviar button, .modal button[type='submit'], #consultar",function(event){ 
+  $(document).on('click',".sidebar-nav a, .enrutaje a, #enlacemiperfil a, .contenedor_noticia a, .barramensajes a, .modal #form_submit,.boton_enviar button, .modal button[type='submit'], #consultar, .bloque-dashboard>a",function(event){ 
     $('body').addClass('waiting');
   });
 
@@ -467,8 +467,8 @@ $(document).ready(function () {
       //Se actualiza el número de avisos en la barra superior.
       num_avisos=parseInt($(".barra_cabecera #barraalertasmovil .numalertas").text())-parseInt(1);
       $("#barraalertasmovil .numalertas").text(num_avisos);
-
-      if($(".seguimiento:not([fecha])").size()>0 && $(".seguimiento:not([fecha])").last().attr("id")<id){
+      //En caso de que exista menos de 5 seguimientos, se inserta el seguimiento leido en la posición correspondiente.
+      if($(".seguimiento").size()<5){
         index=0;
         $(".seguimiento:not([fecha])").each(function(){
           if($(this).attr("id")>id){
@@ -479,44 +479,77 @@ $(document).ready(function () {
         $(this).closest(".seguimiento").find(".aviso").remove();
         boton.remove(); 
         $(this).closest(".seguimiento").find(".icono i").removeClass('c_naranja');
-
-        if(index==0){
+        //Se inserta el seguimiento leido en la primera posición de antiguos seguimientos.
+        if(index==0 && $(".seguimiento:not([fecha])").size()>0){
           id=$(".seguimiento:not([fecha])").first().attr("id");
           $(this).closest(".seguimiento").insertBefore($(".seguimiento[id='"+id+"']"));
           $(this).closest(".seguimiento").animate({'right': 0,opacity: 1 },400);
-        }
+        }//Se inserta el seguimiento leido tras el último seguimiento sin leer.
+        else if(index==0 && $(".seguimiento").size()>1){
+          id=$(".seguimiento").last().attr("id");
+          $(this).closest(".seguimiento").insertAfter($(".seguimiento[id='"+id+"']"));
+          $(this).closest(".seguimiento").animate({'right': 0,opacity: 1 },400); 
+        }//Se muestra el único seguimiento.
+        else if (index==0 && $(".seguimiento").size()==1){
+          $(this).closest(".seguimiento").animate({'right': 0,opacity: 1 },400); 
+        }//Se inserta el seguimiento leido en la posición correspondiente entre los antiguos seguimientos.
         else{
           $(this).closest(".seguimiento").insertAfter($(".seguimiento[id='"+index+"']"));
           $(this).closest(".seguimiento").animate({'right': 0,opacity: 1 },400);
         }
       }
-      else{ 
-        //Se elimina el seguimiento y se marca como leido en la base de datos, para que se pueda cargar en su posición.
-        $(this).closest(".seguimiento").remove();
+      else{
+        //Se comprueba si hay seguimientos antiguos mostrado para insertar el seguimiento leido en la posición correspondiente.
+        if($(".seguimiento:not([fecha])").size()>0 && $(".seguimiento:not([fecha])").last().attr("id")<id){
+          index=0;
+          $(".seguimiento:not([fecha])").each(function(){
+            if($(this).attr("id")>id){
+              index=$(this).attr("id");
+            }
+          });
+          //Se elimina los estilos de seguimiento actualizado.
+          $(this).closest(".seguimiento").find(".aviso").remove();
+          boton.remove(); 
+          $(this).closest(".seguimiento").find(".icono i").removeClass('c_naranja');
 
-        //Se carga nuevos seguimientos en el contenedor si sólo quedan 3.
-        if($(".seguimiento[fecha]").size()==3){
-          id=$("#contenedor_seguimientos").attr("alumno");
-          fecha=$("#contenedor_seguimientos>div").not(':hidden').last().attr("fecha");
-                
-          if(fecha){
-            $.ajax({
-              url: Routing.generate('cargar_nuevos_seguimientos_alumno', {_locale:"es",id:id ,fecha:fecha}),
-              dataType: 'json',
-              success: function(response) {
-                $('#contenedor_seguimientos').append(response.html);
-              }
-            });
+          if(index==0){
+            id=$(".seguimiento:not([fecha])").first().attr("id");
+            $(this).closest(".seguimiento").insertBefore($(".seguimiento[id='"+id+"']"));
+            $(this).closest(".seguimiento").animate({'right': 0,opacity: 1 },400);
           }
           else{
-            iden=$("#contenedor_seguimientos>div").not(':hidden').last().attr("id");
-            $.ajax({
-              url: Routing.generate('cargar_seguimientos_alumno', {_locale:"es",id:id ,iden:iden}),
-              dataType: 'json',
-              success: function(response) {
-                $('#contenedor_seguimientos').append(response.html);
-              }
-            });
+            $(this).closest(".seguimiento").insertAfter($(".seguimiento[id='"+index+"']"));
+            $(this).closest(".seguimiento").animate({'right': 0,opacity: 1 },400);
+          }
+        }
+        else{ 
+          //Se elimina el seguimiento y se marca como leido en la base de datos, para que se pueda cargar en su posición.
+          $(this).closest(".seguimiento").remove();
+
+          //Se carga nuevos seguimientos en el contenedor si sólo quedan 3.
+          if($(".seguimiento[fecha]").size()<=3){
+            id=$("#contenedor_seguimientos").attr("alumno");
+            fecha=$("#contenedor_seguimientos>div").not(':hidden').last().attr("fecha");
+                
+            if(fecha){
+              $.ajax({
+                url: Routing.generate('cargar_nuevos_seguimientos_alumno', {_locale:"es",id:id ,fecha:fecha}),
+                dataType: 'json',
+                success: function(response) {
+                  $('#contenedor_seguimientos').append(response.html);
+                }
+              });
+            }
+            else{
+              iden=$("#contenedor_seguimientos>div").not(':hidden').last().attr("id");
+              $.ajax({
+                url: Routing.generate('cargar_seguimientos_alumno', {_locale:"es",id:id ,iden:iden}),
+                dataType: 'json',
+                success: function(response) {
+                  $('#contenedor_seguimientos').append(response.html);
+                }
+              });
+            }
           }
         }
       }
@@ -544,12 +577,13 @@ $(document).ready(function () {
       });
   });
 
-  //Se carga la ventana modal para responder un seguimiento.
-  $(document).on('click','#btn_responder' ,function() {
-    id=$(this).prev().find(".consulta_seguimiento").attr("id");
-    $("#responder_seguimiento_modal .modal-body").load(Routing.generate("respuesta_seguimiento", {id:id, _locale:locale}), function(){
-    }); 
-  });
+
+
+
+
+
+
+
 
 
 });

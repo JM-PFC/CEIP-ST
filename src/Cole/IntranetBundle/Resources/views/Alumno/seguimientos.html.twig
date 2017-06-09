@@ -72,7 +72,9 @@
                     //$('#loading').show();
                 id=$("#contenedor_seguimientos").attr("alumno");
                 fecha=$("#contenedor_seguimientos>div").not(':hidden').last().attr("fecha");
-                if(fecha){
+                //Se comprueba que hay al menos 5 seguimientos mostrados, ya que si hay menos no hay más seguimientos para mostrar.
+                if($(".seguimiento").size()>=5){
+                  if(fecha){
                     $.ajax({
                         url: Routing.generate('cargar_nuevos_seguimientos_alumno', {_locale:"es",id:id ,fecha:fecha}),
                         dataType: 'json',
@@ -82,8 +84,8 @@
                             $('#contenedor_seguimientos').append(response.html);
                         }
                     });
-                }
-                else{
+                  }
+                  else{
                     iden=$("#contenedor_seguimientos>div").not(':hidden').last().attr("id");
 
                     $.ajax({
@@ -95,6 +97,7 @@
                             $('#contenedor_seguimientos').append(response.html);
                         }
                     });
+                  }
                 }
             }
         }, 100); 

@@ -535,6 +535,8 @@ tr td, tr th{
     .bloque-menu-alumno > div {
         padding-left: 0 !important;
         padding-right: 0 !important;
+        max-height: 0 !important;
+        padding-top: 0 !important;
     }
     #info_profesor .modal-body div, #info_alumno .modal-body div{
         margin: 5px 0px !important;
@@ -564,12 +566,18 @@ tr td, tr th{
         margin: 5px !important;
     }
     .seguimiento .body #edicion {
-        margin-top: 5px !important;        
+        margin-top: 5px;        
         right: 0 !important;
         padding: 0 !important;
     }
+    .seguimiento .body .botones_seguimiento {
+        margin-bottom: 0 !important;
+    }
     .seguimiento .body #edicion a {
         padding: 2px 0 !important;
+    }
+    .margin_btn #edicion{
+        margin-top: -30px !important;
     }
     #seleccion_nuevo_seguimiento #orden {
         top: 45px !important;
@@ -2072,7 +2080,7 @@ table tr td a{
     float: left;
 }
 .add_seguimiento_movil {
-    left: 159px;
+    right: 80px;
     padding: 5px 8px !important;
     position: fixed !important;
     top: 14px !important;
@@ -2128,6 +2136,7 @@ table tr td a{
     min-width: 90px;
     padding: 0 3px;
     text-align: center;
+    height: 25px;
 }
 .consulta_seguimiento .header .fecha{
     text-align: right;
@@ -2172,6 +2181,9 @@ table tr td a{
 .fw_bold{
     font-weight: bold;
 }
+.no_fw_bold{
+    font-weight: normal !important;
+}
 .seguimiento .header p{
     margin: 0;
     padding: 2px;
@@ -2189,7 +2201,7 @@ table tr td a{
     top: 0;
 }
 .seguimiento .body>div>p{
-    margin: 10px !important;
+    margin: 15px 10px !important
 }
 .seguimiento .body .fecha{
     height: 20px;
@@ -2213,7 +2225,6 @@ table tr td a{
 .seguimiento .body #edicion{
     border-radius: 5px 0 0;
     clear: both;
-    margin-top: 8px;
     padding: 0 16px;
     position: relative;
     right: -25px;
@@ -2235,7 +2246,9 @@ table tr td a{
     margin-bottom: 5px;
     margin-top: 10px;
 }
-
+.margin_btn #edicion{
+    margin-top: -25px;
+}
 .seguimiento .header .icono{
     display: table-cell;
     left: 5px;

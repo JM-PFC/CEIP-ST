@@ -13,36 +13,63 @@ use Doctrine\ORM\EntityRepository;
 class AvisosRepository extends EntityRepository
 {
 
-	public function findAvisosAlumno($alumno, $tipoUsuario, $tipoAviso)
+	public function findAvisos($alumno, $idResponsable, $tipoUsuario, $tipoAviso)
 	{
-		return $this->getEntityManager()->createQuery(
-		'SELECT a FROM IntranetBundle:Avisos a WHERE a.idUsuario=:alumno AND a.tipoUsuario=:tipoUsuario AND a.tipoAviso=:tipoAviso ORDER BY a.id ASC')
-		->setParameters(array(
-		'alumno' => $alumno,
-		'tipoUsuario'=>$tipoUsuario,
-		'tipoAviso'=>$tipoAviso))
-		->getResult();
+		if($idResponsable==null){
+			return $this->getEntityManager()->createQuery(
+				'SELECT a FROM IntranetBundle:Avisos a WHERE a.idUsuario=:alumno AND a.tipoUsuario=:tipoUsuario AND a.idResponsable IS NULL AND a.tipoAviso=:tipoAviso ORDER BY a.id ASC')
+				->setParameters(array(
+				'alumno' => $alumno,
+				'tipoUsuario'=>$tipoUsuario,
+				'tipoAviso'=>$tipoAviso))
+				->getResult();
+		}
+		else{
+			return $this->getEntityManager()->createQuery(
+				'SELECT a FROM IntranetBundle:Avisos a WHERE a.idUsuario=:alumno AND a.tipoUsuario=:tipoUsuario AND a.idResponsable=:idResponsable AND a.tipoAviso=:tipoAviso ORDER BY a.id ASC')
+				->setParameters(array(
+				'alumno' => $alumno,
+				'tipoUsuario'=>$tipoUsuario,
+				'idResponsable'=> $idResponsable,
+				'tipoAviso'=>$tipoAviso))
+				->getResult();
+			
+		}
 	}
 
-
-	public function findExistenciaAviso($idUsuario, $tipoUsuario , $idAviso, $tipoAviso)
+	public function findExistenciaAviso($idUsuario,$idResponsable, $tipoUsuario , $idAviso, $tipoAviso)
 	{
-		return $this->getEntityManager()->createQuery(
-		'SELECT a FROM IntranetBundle:Avisos a WHERE a.idUsuario=:idUsuario AND a.tipoUsuario=:tipoUsuario AND a.tipoAviso=:tipoAviso AND a.idAviso=:idAviso ORDER BY a.id ASC')
-		->setParameters(array(
-		'idUsuario' => $idUsuario,
-		'idAviso'=>$idAviso,
-		'tipoUsuario'=>$tipoUsuario,
-		'tipoAviso'=>$tipoAviso))
-		->getResult();
+		if($idResponsable==null){
+			return $this->getEntityManager()->createQuery(
+				'SELECT a FROM IntranetBundle:Avisos a WHERE a.idUsuario=:idUsuario AND a.tipoUsuario=:tipoUsuario AND a.idResponsable IS NULL AND a.tipoAviso=:tipoAviso AND a.idAviso=:idAviso ORDER BY a.id ASC')
+				->setParameters(array(
+				'idUsuario' => $idUsuario,
+				'idAviso'=>$idAviso,
+				'tipoUsuario'=>$tipoUsuario,
+				'tipoAviso'=>$tipoAviso))
+				->getResult();
+		}
+		else{
+			return $this->getEntityManager()->createQuery(
+				'SELECT a FROM IntranetBundle:Avisos a WHERE a.idUsuario=:idUsuario AND a.tipoUsuario=:tipoUsuario AND a.idResponsable=:idResponsable AND a.tipoAviso=:tipoAviso AND a.idAviso=:idAviso ORDER BY a.id ASC')
+				->setParameters(array(
+				'idUsuario' => $idUsuario,
+				'idResponsable' => $idResponsable,
+				'idAviso'=>$idAviso,
+				'tipoUsuario'=>$tipoUsuario,
+				'tipoAviso'=>$tipoAviso))
+				->getResult();
+		}
+
 	}
 
-	public function findseguimientoLeido($idUsuario, $idAviso)
+	public function findseguimientoLeido($idUsuario,$idResponsable, $idAviso)
 	{
 		return $this->getEntityManager()->createQuery(
-		'SELECT a FROM IntranetBundle:Avisos a WHERE a.idUsuario=:idUsuario AND a.tipoUsuario=:tipoUsuario AND a.tipoAviso=:tipoAviso AND a.idAviso=:idAviso')
+		'SELECT a FROM IntranetBundle:Avisos a WHERE a.idUsuario=:idUsuario AND a.idResponsable=:idResponsable AND a.tipoUsuario=:tipoUsuario AND a.tipoAviso=:tipoAviso AND a.idAviso=:idAviso')
 		->setParameters(array(
 		'idUsuario' => $idUsuario,
+		'idResponsable' => $idResponsable,
 		'idAviso'=>$idAviso,
 		'tipoUsuario'=>"Alumno",
 		'tipoAviso'=>"Seguimiento"))
@@ -50,17 +77,64 @@ class AvisosRepository extends EntityRepository
 		->getOneOrNullResult();
 	}
 
-	public function findseguimientoConsultado($idAviso,$idUsuario,$tipoUsuario)
+
+	public function findnoticiaMostrada($idUsuario,$idResponsable, $idAviso, $tipoUsuario )
 	{
-		return $this->getEntityManager()->createQuery(
-		'SELECT a FROM IntranetBundle:Avisos a WHERE a.idUsuario=:idUsuario AND a.tipoUsuario=:tipoUsuario AND a.tipoAviso=:tipoAviso AND a.idAviso=:idAviso')
-		->setParameters(array(
-		'idUsuario' => $idUsuario,
-		'idAviso'=>$idAviso,
-		'tipoUsuario'=>$tipoUsuario,
-		'tipoAviso'=>"Seguimiento"))
-		->setMaxResults(1)
-		->getOneOrNullResult();
+		if($idResponsable==null){
+			return $this->getEntityManager()->createQuery(
+				'SELECT a FROM IntranetBundle:Avisos a WHERE a.idUsuario=:idUsuario AND a.idResponsable IS NULL AND a.tipoUsuario=:tipoUsuario AND a.tipoAviso=:tipoAviso AND a.idAviso=:idAviso')
+				->setParameters(array(
+				'idUsuario' => $idUsuario,
+				'idAviso'=>$idAviso,
+				'tipoUsuario'=>$tipoUsuario ,
+				'tipoAviso'=>"Noticia"))
+				->setMaxResults(1)
+				->getOneOrNullResult();
+		}
+		else{
+			return $this->getEntityManager()->createQuery(
+				'SELECT a FROM IntranetBundle:Avisos a WHERE a.idUsuario=:idUsuario AND a.idResponsable=:idResponsable AND a.tipoUsuario=:tipoUsuario AND a.tipoAviso=:tipoAviso AND a.idAviso=:idAviso')
+				->setParameters(array(
+				'idUsuario' => $idUsuario,
+				'idResponsable' => $idResponsable,
+				'idAviso'=>$idAviso,
+				'tipoUsuario'=>"Alumno",
+				'tipoAviso'=>"Noticia"))
+				->setMaxResults(1)
+				->getOneOrNullResult();
+		}
+
+
+
+
+	}
+
+	public function findseguimientoConsultado($idAviso,$idUsuario,$idResponsable,$tipoUsuario)
+	{
+
+		if($idResponsable==null){
+			return $this->getEntityManager()->createQuery(
+				'SELECT a FROM IntranetBundle:Avisos a WHERE a.idUsuario=:idUsuario AND a.idResponsable IS NULL AND a.tipoUsuario=:tipoUsuario AND a.tipoAviso=:tipoAviso AND a.idAviso=:idAviso')
+				->setParameters(array(
+				'idUsuario' => $idUsuario,
+				'idAviso'=>$idAviso,
+				'tipoUsuario'=>$tipoUsuario,
+				'tipoAviso'=>"Seguimiento"))
+				->setMaxResults(1)
+				->getOneOrNullResult();
+		}
+		else{
+			return $this->getEntityManager()->createQuery(
+				'SELECT a FROM IntranetBundle:Avisos a WHERE a.idUsuario=:idUsuario AND a.idResponsable=:idResponsable AND a.tipoUsuario=:tipoUsuario AND a.tipoAviso=:tipoAviso AND a.idAviso=:idAviso')
+				->setParameters(array(
+				'idUsuario' => $idUsuario,
+				'idResponsable'=>$idResponsable,
+				'idAviso'=>$idAviso,
+				'tipoUsuario'=>$tipoUsuario,
+				'tipoAviso'=>"Seguimiento"))
+				->setMaxResults(1)
+				->getOneOrNullResult();
+		}
 	}
 
 

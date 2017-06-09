@@ -70,17 +70,30 @@
         clearTimeout(tmr);
         tmr = setTimeout(function () {
             if ($(window).scrollTop() >= $(document).height() - $(window).height() - 10) {
-                    //$('#loading').show();
-                id=$("#contenedor_seguimientos>div").not(':hidden').last().attr("id");
-                $.ajax({
-                    url: Routing.generate('cargar_seguimientos_profesor', {_locale:locale, id:id}),
-                    dataType: 'json',
-                    success: function(response) {
-                        //$('#posts').append(html);
-                        //$('#loading').hide();
-                     $('#contenedor_seguimientos').append(response.html);
-                    }
-                });
+                fecha=$("#contenedor_seguimientos>div").not(':hidden').last().attr("fecha");
+                //Se comprueba que hay al menos 5 seguimientos mostrados, ya que si hay menos no hay más seguimientos para mostrar.
+
+                if($(".seguimiento").size()>=5){
+                  if(fecha){
+                    $.ajax({
+                        url: Routing.generate('cargar_nuevos_seguimientos_profesor', {_locale:"es",fecha:fecha}),
+                        dataType: 'json',
+                        success: function(response) {
+                            $('#contenedor_seguimientos').append(response.html);
+                        }
+                    });
+                  }
+                  else{
+                    id=$("#contenedor_seguimientos>div").not(':hidden').last().attr("id");
+                    $.ajax({
+                        url: Routing.generate('cargar_seguimientos_profesor', {_locale:"es",id:id}),
+                        dataType: 'json',
+                        success: function(response) {
+                            $('#contenedor_seguimientos').append(response.html);
+                        }
+                    });
+                  }
+                }
             }
         }, 100); 
         //Se muestra diferentes elementos al hacer scroll.
@@ -147,10 +160,14 @@
                                     <p>{{seguimiento.alumno}}</p>
                                 {% endif %} 
                             {% else %}
-                                <p class="fw_bold">{{seguimiento.grupo.curso.curso ~ seguimiento.grupo.letra ~ " " ~ seguimiento.grupo.curso.nivel }}</p>
                                 {% if seguimiento.alumno%}
-                                    <p class="c_naranja">{{seguimiento.alumno}}</p>
-                                {% endif %} 
+                                    <p class="fw_bold hidden-xs">{{seguimiento.grupo.curso.curso ~ seguimiento.grupo.letra ~ " " ~ seguimiento.grupo.curso.nivel ~ " - "}}<span class="c_naranja no_fw_bold">{{seguimiento.alumno}}</span></p>
+                                    <div class="hidden-sm hidden-md hidden-lg">
+                                        <p class="fw_bold">{{seguimiento.grupo.curso.curso ~ seguimiento.grupo.letra ~ " " ~ seguimiento.grupo.curso.nivel}}<p class="c_naranja no_fw_bold ">{{seguimiento.alumno}}</p></p> 
+                                    </div>
+                                {% else %} 
+                                    <p class="fw_bold">{{seguimiento.grupo.curso.curso ~ seguimiento.grupo.letra ~ " " ~ seguimiento.grupo.curso.nivel}}</p> 
+                                {% endif %}
                             {% endif %}
                         </div>
                     </div>
@@ -160,20 +177,21 @@
                 </div>             
                 <div class="body clearfix">
                     <div class="fecha">
-
                         <p  class=" pull-right">{{ seguimiento.fecha | localizeddate('long', 'none', app.request.getLocale()) | capitalize}}</p>
                     </div>
                     <div>
                         <p class="descripcion">{{seguimiento.descripcion|nl2br }}</p>
-                        <div class="botones_seguimiento">
+                        {% if seguimiento.respuesta %}
+                        <div class="botones_seguimiento margin_btn">
                             <div>
-                            {% if seguimiento.respuesta %}
-                                <a id="consultar" href="{{path('intranet_profesor_seguimiento', {'num': seguimiento.id}) }}" class="btn btn_azul col-xs-2">
+                                <a id="consultar" href="{{path('intranet_profesor_seguimiento', {'num': seguimiento.id}) }}" class="btn btn_azul">
                                     <i class="fa fa-search"></i>
                                     {% trans %}Consultar{% endtrans %}
                                 </a>
-                            {% endif %}
                             </div>
+                        {% else %}
+                        <div class="botones_seguimiento">
+                        {% endif %}
                             <span id="edicion" class="pull-right hidden-xs visible-sm visible-md visible-lg">
                                 <a id="btn_editar" href="#" class="btn btn-default" data-target="#editar_seguimiento_modal" data-toggle="modal" data-backdrop="static" data-keyboard="false">
                                     <i class="fa fa-pencil"></i>{% trans %}Editar{% endtrans %}
@@ -217,10 +235,14 @@
                                     <p>{{seguimiento.alumno}}</p>
                                 {% endif %} 
                             {% else %}
-                                <p class="fw_bold">{{seguimiento.grupo.curso.curso ~ seguimiento.grupo.letra ~ " " ~ seguimiento.grupo.curso.nivel }}</p>
                                 {% if seguimiento.alumno%}
-                                    <p class="c_naranja">{{seguimiento.alumno}}</p>
-                                {% endif %} 
+                                    <p class="fw_bold hidden-xs">{{seguimiento.grupo.curso.curso ~ seguimiento.grupo.letra ~ " " ~ seguimiento.grupo.curso.nivel ~ " - "}}<span class="c_naranja no_fw_bold">{{seguimiento.alumno}}</span></p>
+                                    <div class="hidden-sm hidden-md hidden-lg">
+                                        <p class="fw_bold">{{seguimiento.grupo.curso.curso ~ seguimiento.grupo.letra ~ " " ~ seguimiento.grupo.curso.nivel}}<p class="c_naranja no_fw_bold ">{{seguimiento.alumno}}</p></p> 
+                                    </div>
+                                {% else %} 
+                                    <p class="fw_bold">{{seguimiento.grupo.curso.curso ~ seguimiento.grupo.letra ~ " " ~ seguimiento.grupo.curso.nivel}}</p> 
+                                {% endif %}
                             {% endif %}
                         </div>
                     </div>
@@ -232,13 +254,17 @@
                     </div>
                     <div>
                         <p class="descripcion">{{seguimiento.descripcion|nl2br }}</p>
-                        <div class="botones_seguimiento">
-                            {% if seguimiento.respuesta %}
-                                <a id="consultar" href="{{path('intranet_profesor_seguimiento', {'num': seguimiento.id}) }}" class="btn btn_azul col-xs-2">
+                        {% if seguimiento.respuesta %}
+                        <div class="botones_seguimiento margin_btn">
+                            <div>
+                                <a id="consultar" href="{{path('intranet_profesor_seguimiento', {'num': seguimiento.id}) }}" class="btn btn_azul">
                                     <i class="fa fa-search"></i>
                                     {% trans %}Consultar{% endtrans %}
                                 </a>
-                            {% endif %}
+                            </div>
+                        {% else %}
+                        <div class="botones_seguimiento">
+                        {% endif %}
                             <span id="edicion" class="pull-right hidden-xs visible-sm visible-md visible-lg">
                                 <a id="btn_editar" href="#" class="btn btn-default" data-target="#editar_seguimiento_modal" data-toggle="modal" data-backdrop="static" data-keyboard="false">
                                     <i class="fa fa-pencil"></i>{% trans %}Editar{% endtrans %}
