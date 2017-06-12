@@ -1,0 +1,139 @@
+{% extends  'IntranetBundle:Profesor:index.html.twig' %}
+
+{% block body %}
+    {{parent()}}
+    <script>
+    	$(".menu li").removeClass('active');
+		  $(".menu #reservas").addClass('active');
+    </script>
+ {% endblock %}
+
+{% block migas %}
+	<li class="tipo">
+			{% trans %}Profesorado{% endtrans %}
+	</li>
+	<li>
+		<a href="{{path('intranet_profesor')}}">
+			{% trans %}Panel principal{% endtrans %}
+		</a>
+	</li>
+	<li class="active no-seleccion">
+		{% trans %}Reservas{% endtrans %}
+	</li>
+{% endblock %}
+
+{% block titulo_cabecera %}
+	<i class="fa fa-comments page-header-icon"></i>
+	{% trans %}Reservas{% endtrans %}
+{% endblock %}
+{% block titulo_cabecera_movil %}
+    <i class="fa fa-comments page-header-icon"></i>
+    {% trans %}Reservas{% endtrans %}
+{% endblock %}
+
+{% block contenido %}
+    <h4 id="titulo-seccion" class="titulo-seccion">{% trans %}Reservas del docente{% endtrans %}</h4>
+    <div class=" col-xs-12  col-sm-6">
+      <div>
+        <h4 class="text-center titulo_reserva">{% trans %}Reservas de Instalaciones{% endtrans %}</h4>
+      </div>
+      <div>         
+        <table class="col-xs-12 table-hover table-condensed table-striped equipamientos">
+          <thead class="cabecera-tabla">
+            <tr>
+              <th class="col-xs-7 hidden-sm hidden-md hidden-lg">{% trans %}Instalación{% endtrans %}</th>
+              <th class="col-xs-7 hidden-xs">{% trans %}Nombre de la Instalación{% endtrans %}</th>
+              <th class="text-center col-xs-3 col-ms-4">{% trans %}Fecha{% endtrans %}</th>
+              <th class="col-xs-2 col-ms-1"></th>
+            </tr>
+          </thead>
+        </table>
+      </div>
+      <div  class="container-content">
+        {% if instalaciones %}
+          {% for instalacion in instalaciones %}
+            <div id="{{instalacion.id}}" class="container_reserva" data-toggle="tooltip" data-placement="bottom" title="" data-original-title="{{instalacion.horario.inicio|date('H:i') ~ " - " ~ instalacion.horario.fin|date('H:i') }}">
+              <div class="col-xs-7">{{instalacion.equipamiento.nombre}}</div>
+              <div class="text-center col-xs-3 col-ms-4">
+              {% if instalacion.fecha|date('m/d/Y') ==  'today'|date('m/d/Y')  %}
+                {{ "Hoy" }}
+              {% elseif instalacion.fecha|date('m/d/Y') ==  'tomorrow'|date('m/d/Y') %}
+                {{"Mañana"}}
+              {% else %}
+                {{instalacion.fecha| localizeddate('short','none', app.request.getLocale()) }}
+              {% endif %}
+              </div>
+              <div class="col-xs-2 col-ms-1">
+                <a id="btn_eliminar" href="" data-target="#eliminar_reserva_modal" data-toggle="modal" data-backdrop="static" data-keyboard="false"><i class="fa fa-trash-o"></i></a>
+              </div>
+            </div>
+          {% endfor %}
+        {% else %}
+          <div>
+            <div class="vacio col-xs-12"><p>{% trans %}No tienes ninguna reserva pendiente{% endtrans %}</p></div>
+          </div>
+        {% endif %} 
+      </div>
+      <div class="tbn_reserva">
+        <button class="btn btn-success center-block" onclick="location.href = '{{ path('intranet_profesor_reservar_instalacion') }}';">{% trans %}Reservar Instalación{% endtrans %}</button>
+      </div>
+    </div>
+    <div class="col-xs-12 col-sm-6">
+      <div>
+        <h4 class="text-center titulo_reserva">{% trans %}Reservas de Equipamientos{% endtrans %}</h4>
+      </div>
+      <div>         
+        <table class="col-xs-12 table-hover table-condensed table-striped equipamientos">
+          <thead class="cabecera-tabla">
+            <tr>
+              <th class="col-xs-7 hidden-sm hidden-md hidden-lg">{% trans %}Equipamiento{% endtrans %}</th>
+              <th class="col-xs-7 hidden-xs">{% trans %}Nombre del Equipamiento{% endtrans %}</th>
+              <th class="text-center col-xs-3 col-ms-4">{% trans %}Fecha{% endtrans %}</th>
+              <th class="col-xs-2 col-ms-1"></th>
+            </tr>
+          </thead>
+        </table>
+      </div>
+      <div  class="container-content">
+        {% if equipamientos %}
+          {% for equipamiento in equipamientos %}
+            <div id="{{equipamiento.id}}" class="container_reserva" data-toggle="tooltip" data-placement="bottom" title="" data-original-title="{{"Horario: " ~ equipamiento.horario.inicio|date('H:i') ~ " - " ~ equipamiento.horario.fin|date('H:i') }}">
+              <div class="col-xs-7">{{equipamiento.equipamiento.nombre}}</div>
+              <div class="text-center col-xs-3 col-ms-4">
+              {% if equipamiento.fecha|date('m/d/Y') ==  'today'|date('m/d/Y')  %}
+                {{ "Hoy" }}
+              {% elseif equipamiento.fecha|date('m/d/Y') ==  'tomorrow'|date('m/d/Y') %}
+                {{"Mañana"}}
+              {% else %}
+                {{equipamiento.fecha| localizeddate('short','none', app.request.getLocale()) }}
+              {% endif %}
+              </div>
+              <div class="col-xs-2 col-ms-1">
+                <a id="btn_eliminar" href="" data-target="#eliminar_reserva_modal" data-toggle="modal" data-backdrop="static" data-keyboard="false"><i class="fa fa-trash-o"></i></a>
+              </div>
+            </div>
+          {% endfor %}
+        {% else %}
+          <div>
+            <div class="vacio col-xs-12"><p>{% trans %}No tienes ninguna reserva pendiente{% endtrans %}</p></div>
+          </div>
+        {% endif %} 
+      </div>
+      <div class="tbn_reserva">
+        <button class="btn btn-success center-block" onclick="location.href = '{{ path('intranet_profesor_reservar_equipamiento') }}';">{% trans %}Reservar Equipamiento{% endtrans %}</button>
+      </div>
+    </div>
+
+    <!-- Ventana modal de eliminación de reserva -->
+    <div id="eliminar_reserva_modal" class="modal fade-scale aviso"  tabindex="-1" role="dialog" data-backdrop="true" >
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+        <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            <h4 class="modal-title" id="myModalLabel">{% trans %}Eliminación de la Reserva{% endtrans %}</h4>
+        </div>
+        <div class="modal-body"></div>
+        </div>
+      </div>
+    </div>
+{% endblock %}

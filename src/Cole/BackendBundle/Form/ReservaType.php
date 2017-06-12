@@ -15,10 +15,11 @@ class ReservaType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('fecha')
-            ->add('propósito')
-            ->add('profesor')
-            ->add('equipamiento')
+            ->add('profesor','entity',array('class' => 'BackendBundle:Profesor','query_builder' => function (\Cole\BackendBundle\Entity\ProfesorRepository $er) {return $er->createQueryBuilder('u')->where('u.activo IN(:act)')->setParameter(':act', 1)->orderBy('u.nombre','ASC');}, 'empty_data' => null,'empty_value'=> 'Seleccione un profesor','required'=> false))
+            ->add('equipamiento','entity',array('class' => 'BackendBundle:Equipamiento','query_builder' => function (\Cole\BackendBundle\Entity\EquipamientoRepository $er) {return $er->createQueryBuilder('u')->orderBy('u.nombre','ASC');}, 'empty_data' => null,'empty_value'=> 'Seleccione un equipamiento','required'=> true))
+            ->add('horario','entity',array('class' => 'BackendBundle:Horario','query_builder' => function (\Cole\BackendBundle\Entity\HorarioRepository $er) {return $er->createQueryBuilder('u')->orderBy('u.id','ASC');}, 'empty_data' => null,'empty_value'=> 'Seleccione un horario','required'=> true))
+            ->add('seleccion','entity',array('class' => 'BackendBundle:Horario','multiple'=>true,'property' => 'id','mapped' => false,'expanded' => true,'query_builder' => function (\Cole\BackendBundle\Entity\HorarioRepository $er) {return $er->createQueryBuilder('u')->orderBy('u.id','ASC');},'required'=> false))
+            ->add('fecha','datetime',array('date_widget'=> 'text','required'=> true))
         ;
     }
     

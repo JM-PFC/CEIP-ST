@@ -849,7 +849,7 @@ fieldset.fsetoculto {
     background: #eff4f9 none repeat scroll 0 0;
     clear: both;
     display: block;
-    height: 200px !important;
+    height: 230px !important;
     margin: 0 5%;
     width: 90%;
     border-radius: 5px 5px 0 0;
@@ -872,6 +872,7 @@ fieldset.fsetoculto {
     padding-top: 1% !important;
     background: #001f51 none repeat scroll 0 0;
     opacity: 0.8;
+    height: 24px;
 }
 #calendar .c-grid div[class*="c-grid-title"]{
     border-bottom: 1px solid white;
@@ -1207,7 +1208,9 @@ tr {page-break-inside: avoid;}
 .lista_pdf tr th:first-child{
     border-right: 1px solid #ddd !important;
 }
-
+.c-grid-title {
+    height: 28px !important;
+}
 
 
 

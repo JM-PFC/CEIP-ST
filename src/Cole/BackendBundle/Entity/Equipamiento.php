@@ -233,4 +233,10 @@ class Equipamiento
     {
         return $this->imparte;
     }
+
+    public function __toString()
+    {
+        return $this->getNombre();
+    }
+
 }

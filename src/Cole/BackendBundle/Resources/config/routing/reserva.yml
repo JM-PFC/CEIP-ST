@@ -15,7 +15,7 @@ comprobar_reserva:
     defaults: { _controller: "BackendBundle:Reserva:ComprobarReservas" }
     options:
         expose: true
-
+        
 equipamiento_reservado:
     path:     /equipamiento_reservado
     defaults: { _controller: "BackendBundle:Reserva:EquipamientoReservado" }

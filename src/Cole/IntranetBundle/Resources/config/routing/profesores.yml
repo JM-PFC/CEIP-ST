@@ -6,6 +6,30 @@ intranet_profesor_cursos:
     path:     /cursos
     defaults: { _controller: IntranetBundle:Profesor:cursos}
 
+datos_alumnos_grupo:
+    path:     /datos_alumnos_grupo/{id}
+    defaults: { _controller: IntranetBundle:Profesor:datosAlumnosGrupo}
+    options:
+        expose: true
+
+info_alumno:
+    path:     /info_alumno/{id}
+    defaults: { _controller: IntranetBundle:Profesor:InfoAlumno}
+    options:
+        expose: true
+
+info_profesor:
+    path:     /info_profesor/{id}
+    defaults: { _controller: IntranetBundle:Profesor:InfoProfesor}
+    options:
+        expose: true
+
+asignaturasGrupo_profesor:
+    path:     /asignaturas/profesor/{id}
+    defaults: { _controller: IntranetBundle:Profesor:AsignaturasGrupoProfesor}
+    options:
+        expose: true
+
 horario_profesor:
     pattern:  /horario
     defaults: { _controller: "IntranetBundle:Profesor:Horario"}
@@ -40,6 +64,64 @@ cargar_nuevos_seguimientos_profesor:
     options:
         expose: true
 
+nuevos_seguimientos_profesor:
+    path:     /{id}/nuevos_seguimientos
+    defaults: { _controller: IntranetBundle:Profesor:comprobarSeguimientosNuevos}
+    options:
+        expose: true
+
+AlumnosGrupoAsignatura:
+    path:     /GrupoAsignatura/{id}/{asig}
+    defaults: { _controller: IntranetBundle:Profesor:AlumnosGrupoAsignatura}
+    options:
+        expose: true
+
+AlumnosGrupo:
+    path:     /GrupoAsignatura/{id}
+    defaults: { _controller: IntranetBundle:Profesor:AlumnosGrupo}
+    options:
+        expose: true
+
+intranet_profesor_reservas:
+    path:     /reservas
+    defaults: { _controller: IntranetBundle:Profesor:reservas}
+
+intranet_profesor_reservar_create:
+    path:     /reservar/create
+    defaults: { _controller: "IntranetBundle:Profesor:createReserva" }
+    requirements: { _method: post }
+
+comprobar_reservas_profesor:
+    path:     /comprobar_reservas
+    defaults: { _controller: "IntranetBundle:Profesor:ComprobarReservas" }
+    options:
+        expose: true
+
+intranet_profesor_reservar_instalacion:
+    path:     /reservar/instalación
+    defaults: { _controller: IntranetBundle:Profesor:reservarInstalacion}
+    options:
+        expose: true
+
+intranet_profesor_reservar_equipamiento:
+    path:     /reservar/equipamiento
+    defaults: { _controller: IntranetBundle:Profesor:reservarEquipamiento}
+    options:
+        expose: true
+
+reserva_eliminar:
+    path:     /reserva/{id}/eliminar
+    defaults: { _controller: "IntranetBundle:Profesor:eliminarReserva" }
+    options:
+        expose: true
+
+intranet_profesor_reserva_delete:
+    path:     /reserva/{id}/delete
+    defaults: { _controller: "IntranetBundle:Profesor:deleteReserva" }
+    requirements: { _method: post|delete }
+    options:
+        expose: true
+
 intranet_profesor_noticias:
     path:     /noticias
     defaults: { _controller: IntranetBundle:Profesor:noticias}
@@ -56,44 +138,6 @@ nuevas_noticias_profesor:
     options:
         expose: true
 
-nuevos_seguimientos_profesor:
-    path:     /{id}/nuevos_seguimientos
-    defaults: { _controller: IntranetBundle:Profesor:comprobarSeguimientosNuevos}
-    options:
-        expose: true
 
-datos_alumnos_grupo:
-    path:     /datos_alumnos_grupo/{id}
-    defaults: { _controller: IntranetBundle:Profesor:datosAlumnosGrupo}
-    options:
-        expose: true
 
-info_alumno:
-    path:     /info_alumno/{id}
-    defaults: { _controller: IntranetBundle:Profesor:InfoAlumno}
-    options:
-        expose: true
 
-info_profesor:
-    path:     /info_profesor/{id}
-    defaults: { _controller: IntranetBundle:Profesor:InfoProfesor}
-    options:
-        expose: true
-
-asignaturasGrupo_profesor:
-    path:     /asignaturas/profesor/{id}
-    defaults: { _controller: IntranetBundle:Profesor:AsignaturasGrupoProfesor}
-    options:
-        expose: true
-
-AlumnosGrupoAsignatura:
-    path:     /GrupoAsignatura/{id}/{asig}
-    defaults: { _controller: IntranetBundle:Profesor:AlumnosGrupoAsignatura}
-    options:
-        expose: true
-
-AlumnosGrupo:
-    path:     /GrupoAsignatura/{id}
-    defaults: { _controller: IntranetBundle:Profesor:AlumnosGrupo}
-    options:
-        expose: true

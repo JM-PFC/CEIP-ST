@@ -72,7 +72,8 @@ class DefaultController extends Controller
             //'validation_groups' => array('actualizar')
         ));
 
-        $form->add('submit', 'submit', array('label' => 'Guardar cambios'));
+        $titulo=$this->get("translator")->trans("Guardar cambios");
+        $form->add('submit', 'submit', array('label' => $titulo));
 
         return $form;
     }
@@ -85,7 +86,8 @@ class DefaultController extends Controller
             //'validation_groups' => array('actualizar')
         ));
 
-        $form->add('submit', 'submit', array('label' => 'Guardar cambios'));
+        $titulo=$this->get("translator")->trans("Guardar cambios");
+        $form->add('submit', 'submit', array('label' => $titulo));
 
         return $form;
     }

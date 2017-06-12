@@ -154,39 +154,6 @@ class Horario
     }
 
     /**
-     * Add reserva
-     *
-     * @param \Cole\BackendBundle\Entity\Reserva $reserva
-     * @return Horario
-     */
-    public function addReserva(\Cole\BackendBundle\Entity\Reserva $reserva)
-    {
-        $this->reserva[] = $reserva;
-
-        return $this;
-    }
-
-    /**
-     * Remove reserva
-     *
-     * @param \Cole\BackendBundle\Entity\Reserva $reserva
-     */
-    public function removeReserva(\Cole\BackendBundle\Entity\Reserva $reserva)
-    {
-        $this->reserva->removeElement($reserva);
-    }
-
-    /**
-     * Get reserva
-     *
-     * @return \Doctrine\Common\Collections\Collection 
-     */
-    public function getReserva()
-    {
-        return $this->reserva;
-    }
-
-    /**
      * Add imparte
      *
      * @param \Cole\BackendBundle\Entity\Imparte $imparte
@@ -263,5 +230,42 @@ class Horario
     public function getDuracion()
     {
         return $this->duracion;
+    }
+    public function __toString()
+    {
+        return $this->getHoraClase();
+    }
+
+    /**
+     * Add reserva
+     *
+     * @param \Cole\BackendBundle\Entity\Reserva $reserva
+     * @return Horario
+     */
+    public function addReserva(\Cole\BackendBundle\Entity\Reserva $reserva)
+    {
+        $this->reserva[] = $reserva;
+
+        return $this;
+    }
+
+    /**
+     * Remove reserva
+     *
+     * @param \Cole\BackendBundle\Entity\Reserva $reserva
+     */
+    public function removeReserva(\Cole\BackendBundle\Entity\Reserva $reserva)
+    {
+        $this->reserva->removeElement($reserva);
+    }
+
+    /**
+     * Get reserva
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getReserva()
+    {
+        return $this->reserva;
     }
 }

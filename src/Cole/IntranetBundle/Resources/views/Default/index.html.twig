@@ -339,7 +339,7 @@
 										</a>
 									</li>
 									<li id="reservas">
-										<a href="{{path('intranet')}}">
+										<a href="{{ path('intranet_profesor_reservas') }}">
 											<i class="fa fa-unlock-alt"></i>
 											{% trans %}Reservas{% endtrans %}
 										</a>
@@ -356,7 +356,7 @@
 											{% trans %}Noticias{% endtrans %}
 										</a>
 									</li>
-									{% if 'now'|date('m') == "04" or 'now'|date('m') == "05" %}
+									{% if 'now'|date('m') == "05" or 'now'|date('m') == "06" %}
 										<li id="promocionar">
 											<a class="c_verde" href="{{path('intranet')}}">
 												<i class="fa fa-graduation-cap"></i>
@@ -444,7 +444,7 @@
 										</a>
 									</li>
 									<li id="reservas">
-										<a href="{{path('intranet')}}" class="waiting">
+										<a href="{{ path('intranet_profesor_reservas') }}" class="waiting">
 											<i class="fa fa-unlock-alt"></i>
 											{% trans %}Reservas{% endtrans %}
 										</a>
@@ -461,7 +461,7 @@
 											{% trans %}Noticias{% endtrans %}
 										</a>
 									</li>
-									  {% if 'now'|date('m') == "04" or 'now'|date('m') == "05" %}
+									  {% if 'now'|date('m') == "05" or 'now'|date('m') == "06" %}
 									  	<li id="promocionar">
 											<a class="c_verde" href="{{path('intranet')}}" class="waiting">
 												<i class="fa fa-graduation-cap"></i>

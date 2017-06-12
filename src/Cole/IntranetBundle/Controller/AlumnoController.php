@@ -55,12 +55,22 @@ class AlumnoController extends Controller
             'action' => $this->generateUrl('datos_personales_alumno', array('id' => $entity->getId())),
             'method' => 'PUT',
         ));
+        
+        $titulo=$this->get("translator")->trans("Guardar cambios");
+        $form->add('submit', 'submit', array('label' => $titulo));
+        return $form;
+    }
+    private function createCreateForm(Reserva $entity)
+    {
+        $form = $this->createForm(new ReservaType(), $entity, array(
+            'action' => $this->generateUrl('reserva_create'),
+            'method' => 'POST',
+        ));
 
-        $form->add('submit', 'submit', array('label' => 'Guardar cambios'));
+        $form->add('submit', 'submit', array('label' => 'Create'));
 
         return $form;
     }
-
     private function createDeleteForm($id)
     {
         return $this->createFormBuilder()
@@ -74,13 +84,10 @@ class AlumnoController extends Controller
     public function perfilAction($id)
     {
         $this->comprobarHijo($id);
-
         $em = $this->getDoctrine()->getManager();
         
         $entity= $em->getRepository('BackendBundle:Alumno')->findOneById($id);
-
         $editForm = $this->createEditAlumnoForm($entity);
-
         $deleteForm = $this->createDeleteForm($entity->getId());
 
         return $this->render('IntranetBundle:Alumno:perfil.html.twig', array(
@@ -102,21 +109,17 @@ class AlumnoController extends Controller
         }
 
         $deleteForm = $this->createDeleteForm($id);
-
         $editForm->handleRequest($request);
 
         if ($editForm->isValid()) {
-
             $em->persist($entity);
 
             $em->flush();
             $ms = $this->get('translator')->trans('Se han guardado los cambios.');
-
             $this->get('session')->getFlashBag()->add('notice',$ms);
 
             return $this->redirect($this->generateUrl('intranet_alumno_perfil', array('id'=>$entity->getId())));
         }
-
 
         return $this->render('IntranetBundle:Alumno:perfil.html.twig', array(
             'entity'      => $entity,
@@ -504,9 +507,11 @@ class AlumnoController extends Controller
 
         $em = $this->getDoctrine()->getManager();
         $entity= $em->getRepository('BackendBundle:Alumno')->findOneById($id);
-        $seguimientosNuevos=$em->getRepository('IntranetBundle:Seguimiento')->findSeguimientosActualizadosAlumno($entity, $entity->getGrupo());
+        $responsable = $this->get('security.context')->getToken()->getUser();
+
+        $seguimientosNuevos=$em->getRepository('IntranetBundle:Seguimiento')->findSeguimientosActualizadosAlumno($entity, $responsable->getId(), $entity->getGrupo());
         if(count($seguimientosNuevos)<5){
-            $seguimientos= $em->getRepository('IntranetBundle:Seguimiento')->findAntiguosSeguimientosContadorAlumno($entity, $entity->getGrupo(), 5-count($seguimientosNuevos));
+            $seguimientos= $em->getRepository('IntranetBundle:Seguimiento')->findAntiguosSeguimientosContadorAlumno($entity, $responsable->getId(), $entity->getGrupo(), 5-count($seguimientosNuevos));
         }
         else{
             $seguimientos=null;
@@ -539,11 +544,12 @@ class AlumnoController extends Controller
     {
         $em = $this->getDoctrine()->getManager();
         $entity= $em->getRepository('BackendBundle:Alumno')->findOneById($id);
+        $responsable = $this->get('security.context')->getToken()->getUser();
 
-        $seguimientosNuevos=$em->getRepository('IntranetBundle:Seguimiento')->findCargaSeguimientosNuevosAlumno($fecha, $entity, $entity->getGrupo());
+        $seguimientosNuevos=$em->getRepository('IntranetBundle:Seguimiento')->findCargaSeguimientosNuevosAlumno($fecha, $entity, $responsable->getId(), $entity->getGrupo());
 
         if(count($seguimientosNuevos)<5){
-            $seguimientos= $em->getRepository('IntranetBundle:Seguimiento')->findCargaSeguimientosInicialAlumno($entity, $entity->getGrupo(), 5-count($seguimientosNuevos));
+            $seguimientos= $em->getRepository('IntranetBundle:Seguimiento')->findCargaSeguimientosInicialAlumno($entity, $responsable->getId(), $entity->getGrupo(), 5-count($seguimientosNuevos));
         }
         else{
             $seguimientos=null;
@@ -561,8 +567,9 @@ class AlumnoController extends Controller
     {
         $em = $this->getDoctrine()->getManager();
         $entity= $em->getRepository('BackendBundle:Alumno')->findOneById($id);
+        $responsable = $this->get('security.context')->getToken()->getUser();
 
-        $seguimientos= $em->getRepository('IntranetBundle:Seguimiento')->findCargaSeguimientosAlumno($entity, $iden, $entity->getGrupo());
+        $seguimientos= $em->getRepository('IntranetBundle:Seguimiento')->findCargaSeguimientosAlumno($entity, $responsable->getId(), $iden, $entity->getGrupo());
 
         return new JsonResponse(array(
             'seguimientos' => $seguimientos,
@@ -654,14 +661,16 @@ class AlumnoController extends Controller
         $em = $this->getDoctrine()->getManager();
 
         $entity= $em->getRepository('BackendBundle:Alumno')->findOneById($id);
+        $responsable = $this->get('security.context')->getToken()->getUser();
+
 
         if($entity->getCurso()->getNivel()=="Primaria"){
             $noticias= $em->getRepository('ColeBundle:Noticias')->findBy(array('categoria'=>'primaria'), array('fecha'=>'DESC'));
-            $noticiasNuevas=$em->getRepository('ColeBundle:Noticias')->findSNoticiasNuevasAlumno($entity,"primaria" );
+            $noticiasNuevas=$em->getRepository('ColeBundle:Noticias')->findNoticiasNuevasAlumno($entity, $responsable->getId(),"primaria" );
         }
         else{
             $noticias= $em->getRepository('ColeBundle:Noticias')->findBy(array('categoria'=>'infantil'), array('fecha'=>'DESC'));
-            $noticiasNuevas=$em->getRepository('ColeBundle:Noticias')->findSNoticiasNuevasAlumno($entity,"infantil");
+            $noticiasNuevas=$em->getRepository('ColeBundle:Noticias')->findNoticiasNuevasAlumno($entity, $responsable->getId(),"infantil");
         }
         $paginator  = $this->get('knp_paginator');
         $pagination = $paginator->paginate(

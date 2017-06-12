@@ -87,7 +87,9 @@ tr td, tr th{
 .mt5{
     margin-top: 5px !important;
 }
-
+form{
+    clear: both;
+}
 /* Estilos Intranet*/
 
 /*Estilos para Tablet*/
@@ -599,6 +601,26 @@ tr td, tr th{
     .respuesta .fecha{
         float: right;
     }
+    .container-content {
+        max-height: 220px !important;
+        min-height: 140px !important;
+    }
+    .vacio {
+        margin-top: 50px !important;
+    }
+    #reserva_modulos button {
+        min-width: 125px !important;
+    }
+    .container_reserva div {
+        padding-left: 2px;
+        padding-right: 5px;
+    }
+    .equipamientos td:first-child, .equipamientos th:first-child {
+        padding-left: 5px !important;
+    }
+    #reserva_equipamiento, #reserva_fecha{
+        border-right: 0 !important;
+    }
 }
 /* Estilos para Pc*/
 #titulo_cabecera{
@@ -714,8 +736,8 @@ tr td, tr th{
     padding: 0 3px !important;
 }
 .btn{
-    border: 1px outset grey !important;
-    box-shadow: 0 1px 1px 0 rgba(50, 50, 50, 0.75) !important;
+    border: 1px outset grey ;
+    box-shadow: 0 1px 1px 0 rgba(50, 50, 50, 0.75) ;
 }
 .btn_azul{
     background: #4b8bab none repeat scroll 0 0;
@@ -2040,6 +2062,9 @@ table tr td a{
 .m_top60{
     margin-top: 60px;
 }
+.m_bottom30{
+    margin-bottom: 30px;
+}
 #contenedor_seguimientos{
     padding-left: 30px;
     padding-right: 30px;
@@ -2303,7 +2328,7 @@ table tr td a{
     margin-bottom: 0 !important;
 }
 #seleccion_nuevo_seguimiento .seleccion button{
-    border: 2px outset black;
+    border: 1px outset grey;
     margin: 5px 10px;
 }
 #seleccion_nuevo_seguimiento p{
@@ -2469,4 +2494,233 @@ table tr td a{
     height: 200px;
     width: 100%;
     padding: 10px;
+}
+.container-content{
+    border: 1px solid grey !important;
+    min-height: 270px;
+    border-radius: 0 0 5px 5px;
+    padding: 0;
+    color: #555 !important;
+    background: #f5f5f5 none repeat scroll 0 0 !important;
+    max-height: 285px;
+    min-height: 285px;
+    overflow: auto;
+}
+.tbn_reserva{
+    margin: 15px 0;
+}
+.cabecera-tabla{
+    background: #23527c;
+    color: white;
+    opacity: 0.8;
+    padding: 0 10px;
+    border-radius: 3px 3px 0 0;
+    font-weight: bold;
+    box-shadow: 0px 3px 0px 0px rgb(50, 50, 50, 0.7) !important
+}
+.cabecera-tabla p{
+    margin: 0 !important; 
+    padding: 2px 0;
+    font-family: verdana;
+}
+.equipamientos tr{
+   background: white;
+}
+.equipamientos th{
+   background: #23527c;
+}
+.equipamientos th:first-child, .equipamientos th:nth-child(2) {
+    border-radius: 5px 0 0 0;
+    padding-left: 10px;
+}
+.equipamientos th:last-child {
+    border-radius: 0 5px 0 0;
+}
+.equipamientos td:first-child, .equipamientos th:first-child {
+    padding-left: 10px;
+}
+.vacio{
+    margin-top: 125px;
+    text-align: center;
+}
+.container_reserva{
+    background-color: #cdd6e0;
+    border-bottom: 1px solid #31708f;
+    border-top: 1px solid #31708f;
+    color: #31708f;
+    margin: 10px 0;
+    min-height: 35px;
+    overflow: auto;
+}
+.container_reserva:hover{
+    background: #F7BD83;
+    color: #334c73;
+}
+.container_reserva div{
+    padding-top: 7px;
+    padding-bottom: 7px;
+}
+.titulo_reserva{
+    margin: 10px 0!important;
+    text-decoration: underline;
+}
+.center-block{
+    float: none !important;
+}
+#reserva_equipamiento, #reserva_fecha{
+   border-right: 1px solid grey;
+}
+#reserva_equipamiento button{
+    margin-top: 5px;
+    margin-bottom: 10px;
+    white-space: normal;
+    padding: 3px 5px !important;
+    border: 2px outset threedlightshadow;
+    border-radius: 5px;
+}
+.titulo_reservar{
+    background: #23527c none repeat scroll 0 0;
+    border-bottom: 2px solid white;
+    border-radius: 5px 5px 0 0;
+    box-shadow: 0 1px 1px 0 rgba(50, 50, 50, 0.75) !important;
+    color: white;
+    font-family: verdana;
+    margin-bottom: 0;
+    margin-top: 10px;
+    padding: 5px 0 !important;
+    min-width: 205px;
+}
+.opciones_reservar {
+    background: #cdd6e0 none repeat scroll 0 0;
+    border-radius: 0 0 5px 5px;
+    box-shadow: 0 1px 1px 0 rgba(50, 50, 50, 0.75) !important;
+    height: 310px;
+    min-width: 205px;
+    overflow: auto;
+    padding: 10px 0 !important;
+    text-align: left;
+}
+#reserva_modulos button{
+    margin: 10px 0 !important;
+    min-width: 96px;
+    padding-left: 0;
+    padding-right: 0;
+    border: 2px outset threedlightshadow ;
+    box-shadow: none !important;
+}
+.calendario_lectivos {
+    margin: 3% auto;
+    max-width: 260px;
+    width: 100%;
+}
+.calendario_lectivos th {
+    padding: 2px !important;
+}
+.calendario_lectivos thead tr th {
+    background: #334c73 none repeat scroll 0 0;
+    color: white;
+    font: 1em solid;
+    padding: 0 5px;
+    text-align: left;
+}
+.calendario_lectivos > div {
+    min-height: 230px;
+}
+#contenedor_reserva .ui-widget-content{
+    background: #f4f4f4 !important;
+}
+.calendario_lectivos > div {
+    width: 100%;
+}
+.ui-datepicker {
+    border-radius: 5px;
+    box-shadow: 0 1px 1px 1px rgba(0, 0, 0, 0.5);
+}
+.calendario_lectivos > div > div {
+    background: #b1cce7 none repeat scroll 0 0 !important;
+    margin-bottom: 5px;
+}
+.ui-widget-header {
+    color: #334c73 !important;
+    font-family: Verdana !important;
+    text-align: center;
+    border-radius: 5px 5px 0 0;
+} 
+.calendario_lectivos td {
+    background: rgba(0, 0, 0, 0) none repeat scroll 0 0;
+}
+.calendario_lectivos td {
+    background: rgba(0, 0, 0, 0) none repeat scroll 0 0;
+}
+#contenedor_reserva th {
+    text-align: center;
+}
+#contenedor_reserva .ui-datepicker-title {
+
+    border-radius: 5px 5px 0 0;
+}
+
+.calendario_lectivos td span, .calendario_lectivos td a {
+    margin: 3px !important;
+    border-radius: 3px;
+    padding: 10% 0 !important;
+    text-align: center !important;
+}
+.calendario_lectivos td a {
+    min-width: 15px;
+    padding: 0.2em;
+}
+.calendario_lectivos td a[class*="ui-state-active"] {
+    background: #e57200 none repeat scroll 0 0;
+    color: white;
+}
+#intranet_cole_backendbundle_reserva_submit{
+    padding: 10px 15px;
+}
+.modulos_disabled>p{
+    background: grey !important;
+}
+.modulos_disabled>div{
+    background: lightgrey !important;
+}
+.opciones_reservar button[class*="active"] {
+    border: 2px inset !important;
+    cursor: default;
+    pointer-events: none;
+    background-color: #e57200!important;
+    border-radius: 5px;
+    color: #fff !important;
+}
+#reserva_modulos button[class*="active"] {
+    cursor: pointer;
+    pointer-events: auto;
+}
+#reserva_modulos button p{
+    margin-bottom: 5px !important;
+}
+#reserva_fecha a[class*="ui-state-active"] {
+    cursor: default;
+    pointer-events: none;
+}
+.opciones_reservar button:hover:not(.active):not(.disabled), #reserva_fecha .ui-datepicker-calendar a:hover{
+    background: #337ab7 !important;
+    color: white;
+}
+.reservado {
+    background-color: #b6f6a1;
+    border-radius: 5px;
+    box-shadow: none;
+    color: #0b3b0b;
+    opacity: 0.5;
+}
+.container_reserva i:hover{
+    color: #bc1010 !important;
+}
+#contenedor_reserva  .ui-datepicker-prev a:hover{
+    background: none !important;
+}
+.no_lectivo{
+    background: grey !important;
+    color: white !important;
+    cursor: default;
 }

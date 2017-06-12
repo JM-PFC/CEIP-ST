@@ -172,6 +172,8 @@ class Reserva
         return $this->fin;
     }
 
+
+
     /**
      * Set horario
      *

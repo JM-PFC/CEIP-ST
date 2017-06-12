@@ -108,11 +108,31 @@ class ReservaRepository extends EntityRepository
 		->getResult();
 	}
 
-		public function findallReservasEquipamientos() 
+	public function findallReservasEquipamientos() 
 	{
 		return $this->getEntityManager()->createQuery(
 			'SELECT r FROM BackendBundle:Reserva r INNER JOIN r.equipamiento e INNER JOIN r.horario h WHERE e.tipo=:equipamiento AND r.fecha>= CURRENT_DATE()  ORDER BY r.fecha ASC, h.inicio ASC')
 		->setParameters(array(
+			'equipamiento' => "Equipamiento"))
+		->getResult();
+	}
+
+	public function findReservasInstalacionesProfesor($profesor) 
+	{
+		return $this->getEntityManager()->createQuery(
+			'SELECT r FROM BackendBundle:Reserva r INNER JOIN r.equipamiento e INNER JOIN r.horario h WHERE r.profesor=:profesor AND  e.tipo=:equipamiento AND r.fecha>= CURRENT_DATE()  ORDER BY r.fecha ASC, h.inicio ASC')
+		->setParameters(array(
+			'profesor' => $profesor,
+			'equipamiento' => "Instalación"))
+		->getResult();
+	}
+
+	public function findReservasEquipamientosProfesor($profesor) 
+	{
+		return $this->getEntityManager()->createQuery(
+			'SELECT r FROM BackendBundle:Reserva r INNER JOIN r.equipamiento e INNER JOIN r.horario h WHERE r.profesor=:profesor AND e.tipo=:equipamiento AND r.fecha>= CURRENT_DATE()  ORDER BY r.fecha ASC, h.inicio ASC')
+		->setParameters(array(
+			'profesor' => $profesor,
 			'equipamiento' => "Equipamiento"))
 		->getResult();
 	}

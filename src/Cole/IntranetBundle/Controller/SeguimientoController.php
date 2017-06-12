@@ -252,7 +252,6 @@ class SeguimientoController extends Controller
         ));
     }
 
-
     public function eliminarSeguimientoAction($id)
     {
         $em = $this->getDoctrine()->getManager();
@@ -338,7 +337,7 @@ class SeguimientoController extends Controller
             if (!$entity) {
                 throw $this->createNotFoundException('Unable to find Seguimiento entity.');
             }
-            //Se eimina todos los avisos nuevos de ese seguimiento.
+            //Se elimina todos los avisos nuevos de ese seguimiento.
             $avisos= $em->getRepository('IntranetBundle:Avisos')->findBy(array('idAviso'=>$id, 'tipoAviso'=>"Seguimiento"));
             foreach($avisos as $aviso){
                 $em->remove($aviso);

@@ -8,9 +8,11 @@ use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\JsonResponse;
 
+use Cole\BackendBundle\Entity\Reserva;
 use Cole\BackendBundle\Entity\Profesor;
 use Cole\ColeBundle\Entity\Noticias;
 use Cole\IntranetBundle\Entity\Avisos;
+use Cole\BackendBundle\Form\ReservaType;
 
 
 use Cole\BackendBundle\Form\AlumnoIntranetType;
@@ -31,6 +33,9 @@ class ProfesorController extends Controller
             'id'=>$entity->getId()));
     }
 
+    ///////////////////////////////////////////
+    //            Cursos Impartidos          //
+    ///////////////////////////////////////////
 
     public function datosAlumnosGrupoAction($id)
     {
@@ -189,9 +194,7 @@ class ProfesorController extends Controller
         $em = $this->getDoctrine()->getManager();
 
         $profesor = $this->get('security.context')->getToken()->getUser();
-
         $entity = $em->getRepository('BackendBundle:Horario')->findAll();
-        
         $imparte = $em->getRepository('BackendBundle:Imparte')->findByProfesor($profesor);
 
         $array=[];
@@ -234,7 +237,6 @@ class ProfesorController extends Controller
         $em = $this->getDoctrine()->getManager();
 
         $alumno= $em->getRepository('BackendBundle:Alumno')->findOneById($id);
-
         $grupo= $alumno->getGrupo();
         if (!$grupo) {
             throw $this->createNotFoundException('Unable to find Grupo.');
@@ -243,9 +245,7 @@ class ProfesorController extends Controller
         $fin =$em->getRepository('BackendBundle:Centro')->findFinCurso();
 
         $horarios = $em->getRepository('BackendBundle:Horario')->findAll();
-
         $entities = $em->getRepository('BackendBundle:Imparte')->findByGrupoConHorario($grupo);
-
         $imparte= $em->getRepository('BackendBundle:Imparte')->findAsignacionesNoOpcionales($grupo);
 
         $array=[];
@@ -328,7 +328,11 @@ class ProfesorController extends Controller
             'profesor' => $grupo->getProfesor(),
         ));
         
+
     }
+    ///////////////////////////////////////////
+    //              Seguimiento              //
+    ///////////////////////////////////////////
 
     public function seguimientosAction(Request $request)
     {
@@ -409,51 +413,48 @@ class ProfesorController extends Controller
         $entity= $em->getRepository('BackendBundle:Profesor')->findOneById($id);
         $num=0;
 
-            if($entity->getAccesoSeguimientos()){
-                $seguimientos =$em->getRepository('IntranetBundle:Seguimiento')->findNuevosSeguimientosProfesor($entity->getAccesoSeguimientos(),$entity);
-                
-            }
-            else{
-                $seguimientos =$em->getRepository('IntranetBundle:Seguimiento')->findNuevosSeguimientosInicioProfesor($entity);
-            }
-        
-            //Si hay seguimientos nuevos se añade los id a la tabla Avisos.
-            if($seguimientos){
-                foreach($seguimientos as $seguimiento){
-                    if($seguimiento->getSeguimiento() == null){
-                        $existencia=$em->getRepository('IntranetBundle:Avisos')->findExistenciaAviso($entity->getId(),null, "Profesor",$seguimiento->getId(), "Seguimiento" );
-                        if(!$existencia){
-                            $aviso = new Avisos();
-                            $aviso->setIdUsuario($entity->getId());
-                            $aviso->setIdResponsable(null);
-                            $aviso->setTipoUsuario("Profesor");
-                            $aviso->setIdAviso($seguimiento->getId());
-                            $aviso->setTipoAviso("Seguimiento");
-                            $em->persist($aviso);
-                        }
+        if($entity->getAccesoSeguimientos()){
+            $seguimientos =$em->getRepository('IntranetBundle:Seguimiento')->findNuevosSeguimientosProfesor($entity->getAccesoSeguimientos(),$entity);
+        }
+        else{
+            $seguimientos =$em->getRepository('IntranetBundle:Seguimiento')->findNuevosSeguimientosInicioProfesor($entity);
+        }
+        //Si hay seguimientos nuevos se añade los id a la tabla Avisos.
+        if($seguimientos){
+            foreach($seguimientos as $seguimiento){
+                if($seguimiento->getSeguimiento() == null){
+                    $existencia=$em->getRepository('IntranetBundle:Avisos')->findExistenciaAviso($entity->getId(),null, "Profesor",$seguimiento->getId(), "Seguimiento" );
+                    if(!$existencia){
+                        $aviso = new Avisos();
+                        $aviso->setIdUsuario($entity->getId());
+                        $aviso->setIdResponsable(null);
+                        $aviso->setTipoUsuario("Profesor");
+                        $aviso->setIdAviso($seguimiento->getId());
+                        $aviso->setTipoAviso("Seguimiento");
+                        $em->persist($aviso);
                     }
-                    else{
-                        $existencia=$em->getRepository('IntranetBundle:Avisos')->findExistenciaAviso($entity->getId(),null, "Profesor",$seguimiento->getSeguimiento(), "Seguimiento" );
-                        if(!$existencia){
-                            $aviso = new Avisos();
-                            $aviso->setIdUsuario($entity->getId());
-                            $aviso->setIdResponsable(null);
-                            $aviso->setTipoUsuario("Profesor");
-                            $aviso->setIdAviso($seguimiento->getSeguimiento());
-                            $aviso->setTipoAviso("Seguimiento");
-                            $em->persist($aviso);
-                        }
-                    } 
                 }
-
-                //Se actualiza la fecha del último acceso a noticias.
-                $entity->setAccesoSeguimientos(new \DateTime("now"));
-                $em->persist($entity);
-                $em->flush();
+                else{
+                    $existencia=$em->getRepository('IntranetBundle:Avisos')->findExistenciaAviso($entity->getId(),null, "Profesor",$seguimiento->getSeguimiento(), "Seguimiento" );
+                    if(!$existencia){
+                        $aviso = new Avisos();
+                        $aviso->setIdUsuario($entity->getId());
+                        $aviso->setIdResponsable(null);
+                        $aviso->setTipoUsuario("Profesor");
+                        $aviso->setIdAviso($seguimiento->getSeguimiento());
+                        $aviso->setTipoAviso("Seguimiento");
+                        $em->persist($aviso);
+                    }
+                } 
             }
-            //Se obtiene el número de seguimientos nuevos.
-            $avisos =$em->getRepository('IntranetBundle:Avisos')->findAvisos($entity,NULL, "Profesor", "Seguimiento");
-            $num=count($avisos);
+            //Se actualiza la fecha del último acceso a noticias.
+            $entity->setAccesoSeguimientos(new \DateTime("now"));
+            $em->persist($entity);
+            $em->flush();
+        }
+        //Se obtiene el número de seguimientos nuevos.
+        $avisos =$em->getRepository('IntranetBundle:Avisos')->findAvisos($entity,NULL, "Profesor", "Seguimiento");
+        $num=count($avisos);
 
         return new JsonResponse(array(
             'num'=> $num,
@@ -475,7 +476,6 @@ class ProfesorController extends Controller
             'asignaturas' => $asignaturas
             ), 200);
     }
-
 
     public function AlumnosGrupoAsignaturaAction($id, $asig)
     {
@@ -508,8 +508,292 @@ class ProfesorController extends Controller
         return $this->render('IntranetBundle:Profesor:alumnos_grupo_asignatura.html.twig', array(
             'entities'=>$entities));
     }
+    ///////////////////////////////////////////
+    //               Reservas                //
+    ///////////////////////////////////////////
+
+    public function reservasAction(Request $request)
+    {
+        $em = $this->getDoctrine()->getManager();
+
+        $entity = $this->get('security.context')->getToken()->getUser();
+        $entities = $em->getRepository('BackendBundle:Equipamiento')->findInstalaciones();
+
+        $instalaciones = $em->getRepository('BackendBundle:Reserva')->findReservasInstalacionesProfesor($entity);
+        $equipamientos = $em->getRepository('BackendBundle:Reserva')->findReservasEquipamientosProfesor($entity);
+
+        return $this->render('IntranetBundle:Profesor:reservas.html.twig', array(
+            'entity' => $entity,            
+            'instalaciones' => $instalaciones,
+            'equipamientos' => $equipamientos,
+        ));
+    }
+
+    public function createReservaAction(Request $request)
+    {
+        $em = $this->getDoctrine()->getManager();
+        $profesor = $this->get('security.context')->getToken()->getUser();
+
+        $entity = new Reserva();
+        $form = $this->createCreateReservaForm($entity);
+        $form->handleRequest($request);
+
+        if ($form->isValid()) {
+
+            //Se añade al formulario una variable extra de tipo entity con checkboxes para seleccionar.
+            $extra = $form->get('seleccion')->getData();
+            //Se convierte el ArrayCollection en un array normal.
+            $arr = $extra->toArray();
+
+            $contador=0;
+            //Para cada checkbox marcado se crea una nueva reserva y se guarda con el resto de valores seleccionado.
+            foreach ($arr as $horario) {
+                $entity = new Reserva();
+                $form = $this->createCreateReservaForm($entity);
+                $form->handleRequest($request);
+
+                $modulo = $em->getRepository('BackendBundle:Horario')->findOneById($horario);
+                $entity->setHorario($modulo);       
+                $entity->setProfesor($profesor);             
+
+                $em->persist($entity);
+                $em->flush();
+
+                $contador++;
+            }
+            if($contador>1){
+                $ms = $this->get('translator')->trans('Se han realizado %$contador% reservas correctamente.',array('%$contador%' =>$contador ));
+            }
+            else{
+                $ms = $this->get('translator')->trans('Se ha realizado la reserva correctamente.');
+            }
+            $this->get('session')->getFlashBag()->add('notice',$ms);
+
+            return $this->redirect($this->generateUrl('intranet_profesor_reservas'));
+        }
+        return $this->render('IntranetBundle:Profesor:reservar.html.twig', array(
+            'entity' => $entity,
+            'form'   => $form->createView(),
+        ));
+    }
+
+    private function createCreateReservaForm(Reserva $entity)
+    {
+        $form = $this->createForm(new ReservaType(), $entity, array(
+            'action' => $this->generateUrl('intranet_profesor_reservar_create'),
+            'method' => 'POST',
+        ));
+        $titulo=$this->get("translator")->trans("Reservar");
+        $form->add('submit', 'submit', array('label' => $titulo));
+
+        return $form;
+    }
+
+    //Se comprueba sólo las reservas del profesor.
+    public function ComprobarReservasAction()
+    {
+        $equipamiento=$this->get('request')->request->get('equipamiento');
+        $fecha=$this->get('request')->request->get('fecha');
+        $entity = $this->get('security.context')->getToken()->getUser();
+
+        $em = $this->getDoctrine()->getEntityManager();
+
+        $equipamiento=$em->getRepository('BackendBundle:Equipamiento')->findEquipamientoByName($equipamiento);   
+        $reserva= $em->getRepository('BackendBundle:Reserva')->findReservasUsuario($entity, $equipamiento, $fecha);
+        $horarios= $em->getRepository('BackendBundle:Horario')->findClases();
+        $longitud = count($horarios);
+        $NoDisponible=array();
+        for($i=0; $i<$longitud; $i++)
+        {
+            $unidades= $em->getRepository('BackendBundle:Reserva')->findComprobarUnidades($horarios[$i],$equipamiento, $fecha);
+            if(!((int)$unidades[1] < $equipamiento->getUnidades() && (int)$unidades[1] >= 0)){
+                $NoDisponible[]= $em->getRepository('BackendBundle:Reserva')->findReservasUnidades($horarios[$i],$equipamiento, $fecha);
+            }       
+        }
+
+        if($reserva){
+            if($NoDisponible){
+                return new JsonResponse(array('data' =>$reserva , 'data2' =>$NoDisponible), 200);
+            }
+            else{
+                return new JsonResponse(array('data' =>$reserva, 'data2' =>null), 200);
+            }
+        }
+        else{
+            if($NoDisponible){
+                return new JsonResponse(array('data' =>null , 'data2' =>$NoDisponible), 200);
+            }
+            else{
+                return new JsonResponse(array('data' =>null, 'data2' =>null), 200);
+            }
+        }
+    }
+
+    public function reservarInstalacionAction(Request $request)
+    {
+        $em = $this->getDoctrine()->getManager();
+
+        $entity = $this->get('security.context')->getToken()->getUser();
+        $entities = $em->getRepository('BackendBundle:Equipamiento')->findInstalaciones();
+        $clases = $em->getRepository('BackendBundle:Horario')->findClases();
+        $tipo="Instalación";
+
+        $inicio =$em->getRepository('BackendBundle:Centro')->findInicioCurso();
+        $fin =$em->getRepository('BackendBundle:Centro')->findFinCurso();
+
+        $reserva = new Reserva();
+        $form   = $this->createCreateReservaForm($reserva);
+
+        return $this->render('IntranetBundle:Profesor:reservar.html.twig', array(
+            'entity' => $entity,
+            'tipo' => $tipo,
+            'clases'=>$clases,
+            'inicio' => $inicio,
+            'fin' => $fin,
+            'entities' => $entities,                
+            'form' => $form->createView(),
+        ));
+    }
+
+    public function reservarEquipamientoAction(Request $request)
+    {
+        $em = $this->getDoctrine()->getManager();
+
+        $entity = $this->get('security.context')->getToken()->getUser();
+        $entities = $em->getRepository('BackendBundle:Equipamiento')->findEquipamientos();
+        $clases = $em->getRepository('BackendBundle:Horario')->findClases();
+        $tipo="Equipamiento";
+
+        $inicio =$em->getRepository('BackendBundle:Centro')->findInicioCurso();
+        $fin =$em->getRepository('BackendBundle:Centro')->findFinCurso();
+
+        $reserva = new Reserva();
+        $form   = $this->createCreateReservaForm($reserva);
 
 
+        return $this->render('IntranetBundle:Profesor:reservar.html.twig', array(
+            'entity' => $entity,
+            'tipo' => $tipo,
+            'clases'=>$clases,
+            'inicio' => $inicio,
+            'fin' => $fin,
+            'form' => $form->createView(),
+            'entities' => $entities,              
+
+        ));
+    }
+
+/*
+        return $this->render('IntranetBundle:Profesor:seguimientos.html.twig', array(
+            'entity' => $entity, 
+            'seguimientosNuevos' => $seguimientosNuevos,
+            'seguimientos'=> $seguimientos,
+            ));
+
+
+    public function instalacionesAction()
+    {
+        $em = $this->getDoctrine()->getManager();
+
+        $entities = $em->getRepository('BackendBundle:Equipamiento')->findInstalaciones();
+        $tipo="instalaciones"; 
+        $clases = $em->getRepository('BackendBundle:Horario')->findClases();
+
+        $inicio =$em->getRepository('BackendBundle:Centro')->findInicioCurso();
+        $fin =$em->getRepository('BackendBundle:Centro')->findFinCurso();
+
+        $array['inicio_navidad']=$em->getRepository('BackendBundle:Festivos')->findFestivosPorDescripcion("Inicio Vacaciones de Navidad");
+        $array['fin_navidad']=$em->getRepository('BackendBundle:Festivos')->findFestivosPorDescripcion("Fin Vacaciones de Navidad");
+        $array['inicio_semanasanta']=$em->getRepository('BackendBundle:Festivos')->findFestivosPorDescripcion("Inicio Vacaciones de Semana Santa");
+        $array['fin_semanasanta']=$em->getRepository('BackendBundle:Festivos')->findFestivosPorDescripcion("Fin Vacaciones de Semana Santa");
+
+        return $this->render('BackendBundle:Reserva:reserva_instalaciones.html.twig', array(
+            'entities' => $entities,
+            'clases' => $clases,
+            'inicio' => $inicio,
+            'fin' => $fin,
+            'data'=>$array,
+            'tipo'=>$tipo
+        ));
+    }
+
+    public function equipamientosAction()
+    {
+        $em = $this->getDoctrine()->getManager();
+
+        $entities = $em->getRepository('BackendBundle:Equipamiento')->findByTipo("Equipamiento");
+        $tipo="equipamientos"; 
+        $clases = $em->getRepository('BackendBundle:Horario')->findClases();
+
+        $inicio =$em->getRepository('BackendBundle:Centro')->findInicioCurso();
+        $fin =$em->getRepository('BackendBundle:Centro')->findFinCurso();
+
+        $array['inicio_navidad']=$em->getRepository('BackendBundle:Festivos')->findFestivosPorDescripcion("Inicio Vacaciones de Navidad");
+        $array['fin_navidad']=$em->getRepository('BackendBundle:Festivos')->findFestivosPorDescripcion("Fin Vacaciones de Navidad");
+        $array['inicio_semanasanta']=$em->getRepository('BackendBundle:Festivos')->findFestivosPorDescripcion("Inicio Vacaciones de Semana Santa");
+        $array['fin_semanasanta']=$em->getRepository('BackendBundle:Festivos')->findFestivosPorDescripcion("Fin Vacaciones de Semana Santa");
+
+        return $this->render('BackendBundle:Reserva:reserva_instalaciones.html.twig', array(
+            'entities' => $entities,
+            'clases' => $clases,
+            'inicio' => $inicio,
+            'fin' => $fin,
+            'data'=>$array,
+            'tipo'=>$tipo
+        ));
+    }
+
+*/
+
+    public function deleteReservaAction(Request $request, $id)
+    {
+        $form = $this->createDeleteReservaForm($id);
+        $form->handleRequest($request);
+
+        if ($form->isValid()) {
+            $em = $this->getDoctrine()->getManager();
+            $entity = $em->getRepository('BackendBundle:Reserva')->find($id);
+
+            if (!$entity) {
+                throw $this->createNotFoundException('Unable to find Reserva entity.');
+            }
+
+            $em->remove($entity);
+            $em->flush();
+        }
+        $ms = $this->get('translator')->trans('La reserva ha sido eliminada correctamente.');
+        $this->get('session')->getFlashBag()->add('notice',$ms);
+        return $this->redirect($this->generateUrl('intranet_profesor_reservas'));
+    }
+
+    private function createDeleteReservaForm($id)
+    {
+        return $this->createFormBuilder()
+            ->setAction($this->generateUrl('intranet_profesor_reserva_delete', array('id' => $id)))
+            ->setMethod('DELETE')
+            ->add('submit', 'submit', array('label' => "Eliminar", 'attr' => array('class' => 'btn btn-danger')))
+            ->getForm()
+        ;
+    }
+
+    public function eliminarReservaAction($id)
+    {
+        $em = $this->getDoctrine()->getManager();
+
+        $entity = $em->getRepository('BackendBundle:Reserva')->find($id);
+
+        $deleteForm = $this->createDeleteReservaForm($id);
+
+        return $this->render('IntranetBundle:Seguimiento:eliminarSeguimiento.html.twig', array(
+            'entity'      => $entity,
+            'delete_form' => $deleteForm->createView(),
+        ));
+    }
+    
+
+    ///////////////////////////////////////////
+    //               Noticias                //
+    ///////////////////////////////////////////
 
     public function noticiasAction(Request $request)
     {
@@ -564,8 +848,6 @@ class ProfesorController extends Controller
             'noticia'=> $noticia,
             'imagenes' => $imagenes));
     }
-
-
 
     public function comprobarNoticiasNuevasAction($id)
     {

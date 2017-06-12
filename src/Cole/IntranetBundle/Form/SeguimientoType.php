@@ -22,6 +22,7 @@ class SeguimientoType extends AbstractType
             ->add('alumno','entity',array('class' => 'BackendBundle:Alumno','query_builder' => function (\Cole\BackendBundle\Entity\AlumnoRepository $er) {return $er->createQueryBuilder('u')->where('u.activo IN(:act)')->setParameter(':act', 1)->orderBy('u.nombre','ASC');}, 'empty_data' => null,'empty_value'=> 'Seleccione un alumno','required'=> false))
             ->add('responsable','entity',array('class' => 'BackendBundle:Padres','query_builder' => function (\Cole\BackendBundle\Entity\PadresRepository $er) {return $er->createQueryBuilder('u')->where('u.activo IN(:act)')->setParameter(':act', 1)->orderBy('u.nombre','ASC');}, 'empty_data' => null,'empty_value'=> 'Seleccione un responsable','required'=> false))
             ->add('seguimiento','entity',array('class' => 'IntranetBundle:Seguimiento','query_builder' => function (\Cole\IntranetBundle\Entity\SeguimientoRepository $er) {return $er->createQueryBuilder('u')->orderBy('u.id','ASC');}, 'empty_data' => null,'empty_value'=> 'Seleccione un seguimiento','required'=> false))
+
         ;
     }
     

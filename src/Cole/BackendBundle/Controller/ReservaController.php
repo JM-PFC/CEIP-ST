@@ -268,25 +268,8 @@ class ReservaController extends Controller
 
         $query->execute();
 
-/*
-        $form = $this->createDeleteForm($id);
-        $form->handleRequest($request);
-
-        if ($form->isValid()) {
-            $em = $this->getDoctrine()->getManager();
-            $entity = $em->getRepository('BackendBundle:Reserva')->find($id);
-
-            if (!$entity) {
-                throw $this->createNotFoundException('Unable to find Reserva entity.');
-            }
-
-            $em->remove($entity);
-            $em->flush();
-        }*/
-
         return new JsonResponse(array('success' => true), 200);
 
-        /*return $this->redirect($this->generateUrl('reserva'));*/
     }
 
     /**
@@ -357,8 +340,8 @@ class ReservaController extends Controller
             'tipo'=>$tipo
         ));
     }
-
-    public function ComprobarReservasAction() //Se tiene que obtener el usuario logueado para cambiarlo por null abajo
+    //Se comprueba sólo las reservas del centro.
+    public function ComprobarReservasAction()
     {
         $equipamiento=$this->get('request')->request->get('equipamiento');
         $fecha=$this->get('request')->request->get('fecha');
@@ -373,50 +356,28 @@ class ReservaController extends Controller
         for($i=0; $i<$longitud; $i++)
         {
             $unidades= $em->getRepository('BackendBundle:Reserva')->findComprobarUnidades($horarios[$i],$equipamiento, $fecha);
-
             if(!((int)$unidades[1] < $equipamiento->getUnidades() && (int)$unidades[1] >= 0)){
                 $NoDisponible[]= $em->getRepository('BackendBundle:Reserva')->findReservasUnidades($horarios[$i],$equipamiento, $fecha);
             }       
         }
 
-        /*
-        $horarios= $em->getRepository('BackendBundle:Horario')->findClases();
-        $longitud = count($horarios);
-
-        for($i=0; $i<$longitud; $i++)
-        {
-            $unidades= $em->getRepository('BackendBundle:Reserva')->findComprobarUnidades($horarios[$i],$equipamiento, $fecha);
-
-            if((int)$unidades[1] < $equipamiento->getUnidades() && (int)$unidades[1] >= 0){
-                $NoDisponible[$i]= $em->getRepository('BackendBundle:Reserva')->findReservasUnidades($horarios[$i],$equipamiento, $fecha);
+        if($reserva){
+            if($NoDisponible){
+                return new JsonResponse(array('data' =>$reserva , 'data2' =>$NoDisponible), 200);
             }
             else{
-               $NoDisponible[$i]=null; 
-            }         
-        }
-        print_r($_POST);
-
-        */
-
-        if($reserva){
-                if($NoDisponible){
-                    return new JsonResponse(array('data' =>$reserva , 'data2' =>$NoDisponible), 200);
-                }
-                else{
-                        return new JsonResponse(array('data' =>$reserva, 'data2' =>null), 200);
-                }
+                return new JsonResponse(array('data' =>$reserva, 'data2' =>null), 200);
+            }
         }
         else{
             if($NoDisponible){
-                    return new JsonResponse(array('data' =>null , 'data2' =>$NoDisponible), 200);
-                }
-                else{
-                        return new JsonResponse(array('data' =>null, 'data2' =>null), 200);
-                }
+                return new JsonResponse(array('data' =>null , 'data2' =>$NoDisponible), 200);
+            }
+            else{
+                    return new JsonResponse(array('data' =>null, 'data2' =>null), 200);
+            }
         }
-
     }
-
 
     public function EquipamientoReservadoAction() 
     {

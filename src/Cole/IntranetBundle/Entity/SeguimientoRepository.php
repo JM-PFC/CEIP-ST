@@ -65,14 +65,15 @@ class SeguimientoRepository extends EntityRepository
 		->getResult();
 	}
 
-	public function findSeguimientosActualizadosAlumno($alumno, $grupo)
+	public function findSeguimientosActualizadosAlumno($alumno, $idResponsable, $grupo)
 	{
 		return $this->getEntityManager()->createQuery(
 			'SELECT s FROM IntranetBundle:Seguimiento s WHERE s.grupo=:grupo AND (s.alumno=:alumno or s.alumno IS NULL) AND s.tipo=:tipo AND 
-			s.id IN(select a.idAviso FROM IntranetBundle:Avisos a where a.idUsuario=:alumno AND (a.tipoUsuario=:tipoUsuario OR a.tipoUsuario=:tipoGrupo) AND a.tipoAviso=:tipoAviso) ORDER BY s.fecha DESC')
+			s.id IN(select a.idAviso FROM IntranetBundle:Avisos a where a.idUsuario=:alumno AND a.idResponsable=:idResponsable AND (a.tipoUsuario=:tipoUsuario OR a.tipoUsuario=:tipoGrupo) AND a.tipoAviso=:tipoAviso) ORDER BY s.fecha DESC')
 		->setParameters(array(
 			'alumno' => $alumno,
 			'grupo' =>$grupo,
+			'idResponsable' => $idResponsable,
 			'tipoUsuario' => "Alumno",
 			'tipoGrupo' => "Grupo",
 			'tipoAviso' => "Seguimiento",
@@ -81,14 +82,15 @@ class SeguimientoRepository extends EntityRepository
 		->getResult();
 	}
 
-	public function findAntiguosSeguimientosAlumno($alumno, $grupo)
+	public function findAntiguosSeguimientosAlumno($alumno, $idResponsable, $grupo)
 	{
 		return $this->getEntityManager()->createQuery(
 			'SELECT s FROM IntranetBundle:Seguimiento s WHERE s.grupo=:grupo AND s.tipo=:tipo AND (s.alumno=:alumno or s.alumno IS NULL)
-			AND s.id NOT IN(select a.idAviso FROM IntranetBundle:Avisos a where a.idUsuario=:alumno AND (a.tipoUsuario=:tipoUsuario OR a.tipoUsuario=:tipoGrupo) AND a.tipoAviso=:tipoAviso) ORDER BY s.fecha DESC')
+			AND s.id NOT IN(select a.idAviso FROM IntranetBundle:Avisos a where a.idUsuario=:alumno AND a.idResponsable=:idResponsable AND (a.tipoUsuario=:tipoUsuario OR a.tipoUsuario=:tipoGrupo) AND a.tipoAviso=:tipoAviso) ORDER BY s.fecha DESC')
 		->setParameters(array(
 			'alumno' => $alumno,
 			'grupo' =>$grupo,
+			'idResponsable' => $idResponsable,
 			'tipoUsuario' => "Alumno",
 			'tipoGrupo' => "Grupo",
 			'tipoAviso' => "Seguimiento",
@@ -97,14 +99,15 @@ class SeguimientoRepository extends EntityRepository
 		->getResult();
 	}
 
-	public function findAntiguosSeguimientosContadorAlumno($alumno, $grupo, $contador)
+	public function findAntiguosSeguimientosContadorAlumno($alumno, $idResponsable, $grupo, $contador)
 	{
 		return $this->getEntityManager()->createQuery(
 			'SELECT s FROM IntranetBundle:Seguimiento s WHERE s.grupo=:grupo AND s.tipo=:tipo AND (s.alumno=:alumno or s.alumno IS NULL)
-			AND s.id NOT IN(select a.idAviso FROM IntranetBundle:Avisos a where a.idUsuario=:alumno AND (a.tipoUsuario=:tipoUsuario OR a.tipoUsuario=:tipoGrupo) AND a.tipoAviso=:tipoAviso) ORDER BY s.fecha DESC')
+			AND s.id NOT IN(select a.idAviso FROM IntranetBundle:Avisos a where a.idUsuario=:alumno AND a.idResponsable=:idResponsable AND (a.tipoUsuario=:tipoUsuario OR a.tipoUsuario=:tipoGrupo) AND a.tipoAviso=:tipoAviso) ORDER BY s.fecha DESC')
 		->setParameters(array(
 			'alumno' => $alumno,
 			'grupo' =>$grupo,
+			'idResponsable' => $idResponsable,
 			'tipoUsuario' => "Alumno",
 			'tipoGrupo' => "Grupo",
 			'tipoAviso' => "Seguimiento",
@@ -174,14 +177,15 @@ class SeguimientoRepository extends EntityRepository
 		->getResult();
 	}
 
-	public function findCargaSeguimientosNuevosAlumno($fecha, $alumno, $grupo)
+	public function findCargaSeguimientosNuevosAlumno($fecha, $alumno, $idResponsable, $grupo)
 	{
 		return $this->getEntityManager()->createQuery(
 			'SELECT s FROM IntranetBundle:Seguimiento s WHERE s.grupo=:grupo AND (s.alumno=:alumno or s.alumno IS NULL) AND s.tipo=:tipo AND 
-			s.id IN(select a.idAviso FROM IntranetBundle:Avisos a where a.idUsuario=:alumno AND (a.tipoUsuario=:tipoUsuario OR a.tipoUsuario=:tipoGrupo) AND a.tipoAviso=:tipoAviso) AND s.fechaActualizada<:fecha ORDER BY s.fecha DESC')
+			s.id IN(select a.idAviso FROM IntranetBundle:Avisos a where a.idUsuario=:alumno AND a.idResponsable=:idResponsable AND (a.tipoUsuario=:tipoUsuario OR a.tipoUsuario=:tipoGrupo) AND a.tipoAviso=:tipoAviso) AND s.fechaActualizada<:fecha ORDER BY s.fecha DESC')
 		->setParameters(array(
 			'alumno' => $alumno,
 			'grupo' =>$grupo,
+			'idResponsable' => "idResponsable",
 			'tipoUsuario' => "Alumno",
 			'tipoGrupo' => "Grupo",
 			'tipoAviso' => "Seguimiento",
@@ -191,31 +195,33 @@ class SeguimientoRepository extends EntityRepository
 		->getResult();
 	}
 
-	public function findCargaSeguimientosInicialAlumno($alumno, $grupo, $contador)
+	public function findCargaSeguimientosInicialAlumno($alumno, $idResponsable, $grupo, $contador)
 	{
 		return $this->getEntityManager()->createQuery(
 			'SELECT s FROM IntranetBundle:Seguimiento s WHERE s.grupo=:grupo AND s.tipo=:tipo AND (s.alumno=:alumno or s.alumno IS NULL)
-			AND s.id NOT IN(select a.idAviso FROM IntranetBundle:Avisos a where a.idUsuario=:alumno AND (a.tipoUsuario=:tipoUsuario OR a.tipoUsuario=:tipoGrupo) AND a.tipoAviso=:tipoAviso) ORDER BY s.fecha DESC')
+			AND s.id NOT IN(select a.idAviso FROM IntranetBundle:Avisos a where a.idUsuario=:alumno AND a.idResponsable=:idResponsable AND (a.tipoUsuario=:tipoUsuario OR a.tipoUsuario=:tipoGrupo) AND a.tipoAviso=:tipoAviso) ORDER BY s.fecha DESC')
 		->setParameters(array(
 			'alumno' => $alumno,
 			'grupo' =>$grupo,
 			'tipoUsuario' => "Alumno",
 			'tipoGrupo' => "Grupo",
+			'idResponsable' => "idResponsable",
 			'tipoAviso' => "Seguimiento",
 			'tipo'=>1))
 		->setMaxResults($contador)
 		->getResult();
 	}
 
-	public function findCargaSeguimientosAlumno($alumno, $id , $grupo)
+	public function findCargaSeguimientosAlumno($alumno,$idResponsable, $id , $grupo)
 	{
 		return $this->getEntityManager()->createQuery(
 			'SELECT s FROM IntranetBundle:Seguimiento s WHERE (s.alumno=:alumno or s.alumno IS NULL) AND s.grupo=:grupo AND s.tipo=:tipo and s.id<:id
-			AND s.id NOT IN(select a.idAviso FROM IntranetBundle:Avisos a where a.idUsuario=:alumno AND (a.tipoUsuario=:tipoUsuario OR a.tipoUsuario=:tipoGrupo) AND a.tipoAviso=:tipoAviso) ORDER BY s.fecha DESC')
+			AND s.id NOT IN(select a.idAviso FROM IntranetBundle:Avisos a where a.idUsuario=:alumno AND a.idResponsable=:idResponsable AND (a.tipoUsuario=:tipoUsuario OR a.tipoUsuario=:tipoGrupo) AND a.tipoAviso=:tipoAviso) ORDER BY s.fecha DESC')
 		->setParameters(array(
 			'alumno' => $alumno,
 			'grupo' => $grupo,
 			'id' => $id,
+			'idResponsable' => $idResponsable,
 			'tipoUsuario' => "Alumno",
 			'tipoGrupo' => "Grupo",
 			'tipoAviso' => "Seguimiento",

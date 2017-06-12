@@ -65,6 +65,7 @@ Cursos impartidos: Courses taught
 Horario de clases: Class schedule
 Horario de clase: Class schedule
 Reservas: Reservations
+Reservas del docente: Teacher reservations
 Promocionar: Promote
 Datos del curso: Course Data
 Lunes: Monday
@@ -173,4 +174,23 @@ Descripción: Description
 Edición del Seguimiento: Tracking Editing
 Seguimientos Nuevos: New Tracking
 Respuesta del Seguimiento: Follow-up Response
-Nueva respuesta añadida. : New answer added.
+Nueva respuesta añadida.: New answer added.
+Nombre de la Instalación: Name of the Facility
+Reservar Instalación: Reserve Facility
+Reservas de Instalaciones: Facilities Reservations
+Nombre del Equipamiento: Name of Equipment
+Equipamiento: Equipment
+Instalación: Facility
+Reservar: Reserve
+Reservar Equipamiento: Reserve Equipment
+Reservas de Equipamientos: Equipment Reserves
+No tienes ninguna reserva pendiente: You have no pending reservation
+Reserva de Instalación: Installation reservation
+Reserva de Equipamiento: Equipment Reservation
+Seleccione una instalación: Select an installation
+Seleccione una fecha: Select a date
+Seleccione los módulos: Select modules
+Se han realizado %$contador% reservas correctamente.: %$contador% reservations have been recorded correctly.
+Eliminación de la Reserva: Elimination of the Reserve
+La reserva ha sido eliminada correctamente.: The reservation has been successfully deleted.
+Se va a eliminar la reserva del sistema y no se podrá recuperar:The system reservation is to be deleted and can not be recovered
