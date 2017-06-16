@@ -385,7 +385,7 @@ class ProfesorController extends Controller
             'seguimientos' => $seguimientos,
             'seguimientosNuevos' => $seguimientosNuevos,
             'html' => $this->renderView('IntranetBundle:Profesor:lista_seguimiento.html.twig', array(
-            'seguimientos' => $seguimientos, 'seguimientosNuevos' => $seguimientosNuevos, 'entity'=>$entity)),
+            'seguimientos' => $seguimientos, 'seguimientosNuevos' => $seguimientosNuevos, 'entity'=>$entity, 'tipo'=>'seguimientos')),
             'success' => true
             ), 200);
     }
@@ -401,7 +401,7 @@ class ProfesorController extends Controller
             'seguimientos' => $seguimientos,
             'seguimientosNuevos' => null,
             'html' => $this->renderView('IntranetBundle:Profesor:lista_seguimiento.html.twig', array(
-            'seguimientos' => $seguimientos, 'seguimientosNuevos' => null, 'entity'=>$entity)),
+            'seguimientos' => $seguimientos, 'seguimientosNuevos' => null, 'entity'=>$entity, 'tipo'=>'seguimientos')),
             'success' => true
             ), 200);
     }
@@ -447,7 +447,7 @@ class ProfesorController extends Controller
                     }
                 } 
             }
-            //Se actualiza la fecha del último acceso a noticias.
+            //Se actualiza la fecha del último acceso a seguimientos.
             $entity->setAccesoSeguimientos(new \DateTime("now"));
             $em->persist($entity);
             $em->flush();
@@ -503,7 +503,7 @@ class ProfesorController extends Controller
         $profesor = $this->get('security.context')->getToken()->getUser();
         $grupo=$em->getRepository('BackendBundle:Grupo')->findOneById($id);
     
-        $entities=$em->getRepository('BackendBundle:Alumno')->findByGrupo($grupo);
+        $entities=$em->getRepository('BackendBundle:Alumno')->findByGrupoOrdenado($grupo);
 
         return $this->render('IntranetBundle:Profesor:alumnos_grupo_asignatura.html.twig', array(
             'entities'=>$entities));
@@ -670,7 +670,6 @@ class ProfesorController extends Controller
         $reserva = new Reserva();
         $form   = $this->createCreateReservaForm($reserva);
 
-
         return $this->render('IntranetBundle:Profesor:reservar.html.twig', array(
             'entity' => $entity,
             'tipo' => $tipo,
@@ -683,67 +682,6 @@ class ProfesorController extends Controller
         ));
     }
 
-/*
-        return $this->render('IntranetBundle:Profesor:seguimientos.html.twig', array(
-            'entity' => $entity, 
-            'seguimientosNuevos' => $seguimientosNuevos,
-            'seguimientos'=> $seguimientos,
-            ));
-
-
-    public function instalacionesAction()
-    {
-        $em = $this->getDoctrine()->getManager();
-
-        $entities = $em->getRepository('BackendBundle:Equipamiento')->findInstalaciones();
-        $tipo="instalaciones"; 
-        $clases = $em->getRepository('BackendBundle:Horario')->findClases();
-
-        $inicio =$em->getRepository('BackendBundle:Centro')->findInicioCurso();
-        $fin =$em->getRepository('BackendBundle:Centro')->findFinCurso();
-
-        $array['inicio_navidad']=$em->getRepository('BackendBundle:Festivos')->findFestivosPorDescripcion("Inicio Vacaciones de Navidad");
-        $array['fin_navidad']=$em->getRepository('BackendBundle:Festivos')->findFestivosPorDescripcion("Fin Vacaciones de Navidad");
-        $array['inicio_semanasanta']=$em->getRepository('BackendBundle:Festivos')->findFestivosPorDescripcion("Inicio Vacaciones de Semana Santa");
-        $array['fin_semanasanta']=$em->getRepository('BackendBundle:Festivos')->findFestivosPorDescripcion("Fin Vacaciones de Semana Santa");
-
-        return $this->render('BackendBundle:Reserva:reserva_instalaciones.html.twig', array(
-            'entities' => $entities,
-            'clases' => $clases,
-            'inicio' => $inicio,
-            'fin' => $fin,
-            'data'=>$array,
-            'tipo'=>$tipo
-        ));
-    }
-
-    public function equipamientosAction()
-    {
-        $em = $this->getDoctrine()->getManager();
-
-        $entities = $em->getRepository('BackendBundle:Equipamiento')->findByTipo("Equipamiento");
-        $tipo="equipamientos"; 
-        $clases = $em->getRepository('BackendBundle:Horario')->findClases();
-
-        $inicio =$em->getRepository('BackendBundle:Centro')->findInicioCurso();
-        $fin =$em->getRepository('BackendBundle:Centro')->findFinCurso();
-
-        $array['inicio_navidad']=$em->getRepository('BackendBundle:Festivos')->findFestivosPorDescripcion("Inicio Vacaciones de Navidad");
-        $array['fin_navidad']=$em->getRepository('BackendBundle:Festivos')->findFestivosPorDescripcion("Fin Vacaciones de Navidad");
-        $array['inicio_semanasanta']=$em->getRepository('BackendBundle:Festivos')->findFestivosPorDescripcion("Inicio Vacaciones de Semana Santa");
-        $array['fin_semanasanta']=$em->getRepository('BackendBundle:Festivos')->findFestivosPorDescripcion("Fin Vacaciones de Semana Santa");
-
-        return $this->render('BackendBundle:Reserva:reserva_instalaciones.html.twig', array(
-            'entities' => $entities,
-            'clases' => $clases,
-            'inicio' => $inicio,
-            'fin' => $fin,
-            'data'=>$array,
-            'tipo'=>$tipo
-        ));
-    }
-
-*/
 
     public function deleteReservaAction(Request $request, $id)
     {
@@ -784,12 +722,163 @@ class ProfesorController extends Controller
 
         $deleteForm = $this->createDeleteReservaForm($id);
 
-        return $this->render('IntranetBundle:Seguimiento:eliminarSeguimiento.html.twig', array(
+        return $this->render('IntranetBundle:Profesor:eliminarReserva.html.twig', array(
             'entity'      => $entity,
             'delete_form' => $deleteForm->createView(),
         ));
     }
-    
+
+    ///////////////////////////////////////////
+    //               Tutorias                //
+    ///////////////////////////////////////////
+
+    public function tutoriasAction(Request $request)
+    {
+        $em = $this->getDoctrine()->getManager();
+
+        $entity = $this->get('security.context')->getToken()->getUser();
+        $tutor_grupo= $em->getRepository('BackendBundle:Grupo')->findOneByProfesor($entity);
+
+        $centro =$em->getRepository('BackendBundle:Centro')->findCentro();
+
+        $horario=$centro->getHTutorias();
+        $tutorias=$em->getRepository('IntranetBundle:Tutorias')->findTutoriasPendientesProfesor($entity);
+
+       
+        $tutoriasNuevas=$em->getRepository('IntranetBundle:Seguimiento')->findNuevasTutorias($entity);
+
+        if(count($tutoriasNuevas)<5){
+            $seguimientos_tutorias= $em->getRepository('IntranetBundle:Seguimiento')->findAntiguasTutoriasContador($entity, 5-count($tutoriasNuevas));
+        }
+        else{
+            $seguimientos_tutorias=null;
+        }
+                   
+        return $this->render('IntranetBundle:Profesor:tutorias.html.twig', array(
+            'entity' => $entity, 
+            'tutor_grupo' => $tutor_grupo,
+            'h_tutorias' => $horario,
+            'tutorias' => $tutorias,
+            'tutoriasNuevas' => $tutoriasNuevas,
+            'seguimientos_tutorias'=>$seguimientos_tutorias
+            ));
+    }
+
+    public function seguimientoTutoriaAction(Request $request, $num)
+    {
+        $em = $this->getDoctrine()->getManager();
+        $entity = $this->get('security.context')->getToken()->getUser();
+
+        $seguimiento=$em->getRepository('IntranetBundle:Seguimiento')->findOneById($num);
+        $respuestas=$em->getRepository('IntranetBundle:Seguimiento')->findRespuestasTutorias($num);
+
+
+        //comprobar si tiene tutoria asignada o pendiente de confirmar para mostrarlo
+
+        return $this->render('IntranetBundle:Profesor:seguimiento_tutoria.html.twig', array(
+            'entity' => $entity, 
+            'seguimiento'=> $seguimiento,
+            'respuestas' => $respuestas,
+            ));
+    }
+
+
+    public function comprobarTutoriasNuevasAction($id)
+    {
+        $em = $this->getDoctrine()->getManager();
+
+        $entity= $em->getRepository('BackendBundle:Profesor')->findOneById($id);
+        $num=0;
+
+        if($entity->getAccesoTutorias()){
+            $seguimientos =$em->getRepository('IntranetBundle:Seguimiento')->findNuevasTutoriasProfesor($entity->getAccesoTutorias(),$entity);
+        }
+        else{
+            $seguimientos =$em->getRepository('IntranetBundle:Seguimiento')->findNuevasTutoriasInicioProfesor($entity);
+        }
+        //Si hay consultas de tutorias nuevas se añade los id a la tabla Avisos.
+        if($seguimientos){
+            foreach($seguimientos as $seguimiento){
+                if($seguimiento->getSeguimiento() == null){
+                    $existencia=$em->getRepository('IntranetBundle:Avisos')->findExistenciaAviso($entity->getId(),null, "Profesor",$seguimiento->getId(), "Tutoria" );
+                    
+                    if(!$existencia){
+                        $aviso = new Avisos();
+                        $aviso->setIdUsuario($entity->getId());
+                        $aviso->setIdResponsable(null);
+                        $aviso->setTipoUsuario("Profesor");
+                        $aviso->setIdAviso($seguimiento->getId());
+                        $aviso->setTipoAviso("Tutoria");
+                        $em->persist($aviso);
+                    }
+                }
+                else{
+                    $existencia=$em->getRepository('IntranetBundle:Avisos')->findExistenciaAviso($entity->getId(),null, "Profesor",$seguimiento->getSeguimiento(), "Tutoria" );
+                    if(!$existencia){
+                        $aviso = new Avisos();
+                        $aviso->setIdUsuario($entity->getId());
+                        $aviso->setIdResponsable(null);
+                        $aviso->setTipoUsuario("Profesor");
+                        $aviso->setIdAviso($seguimiento->getSeguimiento());
+                        $aviso->setTipoAviso("Tutoria");
+                        $em->persist($aviso);
+                    }
+                } 
+            }
+            //Se actualiza la fecha del último acceso a tutorias.
+            $entity->setAccesoTutorias(new \DateTime("now"));
+            $em->persist($entity);
+            $em->flush();
+        }
+        //Se obtiene el número de consultas de tutorias nuevas.
+        $avisos =$em->getRepository('IntranetBundle:Avisos')->findAvisos($entity,NULL, "Profesor", "Tutoria");
+        $num=count($avisos);
+
+        return new JsonResponse(array(
+            'num'=> $num,
+            'id' => $id,
+            'success' => true), 200);
+    }
+
+    public function CargarSeguimientosTutoriaAction(Request $request, $id)
+    {
+        $em = $this->getDoctrine()->getManager();
+        $entity = $this->get('security.context')->getToken()->getUser();
+        
+        $seguimientos= $em->getRepository('IntranetBundle:Seguimiento')->findCargaSeguimientosTutoriasProfesor($entity, $id);
+
+        return new JsonResponse(array(
+            'seguimientos' => $seguimientos,
+            'seguimientosNuevos' => null,
+            'html' => $this->renderView('IntranetBundle:Profesor:lista_seguimiento.html.twig', array(
+            'seguimientos' => $seguimientos, 'seguimientosNuevos' => null, 'entity'=>$entity, 'tipo'=>'tutorias')),
+            'success' => true
+            ), 200);
+    }
+
+    public function CargarNuevosSeguimientosTutoriaAction(Request $request, $fecha)
+    {
+        $em = $this->getDoctrine()->getManager();
+        $entity = $this->get('security.context')->getToken()->getUser();
+
+        $seguimientosNuevos=$em->getRepository('IntranetBundle:Seguimiento')->findCargaSeguimientosNuevosTutoriasProfesor($fecha, $entity);
+
+        if(count($seguimientosNuevos)<5){
+            $seguimientos= $em->getRepository('IntranetBundle:Seguimiento')->findCargaSeguimientosInicialTutoriasProfesor($entity, 5-count($seguimientosNuevos));
+        }
+        else{
+            $seguimientos=null;
+        }
+        return new JsonResponse(array(
+            'seguimientos' => $seguimientos,
+            'seguimientosNuevos' => $seguimientosNuevos,
+            'html' => $this->renderView('IntranetBundle:Profesor:lista_seguimiento.html.twig', array(
+            'seguimientos' => $seguimientos, 'seguimientosNuevos' => $seguimientosNuevos, 'entity'=>$entity, 'tipo'=>'tutorias')),
+            'success' => true
+            ), 200);
+    }
+
+
 
     ///////////////////////////////////////////
     //               Noticias                //
@@ -877,7 +966,6 @@ class ProfesorController extends Controller
                     $em->persist($aviso);
                 }
             }
-
 
             //Se actualiza la fecha del último acceso a noticias.
             $entity->setAccesoNoticias(new \DateTime("now"));

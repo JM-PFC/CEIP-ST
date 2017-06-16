@@ -10,6 +10,18 @@ seguimiento_new:
     path:     /nuevo
     defaults: { _controller: "IntranetBundle:Seguimiento:new" }
 
+seguimiento_tutoria_new:
+    path:     /tutoria/nueva
+    defaults: { _controller: "IntranetBundle:Seguimiento:newTutoria" }
+    options:
+        expose: true
+
+seguimiento_tutoria_alumno_new:
+    path:     /{id}/tutoria/nueva/
+    defaults: { _controller: "IntranetBundle:Seguimiento:newTutoriaAlumno" }
+    options:
+        expose: true
+
 seguimiento_create:
     path:     /create
     defaults: { _controller: "IntranetBundle:Seguimiento:create" }
@@ -20,6 +32,11 @@ seguimiento_create_respuesta:
     defaults: { _controller: "IntranetBundle:Seguimiento:createRespuesta" }
     requirements: { _method: post }
 
+seguimiento_tutoria_create:
+    path:     /create/tutoria
+    defaults: { _controller: "IntranetBundle:Seguimiento:createTutoria" }
+    requirements: { _method: post }
+    
 seguimiento_edit:
     path:     /{id}/edit
     defaults: { _controller: "IntranetBundle:Seguimiento:edit" }

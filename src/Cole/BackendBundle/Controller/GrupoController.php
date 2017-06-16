@@ -403,7 +403,7 @@ class GrupoController extends Controller
         $num_grupos=$c->getNumGrupos();
 
         // Se obtiene el curso académico actual.
-        if(date("n")>=6){
+        if(date("n")>6){
             $actual=date("Y")." / ".(date("Y")+1);
         }
         else{

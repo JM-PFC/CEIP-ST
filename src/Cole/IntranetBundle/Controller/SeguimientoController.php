@@ -36,7 +36,7 @@ class SeguimientoController extends Controller
      */
     public function createAction(Request $request)
     {        
-        $profesor = $this->get('security.context')->getToken()->getUser();
+        $user = $this->get('security.context')->getToken()->getUser();
 
         $entity = new Seguimiento();
         $form = $this->createCreateForm($entity);
@@ -44,19 +44,40 @@ class SeguimientoController extends Controller
 
         if ($form->isValid()) {
             $em = $this->getDoctrine()->getManager();
-            $entity->setFecha(new \DateTime("now"));
-            $entity->setFechaActualizada(new \DateTime("now"));
-            $entity->setTipo(1);
-            $entity->setTipoUser(1);
-            $entity->setRespuesta(0);
-            $entity->setProfesor($profesor);
-
+            $alumno=$entity->getAlumno();
+                $entity->setFecha(new \DateTime("now"));
+                $entity->setFechaActualizada(new \DateTime("now"));
+                $entity->setTipo(1);
+                $entity->setRespuesta(0);
+            if ($this->get('security.context')->isGranted('ROLE_PROFESOR')) {
+                $entity->setTipoUser(1);
+                $entity->setProfesor($user);
+            }
+            else if ($this->get('security.context')->isGranted('ROLE_USUARIO')){
+                $entity->setTipoUser(0);
+                $entity->setResponsable($user);
+            }
             $em->persist($entity);
             $em->flush();
-            $ms = $this->get('translator')->trans('Nuevo seguimiento creado.');
-            $this->get('session')->getFlashBag()->add('notice',$ms);
 
-            return $this->redirect($this->generateUrl('intranet_profesor_seguimientos'));
+            if($entity->getAsignatura()!=null){
+                $ms = $this->get('translator')->trans('Nuevo seguimiento creado.');
+                $this->get('session')->getFlashBag()->add('notice',$ms);
+                return $this->redirect($this->generateUrl('intranet_profesor_seguimientos'));
+            }
+            else{
+
+                if ($this->get('security.context')->isGranted('ROLE_PROFESOR')) {
+                    $ms = $this->get('translator')->trans('Nueva consulta de tutoría creada.');
+                    $this->get('session')->getFlashBag()->add('notice',$ms);
+                    return $this->redirect($this->generateUrl('intranet_profesor_tutorias'));
+                }
+                else if ($this->get('security.context')->isGranted('ROLE_USUARIO')){
+                    $ms = $this->get('translator')->trans('Se ha creado la nueva consulta de tutoría correctamente. Pronto recibirás respuesta.');
+                    $this->get('session')->getFlashBag()->add('notice',$ms);
+                    return $this->redirect($this->generateUrl('intranet_alumno_tutorias', array('id'=>$alumno->getId())));
+                }
+            }
         }
 
         return $this->render('IntranetBundle:Seguimiento:new.html.twig', array(
@@ -130,11 +151,23 @@ class SeguimientoController extends Controller
             'method' => 'POST',
         ));
         $titulo=$this->get("translator")->trans("Enviar");
-        $form->add('submit', 'submit', array('label' => $titulo));
+         $form->add('submit', 'submit', array('label' => $titulo, 'attr' => array('class' => 'btn btn-success')));
 
         return $form;
     }
+/*
+    private function createCreateFormAlumno(Seguimiento $entity)
+    {
+        $form = $this->createForm(new SeguimientoType(), $entity, array(
+            'action' => $this->generateUrl('seguimiento_tutoria_create'),
+            'method' => 'POST',
+        ));
+        $titulo=$this->get("translator")->trans("Enviar");
+         $form->add('submit', 'submit', array('label' => $titulo, 'attr' => array('class' => 'btn btn-success')));
 
+        return $form;
+    }
+*/
     private function createCreateFormRespuesta(Seguimiento $entity)
     {
         $form = $this->createForm(new SeguimientoType(), $entity, array(
@@ -178,6 +211,44 @@ class SeguimientoController extends Controller
         ));
     }
 
+    public function newTutoriaAction()
+    {
+        $em = $this->getDoctrine()->getManager();
+
+        $entity = $this->get('security.context')->getToken()->getUser();
+        $tutor_grupo= $em->getRepository('BackendBundle:Grupo')->findOneByProfesor($entity);
+
+        $seguimiento = new Seguimiento();
+        $form   = $this->createCreateForm($seguimiento);
+
+        return $this->render('IntranetBundle:Seguimiento:newTutoria.html.twig', array(
+            'entity' => $entity,
+            'seguimiento' => $seguimiento,
+            'tutor_grupo' => $tutor_grupo,
+            'form'   => $form->createView(),
+        ));
+    }
+    //Nueva consulta de tutoria para alumno.
+    public function newTutoriaAlumnoAction($id)
+    {
+        $em = $this->getDoctrine()->getManager();
+
+        $entity = $this->get('security.context')->getToken()->getUser();
+        $alumno=$em->getRepository('BackendBundle:Alumno')->findOneById($id);
+        //Precondicion: el alumno tiene grupo y tutor.
+        $grupo= $alumno->getGrupo();
+        $tutor=$grupo->getProfesor();
+
+        $seguimiento = new Seguimiento();
+        $form   = $this->createCreateForm($seguimiento);
+
+        return $this->render('IntranetBundle:Seguimiento:newTutoria.html.twig', array(
+            'entity' => $entity,
+            'seguimiento' => $seguimiento,
+            'tutor_grupo' => $grupo,
+            'form'   => $form->createView(),
+        ));
+    }
     public function respuestaSeguimientoAction($id)
     {
         $em = $this->getDoctrine()->getManager();
@@ -257,7 +328,7 @@ class SeguimientoController extends Controller
         $em = $this->getDoctrine()->getManager();
 
         $entity = $em->getRepository('IntranetBundle:Seguimiento')->find($id);
-
+        $asignatura=$entity->getAsignatura();
         if (!$entity) {
             throw $this->createNotFoundException('Unable to find Seguimiento entity.');
         }
@@ -267,6 +338,7 @@ class SeguimientoController extends Controller
         return $this->render('IntranetBundle:Seguimiento:eliminarSeguimiento.html.twig', array(
             'entity'      => $entity,
             'delete_form' => $deleteForm->createView(),
+            'asignatura' => $asignatura
         ));
     }
 
@@ -284,7 +356,7 @@ class SeguimientoController extends Controller
             'method' => 'PUT',
         ));
         $titulo=$this->get("translator")->trans("Actualizar");
-        $form->add('submit', 'submit', array('label' => $titulo, 'attr' => array('class' => 'btn btn-danger')));
+        $form->add('submit', 'submit', array('label' => $titulo, 'attr' => array('class' => 'btn btn-success')));
 
         return $form;
     }
@@ -310,9 +382,25 @@ class SeguimientoController extends Controller
             $entity->setFechaActualizada(new \DateTime("now"));
             $em->flush();
 
-            $ms = $this->get('translator')->trans('El seguimiento ha sido actualizado correctamente.');
-            $this->get('session')->getFlashBag()->add('notice',$ms);
-            return $this->redirect($this->generateUrl('intranet_profesor_seguimientos'));
+            if ($this->get('security.context')->isGranted('ROLE_PROFESOR')) {
+                //Se comprueba el tipo de seguimiento que se actualiza.
+                if($entity->getAsignatura()!=null){
+                    $ms = $this->get('translator')->trans('El seguimiento ha sido actualizado correctamente.');
+                    $this->get('session')->getFlashBag()->add('notice',$ms);
+                    return $this->redirect($this->generateUrl('intranet_profesor_seguimientos'));
+                }
+                else{
+                    $ms = $this->get('translator')->trans('La consulta de tutoría ha sido actualizada correctamente.');
+                    $this->get('session')->getFlashBag()->add('notice',$ms);
+                    return $this->redirect($this->generateUrl('intranet_profesor_tutorias'));
+                }
+            }
+            else if ($this->get('security.context')->isGranted('ROLE_USUARIO')){
+                //El alumno sólo puede actualizar consultas de tutorias.
+                $ms = $this->get('translator')->trans('La consulta de tutoría ha sido actualizada correctamente.');
+                $this->get('session')->getFlashBag()->add('notice',$ms);
+                return $this->redirect($this->generateUrl('intranet_alumno_tutorias', array('id' =>$entity->getAlumno()->getId())));
+            }
         }
 
         return $this->render('IntranetBundle:Seguimiento:edit.html.twig', array(
@@ -333,7 +421,8 @@ class SeguimientoController extends Controller
         if ($form->isValid()) {
             $em = $this->getDoctrine()->getManager();
             $entity = $em->getRepository('IntranetBundle:Seguimiento')->find($id);
-
+            //Variable para comprobar luego si es un seguimiento o una consulta de tutoría.
+            $asignatura=$entity->getAsignatura();
             if (!$entity) {
                 throw $this->createNotFoundException('Unable to find Seguimiento entity.');
             }
@@ -344,10 +433,30 @@ class SeguimientoController extends Controller
             }
             $em->remove($entity);
             $em->flush();
+
+
+            if ($this->get('security.context')->isGranted('ROLE_PROFESOR')) {
+                //Se comprueba el tipo de seguimiento que se elimina.
+                if($asignatura!=null){
+                    $ms = $this->get('translator')->trans('El seguimiento ha sido eliminado correctamente.');
+                    $this->get('session')->getFlashBag()->add('notice',$ms);
+                    return $this->redirect($this->generateUrl('intranet_profesor_seguimientos'));
+                }
+                else{
+                    $ms = $this->get('translator')->trans('La consulta de tutoría ha sido eliminada correctamente.');
+                    $this->get('session')->getFlashBag()->add('notice',$ms);
+                    return $this->redirect($this->generateUrl('intranet_profesor_tutorias'));
+                }
+            }
+            else if ($this->get('security.context')->isGranted('ROLE_USUARIO')){
+                //El alumno sólo puede eliminar consultas de tutorias.
+                $ms = $this->get('translator')->trans('La consulta de tutoría ha sido eliminada correctamente.');
+                $this->get('session')->getFlashBag()->add('notice',$ms);
+                return $this->redirect($this->generateUrl('intranet_alumno_tutorias', array('id' =>$entity->getAlumno()->getId())));
+            }
+
+
         }
-        $ms = $this->get('translator')->trans('El seguimiento ha sido eliminado correctamente.');
-        $this->get('session')->getFlashBag()->add('notice',$ms);
-        return $this->redirect($this->generateUrl('intranet_profesor_seguimientos'));
     }
 
     /**

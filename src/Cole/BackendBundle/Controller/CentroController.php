@@ -42,6 +42,7 @@ class CentroController extends Controller
             'h_secretaria' => $centro->getHSecretaria(),
             'h_direccion' => $centro->getHDireccion(),
             'h_estudios' => $centro->getHEstudios(),
+            'h_tutorias' => $centro->getHTutorias(),
         ));
     }
 
@@ -301,8 +302,11 @@ class CentroController extends Controller
         else if($tipo=="direccion"){
             $centro->setHDireccion($horario);
         }
+        else if($tipo=="estudios"){
+            $centro->setHEstudios($horario);
+        }
         else{
-            $centro->setHEstudios($horario);    
+            $centro->setHTutorias($horario);    
         }
         
         $em->persist($centro);

@@ -1,0 +1,192 @@
+{% extends  'IntranetBundle:Alumno:index.html.twig' %}
+
+{% block body %}
+    {{parent()}}
+    <script>
+        $(".menu li").removeClass('active');
+        $(".menu #tutorias").addClass('active');
+        $(".menu #tutorias").addClass('click');
+
+        //Se muestra elementos según la posición de la ventana del navegador.
+        function ComprobarPosicion() {
+
+                
+            if ($(window).width() < 768) {
+                var bottom_of_object = $("#wrapper").offset().top;
+                var bottom_of_window = $(window).scrollTop();
+
+                if( bottom_of_window > bottom_of_object ){
+                    $(".botonsubir a").removeClass('hidden');
+                }
+                else{
+                    $(".botonsubir a").addClass('hidden');
+                }
+            }
+            else  {
+                var bottom_of_object = $("#wrapper").offset().top;
+                var bottom_of_navbar = $(window).scrollTop();
+                    
+                if( bottom_of_navbar >= bottom_of_object ){
+                    if ($(window).width() < 992) {
+                        $(".botonsubir a").removeClass('hidden');
+                    }
+                }
+                else{
+                    if ($(window).width() < 992) {
+                        $(".botonsubir a").addClass('hidden');
+                    }
+                }
+            }
+        }
+        $(window).scroll(function() {
+            //Se muestra diferentes elementos al hacer scroll.
+            ComprobarPosicion();
+        });
+        
+        //Se muestra el botón de subir al cambiar el tamaño de la ventana segun la posición.
+        $(window).resize(function() {
+            ComprobarPosicion();
+        });
+        
+        //Se carga la plantilla de respuesta en la ventana modal para luego mostrarlo correctamente.
+        locale=$("#intranet").attr("locale");
+        id=$("#contenedor_seguimientos .consulta_seguimiento").attr("id");
+        $("#responder_seguimiento_modal .modal-body").load(Routing.generate("respuesta_seguimiento", {id:id, _locale:locale}), function(){
+        }); 
+    </script>
+ {% endblock %}
+
+{% block migas %}
+    <li class="tipo">
+            {% trans %}Alumnado{% endtrans %}
+    </li>
+    <li>
+        <a href="{{path('intranet_alumno', { 'id': entity.id })}}">
+            {% trans %}Panel principal{% endtrans %}
+        </a>
+    </li>
+    <li>
+        <a href="{{ path('intranet_alumno_tutorias', { 'id': entity.id }) }}">
+            {% trans %}Tutorías{% endtrans %}
+        </a>
+    </li>
+    <li class="active no-seleccion">
+        {% trans %}Consulta de Tutoría{% endtrans %}
+    </li>
+{% endblock %}
+
+{% block titulo_cabecera %}
+    <i class="fa fa-users page-header-icon"></i>
+    {% trans %}Tutorías{% endtrans %}
+{% endblock %}
+{% block titulo_cabecera_movil %}
+    <i class="fa fa-users page-header-icon"></i>
+    {% trans %}Tutorías{% endtrans %}
+{% endblock %}
+
+{% block contenido %}
+    <h4 id="titulo-seccion" class="titulo-seccion">{% trans %}Consulta de Tutoría{% endtrans %}.</h4>
+    <div id="contenedor_seguimientos" class="col-xs-12">
+        <div id="{{seguimiento.id}}" class="consulta_seguimiento">
+            <div class="header col-xs-12 clearfix no-padding">
+                <div class="pull-right fecha hidden-xs">
+                    <p>{{ seguimiento.fecha | localizeddate('full', 'none', app.request.getLocale()) | capitalize}}</p>
+                </div>
+                <div>
+                    {% if seguimiento.profesor.sexo == "Masculino" %}
+                        <label for="">{% trans %}Tutor{% endtrans %}:</label>
+                    {% else %}
+                        <label for="">{% trans %}Tutora{% endtrans %}:</label>
+                    {% endif %}
+                    <span>{{seguimiento.profesor}}</span>
+                </div>
+                <div class="hidden-sm hidden-md hidden-lg">
+                    <label for="">{% trans %}Fecha{% endtrans %}: </label>
+                    <span>{{ seguimiento.fecha | localizeddate('full', 'none', app.request.getLocale()) | capitalize}}</span>
+                </div>
+            </div>  
+            <div class="body clearfix">
+                <div class=" label_descripcion col-xs-12 col-sm-offset-2 col-sm-8">
+                {% if seguimiento.tipoUser == 1 %}
+                    <p class="text-center hidden-xs">
+                        <span>{% trans %}Consulta de{% endtrans %}:</span>
+                        <span>{{seguimiento.profesor}}</span>
+                    </p>
+                    <p class=" hidden-sm hidden-md hidden-lg">
+                        <span>{% trans %}Consulta de{% endtrans %}:</span>
+                        <span>{{seguimiento.profesor}}</span>
+                    </p>  
+                {% else %}
+                    <p class="text-center hidden-xs">
+                        <span>{% trans %}Consulta de{% endtrans %}:</span>
+                        <span>{{seguimiento.responsable}}</span>
+                    </p>
+                    <p class=" hidden-sm hidden-md hidden-lg">
+                        <span>{% trans %}Consulta de{% endtrans %}:</span>
+                        <span>{{seguimiento.responsable}}</span>
+                    </p>
+                {% endif %}
+                </div>
+                <div class="col-xs-12">
+                    <p class="descripcion">{{seguimiento.descripcion|nl2br}}</p>
+                </div>  
+            </div>
+            {% for seguimiento in respuestas %}
+                <div class="respuesta">
+                    <header class="hidden-xs">
+                        {% if seguimiento.tipoUser == 1 %}
+                            <i class="fa fa-share color_rojo"></i>
+                        {% else %}
+                            <i class="fa fa-reply color_verde"></i>
+                        {% endif %}
+
+                        {% trans %}Respuesta de{% endtrans %}: 
+                         
+                        {% if seguimiento.tipoUser == 0 %}
+                            <span class="c_naranja">{{seguimiento.responsable}}</span> 
+                        {% else %}
+                            <span class="c_naranja">{{seguimiento.profesor}}</span> 
+                        {% endif %} 
+
+                        <span class="pull-right fecha">{{ seguimiento.fecha | localizeddate('short', 'short', app.request.getLocale())}} </span>
+                    </header>
+                    <header class="hidden-sm hidden-md hidden-lg">
+                        <p><span class="fecha">{{ seguimiento.fecha | localizeddate('short','short', app.request.getLocale())}} </span></p>
+                        {% if seguimiento.tipoUser == 1 %}
+                            <i class="fa fa-share color_rojo pull-left"></i>
+                        {% else %}
+                            <i class="fa fa-reply color_verde pull-left"></i>
+                        {% endif %} 
+                        <p>{% trans %}Respuesta de{% endtrans %}:  </p>         
+                        {% if seguimiento.tipoUser == 0 %}
+                            <span class="c_naranja">{{seguimiento.responsable}}</span> 
+                        {% else %}
+                            <span class="c_naranja">{{seguimiento.profesor}}</span> 
+                        {% endif %}               
+                    </header>
+                    <div>
+                        <p class="descripcion">{{seguimiento.descripcion|nl2br}}</p>
+                    </div> 
+                </div>
+            {% endfor %}
+            </div>
+        </div>
+        <a id="btn_responder" class="btn_responder btn btn_azul" data-target="#responder_seguimiento_modal" data-toggle="modal" data-backdrop="static" data-keyboard="false">{% trans %}Responder{% endtrans %}</a>
+        <div class="col-xs-3 col-sm-3 visible-xs visible-sm botonsubir">
+            <a class="go-top btn btn-default  hidden" href="#">
+                <i class="fa fa-arrow-up"></i>{% trans %}Subir{% endtrans %}
+            </a>
+        </div>
+    <!-- Ventana modal de respuesta del seguimiento -->
+    <div id="responder_seguimiento_modal" class="modal fade aviso" role="dialog" data-backdrop="true" >
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    <h4 class="modal-title">{% trans %}Respuesta del Seguimiento{% endtrans %}</h4>
+                </div>
+                <div class="modal-body"></div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

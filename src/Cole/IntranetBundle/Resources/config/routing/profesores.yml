@@ -122,6 +122,36 @@ intranet_profesor_reserva_delete:
     options:
         expose: true
 
+intranet_profesor_tutorias:
+    path:     /tutorias
+    defaults: { _controller: IntranetBundle:Profesor:tutorias}
+    options:
+        expose: true
+
+intranet_profesor_seguimiento_tutoria:
+    path:     /{num}/tutoria/
+    defaults: { _controller: IntranetBundle:Profesor:seguimientoTutoria}
+    options:
+        expose: true
+
+cargar_seguimientos_tutoria_profesor:
+    path:     /cargar_seguimientos_tutoria/{id}
+    defaults: { _controller: IntranetBundle:Profesor:CargarSeguimientosTutoria}
+    options:
+        expose: true
+
+cargar_nuevos_seguimientos_tutoria_profesor:
+    path:     /cargar_nuevos_seguimientos_tutoria/{fecha}
+    defaults: { _controller: IntranetBundle:Profesor:CargarNuevosSeguimientosTutoria}
+    options:
+        expose: true
+
+nuevas_tutorias_profesor:
+    path:     /{id}/nuevas_tutorias
+    defaults: { _controller: IntranetBundle:Profesor:comprobarTutoriasNuevas}
+    options:
+        expose: true
+
 intranet_profesor_noticias:
     path:     /noticias
     defaults: { _controller: IntranetBundle:Profesor:noticias}

@@ -1,0 +1,20 @@
+{% extends '::base.html.twig' %}         
+
+{% block body -%}
+    {{ form_start (form, {'method':'Post','attr':{'id':'turotias_new', 'data-toggle':"validator", 'role':"form" ,'novalidate':'novalidate', 'autocomplete':'off'}})}}
+    <div class="form-group has-feedback">
+
+        <label for="seguimiento_descripcion">{% trans %}Descripción{% endtrans %}</label>
+        {{ form_widget(form.descripcion) }}
+        <div class="class-footer">
+            <button class="btn btn_azul" type="button" data-dismiss="modal" title="">{% trans %}Cancelar{% endtrans %}</button>
+            {{ form_widget(form.submit,{'attr':{'class': 'btn btn-success disabled' }}) }}
+        </div>
+        <div class="hidden">
+            {{ form_rest(form) }}
+        </div>
+    </div>
+    {{ form_end (form)}}
+
+{% endblock %}
+

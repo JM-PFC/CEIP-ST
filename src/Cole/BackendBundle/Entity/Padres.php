@@ -184,6 +184,11 @@ class Padres implements UserInterface, \Serializable
     */
     private $seguimiento;
 
+    /**
+    * @ORM\OneToMany(targetEntity="Cole\IntranetBundle\Entity\Tutorias", mappedBy="responsable", cascade={"remove"})
+    */
+    private $tutorias;
+
     public function __construct()
     {
         $this->activo = true;
@@ -625,5 +630,38 @@ class Padres implements UserInterface, \Serializable
     public function getSeguimiento()
     {
         return $this->seguimiento;
+    }
+
+    /**
+     * Add tutorias
+     *
+     * @param \Cole\IntranetBundle\Entity\Tutorias $tutorias
+     * @return Padres
+     */
+    public function addTutoria(\Cole\IntranetBundle\Entity\Tutorias $tutorias)
+    {
+        $this->tutorias[] = $tutorias;
+
+        return $this;
+    }
+
+    /**
+     * Remove tutorias
+     *
+     * @param \Cole\IntranetBundle\Entity\Tutorias $tutorias
+     */
+    public function removeTutoria(\Cole\IntranetBundle\Entity\Tutorias $tutorias)
+    {
+        $this->tutorias->removeElement($tutorias);
+    }
+
+    /**
+     * Get tutorias
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getTutorias()
+    {
+        return $this->tutorias;
     }
 }

@@ -6,24 +6,6 @@
         $(".menu li").removeClass('active');
         $(".menu #seguimiento").addClass('active');
 
-
-        //Se marca las noticias privadas nuevas sin leer.
-
-        /*
-        //-->>>>>>>>>>>>>>>>>>>>>obtener seguimientos nuevos como noticias nuevas que he tenido que borrar porque daba error
-
-        for (var key in array){
-            id=key;//Id de las noticias nuevas.
-
-            //Se marca las noticias nuevas en la lista de noticias desde el pc o tablet.
-            $("article[id='"+id+"'] h2").append('<i class="fa nueva_noticia"><span>{% trans %}Nueva{% endtrans %}</span></i>');
-            //Se marca las noticias nuevas enla lista de noticias desde el móvil.
-            $(".contenedor_noticia_movil>div[id='"+id+"'] .fa-bookmark-o").addClass('fa-bookmark');
-            $(".contenedor_noticia_movil>div[id='"+id+"'] .fa-bookmark-o").removeClass('fa-bookmark-o');
-        }
-
-        */
-
         //Se muestra elementos según la posición de la ventana del navegador.
         function ComprobarPosicion() {
                 
@@ -166,10 +148,15 @@
                             <p><span class="c_naranja">{{seguimiento.profesor}}</span></p>
                         </div>
                     </div>
+                    {% if seguimiento.respuesta == 0 %}
+                    <div class="aviso hidden-xs">
+                        <p  class="pull-right">{% trans %}Nuevo{% endtrans %}</p>
+                    </div>
+                    {% else %}
                     <div class="aviso hidden-xs">
                         <p  class="pull-right">{% trans %}Actualizado{% endtrans %}</p>
                     </div>
-                </div>             
+                    {% endif %}                </div>             
                 <div class="body clearfix">
                     <div class="fecha">
 

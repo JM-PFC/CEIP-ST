@@ -141,6 +141,12 @@ class Centro
      */
     private $h_estudios;
 
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="h_tutorias", type="string", length=255, nullable=true)
+     */
+    private $h_tutorias;
 
     /**
      * Get id
@@ -497,5 +503,28 @@ class Centro
     public function getHEstudios()
     {
         return $this->h_estudios;
+    }
+
+    /**
+     * Set h_tutorias
+     *
+     * @param string $hTutorias
+     * @return Centro
+     */
+    public function setHTutorias($hTutorias)
+    {
+        $this->h_tutorias = $hTutorias;
+
+        return $this;
+    }
+
+    /**
+     * Get h_tutorias
+     *
+     * @return string 
+     */
+    public function getHTutorias()
+    {
+        return $this->h_tutorias;
     }
 }

@@ -12,6 +12,7 @@
   h_secretaria={{h_secretaria|json_encode()|raw}};
   h_direccion={{h_direccion|json_encode()|raw}};
   h_estudios={{h_estudios|json_encode()|raw}};
+  h_tutorias={{h_tutorias|json_encode()|raw}};
 
   function reemplazarDatos(array) {
     array=array.replace("L","Lunes");
@@ -47,7 +48,7 @@
     }
   }
 
-  if(h_secretaria==""){
+  if(h_secretaria=="" || h_secretaria==null){
     $("#horarios_atencion_dialog #secretaria #show div[id*='hora_']>div").append('<span  class="no_horario">Actualmente no existe ningún horario de contacto establecido.</span');
   }
   else if(h_secretaria.indexOf("*")>0){
@@ -60,7 +61,7 @@
     actualizarContenido(h_secretaria,$("#horarios_atencion_dialog #secretaria"));
   }
 
-  if(h_direccion==""){
+  if(h_direccion=="" || h_direccion==null){
     $("#horarios_atencion_dialog #direccion #show div[id*='hora_']>div").append('<span class="no_horario">Actualmente no existe ningún horario de contacto establecido.</span');
   }
   else if(h_direccion.indexOf("*")>0){
@@ -73,8 +74,8 @@
     actualizarContenido(h_direccion,$("#horarios_atencion_dialog #direccion"));
   }
 
-  if(h_estudios==""){
-    $("#horarios_atencion_dialog #direccion #show div[id*='hora_']>div").append('<span class="no_horario">Actualmente no existe ningún horario de contacto establecido.</span');
+  if(h_estudios=="" || h_estudios==null){
+    $("#horarios_atencion_dialog #estudios #show div[id*='hora_']>div").append('<span class="no_horario">Actualmente no existe ningún horario de contacto establecido.</span');
   }
   else if(h_estudios.indexOf("*")>0){
     arr=h_estudios.split("*");
@@ -86,10 +87,23 @@
     actualizarContenido(h_estudios,$("#horarios_atencion_dialog #estudios"));
   }
 
+  if(h_tutorias=="" || h_tutorias==null){
+    $("#horarios_atencion_dialog #tutorias #show div[id*='hora_']>div").append('<span class="no_horario">Actualmente no existe ningún horario de contacto establecido.</span');
+  }
+  else if(h_tutorias.indexOf("*")>0){
+    arr=h_tutorias.split("*");
+    for (var i = 0; i<arr.length; i++) {
+      actualizarContenido(arr[i],$("#horarios_atencion_dialog #tutorias"));
+    }
+  }
+  else{
+    actualizarContenido(h_tutorias,$("#horarios_atencion_dialog #tutorias"));
+  }
 
   $("#horario_centro_dialog  #aviso_error").hide();
-
-  $("#horarios_atencion_dialog #hora_inicio").timepicki({
+  
+  //Válido para todos los horarios menos para tutorias.
+  $("#horarios_atencion_dialog .container_add[id!='tutorias'] #hora_inicio").timepicki({
     show_meridian:false,
     min_hour_value:9,
     max_hour_value:14,
@@ -100,10 +114,37 @@
     disable_keyboard_mobile: true
   });
 
-  $("#horarios_atencion_dialog #hora_fin").timepicki({
+  $("#horarios_atencion_dialog .container_add[id!='tutorias'] #hora_fin").timepicki({
     show_meridian:false,
     min_hour_value:9,
     max_hour_value:14,
+    step_size_minutes:15,
+    overflow_minutes:true,
+    increase_direction:'up',
+    start_time: ["10", "00"],
+    disable_keyboard_mobile: true
+  });
+    //Se obtiene los dígitos de la hora y minutos de la hora final para asignarsela al timepicki de tutorias.  
+    fin=h_fin.split(":");
+    hora_max=parseInt(fin[0])-1;
+    hora_fin=("0" + hora_max).slice(-2);
+
+  //Válido solo para los horarios de tutorías.  
+  $("#horarios_atencion_dialog .container_add[id='tutorias'] #hora_inicio").timepicki({
+    show_meridian:false,
+    min_hour_value:8,
+    max_hour_value:hora_fin,
+    step_size_minutes:15,
+    overflow_minutes:true,
+    increase_direction:'up',
+    start_time: ["10", "00"],
+    disable_keyboard_mobile: true
+  });
+
+  $("#horarios_atencion_dialog .container_add[id='tutorias'] #hora_fin").timepicki({
+    show_meridian:false,
+    min_hour_value:9,
+    max_hour_value:hora_fin,
     step_size_minutes:15,
     overflow_minutes:true,
     increase_direction:'up',
@@ -160,8 +201,8 @@
   //Se elimina el arrow_top que trae por defecto.
   $("#horarios_atencion_dialog #cont_simple  .arrow_top" ).remove();    
 
-  //Se establece por defecto el valor inicial del input al hacer click en la botón.
-  $(document).on("click","#horarios_atencion_dialog .prev",function(event){
+  //Se establece por defecto el valor inicial del input al hacer click en la botón. (Todos menos tutorias)
+  $(document).on("click","#horarios_atencion_dialog .container_add[id!='tutorias'] .prev",function(event){
     event.preventDefault();
     if($(this).next().find("input").val()=="01" && $(this).parent().attr("class")=="time"){
       valor=0;
@@ -171,6 +212,15 @@
       else{
         valor="12";
       }
+      $(this).next().find("input").val(valor);
+    }
+  });
+
+    //Se establece por defecto el valor inicial del input al hacer click en la botón. (Sólo tutorias)
+  $(document).on("click","#horarios_atencion_dialog .container_add[id='tutorias'] .prev",function(event){
+    event.preventDefault();
+    if($(this).next().find("input").val()=="01" && $(this).parent().attr("class")=="time"){
+      valor="16";
       $(this).next().find("input").val(valor);
     }
   });
@@ -258,7 +308,7 @@
   function comprobarDatos(div) {
     //Seleccion - simple
     if(!$(div).find("#seleccion").hasClass('oculto') && !$(div).find(" #cont_simple").hasClass('oculto')){
-      if($(div).find("#hora_inicio").val()!="" && $(div).find("#hora_fin").val()!="" && $(div).find("#tipo input:checkbox:checked").length > 0 && $(div).find("#list_added>span").length<4){
+      if($(div).find("#hora_inicio").val()!="" && $(div).find("#hora_fin").val()!="" && $(div).find("#tipo input:checked").length > 0 && $(div).find("#list_added>span").length<4){
           $(div).find("#add").removeClass('disab');
       }
       else{
@@ -266,7 +316,7 @@
       }
     } //Seleccion - multiple
     else if(!$(div).find("#seleccion").hasClass('oculto') && $(div).find("#cont_simple").hasClass('oculto')){
-      if($(div).find("#hora_ini_1").val()!="" && $(div).find("#hora_fin_1").val()!="" && $(div).find("#hora_ini_2").val()!="" && $(div).find("#hora_fin_2").val()!="" && $(div).find("#tipo input:checkbox:checked").length > 0 && $(div).find("#list_added>span").length<4){
+      if($(div).find("#hora_ini_1").val()!="" && $(div).find("#hora_fin_1").val()!="" && $(div).find("#hora_ini_2").val()!="" && $(div).find("#hora_fin_2").val()!="" && $(div).find("#tipo input:checked").length > 0 && $(div).find("#list_added>span").length<4){
           $(div).find("#add").removeClass('disab');
       }
       else{
@@ -329,8 +379,8 @@
     //Seleccion - simple
     if(!$(div).find("#seleccion").hasClass('oculto') && !$(div).find("#cont_simple").hasClass('oculto')){
       //Se añade los días al horario.
-      if($(div).find("#tipo input:checkbox:checked").length<5){
-        $(div).find("#tipo input:checkbox:checked").each(function() {
+      if($(div).find("#tipo input:checked").length<5){
+        $(div).find("#tipo input:checked").each(function() {
           horario+=$(this).val()+",";
         });
         horario=horario.substring(0,horario.length-1);
@@ -351,8 +401,8 @@
     else if(!$(div).find("#seleccion").hasClass('oculto') && $(div).find("#cont_simple").hasClass('oculto')){
 
       //Se añade los días al horario.
-      if($(div).find("#tipo input:checkbox:checked").length<5){
-        $(div).find("#tipo input:checkbox:checked").each(function() {
+      if($(div).find("#tipo input:checked").length<5){
+        $(div).find("#tipo input:checked").each(function() {
           horario+=$(this).val()+",";
         });
         horario=horario.substring(0,horario.length-1);
@@ -409,9 +459,6 @@
 
     }
   }
-
-
-
   
   $(document).on("mouseover","#horarios_atencion_dialog #arrow_next", function () {
     $("#horarios_atencion_dialog #arrow_next").addClass("oculto");
@@ -853,6 +900,89 @@
                           <label>Fin</label>                     
                         </div>
                       </div> 
+                    </div>
+                  </div>
+                  <div id="add" class="disab">
+                    <span>
+                      <img src="{{ asset('bundles/backend/images/menu/flecha_w.png')}}"> 
+                      Añadir
+                      <img src="{{ asset('bundles/backend/images/menu/flecha_w.png')}}">
+                    </span>
+                  </div>
+                  <div class="container_save">
+                    <div id="list_added">
+                      <span class="title">Horarios seleccionados</span>
+                      <p class="vacio oculto">No existe ningún horario</p>
+                    </div>
+                  </div>
+                 </div>  
+                </div>
+                <div id="horarios_atencion_show">
+                  <button class="nuevo">Nuevo</button>
+                  <button class="eliminar" >Eliminar</button>
+                </div>
+                <div id="horarios_atencion_save" class="oculto">
+                  <button class="guardar" disabled="disabled">Guardar</button>
+                  <button class="volver">Volver</button>
+                </div>
+              </div>
+              <div id="4" class="colum" style="display: none;">
+                <div id="tutorias" class="container_add">
+                  <p>Tutorias</p>
+                  <div id="show">
+                    <div>
+                      <h4>Horario de Atención</h4>
+                      <div id="hora_tutorias"> 
+                        <div class="container"></div>
+                      </div>
+                      <div class="block_insert">
+                        <ul>
+                          <li>Pulse sobre<button class="btn_info">Nuevo</button>para <span>añadir</span> un nuevo horario.</li>
+                          <li>Pulse sobre<button class="btn_info">Eliminar</button>para <span>eliminar</span> el horario actual.</li>
+                        </ul>            
+                      </div>
+                    </div>
+                  </div>
+                  
+                  <div id="edit" class="oculto">
+                   <div id="dias">
+                    <h3>1. Seleccione días de la semana.</h3>
+                    <div id="tipo">
+                      <div id="seleccion">
+                        <div class="checkbox">
+                          <label><input type="radio" name="dia" value="L"> L</label>
+                        </div>
+                        <div class="checkbox">
+                          <label><input type="radio" name="dia" value="M"> M</label>
+                        </div>
+                        <div class="checkbox">
+                          <label><input type="radio" name="dia" value="X"> X</label>
+                        </div>
+                        <div class="checkbox">
+                          <label><input type="radio" name="dia" value="J"> J</label>
+                        </div>
+                        <div class="checkbox">
+                          <label><input type="radio" name="dia" value="V"> V</label>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div id="horas">
+                    <h3>2. Seleccione el rango de horas.</h3>
+                    <div id="contenido">
+                      <div id="cont_simple">
+                        <div id="inicio"class="timepicki_colum">
+                          <input id="hora_inicio" class="oculto"></input>
+                        </div>
+                        <div class="guion">-</div>
+                        <div id="fin" class="timepicki_colum">
+                          <input id="hora_fin" class="oculto"></input>
+                        </div>
+                        <div class="label">
+                          <label>Inicio</label>
+                          <label>Fin</label>                     
+                        </div>
+                      </div>
                     </div>
                   </div>
                   <div id="add" class="disab">

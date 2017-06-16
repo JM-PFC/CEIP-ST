@@ -1,4 +1,4 @@
-
+    {% if tipo == "seguimientos" %}
             {% for seguimiento in seguimientosNuevos %}
             <div id="{{seguimiento.id}}" class="seguimiento" fecha="{{seguimiento.fechaActualizada | date('Y-m-d H:i:s')}}">
                 <div class="header col-xs-12 clearfix no-padding">
@@ -141,3 +141,146 @@
                 </div>
             </div>
           {% endfor %}
+    {% else %}
+
+            {% for seguimiento in seguimientosNuevos %}
+            <div id="{{seguimiento.id}}" class="seguimiento" fecha="{{seguimiento.fechaActualizada | date('Y-m-d H:i:s')}}">
+    <div class="header col-xs-12 clearfix no-padding">
+                                <div class="icono">
+                                    <i class="fa  fa-weixin c_naranja"></i>
+                                </div>
+
+                                <div class="nombre col-xs-12">
+                                    <div>
+                                        <p class="fw_bold ">{{seguimiento.alumno}}</p>
+                                    </div>
+                                </div>
+                                {% if seguimiento.respuesta == 0 %}
+                                <div class="aviso hidden-xs">
+                                    <p  class="pull-right">{% trans %}Nueva{% endtrans %}</p>
+                                </div>
+                                {% else %}
+                                <div class="aviso hidden-xs">
+                                    <p  class="pull-right">{% trans %}Actualizada{% endtrans %}</p>
+                                </div>
+                                {% endif %}
+                            </div>             
+                            <div class="body clearfix">
+                                <div class="fecha">
+                                    <p  class=" pull-right">{{ seguimiento.fecha | localizeddate('long', 'none', app.request.getLocale()) | capitalize}}</p>
+                                </div>
+                                <div>
+                                    <p class="descripcion">{{seguimiento.descripcion|nl2br }}</p>
+                                    <div class="botones_seguimiento margin_btn">
+                                        <div>
+                                        {% if seguimiento.respuesta %}
+                                            <a id="consultar" href="{{path('intranet_profesor_seguimiento_tutoria', {'num': seguimiento.id}) }}" class="btn btn_azul">
+                                                <i class="fa fa-search"></i>
+                                                {% trans %}Consultar{% endtrans %}
+                                            </a>
+                                        {% else %}
+                                            <a id="consultar" href="{{path('intranet_profesor_seguimiento_tutoria', {'num': seguimiento.id}) }}" class="btn btn_azul">
+                                                <i class="fa  fa-pencil-square-o"></i>
+                                                {% trans %}Responder{% endtrans %}
+                                            </a>
+                                        {% endif %}
+                            
+                                        <span id="edicion" class="pull-right hidden-xs visible-sm visible-md visible-lg">
+                                            
+                                            {% if not seguimiento.respuesta and seguimiento.tipoUser == 1 %}
+                                                <a id="btn_editar" href="#" class="btn btn_gris" data-target="#editar_tutoria_modal" data-toggle="modal" data-backdrop="static" data-keyboard="false">
+                                                    <i class="fa fa-pencil"></i>{% trans %}Editar{% endtrans %}
+                                                </a>
+                                            {% endif %}
+                                            {% if seguimiento.tipoUser == 1 %}
+                                                <a id="btn_eliminar" href="" class="btn btn_gris" data-target="#eliminar_tutoria_modal" data-toggle="modal" data-backdrop="static" data-keyboard="false">
+                                                    <i class="fa fa-trash-o"></i>{% trans %}Eliminar{% endtrans %}
+                                                </a>
+                                            {% endif %}
+                                        </span>
+                                        <span id="edicion" class="pull-right visible-xs hidden-sm hidden-md hidden-lg">
+                                            {% if not seguimiento.respuesta and seguimiento.tipoUser == 1 %}
+                                                <a id="btn_editar" href="#" class="btn btn_gris" data-target="#editar_tutoria_modal" data-toggle="modal" data-backdrop="static" data-keyboard="false">
+                                                    <i class="fa fa-pencil"></i>
+                                                </a>
+                                            {% endif %}
+                                            {% if seguimiento.tipoUser == 1 %}
+                                                <a id="btn_eliminar" href="" class="btn btn_gris" data-target="#eliminar_tutoria_modal" data-toggle="modal" data-backdrop="static" data-keyboard="false">
+                                                    <i class="fa fa-trash-o"></i>
+                                                </a>
+                                            {% endif %}
+                                        </span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+          {% endfor %}
+
+            {% for seguimiento in seguimientos %}
+           <div id="{{seguimiento.id}}" class="seguimiento">
+                <div class="header col-xs-12 clearfix no-padding">
+
+                        <div class="icono">
+                            <i class="fa  fa-weixin"></i>
+                        </div>
+
+                    <div class="nombre col-xs-12">
+                        <div>
+                            <p class="fw_bold ">{{seguimiento.alumno}}</p>
+                        </div>
+                    </div>
+                </div>             
+                <div class="body clearfix">
+                    <div class="fecha">
+                        <p  class=" pull-right">{{ seguimiento.fecha | localizeddate('long', 'none', app.request.getLocale()) | capitalize}}</p>
+                    </div>
+                    <div>
+                        <p class="descripcion">{{seguimiento.descripcion|nl2br }}</p>
+                        <div class="botones_seguimiento margin_btn">
+                            <div>
+                            {% if seguimiento.respuesta %}
+                                <a id="consultar" href="{{path('intranet_profesor_seguimiento_tutoria', {'num': seguimiento.id}) }}" class="btn btn_azul">
+                                    <i class="fa fa-search"></i>
+                                    {% trans %}Consultar{% endtrans %}
+                                </a>
+                            {% else %}
+                                <a id="consultar" href="{{path('intranet_profesor_seguimiento_tutoria', {'num': seguimiento.id}) }}" class="btn btn_azul">
+                                    <i class="fa  fa-pencil-square-o"></i>
+                                    {% trans %}Responder{% endtrans %}
+                                </a>
+                            {% endif %}
+
+                            <span id="edicion" class="pull-right hidden-xs visible-sm visible-md visible-lg">
+                                {% if not seguimiento.respuesta  and seguimiento.tipoUser == 1 %}
+                                    <a id="btn_editar" href="#" class="btn btn_gris" data-target="#editar_tutoria_modal" data-toggle="modal" data-backdrop="static" data-keyboard="false">
+                                        <i class="fa fa-pencil"></i>{% trans %}Editar{% endtrans %}
+                                    </a>
+                                {% endif %}
+                                {% if seguimiento.tipoUser == 1 %}
+                                    <a id="btn_eliminar" href="" class="btn btn_gris" data-target="#eliminar_tutoria_modal" data-toggle="modal" data-backdrop="static" data-keyboard="false">
+                                        <i class="fa fa-trash-o"></i>{% trans %}Eliminar{% endtrans %}
+                                    </a>
+                                {% endif %}
+                            </span>
+                            <span id="edicion" class="pull-right visible-xs hidden-sm hidden-md hidden-lg">
+                                {% if not seguimiento.respuesta and seguimiento.tipoUser == 1 %}
+                                    <a id="btn_editar" href="#" class="btn btn_gris" data-target="#editar_tutoria_modal" data-toggle="modal" data-backdrop="static" data-keyboard="false">
+                                        <i class="fa fa-pencil"></i>
+                                    </a>
+                                {% endif %}
+                                {% if seguimiento.tipoUser == 1 %}
+                                    <a id="btn_eliminar" href="" class="btn btn_gris" data-target="#eliminar_tutoria_modal" data-toggle="modal" data-backdrop="static" data-keyboard="false">
+                                        <i class="fa fa-trash-o"></i>
+                                    </a>
+                                {% endif %}
+                            </span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                </div>
+            </div>
+          {% endfor %}
+
+    {% endif %}

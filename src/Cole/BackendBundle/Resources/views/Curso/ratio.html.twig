@@ -11,7 +11,7 @@
             range: "min",
             value: $(this).closest("td").prev().find("input").val(),
             step: 1,
-            min: 15,
+            min: 1,
             max: 35,
             slide: function (event, ui) {
                 // Se establece el valor del slider al input correspondiente de la file.
@@ -66,9 +66,9 @@
     $( "#registro_ratio .block_insert #slider1" ).each(function() {
         $(this).empty().slider({
             range: "min",
-            value: 15,
+            value: 10,
             step: 1,
-            min: 15,
+            min: 1,
             max: 35,
             slide: function (event, ui) {
                 $(this).next("input").val(ui.value);
@@ -114,9 +114,9 @@
     $( "#registro_ratio .block_insert #slider2" ).each(function() {
         $(this).empty().slider({
             range: "min",
-            value: 15,
+            value: 10,
             step: 1,
-            min: 15,
+            min: 1,
             max: 35,
             slide: function (event, ui) {
                 $(this).next("input").val(ui.value);
@@ -157,9 +157,9 @@
     $( "#registro_ratio .block_insert #slider3" ).each(function() {
         $(this).empty().slider({
             range: "min",
-            value: 15,
+            value: 10,
             step: 1,
-            min: 15,
+            min: 1,
             max: 35,
             slide: function (event, ui) {
                 $(this).next("input").val(ui.value);
@@ -196,7 +196,19 @@
             }
         });
     });
+    //Obtenemos el número de alumnos máximos que hay en cada curso.
+    $.ajax({
+        type: 'POST',
+        url: Routing.generate('obtener_ratio_max'),
+        success: function(response) {
 
+            // Se añade el número de alumnos máximos asignados en los cursos.
+            for (var key in response.ratio) {
+                $("#contenedor_ratio_grupos tr[id='"+key+"']").attr("ratio",response.ratio[key]);
+            }
+
+        }
+    })
     </script>
 {% endblock %}
 
@@ -252,7 +264,7 @@
                 <div class="inner_table">
                     <table id="lista_color">
                     {% for entity in entities %}
-                        <tr>
+                        <tr id="{{ entity.id }}">
                             <td>{{ entity.curso }}</td>
                             <td class="{{ entity.nivel }}">{{ entity.nivel }}</td>
                             <td>

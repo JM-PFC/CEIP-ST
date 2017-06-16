@@ -59,7 +59,7 @@ Comunicación: Communication
 Asistencia: Assistance
 Calificaciones: Score
 Expediente: Case file
-Tutorias: Tutorials
+Tutorías: Tutorials
 Noticias: News
 Cursos impartidos: Courses taught
 Horario de clases: Class schedule
@@ -121,7 +121,8 @@ Ver info: See info
 Contactar: Contact
 Noticias Nuevas: New news
 Mensajes de correo sin leer: Unread mail
-Avisos de seguimiento sin leer: Unread Tracking Warnings
+Avisos de seguimiento sin leer: Unread Tracking
+Avisos de tutorias sin leer: Unread Tutorials
 Área de Administración: Administration area
 Acceder al área del alumno : Access the student area
 Nueva: New
@@ -147,6 +148,7 @@ No hay ningún seguimiento: There is no follow-up
 No has realizado ningún seguimiento de alumno o grupo. Puedes realizar en cualquier momento un seguimiento pulsando en la opción "añadir nuevo seguimiento" en la parte superior: You have not followed a student or group. You can make a follow-up at any time by clicking on the "add new tracking" option at the top
 No se ha realizado ningún seguimiento del alumno o grupo. Cuando tenga un nuevo seguimiento se le notificará en los avisos de la barra superior: There was no follow-up of the student or group. When you have a new follow up you will be notified in the announcements of the top bar
 Actualizado: Updated
+Actualizada: Updated
 Nuevo Seguimiento: New Tracking
 Nuevo seguimiento creado.: New tracking created.
 Consulta de Seguimiento: Follow-up Consultation
@@ -193,4 +195,42 @@ Seleccione los módulos: Select modules
 Se han realizado %$contador% reservas correctamente.: %$contador% reservations have been recorded correctly.
 Eliminación de la Reserva: Elimination of the Reserve
 La reserva ha sido eliminada correctamente.: The reservation has been successfully deleted.
-Se va a eliminar la reserva del sistema y no se podrá recuperar:The system reservation is to be deleted and can not be recovered
+Se va a eliminar la reserva del sistema y no se podrá recuperar: The system reservation is to be deleted and can not be recovered
+Tutorías presenciales: Face-to-face tutorials
+Tutorías electrónicas: Electronic Tutorials
+Ed. Primaria: Primary Ed.
+Ed. Infantil: Child Ed.
+Aula: Classroom
+Asignar Tutoría: Assign Tutoring
+Horario de tutorías: Tutoring Schedule
+Pulse para ver más información: Click to see more information
+No tienes ninguna tutoría asignada: You do not have any assigned tutoring
+No tienes ninguna consulta de tutoría iniciada en este momento: You do not have any tutoring started right now
+Consulta de Tutoría: Tutorial consultation
+Próxima tutoría presencial: Next face-to-face tutoring
+El grupo del alumno aún no tiene tutor asignado: The student group does not yet have an assigned tutor
+Por favor espere a que se le asigne un tutor al grupo para poder usar esta herramienta: Please wait for a group tutor to be able to use this tool
+Lunes: Monday
+Martes: Tuesday
+Miércoles: Wednesday
+Jueves: Thursday
+Viernes: Friday
+Consultas activas: Consultations started
+Consultas finalizadas: Consultations completed
+Consulta de: Consulted by
+Eliminación de la consulta de tutoría: Removal of the tutorial consultation
+Edición de la consulta de tutoría: Editing the tutorial consultation
+Nueva consulta de tutoría: New tutoring consultation
+Seleccione un alumno de su grupo: Select a student from your group
+Indique la consulta para los responsables del alumno: Indicate the consultation for the students responsible
+Nº de clase: Class number
+Apellidos, Nombre: Surname, Name
+Consulta de tutorias Nuevas: New tutorials consultation
+Nuevos mensajes de correo: New mail messages
+La consulta de tutoría ha sido actualizada correctamente.: The tutorial consultation has been updated correctly.
+La consulta de tutoría ha sido eliminada correctamente.: The tutorial consultation has been successfully deleted.
+Se va a eliminar la consulta de tutoría del sistema y no se podrá recuperar: The system tutorial will be deleted and can not be recovered
+Indique el motivo de su consulta y el tutor le responderá en cuanto le sea posible: Indicate the reason for your query and the tutor the responder as soon as possible
+Indique el motivo de su consulta y la tutora le responderá en cuanto le sea posible: Indicate the reason for your query and the tutor the responder as soon as possible
+Nueva consulta de tutoría creada.: New tutoring consultation created.
+Se ha creado la nueva consulta de tutoría correctamente. Pronto recibirás respuesta.: The new tutorial query has been created successfully. You will receive a response soon.

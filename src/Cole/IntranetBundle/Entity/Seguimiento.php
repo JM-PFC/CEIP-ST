@@ -55,7 +55,7 @@ class Seguimiento
         /**
      * @var \DateTime
      *
-     * @ORM\Column(name="fecha_actualizada", type="datetime")
+     * @ORM\Column(name="fecha_actualizada", type="datetime" , nullable=true)
      */
     private $fechaActualizada;
 
@@ -107,6 +107,11 @@ class Seguimiento
      * @ORM\JoinColumn(name="responsable_id", referencedColumnName="id", nullable=true)
      */
     private $responsable;
+
+    /**
+     * @ORM\OneToOne(targetEntity="Tutorias", mappedBy="seguimiento")
+     */
+    private $tutoria;
 
     /**
      * Get id
@@ -439,4 +444,27 @@ class Seguimiento
 
 
 
+
+    /**
+     * Set tutoria
+     *
+     * @param \Cole\IntranetBundle\Entity\Tutorias $tutoria
+     * @return Seguimiento
+     */
+    public function setTutoria(\Cole\IntranetBundle\Entity\Tutorias $tutoria = null)
+    {
+        $this->tutoria = $tutoria;
+
+        return $this;
+    }
+
+    /**
+     * Get tutoria
+     *
+     * @return \Cole\IntranetBundle\Entity\Tutorias 
+     */
+    public function getTutoria()
+    {
+        return $this->tutoria;
+    }
 }

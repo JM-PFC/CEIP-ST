@@ -49,6 +49,7 @@ class AlumnoController extends Controller
             'id'=>$entity->getId()));
     }
 
+
     private function createEditAlumnoForm(Alumno $entity)
     {
         $form = $this->createForm(new AlumnoIntranetType(), $entity, array(
@@ -99,6 +100,7 @@ class AlumnoController extends Controller
 
     public function DatosPersonalesAction(Request $request, $id)
     {
+        $this->comprobarHijo($id);
         $em = $this->getDoctrine()->getManager();
 
         $entity = $em->getRepository('BackendBundle:Alumno')->find($id);
@@ -128,10 +130,13 @@ class AlumnoController extends Controller
         ));
     }
 
+    ///////////////////////////////////////////
+    //             Cursos actual             //
+    ///////////////////////////////////////////
+
     public function cursoAction($id)
     {
         $this->comprobarHijo($id);
-
         $em = $this->getDoctrine()->getManager();
 
         $entity= $em->getRepository('BackendBundle:Alumno')->findOneById($id);
@@ -187,6 +192,7 @@ class AlumnoController extends Controller
 
     public function HorariosGruposAction($id, $id_alumno,$num)
     {
+        $this->comprobarHijo($id);
         $em = $this->getDoctrine()->getManager();
         $grupo = $em->getRepository('BackendBundle:Grupo')->findOneById($id);
         $entity = $em->getRepository('BackendBundle:Horario')->findAll();
@@ -386,7 +392,8 @@ class AlumnoController extends Controller
 
     public function HorarioPdfAction($id)
     {
-       $em = $this->getDoctrine()->getManager();
+        $this->comprobarHijo($id);
+        $em = $this->getDoctrine()->getManager();
 
         $alumno= $em->getRepository('BackendBundle:Alumno')->findOneById($id);
 
@@ -500,12 +507,15 @@ class AlumnoController extends Controller
         );
     }
 
+    ///////////////////////////////////////////
+    //              Seguimiento              //
+    ///////////////////////////////////////////
 
     public function seguimientosAction(Request $request, $id)
     {
         $this->comprobarHijo($id);
-
         $em = $this->getDoctrine()->getManager();
+
         $entity= $em->getRepository('BackendBundle:Alumno')->findOneById($id);
         $responsable = $this->get('security.context')->getToken()->getUser();
 
@@ -527,8 +537,8 @@ class AlumnoController extends Controller
     public function seguimientoAction(Request $request, $id, $num)
     {
         $this->comprobarHijo($id);
-
         $em = $this->getDoctrine()->getManager();
+
         $entity= $em->getRepository('BackendBundle:Alumno')->findOneById($id);
         $seguimiento=$em->getRepository('IntranetBundle:Seguimiento')->findOneById($num);
         $respuestas=$em->getRepository('IntranetBundle:Seguimiento')->findRespuestas($num);
@@ -558,7 +568,7 @@ class AlumnoController extends Controller
             'seguimientos' => $seguimientos,
             'seguimientosNuevos' => $seguimientosNuevos,
             'html' => $this->renderView('IntranetBundle:Alumno:lista_seguimiento.html.twig', array(
-            'seguimientos' => $seguimientos, 'seguimientosNuevos' => $seguimientosNuevos, 'entity'=>$entity)),
+            'seguimientos' => $seguimientos, 'seguimientosNuevos' => $seguimientosNuevos, 'entity'=>$entity, 'tipo' =>'seguimientos')),
             'success' => true
             ), 200);
     }
@@ -575,7 +585,7 @@ class AlumnoController extends Controller
             'seguimientos' => $seguimientos,
             'seguimientosNuevos' => null,
             'html' => $this->renderView('IntranetBundle:Alumno:lista_seguimiento.html.twig', array(
-            'seguimientos' => $seguimientos, 'seguimientosNuevos' => null, 'entity'=>$entity)),
+            'seguimientos' => $seguimientos, 'seguimientosNuevos' => null, 'entity'=>$entity, 'tipo' =>'seguimientos')),
             'success' => true
             ), 200);
     }
@@ -654,10 +664,120 @@ class AlumnoController extends Controller
             'success' => true), 200);
     }
 
+    ///////////////////////////////////////////
+    //               Tutorias                //
+    ///////////////////////////////////////////
+
+    public function tutoriasAction(Request $request, $id)
+    {
+        $this->comprobarHijo($id);
+        $em = $this->getDoctrine()->getManager();
+
+        $entity= $em->getRepository('BackendBundle:Alumno')->findOneById($id);
+        $responsable = $this->get('security.context')->getToken()->getUser();
+
+        $grupo= $entity->getGrupo();
+
+        if($grupo){
+            $tutor=$grupo->getProfesor();
+        }else{
+            $tutor=null;
+        }
+        $centro =$em->getRepository('BackendBundle:Centro')->findCentro();
+
+        $horario=$centro->getHTutorias();
+        $tutorias=$em->getRepository('IntranetBundle:Tutorias')->findTutoriasPendientesAlumno($entity,$responsable);
+
+       
+        $tutoriasNuevas=$em->getRepository('IntranetBundle:Seguimiento')->findNuevasTutoriasAlumno($entity,$responsable);
+
+        if(count($tutoriasNuevas)<5){
+            $seguimientos_tutorias= $em->getRepository('IntranetBundle:Seguimiento')->findAntiguasTutoriasContadorAlumno($entity, $responsable->getId(), 5-count($tutoriasNuevas));
+        }
+        else{
+            $seguimientos_tutorias=null;
+        }
+                   
+        return $this->render('IntranetBundle:Alumno:tutorias.html.twig', array(
+            'entity' => $entity, 
+            'grupo' => $grupo,
+            'tutor' =>$tutor,
+            'h_tutorias' => $horario,
+            'tutorias' => $tutorias,
+            'tutoriasNuevas' => $tutoriasNuevas,
+            'seguimientos_tutorias'=>$seguimientos_tutorias
+            ));
+    }
+
+
+    public function seguimientoTutoriaAction(Request $request, $id, $num)
+    {
+        $this->comprobarHijo($id);
+        $em = $this->getDoctrine()->getManager();
+
+        $entity= $em->getRepository('BackendBundle:Alumno')->findOneById($id);
+
+        $seguimiento=$em->getRepository('IntranetBundle:Seguimiento')->findOneById($num);
+        $respuestas=$em->getRepository('IntranetBundle:Seguimiento')->findRespuestasTutorias($num);
+
+        //comprobar si tiene tutoria asignada o pendiente de confirmar para mostrarlo
+
+        return $this->render('IntranetBundle:Alumno:seguimiento_tutoria.html.twig', array(
+            'entity' => $entity, 
+            'seguimiento'=> $seguimiento,
+            'respuestas' => $respuestas,
+            ));
+    }
+
+
+    public function CargarNuevosSeguimientosTutoriaAction(Request $request, $id, $fecha)
+    {
+        $em = $this->getDoctrine()->getManager();
+        $entity= $em->getRepository('BackendBundle:Alumno')->findOneById($id);
+        $responsable = $this->get('security.context')->getToken()->getUser();
+
+        $seguimientosNuevos=$em->getRepository('IntranetBundle:Seguimiento')->findCargaSeguimientosNuevosTutoriasAlumno($fecha, $entity, $responsable->getId(), $entity->getGrupo());
+
+        if(count($seguimientosNuevos)<5){
+            $seguimientos= $em->getRepository('IntranetBundle:Seguimiento')->findCargaSeguimientosInicialTutoriasAlumno($entity, $responsable->getId(), $entity->getGrupo(), 5-count($seguimientosNuevos));
+        }
+        else{
+            $seguimientos=null;
+        }
+        return new JsonResponse(array(
+            'seguimientos' => $seguimientos,
+            'seguimientosNuevos' => $seguimientosNuevos,
+            'html' => $this->renderView('IntranetBundle:Alumno:lista_seguimiento.html.twig', array(
+            'seguimientos' => $seguimientos, 'seguimientosNuevos' => $seguimientosNuevos, 'entity'=>$entity, 'tipo' =>'tutorias')),
+            'success' => true
+            ), 200);
+    }
+
+
+    public function CargarSeguimientosTutoriaAction(Request $request, $id, $iden)
+    {
+        $em = $this->getDoctrine()->getManager();
+        $entity= $em->getRepository('BackendBundle:Alumno')->findOneById($id);
+        $responsable = $this->get('security.context')->getToken()->getUser();
+
+        $seguimientos= $em->getRepository('IntranetBundle:Seguimiento')->findCargaSeguimientosTutoriasAlumno($entity, $responsable->getId(), $iden, $entity->getGrupo());
+
+        return new JsonResponse(array(
+            'seguimientos' => $seguimientos,
+            'seguimientosNuevos' => null,
+            'html' => $this->renderView('IntranetBundle:Alumno:lista_seguimiento.html.twig', array(
+            'seguimientos' => $seguimientos, 'seguimientosNuevos' => null, 'entity'=>$entity, 'tipo' =>'tutorias')),
+            'success' => true
+            ), 200);
+    }
+
+    ///////////////////////////////////////////
+    //               Noticias                //
+    ///////////////////////////////////////////   
+
     public function noticiasAction(Request $request, $id)
     {
         $this->comprobarHijo($id);
-
         $em = $this->getDoctrine()->getManager();
 
         $entity= $em->getRepository('BackendBundle:Alumno')->findOneById($id);
@@ -690,7 +810,6 @@ class AlumnoController extends Controller
     public function noticiaAction($id,$num)
     {
         $this->comprobarHijo($id);
-
         $em = $this->getDoctrine()->getManager();
 
         $entity= $em->getRepository('BackendBundle:Alumno')->findOneById($id);

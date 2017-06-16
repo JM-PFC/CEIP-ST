@@ -40,6 +40,36 @@ cargar_nuevos_seguimientos_alumno:
     options:
         expose: true
 
+nuevos_seguimientos_alumno:
+    path:     /nuevos_seguimientos
+    defaults: { _controller: IntranetBundle:Alumno:comprobarSeguimientosNuevos}
+    options:
+        expose: true
+
+intranet_alumno_seguimiento:
+    path:     /seguimiento/{num}
+    defaults: { _controller: IntranetBundle:Alumno:seguimiento}
+
+intranet_alumno_tutorias:
+    path:     /tutorias
+    defaults: { _controller: IntranetBundle:Alumno:tutorias}
+
+intranet_alumno_seguimiento_tutoria:
+    path:     /tutoria/{num}
+    defaults: { _controller: IntranetBundle:Alumno:seguimientoTutoria}
+
+cargar_nuevos_seguimientos_tutoria_alumno:
+    path:     /cargar_nuevos_seguimientos_tutoria/{fecha}
+    defaults: { _controller: IntranetBundle:Alumno:CargarNuevosSeguimientosTutoria}
+    options:
+        expose: true
+
+cargar_seguimientos_tutoria_alumno:
+    path:     /cargar_seguimientos_tutoria/{iden}
+    defaults: { _controller: IntranetBundle:Alumno:CargarSeguimientosTutoria}
+    options:
+        expose: true
+        
 intranet_alumno_noticias:
     path:     /noticias
     defaults: { _controller: IntranetBundle:Alumno:noticias}
@@ -54,13 +84,4 @@ nuevas_noticias_alumno:
     options:
         expose: true
 
-nuevos_seguimientos_alumno:
-    path:     /nuevos_seguimientos
-    defaults: { _controller: IntranetBundle:Alumno:comprobarSeguimientosNuevos}
-    options:
-        expose: true
-
-intranet_alumno_seguimiento:
-    path:     /seguimiento/{num}
-    defaults: { _controller: IntranetBundle:Alumno:seguimiento}
 

@@ -17,8 +17,6 @@
             $("#seguimiento_grupo option[value='"+grupo+"']").prop('selected', true);
         }
 
-
-
     </script>
  {% endblock %}
 
@@ -150,7 +148,7 @@
 
 
 
-    <div id="lista_alumnos_seguimiento" class="modal fade " role="dialog" data-backdrop="true" >
+    <div id="lista_alumnos_seguimiento" class="modal fade lista_alumnos_seguimiento" role="dialog" data-backdrop="true" >
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
@@ -159,7 +157,7 @@
                 </div>
                 <div class="modal-body"></div>
                 <div class="class-footer">
-                    <button type="button" class="btn btn-primary" data-dismiss="modal">{% trans %}Cerrar{% endtrans %}</button>
+                    <button type="button" class="btn btn_azul" data-dismiss="modal">{% trans %}Cerrar{% endtrans %}</button>
                 </div>
             </div>
         </div>

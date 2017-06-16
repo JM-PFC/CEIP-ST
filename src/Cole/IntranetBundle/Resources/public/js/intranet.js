@@ -135,12 +135,17 @@ $(document).ready(function () {
     $('body').addClass('waiting');
   });
 
+
   $(document).on('click',".sidebar-nav a, .enrutaje a, #enlacemiperfil a, .contenedor_noticia a, .barramensajes a, .modal #form_submit,.boton_enviar button, .modal button[type='submit'], #consultar, .bloque-dashboard>a",function(event){ 
     $('body').addClass('waiting');
   });
   //Se utiliza para que se elimine la clase waiting al volver atrás en el navegador.
   $(window).bind('beforeunload', function() {
   });
+
+  $(document).on('focus',"input, textarea, select, radio, checkbox",function(event){ 
+    $('body').removeClass('waiting');
+   });
   //Se incrementa el contador de las noticias.
   $(document).on('click',".contenido_noticia a",function(event){ 
 
@@ -432,8 +437,10 @@ $(document).ready(function () {
     })
   });
 
-    //Se añade el id del seguimiento en botón de editar de la ventana modal para luegp generar la ruta.
+  //Se añade el id del seguimiento en botón de editar de la ventana modal para luegp generar la ruta.
   $(document).on('click','#contenedor_seguimientos #btn_editar' ,function() {
+    //Se quita el contenido del textarea para que no se muestre el anterior al abrir la ventana y cargar el nuevo dato.
+    $("#seguimiento_descripcion").val(" ");
     id=$(this).closest('.seguimiento').attr("id");
     $("#editar_seguimiento_modal .modal-body").load(Routing.generate("seguimiento_edit", {id:id, _locale:locale}), function(){
     }); 
@@ -983,7 +990,6 @@ $(document).ready(function () {
     })
   }
 
-
   //Se selecciona los valores asignados en su correspondiente select oculto.
 
   //Equipamiento seleccionado
@@ -1036,9 +1042,42 @@ $(document).ready(function () {
     $("#eliminar_reserva_modal .modal-body").load(Routing.generate("reserva_eliminar", {id:id, _locale:locale}), function(){
     }); 
   });
-/*
-  $(document).on('click','#eliminar_seguimiento_modal #eliminar' ,function() {
-    $('#eliminar_seguimiento_modal').modal('toggle');
+
+
+  //////////////////////////////////////////
+  //          Tutorías Profesor           //
+  //////////////////////////////////////////
+
+  //Se añade el id de la consulta de tutoría en botón de editar de la ventana modal para luego generar la ruta.
+  $(document).on('click','#contenedor_tutorias #btn_editar' ,function() {
+    //Se quita el contenido del textarea para que no se muestre el anterior al abrir la ventana y cargar el nuevo dato.
+    $("#seguimiento_descripcion").val(" ");
+    id=$(this).closest('.seguimiento').attr("id");
+    $("#editar_tutoria_modal .modal-body").load(Routing.generate("seguimiento_edit", {id:id, _locale:locale}), function(){
+    }); 
+  });
+
+  $(document).on('click','#editar_seguimiento_modal #editar' ,function() {
+    $('#editar_seguimiento_modal').modal('toggle');
+    id=$(this).attr("seguimiento");
+    $.ajax({
+      type: 'POST',
+      url: Routing.generate("seguimiento_update", {id:id, _locale:locale}),        
+      success: function() {
+
+      }
+    })
+  });
+
+  //Se añade el id de la consulta de tutoría en botón de eliminar de la ventana modal para luego generar la ruta.
+  $(document).on('click','#contenedor_tutorias #btn_eliminar' ,function() {
+    id=$(this).closest('.seguimiento').attr("id");
+    $("#eliminar_tutoria_modal .modal-body").load(Routing.generate("seguimiento_eliminar", {id:id, _locale:locale}), function(){
+    }); 
+  });
+
+  $(document).on('click','#eliminar_tutoria_modal #eliminar' ,function() {
+    $('#eliminar_tutoria_modal').modal('toggle');
     id=$(this).attr("seguimiento");
     $.ajax({
       type: 'POST',
@@ -1048,10 +1087,71 @@ $(document).ready(function () {
       }
     })
   });
+
+
+  $(document).on('click','#btn_tutoria_electronica button' ,function() {
+    profesor=$(this).attr("profesor");
+    grupo=$(this).attr("grupo");
+    $("#modal-body-1").removeClass('hidden');
+    $("#modal-body-2").addClass('hidden');
+    $("#nueva_tutoria_modal #modal-body-1>div").load(Routing.generate("AlumnosGrupo", {id:grupo, _locale:locale}), function(){
+      $("#nueva_tutoria_modal #modal-body-2>div").load(Routing.generate("seguimiento_tutoria_new", {_locale:locale}), function(){
+        $("#modal-body-2").attr("progesor",profesor);
+        $("#modal-body-2").attr("grupo",grupo);
+          $("#turotias_new #seguimiento_grupo option[value='"+grupo+"']").prop('selected', true);
+          $("#turotias_new #seguimiento_profesor option[value='"+profesor+"']").prop('selected', true);
+      }); 
+    }); 
+  });
+
+  // Se muestra el alumno elegido de la venatan modal de la opción destinatario.
+  $(document).on('click','#nueva_tutoria_modal tr' ,function() {
+    nombre=$(this).attr("nombre");
+    id=$(this).attr("id");
+    $("#alumno").text(nombre);
+    $("#modal-body-2").removeClass('hidden');
+    $("#modal-body-1").addClass('hidden');
+    $("#turotias_new #seguimiento_alumno option[value='"+id+"']").prop('selected', true);
+  });
+
+  $(document).on("keyup paste cut",'#turotias_new #seguimiento_descripcion', function(){
+    if($(this).val().length != 0){
+      $("#turotias_new #seguimiento_submit").removeClass('disabled');
+    }
+    else{
+      $("#turotias_new #seguimiento_submit").addClass('disabled');
+    }
+  });
+
+  $(document).on('click','#btn_tutoria_nueva_alumno button' ,function() {
+    profesor=$(this).attr("profesor");
+    grupo=$(this).attr("grupo");
+    alumno=$(this).attr("alumno");
+    $("#nueva_tutoria_modal #contenido").load(Routing.generate("seguimiento_tutoria_alumno_new", {id:grupo, _locale:locale}), function(){
+      $("#turotias_new #seguimiento_grupo option[value='"+grupo+"']").prop('selected', true);
+      $("#turotias_new #seguimiento_profesor option[value='"+profesor+"']").prop('selected', true);
+      $("#turotias_new #seguimiento_alumno option[value='"+alumno+"']").prop('selected', true);
+    }); 
+  });
+
+/*
+
+  $(document).on('click','#btn_tutoria_electronica button' ,function() {
+    $("#nueva_tutoria_modal .modal-body").load(Routing.generate("seguimiento_tutoria_new", {_locale:locale}), function(){
+    }); 
+  });
+
+  $(document).on('click','#btn_tutoria_electronica button' ,function() {
+    $('#nueva_tutoria_modal').modal('toggle');
+    $.ajax({
+      type: 'POST',
+      url: Routing.generate("seguimiento_update", {id:id, _locale:locale}),        
+      success: function() {
+
+      }
+    })
+  });
 */
-
-
-
 
 
 

@@ -3271,7 +3271,7 @@ font-weight: bold;
   	border: 1px solid transparent;
   	background: #e4e0e0;
 	border-radius: 5px;
-	height: 55px;
+	max-height: 55px;
 	width: 93%;
 	margin:0 auto;
 	border: 1px solid #c1bbbb;
@@ -3354,6 +3354,9 @@ font-weight: bold;
 	margin-top: 31px;
 	position: absolute;
 }
+#horarios_atencion_dialog #tutorias #cont_simple .guion{
+	margin-top: 36px;
+}
 #horarios_atencion_dialog #cont_multiple .guion{
 	width: 6px;
 	display: inline-block;
@@ -3397,11 +3400,12 @@ font-weight: bold;
 	opacity: 0.7;
 }#horarios_atencion_dialog .disab span, #profesor_asignatura_grupo_dialog .disab{
 	color: #e4e0e0 !important;
-	pointer-events: none;
+	pointer-events: none !important;
     cursor: default;
 }
 #horarios_atencion_dialog .disab img,#profesor_asignatura_grupo_dialog .disab img{
 	opacity: 0.8;
+	pointer-events: none !important;
 }
 #horarios_atencion_dialog #add span{
 	display: inline-block;
@@ -3424,7 +3428,10 @@ font-weight: bold;
 	height: 19px;
 	box-shadow: none;
 }
-
+#horarios_atencion_dialog #tutorias #cont_simple>div:not(.guion){
+	margin-top: 5px;
+	margin-bottom: 5px;
+}
 #horarios_atencion_dialog #add:not(.disab) span:hover, #profesor_asignatura_grupo_dialog #btn_asignar span:not(.disab):hover{
 	cursor: pointer;
 }
@@ -5749,7 +5756,9 @@ input[type="checkbox"]:hover{
 .footer_disabled p{
 	background: grey !important;
 }
-
+.footer_disabled span{
+	color: grey !important;
+}
 #asignar_grupos #contenedor_cursos p[class*="aviso"] {
     font-family: Courier,Helvetica,Arial,sans-serif;
     font-size: 1em;

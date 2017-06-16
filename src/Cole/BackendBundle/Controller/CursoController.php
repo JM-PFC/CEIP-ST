@@ -259,7 +259,7 @@ class CursoController extends Controller
             if (!$entity) {
                 throw $this->createNotFoundException('Unable to find Curso entity.');
             }
-            /* Para validad si hay alumnos matriculados en el curso actual si finalmente hace falta 
+            /* Para validar si hay alumnos matriculados en el curso actual si finalmente hace falta 
             comprobarlo desde la tabla y no desde el campos curso de la tabla Alumno
 
             if(date("n")>=6){
@@ -467,7 +467,7 @@ class CursoController extends Controller
         }
 
         $em = $this->getDoctrine()->getManager();
-        if($ratio!=="" && $ratio>=15 && $ratio<=35){
+        if($ratio!=="" && $ratio>=1 && $ratio<=35){
             $entity->setRatio($ratio);     
         }
 
@@ -482,7 +482,34 @@ class CursoController extends Controller
     }
 
 
-
+    public function ObtenerRatioMaxAction(Request $request)
+    {
+        // if request is XmlHttpRequest (AJAX) but not a POSt, throw an exception
+        if ($request->isXmlHttpRequest() && !$request->isMethod('POST')) {
+            throw new HttpException('XMLHttpRequests/AJAX calls must be POSTed');
+        }
+        
+        $em = $this->getDoctrine()->getEntityManager();
+        $entity = $em->getRepository('BackendBundle:Curso')->findAll();
+        $array;
+        foreach ($entity as $curso) {
+            $grupos = $em->getRepository('BackendBundle:Grupo')->findGruposByCurso($curso);
+            $ratio=0;
+            foreach ($grupos as $grupo) {
+                $alumnos_grupo = $em->getRepository('BackendBundle:Alumno')->findByGrupo($grupo);
+                if((int)$ratio<(int)count($alumnos_grupo)){
+                   $ratio=count($alumnos_grupo);
+                }
+            }
+            $array[$curso->getId()]=$ratio;
+        }
+        
+        if ($request->isXmlHttpRequest()) {
+                return new JsonResponse(array(
+                    'ratio' => $array,
+                    'success' => true), 200);
+        }
+    }
 
 
 }

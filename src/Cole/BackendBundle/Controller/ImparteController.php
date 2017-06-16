@@ -307,7 +307,7 @@ class ImparteController extends Controller
                 'nivel'=>$datos->getGrupo()->getCurso()->getNivel(),
                 'curso'=>$datos->getGrupo()->getCurso()->getCurso(),
                 'grupo' =>$datos->getGrupo()->getLetra(),
-                'asignatura'=>$datos->getAsignatura()->getNombre()), 200);
+                'asignatura'=>$datos->getAsignatura()->getAsignatura()->getNombre()), 200);
         }
         else{
             return new JsonResponse(array('data' =>null), 200);

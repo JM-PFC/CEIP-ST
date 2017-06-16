@@ -93,14 +93,6 @@
                     <p>{{ seguimiento.fecha | localizeddate('full', 'none', app.request.getLocale()) | capitalize}}</p>
                 </div>
                 <div>
-                    {% if seguimiento.alumno.sexo == "Masculino" %}
-                        <label for="">{% trans %}Alumno{% endtrans %}:</label>
-                    {% else %}
-                        <label for="">{% trans %}Alumna{% endtrans %}:</label>
-                    {% endif %}
-                    <span>{{seguimiento.alumno}}</span>
-                </div>
-                <div>
                     <label for="">{% trans %}Curso{% endtrans %}:</label>
                     <span>{{seguimiento.grupo ~ " - " ~ seguimiento.grupo.curso.nivel}}</span>
                 </div>
@@ -114,15 +106,44 @@
                     <span>{{seguimiento.asignatura.asignatura.abreviatura}}</span>
                 </div>
                 {% endif %}
+                <div>
+                    {% if seguimiento.alumno.sexo == "Masculino" %}
+                        <label for="">{% trans %}Alumno{% endtrans %}:</label>
+                    {% else %}
+                        <label for="">{% trans %}Alumna{% endtrans %}:</label>
+                    {% endif %}
+                    <span>{{seguimiento.alumno}}</span>
+                </div>
                 <div class="hidden-sm hidden-md hidden-lg">
                     <label for="">{% trans %}Fecha{% endtrans %}: </label>
                     <span>{{ seguimiento.fecha | localizeddate('full', 'none', app.request.getLocale()) | capitalize}}</span>
                 </div>
             </div>             
             <div class="body clearfix">
-                <div>
+               <div class=" label_descripcion col-xs-12 col-sm-offset-2 col-sm-8">
+                {% if seguimiento.tipoUser == 1 %}
+                    <p class="text-center hidden-xs">
+                        <span>{% trans %}Consulta de{% endtrans %}:</span>
+                        <span>{{seguimiento.profesor}}</span>
+                    </p>
+                    <p class=" hidden-sm hidden-md hidden-lg">
+                        <span>{% trans %}Consulta de{% endtrans %}:</span>
+                        <span>{{seguimiento.profesor}}</span>
+                    </p>  
+                {% else %}
+                    <p class="text-center hidden-xs">
+                        <span>{% trans %}Consulta de{% endtrans %}:</span>
+                        <span>{{seguimiento.responsable}}</span>
+                    </p>
+                    <p class=" hidden-sm hidden-md hidden-lg">
+                        <span>{% trans %}Consulta de{% endtrans %}:</span>
+                        <span>{{seguimiento.responsable}}</span>
+                    </p>
+                {% endif %}
+                </div>
+                <div class="col-xs-12">
                     <p class="descripcion">{{seguimiento.descripcion|nl2br}}</p>
-                </div>  
+                </div>
             </div>
             {% for seguimiento in respuestas %}
                 <div class="respuesta">
@@ -164,14 +185,14 @@
             {% endfor %}
             </div>
         </div>
-        <a id="btn_responder" class="btn_responder btn btn-primary" data-target="#responder_seguimiento_modal" data-toggle="modal" data-backdrop="static" data-keyboard="false">{% trans %}Responder{% endtrans %}</a>
+        <a id="btn_responder" class="btn_responder btn btn_azul" data-target="#responder_seguimiento_modal" data-toggle="modal" data-backdrop="static" data-keyboard="false">{% trans %}Responder{% endtrans %}</a>
         <div class="col-xs-3 col-sm-3 visible-xs visible-sm botonsubir">
             <a class="go-top btn btn-default  hidden" href="#">
                 <i class="fa fa-arrow-up"></i>{% trans %}Subir{% endtrans %}
             </a>
         </div>
     <!-- Ventana modal de respuesta del seguimiento -->
-    <div id="responder_seguimiento_modal" class="modal fade aviso" role="dialog" data-backdrop="true" >
+    <div id="responder_seguimiento_modal" class="modal fade aviso ediccion_seguimiento_modal " role="dialog" data-backdrop="true" >
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">

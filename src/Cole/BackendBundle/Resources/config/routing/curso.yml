@@ -74,3 +74,9 @@ asignar_ratio:
     options:
         expose: true
 
+obtener_ratio_max:
+    path:     /Obtener_ratio_max
+    defaults: { _controller: "BackendBundle:Curso:ObtenerRatioMax" }
+    requirements: { _method: post }
+    options:
+        expose: true

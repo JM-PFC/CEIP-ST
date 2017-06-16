@@ -52,7 +52,7 @@
       <div  class="container-content">
         {% if instalaciones %}
           {% for instalacion in instalaciones %}
-            <div id="{{instalacion.id}}" class="container_reserva" data-toggle="tooltip" data-placement="bottom" title="" data-original-title="{{instalacion.horario.inicio|date('H:i') ~ " - " ~ instalacion.horario.fin|date('H:i') }}">
+            <div id="{{instalacion.id}}" class="container_contenido_tabla" data-toggle="tooltip" data-placement="bottom" title="" data-original-title="{{instalacion.horario.inicio|date('H:i') ~ " - " ~ instalacion.horario.fin|date('H:i') }}">
               <div class="col-xs-7">{{instalacion.equipamiento.nombre}}</div>
               <div class="text-center col-xs-3 col-ms-4">
               {% if instalacion.fecha|date('m/d/Y') ==  'today'|date('m/d/Y')  %}
@@ -70,7 +70,7 @@
           {% endfor %}
         {% else %}
           <div>
-            <div class="vacio col-xs-12"><p>{% trans %}No tienes ninguna reserva pendiente{% endtrans %}</p></div>
+            <div class="vacio col-xs-12"><p class="color_rojo">{% trans %}No tienes ninguna reserva pendiente{% endtrans %}</p></div>
           </div>
         {% endif %} 
       </div>
@@ -97,7 +97,7 @@
       <div  class="container-content">
         {% if equipamientos %}
           {% for equipamiento in equipamientos %}
-            <div id="{{equipamiento.id}}" class="container_reserva" data-toggle="tooltip" data-placement="bottom" title="" data-original-title="{{"Horario: " ~ equipamiento.horario.inicio|date('H:i') ~ " - " ~ equipamiento.horario.fin|date('H:i') }}">
+            <div id="{{equipamiento.id}}" class="container_contenido_tabla" data-toggle="tooltip" data-placement="bottom" title="" data-original-title="{{"Horario: " ~ equipamiento.horario.inicio|date('H:i') ~ " - " ~ equipamiento.horario.fin|date('H:i') }}">
               <div class="col-xs-7">{{equipamiento.equipamiento.nombre}}</div>
               <div class="text-center col-xs-3 col-ms-4">
               {% if equipamiento.fecha|date('m/d/Y') ==  'today'|date('m/d/Y')  %}
@@ -115,7 +115,7 @@
           {% endfor %}
         {% else %}
           <div>
-            <div class="vacio col-xs-12"><p>{% trans %}No tienes ninguna reserva pendiente{% endtrans %}</p></div>
+            <div class="vacio col-xs-12"><p class="color_rojo">{% trans %}No tienes ninguna reserva pendiente{% endtrans %}</p></div>
           </div>
         {% endif %} 
       </div>

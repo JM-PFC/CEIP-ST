@@ -297,6 +297,14 @@ class Profesor implements UserInterface, \Serializable
      * 
      */
     private $accesoSeguimientos;
+
+    /**
+     * @var \DateTime
+     *
+     * @ORM\Column(name="accesoTutorias", type="datetime", nullable=true)
+     * 
+     */
+    private $accesoTutorias;
     
     /**
      * @var \DateTime
@@ -334,6 +342,11 @@ class Profesor implements UserInterface, \Serializable
     * @ORM\OneToMany(targetEntity="Cole\IntranetBundle\Entity\Seguimiento", mappedBy="profesor", cascade={"remove"})
     */
     private $seguimiento;
+
+    /**
+    * @ORM\OneToMany(targetEntity="Cole\IntranetBundle\Entity\Tutorias", mappedBy="profesor", cascade={"remove"})
+    */
+    private $tutorias;
     
     public function __construct()
     {
@@ -1210,5 +1223,61 @@ class Profesor implements UserInterface, \Serializable
     public function getAccesoSeguimientos()
     {
         return $this->accesoSeguimientos;
+    }
+
+    /**
+     * Add tutorias
+     *
+     * @param \Cole\IntranetBundle\Entity\Tutorias $tutorias
+     * @return Profesor
+     */
+    public function addTutoria(\Cole\IntranetBundle\Entity\Tutorias $tutorias)
+    {
+        $this->tutorias[] = $tutorias;
+
+        return $this;
+    }
+
+    /**
+     * Remove tutorias
+     *
+     * @param \Cole\IntranetBundle\Entity\Tutorias $tutorias
+     */
+    public function removeTutoria(\Cole\IntranetBundle\Entity\Tutorias $tutorias)
+    {
+        $this->tutorias->removeElement($tutorias);
+    }
+
+    /**
+     * Get tutorias
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getTutorias()
+    {
+        return $this->tutorias;
+    }
+
+    /**
+     * Set accesoTutorias
+     *
+     * @param \DateTime $accesoTutorias
+     * @return Profesor
+     */
+    public function setAccesoTutorias($accesoTutorias)
+    {
+        $this->accesoTutorias = $accesoTutorias;
+
+        return $this;
+    }
+
+    /**
+     * Get accesoTutorias
+     *
+     * @return \DateTime 
+     */
+    public function getAccesoTutorias()
+    {
+        return $this->accesoTutorias;
     }
 }

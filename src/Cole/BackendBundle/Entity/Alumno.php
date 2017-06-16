@@ -186,7 +186,7 @@ class Alumno
     /**
      * @var string
      *
-     * @ORM\Column(name="num_alum", type="string", length=2, nullable=true)
+     * @ORM\Column(name="num_alum", type="integer", length=10, nullable=true)
      * 
      */
     private $numAlum;
@@ -251,10 +251,31 @@ class Alumno
      */
     private $accesoSeguimientosResponsable2;
 
+        /**
+     * @var \DateTime
+     *
+     * @ORM\Column(name="accesoTutoriasResponsable1", type="datetime", nullable=true)
+     * 
+     */
+    private $accesoTutoriasResponsable1;
+
+    /**
+     * @var \DateTime
+     *
+     * @ORM\Column(name="accesoTutoriasResponsable2", type="datetime", nullable=true)
+     * 
+     */
+    private $accesoTutoriasResponsable2;
+
     /**
     * @ORM\OneToMany(targetEntity="Cole\IntranetBundle\Entity\Seguimiento", mappedBy="alumno", cascade={"remove"})
     */
     private $seguimiento;
+
+    /**
+    * @ORM\OneToMany(targetEntity="Cole\IntranetBundle\Entity\Tutorias", mappedBy="alumno", cascade={"remove"})
+    */
+    private $tutorias;
 
     /**
      * Get id
@@ -1005,5 +1026,84 @@ class Alumno
     public function getAccesoSeguimientosResponsable2()
     {
         return $this->accesoSeguimientosResponsable2;
+    }
+
+    /**
+     * Add tutorias
+     *
+     * @param \Cole\IntranetBundle\Entity\Tutorias $tutorias
+     * @return Alumno
+     */
+    public function addTutoria(\Cole\IntranetBundle\Entity\Tutorias $tutorias)
+    {
+        $this->tutorias[] = $tutorias;
+
+        return $this;
+    }
+
+    /**
+     * Remove tutorias
+     *
+     * @param \Cole\IntranetBundle\Entity\Tutorias $tutorias
+     */
+    public function removeTutoria(\Cole\IntranetBundle\Entity\Tutorias $tutorias)
+    {
+        $this->tutorias->removeElement($tutorias);
+    }
+
+    /**
+     * Get tutorias
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getTutorias()
+    {
+        return $this->tutorias;
+    }
+
+    /**
+     * Set accesoTutoriasResponsable1
+     *
+     * @param \DateTime $accesoTutoriasResponsable1
+     * @return Alumno
+     */
+    public function setAccesoTutoriasResponsable1($accesoTutoriasResponsable1)
+    {
+        $this->accesoTutoriasResponsable1 = $accesoTutoriasResponsable1;
+
+        return $this;
+    }
+
+    /**
+     * Get accesoTutoriasResponsable1
+     *
+     * @return \DateTime 
+     */
+    public function getAccesoTutoriasResponsable1()
+    {
+        return $this->accesoTutoriasResponsable1;
+    }
+
+    /**
+     * Set accesoTutoriasResponsable2
+     *
+     * @param \DateTime $accesoTutoriasResponsable2
+     * @return Alumno
+     */
+    public function setAccesoTutoriasResponsable2($accesoTutoriasResponsable2)
+    {
+        $this->accesoTutoriasResponsable2 = $accesoTutoriasResponsable2;
+
+        return $this;
+    }
+
+    /**
+     * Get accesoTutoriasResponsable2
+     *
+     * @return \DateTime 
+     */
+    public function getAccesoTutoriasResponsable2()
+    {
+        return $this->accesoTutoriasResponsable2;
     }
 }

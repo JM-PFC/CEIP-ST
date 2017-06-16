@@ -96,7 +96,7 @@ class ProfesorController extends Controller
             $entity->setFechaAlta(new \DateTime("now"));
             $entity->setActivo(true);
             $entity->setAccesoNoticias(null);
-            $entity->setNoticiasNuevas(null);
+            $entity->setAccesoSeguimientos(null);
 
             $entity->setUsername("p".substr($entity->getDni(), 0, -2));
             $entity->setClaveUsuario("profe: ".substr($entity->getDni(), 0, -2).substr($entity->getDni(), -1));

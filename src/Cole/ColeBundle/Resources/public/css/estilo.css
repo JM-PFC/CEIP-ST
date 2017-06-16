@@ -849,7 +849,7 @@ fieldset.fsetoculto {
     background: #eff4f9 none repeat scroll 0 0;
     clear: both;
     display: block;
-    height: 230px !important;
+    
     margin: 0 5%;
     width: 90%;
     border-radius: 5px 5px 0 0;
@@ -880,7 +880,8 @@ fieldset.fsetoculto {
     padding: 0 6px !important;
 }
 #calendar .c-grid div[class*="c-day"]{
-    padding-top: 1.5% !important;
+    padding: 3px 0 !important;
+    font-size: 13px;
 }
 #calendar .c-grid .c-day:not(.c-event){
     pointer-events: none !important ;

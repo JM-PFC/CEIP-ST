@@ -1,0 +1,450 @@
+{% extends  'IntranetBundle:Profesor:index.html.twig' %}
+
+{% block body %}
+    {{parent()}}
+    <script>
+    	$(".menu li").removeClass('active');
+		$(".menu #tutorias").addClass('active');
+        locale=$("#intranet").attr("locale");
+
+
+/*
+        //Se muestra elementos según la posición de la ventana del navegador.
+        function ComprobarPosicion() {
+                
+        if ($(window).width() < 768) {
+            var bottom_of_object = $("#add_seguimiento").offset().top;
+            var bottom_of_window = $(window).scrollTop();
+            
+            if( bottom_of_window > bottom_of_object ){
+                $("#add_seguimiento_movil").removeClass('hidden');
+                $(".barramenu").addClass('barramenu_scroll');
+                $(".botonsubir a").removeClass('hidden');
+            }
+            else{
+                $("#add_seguimiento_movil").addClass('hidden');
+                $(".barramenu").removeClass('barramenu_scroll');
+                $(".botonsubir a").addClass('hidden');
+            }
+        }
+        else  {
+            $(".barramenu").removeClass('barramenu_scroll');
+
+            var bottom_of_object = $("#add_seguimiento").offset().top+$("#add_seguimiento").outerHeight();
+            var bottom_of_navbar= $(".navbar").offset().top+$(".navbar").outerHeight();
+                    
+            if( bottom_of_navbar > bottom_of_object ){
+                $("#add_seguimiento_scroll").removeClass('hidden');
+                if ($(window).width() < 992) {
+                    $(".botonsubir a").removeClass('hidden');
+                }
+            }
+            else{
+                $("#add_seguimiento_scroll").addClass('hidden');
+                if ($(window).width() < 992) {
+                    $(".botonsubir a").addClass('hidden');
+                }
+            }
+        }
+    }
+*/
+    //Se muestran antiguas consultas de tutorias cuando desplazamos el scroll hacia abajo.
+    //Se utiliza un temporizador para que no se dispare el evento varias veces seguidas al desplazar el scrollalfinal de la ventana.    
+    var tmr = 0;
+    $(window).scroll(function() {
+        clearTimeout(tmr);
+        tmr = setTimeout(function () {
+            if ($(window).scrollTop() >= $(document).height() - $(window).height() - 10) {
+                fecha=$("#contenedor_tutorias>div").not(':hidden').last().attr("fecha");
+                //Se comprueba que hay al menos 5 seguimientos mostrados, ya que si hay menos no hay más seguimientos para mostrar.
+
+                if($(".seguimiento").size()>=5){
+                  if(fecha){
+                    $.ajax({
+                        url: Routing.generate('cargar_nuevos_seguimientos_tutoria_profesor', {_locale:"es",fecha:fecha}),
+                        dataType: 'json',
+                        success: function(response) {
+                            $('#contenedor_tutorias').append(response.html);
+                        }
+                    });
+                  }
+                  else{
+                    id=$("#contenedor_tutorias>div").not(':hidden').last().attr("id");
+                    $.ajax({
+                        url: Routing.generate('cargar_seguimientos_tutoria_profesor', {_locale:"es",id:id}),
+                        dataType: 'json',
+                        success: function(response) {
+                            $('#contenedor_tutorias').append(response.html);
+                        }
+                    });
+                  }
+                }
+            }
+        }, 100); 
+        //Se muestra diferentes elementos al hacer scroll.
+        //ComprobarPosicion();
+
+    });
+    
+    //Se muestra diferentes elementos al cambiar el tamaño de la ventana segun la posición.
+    //$(window).resize(function() {
+    //    ComprobarPosicion();
+    //});
+
+
+
+  h_tutorias={{h_tutorias|json_encode()|raw}};
+
+
+  function reemplazarDatos(array) {
+    array=array.replace("L","Lunes");
+    array=array.replace("M","Martes");
+    array=array.replace("X","Miércoles");
+    array=array.replace("J","Jueves");
+    array=array.replace("V","Viernes");
+    array=array.replace("|",": ");
+    array=array.replace("-"," a ");
+    return array;
+  }
+
+
+    array=h_tutorias.split("*");
+
+    for(var i=0; i < array.length ; i++){
+        horario=reemplazarDatos(array[i]);
+        $(".horario").append('<p class="">'+horario+'</p');
+
+    };
+    
+
+    </script>
+ {% endblock %}
+
+{% block migas %}
+	<li class="tipo">
+			{% trans %}Profesorado{% endtrans %}
+	</li>
+	<li>
+		<a href="{{path('intranet_profesor')}}">
+			{% trans %}Panel principal{% endtrans %}
+		</a>
+	</li>
+	<li class="active no-seleccion">
+		{% trans %}Tutorías{% endtrans %}
+	</li>
+{% endblock %}
+
+{% block titulo_cabecera %}
+	<i class="fa fa-users page-header-icon"></i>
+	{% trans %}Tutorías{% endtrans %}
+{% endblock %}
+{% block titulo_cabecera_movil %}
+    <i class="fa fa-users page-header-icon"></i>
+    {% trans %}Tutorías{% endtrans %}
+{% endblock %}
+
+{% block contenido %}
+    <h4 id="titulo-seccion" class="titulo-seccion">{% trans %}Tutorías presenciales{% endtrans %}</h4>
+
+    <div id="datos_tutoria" class="container-fluid div_datos_curso">
+        <div class="pull-left col-xs-12 col-sm-4 no-padding datos_curso">
+            <label>{% trans %}Curso{% endtrans %}:</label>
+            <span> {{tutor_grupo.curso.curso ~ " " ~ tutor_grupo.letra ~ " - " ~ tutor_grupo.curso.nivel}}</span >
+            <br>
+            {% if tutor_grupo.aula %}
+                <label>{% trans %}Aula{% endtrans %}:</label>
+                <span> {{tutor_grupo.aula.nombre}}</span >
+            {% else %}
+                <label>{% trans %}Aula{% endtrans %}:</label>
+                <span>{% trans %}Sin asignar{% endtrans %}</span >
+            {% endif %}
+            <br>
+            <label>{% trans %}Horario de tutorías{% endtrans %}:</label>
+            <br>
+            <span class="horario"></span >                  
+        </div>
+
+        <div class="pull-left col-xs-12 col-sm-8 no-padding ">
+            <div class=" col-xs-12 no-padding">
+                <div>         
+                    <table class="col-xs-12 table-hover table-condensed table-striped equipamientos">
+                        <thead class="cabecera-tabla">
+                            <tr>
+                                <th class="col-xs-12 text-center">{% trans %}Tutorías pendientes{% endtrans %}</th>
+                            </tr>
+                        </thead>
+                    </table>
+                </div>
+                <div  class="container-content">
+             
+                {% if tutorias %}
+                    {% for tutoria in tutorias %}
+                        <div id="{{tutoria.id}}" class="container_contenido_tabla" data-toggle="tooltip" data-placement="bottom" title="" data-original-title="{% trans %}Ver info{% endtrans %}">
+                            <div class="col-xs-7">{{tutoria.alumno}}</div>
+                            <div class="text-center col-xs-3 col-sm-2 no-padding-rl">
+                            {% if tutoria.fecha|date('m/d/Y') ==  'today'|date('m/d/Y')  %}
+                                {{ "Hoy" }}
+                            {% elseif tutoria.fecha|date('m/d/Y') ==  'tomorrow'|date('m/d/Y') %}
+                                {{"Mañana"}}
+                            {% else %}
+                                {{tutoria.fecha| localizeddate('short','none', app.request.getLocale()) }}
+                            {% endif %}
+                            </div>
+                            <div class=" contenedor_hora text-center col-xs-3 col-sm-2 no-padding-rl">
+                                {{tutoria.fecha| localizeddate('none','short', app.request.getLocale()) }}
+                            </div>
+                            <div class="contenedor_icono col-xs-2 col-ms-1 no-padding-rl">
+                                <a id="btn_eliminar" href="" data-target="#eliminar_tutoria_modal" data-toggle="modal" data-backdrop="static" data-keyboard="false"><i class="fa fa-trash-o"></i></a>
+                            </div>
+                        </div>
+                    {% endfor %}
+                {% else %}
+                <div>
+                    <div class="vacio col-xs-12"><p class="color_rojo">{% trans %}No tienes ninguna tutoría asignada{% endtrans %}</p></div>
+                </div>
+                {% endif %}
+                </div>
+                <p class="text-center hidden-sm hidden-md hidden-lg">({% trans %}Pulse para ver más información{% endtrans %})</p>
+                <div id="btn_tutoria_presencial">
+                    <button class="btn btn_azul center-block" onclick="location.href = '{{ path('intranet_profesor_reservar_instalacion') }}';">{% trans %}Asignar Tutoría{% endtrans %}</button>
+                </div>
+            </div>
+        </div>
+     </div>
+
+    <h4 id="titulo-seccion" class="titulo-seccion">{% trans %}Tutorías electrónicas{% endtrans %}</h4>
+    <div id="btn_tutoria_electronica" class="hidden-sm hidden-md hidden-lg">
+        <button grupo="{{tutor_grupo.id}}" profesor="{{entity.id}}" class="btn btn-success center-block" data-target="#nueva_tutoria_modal" data-toggle="modal" data-backdrop="static" data-keyboard="false"><i class="fa fa-plus"> </i>{% trans %}Nueva consulta de tutoría{% endtrans %}</button>
+    </div>
+    <div id="btn_tutoria_electronica" class="btn_tutoria_electronica hidden-xs">
+        <button grupo="{{tutor_grupo.id}}" profesor="{{entity.id}}" class="btn btn-success pull-right" data-target="#nueva_tutoria_modal" data-toggle="modal" data-backdrop="static" data-keyboard="false"><i class="fa fa-plus"> </i>{% trans %}Nueva consulta de tutoría{% endtrans %}</button>
+    </div>
+    <div role="tabpanel" class="tab_tutoria">
+        <ul class="nav nav-tabs" role="tablist">
+            <li role="presentation" class="active"><a id="tab_tutorias_activas" href="#activas" aria-controls="activas" data-toggle="tab" role="tab">{% trans %}Consultas activas{% endtrans %}</a></li>
+            <li role="presentation"><a id="tab_tutorias_inactivas" href="#inactivas" aria-controls="inactivas" data-toggle="tab" role="tab">{% trans %}Consultas finalizadas{% endtrans %}</a></li>
+        </ul>
+
+        <div class="tab-content clearfix">
+            <div role="tabpanel" class="tab-pane active clearfix " id="activas">
+                {% if not (tutoriasNuevas == null and seguimientos_tutorias == null ) %}
+                    <div id="contenedor_tutorias" profesor="{{entity.id}}" class="nombre col-xs-12">
+                    {% for seguimiento in tutoriasNuevas %}
+                        <div id="{{seguimiento.id}}" class="seguimiento">
+                            <div class="header col-xs-12 clearfix no-padding">
+                                <div class="icono">
+                                    <i class="fa  fa-weixin c_naranja"></i>
+                                </div>
+
+                                <div class="nombre col-xs-12">
+                                    <div>
+                                        <p class="fw_bold ">{{seguimiento.alumno}}</p>
+                                    </div>
+                                </div>
+                                {% if seguimiento.respuesta == 0 %}
+                                <div class="aviso hidden-xs">
+                                    <p  class="pull-right">{% trans %}Nueva{% endtrans %}</p>
+                                </div>
+                                {% else %}
+                                <div class="aviso hidden-xs">
+                                    <p  class="pull-right">{% trans %}Actualizada{% endtrans %}</p>
+                                </div>
+                                {% endif %}
+                            </div>             
+                            <div class="body clearfix">
+                                <div class="fecha">
+                                    <p  class=" pull-right">{{ seguimiento.fecha | localizeddate('long', 'none', app.request.getLocale()) | capitalize}}</p>
+                                </div>
+                                <div>
+                                    <p class="descripcion">{{seguimiento.descripcion|nl2br }}</p>
+                                    <div class="botones_seguimiento margin_btn">
+                                        <div>
+                                        {% if seguimiento.respuesta %}
+                                            <a id="consultar" href="{{path('intranet_profesor_seguimiento_tutoria', {'num': seguimiento.id}) }}" class="btn btn_azul">
+                                                <i class="fa fa-search"></i>
+                                                {% trans %}Consultar{% endtrans %}
+                                            </a>
+                                        {% else %}
+                                            <a id="consultar" href="{{path('intranet_profesor_seguimiento_tutoria', {'num': seguimiento.id}) }}" class="btn btn_azul">
+                                                <i class="fa  fa-pencil-square-o"></i>
+                                                {% trans %}Responder{% endtrans %}
+                                            </a>
+                                        {% endif %}
+                            
+                                        <span id="edicion" class="pull-right hidden-xs visible-sm visible-md visible-lg">
+                                            
+                                            {% if not seguimiento.respuesta and seguimiento.tipoUser == 1 %}
+                                                <a id="btn_editar" href="#" class="btn btn_gris" data-target="#editar_tutoria_modal" data-toggle="modal" data-backdrop="static" data-keyboard="false">
+                                                    <i class="fa fa-pencil"></i>{% trans %}Editar{% endtrans %}
+                                                </a>
+                                            {% endif %}
+                                            {% if seguimiento.tipoUser == 1 %}
+                                                <a id="btn_eliminar" href="" class="btn btn_gris" data-target="#eliminar_tutoria_modal" data-toggle="modal" data-backdrop="static" data-keyboard="false">
+                                                    <i class="fa fa-trash-o"></i>{% trans %}Eliminar{% endtrans %}
+                                                </a>
+                                            {% endif %}
+                                        </span>
+                                        <span id="edicion" class="pull-right visible-xs hidden-sm hidden-md hidden-lg">
+                                            {% if not seguimiento.respuesta and seguimiento.tipoUser == 1 %}
+                                                <a id="btn_editar" href="#" class="btn btn_gris" data-target="#editar_tutoria_modal" data-toggle="modal" data-backdrop="static" data-keyboard="false">
+                                                    <i class="fa fa-pencil"></i>
+                                                </a>
+                                            {% endif %}
+                                            {% if seguimiento.tipoUser == 1 %}
+                                                <a id="btn_eliminar" href="" class="btn btn_gris" data-target="#eliminar_tutoria_modal" data-toggle="modal" data-backdrop="static" data-keyboard="false">
+                                                    <i class="fa fa-trash-o"></i>
+                                                </a>
+                                            {% endif %}
+                                        </span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    {% endfor %}
+
+          {% for seguimiento in seguimientos_tutorias %}
+            <div id="{{seguimiento.id}}" class="seguimiento">
+                <div class="header col-xs-12 clearfix no-padding">
+
+                        <div class="icono">
+                            <i class="fa  fa-weixin"></i>
+                        </div>
+
+                    <div class="nombre col-xs-12">
+                        <div>
+                            <p class="fw_bold ">{{seguimiento.alumno}}</p>
+                        </div>
+                    </div>
+                </div>             
+                <div class="body clearfix">
+                    <div class="fecha">
+                        <p  class=" pull-right">{{ seguimiento.fecha | localizeddate('long', 'none', app.request.getLocale()) | capitalize}}</p>
+                    </div>
+                    <div>
+                        <p class="descripcion">{{seguimiento.descripcion|nl2br }}</p>
+                        <div class="botones_seguimiento margin_btn">
+                            <div>
+                            {% if seguimiento.respuesta %}
+                                <a id="consultar" href="{{path('intranet_profesor_seguimiento_tutoria', {'num': seguimiento.id}) }}" class="btn btn_azul">
+                                    <i class="fa fa-search"></i>
+                                    {% trans %}Consultar{% endtrans %}
+                                </a>
+                            {% else %}
+                                <a id="consultar" href="{{path('intranet_profesor_seguimiento_tutoria', {'num': seguimiento.id}) }}" class="btn btn_azul">
+                                    <i class="fa  fa-pencil-square-o"></i>
+                                    {% trans %}Responder{% endtrans %}
+                                </a>
+                            {% endif %}
+
+                            <span id="edicion" class="pull-right hidden-xs visible-sm visible-md visible-lg">
+                                {% if not seguimiento.respuesta  and seguimiento.tipoUser == 1 %}
+                                    <a id="btn_editar" href="#" class="btn btn_gris" data-target="#editar_tutoria_modal" data-toggle="modal" data-backdrop="static" data-keyboard="false">
+                                        <i class="fa fa-pencil"></i>{% trans %}Editar{% endtrans %}
+                                    </a>
+                                {% endif %}
+                                {% if seguimiento.tipoUser == 1 %}
+                                    <a id="btn_eliminar" href="" class="btn btn_gris" data-target="#eliminar_tutoria_modal" data-toggle="modal" data-backdrop="static" data-keyboard="false">
+                                        <i class="fa fa-trash-o"></i>{% trans %}Eliminar{% endtrans %}
+                                    </a>
+                                {% endif %}
+                            </span>
+                            <span id="edicion" class="pull-right visible-xs hidden-sm hidden-md hidden-lg">
+                                {% if not seguimiento.respuesta and seguimiento.tipoUser == 1 %}
+                                    <a id="btn_editar" href="#" class="btn btn_gris" data-target="#editar_tutoria_modal" data-toggle="modal" data-backdrop="static" data-keyboard="false">
+                                        <i class="fa fa-pencil"></i>
+                                    </a>
+                                {% endif %}
+                                {% if seguimiento.tipoUser == 1 %}
+                                    <a id="btn_eliminar" href="" class="btn btn_gris" data-target="#eliminar_tutoria_modal" data-toggle="modal" data-backdrop="static" data-keyboard="false">
+                                        <i class="fa fa-trash-o"></i>
+                                    </a>
+                                {% endif %}
+                            </span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                </div>
+            </div>
+          {% endfor %}
+
+
+
+
+                    </div>
+
+                {% else %}
+                    <div>
+                        <div class="vacio col-xs-12"><p class="color_rojo">{% trans %}No tienes ninguna consulta de tutoría iniciada en este momento{% endtrans %}</p></div>
+                    </div>
+                {% endif %}
+            </div>
+            <div role="tabpanel" class="tab-pane clearfix" id="inactivas">
+                prueba 2
+            </div>
+        </div>
+ 
+    </div>
+
+
+    <!-- Ventana modal de eliminación de consulta de tutoría -->
+  <div id="eliminar_tutoria_modal" class="modal fade-scale aviso ediccion_seguimiento_modal"  tabindex="-1" role="dialog" data-backdrop="true" >
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+        <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            <h4 class="modal-title" id="myModalLabel">{% trans %}Eliminación de la consulta de tutoría{% endtrans %}</h4>
+        </div>
+        <div class="modal-body"></div>
+        </div>
+    </div>
+  </div>
+
+    <!-- Ventana modal de edición de consulta de tutoría -->
+    <div id="editar_tutoria_modal" class="modal fade aviso ediccion_seguimiento_modal" role="dialog" data-backdrop="true" >
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    <h4 class="modal-title">{% trans %}Edición de la consulta de tutoría{% endtrans %}</h4>
+                </div>
+                <div class="modal-body">
+                    {#Formulario de prueba para que se muestre la ventana con el formulario cargado y luego se actualiza#}
+                    <form>
+                        <label>{% trans %}Descripción{% endtrans %}</label>
+                        <textarea id="seguimiento_descripcion"></textarea>
+                        <div class="class-footer">
+                            <button class="btn btn_azul">Cancelar</button>
+                            <button id="seguimiento_submit" class="btn btn-success">Actualizar</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Ventana modal de creaccion de consulta de tutoría -->
+    <div id="nueva_tutoria_modal" class="modal fade aviso ediccion_seguimiento_modal" role="dialog" data-backdrop="true" >
+        <div class="modal-dialog seleccion_modal">
+            <div class="modal-content ">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    <h4 class="modal-title">{% trans %}Nueva consulta de tutoría{% endtrans %}</h4>
+                </div>
+                <div id="modal-body-1" class="modal-body">
+                    <p>1. {% trans %}Seleccione un alumno de su grupo{% endtrans %}:</p>
+                    <div class="lista_alumnos_seguimiento"></div>
+                </div>
+                <div id="modal-body-2" class="modal-body hidden">
+                    <p>1. {% trans %}Seleccione un alumno de su grupo{% endtrans %}:</p>
+                    <label class="nombre">Alumno: <span id="alumno"></span></label>
+                    
+                    <p>2. {% trans %}Indique la consulta para los responsables del alumno{% endtrans %}:</p>
+                    <div></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}

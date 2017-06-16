@@ -101,23 +101,14 @@
 {% block contenido %}
 	<h4 id="titulo-seccion" class="titulo-seccion">{% trans %}Datos del curso{% endtrans %}</h4>
 	{% if cursos != null %}
-
 		<div id="cursos_profesores" class="container-fluid div_datos_curso">
 			{% if entity.nivel == "Primaria" %}
 				<div class="pull-left col-xs-12 col-sm-5 no-padding datos_curso">
 					<label>{% trans %}Nivel impartido{% endtrans %}:</label>
 					{% if entity.nivel == "Primaria" %}
-						{% if  app.request.getLocale() == "es" %}
-							<span> {{"Ed. Primaria"}}</span >
-						{% else %}
-							<span> {{"Primary Ed."}}</span >
-						{% endif %}
+						<span> {% trans %}Ed. Primaria{% endtrans %}</span >
 					{% else %}
-						{% if  app.request.getLocale() == "es" %}
-							<span> {{"Ed. Infantil"}}</span >
-						{% else %}
-							<span> {{"Child Ed."}}</span >
-						{% endif %}
+						<span>{% trans %}Ed. Infantil{% endtrans %}</span>
 					{% endif %}
 					<br>
 
@@ -155,17 +146,9 @@
 					<div>
 						<label>{% trans %}Nivel impartido{% endtrans %}:</label>
 						{% if entity.nivel == "Primaria" %}
-							{% if  app.request.getLocale() == "es" %}
-								<span> {{"Ed. Primaria"}}</span >
-							{% else %}
-								<span> {{"Primary Ed."}}</span >
-							{% endif %}
+							<span> {% trans %}Ed. Primaria{% endtrans %}</span >
 						{% else %}
-							{% if  app.request.getLocale() == "es" %}
-								<span> {{"Ed. Infantil"}}</span >
-							{% else %}
-								<span> {{"Child Ed."}}</span >
-							{% endif %}
+							<span>{% trans %}Ed. Infantil{% endtrans %}</span>
 						{% endif %}
 					</div>
 					
@@ -205,7 +188,6 @@
 				{% if entity.nivel == "Primaria" %}
 					<li role="presentation" class="active"><a id="tab_prof_horarios" href="#horarios" aria-controls="horarios" data-toggle="tab" role="tab">{% trans %}Horario de clases{% endtrans %}</a></li>
 					<li role="presentation"><a id="tab_prof_alumnos" href="#alumnos" aria-controls="alumnos" data-toggle="tab" role="tab">{% trans %}Cursos impartidos{% endtrans %}</a></li>
-				</div>
 				{% else %}
 					{% if tutor_grupo %}
 						<li role="presentation" class="active"><a id="tab_prof_alumnos" href="#alumnos" aria-controls="alumnos" data-toggle="tab" role="tab">{% trans %}Alumnos del grupo{% endtrans %}</a></li>

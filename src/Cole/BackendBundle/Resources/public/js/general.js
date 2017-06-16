@@ -2641,9 +2641,7 @@ $(document).on("blur","input[id='edit_profesor_dni']",function() {
   function actualizarContenido(horario,div) {
     array=horario.split("|");
 
-    $(div).find("#show div[id*='hora_']>div>span").remove();
-
-    if(horario==""){
+    if(horario=="" || horario==null){
       $(div).find("#show div[id*='hora_']>div").append('<span class="no_horario">Actualmente no existe ningún horario de contacto establecido.</span');
     }
     else{      
@@ -2736,7 +2734,14 @@ $(document).on("blur","input[id='edit_profesor_dni']",function() {
               out_class: "fadeOutRight",
             }
           });
-          actualizarContenido(contenido,id);
+          //Se elimina el contenido que muestra el horario de atención.
+          $(id).find("#show div[id*='hora_']>div>span").remove();
+         
+          //Se actualiza el nuevo horario de.
+          arr=contenido.split("*");
+          for (var i = 0; i<arr.length; i++) {
+            actualizarContenido(arr[i],id);
+          }
           id.next().next().find(".volver").click();
         }
       })
@@ -2785,6 +2790,11 @@ $(document).on("blur","input[id='edit_profesor_dni']",function() {
                 out_class: "fadeOutRight",
               }
             });
+
+            //Se elimina el contenido que muestra el horario de atención.
+            $(id).find("#show div[id*='hora_']>div>span").remove();
+
+            //Se actualiza el aviso de horario de atención.
             actualizarContenido(contenido,id);
           }
         })
@@ -2818,8 +2828,17 @@ $(document).on("blur","input[id='edit_profesor_dni']",function() {
         });
       });
     }
-    else{
+    else if(div==3){
       $("#horarios_atencion_dialog #3").hide("slide",{ direction: "left" }, 300, function() 
+      { 
+        $("#horarios_atencion_dialog #4").show("slide", { direction: "right" }, 300, function() 
+        { 
+          $("#horarios_atencion_dialog #formularios img").css( 'pointer-events', 'auto' );
+        });
+      });
+    }
+    else{
+      $("#horarios_atencion_dialog #4").hide("slide",{ direction: "left" }, 300, function() 
       { 
         $("#horarios_atencion_dialog #1").show("slide", { direction: "right" }, 300, function() 
         { 
@@ -2836,7 +2855,7 @@ $(document).on("blur","input[id='edit_profesor_dni']",function() {
    if(div==1){
       $("#horarios_atencion_dialog #1").hide("slide",{ direction: "right" }, 300, function() 
       { 
-        $("#horarios_atencion_dialog #3").show("slide", { direction: "left" }, 300, function(){ 
+        $("#horarios_atencion_dialog #4").show("slide", { direction: "left" }, 300, function(){ 
           $("#horarios_atencion_dialog #formularios img").css( 'pointer-events', 'auto' );
         });
       });
@@ -2849,10 +2868,18 @@ $(document).on("blur","input[id='edit_profesor_dni']",function() {
         });
       });
     }
-    else{
+    else if(div==3){
       $("#horarios_atencion_dialog #3").hide("slide",{ direction: "right" }, 300, function() 
       { 
-        $("#horarios_atencion_dialog #2").show("slide", { direction: "left" }, 300, function() {
+        $("#horarios_atencion_dialog #2").show("slide", { direction: "left" }, 300, function(){ 
+          $("#horarios_atencion_dialog #formularios img").css( 'pointer-events', 'auto' );
+        });
+      });
+    }
+    else{
+      $("#horarios_atencion_dialog #4").hide("slide",{ direction: "right" }, 300, function() 
+      { 
+        $("#horarios_atencion_dialog #3").show("slide", { direction: "left" }, 300, function() {
           $("#horarios_atencion_dialog #formularios img").css( 'pointer-events', 'auto' );
         });
       });
@@ -2862,9 +2889,9 @@ $(document).on("blur","input[id='edit_profesor_dni']",function() {
 
   function restablecerDatos(div) {
  
-    $(div).find("input[type!='checkbox']").val(""); 
+    $(div).find("input[type!='checkbox'][type!='radio']").val(""); 
     $(div).find("select").val("");
-    $(div).find("#tipo input:checkbox:checked").each(function() {
+    $(div).find("#tipo input:checked").each(function() {
       $(this).prop('checked', false);         
     });
     $(div).find("#selec").click();
@@ -2892,6 +2919,7 @@ $(document).on("blur","input[id='edit_profesor_dni']",function() {
     }
   });
 
+
   //Opciones con los botones.
   $(document).on('click',"#horarios_atencion_dialog .nuevo",function(event){
     id=$(this).closest("div").prev();
@@ -2907,6 +2935,7 @@ $(document).on("blur","input[id='edit_profesor_dni']",function() {
     id.find("#show").removeClass('oculto');
     id.next().removeClass('oculto');
     id.next().next().addClass('oculto');
+    id.find("#edit #add").addClass('disab');
     //Se restablece el contenedor.
     restablecerDatos(id);
     id.find("#list_added span[class!='title']").remove();
@@ -8808,10 +8837,10 @@ $(document).on("click","#registro_equipamientos td a",function(event){
         return this.get(0).scrollHeight > this.height();
     }
   })(jQuery);
-
-  // Se muestra la información del profesor al situar el ratón sobre una reserva de un profesor.
+  //Se utilizaba ésta variable para obtener el día de la semana pero lo cambiamos al número de día.
   var dia_semana = ["Domingo","Lunes","Martes","Miércoles","Jueves","Viernes","Sábado"];
-  //Variable para controlar el retardo de la carga de contenido_info.
+  
+  // Se muestra la información del profesor al situar el ratón sobre una reserva de un profesor.
   $(document).on("mouseenter","div[id^='consulta_reservas'] .scrollContent tr[id!='centro']", function () {
     container= $(this).closest("div[id^='consulta_reservas']");
 
@@ -8827,7 +8856,8 @@ $(document).on("click","#registro_equipamientos td a",function(event){
       from=$(this).find("td:nth-child(3)").attr("data-order").split("/");
 
       fecha = new Date(from[2], from[0]-1 , from[1]);
-      dia_semanal=dia_semana[fecha.getDay()];
+      //Se para el número de día de la semana.
+      dia_semanal=fecha.getDay();
 
       hora_inicio=$(this).find("td:nth-child(4)").attr("inicio");
       hora_fin=$(this).find("td:nth-child(4)").attr("fin");
@@ -8835,6 +8865,7 @@ $(document).on("click","#registro_equipamientos td a",function(event){
       fin=hora_fin+":00";
 
       profesor=$(this).attr("id");
+
 
       $.ajax({
         type: 'POST',
@@ -8987,19 +9018,55 @@ $(document).on("click","#registro_equipamientos td a",function(event){
     curso=tr.children('td').slice(0, 2).html();
     nivel=tr.children('td').slice(1, 2).html();
     ratio=tr.find("input").val();
-    // Se actualiza el atributo ratio de la entidad Curso.
-    $.ajax({
-      type: 'POST',
-      url: Routing.generate('asignar_ratio'),
-      data: {curso:curso,nivel:nivel,ratio:ratio},
-      success: function() {
-        // Se actualiza el nuevo valor inicial.
-        tr.find("input").attr("value",ratio);
+    alumnos_asignados=tr.attr("ratio");
 
-        // Se actualiza la pestaña asignar grupo.
-        $("#asignar_grupo").update_tab();
+    if(parseInt(alumnos_asignados)>parseInt(ratio)){
+      /*
+      texto="<p class='justificado'>No se puede asignar la tutoría de este grupo al profesor seleccionado ya que no es el tutor del grupo.<br></p>"
+      error.play();
+      swal({
+        title: "Asignación no permitida",
+        html: texto,
+        type: "error",
+        width: "500px",
+        confirmButtonColor: color,
+        showCancelButton: false
+      });
+*/
+      if($("#button_grupos_all").hasClass('clicked')){
+        tr.find("td:nth-child(3) input").addClass('modified');
+        tr.addClass('max');
       }
-    })
+      else{
+        texto="<p class='justificado'>No se puede asignar el número de alumnos indicado en el curso <strong class='negrita'>"+tr.find("td:first-child").text()+" de "+tr.find("td:nth-child(2)").text()+"</strong>, ya que hay un mayor número de alumnos matriculados en alguno de los grupos del curso.<br></p>"
+        error.play();
+        swal({
+          title: "Asignación no permitida",
+          html: texto,
+          type: "error",
+          width: "500px",
+          confirmButtonColor: color,
+          showCancelButton: false
+        });
+        tr.find("td:nth-child(3) input").addClass('modified');
+      }
+
+    }
+    else{
+      // Se actualiza el atributo ratio de la entidad Curso.
+      $.ajax({
+        type: 'POST',
+        url: Routing.generate('asignar_ratio'),
+        data: {curso:curso,nivel:nivel,ratio:ratio},
+        success: function() {
+          // Se actualiza el nuevo valor inicial.
+          tr.find("input").attr("value",ratio);
+
+          // Se actualiza la pestaña asignar grupo.
+          $("#asignar_grupo").update_tab();
+        }
+      })
+    }
   });
 
   // Se modifica el estilo de los input modificados.
@@ -9014,11 +9081,50 @@ $(document).on("click","#registro_equipamientos td a",function(event){
 
   // Se quita la marca de los input modificados y actualizan los ratios modificados.
   $(document).on('click',"#registro_ratio #button_grupos_all",function(event){
+    //Se indica que se ha pulsado el botón de guardar todos para no mostrar los avisos de errores individuales.
+    $(this).addClass('clicked');
+    //Se elimina la clase "max" de cada curso por si se ha mostrado avisosde errores anteriores.
+    $("#contenedor_ratio_grupos tr").removeClass('max');
+    //Se llama al evento principal para que guarde individualmente el ratio modificado.
     $("#contenedor_ratio_grupos input[class='modified']").each(function(){  
       $(this).closest("tr").find("button").trigger("click");
     });
-    // Se actualiza la pestaña asignar grupo.
-        $("#ratio_curso").update_tab();
+
+    //Se muestra los avisos de error si hay.
+    if($("#contenedor_ratio_grupos tr[class='max']").size()>1){
+      texto="<p class='justificado'>No se puede asignar el número de alumnos indicado en los siguientes cursos, ya que hay un mayor número de alumnos matriculados en alguno de los grupos del curso:<br><br></p>";
+      $("#contenedor_ratio_grupos tr[class='max']").each (function(){ 
+        texto=texto+"<p class='justificado negrita'>- "+$(this).find("td:first-child").text()+" de "+$(this).find("td:nth-child(2)").text()+"</p>";
+      });
+      
+      error.play();
+      swal({
+        title: "Asignación no permitida",
+        html: texto,
+        type: "error",
+        width: "500px",
+        confirmButtonColor: color,
+        showCancelButton: false
+      });
+      tr.find("td:nth-child(3) input").addClass('modified');
+      $(this).removeClass('clicked');
+    }
+    else if($("#contenedor_ratio_grupos tr[class='max']").size()==1)
+    {
+      texto="<p class='justificado'>No se puede asignar el número de alumnos indicado en el curso <strong class='negrita'>"+tr.find("td:first-child").text()+" de "+tr.find("td:nth-child(2)").text()+"</strong>, ya que hay un mayor número de alumnos matriculados en alguno de los grupos del curso.<br></p>";
+      
+      error.play();
+      swal({
+        title: "Asignación no permitida",
+        html: texto,
+        type: "error",
+        width: "500px",
+        confirmButtonColor: color,
+        showCancelButton: false
+      });
+      tr.find("td:nth-child(3) input").addClass('modified');
+      $(this).removeClass('clicked');
+    }
   });
 
   // Se restablece los valorea iniciales
@@ -11860,7 +11966,6 @@ $(document).on("click","#registro_equipamientos td a",function(event){
       }
     })
   });
-
 
   $(document).on('click',"#profesor_asignatura_grupo_dialog #div_lista button",function(event){ 
     //Se marca el profesor seleccionado.
