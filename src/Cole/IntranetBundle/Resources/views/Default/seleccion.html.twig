@@ -23,11 +23,23 @@
         	type: 'POST',
         	url: Routing.generate('nuevos_seguimientos_alumno', {id:id, _locale:"es"}),
         	success: function(response){
-            	//Si hay nuevas noticias sin leer, se indica en el contenedor de selección de cada alumno.
+            	//Si hay nuevos seguimientos sin leer, se indica en el contenedor de selección de cada alumno.
             	if(response.num!=0){
                 	$(".dashboard div[id='"+response.id+"'] #barraalertasmovil span:nth-child(2)").text(response.num);
 					$(".dashboard div[id='"+response.id+"'] #barraalertasmovil span:nth-child(2)").addClass('c_amarillo');
             	}
+        	}
+    	})
+
+    	$.ajax({
+        	type: 'POST',
+        	url: Routing.generate('nuevos_seguimiento_tutorias_alumno', {id:id, _locale:"es"}),
+        	success: function(response){
+            	//Si hay nuevas consultas de tutorías sin leer, se indica en la barra superior y en el panel principal.
+            	if(response.num!=0){
+                	$(".dashboard div[id='"+response.id+"'] #barratutoriasmovil span:nth-child(2)").text(response.num);
+					$(".dashboard div[id='"+response.id+"'] #barratutoriasmovil span:nth-child(2)").addClass('c_amarillo');
+            	}            	
         	}
     	})
     });

@@ -76,3 +76,9 @@ respuesta_seguimiento:
     defaults: { _controller: "IntranetBundle:Seguimiento:respuestaSeguimiento" }
     options:
         expose: true
+
+seguimiento_tutorias_consultado:
+    path:     /{id}/tutorias/consultado/{tipo}/{user}
+    defaults: { _controller: "IntranetBundle:Seguimiento:seguimientoTutoriasConsultado" }
+    options:
+        expose: true

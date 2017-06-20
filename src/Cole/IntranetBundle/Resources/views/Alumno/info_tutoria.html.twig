@@ -1,0 +1,19 @@
+		<div>
+			<label class="col-xs-8 col-sm-3">{% trans %}Profesor{% endtrans %}:</label> 
+			<span class="col-xs-12 col-sm-8">{{tutoria.profesor}}</span>
+		</div>
+	<div>
+			<label class="col-xs-2">{% trans %}Día{% endtrans %}:</label> 
+			<span class="col-xs-12 col-sm-8">{{tutoria.fecha | localizeddate('long', 'none', app.request.getLocale()) | capitalize}}</span>
+		</div>
+		<div>
+			<label class="col-xs-2">{% trans %}Hora{% endtrans %}:</label> 
+			<span class="col-xs-12 col-sm-8">{{tutoria.fecha | localizeddate('none', 'short', app.request.getLocale()) | capitalize}}</span>
+		</div>
+		<li class="divider"></li>
+		<div class="descripcion_tutoria col-xs-12 no-padding">
+			<div>
+				<label class="col-xs-8 col-sm-3">{% trans %}Descripción{% endtrans %}:</label> 
+			</div>
+				<p class="col-xs-12">{{tutoria.seguimiento.descripcion}}</p>
+		</div>

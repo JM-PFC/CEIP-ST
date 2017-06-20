@@ -572,7 +572,7 @@ $(document).ready(function () {
   });
 
   //Se marca el seguimiento como leido.
-  $(document).on('click','#consultar' ,function() {
+  $(document).on('click','#contenedor_seguimientos #consultar' ,function() {
     boton=$(this);
     id=$(this).closest(".seguimiento").attr("id");
     if($(this).closest("#contenedor_seguimientos").attr("profesor")){
@@ -1006,7 +1006,7 @@ $(document).ready(function () {
   });
 
   //Día seleccionado.
-  $(document).on('click',"#dia_seleccionado",function(e){
+  $(document).on('click',"#contenedor_reserva #dia_seleccionado",function(e){
     fecha=$(this).val();
     array=fecha.split("/");
 
@@ -1088,7 +1088,6 @@ $(document).ready(function () {
     })
   });
 
-
   $(document).on('click','#btn_tutoria_electronica button' ,function() {
     profesor=$(this).attr("profesor");
     grupo=$(this).attr("grupo");
@@ -1134,24 +1133,178 @@ $(document).ready(function () {
     }); 
   });
 
-/*
+  //Se marca el seguimiento como leido.
+  $(document).on('click','#contenedor_tutorias #consultar' ,function() {
+    boton=$(this);
+    id=$(this).closest(".seguimiento").attr("id");
+    if($(this).closest("#contenedor_tutorias").attr("profesor")){
+      user=$(this).closest("#contenedor_tutorias").attr("profesor");
+      tipo="Profesor";
+    }else{
+      user=$(this).closest("#contenedor_tutorias").attr("alumno");
+      tipo="Alumno";
+    }
+      //Se elimina de la tabla de avisos la consulta de tutoría seleccionada.
+      $.ajax({
+        url: Routing.generate('seguimiento_tutorias_consultado', {_locale:"es",id:id, user:user, tipo:tipo}),
+        dataType: 'json',
+        success: function(response) {
 
-  $(document).on('click','#btn_tutoria_electronica button' ,function() {
-    $("#nueva_tutoria_modal .modal-body").load(Routing.generate("seguimiento_tutoria_new", {_locale:locale}), function(){
+        }
+      });
+  });
+
+  //Se muestra la información detallada de la tutoría pendiente del profesor.
+  $(document).on('click','#tutorias_pendientes .info_tutoria_modal' ,function() {  
+    $("#info_tutoria_modal .modal-body").addClass('hidden');
+    id=$(this).attr("id");
+    $("#info_tutoria_modal .modal-body").load(Routing.generate("info_tutoria_profesor", {id:id, _locale:locale}), function(){
+        $("#info_tutoria_modal .modal-body").removeClass('hidden');
     }); 
   });
 
-  $(document).on('click','#btn_tutoria_electronica button' ,function() {
-    $('#nueva_tutoria_modal').modal('toggle');
-    $.ajax({
-      type: 'POST',
-      url: Routing.generate("seguimiento_update", {id:id, _locale:locale}),        
-      success: function() {
-
-      }
-    })
+  //Se muestra la información detallada de la tutoría pendiente del responsable.
+  $(document).on('click','#tutorias_pendientes .info_tutoria_modal_alumno' ,function() {  
+    $("#info_tutoria_modal .modal-body").addClass('hidden');
+    id=$(this).attr("alumno");
+    num=$(this).attr("id");
+    $("#info_tutoria_modal .modal-body").load(Routing.generate("info_tutoria_alumno", {id:id, num:num, _locale:locale}), function(){
+        $("#info_tutoria_modal .modal-body").removeClass('hidden');
+    }); 
   });
+
+     
+  //Se carga la lista de alumnos del grupo en para la asignación de tutorías.
+  $(document).on('click','.alumno_tutoria_button' ,function(event) {
+    event.preventDefault();
+    grupo=$(this).attr("grupo");
+    profesor=$(this).attr("profesor");
+    $("#lista_alumnos_tutoria .modal-body").load(Routing.generate("AlumnosGrupo", {id:grupo, _locale:locale}), function(){
+    });
+    $("#cole_intranetbundle_tutorias_grupo option[value='"+grupo+"']").prop('selected', true);
+    $("#cole_intranetbundle_tutorias_profesor option[value='"+profesor+"']").prop('selected', true);
+  });
+
+
+  // Se muestra el alumno elegido de la venatan modal en asignación de tutoría.
+  $(document).on('click','#lista_alumnos_tutoria tr' ,function() {
+    nombre=$(this).attr("nombre");
+    id=$(this).attr("id");
+    $("#alumno").text(nombre);
+    $("#div_alumno").removeClass('hidden');
+    $("#click_alumno").addClass('hidden');
+    $("#click_alumno_modificar").removeClass('hidden');
+    $("#alumno_tutoria").removeClass('margin_bottom_tutoria')
+    //Se cierra la ventana modal.
+    $('#lista_alumnos_tutoria').modal('toggle');
+
+    $("#cole_intranetbundle_tutorias_alumno option[value='"+id+"']").prop('selected', true);
+    //Se comprueba si estan todos los datos del formulario desde el campos descripción.
+    $("#cole_intranetbundle_tutorias_descripcion").blur();
+  });
+
+  $(document).on('blur','#hora_tutoria' ,function() {
+    if(!$(this).attr("data-timepicki-tim")){
+      setTimeout(function(){
+        //Se obliga a mostrar la hora por defecto al pulsar el input.
+        $(".timepicker_wrap  .time .prev").click(); //Se hace click para obtener la hora por defecto e insertarla en el input
+      }, 100);
+    }
+  });
+
+  //Se modifica el input con la hora seleccionada. 
+  $(document).on('click','#contenedor_tutoria .prev, #contenedor_tutoria .next ' ,function() {
+      setTimeout(function(){
+          //Se obtiene la hora asignada por defecto y se asigna al input correspondiente.
+          hora=$("#hora_tutoria").attr("data-timepicki-tim");
+          min=$("#hora_tutoria").attr("data-timepicki-mini");
+
+          if(hora.charAt(0)=='0'){
+            $("#cole_intranetbundle_tutorias_fecha_time_hour option[value='"+hora.charAt(1)+"']").prop('selected', true);
+          }
+          else{
+            $("#cole_intranetbundle_tutorias_fecha_time_hour option[value='"+hora+"']").prop('selected', true);
+          }
+
+          if(min.charAt(0)=='0'){
+            $("#cole_intranetbundle_tutorias_fecha_time_minute option[value='"+min.charAt(1)+"']").prop('selected', true);
+          }
+          else{
+            $("#cole_intranetbundle_tutorias_fecha_time_minute option[value='"+min+"']").prop('selected', true);
+          }
+          //Se comprueba si estan todos los datos del formulario desde el campos descripción.
+          $("#cole_intranetbundle_tutorias_descripcion").blur();
+      }, 100);
+  });
+
+  //Día seleccionado.
+  $(document).on('click',"#contenedor_tutoria #dia_seleccionado",function(e){
+    fecha=$(this).val();
+    array=fecha.split("/");
+
+    $("#cole_intranetbundle_tutorias_fecha_date_day").val(array[0]);
+    $("#cole_intranetbundle_tutorias_fecha_date_month").val(array[1]);
+    $("#cole_intranetbundle_tutorias_fecha_date_year").val(array[2]).change;
+    //Se comprueba si estan todos los datos del formulario desde el campos descripción.
+    $("#cole_intranetbundle_tutorias_descripcion").blur();
+  });
+
+
+
+
+
+ 
+
+
+
+
+
+
+
+
+
+
+
+  //Asignación de tutoría.
+  /*
+  $(document).on('click','#btn_tutoria_presencial button' ,function() {  
+    id=$(this).attr("alumno");
+    num=$(this).attr("id");
+    $("#asignar_tutoria_modal .modal-body").load(Routing.generate("tutorias_new", {_locale:locale}), function(){
+    }); 
+  });
+
 */
+  $(document).on('click','#btn_tutoria_presencial button' ,function() {
+    profesor=$(this).attr("profesor");
+    grupo=$(this).attr("grupo");
+    $("#asignar_tutoria_modal #modal-body-1").removeClass('hidden');
+    $("#asignar_tutoria_modal #modal-body-2").addClass('hidden');
+    $("#asignar_tutoria_modal #modal-body-1>div").load(Routing.generate("AlumnosGrupo", {id:grupo, _locale:locale}), function(){
+      $("#asignar_tutoria_modal #modal-body-2>div").load(Routing.generate("tutorias_new", {_locale:locale}), function(){
+        $("#modal-body-2").attr("progesor",profesor);
+        $("#modal-body-2").attr("grupo",grupo);
+          $("#cole_intranetbundle_tutorias #cole_intranetbundle_tutorias_seguimiento_grupo option[value='"+grupo+"']").prop('selected', true);
+          $("#cole_intranetbundle_tutorias #cole_intranetbundle_tutorias_seguimiento_profesor option[value='"+profesor+"']").prop('selected', true);
+          $("#cole_intranetbundle_tutorias #cole_intranetbundle_tutorias_profesor option[value='"+profesor+"']").prop('selected', true);
+      }); 
+    }); 
+  });
+
+  // Se muestra el alumno elegido de la venatan modal de la opción destinatario.
+  $(document).on('click','#asignar_tutoria_modal tr' ,function() {
+    nombre=$(this).attr("nombre");
+    id=$(this).attr("id");
+    $("#alumno").text(nombre);
+    $("#asignar_tutoria_modal #modal-body-2").removeClass('hidden');
+    $("#asignar_tutoria_modal #modal-body-1").addClass('hidden');
+    $("#cole_intranetbundle_tutorias #cole_intranetbundle_tutorias_alumno option[value='"+id+"']").prop('selected', true);
+    $("#cole_intranetbundle_tutorias #cole_intranetbundle_tutorias_seguimiento_alumno option[value='"+id+"']").prop('selected', true);
+  });
+
+
+
+
 
 
 

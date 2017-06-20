@@ -161,6 +161,18 @@ class ProfesorController extends Controller
             'dia'=>$dia_semana));
     }
 
+    public function InfoTutoriaAction($id)
+    {
+        $em = $this->getDoctrine()->getManager();
+
+        $entity = $this->get('security.context')->getToken()->getUser();
+
+        $tutoria=$em->getRepository('IntranetBundle:Tutorias')->findOneById($id);
+
+        return $this->render('IntranetBundle:Profesor:info_tutoria.html.twig', array(
+            'tutoria' => $tutoria,
+            'entity'=>$entity));
+    }
 
     public function cursosAction()
     {
@@ -746,12 +758,14 @@ class ProfesorController extends Controller
 
        
         $tutoriasNuevas=$em->getRepository('IntranetBundle:Seguimiento')->findNuevasTutorias($entity);
-
+        //Se obtiene las consultas finalizadas.      
+        $seguimientos_tutorias_finalizadas= $em->getRepository('IntranetBundle:Seguimiento')->findAntiguasTutoriasContador($entity, 5-count($tutoriasNuevas),"finalizadas");
+        //Si hay menos de 5 consultas nuevas ,se añade algunas antiguas hasta llegar a mostrar 5 consultas
         if(count($tutoriasNuevas)<5){
-            $seguimientos_tutorias= $em->getRepository('IntranetBundle:Seguimiento')->findAntiguasTutoriasContador($entity, 5-count($tutoriasNuevas));
+            $seguimientos_tutorias_activas= $em->getRepository('IntranetBundle:Seguimiento')->findAntiguasTutoriasContador($entity, 5-count($tutoriasNuevas),"activas");
         }
         else{
-            $seguimientos_tutorias=null;
+            $seguimientos_tutorias_activas=null;
         }
                    
         return $this->render('IntranetBundle:Profesor:tutorias.html.twig', array(
@@ -760,7 +774,8 @@ class ProfesorController extends Controller
             'h_tutorias' => $horario,
             'tutorias' => $tutorias,
             'tutoriasNuevas' => $tutoriasNuevas,
-            'seguimientos_tutorias'=>$seguimientos_tutorias
+            'seguimientos_tutorias_activas'=>$seguimientos_tutorias_activas,
+            'seguimientos_tutorias_finalizadas'=>$seguimientos_tutorias_finalizadas
             ));
     }
 
@@ -772,13 +787,15 @@ class ProfesorController extends Controller
         $seguimiento=$em->getRepository('IntranetBundle:Seguimiento')->findOneById($num);
         $respuestas=$em->getRepository('IntranetBundle:Seguimiento')->findRespuestasTutorias($num);
 
+        //Se comprueba si la consulta tiene tutoria asignada.
+        $tutoria=$em->getRepository('IntranetBundle:Tutorias')->findTutoriaConsulta($num);
 
-        //comprobar si tiene tutoria asignada o pendiente de confirmar para mostrarlo
 
         return $this->render('IntranetBundle:Profesor:seguimiento_tutoria.html.twig', array(
             'entity' => $entity, 
             'seguimiento'=> $seguimiento,
             'respuestas' => $respuestas,
+            'tutoria' =>$tutoria
             ));
     }
 
@@ -840,12 +857,12 @@ class ProfesorController extends Controller
             'success' => true), 200);
     }
 
-    public function CargarSeguimientosTutoriaAction(Request $request, $id)
+    public function CargarSeguimientosTutoriaAction(Request $request, $id, $tipo)
     {
         $em = $this->getDoctrine()->getManager();
         $entity = $this->get('security.context')->getToken()->getUser();
         
-        $seguimientos= $em->getRepository('IntranetBundle:Seguimiento')->findCargaSeguimientosTutoriasProfesor($entity, $id);
+        $seguimientos= $em->getRepository('IntranetBundle:Seguimiento')->findCargaSeguimientosTutoriasProfesor($entity, $id, $tipo);
 
         return new JsonResponse(array(
             'seguimientos' => $seguimientos,
@@ -877,6 +894,7 @@ class ProfesorController extends Controller
             'success' => true
             ), 200);
     }
+
 
 
 

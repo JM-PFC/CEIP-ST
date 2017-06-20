@@ -312,90 +312,135 @@ class SeguimientoRepository extends EntityRepository
 	public function findNuevasTutorias($profesor)
 	{
 		return $this->getEntityManager()->createQuery(
-			'SELECT s FROM IntranetBundle:Seguimiento s WHERE s.profesor=:profesor AND s.tipo=:tipo AND s.asignatura IS NULL
-			AND s.id IN(select a.idAviso FROM IntranetBundle:Avisos a where a.idUsuario=:profesor AND a.tipoUsuario=:tipoUsuario AND a.tipoAviso=:tipoAviso) ORDER BY s.fecha DESC')
+			'SELECT s FROM IntranetBundle:Seguimiento s WHERE s.profesor=:profesor AND s.tipoUser=:tipoUser AND s.asignatura IS NULL
+			AND s.id IN(select a.idAviso FROM IntranetBundle:Avisos a where a.idUsuario=:profesor AND a.tipoUsuario=:tipoUsuario AND a.tipoAviso=:tipoAviso) ORDER BY s.fechaActualizada DESC')
 		->setParameters(array(
 			'profesor' => $profesor,
 			'tipoUsuario' => "Profesor",
 			'tipoAviso' => "Tutoria",
-			'tipo'=>1))
+			'tipoUser'=>0))
 		->setMaxResults(5)
 		->getResult();
 	}
 
-	public function findAntiguasTutoriasContador($profesor, $contador)
+	public function findAntiguasTutoriasContador($profesor, $contador, $tipo)
 	{
-		return $this->getEntityManager()->createQuery(
-			'SELECT s FROM IntranetBundle:Seguimiento s WHERE s.profesor=:profesor AND s.tipo=:tipo AND s.asignatura IS NULL
-			AND s.id NOT IN(select a.idAviso FROM IntranetBundle:Avisos a where a.idUsuario=:profesor AND a.tipoUsuario=:tipoUsuario AND a.tipoAviso=:tipoAviso) ORDER BY s.fecha DESC')
-		->setParameters(array(
-			'profesor' => $profesor,
-			'tipoUsuario' => "Profesor",
-			'tipoAviso' => "Tutoria",
-			'tipo'=>1))
-		->setMaxResults($contador)
-		->getResult();
+
+		if($tipo == "activas"){
+			return $this->getEntityManager()->createQuery(
+				'SELECT s FROM IntranetBundle:Seguimiento s WHERE s.profesor=:profesor AND s.tipo=:tipo AND s.asignatura IS NULL AND s.fechaTerminada Is NULL
+				AND s.id NOT IN(select a.idAviso FROM IntranetBundle:Avisos a where a.idUsuario=:profesor AND a.tipoUsuario=:tipoUsuario AND a.tipoAviso=:tipoAviso) ORDER BY s.id DESC')
+			->setParameters(array(
+				'profesor' => $profesor,
+				'tipoUsuario' => "Profesor",
+				'tipoAviso' => "Tutoria",
+				'tipo'=>1))
+			->setMaxResults($contador)
+			->getResult();
+		}else{
+			return $this->getEntityManager()->createQuery(
+				'SELECT s FROM IntranetBundle:Seguimiento s WHERE s.profesor=:profesor AND s.tipo=:tipo AND s.asignatura IS NULL AND s.fechaTerminada Is NOT NULL
+				AND s.id NOT IN(select a.idAviso FROM IntranetBundle:Avisos a where a.idUsuario=:profesor AND a.tipoUsuario=:tipoUsuario AND a.tipoAviso=:tipoAviso) ORDER BY s.fecha DESC')
+			->setParameters(array(
+				'profesor' => $profesor,
+				'tipoUsuario' => "Profesor",
+				'tipoAviso' => "Tutoria",
+				'tipo'=>1))
+			->setMaxResults(5)
+			->getResult();
+		}
 	}
 
 
 	public function findNuevasTutoriasAlumno($alumno, $idResponsable)
 	{
 		return $this->getEntityManager()->createQuery(
-			'SELECT s FROM IntranetBundle:Seguimiento s WHERE  s.alumno=:alumno AND s.tipo=:tipo AND s.asignatura IS NULL AND  
-			s.id IN(select a.idAviso FROM IntranetBundle:Avisos a where a.idUsuario=:alumno AND a.idResponsable=:idResponsable AND a.tipoUsuario=:tipoUsuario AND a.tipoAviso=:tipoAviso) ORDER BY s.fecha DESC')
+			'SELECT s FROM IntranetBundle:Seguimiento s WHERE  s.alumno=:alumno AND s.tipoUser=:tipoUser AND s.asignatura IS NULL AND  
+			s.id IN(select a.idAviso FROM IntranetBundle:Avisos a where a.idUsuario=:alumno AND a.idResponsable=:idResponsable AND a.tipoUsuario=:tipoUsuario AND a.tipoAviso=:tipoAviso) ORDER BY s.fechaActualizada DESC')
 		->setParameters(array(
 			'alumno' => $alumno,
 			'idResponsable' => $idResponsable,
 			'tipoUsuario' => "Alumno",
 			'tipoAviso' => "Tutoria",
-			'tipo'=>1))
+			'tipoUser'=>1))
 		->setMaxResults(5)
 		->getResult();
 	}
 
 
 
-	public function findAntiguasTutoriasContadorAlumno($alumno, $idResponsable, $contador)
+	public function findAntiguasTutoriasContadorAlumno($alumno, $idResponsable, $contador, $tipo)
 	{
-		return $this->getEntityManager()->createQuery(
-			'SELECT s FROM IntranetBundle:Seguimiento s WHERE  s.alumno=:alumno AND s.tipo=:tipo AND s.asignatura IS NULL AND  
-			s.id NOT IN(select a.idAviso FROM IntranetBundle:Avisos a where a.idUsuario=:alumno AND a.idResponsable=:idResponsable AND a.tipoUsuario=:tipoUsuario AND a.tipoAviso=:tipoAviso) ORDER BY s.fecha DESC')
-		->setParameters(array(
-			'alumno' => $alumno,
-			'idResponsable' => $idResponsable,
-			'tipoUsuario' => "Alumno",
-			'tipoAviso' => "Tutoria",
-			'tipo'=>1))
-		->setMaxResults($contador)
-		->getResult();
+
+		if($tipo == "activas"){
+			return $this->getEntityManager()->createQuery(
+				'SELECT s FROM IntranetBundle:Seguimiento s WHERE  s.alumno=:alumno AND s.tipo=:tipo AND s.asignatura IS NULL AND s.fechaTerminada Is NULL AND
+				s.id NOT IN(select a.idAviso FROM IntranetBundle:Avisos a where a.idUsuario=:alumno AND a.idResponsable=:idResponsable AND a.tipoUsuario=:tipoUsuario AND a.tipoAviso=:tipoAviso) ORDER BY s.fecha DESC')
+			->setParameters(array(
+				'alumno' => $alumno,
+				'idResponsable' => $idResponsable,
+				'tipoUsuario' => "Alumno",
+				'tipoAviso' => "Tutoria",
+				'tipo'=>1))
+			->setMaxResults($contador)
+			->getResult();
+		}else{
+			return $this->getEntityManager()->createQuery(
+				'SELECT s FROM IntranetBundle:Seguimiento s WHERE  s.alumno=:alumno AND s.tipo=:tipo AND s.asignatura IS NULL AND s.fechaTerminada Is NOT NULL AND 
+				s.id NOT IN(select a.idAviso FROM IntranetBundle:Avisos a where a.idUsuario=:alumno AND a.idResponsable=:idResponsable AND a.tipoUsuario=:tipoUsuario AND a.tipoAviso=:tipoAviso) ORDER BY s.fecha DESC')
+				->setParameters(array(
+				'alumno' => $alumno,
+				'idResponsable' => $idResponsable,
+				'tipoUsuario' => "Alumno",
+				'tipoAviso' => "Tutoria",
+				'tipo'=>1))
+			->setMaxResults(5)
+			->getResult();
+		}
 	}
 
-	public function findCargaSeguimientosTutoriasProfesor($profesor, $id)
+	public function findCargaSeguimientosTutoriasProfesor($profesor, $id, $tipo)
 	{
-		return $this->getEntityManager()->createQuery(
-			'SELECT s FROM IntranetBundle:Seguimiento s WHERE s.profesor=:profesor AND s.tipo=:tipo AND s.id<:id  AND s.asignatura IS NULL
-			 AND s.id NOT IN(select a.idAviso FROM IntranetBundle:Avisos a where a.idUsuario=:profesor AND a.tipoUsuario=:tipoUsuario AND a.tipoAviso=:tipoAviso) ORDER BY s.fecha DESC')
-		->setParameters(array(
-			'profesor' => $profesor,
-			'id' => $id,
-			'tipoUsuario' => "Profesor",
-			'tipoAviso' => "Tutoria",
-			'tipo'=>1))
-		->setMaxResults(3)
-		->getResult();
+		if($tipo == "activas"){
+			return $this->getEntityManager()->createQuery(
+				'SELECT s FROM IntranetBundle:Seguimiento s WHERE s.profesor=:profesor AND s.tipo=:tipo AND s.id<:id AND s.fechaTerminada Is NULL AND s.asignatura IS NULL
+			 	AND s.id NOT IN(select a.idAviso FROM IntranetBundle:Avisos a where a.idUsuario=:profesor AND a.tipoUsuario=:tipoUsuario AND a.tipoAviso=:tipoAviso) ORDER BY s.fecha DESC')
+			->setParameters(array(
+				'profesor' => $profesor,
+				'id' => $id,
+				'tipoUsuario' => "Profesor",
+				'tipoAviso' => "Tutoria",
+				'tipo'=>1))
+			->setMaxResults(3)
+			->getResult();
+		}
+		else{
+			return $this->getEntityManager()->createQuery(
+				'SELECT s FROM IntranetBundle:Seguimiento s WHERE s.profesor=:profesor AND s.tipo=:tipo AND s.id<:id AND s.fechaTerminada Is NOT NULL AND s.asignatura IS NULL
+			 	AND s.id NOT IN(select a.idAviso FROM IntranetBundle:Avisos a where a.idUsuario=:profesor AND a.tipoUsuario=:tipoUsuario AND a.tipoAviso=:tipoAviso) ORDER BY s.fecha DESC')
+			->setParameters(array(
+				'profesor' => $profesor,
+				'id' => $id,
+				'tipoUsuario' => "Profesor",
+				'tipoAviso' => "Tutoria",
+				'tipo'=>1))
+			->setMaxResults(3)
+			->getResult();
+		}
+
 	}
 
 	public function findCargaSeguimientosNuevosTutoriasProfesor($fecha, $profesor)
 	{
 		return $this->getEntityManager()->createQuery(
-			'SELECT s FROM IntranetBundle:Seguimiento s WHERE  s.profesor=:profesor AND s.tipo=:tipo AND s.fechaActualizada<:fecha  AND s.asignatura IS NULL AND
-			s.id IN(select a.idAviso FROM IntranetBundle:Avisos a where a.idUsuario=:profesor AND a.tipoUsuario=:tipoUsuario AND a.tipoAviso=:tipoAviso)  ORDER BY s.fecha DESC')
+			'SELECT s FROM IntranetBundle:Seguimiento s WHERE  s.profesor=:profesor AND s.tipoUser=:tipoUser AND s.fechaTerminada Is NULL AND s.fechaActualizada<:fecha  AND s.asignatura IS NULL AND
+			s.id IN(select a.idAviso FROM IntranetBundle:Avisos a where a.idUsuario=:profesor AND a.tipoUsuario=:tipoUsuario AND a.tipoAviso=:tipoAviso)  ORDER BY s.fechaActualizada DESC')
 		->setParameters(array(
 			'profesor' => $profesor,
 			'tipoUsuario' => "Profesor",
 			'tipoAviso' => "Tutoria",
 			'fecha' => $fecha,
-			'tipo'=>1))
+			'tipoUser'=>0))
 		->setMaxResults(5)
 		->getResult();
 	}
@@ -403,7 +448,7 @@ class SeguimientoRepository extends EntityRepository
 	public function findCargaSeguimientosInicialTutoriasProfesor($profesor, $contador)
 	{
 		return $this->getEntityManager()->createQuery(
-			'SELECT s FROM IntranetBundle:Seguimiento s WHERE s.tipo=:tipo AND s.alumno=:profesor  AND s.asignatura IS NULL AND 
+			'SELECT s FROM IntranetBundle:Seguimiento s WHERE s.tipo=:tipo AND s.profesor=:profesor  AND s.fechaTerminada Is NULL AND s.asignatura IS NULL AND 
 			s.id NOT IN(select a.idAviso FROM IntranetBundle:Avisos a where a.idUsuario=:profesor AND a.tipoUsuario=:tipoUsuario AND a.tipoAviso=:tipoAviso) ORDER BY s.fecha DESC')
 		->setParameters(array(
 			'profesor' => $profesor,
@@ -418,12 +463,12 @@ class SeguimientoRepository extends EntityRepository
 	public function findNuevasTutoriasProfesor($ultimo_acceso, $profesor)
 	{
 		return $this->getEntityManager()->createQuery(
-		'SELECT s FROM IntranetBundle:Seguimiento s WHERE s.profesor=:profesor  AND  s.tipo=:tipo AND s.asignatura IS NULL
-		AND s.fechaActualizada>=:ultimo_acceso GROUP BY s.profesor, s.alumno, s.asignatura, s.grupo ORDER BY s.fechaActualizada DESC')
+		'SELECT s FROM IntranetBundle:Seguimiento s WHERE s.profesor=:profesor AND s.asignatura IS NULL
+		AND s.fechaActualizada>=:ultimo_acceso AND s.tipoUser=:tipoUser  ORDER BY s.fechaActualizada DESC')
 		->setParameters(array(
 		'profesor' => $profesor,
 		'ultimo_acceso' => $ultimo_acceso,
-		'tipo'=>1))
+		'tipoUser'=>0))
 		->getResult();
 	}
 
@@ -431,39 +476,55 @@ class SeguimientoRepository extends EntityRepository
 	public function findNuevasTutoriasInicioProfesor($profesor)
 	{
 		return $this->getEntityManager()->createQuery(
-		'SELECT s FROM IntranetBundle:Seguimiento s WHERE s.profesor=:profesor AND s.tipo=:tipo AND s.asignatura IS NULL ORDER BY s.fechaActualizada DESC')
+		'SELECT s FROM IntranetBundle:Seguimiento s WHERE s.profesor=:profesor AND s.asignatura IS NULL 
+		 AND s.tipoUser=:tipoUser ORDER BY s.fechaActualizada DESC')
 		->setParameters(array(
 		'profesor' => $profesor,
-		'tipo'=>1))
+		'tipoUser'=>0))
 		->getResult();
 	}
 
-	public function findCargaSeguimientosTutoriasAlumno($alumno,$idResponsable, $id , $grupo)
+	public function findCargaSeguimientosTutoriasAlumno($alumno,$idResponsable, $id, $tipo )
+	{
+
+		if($tipo == "activas"){
+			return $this->getEntityManager()->createQuery(
+				'SELECT s FROM IntranetBundle:Seguimiento s WHERE s.alumno=:alumno AND s.tipo=:tipo AND s.id<:id  AND s.fechaTerminada Is NULL AND s.asignatura IS NULL
+				AND s.id NOT IN(select a.idAviso FROM IntranetBundle:Avisos a where a.idUsuario=:alumno AND a.idResponsable=:idResponsable AND a.tipoUsuario=:tipoUsuario AND a.tipoAviso=:tipoAviso) ORDER BY s.fecha DESC')
+			->setParameters(array(
+				'alumno' => $alumno,
+				'id' => $id,
+				'idResponsable' => $idResponsable,
+				'tipoUsuario' => "Alumno",
+				'tipoAviso' => "Tutoria",
+				'tipo'=>1))
+			->setMaxResults(3)
+			->getResult();
+		}
+		else{
+			return $this->getEntityManager()->createQuery(
+				'SELECT s FROM IntranetBundle:Seguimiento s WHERE s.alumno=:alumno AND s.tipo=:tipo AND s.id<:id  AND s.fechaTerminada Is NOT NULL AND s.asignatura IS NULL
+				AND s.id NOT IN(select a.idAviso FROM IntranetBundle:Avisos a where a.idUsuario=:alumno AND a.idResponsable=:idResponsable AND a.tipoUsuario=:tipoUsuario AND a.tipoAviso=:tipoAviso) ORDER BY s.fecha DESC')
+			->setParameters(array(
+				'alumno' => $alumno,
+				'id' => $id,
+				'idResponsable' => $idResponsable,
+				'tipoUsuario' => "Alumno",
+				'tipoAviso' => "Tutoria",
+				'tipo'=>1))
+			->setMaxResults(3)
+			->getResult();
+		}
+	}
+
+	public function findCargaSeguimientosNuevosTutoriasAlumno($fecha, $alumno, $idResponsable)
 	{
 		return $this->getEntityManager()->createQuery(
-			'SELECT s FROM IntranetBundle:Seguimiento s WHERE s.alumno=:alumno AND s.grupo=:grupo AND s.tipo=:tipo AND s.id<:id  AND s.asignatura IS NULL
-			AND s.id NOT IN(select a.idAviso FROM IntranetBundle:Avisos a where a.idUsuario=:alumno AND a.idResponsable=:idResponsable AND a.tipoUsuario=:tipoUsuario AND a.tipoAviso=:tipoAviso) ORDER BY s.fecha DESC')
+			'SELECT s FROM IntranetBundle:Seguimiento s WHERE s.alumno=:alumno  AND s.tipo=:tipo AND s.fechaTerminada Is NULL AND s.asignatura IS NULL AND 
+			s.id IN(select a.idAviso FROM IntranetBundle:Avisos a where a.idUsuario=:alumno AND a.idResponsable=:idResponsable AND a.tipoUsuario=:tipoUsuario AND a.tipoAviso=:tipoAviso) AND s.fechaActualizada<:fecha  ORDER BY s.fechaActualizada DESC')
 		->setParameters(array(
 			'alumno' => $alumno,
-			'grupo' => $grupo,
-			'id' => $id,
 			'idResponsable' => $idResponsable,
-			'tipoUsuario' => "Alumno",
-			'tipoAviso' => "Tutoria",
-			'tipo'=>1))
-		->setMaxResults(3)
-		->getResult();
-	}
-
-	public function findCargaSeguimientosNuevosTutoriasAlumno($fecha, $alumno, $idResponsable, $grupo)
-	{
-		return $this->getEntityManager()->createQuery(
-			'SELECT s FROM IntranetBundle:Seguimiento s WHERE s.grupo=:grupo AND s.alumno=:alumno  AND s.tipo=:tipo AND s.asignatura IS NULL AND 
-			s.id IN(select a.idAviso FROM IntranetBundle:Avisos a where a.idUsuario=:alumno AND a.idResponsable=:idResponsable AND a.tipoUsuario=:tipoUsuario AND a.tipoAviso=:tipoAviso) AND s.fechaActualizada<:fecha ORDER BY s.fecha DESC')
-		->setParameters(array(
-			'alumno' => $alumno,
-			'grupo' =>$grupo,
-			'idResponsable' => "idResponsable",
 			'tipoUsuario' => "Alumno",
 			'tipoAviso' => "Tutoria",
 			'fecha' => $fecha,
@@ -472,19 +533,42 @@ class SeguimientoRepository extends EntityRepository
 		->getResult();
 	}
 
-	public function findCargaSeguimientosInicialTutoriasAlumno($alumno, $idResponsable, $grupo, $contador)
+	public function findCargaSeguimientosInicialTutoriasAlumno($alumno, $idResponsable, $contador)
 	{
 		return $this->getEntityManager()->createQuery(
-			'SELECT s FROM IntranetBundle:Seguimiento s WHERE s.grupo=:grupo AND s.tipo=:tipo AND s.alumno=:alumno AND s.asignatura IS NULL
+			'SELECT s FROM IntranetBundle:Seguimiento s WHERE s.tipo=:tipo AND s.alumno=:alumno AND s.fechaTerminada Is NULL AND s.asignatura IS NULL
 			AND s.id NOT IN(select a.idAviso FROM IntranetBundle:Avisos a where a.idUsuario=:alumno AND a.idResponsable=:idResponsable AND a.tipoUsuario=:tipoUsuario AND a.tipoAviso=:tipoAviso) ORDER BY s.fecha DESC')
 		->setParameters(array(
 			'alumno' => $alumno,
-			'grupo' =>$grupo,
 			'tipoUsuario' => "Alumno",
-			'idResponsable' => "idResponsable",
+			'idResponsable' => $idResponsable,
 			'tipoAviso' => "Tutoria",
 			'tipo'=>1))
 		->setMaxResults($contador)
+		->getResult();
+	}
+
+	public function findNuevosSeguimientosTutoriasAlumno($ultimo_acceso, $alumno)
+	{
+		return $this->getEntityManager()->createQuery(
+		'SELECT s FROM IntranetBundle:Seguimiento s WHERE s.alumno=:alumno  AND s.asignatura IS NULL AND s.tipoUser=:tipoUser 
+		AND s.fechaActualizada>:ultimo_acceso ORDER BY s.fechaActualizada DESC')
+		->setParameters(array(
+		'alumno' => $alumno,
+		'ultimo_acceso' => $ultimo_acceso,
+		'tipoUser'=>1))
+		->getResult();
+	}
+
+
+	#Seguimientos nuevos para el alumno que nunca ha visto la lista de seguimientos pendientes.
+	public function findNuevosSeguimientosInicioTutoriasAlumno($alumno)
+	{
+		return $this->getEntityManager()->createQuery(
+		'SELECT s FROM IntranetBundle:Seguimiento s WHERE s.alumno=:alumno AND s.tipoUser=:tipoUser  AND s.asignatura IS NULL ORDER BY s.fechaActualizada DESC')
+		->setParameters(array(
+		'alumno' => $alumno,
+		'tipoUser'=>1))
 		->getResult();
 	}
 
@@ -495,6 +579,19 @@ class SeguimientoRepository extends EntityRepository
 		->setParameters(array(
 		'id' => $id))
 		->getResult();
+	}
+
+
+	public function findUltimoAvisoTutoria($profesor, $tipo)
+	{
+		return $this->getEntityManager()->createQuery(
+			'SELECT s FROM IntranetBundle:Seguimiento s WHERE s.profesor=:profesor AND s.tipo=:tipo AND s.tipoUser=:tipoUser AND s.asignatura IS NULL  ORDER BY s.fecha DESC')
+		->setParameters(array(
+			'profesor' => $profesor,
+			'tipoUser'=>1,
+			'tipo'=>$tipo))
+		->setMaxResults(1)
+		->getSingleResult();
 	}
 
 

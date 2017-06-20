@@ -2,6 +2,61 @@
 
 {% block javascript %}
 	{{parent()}}
+	<script>
+		// Se muestra los avisos nuevos 
+		id={{entity.id|json_encode()|raw}};//Id del profesor.
+
+    	$.ajax({
+        	type: 'POST',
+        	url: Routing.generate('nuevas_noticias_profesor', {id:id, _locale:"es"}),
+        	success: function(response){
+            	//Si hay nuevas noticias sin leer, se indica en la barra superior y en el panel principal.
+            	if(response.num!=0){
+                	$("#barraanunciosmovil span:nth-child(2)").text(response.num);
+					$("#barraanunciosmovil span:nth-child(2)").addClass('c_amarillo');
+					$(".numanuncios").text(response.num);
+					$(".bloque-menu-alumno .numanuncios").removeClass('hidden');
+            	}
+            	else{
+            		$(".bloque-menu .numanuncios").remove();
+            	}
+        	}
+    	})
+    	$.ajax({
+        	type: 'POST',
+        	url: Routing.generate('nuevos_seguimientos_profesor', {id:id, _locale:"es"}),
+        	success: function(response){
+            	//Si hay nuevas noticias sin leer, se indica en la barra superior y en el panel principal.
+            	if(response.num!=0){
+                	$("#barraalertasmovil span:nth-child(2)").text(response.num);
+					$("#barraalertasmovil span:nth-child(2)").addClass('c_amarillo');
+					$(".numalertas").text(response.num);
+					$(".bloque-menu-alumno .numalertas").removeClass('hidden');
+            	}
+            	else{
+            		$(".bloque-menu .numalertas").remove();
+            	}
+        	}
+    	})
+
+    	$.ajax({
+        	type: 'POST',
+        	url: Routing.generate('nuevas_tutorias_profesor', {id:id, _locale:"es"}),
+        	success: function(response){
+            	//Si hay nuevas noticias sin leer, se indica en la barra superior y en el panel principal.
+            	if(response.num!=0){
+                	$("#barratutoriasmovil span:nth-child(2)").text(response.num);
+					$("#barratutoriasmovil span:nth-child(2)").addClass('c_amarillo');
+					$(".numtutorias").text(response.num);
+					$(".bloque-menu-alumno .numtutorias").removeClass('hidden');
+            	}
+            	else{
+            		$(".bloque-menu .numtutorias").remove();
+            	}
+        	}
+    	})
+
+	</script>
 {% endblock %}
 
 {% block titulo_cabecera %}

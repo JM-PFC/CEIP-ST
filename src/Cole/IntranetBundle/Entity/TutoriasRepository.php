@@ -17,7 +17,8 @@ class TutoriasRepository extends EntityRepository
 	{
 
 		return $this->getEntityManager()->createQuery(
-			'SELECT t FROM IntranetBundle:Tutorias t WHERE t.profesor=:profesor AND t.activo=:activo AND t.fecha>= CURRENT_DATE() ORDER BY t.fecha ASC')
+			'SELECT t FROM IntranetBundle:Tutorias t WHERE t.profesor=:profesor AND t.activo=:activo AND t.fecha>= CURRENT_DATE()
+			AND t.profesor IS NOT NULL AND t.alumno IS NOT NULL AND t.responsable IS NOT NULL ORDER BY t.fecha ASC')
 			->setParameters(array(
 			'profesor' => $profesor,
 			'activo'=>1))
@@ -28,13 +29,24 @@ class TutoriasRepository extends EntityRepository
 	{
 
 		return $this->getEntityManager()->createQuery(
-			'SELECT t FROM IntranetBundle:Tutorias t WHERE t.alumno=:alumno AND t.responsable=:responsable AND t.activo=:activo AND t.fecha>= CURRENT_DATE() ORDER BY t.fecha ASC')
+			'SELECT t FROM IntranetBundle:Tutorias t WHERE t.alumno=:alumno AND t.responsable=:responsable AND t.activo=:activo AND t.fecha>= CURRENT_DATE()
+			AND t.profesor IS NOT NULL AND t.alumno IS NOT NULL AND t.responsable IS NOT NULL ORDER BY t.fecha ASC')
 			->setParameters(array(
 			'alumno' => $alumno,
 			'responsable' => $responsable,
 			'activo'=>1))
 			->getResult();
-
-
 	}
+	//Consulta para obtener la tutoria de una consulta, ya sea confirmada (activo=1) o pendiente de confirmar (activo=0)
+	public function findTutoriaConsulta($num)
+	{
+		return $this->getEntityManager()->createQuery(
+			'SELECT t FROM IntranetBundle:Tutorias t WHERE t.seguimiento=:seguimiento')
+			->setParameters(array(
+			'seguimiento' => $num))
+			->setMaxResults(1)
+			->getOneOrNullResult();
+	}
+
+
 }

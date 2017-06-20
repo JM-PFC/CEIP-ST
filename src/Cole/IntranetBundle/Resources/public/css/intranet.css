@@ -242,6 +242,9 @@ form{
     .botonsubir {
         bottom: 35px !important;
     }
+    #contenedor_tutoria .arrow_top{
+        left: 20px !important;
+    }
 
 }
 /*Estilos para Móvil*/
@@ -625,7 +628,7 @@ form{
     .equipamientos td:first-child, .equipamientos th:first-child {
         padding-left: 5px !important;
     }
-    #reserva_equipamiento, #reserva_fecha{
+    #reserva_equipamiento, .reserva_fecha{
         border-right: 0 !important;
     }
     .tbn_tutorias {
@@ -643,6 +646,17 @@ form{
     }
     .label_descripcion p {
         padding: 3px 10px !important;
+    }
+    #asignar_tutoria_modal .timepicker_wrap {
+        margin: 0 25% !important;
+        min-width: 190px !important;
+        width: 50% !important;
+    }
+    #contenedor_tutoria .timepicker_wrap{
+        margin-left: 45px !important;
+    }
+    #contenedor_tutoria .arrow_top{
+        left: 20px !important;
     }
 }
 /* Estilos para Pc*/
@@ -2009,7 +2023,8 @@ table tr td a{
     margin-bottom: 15px;
 }
 #intranet .modal span{
-    margin-top: 3px;
+    display: inline-block;
+    padding: 3px 0;
 } 
 #intranet .doble_dato{
     min-height: 27px !important;
@@ -2032,9 +2047,11 @@ table tr td a{
 #intranet .modal .titulo-bloque i{
     margin: 0 !important;
 }
-#intranet #info_alumno .class-footer{
+#intranet #info_alumno .class-footer, #intranet #info_profesor .class-footer{
     text-align: center !important;
+    margin-bottom: 10px;
 }
+
 #intranet #tutor button{
     border-radius: 0px;
     margin-top: 5px;
@@ -2082,6 +2099,7 @@ table tr td a{
 #lista_alumnos .aviso_optativa{
     clear: both;
     margin-bottom: 5px;
+    margin-top: -5px;
 }
 #lista_alumnos .aviso_optativa p{
     text-align: center;
@@ -2299,6 +2317,8 @@ table tr td a{
     font-weight: bolder;
     margin: 0 !important;
     padding: 0 15px;
+    min-width: 200px;
+    text-align: center;
 }
 .seguimiento .body .descripcion p , .consulta_seguimiento .body .descripcion p{
     margin-bottom: 20px!important;
@@ -2448,7 +2468,7 @@ table tr td a{
     resize: none;
     border-radius: 5px !important;
     box-shadow: 0 1px 1px 0 rgba(50, 50, 50, 0.75) !important;
-    width: 97% !important;
+    width: 99% !important;
 }
 #formulario_nuevo_seguimiento textarea{
     padding: 10px 15px !important;
@@ -2492,8 +2512,11 @@ table tr td a{
 .lista_alumnos_seguimiento .modal-body{
     min-height: 200px;
 }
+.lista_alumnos_seguimiento {
+    margin-bottom: 20px !important;
+}
 .lista_alumnos_seguimiento button:not(.close){
-    margin: 20px !important;
+    margin: 0 20px 15px !important;
 }
 .lista_alumnos_seguimiento tr{
     cursor: pointer;
@@ -2542,11 +2565,11 @@ table tr td a{
 .modal textarea {
     resize: none;
 }
-.ediccion_seguimiento_modal label{
+.ediccion_seguimiento_modal label, .div_descripcion label{
     margin-right: 10px !important;
     width: 100%;
 }
-.ediccion_seguimiento_modal textarea{
+.ediccion_seguimiento_modal textarea, .div_descripcion textarea{
     height: 200px;
     width: 100%;
     padding: 10px;
@@ -2623,7 +2646,7 @@ table tr td a{
 .center-block{
     float: none !important;
 }
-#reserva_equipamiento, #reserva_fecha{
+#reserva_equipamiento, .reserva_fecha{
    border-right: 1px solid grey;
 }
 #reserva_equipamiento button{
@@ -2690,7 +2713,7 @@ table tr td a{
 }
 .ui-datepicker {
     border-radius: 5px;
-    box-shadow: 0 1px 1px 1px rgba(0, 0, 0, 0.5);
+    box-shadow: 0 1px 1px 0px rgba(0, 0, 0, 0.5);
 }
 .calendario_lectivos > div > div {
     background: #b1cce7 none repeat scroll 0 0 !important;
@@ -2754,11 +2777,11 @@ table tr td a{
 #reserva_modulos button p{
     margin-bottom: 5px !important;
 }
-#reserva_fecha a[class*="ui-state-active"] {
+.reserva_fecha a[class*="ui-state-active"] {
     cursor: default;
     pointer-events: none;
 }
-.opciones_reservar button:hover:not(.active):not(.disabled), #reserva_fecha .ui-datepicker-calendar a:hover{
+#asignar_tutoria_modal .ui-datepicker-calendar a:not(.ui-state-disabled):hover, .reserva_fecha button:hover:not(.active):not(.disabled), .reserva_fecha .ui-datepicker-calendar a:not(.ui-state-disabled):hover{
     background: #337ab7 !important;
     color: white;
 }
@@ -2841,7 +2864,7 @@ table tr td a{
 #datos_tutoria .vacio {
     margin-top: 60px !important;
 }
-.tab_tutoria #activas .vacio{
+.tab_tutoria #activas .vacio, .tab_tutoria #inactivas .vacio{
     margin-top: 50px !important;
 }
 .seguimiento .header p {
@@ -2904,4 +2927,184 @@ table tr td a{
     color:  #e57200;
     padding-left: 10px;
    
+}
+#btn_tutoria_presencial button{
+    line-height: 1 !important;
+}
+.sangre{
+    max-width: 150px;
+}
+#info_tutoria_modal .divider{
+    margin: 15px 0;
+}
+#info_tutoria_modal .descripcion_tutoria{
+    display: inline-block;
+    float: none !important;
+}
+#info_tutoria_modal .descripcion_tutoria p{
+    background: #f5f5f5 none repeat scroll 0 0;
+    border-radius: 3px;
+    box-shadow: 0 1px 1px 1px rgba(0, 0, 0, 0.42);
+    min-height: 100px;
+    padding: 10px;
+}
+#info_tutoria_modal label{
+    max-width: 140px !important;
+    min-width: 140px !important;
+}
+#asignar_tutoria_modal .ui-datepicker td span, #asignar_tutoria_modal .ui-datepicker td a {
+    min-width: 28px ;
+    height: 22px !important;
+    margin: 1px !important;
+    display: block;
+    padding-top: 1px !important;
+}
+#asignar_tutoria_modal .ui-datepicker .ui-datepicker-title {
+    line-height: 1em !important;
+}
+#asignar_tutoria_modal .ui-datepicker-title{
+    min-height: 0 !important;
+    margin-bottom: 0 !important;
+    margin-top: 0 !important;
+}
+#asignar_tutoria_modal .ui-datepicker-title span{
+    padding: 5px 0 !important;
+}
+#asignar_tutoria_modal .time{
+    margin-bottom: 0 !important;
+    float: left;
+    margin-top: -52px !important;
+}
+
+#asignar_tutoria_modal .mins{
+    float: right;
+        margin-top: -52px !important;
+}
+#asignar_tutoria_modal .timepicker_wrap {
+    margin-left: 89px;
+    margin-top: 30px !important;
+    padding-bottom: 5px !important;
+    padding-top: 60px;
+}
+#asignar_tutoria_modal .modal-body div{
+    clear: none !important;
+}
+#asignar_tutoria_modal #hora{
+    margin-top: 0;
+    width: 150px !important;
+    text-align: center;
+}
+#asignar_tutoria_modal .time_pick{
+    margin-top: 0 !important;
+}
+#asignar_tutoria_modal .modal-dialog{
+    margin-top: 20px !important;
+}
+#formulario_asignar_tutoria label{
+    margin-right: 10px;
+    float: left;
+    min-width: 55px;
+    margin-bottom: 2.5px !important;
+    margin-top: 2.5px !important;
+    clear: both;
+}
+#formulario_asignar_tutoria input{
+    padding: 0 5px;
+    text-align: center;
+}
+.tutoria_fecha .time_pick{
+    margin-bottom: 5px;
+}
+.tutoria_fecha .opciones_reservar{
+    height: 340px;
+}
+#formulario_asignar_tutoria .form-group>div{
+    clear: both;
+}
+.tutoria_fecha{
+    border: none !important;
+    max-width: 345px;
+}
+.tutoria_fecha #dia_reserva{
+    margin-top: 0 !important;
+}
+#formulario_asignar_tutoria textarea{
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    box-shadow: 0 0 1px 0 rgba(0, 0, 0, 0.5);
+    margin: 10px 0 !important;
+    min-height: 170px;
+    overflow: auto;
+    padding: 10px;
+    resize: none;
+    width: 97% !important;
+}
+#hora_tutoria{
+    text-align: center;
+    width: 90%;
+    max-width: 260px;
+    margin: 5px 0;
+}
+#contenedor_tutoria, .tutoria_fecha p{
+    margin-left: 10px !important;
+    margin-top: 0;
+}
+#contenedor_tutoria .timepicker_wrap{
+    padding-right: 0!important;
+    padding-left: 0 !important;
+    margin-left: 21%;
+}
+#contenedor_tutoria .arrow_top{
+    left: 72px;
+}
+
+#cole_intranetbundle_tutorias_seleccion_nombre{
+    margin-bottom: 15px;
+}
+#alumno_tutoria{
+    border: none !important;
+}
+#alumno_tutoria, #alumno_tutoria p, #descripcion_tutoria p{
+    margin-top: 0 !important;
+    width: 99% !important;
+}
+#alumno_tutoria .opciones_reservar, #descripcion_tutoria .opciones_reservar{
+    height: auto !important;
+    min-height: 50px !important;
+    margin-bottom: 10px;
+    width: 99% !important;
+}
+#alumno_tutoria .opciones_reservar>div{
+    padding: 5px  0;
+}
+.alumno_tutoria_button{
+    display: block !important;
+    margin: 0 auto !important;
+    padding: 2px 5px;
+}
+#alumno_tutoria span, #alumno_tutoria label {
+   text-align: left;
+   float: left;
+   margin: 0 !important; 
+   margin-left: 10px !important;
+   max-width: 85%;
+}
+#click_alumno_modificar{
+    margin-bottom: 11px !important;
+}
+.margin_bottom_tutoria{
+    margin-bottom: 41px !important;
+    margin-top: 10px !important;
+}
+#panel_tutoria>div{
+    padding: 5px 10px;
+}
+#panel_tutoria label{
+    min-width: 40px;
+    margin-right: 15px;
+}
+#panel_tutoria a{
+    margin: 0 10px;
+    min-width: 90px;
+    padding: 2px;
 }

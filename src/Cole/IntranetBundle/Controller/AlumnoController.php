@@ -11,6 +11,8 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Cole\BackendBundle\Entity\Alumno;
 use Cole\ColeBundle\Entity\Noticias;
 use Cole\IntranetBundle\Entity\Avisos;
+use Cole\IntranetBundle\Entity\Seguimiento;
+use Cole\IntranetBundle\Form\SeguimientoType;
 
 
 use Cole\BackendBundle\Form\AlumnoIntranetType;
@@ -690,12 +692,14 @@ class AlumnoController extends Controller
 
        
         $tutoriasNuevas=$em->getRepository('IntranetBundle:Seguimiento')->findNuevasTutoriasAlumno($entity,$responsable);
-
-        if(count($tutoriasNuevas)<5){
-            $seguimientos_tutorias= $em->getRepository('IntranetBundle:Seguimiento')->findAntiguasTutoriasContadorAlumno($entity, $responsable->getId(), 5-count($tutoriasNuevas));
-        }
+        //Se obtiene las consultas finalizadas.      
+        $seguimientos_tutorias_finalizadas= $em->getRepository('IntranetBundle:Seguimiento')->findAntiguasTutoriasContadorAlumno($entity, $responsable->getId(), 5-count($tutoriasNuevas),"finalizadas");
+        //Si hay menos de 5 consultas nuevas ,se añade algunas antiguas hasta llegar a mostrar 5 consultas
+        if(count($tutoriasNuevas)<5){            
+            $seguimientos_tutorias_activas= $em->getRepository('IntranetBundle:Seguimiento')->findAntiguasTutoriasContadorAlumno($entity, $responsable->getId(), 5-count($tutoriasNuevas),"activas");
+       }
         else{
-            $seguimientos_tutorias=null;
+            $seguimientos_tutorias_activas=null;
         }
                    
         return $this->render('IntranetBundle:Alumno:tutorias.html.twig', array(
@@ -705,7 +709,8 @@ class AlumnoController extends Controller
             'h_tutorias' => $horario,
             'tutorias' => $tutorias,
             'tutoriasNuevas' => $tutoriasNuevas,
-            'seguimientos_tutorias'=>$seguimientos_tutorias
+            'seguimientos_tutorias_activas'=>$seguimientos_tutorias_activas,
+            'seguimientos_tutorias_finalizadas'=>$seguimientos_tutorias_finalizadas
             ));
     }
 
@@ -720,12 +725,14 @@ class AlumnoController extends Controller
         $seguimiento=$em->getRepository('IntranetBundle:Seguimiento')->findOneById($num);
         $respuestas=$em->getRepository('IntranetBundle:Seguimiento')->findRespuestasTutorias($num);
 
-        //comprobar si tiene tutoria asignada o pendiente de confirmar para mostrarlo
+        //Se comprueba si la consulta tiene tutoria asignada.
+        $tutoria=$em->getRepository('IntranetBundle:Tutorias')->findTutoriaConsulta($num);
 
         return $this->render('IntranetBundle:Alumno:seguimiento_tutoria.html.twig', array(
             'entity' => $entity, 
             'seguimiento'=> $seguimiento,
             'respuestas' => $respuestas,
+            'tutoria' =>$tutoria
             ));
     }
 
@@ -736,10 +743,10 @@ class AlumnoController extends Controller
         $entity= $em->getRepository('BackendBundle:Alumno')->findOneById($id);
         $responsable = $this->get('security.context')->getToken()->getUser();
 
-        $seguimientosNuevos=$em->getRepository('IntranetBundle:Seguimiento')->findCargaSeguimientosNuevosTutoriasAlumno($fecha, $entity, $responsable->getId(), $entity->getGrupo());
+        $seguimientosNuevos=$em->getRepository('IntranetBundle:Seguimiento')->findCargaSeguimientosNuevosTutoriasAlumno($fecha, $entity->getId(), $responsable->getId());
 
         if(count($seguimientosNuevos)<5){
-            $seguimientos= $em->getRepository('IntranetBundle:Seguimiento')->findCargaSeguimientosInicialTutoriasAlumno($entity, $responsable->getId(), $entity->getGrupo(), 5-count($seguimientosNuevos));
+            $seguimientos= $em->getRepository('IntranetBundle:Seguimiento')->findCargaSeguimientosInicialTutoriasAlumno($entity, $responsable->getId(), 5-count($seguimientosNuevos));
         }
         else{
             $seguimientos=null;
@@ -754,13 +761,13 @@ class AlumnoController extends Controller
     }
 
 
-    public function CargarSeguimientosTutoriaAction(Request $request, $id, $iden)
+    public function CargarSeguimientosTutoriaAction(Request $request, $id, $iden, $tipo)
     {
         $em = $this->getDoctrine()->getManager();
         $entity= $em->getRepository('BackendBundle:Alumno')->findOneById($id);
         $responsable = $this->get('security.context')->getToken()->getUser();
 
-        $seguimientos= $em->getRepository('IntranetBundle:Seguimiento')->findCargaSeguimientosTutoriasAlumno($entity, $responsable->getId(), $iden, $entity->getGrupo());
+        $seguimientos= $em->getRepository('IntranetBundle:Seguimiento')->findCargaSeguimientosTutoriasAlumno($entity, $responsable->getId(), $iden, $tipo);
 
         return new JsonResponse(array(
             'seguimientos' => $seguimientos,
@@ -769,6 +776,176 @@ class AlumnoController extends Controller
             'seguimientos' => $seguimientos, 'seguimientosNuevos' => null, 'entity'=>$entity, 'tipo' =>'tutorias')),
             'success' => true
             ), 200);
+    }
+
+    
+    public function comprobarSeguimientosTutoriasNuevosAction($id)
+    {
+        $em = $this->getDoctrine()->getManager();
+
+        $entity= $em->getRepository('BackendBundle:Alumno')->findOneById($id);
+        $responsable = $this->get('security.context')->getToken()->getUser();
+        if($entity->getResponsable1()==$responsable){
+            $acceso=$entity->getAccesoTutoriasResponsable1();
+        }
+        else{
+            $acceso=$entity->getAccesoTutoriasResponsable2();
+        }
+
+        $num=0;
+
+        if($acceso){
+            $seguimientos =$em->getRepository('IntranetBundle:Seguimiento')->findNuevosSeguimientosTutoriasAlumno($acceso,$entity);
+        }
+        else{
+            $seguimientos =$em->getRepository('IntranetBundle:Seguimiento')->findNuevosSeguimientosInicioTutoriasAlumno($entity);
+        }
+
+        //Si hay consultasde tutorias nuevas se añade los id a la tabla Avisos.
+        if($seguimientos){
+            foreach($seguimientos as $seguimiento){
+                //Se añade el id del responsable en la tabla de avisos, para que ambos responsable tenga sus propios avisos.
+                if($seguimiento->getSeguimiento() == null){
+                    $existencia=$em->getRepository('IntranetBundle:Avisos')->findExistenciaAviso($entity->getId(),$responsable->getId(), "Alumno",$seguimiento->getId(), "Tutoria" );
+                    if(!$existencia){
+                        $aviso = new Avisos();
+                        $aviso->setIdUsuario($entity->getId());
+                        $aviso->setIdResponsable($responsable->getId());
+                        $aviso->setTipoUsuario("Alumno");
+                        $aviso->setIdAviso($seguimiento->getId());
+                        $aviso->setTipoAviso("Tutoria");
+                        $em->persist($aviso);
+                    }
+                }
+                else{
+                    $existencia=$em->getRepository('IntranetBundle:Avisos')->findExistenciaAviso($entity->getId(),$responsable->getId(), "Alumno",$seguimiento->getSeguimiento(), "Tutoria" );
+                    if(!$existencia){
+                        $aviso = new Avisos();
+                        $aviso->setIdUsuario($entity->getId());
+                        $aviso->setIdResponsable($responsable->getId());
+                        $aviso->setTipoUsuario("Alumno");
+                        $aviso->setIdAviso($seguimiento->getSeguimiento());
+                        $aviso->setTipoAviso("Tutoria");
+                        $em->persist($aviso);
+                    }
+                } 
+            }
+
+            //Se actualiza la fecha del último acceso del responsable correspondiente.
+            if($entity->getResponsable1()==$responsable){
+                $entity->setAccesoTutoriasResponsable1(new \DateTime("now"));
+            }
+            else{
+                $entity->setAccesoTutoriasResponsable2(new \DateTime("now"));
+            }
+            $em->persist($entity);
+            $em->flush();
+        }
+        //Se obtiene el número de consultasde tutoría nuevas.
+        $avisos =$em->getRepository('IntranetBundle:Avisos')->findAvisos($entity, $responsable, "Alumno", "Tutoria");
+        $num=count($avisos);
+        
+
+        return new JsonResponse(array(
+            'num'=> $num,
+            'id' => $id,
+            'success' => true), 200);
+    }
+
+    public function InfoTutoriaAction($id, $num)
+    {
+        $em = $this->getDoctrine()->getManager();
+
+        $entity = $this->get('security.context')->getToken()->getUser();
+
+        $tutoria=$em->getRepository('IntranetBundle:Tutorias')->findOneById($num);
+
+        return $this->render('IntranetBundle:Alumno:info_tutoria.html.twig', array(
+            'tutoria' => $tutoria,
+            'entity'=>$entity));
+    }
+
+
+    public function ConfirmarTutoriaAction($id, $num)
+    {
+        $em = $this->getDoctrine()->getManager();
+
+        $entity = $this->get('security.context')->getToken()->getUser();
+
+        $tutoria=$em->getRepository('IntranetBundle:Tutorias')->findOneById($num);
+        $tutoria->setActivo(1);
+        $tutoria->setResponsable($entity);
+
+        $em->persist($tutoria);
+        $em->flush();
+
+        $alumno=$em->getRepository('BackendBundle:Alumno')->findOneById($id);
+
+        //Se añade un comentario para mostrar como aviso del sistema (FechaActualizada == null)
+        $seguimiento = new Seguimiento();
+        $seguimiento->setProfesor($alumno->getGrupo()->getProfesor());
+        $seguimiento->setAlumno($alumno);
+        $seguimiento->setResponsable($entity);
+        $seguimiento->setAsignatura(null);
+        $seguimiento->setGrupo($alumno->getGrupo());
+        $seguimiento->setTipo(0);
+        $seguimiento->setTipoUser(0);
+        $descripcion = $this->get('translator')->trans("El responsable ha aceptado la petición de tutoría.");
+        $seguimiento->setDescripcion($descripcion);
+        $seguimiento->setFecha(new \DateTime("now"));
+        $seguimiento->setFechaActualizada(null);
+        $seguimiento->setSeguimiento($tutoria->getSeguimiento());
+        $seguimiento->setRespuesta(0);
+        $seguimiento->setFechaTerminada(null);
+
+        $em->persist($seguimiento);
+        $em->flush();
+
+        $ms = $this->get('translator')->trans('La tutoría ha sido asignada corectamente.');
+        $this->get('session')->getFlashBag()->add('notice',$ms);
+
+        return $this->redirect($this->generateUrl('intranet_alumno_seguimiento_tutoria', array('id'=>$id, 'num'=>$tutoria->getSeguimiento())));
+
+    }
+
+    public function CancelarTutoriaAction($id, $num)
+    {
+        $em = $this->getDoctrine()->getManager();
+
+        $entity = $this->get('security.context')->getToken()->getUser();
+        $tutoria=$em->getRepository('IntranetBundle:Tutorias')->findOneById($num);
+        $alumno=$em->getRepository('BackendBundle:Alumno')->findOneById($id);
+
+        //Se añade un comentario para mostrar como aviso del sistema (FechaActualizada == null)
+        $seguimiento = new Seguimiento();
+        $seguimiento->setProfesor($alumno->getGrupo()->getProfesor());
+        $seguimiento->setAlumno($alumno);
+        $seguimiento->setResponsable($entity);
+        $seguimiento->setAsignatura(null);
+        $seguimiento->setGrupo($alumno->getGrupo());
+        $seguimiento->setTipo(0);
+        $seguimiento->setTipoUser(0);
+        $descripcion = $this->get('translator')->trans("El responsable ha cancelado la petición de tutoría.");
+        $seguimiento->setDescripcion($descripcion);
+        $seguimiento->setFecha(new \DateTime("now"));
+        $seguimiento->setFechaActualizada(null);
+        $seguimiento->setSeguimiento($tutoria->getSeguimiento());
+        $seguimiento->setRespuesta(0);
+        $seguimiento->setFechaTerminada(null);
+
+        $em->persist($seguimiento);
+        $em->flush();
+
+        //Se elimina la tutoría pendiente.
+        $em->remove($tutoria);
+        $em->flush();
+
+
+        $ms = $this->get('translator')->trans('La petición de tutoría ha sido cancelada.');
+        $this->get('session')->getFlashBag()->add('notice',$ms);
+
+        return $this->redirect($this->generateUrl('intranet_alumno_seguimiento_tutoria', array('id'=>$id, 'num'=>$tutoria->getSeguimiento())));
+
     }
 
     ///////////////////////////////////////////

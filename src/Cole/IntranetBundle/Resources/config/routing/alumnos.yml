@@ -58,6 +58,12 @@ intranet_alumno_seguimiento_tutoria:
     path:     /tutoria/{num}
     defaults: { _controller: IntranetBundle:Alumno:seguimientoTutoria}
 
+nuevos_seguimiento_tutorias_alumno:
+    path:     /nuevos_seguimiento_tutorias
+    defaults: { _controller: IntranetBundle:Alumno:comprobarSeguimientosTutoriasNuevos}
+    options:
+        expose: true
+
 cargar_nuevos_seguimientos_tutoria_alumno:
     path:     /cargar_nuevos_seguimientos_tutoria/{fecha}
     defaults: { _controller: IntranetBundle:Alumno:CargarNuevosSeguimientosTutoria}
@@ -65,11 +71,28 @@ cargar_nuevos_seguimientos_tutoria_alumno:
         expose: true
 
 cargar_seguimientos_tutoria_alumno:
-    path:     /cargar_seguimientos_tutoria/{iden}
+    path:     /cargar_seguimientos_tutoria/{iden}/{tipo}
     defaults: { _controller: IntranetBundle:Alumno:CargarSeguimientosTutoria}
     options:
         expose: true
-        
+
+info_tutoria_alumno:
+    path:     /info_tutoria/{num}
+    defaults: { _controller: IntranetBundle:Alumno:InfoTutoria}
+    options:
+        expose: true
+
+confirmar_tutoria:
+    path:     /confirmar_tutoria/{num}
+    defaults: { _controller: IntranetBundle:Alumno:ConfirmarTutoria}
+    options:
+        expose: true
+
+cancelar_tutoria:
+    path:     /cancelar_tutoria/{num}
+    defaults: { _controller: IntranetBundle:Alumno:CancelarTutoria}
+    options:
+        expose: true
 intranet_alumno_noticias:
     path:     /noticias
     defaults: { _controller: IntranetBundle:Alumno:noticias}

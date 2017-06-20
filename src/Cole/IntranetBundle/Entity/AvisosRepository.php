@@ -137,5 +137,33 @@ class AvisosRepository extends EntityRepository
 		}
 	}
 
+	public function findseguimientoTutoriasConsultado($idAviso,$idUsuario,$idResponsable,$tipoUsuario)
+	{
+		if($idResponsable==null){
+			return $this->getEntityManager()->createQuery(
+				'SELECT a FROM IntranetBundle:Avisos a WHERE a.idUsuario=:idUsuario AND a.idResponsable IS NULL AND a.tipoUsuario=:tipoUsuario AND a.tipoAviso=:tipoAviso AND a.idAviso=:idAviso')
+				->setParameters(array(
+				'idUsuario' => $idUsuario,
+				'idAviso'=>$idAviso,
+				'tipoUsuario'=>$tipoUsuario,
+				'tipoAviso'=>"Tutoria"))
+				->setMaxResults(1)
+				->getOneOrNullResult();
+		}
+		else{
+			return $this->getEntityManager()->createQuery(
+				'SELECT a FROM IntranetBundle:Avisos a WHERE a.idUsuario=:idUsuario AND a.idResponsable=:idResponsable AND a.tipoUsuario=:tipoUsuario AND a.tipoAviso=:tipoAviso AND a.idAviso=:idAviso')
+				->setParameters(array(
+				'idUsuario' => $idUsuario,
+				'idResponsable'=>$idResponsable,
+				'idAviso'=>$idAviso,
+				'tipoUsuario'=>$tipoUsuario,
+				'tipoAviso'=>"Tutoria"))
+				->setMaxResults(1)
+				->getOneOrNullResult();
+		}
+	}
+
+
 
 }

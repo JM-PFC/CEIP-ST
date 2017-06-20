@@ -24,6 +24,12 @@ info_profesor:
     options:
         expose: true
 
+info_tutoria_profesor:
+    path:     /info_tutoria/{id}
+    defaults: { _controller: IntranetBundle:Profesor:InfoTutoria}
+    options:
+        expose: true
+
 asignaturasGrupo_profesor:
     path:     /asignaturas/profesor/{id}
     defaults: { _controller: IntranetBundle:Profesor:AsignaturasGrupoProfesor}
@@ -135,7 +141,7 @@ intranet_profesor_seguimiento_tutoria:
         expose: true
 
 cargar_seguimientos_tutoria_profesor:
-    path:     /cargar_seguimientos_tutoria/{id}
+    path:     /cargar_seguimientos_tutoria/{id}/{tipo}
     defaults: { _controller: IntranetBundle:Profesor:CargarSeguimientosTutoria}
     options:
         expose: true
@@ -145,6 +151,7 @@ cargar_nuevos_seguimientos_tutoria_profesor:
     defaults: { _controller: IntranetBundle:Profesor:CargarNuevosSeguimientosTutoria}
     options:
         expose: true
+
 
 nuevas_tutorias_profesor:
     path:     /{id}/nuevas_tutorias

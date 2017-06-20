@@ -1,0 +1,37 @@
+tutorias:
+    path:     /
+    defaults: { _controller: "IntranetBundle:Tutorias:index" }
+
+tutorias_show:
+    path:     /{id}/show
+    defaults: { _controller: "IntranetBundle:Tutorias:show" }
+
+tutorias_new:
+    path:     /new
+    defaults: { _controller: "IntranetBundle:Tutorias:new" }
+    options:
+        expose: true
+tutorias_asignar:
+    path:     /tutorias/asignar
+    defaults: { _controller: IntranetBundle:Tutorias:asignarTutoriaShow}
+    options:
+        expose: true
+
+tutorias_create:
+    path:     /create
+    defaults: { _controller: "IntranetBundle:Tutorias:create" }
+    requirements: { _method: post }
+
+tutorias_edit:
+    path:     /{id}/edit
+    defaults: { _controller: "IntranetBundle:Tutorias:edit" }
+
+tutorias_update:
+    path:     /{id}/update
+    defaults: { _controller: "IntranetBundle:Tutorias:update" }
+    requirements: { _method: post|put }
+
+tutorias_delete:
+    path:     /{id}/delete
+    defaults: { _controller: "IntranetBundle:Tutorias:delete" }
+    requirements: { _method: post|delete }

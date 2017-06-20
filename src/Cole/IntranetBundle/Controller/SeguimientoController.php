@@ -49,6 +49,7 @@ class SeguimientoController extends Controller
                 $entity->setFechaActualizada(new \DateTime("now"));
                 $entity->setTipo(1);
                 $entity->setRespuesta(0);
+                $entity->setFechaTerminada(null);
             if ($this->get('security.context')->isGranted('ROLE_PROFESOR')) {
                 $entity->setTipoUser(1);
                 $entity->setProfesor($user);
@@ -104,6 +105,7 @@ class SeguimientoController extends Controller
                 $entity->setTipo(0);
                 $entity->setTipoUser(1);
                 $entity->setRespuesta(0);
+                $entity->setFechaTerminada(null);
             }
             else if ($this->get('security.context')->isGranted('ROLE_USUARIO')){
                 $entity->setFecha(new \DateTime("now"));
@@ -112,11 +114,13 @@ class SeguimientoController extends Controller
                 $entity->setTipoUser(0);
                 $entity->setRespuesta(0);
                 $entity->setResponsable($user);
+                $entity->setFechaTerminada(null);
             }
             $em->persist($entity);
             //Se indica en el seguimiento principal que tiene respuesta.
             $principal= $em->getRepository('IntranetBundle:Seguimiento')->findOneById($entity->getSeguimiento());
             $principal->setRespuesta(1);
+            $principal->setFechaActualizada(new \DateTime("now"));
             $em->persist($principal);
 
             $em->flush();
@@ -124,10 +128,21 @@ class SeguimientoController extends Controller
             $this->get('session')->getFlashBag()->add('notice',$ms);
 
             if ($this->get('security.context')->isGranted('ROLE_PROFESOR')) {
-                return $this->redirect($this->generateUrl('intranet_profesor_seguimiento', array('num' => $entity->getSeguimiento())));
+               //Se comprueba el tipo de respuesta.
+                if($entity->getAsignatura()!=null){
+                    return $this->redirect($this->generateUrl('intranet_profesor_seguimiento', array('num' => $entity->getSeguimiento())));
+                }
+                else{
+                    return $this->redirect($this->generateUrl('intranet_profesor_seguimiento_tutoria', array('num' => $entity->getSeguimiento())));
+                }
             }
             else if ($this->get('security.context')->isGranted('ROLE_USUARIO')){
-                return $this->redirect($this->generateUrl('intranet_alumno_seguimiento', array('id' =>$entity->getAlumno()->getId() , 'num' => $entity->getSeguimiento())));
+                if($entity->getAsignatura()!=null){
+                    return $this->redirect($this->generateUrl('intranet_alumno_seguimiento', array('id' =>$entity->getAlumno()->getId() , 'num' => $entity->getSeguimiento())));
+                }
+                else{
+                    return $this->redirect($this->generateUrl('intranet_alumno_seguimiento_tutoria', array('id' =>$entity->getAlumno()->getId() , 'num' => $entity->getSeguimiento())));
+                }
             }
         }
 
@@ -136,6 +151,7 @@ class SeguimientoController extends Controller
             'form'   => $form->createView(),
         ));
     }
+
 
     /**
      * Creates a form to create a Seguimiento entity.
@@ -249,6 +265,7 @@ class SeguimientoController extends Controller
             'form'   => $form->createView(),
         ));
     }
+
     public function respuestaSeguimientoAction($id)
     {
         $em = $this->getDoctrine()->getManager();
@@ -511,6 +528,23 @@ class SeguimientoController extends Controller
     }
 
 
+    public function seguimientoTutoriasConsultadoAction($id,$user,$tipo)
+    {
+        $em = $this->getDoctrine()->getManager();
+        $entity = $this->get('security.context')->getToken()->getUser();
 
+        if ($this->get('security.context')->isGranted('ROLE_PROFESOR')) {
+            $responsable=null;
+        }
+        else if ($this->get('security.context')->isGranted('ROLE_USUARIO')){
+            $responsable=$entity;
+        }
+
+        $aviso= $em->getRepository('IntranetBundle:Avisos')->findseguimientoTutoriasConsultado($id,$user,$responsable,$tipo);
+        $em->remove($aviso);
+        $em->flush();
+
+        return new JsonResponse(array('success' => true), 200);
+    }
 
 }

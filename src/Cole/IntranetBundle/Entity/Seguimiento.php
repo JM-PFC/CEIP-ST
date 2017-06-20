@@ -52,12 +52,19 @@ class Seguimiento
      */
     private $fecha;
 
-        /**
+    /**
      * @var \DateTime
      *
      * @ORM\Column(name="fecha_actualizada", type="datetime" , nullable=true)
      */
     private $fechaActualizada;
+
+    /**
+     * @var \DateTime
+     *
+     * @ORM\Column(name="fecha_terminada", type="datetime" , nullable=true)
+     */
+    private $fechaTerminada;
 
     /**
     * @ORM\ManyToOne(targetEntity="Cole\BackendBundle\Entity\AsignaturasCursos", inversedBy="seguimiento")
@@ -226,7 +233,7 @@ class Seguimiento
      * @param \Cole\BackendBundle\Entity\AsignaturasCursos $asignatura
      * @return Seguimiento
      */
-    public function setAsignatura(\Cole\BackendBundle\Entity\AsignaturasCursos $asignatura)
+    public function setAsignatura(\Cole\BackendBundle\Entity\AsignaturasCursos $asignatura = null)
     {
         $this->asignatura = $asignatura;
 
@@ -466,5 +473,29 @@ class Seguimiento
     public function getTutoria()
     {
         return $this->tutoria;
+    }
+
+
+    /**
+     * Set fechaTerminada
+     *
+     * @param \DateTime $fechaTerminada
+     * @return Seguimiento
+     */
+    public function setFechaTerminada($fechaTerminada)
+    {
+        $this->fechaTerminada = $fechaTerminada;
+
+        return $this;
+    }
+
+    /**
+     * Get fechaTerminada
+     *
+     * @return \DateTime 
+     */
+    public function getFechaTerminada()
+    {
+        return $this->fechaTerminada;
     }
 }

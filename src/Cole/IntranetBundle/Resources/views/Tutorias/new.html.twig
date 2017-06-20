@@ -1,0 +1,178 @@
+
+{#
+
+{% extends '::base.html.twig' %}
+
+{% block javascript %}
+
+<script>
+	    $('#cole_intranetbundle_tutorias_fecha').datepicker({
+        weekStart: 1,
+        startDate: "date",
+        language: "es",
+        daysOfWeekDisabled: "0,6",
+        daysOfWeekHighlighted: "1,2,3,4,5",
+        todayHighlight: true
+    });
+</script>
+
+{% endblock %}
+
+{% block body -%}
+
+    {{ form(form) }}
+
+        <ul class="record_actions">
+    <li>
+        <a href="{{ path('tutorias') }}">
+            Back to the list
+        </a>
+    </li>
+</ul>
+{% endblock %}
+
+#}
+
+
+{% extends  'IntranetBundle:Default:index.html.twig' %}
+
+{% block body %}
+
+
+    <link href="{{ asset('bundles/backend/js/jquery-ui/jquery-ui.css') }}" rel="stylesheet" type="text/css" />
+    <link href="{{ asset('bundles/backend/js/TimePicki-master/css/timepicki.css') }}" media="all" rel="stylesheet" type="text/css">
+    <script src="{{ asset('bundles/backend/js/TimePicki-master/js/timepicki.js') }}" type="text/javascript"></script>
+
+    <script>
+
+    inicio_d={{ inicio.inicioCurso|date('d') }};
+    inicio_m= {{ inicio.inicioCurso|date('m') }};
+    inicio_a= {{ inicio.inicioCurso|date('Y') }};  
+    fin_d={{ fin.finCurso|date('d') }};
+    fin_m= {{ fin.finCurso|date('m') }};
+    fin_a= {{ fin.finCurso|date('Y') }};
+
+    $.datepicker.regional['es'] = {
+        closeText: 'Cerrar',
+        prevText: '<Ant',
+        nextText: 'Sig>',
+        currentText: 'Hoy',
+        monthNames: ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'],
+        monthNamesShort: ['Ene','Feb','Mar','Abr', 'May','Jun','Jul','Ago','Sep', 'Oct','Nov','Dic'],
+        dayNames: ['Domingo', 'Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado'],
+        dayNamesShort: ['Dom','Lun','Mar','Mié','Juv','Vie','Sáb'],
+        dayNamesMin: ['Do','Lu','Ma','Mi','Ju','Vi','Sá'],
+        weekHeader: 'Sm',
+        dateFormat: 'dd/mm/yy',
+        firstDay: 1,
+        isRTL: false,
+        showMonthAfterYear: false,
+        yearSuffix: ''
+    };
+    if($("#intranet").attr("locale")=="es"){
+        $.datepicker.setDefaults($.datepicker.regional['es']);
+    }
+    else{
+        $.datepicker.setDefaults($.datepicker.regional['en']);
+    }
+
+    if(new Date() < new Date(inicio_a, inicio_m-1, inicio_d)){
+        min=new Date(inicio_a, inicio_m-1, inicio_d);
+    }
+    else{
+        min=new Date();
+    }
+    // beforeShowDay: $.datepicker.noWeekends (Para deshabilitar fines de semana)
+    $( "#asignar_tutoria_date" ).datepicker({ minDate: min, maxDate: new Date(fin_a, fin_m-1, fin_d),beforeShowDay: $.datepicker.noWeekends, defaultDate: null,
+        onChangeMonthYear:function () {
+        $("#reserva_fecha #actualizar_calendario_lectivo").trigger("click");
+        },    
+        onSelect: function (date,inst) {
+
+        d=$("#asignar_tutoria_modal #contenedor_reserva .ui-datepicker-calendar a[class*='ui-state-active']").text();
+        m=('0'+(parseInt($("#asignar_tutoria_modal #contenedor_reserva .ui-datepicker-calendar a[class*='ui-state-active']").closest("td").attr("data-month"))+1)).slice(-2);
+        a=$("#asignar_tutoria_modal #contenedor_reserva .ui-datepicker-calendar a[class*='ui-state-active']").closest("td").attr("data-year");
+        fecha=d+"/"+m+"/"+a;
+        // Se evita darle click al día seleccionado.
+        if(fecha!=date){
+            // Se establece como falso para impedir el redibujado en la función interna de la libreria jquery-ui (if (inst.inline) {this._updateDatepicker(inst);...})
+            inst.inline = false;
+            // Se elimina los estilos de la selección existente.
+            $("#asignar_tutoria_modal #contenedor_reserva .ui-datepicker-calendar .ui-datepicker-current-day").removeClass("ui-datepicker-current-day").children().removeClass("ui-state-active");
+            $("#asignar_tutoria_modal #contenedor_reserva .ui-datepicker-calendar tbody a[class*='ui-state-active']").removeClass("ui-state-active");
+            // Se busca el enlace seleccionado y se le aplica los estilos.
+            $("#asignar_tutoria_modal #contenedor_reserva .ui-datepicker-calendar tbody a").each(function(){
+            if ($(this).text() == inst.selectedDay) {
+                $(this).addClass("ui-state-active");
+                $(this).parent().addClass("ui-datepicker-current-day");
+            }
+            });
+            //Se simula el darle click a un día, guardando el día en un input y haciendo click para capturar el evento en intranet.js
+            dia=date.split("/");
+            $("#dia_seleccionado").attr("value",date);
+            $("#dia_seleccionado").trigger("click");
+        }
+        } 
+    });
+    $('#asignar_tutoria_modal #contenedor_reserva a[class*="ui-state-disabled"]').hide();
+    $("#asignar_tutoria_modal #actualizar_calendario_lectivo").trigger("click");
+
+    //Se muestra el calendario sin opciones marcadas si no hay fecha del curso registrada.
+    if(inicio_a<0){
+        $("#asignar_tutoria_modal .ui-datepicker-calendar td").addClass('ui-state-disabled');
+        $("#asignar_tutoria_modal .ui-datepicker-title span").remove();
+    }
+    // Se elimina el estilo de activado del dia actual.
+    $("#asignar_tutoria_modal #contenedor_reserva .ui-datepicker-calendar .ui-datepicker-current-day").removeClass("ui-datepicker-current-day").children().removeClass("ui-state-active");
+
+    $("#asignar_tutoria_modal #hora").timepicki({
+        show_meridian:false,
+        min_hour_value:9,
+        max_hour_value:14,
+        step_size_minutes:15,
+        overflow_minutes:true,
+        increase_direction:'up',
+        start_time: ["10", "00"],
+        disable_keyboard_mobile: true
+    });
+
+ 
+
+    // Se añade el separador de la hora.
+    $("#asignar_tutoria_modal .timepicker_wrap .time").after(":");
+    
+    //Se elimina el arrow_top que trae por defecto.
+    $("#asignar_tutoria_modal  .arrow_top" ).remove();    
+    </script>
+
+    <div class="contenedor_reserva text-center col-xs-12 col-sm-offset-2 col-sm-7 no-padding" id="contenedor_reserva">
+        <div id="asignar_tutoria_date" class="calendario_lectivos"></div>
+        <div id="div_leyenda" class="hidden"></div>
+        <input id="dia_seleccionado" class="hidden"></input>
+        <button id="actualizar_calendario_lectivo" class="hidden"></button>
+    </div>
+
+    <div class="contenedor_reserva text-center col-xs-12 no-padding">
+        <label for="" class="pull-left">Hora:</label><input id="hora" class="pull-left"></input>
+    </div>
+
+
+  {{form_start(form, {'method':'Post','attr':{'id':'asignar_tutoria', 'data-toggle':"validator", 'role':"form" ,'novalidate':'novalidate', 'autocomplete':'off'}})}}
+    <div class="form-group has-feedback">
+      {{ form_errors(form) }}
+        <div class="div_descripcion">
+            {{ form_label(form.seguimiento.descripcion) }}
+        {{ form_widget(form.seguimiento.descripcion) }}
+        </div>
+        
+      {{ form_row(form.submit,{'id':'intranet_'~form.submit.vars.id , 'attr':{'class': 'btn btn-success center-block disabled' }}) }}
+
+      <div class="hidden">
+        {{ form_rest(form) }}
+      </div>
+
+      <div class="help-block with-errors"></div>
+    </div>
+  {{ form_end(form) }}
+
+{% endblock %}

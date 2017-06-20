@@ -93,12 +93,12 @@
                                 <div class="botones_seguimiento margin_btn">
                                     <div>
                                     {% if seguimiento.respuesta %}
-                                        <a id="consultar" href="{{path('intranet_profesor_seguimiento_tutoria', {'num': seguimiento.id}) }}" class="btn btn_azul">
+                                        <a id="consultar" href="{{path('intranet_alumno_seguimiento_tutoria', {'id': entity.id, 'num': seguimiento.id}) }}"  class="btn btn_azul">
                                             <i class="fa fa-search"></i>
                                             {% trans %}Consultar{% endtrans %}
                                         </a>
                                     {% else %}
-                                        <a id="consultar" href="{{path('intranet_profesor_seguimiento_tutoria', {'num': seguimiento.id}) }}" class="btn btn_azul">
+                                        <a id="consultar" href="{{path('intranet_alumno_seguimiento_tutoria', {'id': entity.id, 'num': seguimiento.id}) }}"  class="btn btn_azul">
                                             <i class="fa  fa-pencil-square-o"></i>
                                             {% trans %}Responder{% endtrans %}
                                         </a>

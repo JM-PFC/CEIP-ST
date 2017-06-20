@@ -129,7 +129,7 @@ Nueva: New
 Nuevo: New
 Información del alumno: Student Information
 Información del profesor: Teacher Information
-Sangre: Blood
+Grupo Sanguíneo: Blood type
 No disponible: Not available
 No asignado: Not assigned
 Responsables: Responsible
@@ -234,3 +234,25 @@ Indique el motivo de su consulta y el tutor le responderá en cuanto le sea posi
 Indique el motivo de su consulta y la tutora le responderá en cuanto le sea posible: Indicate the reason for your query and the tutor the responder as soon as possible
 Nueva consulta de tutoría creada.: New tutoring consultation created.
 Se ha creado la nueva consulta de tutoría correctamente. Pronto recibirás respuesta.: The new tutorial query has been created successfully. You will receive a response soon.
+No tienes ninguna consulta de tutoría registrada en el sistema: You do not have any tutoring queries registered in the system
+No tienes ninguna consulta de tutoría finalizada en el sistema: You do not have any tutorial queries finalized in the system
+Información de la tutoría presencial: Tutorial information in person
+Asignación de tutoría: Tutoring assignment
+Seleccione día y hora: Select day and time
+Seleccione un alumno del grupo: Select a student from the group
+Añade una descripción para la asignación: Add a description for the assignment
+Se ha asignado una nueva tutoría pendiente de confirmación.: New tutoring pending confirmation has been assigned.
+Seleccionar alumno: Select student
+Modificar alumno: Modify student
+Guardar Asignación: Save Assignmen
+Pulse para seleccionar la hora: Press to select the time
+Petición de tutoría pendiente de confirmación: Request for tutorial pending confirmation
+Día: Day
+Hora: Hour
+Confirmar: Confirm
+La tutoría ha sido asignada corectamente.: The tutoring has been assigned correctly.
+El responsable ha aceptado la petición de tutoría.: The responsible has accepted the request for tutoring.
+El responsable ha cancelado la petición de tutoría.: The responsible has canceled the request for tutoring.
+La petición de tutoría ha sido cancelada.: The tutorial request has been canceled.
+Cancelación de la petición de tutoría: Cancellation of the request for tutoring
+Estas apunto de cancelar la asignación de tutoría que tienes pendiente: You are about to cancel the pending tutoring assignment

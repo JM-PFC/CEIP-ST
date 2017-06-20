@@ -14,41 +14,40 @@
 		<div>
 			<label class="col-xs-2">{% trans %}Nombre{% endtrans %}:</label> <span>{{entity}}</span>	
 		</div>
-		<div class="doble_dato visible-sm hidden-xs visible-md visible-lg">
-			<label class="col-sm-2">{% trans %}Edad{% endtrans %}:</label> 
-			<span class="col-sm-3 no-padding">{{edad ~ " "}} {% trans %}años{% endtrans %}</span>
-			{% if entity.grupoSangre != null %}
-				<label class="col-sm-2">{% trans %}Sangre{% endtrans %}:</label>
-				<span class="col-sm-2 no-padding" >{{entity.grupoSangre}}</span>
-			{% else %}
-				<label class="col-sm-2">{% trans %}Sangre{% endtrans %}:</label>
-				<span class="col-sm-2 no-padding color_rojo" >{% trans %}No disponible{% endtrans %}</span>
-			{% endif %}
+
+		{% if entity.curso != null and entity.grupo != null %}
+		<div class="hidden-sm visible-xs hidden-md hidden-lg">
+			<label class="col-xs-2 pull-left">{% trans %}Curso{% endtrans %}:</label> 
+			<span class="col-xs-8 pull-left no-padding">{{entity.curso.curso ~ " de " ~ entity.curso.nivel }}</span>
 		</div>
+		<div class="hidden-sm visible-xs hidden-md hidden-lg">	
+			<label class="col-xs-2 pull-left">{% trans %}Grupo{% endtrans %}:</label>
+			<span class="col-xs-8 no-padding pull-left" >{{entity.grupo.letra}}</span>
+		</div>
+		<div class="visible-sm hidden-xs visible-md visible-lg">
+			<label class="col-xs-2 pull-left">{% trans %}Curso{% endtrans %}:</label> 
+			<span class="col-xs-4 pull-left">{{entity.curso.curso ~ " de " ~ entity.curso.nivel }}</span>	
+			<label class="col-xs-2 pull-left">{% trans %}Grupo{% endtrans %}:</label>
+			<span class="col-xs-2 no-padding pull-left" >{{entity.grupo.letra}}</span>
+		</div>
+
+		{% endif %}
+		
+		<div>
+			<label class="col-xs-2">{% trans %}Teléfono{% endtrans %}:</label> <span class="color_rojo">{% trans %}No disponible{% endtrans %}</span>	
+		</div>
+		
 		<div class="hidden-sm visible-xs hidden-md hidden-lg">
 			<label class="col-xs-2" >{% trans %}Edad{% endtrans %}:</label> <span>{{edad ~ " "}} {% trans %}años{% endtrans %}</span>	
 		</div>
 		
 		{% if entity.grupoSangre != null %}
-		<div class="hidden-sm visible-xs hidden-md hidden-lg">
-			<label class="col-xs-2" >{% trans %}Sangre{% endtrans %}:</label> <span>{{entity.grupoSangre}}</span>	
+		<div class="">
+			<label class="sangre col-xs-6" >{% trans %}Sangre{% endtrans %}:</label> <span>{{entity.grupoSangre}}</span>	
 		</div>
 		{% else %}
 			<div>
-				<label class="col-xs-2">{% trans %}Sangre{% endtrans %}:</label> <span class="color_rojo">{% trans %}No disponible{% endtrans %}</span>	
-			</div>
-		{% endif %}
-
-		{% if entity.telefono != null %}
-			<div class="visible-sm hidden-xs visible-md visible-lg">
-				<label class="col-sm-2">{% trans %}Teléfono{% endtrans %}:</label> <span class="col-sm-3 no-padding">{{entity.telefono}}</span>	
-			</div>
-			<div class="hidden-sm visible-xs hidden-md hidden-lg">
-				<label class="col-xs-2">{% trans %}Teléfono{% endtrans %}:</label> <span>{{entity.telefono}}</span>	
-			</div>
-		{% else %}
-			<div>
-				<label class="col-xs-2">{% trans %}Teléfono{% endtrans %}:</label> <span class="color_rojo">{% trans %}No disponible{% endtrans %}</span>	
+				<label class="sangre col-xs-6">{% trans %}Grupo Sanguíneo{% endtrans %}:</label> <span class="color_rojo">{% trans %}No disponible{% endtrans %}</span>	
 			</div>
 		{% endif %}
 	</div>
