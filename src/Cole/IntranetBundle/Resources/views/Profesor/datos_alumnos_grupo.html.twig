@@ -66,49 +66,56 @@
 		<a id="alumnos_grupo_pdf"class=" descargar-datos hidden-md hidden-lg hidden-sm #1"   href="{{ path('alumnos_grupo_pdf', { 'id': grupo.id }) }}">
 			<button class="hidden"><i class="fa fa-file-pdf-o"></i>{% trans %}Lista de Alumnos PDF{% endtrans %}</button>
 		</a>
+		{% if entities %}
+			{# Opciones para el profesor que imparte asignatura opcional y no opcional #}
+			{% if tipos == "ambos" %}
+				<div id="tipo_lista">
+					<button id="alumnos_del_grupo" class="active">{% trans %}Alumnos / Grupo{% endtrans %}</button><button id="alumnos_optativa">{% trans %}Alumnos / Optativa{% endtrans %}</button>
+				</div>
+			{% endif %}
+			<table class="lista-alumnos table table-striped">
+				<thead >
+					<tr>
+						<th class="col-xs-1 center">Nº</th>
+						<th class="col-xs-8 col-sm-9">{% trans %}Apellidos, Nombre{% endtrans %}</th>
+						<th class="col-xs-3 col-sm-2 center"></th>
+					</tr>
+				</thead> 
+				<tbody>
+					{% for entity in entities %}
+					<tr>
+						<td class="col-xs-1 center">
+							{#{{ loop.index }}#}
+							{{ entity.numAlum }}
+						</td>
+						<td class="col-xs-8 col-sm-9 ">
+							{{entity.apellido1 ~ " " ~ entity.apellido2 ~ ", " ~ entity.nombre }} 
+						</td>
+						<td class="col-xs-3 col-sm-2 center">
+							<a id="{{entity.id}}" href="javascript:void(0);" class="i_hover contacto_responsable" data-toggle="tooltip" data-placement="bottom" title="" data-original-title="{% trans %}Contactar{% endtrans %}">
+								<i id="first" class="fa fa-envelope-o"></i>
+								<i id="second" class=" hidden fa fa-envelope"></i>
+							</a>
+							{% if tutor and tutor.id == profesor.id %}
 
-		{# Opciones para el profesor que imparte asignatura opcional y no opcional #}
-		{% if tipos == "ambos" %}
-			<div id="tipo_lista">
-				<button id="alumnos_del_grupo" class="active">{% trans %}Alumnos / Grupo{% endtrans %}</button><button id="alumnos_optativa">{% trans %}Alumnos / Optativa{% endtrans %}</button>
-			</div>
+							<a id="{{entity.id}}" data-target="#info_alumno" class="i_hover info_alumno" data-toggle="modal" data-backdrop="static" data-placement="bottom" title="" data-original-title="{% trans %}Ver info{% endtrans %}">
+								<i id="first" class="fa fa-info"></i>
+								<i id="second" class=" hidden fa fa-info-circle"></i>
+							</a>
+							{% endif %}
+						</td>
+					</tr>
+					{% endfor %}
+				</tbody>
+			</table>
+		{% else %}
+        	<div class="alert alert-info alert-block">
+            	<small>
+                	<h4>{% trans %}No hay alumnos asignados al grupo{% endtrans %}.</h4>
+                	<h6>{% trans %}Aún no se ha asignado ningún alumno al grupo. Espere a que finalice el proceso de matriculación para poder ver la lista completa de alumnos del grupo correspondiente{% endtrans %}.</h6>
+            	</small>
+        	</div>
 		{% endif %}
-
-		<table class="lista-alumnos table table-striped">
-			<thead >
-				<tr>
-					<th class="col-xs-1 center">Nº</th>
-					<th class="col-xs-8 col-sm-9">{% trans %}Apellidos, Nombre{% endtrans %}</th>
-					<th class="col-xs-3 col-sm-2 center"></th>
-				</tr>
-			</thead> 
-			<tbody>
-				{% for entity in entities %}
-				<tr>
-					<td class="col-xs-1 center">
-						{#{{ loop.index }}#}
-						{{ entity.numAlum }}
-					</td>
-					<td class="col-xs-8 col-sm-9 ">
-						{{entity.apellido1 ~ " " ~ entity.apellido2 ~ ", " ~ entity.nombre }} 
-					</td>
-					<td class="col-xs-3 col-sm-2 center">
-						<a id="{{entity.id}}" href="javascript:void(0);" class="i_hover contacto_responsable" data-toggle="tooltip" data-placement="bottom" title="" data-original-title="{% trans %}Contactar{% endtrans %}">
-							<i id="first" class="fa fa-envelope-o"></i>
-							<i id="second" class=" hidden fa fa-envelope"></i>
-						</a>
-						{% if tutor and tutor.id == profesor.id %}
-
-						<a id="{{entity.id}}" data-target="#info_alumno" class="i_hover info_alumno" data-toggle="modal" data-backdrop="static" data-placement="bottom" title="" data-original-title="{% trans %}Ver info{% endtrans %}">
-							<i id="first" class="fa fa-info"></i>
-							<i id="second" class=" hidden fa fa-info-circle"></i>
-						</a>
-						{% endif %}
-					</td>
-				</tr>
-				{% endfor %}
-			</tbody>
-		</table>
 	</div>
 	{% endif %}
 
@@ -127,8 +134,9 @@
 			<a id="alumnos_optativa_pdf"class="hidden descargar-datos hidden-md hidden-lg hidden-sm "   href="{{ path('alumnos_optativa_pdf', { 'id': grupo.id }) }}">
 				<button class="hidden alumnos_optativa"><i class="fa fa-file-pdf-o"></i>{% trans %}Alumnos de la optativa PDF{% endtrans %}</button>
 			</a>
-			{# Se muestra un aviso para los alumnos de la optativa #}
-			{% if opcional %}
+			{% if entities %}
+			  {# Se muestra un aviso para los alumnos de la optativa #}
+			  {% if opcional %}
 				{% if tipos == "ambos" %}
 	  				<div class="aviso_optativa col-xs-12 hidden alumnos_optativa">
 	  					<p class="aviso_optativa col-xs-12 col-sm-offset-3  col-sm-6 col-md-offset-4 col-md-4 ">{% trans %}Alumnos de{% endtrans %} {{ opcional.asignatura.asignatura.abreviatura }}</p>
@@ -138,15 +146,15 @@
 	  					<p class="aviso_optativa col-xs-12 col-sm-offset-3  col-sm-6 col-md-offset-4 col-md-4 ">{% trans %}Alumnos de{% endtrans %} {{opcional.asignatura.asignatura.abreviatura }}</p>
 	  				</div>
 	  			{% endif %}
-			{% endif %}
+			  {% endif %}
 
-	  		{% if tipos == "ambos" %}
+	  		  {% if tipos == "ambos" %}
 				<div id="tipo_lista">
 					<button id="alumnos_del_grupo" class="active">{% trans %}Alumnos / Grupo{% endtrans %}</button><button id="alumnos_optativa">{% trans %}Alumnos / Optativa{% endtrans %}</button>
 				</div>
-			{% endif %}
+			  {% endif %}
 
-			<table class="lista-alumnos table table-striped">
+			  <table class="lista-alumnos table table-striped">
 				<thead >
 					<tr>
 						<th class="col-xs-1 center">Nº</th>
@@ -180,7 +188,15 @@
 					</tr>
 					{% endfor %}
 				</tbody>
-			</table>
+			  </table>
+			{% else %}
+        	  <div class="alert alert-info alert-block">
+            	<small>
+                	<h4>{% trans %}No hay alumnos asignados al grupo{% endtrans %}.</h4>
+                	<h6>{% trans %}Aún no se ha asignado ningún alumno al grupo. Espere a que finalice el proceso de matriculación para poder ver la lista completa de alumnos del grupo correspondiente{% endtrans %}.</h6>
+            	</small>
+        	  </div>
+			{% endif %}
 	  	</div>
 	{% endif %}
 

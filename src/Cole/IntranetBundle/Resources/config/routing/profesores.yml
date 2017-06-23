@@ -152,10 +152,15 @@ cargar_nuevos_seguimientos_tutoria_profesor:
     options:
         expose: true
 
-
 nuevas_tutorias_profesor:
     path:     /{id}/nuevas_tutorias
     defaults: { _controller: IntranetBundle:Profesor:comprobarTutoriasNuevas}
+    options:
+        expose: true
+
+cancelar_tutoria_profesor:
+    path:     /cancelar_tutoria/{num}
+    defaults: { _controller: IntranetBundle:Profesor:CancelarTutoria}
     options:
         expose: true
 

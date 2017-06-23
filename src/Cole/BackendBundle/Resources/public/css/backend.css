@@ -9,9 +9,9 @@ button{
 	padding: 3px;
 	background: #e4e0e0; 
 }
-form label{
+/*form label{
 	pointer-events: none;
-}
+}*/
 .ui-dialog-content button:not(.btn_info){
 	font-size: 14px ;
 	min-width: 100px;

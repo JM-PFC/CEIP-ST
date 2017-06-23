@@ -82,3 +82,15 @@ seguimiento_tutorias_consultado:
     defaults: { _controller: "IntranetBundle:Seguimiento:seguimientoTutoriasConsultado" }
     options:
         expose: true
+
+finalizar_consulta:
+    path:     /finalizar_consulta/{id}
+    defaults: { _controller: IntranetBundle:Seguimiento:FinalizarConsulta}
+    options:
+        expose: true
+
+reanudar_consulta:
+    path:     /reanudar_consulta/{id}
+    defaults: { _controller: IntranetBundle:Seguimiento:ReanudarConsulta}
+    options:
+        expose: true

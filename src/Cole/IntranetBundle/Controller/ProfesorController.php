@@ -13,6 +13,8 @@ use Cole\BackendBundle\Entity\Profesor;
 use Cole\ColeBundle\Entity\Noticias;
 use Cole\IntranetBundle\Entity\Avisos;
 use Cole\BackendBundle\Form\ReservaType;
+use Cole\IntranetBundle\Entity\Seguimiento;
+use Cole\IntranetBundle\Form\SeguimientoType;
 
 
 use Cole\BackendBundle\Form\AlumnoIntranetType;
@@ -783,6 +785,7 @@ class ProfesorController extends Controller
     {
         $em = $this->getDoctrine()->getManager();
         $entity = $this->get('security.context')->getToken()->getUser();
+        $tutor_grupo= $em->getRepository('BackendBundle:Grupo')->findOneByProfesor($entity);
 
         $seguimiento=$em->getRepository('IntranetBundle:Seguimiento')->findOneById($num);
         $respuestas=$em->getRepository('IntranetBundle:Seguimiento')->findRespuestasTutorias($num);
@@ -795,7 +798,8 @@ class ProfesorController extends Controller
             'entity' => $entity, 
             'seguimiento'=> $seguimiento,
             'respuestas' => $respuestas,
-            'tutoria' =>$tutoria
+            'tutoria' =>$tutoria,
+            'grupo' => $tutor_grupo
             ));
     }
 
@@ -895,8 +899,56 @@ class ProfesorController extends Controller
             ), 200);
     }
 
+    public function CancelarTutoriaAction($num)
+    {
+        $em = $this->getDoctrine()->getManager();
 
+        $entity = $this->get('security.context')->getToken()->getUser();
+        $tutoria=$em->getRepository('IntranetBundle:Tutorias')->findOneById($num);
+        $alumno=$tutoria->getAlumno();
+        $profesor=$tutoria->getProfesor();
 
+        //Se añade un comentario para mostrar como aviso del sistema (FechaActualizada == null)
+        $seguimiento = new Seguimiento();
+        $seguimiento->setProfesor($alumno->getGrupo()->getProfesor());
+        $seguimiento->setAlumno($alumno);
+        $seguimiento->setResponsable($tutoria->getResponsable());
+        $seguimiento->setAsignatura(null);
+        $seguimiento->setGrupo($alumno->getGrupo());
+        $seguimiento->setTipo(0);
+        $seguimiento->setTipoUser(1);
+        //$descripcion = $this->get('translator')->trans("El responsable ha cancelado la petición de tutoría.");
+        //$seguimiento->setDescripcion($descripcion);
+        if($profesor->getSexo() == "Masculino"){
+            $seguimiento->setDescripcion("El tutor ha cancelado la petición de tutoría.");
+        }else{
+            $seguimiento->setDescripcion("La tutora ha cancelado la petición de tutoría.");
+        }   
+        $seguimiento->setFecha(new \DateTime("now"));
+        $seguimiento->setFechaActualizada(null);
+        $seguimiento->setSeguimiento($tutoria->getSeguimiento());
+        $seguimiento->setRespuesta(0);
+        $seguimiento->setFechaTerminada(null);
+
+        $em->persist($seguimiento);
+        $em->flush();
+
+        //Se modifica el valor de respuesta en la consulta principal
+        $consulta_principal=$tutoria->getSeguimiento();
+        $consulta_principal->setRespuesta(1);
+        $em->persist($consulta_principal);
+        $em->flush();
+
+        //Se elimina la tutoría pendiente.
+        $em->remove($tutoria);
+        $em->flush();
+
+        $ms = $this->get('translator')->trans('La petición de tutoría ha sido cancelada.');
+        $this->get('session')->getFlashBag()->add('notice',$ms);
+
+        return $this->redirect($this->generateUrl('intranet_profesor_seguimiento_tutoria', array('num'=>$tutoria->getSeguimiento())));
+
+    }
 
     ///////////////////////////////////////////
     //               Noticias                //

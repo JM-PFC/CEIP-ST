@@ -890,8 +890,9 @@ class AlumnoController extends Controller
         $seguimiento->setGrupo($alumno->getGrupo());
         $seguimiento->setTipo(0);
         $seguimiento->setTipoUser(0);
-        $descripcion = $this->get('translator')->trans("El responsable ha aceptado la petición de tutoría.");
-        $seguimiento->setDescripcion($descripcion);
+        //$descripcion = $this->get('translator')->trans("El responsable ha aceptado la petición de tutoría.");
+        //$seguimiento->setDescripcion($descripcion);
+        $seguimiento->setDescripcion("El responsable ha aceptado la petición de tutoría.");
         $seguimiento->setFecha(new \DateTime("now"));
         $seguimiento->setFechaActualizada(null);
         $seguimiento->setSeguimiento($tutoria->getSeguimiento());
@@ -900,6 +901,13 @@ class AlumnoController extends Controller
 
         $em->persist($seguimiento);
         $em->flush();
+
+        //Se modifica el valor de respuesta en la consulta principal
+        $consulta_principal=$tutoria->getSeguimiento();
+        $consulta_principal->setRespuesta(1);
+        $em->persist($consulta_principal);
+        $em->flush();
+
 
         $ms = $this->get('translator')->trans('La tutoría ha sido asignada corectamente.');
         $this->get('session')->getFlashBag()->add('notice',$ms);
@@ -925,8 +933,9 @@ class AlumnoController extends Controller
         $seguimiento->setGrupo($alumno->getGrupo());
         $seguimiento->setTipo(0);
         $seguimiento->setTipoUser(0);
-        $descripcion = $this->get('translator')->trans("El responsable ha cancelado la petición de tutoría.");
-        $seguimiento->setDescripcion($descripcion);
+        //$descripcion = $this->get('translator')->trans("El responsable ha cancelado la petición de tutoría.");
+        //$seguimiento->setDescripcion($descripcion);
+        $seguimiento->setDescripcion("El responsable ha cancelado la petición de tutoría.");
         $seguimiento->setFecha(new \DateTime("now"));
         $seguimiento->setFechaActualizada(null);
         $seguimiento->setSeguimiento($tutoria->getSeguimiento());
@@ -936,10 +945,15 @@ class AlumnoController extends Controller
         $em->persist($seguimiento);
         $em->flush();
 
+        //Se modifica el valor de respuesta en la consulta principal
+        $consulta_principal=$tutoria->getSeguimiento();
+        $consulta_principal->setRespuesta(1);
+        $em->persist($consulta_principal);
+        $em->flush();
+
         //Se elimina la tutoría pendiente.
         $em->remove($tutoria);
         $em->flush();
-
 
         $ms = $this->get('translator')->trans('La petición de tutoría ha sido cancelada.');
         $this->get('session')->getFlashBag()->add('notice',$ms);

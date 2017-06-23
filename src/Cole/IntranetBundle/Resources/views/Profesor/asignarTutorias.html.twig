@@ -105,9 +105,29 @@
         start_time: ["15", "00"],
         disable_keyboard_mobile: true
     });
+    
+    alumno={{idalumno|json_encode()|raw}}; //Id del alumno
+    profesor={{entity.id|json_encode()|raw}};
+    grupo={{grupo.id|json_encode()|raw}};
+    consulta={{consulta|json_encode()|raw}}; //Id de la consulta de tutoría.
+    //Se establece el tipo de consulta a 1 si es una asignación sin alumno y a "0" si es una asignación desde una consulta de un alumno. En la info de consulta se mostrará la descripción de la consulta principal en ambos casos.
+    if(alumno){
+      $("#cole_intranetbundle_tutorias_tipo input[value='0']").prop("checked",true);
+      //Se selecciona el alumno correspondiente.
+      $("#cole_intranetbundle_tutorias_alumno option[value='"+alumno+"']").prop('selected', true);
 
-    //Se establece por defecto el tipo de consulta a 1. ()
-    $("#cole_intranetbundle_tutorias_tipo input[value='1']").prop("checked",true);
+    }
+    else{
+      $("#cole_intranetbundle_tutorias_tipo input[value='1']").prop("checked",true);
+    }
+
+    $("#cole_intranetbundle_tutorias_grupo option[value='"+grupo+"']").prop('selected', true);
+    $("#cole_intranetbundle_tutorias_profesor option[value='"+profesor+"']").prop('selected', true);
+
+    if(consulta){
+      $("#cole_intranetbundle_tutorias_seguimiento option[value='"+consulta+"']").prop('selected', true);
+    }
+
 
     </script>
  {% endblock %}
@@ -172,31 +192,42 @@
 
         {#<div class="form-group has-feedback">#}
           {{ form_errors(form) }}
-          <div id="alumno_tutoria" class="col-xs-12 no-padding margin_bottom_tutoria">
-            <p class="text-center col-xs-12 titulo_reservar">2. {% trans %}Seleccione un alumno del grupo{% endtrans %}:</p>
-            <div class=" opciones_reservar text-center col-xs-12">
-              <button id="click_alumno" grupo="{{grupo.id}}" profesor="{{entity.id}}" class="alumno_tutoria_button" data-target="#lista_alumnos_tutoria" data-toggle="modal" data-backdrop="static" data-keyboard="false" type="text">{% trans %}Seleccionar alumno{% endtrans %}</button>
-              <div id="div_alumno" class="hidden">
-                <label for="">{% trans %}Alumno{% endtrans %}:</label> <span id="alumno" class="c_naranja"></span>
+          {% if not alumno %}
+            <div id="alumno_tutoria" class="col-xs-12 no-padding margin_bottom_tutoria">
+              <p class="text-center col-xs-12 titulo_reservar">2. {% trans %}Seleccione un alumno del grupo{% endtrans %}:</p>
+              <div class=" opciones_reservar text-center col-xs-12">
+                <button id="click_alumno" grupo="{{grupo.id}}" profesor="{{entity.id}}" class="alumno_tutoria_button" data-target="#lista_alumnos_tutoria" data-toggle="modal" data-backdrop="static" data-keyboard="false" type="text">{% trans %}Seleccionar alumno{% endtrans %}</button>
+                <div id="div_alumno" class="hidden">
+                  <label for="">{% trans %}Alumno{% endtrans %}:</label> <span id="alumno" class="c_naranja"></span>
+                </div>
               </div>
             </div>
-          </div>
+
+            <button id="click_alumno_modificar" grupo="{{grupo.id}}" profesor="{{entity.id}}" class="alumno_tutoria_button hidden" data-target="#lista_alumnos_tutoria" data-toggle="modal" data-backdrop="static" data-keyboard="false" type="text">{% trans %}Modificar alumno{% endtrans %}</button>
+          {% else %}
+            <div id="alumno_tutoria" class="col-xs-12 no-padding margin_bottom_tutoria">
+              <p class="text-center col-xs-12 titulo_reservar">2. {% trans %}Alumno del grupo seleccionado{% endtrans %}:</p>
+              <div class=" opciones_reservar text-center col-xs-12">
+                <div id="div_alumno">
+                  <label for="">{% trans %}Alumno{% endtrans %}:</label> <span id="alumno" class="c_naranja">{{alumno}}</span>
+                </div>
+              </div>
+            </div>
+          {% endif %}
         
-        <button id="click_alumno_modificar" grupo="{{grupo.id}}" profesor="{{entity.id}}" class="alumno_tutoria_button hidden" data-target="#lista_alumnos_tutoria" data-toggle="modal" data-backdrop="static" data-keyboard="false" type="text">{% trans %}Modificar alumno{% endtrans %}</button>
-        
-        <div>
-          <div id="descripcion_tutoria" class=" ol-xs-12 no-padding">
-            <p class="text-center col-xs-12 titulo_reservar">3. {% trans %}Añade una descripción para la asignación{% endtrans %}:</p>
-            <div class=" opciones_reservar text-center col-xs-12">
+          <div>
+            <div id="descripcion_tutoria" class=" ol-xs-12 no-padding">
+              <p class="text-center col-xs-12 titulo_reservar">3. {% trans %}Añade una descripción para la asignación{% endtrans %}:</p>
+              <div class=" opciones_reservar text-center col-xs-12">
 
               {% if locale == "es" %}
                 {{ form_widget(form.descripcion,{'attr':{'class': ' formulario_seguimiento', 'type': 'textarea','data-error': 'Debes añadir una descripción', 'placeholder': 'Inserta una descripción' }}) }}
               {% elseif locale == "en" %}
                 {{ form_widget(form.descripcion,{'attr':{'class': ' formulario_seguimiento', 'type': 'textarea','data-error': 'You must add a description', 'placeholder': 'Insert a description' }}) }}
               {% endif %}
+              </div>
             </div>
           </div>
-        </div>
         {{ form_row(form.submit,{'id':'intranet_'~form.submit.vars.id , 'attr':{'class': 'btn btn-success center-block disabled' }}) }}
 
         <div class="hidden">

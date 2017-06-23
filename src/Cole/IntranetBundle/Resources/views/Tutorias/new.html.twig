@@ -136,14 +136,18 @@
         disable_keyboard_mobile: true
     });
 
- 
-
     // Se añade el separador de la hora.
     $("#asignar_tutoria_modal .timepicker_wrap .time").after(":");
     
     //Se elimina el arrow_top que trae por defecto.
     $("#asignar_tutoria_modal  .arrow_top" ).remove();    
     </script>
+
+
+    <p>1. {% trans %}Seleccione un alumno de su grupo{% endtrans %}:</p>
+    <label class="nombre">Alumno: <span id="alumno"></span></label>
+                    
+    <p>1. {% trans %}Seleccione día y hora{% endtrans %}:</p>
 
     <div class="contenedor_reserva text-center col-xs-12 col-sm-offset-2 col-sm-7 no-padding" id="contenedor_reserva">
         <div id="asignar_tutoria_date" class="calendario_lectivos"></div>
@@ -152,17 +156,18 @@
         <button id="actualizar_calendario_lectivo" class="hidden"></button>
     </div>
 
+    <a id="restablecer" class="hidden"></a>
+    
     <div class="contenedor_reserva text-center col-xs-12 no-padding">
         <label for="" class="pull-left">Hora:</label><input id="hora" class="pull-left"></input>
     </div>
-
-
+    <p>2. {% trans %}Añade una descripción para la asignación{% endtrans %}:</p>
   {{form_start(form, {'method':'Post','attr':{'id':'asignar_tutoria', 'data-toggle':"validator", 'role':"form" ,'novalidate':'novalidate', 'autocomplete':'off'}})}}
     <div class="form-group has-feedback">
       {{ form_errors(form) }}
         <div class="div_descripcion">
-            {{ form_label(form.seguimiento.descripcion) }}
-        {{ form_widget(form.seguimiento.descripcion) }}
+            {{ form_label(form.descripcion) }}
+        {{ form_widget(form.descripcion) }}
         </div>
         
       {{ form_row(form.submit,{'id':'intranet_'~form.submit.vars.id , 'attr':{'class': 'btn btn-success center-block disabled' }}) }}

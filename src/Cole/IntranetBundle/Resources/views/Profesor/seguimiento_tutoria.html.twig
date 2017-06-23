@@ -53,6 +53,7 @@
         id=$("#contenedor_seguimientos .consulta_seguimiento").attr("id");
         $("#responder_seguimiento_modal .modal-body").load(Routing.generate("respuesta_seguimiento", {id:id, _locale:locale}), function(){
         }); 
+
     </script>
  {% endblock %}
 
@@ -85,14 +86,73 @@
 {% endblock %}
 
 {% block contenido %}
-    <h4 id="titulo-seccion" class="titulo-seccion">{% trans %}Consulta de Tutoría{% endtrans %}.</h4>
+    {% if not seguimiento.fechaTerminada %}
+        <h4 id="titulo-seccion" class="titulo-seccion">{% trans %}Consulta de Tutoría{% endtrans %}</h4>
+    {% else %}
+        <h4 id="titulo-seccion" class="titulo-seccion">{% trans %}Consulta de Tutoría{% endtrans %} <span class="color_rojo"> ({% trans %}Finalizada{% endtrans %})</span></h4>
+    {% endif %}
+    {% if tutoria and tutoria.activo == 0 and not seguimiento.fechaTerminada %}
+        <div id="panel_tutoria" class="panel panel-danger col-xs-12 col-sm-7 col-lg-5 center-block no-padding">
+            <div class=" panel-heading text-center"><strong>{% trans %}Asignación de tutoría pendiente de confirmación{% endtrans %}:</strong></div>
+            <div class="panel-body ">
+                <div>
+                    <label>{% trans %}Día{% endtrans %}:</label><span>{{ tutoria.fecha | localizeddate('full', 'none', app.request.getLocale()) | capitalize}}</span>       
+                 </div>  
+                <div>
+                    <label>{% trans %}Hora{% endtrans %}:</label><span>{{ tutoria.fecha | localizeddate('none', 'short', app.request.getLocale()) | capitalize}}</span>       
+                </div>
+                <div class="text-center">
+                    <a id="btn_cancelar_tutoria_profesor" class="btn btn-danger pull-right" href="" data-target="#cancelar_tutoria_modal" data-toggle="modal" data-backdrop="static" data-keyboard="false">{% trans %}Cancelar{% endtrans %}</a>
+                </div>     
+            </div>
+        </div>
+    {% elseif tutoria and tutoria.activo == 1 and not seguimiento.fechaTerminada %}
+        <div id="panel_tutoria" class="panel panel-default col-xs-12 col-sm-10  center-block no-padding">
+            <div class=" panel-heading text-center"><strong class="text-success">{% trans %}Tutoría asignada{% endtrans %}:</strong></div>
+            <div class="panel-body ">
+                <div>
+                    <label>{% trans %}Día{% endtrans %}:</label><span>{{ tutoria.fecha | localizeddate('full', 'none', app.request.getLocale()) | capitalize}}</span>       
+                 </div>  
+                <div>
+                    <label>{% trans %}Hora{% endtrans %}:</label><span>{{ tutoria.fecha | localizeddate('none', 'short', app.request.getLocale()) | capitalize}}</span>       
+                </div> 
+                <div>
+                    <label>{% trans %}Responsable{% endtrans %}:</label><span>{{tutoria.responsable}}</span>       
+                </div>                  
+            </div>
+        </div>
+    {% endif %}
     <div id="contenedor_seguimientos" class="col-xs-12">
         <div id="{{seguimiento.id}}" class="consulta_seguimiento">
-            <div class="header col-xs-12 clearfix no-padding">
-                <div class="pull-right fecha hidden-xs">
-                    <p>{{ seguimiento.fecha | localizeddate('full', 'none', app.request.getLocale()) | capitalize}}</p>
+            <div class="header col-xs-12 clearfix no-padding min-header">
+                <div class="hidden-xs">
+     
+                    <div class="col-sm-7 col-lg-8 no-padding margin-nombre">
+                        {% if seguimiento.alumno.sexo == "Masculino" %}
+                            <label for="">{% trans %}Alumno{% endtrans %}:</label>
+                        {% else %}
+                            <label for="">{% trans %}Alumna{% endtrans %}:</label>
+                        {% endif %}
+                        <span>{{seguimiento.alumno}}</span>
+                    </div>
+                          <div>
+                    <div class=" pull-right fecha col-sm-5 col-lg-4 no-padding">
+                        <p>{{ seguimiento.fecha | localizeddate('full', 'none', app.request.getLocale()) | capitalize}}</p>
+                    </div>
+                    <div>
+                        {% if not seguimiento.fechaTerminada %}
+                            <button id="btn_fin_consulta" class="pull-right btn btn_gris" data-target="#finalizar_consulta_modal" data-toggle="modal" data-backdrop="static" data-keyboard="false">{% trans %}Finalizar consulta{% endtrans %}</button> 
+                            {% if not tutoria %}
+                                <a id="btn_tutoria_presencial" grupo="{{grupo.id}}" profesor="{{entity.id}}"  class="pull-right btn btn_gris" href="{{path('asignar_tutoria_consulta', {'id': seguimiento.id}) }}" >{% trans %}Asignar tutoría{% endtrans %}</a>
+                            {% endif %}
+                        {% else %}
+                            <button id="btn_fin_consulta" class="pull-right btn btn_gris" data-target="#reanudar_consulta_modal" data-toggle="modal" data-backdrop="static" data-keyboard="false">{% trans %}Reanudar consulta{% endtrans %}</button> 
+                        {% endif %}  
+                    </div>
                 </div>
-                <div>
+                </div>
+          
+                <div class="hidden-sm hidden-md hidden-lg">
                     {% if seguimiento.alumno.sexo == "Masculino" %}
                         <label for="">{% trans %}Alumno{% endtrans %}:</label>
                     {% else %}
@@ -103,7 +163,20 @@
                 <div class="hidden-sm hidden-md hidden-lg">
                     <label for="">{% trans %}Fecha{% endtrans %}: </label>
                     <span>{{ seguimiento.fecha | localizeddate('full', 'none', app.request.getLocale()) | capitalize}}</span>
+                    <div>
+                        {% if not seguimiento.fechaTerminada %}
+
+                            <button id="btn_fin_consulta" class="pull-right btn btn_gris" data-target="#finalizar_consulta_modal" data-toggle="modal" data-backdrop="static" data-keyboard="false">{% trans %}Finalizar consulta{% endtrans %}</button> 
+                            {% if not tutoria %}
+                                <a id="btn_tutoria_presencial" grupo="{{grupo.id}}" profesor="{{entity.id}}" class="pull-right btn btn_gris" href="{{path('asignar_tutoria_consulta', {'id': seguimiento.id}) }}">{% trans %}Asignar tutoría{% endtrans %}</a>
+                            {% endif %}
+
+                        {% else %}
+                            <button id="btn_fin_consulta" class="pull-right btn btn_gris" data-target="#reanudar_consulta_modal" data-toggle="modal" data-backdrop="static" data-keyboard="false">{% trans %}Reanudar consulta{% endtrans %}</button> 
+                        {% endif %}                   
+                    </div>
                 </div>
+
             </div>             
             <div class="body clearfix">
                <div class=" label_descripcion col-xs-12 col-sm-offset-2 col-sm-8">
@@ -134,44 +207,57 @@
             {% for seguimiento in respuestas %}
                 <div class="respuesta">
                     <header class="hidden-xs">
+                    {% if seguimiento.fechaActualizada %}
                         {% if seguimiento.tipoUser == 0 %}
                             <i class="fa fa-share color_rojo"></i>
                         {% else %}
                             <i class="fa fa-reply color_verde"></i>
                         {% endif %}
 
-                        {% trans %}Respuesta de{% endtrans %}: 
+                        {% trans %}Comentario de{% endtrans %}: 
                          
                         {% if seguimiento.tipoUser == 0 %}
                             <span class="c_naranja">{{seguimiento.responsable}}</span> 
                         {% else %}
                             <span class="c_naranja">{{seguimiento.profesor}}</span> 
-                        {% endif %} 
-
+                        {% endif %}
+                    {% else %}
+                        <i class="fa  fa-exclamation-circle c_azul"></i>
+                        {{seguimiento.descripcion|nl2br}}
+                    {% endif %}
                         <span class="pull-right fecha">{{ seguimiento.fecha | localizeddate('short', 'short', app.request.getLocale())}} </span>
                     </header>
                     <header class="hidden-sm hidden-md hidden-lg">
                         <p><span class="fecha">{{ seguimiento.fecha | localizeddate('short','short', app.request.getLocale())}} </span></p>
-                        {% if seguimiento.tipoUser == 0 %}
-                            <i class="fa fa-share color_rojo pull-left"></i>
+                        {% if seguimiento.fechaActualizada %}
+                            {% if seguimiento.tipoUser == 0 %}
+                                <i class="fa fa-share color_rojo pull-left"></i>
+                            {% else %}
+                                <i class="fa fa-reply color_verde pull-left"></i>
+                            {% endif %} 
+                            <p>{% trans %}Comentario de{% endtrans %}:  </p>         
+                            {% if seguimiento.tipoUser == 0 %}
+                                <span class="c_naranja">{{seguimiento.responsable}}</span> 
+                            {% else %}
+                                <span class="c_naranja">{{seguimiento.profesor}}</span> 
+                            {% endif %}
                         {% else %}
-                            <i class="fa fa-reply color_verde pull-left"></i>
-                        {% endif %} 
-                        <p>{% trans %}Respuesta de{% endtrans %}:  </p>         
-                        {% if seguimiento.tipoUser == 0 %}
-                            <span class="c_naranja">{{seguimiento.responsable}}</span> 
-                        {% else %}
-                            <span class="c_naranja">{{seguimiento.profesor}}</span> 
-                        {% endif %}               
+                            <i class="fa  fa-exclamation-circle c_azul"></i>
+                            {{seguimiento.descripcion|nl2br}}
+                        {% endif %}
                     </header>
-                    <div>
-                        <p class="descripcion">{{seguimiento.descripcion|nl2br}}</p>
-                    </div> 
+                    {% if seguimiento.fechaActualizada %}
+                        <div>
+                            <p class="descripcion">{{seguimiento.descripcion|nl2br}}</p>
+                        </div> 
+                    {% endif %}
                 </div>
             {% endfor %}
             </div>
         </div>
-        <a id="btn_responder" class="btn_responder btn btn_azul" data-target="#responder_seguimiento_modal" data-toggle="modal" data-backdrop="static" data-keyboard="false">{% trans %}Responder{% endtrans %}</a>
+        {% if not seguimiento.fechaTerminada %}
+                <a id="btn_responder" class="btn_responder btn btn_azul" data-target="#responder_seguimiento_modal" data-toggle="modal" data-backdrop="static" data-keyboard="false">{% trans %}Responder{% endtrans %}</a>
+        {% endif %}
         <div class="col-xs-3 col-sm-3 visible-xs visible-sm botonsubir">
             <a class="go-top btn btn-default  hidden" href="#">
                 <i class="fa fa-arrow-up"></i>{% trans %}Subir{% endtrans %}
@@ -189,4 +275,84 @@
             </div>
         </div>
     </div>
+
+    <!-- Ventana modal de finalización de consulta de tutoría -->
+    <div id="finalizar_consulta_modal" class="modal fade-scale aviso ediccion_seguimiento_modal"  tabindex="-1" role="dialog" data-backdrop="true" >
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="myModalLabel">{% trans %}Finalización de la consulta de tutoría{% endtrans %}</h4>
+                </div>
+                <div class="modal-body">
+                    <p>{% trans %}Estas apunto de finalizar la consulta{% endtrans %}.</p>
+                    <p>{% trans %}¿Estas seguro de continuar?{% endtrans %}</p>
+                    <div class="class-footer">
+                        <button class="btn btn_azul" type="button" data-dismiss="modal" >{% trans %}Cancelar{% endtrans %}</button>
+                        <a  class="btn btn-danger" href="{{ path('finalizar_consulta', {'id': seguimiento.id }) }}">{% trans %}Finalizar{% endtrans %}</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Ventana modal de reanudar consulta finalizada -->
+    <div id="reanudar_consulta_modal" class="modal fade-scale aviso ediccion_seguimiento_modal"  tabindex="-1" role="dialog" data-backdrop="true" >
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="myModalLabel">{% trans %}Reanudación de la consulta de tutoría{% endtrans %}</h4>
+                </div>
+                <div class="modal-body">
+                    <p>{% trans %}Se va a reanudar una consulta que había sido finalizada{% endtrans %}.</p>
+                    <p>{% trans %}¿Estas seguro de continuar?{% endtrans %}</p>
+                    <div class="class-footer">
+                        <button class="btn btn_azul" type="button" data-dismiss="modal" >{% trans %}Cancelar{% endtrans %}</button>
+                        <a  class="btn btn-danger" href="{{ path('reanudar_consulta', {'id': seguimiento.id }) }}">{% trans %}Reanudar{% endtrans %}</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Ventana modal de asignación de turtoria -->
+    <div id="asignar_tutoria_modal" class="modal fade aviso" role="dialog" data-backdrop="true" >
+        <div class="modal-dialog seleccion_modal">
+            <div class="modal-content ">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    <h4 class="modal-title">{% trans %}Asignación de tutoría{% endtrans %}</h4>
+                </div>
+                <div class="modal-body">
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Ventana modal de cancelación de asignación de tutoría del profesor -->
+  <div id="cancelar_tutoria_modal" class="modal fade-scale aviso ediccion_seguimiento_modal"  tabindex="-1" role="dialog" data-backdrop="true" >
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+        <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            <h4 class="modal-title" id="myModalLabel">{% trans %}Cancelación de la petición de tutoría{% endtrans %}</h4>
+        </div>
+        <div class="modal-body">
+            <p>{% trans %}Estas apunto de cancelar la asignación de tutoría que hay pendiente de confirmar{% endtrans %}.</p>
+            <p>{% trans %}¿Estas seguro de continuar?{% endtrans %}</p>
+            <div class="class-footer">
+                <button class="btn btn_azul" type="button" data-dismiss="modal" >{% trans %}Cancelar{% endtrans %}</button>
+                {% if tutoria %}
+                    <a  class="btn btn-danger" href="{{ path('cancelar_tutoria_profesor', { 'num': tutoria.id }) }}">{% trans %}Eliminar{% endtrans %}</a>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+  </div>
+
+
+
+
 {% endblock %}

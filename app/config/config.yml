@@ -117,14 +117,6 @@ services:
     #   tags:
     #      - { name: kernel.event_listener, event: kernel.exception, method: onKernelException }
 
-    #para guardar el último acceso
-    your_user_bundle.security.interactive_login_listener:
-        class: Cole\ColeBundle\InteractiveLoginListener
-        arguments: [ "@doctrine.orm.entity_manager", "@request", @security.context ]
-        scope: request
-        tags:
-            - { name: kernel.event_listener, event: security.interactive_login, method: onSecurityInteractiveLogin }
-
 parameters:
     Dir_imagenes_prof: %kernel.root_dir%/../web/uploads/images/
     Dir_imagenes_alum: %kernel.root_dir%/../web/uploads/images/

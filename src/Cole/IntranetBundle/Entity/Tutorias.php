@@ -22,11 +22,18 @@ class Tutorias
     private $id;
 
     /**
-     * @var \DateTime
+     * @var \Date
      *
-     * @ORM\Column(name="fecha", type="datetime")
+     * @ORM\Column(name="fecha", type="date")
      */
     private $fecha;
+
+    /**
+     * @var \Time
+     *
+     * @ORM\Column(name="hora", type="time")
+     */
+    private $hora;
 
     /**
      * @var boolean
@@ -67,29 +74,6 @@ class Tutorias
     public function getId()
     {
         return $this->id;
-    }
-
-    /**
-     * Set fecha
-     *
-     * @param \DateTime $fecha
-     * @return Tutorias
-     */
-    public function setFecha($fecha)
-    {
-        $this->fecha = $fecha;
-
-        return $this;
-    }
-
-    /**
-     * Get fecha
-     *
-     * @return \DateTime 
-     */
-    public function getFecha()
-    {
-        return $this->fecha;
     }
 
     /**
@@ -205,5 +189,51 @@ class Tutorias
     public function getSeguimiento()
     {
         return $this->seguimiento;
+    }
+
+    /**
+     * Set fecha
+     *
+     * @param \DateTime $fecha
+     * @return Tutorias
+     */
+    public function setFecha($fecha)
+    {
+        $this->fecha = $fecha;
+
+        return $this;
+    }
+
+    /**
+     * Get fecha
+     *
+     * @return \DateTime 
+     */
+    public function getFecha()
+    {
+        return $this->fecha;
+    }
+
+    /**
+     * Set hora
+     *
+     * @param \DateTime $hora
+     * @return Tutorias
+     */
+    public function setHora($hora)
+    {
+        $this->hora = $hora;
+
+        return $this;
+    }
+
+    /**
+     * Get hora
+     *
+     * @return \DateTime 
+     */
+    public function getHora()
+    {
+        return $this->hora;
     }
 }

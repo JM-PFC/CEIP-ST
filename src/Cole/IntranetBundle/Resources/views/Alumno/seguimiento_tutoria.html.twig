@@ -85,10 +85,15 @@
 {% endblock %}
 
 {% block contenido %}
-    <h4 id="titulo-seccion" class="titulo-seccion">{% trans %}Consulta de Tutoría{% endtrans %}.</h4>
-    {% if tutoria and tutoria.activo == 0 %}
+    {% if not seguimiento.fechaTerminada %}
+        <h4 id="titulo-seccion" class="titulo-seccion">{% trans %}Consulta de Tutoría{% endtrans %}</h4>
+    {% else %}
+        <h4 id="titulo-seccion" class="titulo-seccion">{% trans %}Consulta de Tutoría{% endtrans %} <span class="color_rojo"> ({% trans %}Finalizada{% endtrans %})</span></h4>
+    {% endif %}
+
+    {% if tutoria and tutoria.activo == 0 and not seguimiento.fechaTerminada %}
         <div id="panel_tutoria" class="panel panel-success col-xs-12 col-sm-7 col-lg-5 center-block no-padding">
-            <div class=" panel-heading text-center"><strong class="text-success">{% trans %}Petición de tutoría pendiente de confirmación{% endtrans %}:</strong></div>
+            <div class=" panel-heading text-center"><strong class="text-success">{% trans %}Asignación de tutoría pendiente de confirmación{% endtrans %}:</strong></div>
             <div class="panel-body ">
                 <div>
                     <label>{% trans %}Día{% endtrans %}:</label><span>{{ tutoria.fecha | localizeddate('full', 'none', app.request.getLocale()) | capitalize}}</span>       
@@ -104,7 +109,7 @@
             </div>
 
         </div>
-    {% elseif tutoria and tutoria.activo == 1 %}
+    {% elseif tutoria and tutoria.activo == 1 and not seguimiento.fechaTerminada %}
         <div id="panel_tutoria" class="panel panel-default col-xs-12 col-sm-10  center-block no-padding">
             <div class=" panel-heading text-center"><strong class="text-success">{% trans %}Tutoría asignada{% endtrans %}:</strong></div>
             <div class="panel-body ">
@@ -169,14 +174,14 @@
             {% for seguimiento in respuestas %}
                 <div class="respuesta">
                     <header class="hidden-xs">
-                    {% if seguimiento.tipoUser%}
+                    {% if seguimiento.fechaActualizada %}
                         {% if seguimiento.tipoUser == 1 %}
                             <i class="fa fa-share color_rojo"></i>
                         {% else %}
                             <i class="fa fa-reply color_verde"></i>
                         {% endif %}
 
-                        {% trans %}Respuesta de{% endtrans %}: 
+                        {% trans %}Comentario de{% endtrans %}: 
                          
                         {% if seguimiento.tipoUser == 0 %}
                             <span class="c_naranja">{{seguimiento.responsable}}</span> 
@@ -185,31 +190,31 @@
                         {% endif %} 
 
                     {% else %}
-                        <i class="fa  fa-angle-right c_azul"></i>
+                        <i class="fa  fa-exclamation-circle c_azul"></i>
                         {{seguimiento.descripcion|nl2br}}
                     {% endif %}
                         <span class="pull-right fecha">{{ seguimiento.fecha | localizeddate('short', 'short', app.request.getLocale())}} </span>
                     </header>
                     <header class="hidden-sm hidden-md hidden-lg">
                         <p><span class="fecha">{{ seguimiento.fecha | localizeddate('short','short', app.request.getLocale())}} </span></p>
-                        {% if seguimiento.tipoUser %}
+                        {% if seguimiento.fechaActualizada %}
                             {% if seguimiento.tipoUser == 1 %}
                                 <i class="fa fa-share color_rojo pull-left"></i>
                             {% else %}
                                 <i class="fa fa-reply color_verde pull-left"></i>
                             {% endif %} 
-                            <p>{% trans %}Respuesta de{% endtrans %}:  </p>         
+                            <p>{% trans %}Comentario de{% endtrans %}:  </p>         
                             {% if seguimiento.tipoUser == 0 %}
                                 <span class="c_naranja">{{seguimiento.responsable}}</span> 
                             {% else %}
                                 <span class="c_naranja">{{seguimiento.profesor}}</span> 
                             {% endif %} 
                         {% else %}
-                            <i class="fa  fa-angle-right c_azul"></i>
+                            <i class="fa  fa-exclamation-circle c_azul"></i>
                             {{seguimiento.descripcion|nl2br}}
                         {% endif %}
                     </header>
-                    {% if seguimiento.tipoUser %}
+                    {% if seguimiento.fechaActualizada %}
                         <div>
                             <p class="descripcion">{{seguimiento.descripcion|nl2br}}</p>
                         </div> 
@@ -218,7 +223,9 @@
             {% endfor %}
             </div>
         </div>
-        <a id="btn_responder" class="btn_responder btn btn_azul" data-target="#responder_seguimiento_modal" data-toggle="modal" data-backdrop="static" data-keyboard="false">{% trans %}Responder{% endtrans %}</a>
+        {% if not seguimiento.fechaTerminada %}
+            <a id="btn_responder" class="btn_responder btn btn_azul" data-target="#responder_seguimiento_modal" data-toggle="modal" data-backdrop="static" data-keyboard="false">{% trans %}Responder{% endtrans %}</a>
+        {% endif %}
         <div class="col-xs-3 col-sm-3 visible-xs visible-sm botonsubir">
             <a class="go-top btn btn-default  hidden" href="#">
                 <i class="fa fa-arrow-up"></i>{% trans %}Subir{% endtrans %}
@@ -253,7 +260,6 @@
                 {% if tutoria %}
                     <a  class="btn btn-danger" href="{{ path('cancelar_tutoria', { 'id': entity.id, 'num': tutoria.id }) }}">{% trans %}Eliminar{% endtrans %}</a>
                 {% endif %}
-
             </div>
         </div>
     </div>

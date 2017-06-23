@@ -11,9 +11,16 @@ tutorias_new:
     defaults: { _controller: "IntranetBundle:Tutorias:new" }
     options:
         expose: true
+
 tutorias_asignar:
     path:     /tutorias/asignar
     defaults: { _controller: IntranetBundle:Tutorias:asignarTutoriaShow}
+    options:
+        expose: true
+
+asignar_tutoria_consulta:
+    path:     /tutorias/{id}/asignar/
+    defaults: { _controller: IntranetBundle:Tutorias:asignarTutoriaConsulta}
     options:
         expose: true
 

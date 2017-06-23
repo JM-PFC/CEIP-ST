@@ -547,4 +547,101 @@ class SeguimientoController extends Controller
         return new JsonResponse(array('success' => true), 200);
     }
 
+
+    public function FinalizarConsultaAction($id)
+    {
+        $em = $this->getDoctrine()->getManager();
+
+        $entity = $this->get('security.context')->getToken()->getUser();
+        $consulta=$em->getRepository('IntranetBundle:Seguimiento')->findOneById($id);
+
+        $alumno=$consulta->getAlumno();
+
+        //Se añade un comentario para mostrar como aviso del sistema (FechaActualizada == null)
+        $seguimiento = new Seguimiento();
+        $seguimiento->setProfesor($entity);
+        $seguimiento->setAlumno($alumno);
+        $seguimiento->setResponsable($consulta->getResponsable());
+        $seguimiento->setAsignatura(null);
+        $seguimiento->setGrupo($alumno->getGrupo());
+        $seguimiento->setTipo(0);
+        $seguimiento->setTipoUser(1);
+        //$descripcion = $this->get('translator')->trans("La consulta ha sido finalizada.");
+        //$seguimiento->setDescripcion($descripcion);
+        $seguimiento->setDescripcion("La consulta ha sido finalizada.");       
+        $seguimiento->setFecha(new \DateTime("now"));
+        $seguimiento->setFechaActualizada(null);
+        $seguimiento->setSeguimiento($consulta);
+        $seguimiento->setRespuesta(0);
+        $seguimiento->setFechaTerminada(null);
+
+        $em->persist($seguimiento);
+        $em->flush();
+
+        //Se finaliza la consulta.
+        $consulta->setFechaTerminada(new \DateTime("now"));
+        $consulta->setFechaActualizada(new \DateTime("now"));
+        $consulta->setRespuesta(1);
+
+        $em->persist($consulta);
+        $em->flush();
+
+        $ms = $this->get('translator')->trans('La consulta ha sido finalizada.');
+        $this->get('session')->getFlashBag()->add('notice',$ms);
+
+        return $this->redirect($this->generateUrl('intranet_profesor_tutorias'));
+    }
+
+    public function ReanudarConsultaAction($id)
+    {
+        $em = $this->getDoctrine()->getManager();
+
+        $entity = $this->get('security.context')->getToken()->getUser();
+        $consulta=$em->getRepository('IntranetBundle:Seguimiento')->findOneById($id);
+
+        $alumno=$consulta->getAlumno();
+
+        //Se añade un comentario para mostrar como aviso del sistema (FechaActualizada == null)
+        $seguimiento = new Seguimiento();
+        $seguimiento->setProfesor($entity);
+        $seguimiento->setAlumno($alumno);
+        $seguimiento->setResponsable($consulta->getResponsable());
+        $seguimiento->setAsignatura(null);
+        $seguimiento->setGrupo($alumno->getGrupo());
+        $seguimiento->setTipo(0);
+        $seguimiento->setTipoUser(1);
+        //$descripcion = $this->get('translator')->trans("La consulta ha sido finalizada.");
+        //$seguimiento->setDescripcion($descripcion);
+        $seguimiento->setDescripcion("La consulta ha sido reanudada.");       
+        $seguimiento->setFecha(new \DateTime("now"));
+        $seguimiento->setFechaActualizada(null);
+        $seguimiento->setSeguimiento($consulta);
+        $seguimiento->setRespuesta(0);
+        $seguimiento->setFechaTerminada(null);
+
+        $em->persist($seguimiento);
+        $em->flush();
+
+        //Se reanuda la consulta.
+        $consulta->setFechaTerminada(null);
+        $consulta->setFechaActualizada(new \DateTime("now"));
+        $consulta->setRespuesta(1);
+
+        $em->persist($consulta);
+        $em->flush();
+
+        $ms = $this->get('translator')->trans('La consulta ha sido reanudada.');
+        $this->get('session')->getFlashBag()->add('notice',$ms);
+
+        return $this->redirect($this->generateUrl('intranet_profesor_tutorias'));
+    }
+
+
+
+
+
+
+
+
+
 }

@@ -155,6 +155,7 @@ Consulta de Seguimiento: Follow-up Consultation
 Consultar: Consult
 Respuesta: Answer
 Respuesta de: Answer of
+Comentario de: Comment from
 Leido: Read
 Responder: Answer
 Editar: Edit
@@ -246,7 +247,7 @@ Seleccionar alumno: Select student
 Modificar alumno: Modify student
 Guardar Asignación: Save Assignmen
 Pulse para seleccionar la hora: Press to select the time
-Petición de tutoría pendiente de confirmación: Request for tutorial pending confirmation
+Asignación de tutoría pendiente de confirmación: Tutoring assignment to be confirmed
 Día: Day
 Hora: Hour
 Confirmar: Confirm
@@ -256,3 +257,19 @@ El responsable ha cancelado la petición de tutoría.: The responsible has cance
 La petición de tutoría ha sido cancelada.: The tutorial request has been canceled.
 Cancelación de la petición de tutoría: Cancellation of the request for tutoring
 Estas apunto de cancelar la asignación de tutoría que tienes pendiente: You are about to cancel the pending tutoring assignment
+Asignar tutoría: Assign tutorials
+Finalizar consulta: End consultation
+Reanudar consulta: Restart consultation
+Reanudar: Restart
+Finalizada: Finished
+Finalización de la consulta de tutoría: Completion of the tutorial consultation
+Estas apunto de finalizar la consulta: You are about to end the consultation
+Finalizar: Finalize
+La consulta ha sido finalizada.: The consultation has been completed.
+Reanudación de la consulta de tutoría: Resumption of the tutoring consultation
+Se va a reanudar una consulta que había sido finalizada: A query that has been finalized will be resumed
+La consulta ha sido reanudada.: The query has been resumed.
+Alumno del grupo seleccionado: Student of selected group
+Estas apunto de cancelar la asignación de tutoría que hay pendiente de confirmar: You are about to cancel the tutoring assignment that is pending confirmation
+No hay alumnos asignados al grupo: No students assigned to the group
+Aún no se ha asignado ningún alumno al grupo. Espere a que finalice el proceso de matriculación para poder ver la lista completa de alumnos del grupo correspondiente: No student has yet been assigned to the group. Wait for the enrollment process to complete so that you can see the complete list of students in the corresponding group

@@ -44,34 +44,69 @@ class TutoriasController extends Controller
         $tipo=$form->get("tipo")->getData();
         $descripcion=$form->get("descripcion")->getData();
         $grupo=$form->get("grupo")->getData();
+        $consulta_principal=$form->get("seguimiento")->getData();
+
+        $em = $this->getDoctrine()->getManager();
+        $consulta = $em->getRepository('IntranetBundle:Seguimiento')->findOneById($consulta_principal->getId());
 
         if ($form->isValid()) {
-            //Se crea el nuevo seguimiento de la asignación de tutoría.
-            $seguimiento = new Seguimiento();
-            $seguimiento->setProfesor($entity->getProfesor());
-            $seguimiento->setAlumno($entity->getAlumno());
-            $seguimiento->setResponsable(null);
-            $seguimiento->setAsignatura(null);
-            $seguimiento->setGrupo($grupo);
-            $seguimiento->setTipo($tipo);
-            $seguimiento->setTipoUser(1);
-            $seguimiento->setDescripcion($descripcion);
-            $seguimiento->setFecha(new \DateTime("now"));
-            $seguimiento->setFechaActualizada(new \DateTime("now"));
-            $seguimiento->setSeguimiento(null);
-            $seguimiento->setRespuesta(0);
-            $seguimiento->setFechaTerminada(null);
+            if(!$consulta_principal){
+                //Se crea el nuevo seguimiento de la asignación de tutoría.
+                $seguimiento = new Seguimiento();
+                $seguimiento->setProfesor($entity->getProfesor());
+                $seguimiento->setAlumno($entity->getAlumno());
+                $seguimiento->setResponsable(null);
+                $seguimiento->setAsignatura(null);
+                $seguimiento->setGrupo($grupo);
+                $seguimiento->setTipo(1);
+                $seguimiento->setTipoUser(1);
+                $seguimiento->setDescripcion($descripcion);
+                $seguimiento->setFecha(new \DateTime("now"));
+                $seguimiento->setFechaActualizada(new \DateTime("now"));
+                $seguimiento->setSeguimiento(null);
+                $seguimiento->setRespuesta(0);
+                $seguimiento->setFechaTerminada(null);
+                
+                $em->persist($seguimiento);
+                $em->flush();
 
-            $em = $this->getDoctrine()->getManager();
-            $em->persist($seguimiento);
-            $em->flush();
+                //Se obtiene el seguimiento creado para añadirselo al registro de tutoría.
+                $comentario = $em->getRepository('IntranetBundle:Seguimiento')->findUltimoAvisoTutoria($entity->getProfesor()->getId(), $tipo);
 
-            //Se obtiene el seguimiento creado para añadirselo al registro de tutoría.
-            $comentario = $em->getRepository('IntranetBundle:Seguimiento')->findUltimoAvisoTutoria($entity->getProfesor()->getId(), $tipo);
+                //Se asigna los demás valores de tutorias.
+                $entity->setActivo(0);
+                $entity->setSeguimiento($comentario);
 
-            //Se asigna los demás valores de tutorias.
-            $entity->setActivo(0);
-            $entity->setSeguimiento($comentario);
+            }else{
+                //Se crea el nuevo seguimiento de la asignación de tutoría.
+                $seguimiento = new Seguimiento();
+                $seguimiento->setProfesor($entity->getProfesor());
+                $seguimiento->setAlumno($entity->getAlumno());
+                $seguimiento->setResponsable(null);
+                $seguimiento->setAsignatura(null);
+                $seguimiento->setGrupo($grupo);
+                $seguimiento->setTipo(0);
+                $seguimiento->setTipoUser(1);
+                $seguimiento->setDescripcion($descripcion);
+                $seguimiento->setFecha(new \DateTime("now"));
+                $seguimiento->setFechaActualizada(new \DateTime("now"));
+                $seguimiento->setSeguimiento($consulta);
+                $seguimiento->setRespuesta(0);
+                $seguimiento->setFechaTerminada(null);
+
+                $em->persist($seguimiento);
+                $em->flush();
+
+                //Se modifica la consulta principal para que se muestre actualizada.
+                $consulta->setRespuesta(1);
+                $consulta->setFechaActualizada(new \DateTime("now"));
+                $em->persist($consulta);
+                $em->flush();
+
+                //Se asigna los demás valores de tutorias.
+                $entity->setActivo(0);
+                $entity->setSeguimiento($consulta);
+            }
 
             $em->persist($entity);
             $em->flush();
@@ -129,7 +164,7 @@ class TutoriasController extends Controller
         ));
     }
 
-        public function asignarTutoriaShowAction(Request $request)
+    public function asignarTutoriaShowAction(Request $request)
     {
         $em = $this->getDoctrine()->getManager();
         $entity = new Tutorias();
@@ -147,12 +182,40 @@ class TutoriasController extends Controller
             'form'   => $form->createView(),
             'inicio' => $inicio,
             'fin' => $fin,      
-            'grupo' => $tutor_grupo,    
+            'grupo' => $tutor_grupo,
+            'idalumno' => null,
+            'consulta' => null,     
     
         ));
     }
 
+    public function asignarTutoriaConsultaAction(Request $request, $id)
+    {
+        $em = $this->getDoctrine()->getManager();
+        $entity = new Tutorias();
+        $form   = $this->createCreateForm($entity);
+        
+        $entity = $this->get('security.context')->getToken()->getUser();
+        $tutor_grupo= $em->getRepository('BackendBundle:Grupo')->findOneByProfesor($entity);
+        $consulta= $em->getRepository('IntranetBundle:Seguimiento')->findOneById($id);
 
+        $alumno= $consulta->getAlumno();
+
+        $inicio =$em->getRepository('BackendBundle:Centro')->findInicioCurso();
+        $fin =$em->getRepository('BackendBundle:Centro')->findFinCurso();
+   
+        return $this->render('IntranetBundle:Profesor:asignarTutorias.html.twig', array(
+            'entity' => $entity,
+            'form'   => $form->createView(),
+            'inicio' => $inicio,
+            'fin' => $fin,      
+            'grupo' => $tutor_grupo,
+            'idalumno' => $alumno->getId(),
+            'alumno' => $alumno, 
+            'consulta' => $consulta->getId(),
+        ));
+    }
+    
     /**
      * Finds and displays a Tutorias entity.
      *

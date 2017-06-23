@@ -250,8 +250,9 @@
                                     {% trans %}Responder{% endtrans %}
                                 </a>
                             {% endif %}
-
-                            <span id="edicion" class="pull-right hidden-xs visible-sm visible-md visible-lg">
+                            {#Se comprueba si la consulta está finalizada para no mostrar los botones#}
+                            {% if not seguimiento.fechaTerminada %}
+                                <span id="edicion" class="pull-right hidden-xs visible-sm visible-md visible-lg">
                                 {% if not seguimiento.respuesta  and seguimiento.tipoUser == 1 %}
                                     <a id="btn_editar" href="#" class="btn btn_gris" data-target="#editar_tutoria_modal" data-toggle="modal" data-backdrop="static" data-keyboard="false">
                                         <i class="fa fa-pencil"></i>{% trans %}Editar{% endtrans %}
@@ -262,8 +263,8 @@
                                         <i class="fa fa-trash-o"></i>{% trans %}Eliminar{% endtrans %}
                                     </a>
                                 {% endif %}
-                            </span>
-                            <span id="edicion" class="pull-right visible-xs hidden-sm hidden-md hidden-lg">
+                                </span>
+                                <span id="edicion" class="pull-right visible-xs hidden-sm hidden-md hidden-lg">
                                 {% if not seguimiento.respuesta and seguimiento.tipoUser == 1 %}
                                     <a id="btn_editar" href="#" class="btn btn_gris" data-target="#editar_tutoria_modal" data-toggle="modal" data-backdrop="static" data-keyboard="false">
                                         <i class="fa fa-pencil"></i>
@@ -274,7 +275,8 @@
                                         <i class="fa fa-trash-o"></i>
                                     </a>
                                 {% endif %}
-                            </span>
+                                </span>
+                            {% endif %}
                             </div>
                         </div>
                     </div>

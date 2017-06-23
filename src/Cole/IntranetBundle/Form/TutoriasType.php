@@ -16,12 +16,13 @@ class TutoriasType extends AbstractType
     {
         $builder
             //->add('fecha', 'text', array('required' => true,'label' => 'Fecha','attr' => array('class' => 'form-control input-inline datetimepicker','data-provide' => 'datepicker','data-format' => 'dd-mm-yyyy HH:ii')))
-            ->add('fecha','datetime',array('date_widget'=> 'text','required'=> true))
+            ->add('fecha','date',array('widget' => 'text','required'=> true))
+            ->add('hora','time',array('widget' => 'text','required'=> true))
             ->add('grupo','entity',array('mapped' => false, 'class' => 'BackendBundle:Grupo','query_builder' => function (\Cole\BackendBundle\Entity\GrupoRepository $er) {return $er->createQueryBuilder('u')->orderBy('u.curso','ASC')->addOrderBy('u.letra', 'ASC');}, 'empty_data' => null,'empty_value'=> 'Seleccione un grupo','required'=> true))
             ->add('profesor','entity',array('class' => 'BackendBundle:Profesor','query_builder' => function (\Cole\BackendBundle\Entity\ProfesorRepository $er) {return $er->createQueryBuilder('u')->where('u.activo IN(:act)')->setParameter(':act', 1)->orderBy('u.nombre','ASC');}, 'empty_data' => null,'empty_value'=> 'Seleccione un profesor','required'=> true))
             ->add('alumno','entity',array('class' => 'BackendBundle:Alumno','query_builder' => function (\Cole\BackendBundle\Entity\AlumnoRepository $er) {return $er->createQueryBuilder('u')->where('u.activo IN(:act)')->setParameter(':act', 1)->orderBy('u.nombre','ASC');}, 'empty_data' => null,'empty_value'=> 'Seleccione un alumno','required'=> false))
             ->add('responsable','entity',array('class' => 'BackendBundle:Padres','query_builder' => function (\Cole\BackendBundle\Entity\PadresRepository $er) {return $er->createQueryBuilder('u')->where('u.activo IN(:act)')->setParameter(':act', 1)->orderBy('u.nombre','ASC');}, 'empty_data' => null,'empty_value'=> 'Seleccione un responsable','required'=> false))
-            //->add('seguimiento', new SeguimientoType())
+            ->add('seguimiento','entity',array('class' => 'IntranetBundle:Seguimiento','query_builder' => function (\Cole\IntranetBundle\Entity\SeguimientoRepository $er) {return $er->createQueryBuilder('u')->where('u.tipo IN(:act)')->setParameter(':act', 1)->orderBy('u.id','ASC');}, 'empty_data' => null,'empty_value'=> 'Seleccione una consulta','required'=> false))
             ->add('tipo', 'choice', array('mapped' => false,'choices' => array('1' => 'Profesor', '0' =>'Alumno'),'required'=> true, 'expanded'=>true, 'multiple'=>false))
             ->add('descripcion','textarea',array('mapped' => false, 'label' => 'Descripción', 'attr' => array('type'=>'textarea')))
         ;
