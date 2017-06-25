@@ -1037,8 +1037,8 @@ $(document).ready(function () {
   });
 
   //Se añade el id del equipamiento en botón de eliminar de la ventana modal para luego generar la ruta.
-  $(document).on('click','.container_reserva #btn_eliminar' ,function() {
-    id=$(this).closest('.container_reserva').attr("id");
+  $(document).on('click','.container_contenido_tabla #btn_eliminar' ,function() {
+    id=$(this).closest('.container_contenido_tabla').attr("id");
     $("#eliminar_reserva_modal .modal-body").load(Routing.generate("reserva_eliminar", {id:id, _locale:locale}), function(){
     }); 
   });
@@ -1070,9 +1070,9 @@ $(document).ready(function () {
   });
 
   //Se añade el id de la consulta de tutoría en botón de eliminar de la ventana modal para luego generar la ruta.
-  $(document).on('click','#contenedor_tutorias #btn_eliminar' ,function() {
-    id=$(this).closest('.seguimiento').attr("id");
-    $("#eliminar_tutoria_modal .modal-body").load(Routing.generate("seguimiento_eliminar", {id:id, _locale:locale}), function(){
+  $(document).on('click','#tutorias_pendientes #btn_eliminar' ,function() {
+    id=$(this).prev().attr("id");
+    $("#eliminar_tutoria_modal .modal-body").load(Routing.generate("tutorias_eliminar", {id:id, _locale:locale}), function(){
     }); 
   });
 

@@ -42,3 +42,9 @@ tutorias_delete:
     path:     /{id}/delete
     defaults: { _controller: "IntranetBundle:Tutorias:delete" }
     requirements: { _method: post|delete }
+
+tutorias_eliminar:
+    path:     /{id}/eliminar
+    defaults: { _controller: "IntranetBundle:Tutorias:eliminarTutorias" }
+    options:
+        expose: true

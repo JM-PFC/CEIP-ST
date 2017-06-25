@@ -948,6 +948,7 @@ class AlumnoController extends Controller
         //Se modifica el valor de respuesta en la consulta principal
         $consulta_principal=$tutoria->getSeguimiento();
         $consulta_principal->setRespuesta(1);
+        $consulta_principal->setFecha(new \DateTime("now"));
         $em->persist($consulta_principal);
         $em->flush();
 

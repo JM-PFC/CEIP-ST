@@ -47,7 +47,9 @@ class TutoriasController extends Controller
         $consulta_principal=$form->get("seguimiento")->getData();
 
         $em = $this->getDoctrine()->getManager();
-        $consulta = $em->getRepository('IntranetBundle:Seguimiento')->findOneById($consulta_principal->getId());
+        if($consulta_principal){
+            $consulta = $em->getRepository('IntranetBundle:Seguimiento')->findOneById($consulta_principal->getId());
+        }
 
         if ($form->isValid()) {
             if(!$consulta_principal){
@@ -99,7 +101,7 @@ class TutoriasController extends Controller
 
                 //Se modifica la consulta principal para que se muestre actualizada.
                 $consulta->setRespuesta(1);
-                $consulta->setFechaActualizada(new \DateTime("now"));
+                //$consulta->setFechaActualizada(new \DateTime("now"));
                 $em->persist($consulta);
                 $em->flush();
 
@@ -310,6 +312,21 @@ class TutoriasController extends Controller
             'delete_form' => $deleteForm->createView(),
         ));
     }
+
+    public function eliminarTutoriasAction($id)
+    {
+        $em = $this->getDoctrine()->getManager();
+
+        $entity = $em->getRepository('IntranetBundle:Tutorias')->findById($id);
+
+        $deleteForm = $this->createDeleteForm($id);
+
+        return $this->render('IntranetBundle:Tutorias:eliminarTutorias.html.twig', array(
+            'entity'      => $entity,
+            'delete_form' => $deleteForm->createView(),
+        ));
+    }
+
     /**
      * Deletes a Tutorias entity.
      *
@@ -321,18 +338,63 @@ class TutoriasController extends Controller
 
         if ($form->isValid()) {
             $em = $this->getDoctrine()->getManager();
-            $entity = $em->getRepository('IntranetBundle:Tutorias')->find($id);
+            $tutoria=$em->getRepository('IntranetBundle:Tutorias')->findOneById($id);
+            $alumno=$tutoria->getAlumno();
+            $profesor=$tutoria->getProfesor();
 
-            if (!$entity) {
-                throw $this->createNotFoundException('Unable to find Tutorias entity.');
+            //Se añade un comentario para mostrar como aviso del sistema (FechaActualizada == null)
+            $seguimiento = new Seguimiento();
+            $seguimiento->setProfesor($alumno->getGrupo()->getProfesor());
+            $seguimiento->setAlumno($alumno);
+            $seguimiento->setResponsable($tutoria->getResponsable());
+            $seguimiento->setAsignatura(null);
+            $seguimiento->setGrupo($alumno->getGrupo());
+            $seguimiento->setTipo(0);
+            if ($this->get('security.context')->isGranted('ROLE_PROFESOR')) {
+                $seguimiento->setTipoUser(1);
+                if($profesor->getSexo() == "Masculino"){
+                    $seguimiento->setDescripcion("El tutor ha cancelado la tutoría asiganda.");
+                }else{
+                    $seguimiento->setDescripcion("La tutora ha cancelado la tutoría asiganda.");
+                }
             }
+            else if ($this->get('security.context')->isGranted('ROLE_USUARIO')){
+                $seguimiento->setTipoUser(0);
+                $seguimiento->setDescripcion("El responsable ha cancelado la tutoría asiganda.");
+            }
+            $seguimiento->setFecha(new \DateTime("now"));
+            $seguimiento->setFechaActualizada(null);
+            $seguimiento->setSeguimiento($tutoria->getSeguimiento());
+            $seguimiento->setRespuesta(0);
+            $seguimiento->setFechaTerminada(null);
 
-            $em->remove($entity);
+            $em->persist($seguimiento);
             $em->flush();
+
+            //Se modifica el valor de respuesta en la consulta principal
+            $consulta_principal=$tutoria->getSeguimiento();
+            $consulta_principal->setRespuesta(1);
+            $em->persist($consulta_principal);
+            $em->flush();
+
+            //Se elimina la tutoría pendiente.
+            $em->remove($tutoria);
+            $em->flush();
+
+            $ms = $this->get('translator')->trans('La tutoría ha sido cancelada.');
+            $this->get('session')->getFlashBag()->add('notice',$ms);
+
+            if ($this->get('security.context')->isGranted('ROLE_PROFESOR')) {
+                    return $this->redirect($this->generateUrl('intranet_profesor_tutorias'));
+            }
+            else if ($this->get('security.context')->isGranted('ROLE_USUARIO')){
+                    return $this->redirect($this->generateUrl('intranet_alumno_tutorias', array('id'=>$alumno->getId())));
+            }
         }
 
         return $this->redirect($this->generateUrl('tutorias'));
     }
+
 
     /**
      * Creates a form to delete a Tutorias entity by id.
@@ -346,7 +408,7 @@ class TutoriasController extends Controller
         return $this->createFormBuilder()
             ->setAction($this->generateUrl('tutorias_delete', array('id' => $id)))
             ->setMethod('DELETE')
-            ->add('submit', 'submit', array('label' => 'Eliminar'))
+            ->add('submit', 'submit', array('label' => "Eliminar", 'attr' => array('class' => 'btn btn-danger')))
             ->getForm()
         ;
     }

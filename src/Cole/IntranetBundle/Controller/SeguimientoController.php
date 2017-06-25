@@ -120,7 +120,7 @@ class SeguimientoController extends Controller
             //Se indica en el seguimiento principal que tiene respuesta.
             $principal= $em->getRepository('IntranetBundle:Seguimiento')->findOneById($entity->getSeguimiento());
             $principal->setRespuesta(1);
-            $principal->setFechaActualizada(new \DateTime("now"));
+            //$principal->setFechaActualizada(new \DateTime("now"));
             $em->persist($principal);
 
             $em->flush();

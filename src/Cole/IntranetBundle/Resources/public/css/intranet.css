@@ -2786,6 +2786,8 @@ table tr td a{
 #reserva_modulos button[class*="active"] {
     cursor: pointer;
     pointer-events: auto;
+    border: 1px inset !important;
+
 }
 #reserva_modulos button p{
     margin-bottom: 5px !important;
@@ -2794,7 +2796,7 @@ table tr td a{
     cursor: default;
     pointer-events: none;
 }
-#asignar_tutoria_modal .ui-datepicker-calendar a:not(.ui-state-disabled):hover, .reserva_fecha button:hover:not(.active):not(.disabled), .reserva_fecha .ui-datepicker-calendar a:not(.ui-state-disabled):hover{
+#asignar_tutoria_modal .ui-datepicker-calendar a:not(.ui-state-disabled):hover, .opciones_reservar button:hover:not(.active):not(.disabled), .reserva_fecha .ui-datepicker-calendar a:not(.ui-state-disabled):hover{
     background: #337ab7 !important;
     color: white;
 }
