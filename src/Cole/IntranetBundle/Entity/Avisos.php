@@ -38,7 +38,7 @@ class Avisos
     /**
      * @var string
      *
-     * @ORM\Column(name="tipoUsuario", type="string", length=50)
+     * @ORM\Column(name="tipoUsuario", type="string", length=20)
      */
     private $tipoUsuario;
 
@@ -52,7 +52,7 @@ class Avisos
     /**
      * @var string
      *
-     * @ORM\Column(name="tipoAviso", type="string", length=50)
+     * @ORM\Column(name="tipoAviso", type="string", length=20)
      */
     private $tipoAviso;
 

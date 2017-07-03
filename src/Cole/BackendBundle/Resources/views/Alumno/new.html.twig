@@ -42,6 +42,21 @@
 
         // Se elimina el contenido de la etiqueta de fecha de nacimiento para que muestre bien el aviso de error(se añade con css).
         $("label[for^='alumno_res'][for$='_fechaNacimiento']").text("");
+
+        //Comprobamos si hay cursos sin plazas libres para deshabilitarlo de la lista de cursos.
+        $.ajax({
+            type: 'POST',
+            url: Routing.generate('cursos_sin_plazas'),
+            dataType: 'json',
+            success: function(response) { 
+                for( var key in response.cursos){
+                    $("#alumno_nuevo #alumno_cursoIngreso option[value='"+response.cursos[key]+"']").prop('disabled', true);
+                }   
+
+            }
+        })
+
+
     </script>
 
 {% endblock %}

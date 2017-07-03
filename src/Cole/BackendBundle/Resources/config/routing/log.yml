@@ -1,0 +1,9 @@
+log:
+    path:     /
+    defaults: { _controller: "BackendBundle:Log:index" }
+
+log_show:
+    path:     /{id}/show
+    defaults: { _controller: "BackendBundle:Log:show" }
+
+

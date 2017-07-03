@@ -19,6 +19,7 @@
   fin_m= {{ fin.finCurso|date('m') }};
   fin_a= {{ fin.finCurso|date('Y') }};
 
+
   $.datepicker.regional['es'] = {
     closeText: 'Cerrar',
     prevText: '<Ant',
@@ -91,14 +92,26 @@
     $("#reserva_fecha .ui-datepicker-title span").remove();
   }
   // Se elimina el estilo de activado del dia actual.
-  $("#reserva_fecha .ui-datepicker-calendar .ui-datepicker-current-day").removeClass("ui-datepicker-current-day").children().removeClass("ui-state-active");
+  $("#reserva_fecha .ui-datepicker-calendar .ui-datepicker-current-day").removeClass("ui-datepicker-current-day").children().removeClass('ui-state-active"')
+
+    //Se establece los margenes del selector de hora con las horas de apertura del centro.
+    inicioHorario={{ inicioHorario|json_encode()|raw }};
+    finHorario={{ finHorario|json_encode()|raw }};
+    if(inicioHorario.charAt(0) == 0){
+      inicioHorario=inicioHorario.charAt(1);
+    }
+
+    if(finHorario.charAt(0) == 0){
+      finHorario=finHorario.charAt(1);
+    }
+    alert(finHorario);
 
     //Input time, se vacia cada vez que se carga.
     $("#hora_tutoria").val("");
     $("#hora_tutoria").timepicki({
         show_meridian:false,
-        min_hour_value:9,
-        max_hour_value:20,
+        min_hour_value:inicioHorario,
+        max_hour_value:finHorario,
         step_size_minutes:15,
         overflow_minutes:true,
         increase_direction:'up',

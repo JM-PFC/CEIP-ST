@@ -63,8 +63,7 @@
 					<li><a href="#2" title="Docentes"> Docentes </a></li>
 					<li class="activo"><a href="#3" title="Alumnos"> Alumnos </a></li>
 					<li><a href="#4" title="Académico"> Académico </a></li>
-					<li><a href="#5" title="Herramientas"> Herramientas </a></li>
-					<li><a href="#6" title="Ayuda"> Ayuda </a></li>
+					<li><a href="#5" title="Utilidades"> Utilidades </a></li>
 					{#<li class="salir"><a href="{{path('index')}}" title="Salir de Administración"> <img src="{{ asset('bundles/backend/images/menu/salir.png')}}"> <p>Salir</p></a></li>#}
 					<li class="salir"><a href="{{path('logout')}}" title="Salir de Administración"> <img src="{{ asset('bundles/backend/images/menu/salir.png')}}"> <p>Salir</p></a></li>
 				</ul>
@@ -282,11 +281,16 @@
 					</div>
 				</div>
 				<div id="5">
-					<a href="javascript:void(0);"> Herramientas</a>
+					<div>
+						<a id="listarlog" title="Entradas / Salidas" href="{{path('log')}}">
+							<img src="{{ asset('bundles/backend/images/menu/control-usuarios.png')}}">
+							<span> Entradas / Salidas</span>
+						</a>
+						<span> Control de Usuarios </span>
+					</div>
 				</div>
-				<div id="6">
-					<a href="javascript:void(0);"> Ayuda</a>
-				</div>
+
+
 				<div  class="oculto" id="dialog-message" title="Número máximo de Pestañas">
 					<div>
 						<p>Número máximo de pestañas permitidas.</p>

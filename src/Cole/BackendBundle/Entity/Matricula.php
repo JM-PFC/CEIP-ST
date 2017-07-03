@@ -42,7 +42,7 @@ class Matricula
     /**
      * @var string
      *
-     * @ORM\Column(name="añoAcademico", type="string", length=255)
+     * @ORM\Column(name="añoAcademico", type="string", length=30)
      */
     private $anyoAcademico;
 

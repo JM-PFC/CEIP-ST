@@ -511,5 +511,30 @@ class CursoController extends Controller
         }
     }
 
+    public function CursosSinPlazasAction(Request $request)
+    {
+        // if request is XmlHttpRequest (AJAX) but not a POSt, throw an exception
+        if ($request->isXmlHttpRequest() && !$request->isMethod('POST')) {
+            throw new HttpException('XMLHttpRequests/AJAX calls must be POSTed');
+        }
+        
+        $em = $this->getDoctrine()->getEntityManager();
+        $entity = $em->getRepository('BackendBundle:Curso')->findAll();
+        $array;
+        foreach ($entity as $curso) {
+            $matriculados = $em->getRepository('BackendBundle:Alumno')->findAlumnosPorCurso($curso);
+            $max=(int)$curso->getNumGrupos()*(int)$curso->getRatio();
+
+            if (count($matriculados)>=$max) {
+                $array[]=$curso->getId();
+            }
+        }
+        
+        if ($request->isXmlHttpRequest()) {
+                return new JsonResponse(array(
+                    'cursos' => $array,
+                    'success' => true), 200);
+        }
+    }
 
 }

@@ -356,8 +356,8 @@ nav{
 	position: relative;
 	display: block;
 	background: #D8D8D8;
-	width: 90%;
-	min-width: 87%;
+	width: 80%;
+	min-width: 930px;
 	height: 120px;
 	-moz-box-shadow:  black 2px 2px 15px;
    	-webkit-box-shadow:  black 2px 2px 15px;
@@ -380,6 +380,7 @@ nav{
 	text-align: center;
 	border-radius: 5px;
 	margin-right: 5px;
+	margin-left: 5px;
 }
 .contenedor div a{
 	float: left;
@@ -480,6 +481,7 @@ nav{
     padding: 4%;
     max-width: 350px; 
     font-size: 1em;
+    text-align: center;
 }
 #fondo_logo img{
 	width: 80%;
@@ -6674,7 +6676,7 @@ cursor: default !important;
 	width: 100%;
 	padding: 0 2%;
 }
-/*Anular Matríclas*/
+/*Anular Matrículas*/
 
 #anular_matricula #texto{
     display: table-cell;
@@ -7683,4 +7685,10 @@ cursor: default !important;
 }
 #asignar_optativa .text_cabecera_2 {
     width: 22%;
+}
+#lista_log .text_cabecera_2 {
+	width: 61% !important;
+}
+#lista_log tr, #lista_log td{
+	cursor: default !important;
 }

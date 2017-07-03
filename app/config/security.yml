@@ -10,7 +10,11 @@ security:
                # use_referer: true
                 default_target_path: /es/intranet
                 require_previous_session: false
-            logout: ~
+                success_handler: authentication_handler
+            logout:
+                path: /logout
+                target: /login
+                success_handler: authentication_handler
             access_denied_handler: accessdenied_handler
             remember_me:
                 key:      coleST

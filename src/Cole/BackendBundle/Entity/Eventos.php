@@ -58,7 +58,7 @@ class Eventos
     /**
      * @var string
      *
-     * @ORM\Column(name="hora", type="string", length=50)
+     * @ORM\Column(name="hora", type="string", length=15)
      */
     private $hora;
 

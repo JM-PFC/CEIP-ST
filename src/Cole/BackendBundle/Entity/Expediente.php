@@ -43,7 +43,7 @@ class Expediente
     /**
      * @var string
      *
-     * @ORM\Column(name="grupo", type="string", length=20)
+     * @ORM\Column(name="grupo", type="string", length=1)
      */
     private $grupo;
 
@@ -57,14 +57,7 @@ class Expediente
     /**
      * @var string
      *
-     * @ORM\Column(name="notas", type="string", length=1200, nullable=true)
-     */
-    private $notas;
-
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="faltas", type="string", length=50, nullable=true)
+     * @ORM\Column(name="faltas", type="string", length=5, nullable=true)
      */
     private $faltas;
 
@@ -130,29 +123,6 @@ class Expediente
     public function getGrupo()
     {
         return $this->grupo;
-    }
-
-    /**
-     * Set notas
-     *
-     * @param string $notas
-     * @return Expediente
-     */
-    public function setNotas($notas)
-    {
-        $this->notas = $notas;
-
-        return $this;
-    }
-
-    /**
-     * Get notas
-     *
-     * @return string 
-     */
-    public function getNotas()
-    {
-        return $this->notas;
     }
 
     /**

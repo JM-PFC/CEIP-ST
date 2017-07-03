@@ -38,7 +38,7 @@ class Equipamiento
     /**
      * @var string
      *
-     * @ORM\Column(name="tipo", type="string", length=150)
+     * @ORM\Column(name="tipo", type="string", length=15)
      */
     private $tipo;
 

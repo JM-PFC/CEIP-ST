@@ -80,3 +80,10 @@ obtener_ratio_max:
     requirements: { _method: post }
     options:
         expose: true
+
+cursos_sin_plazas:
+    path:     /Cursos_sin_plazas
+    defaults: { _controller: "BackendBundle:Curso:CursosSinPlazas" }
+    requirements: { _method: post }
+    options:
+        expose: true

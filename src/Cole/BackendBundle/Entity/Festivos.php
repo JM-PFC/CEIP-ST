@@ -31,14 +31,14 @@ class Festivos
     /**
      * @var string
      *
-     * @ORM\Column(name="mes", type="string", length=100)     
+     * @ORM\Column(name="mes", type="string", length=15)     
      */
     private $mes;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="numMes", type="string", length=5)
+     * @ORM\Column(name="numMes", type="string", length=2)
      */
     private $numMes;
 
@@ -52,7 +52,7 @@ class Festivos
     /**
      * @var string
      *
-     * @ORM\Column(name="tipo", type="string", length=100)
+     * @ORM\Column(name="tipo", type="string", length=15)
      */
     private $tipo;
 

@@ -75,3 +75,8 @@ BackendBundle_matricula:
 BackendBundle_eventos:
     resource: "@BackendBundle/Resources/config/routing/eventos.yml"
     prefix:   /eventos
+
+BackendBundle_log:
+    resource: "@BackendBundle/Resources/config/routing/log.yml"
+    prefix:   /log
+

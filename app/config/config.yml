@@ -104,6 +104,11 @@ services:
         calls:
             - [setContainer, ["@service_container"]]
 
+    #para saber que usuario se conecta y se desconecta
+    authentication_handler:
+        class: Cole\ColeBundle\AuthenticationHandler
+        arguments: [@router , @doctrine.orm.entity_manager, @security.context]
+
     #para personalizar la pagina de accesso denegado
     accessdenied_handler:
         class: Cole\ColeBundle\AccessDeniedHandler

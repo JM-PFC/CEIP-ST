@@ -1,0 +1,134 @@
+{% extends '::base.html.twig' %}
+
+
+{% block head %}{% endblock %}
+{% block stylesheets %}{% endblock %}
+
+{% block javascript %}
+<script>
+
+    // Tabla con la opción de ordenar y búsqueda.
+    $('#log').DataTable( { //on( 'page.dt',   function () { $(".current").prop("disabled", true); } )
+        //"aLengthMenu": [[25, 50, 100, 250, 500, -1], [25, 50, 100, 250, 500, "All"]],
+                initComplete: function () {
+            this.api().columns().every( function (e) {
+                var column = this;
+                var select = $('<select class="'+e+'"><option value=""></option></select>')
+                    .appendTo('.table_log')
+                    .on( 'change', function () {
+                        var val = $.fn.dataTable.util.escapeRegex(
+                            $(this).val()
+                        );
+ 
+                        column
+                            .search( val ? '^'+val+'$' : '', true, false )
+                            .draw();
+                    } );
+ 
+                column.data().unique().sort().each( function ( d, j ) {
+                    select.append( '<option value="'+d+'">'+d+'</option>' )
+                } );
+                select.append( '<option value="nada">nada</option>' )
+            } );
+        },
+        "order": [[ 2, "desc" ]],
+        "aLengthMenu": [[-1], [ "All"]],
+        "columnDefs": [ {
+            "targets": 'no-sort',
+            "orderable": false,} ],
+        "language": {
+            "zeroRecords": "Lo siento, no se ha encontrado ningún registro coincidente",
+            "emptyTable": "No hay alumnos en el curso anterior pendientes de matriculación",
+            "lengthMenu": "Mostrar _MENU_ entradas",
+            "loadingRecords": "Cargando...",
+            "processing":     "Processando...",
+            "info": "Página _PAGE_ de _PAGES_",
+            "infoEmpty": "No hay registros disponibles",
+            "infoFiltered": "(filtrado de _MAX_ registros)",
+            "search": "Buscar:",
+            "Next": "Siguiente",
+            "paginate": {
+                "previous": "Anterior",
+                "next": "Siguiente"
+            }
+        }
+    });
+
+
+    $("#lista_log .dataTables_info").addClass("oculto");
+    $("#lista_log .dataTables_paginate").addClass("oculto");
+    $("#lista_log .dataTables_length").addClass("oculto");
+    $('#lista_log .contenedor_registro').each (function(){ 
+      $(this).find(".dataTables_filter").appendTo($(this).find('#buscador'));
+    });
+
+    // Se comprueba si existe scrol vertical para ajustar el thead
+    if( $('#lista_log table tbody').get(0).scrollHeight>$('#lista_log table tbody').height()){
+        $("#lista_log table thead tr>th:last-child").attr('style', 'width: 10.5% !important');
+    }
+    else{
+        $("#lista_log table thead tr>th:last-child").attr('style', 'width: 11% !important');
+    }
+    
+    $(window).resize(function() {
+        //Se comrpueba si está el div con la tabla para cambiar los estilos.
+        if($('#lista_log table tbody').length){
+            if($('#lista_log table tbody').get(0).scrollHeight>$('#lista_log table tbody').height() ){
+                $("#lista_log table thead tr>th:last-child").attr('style', 'width: 10.5% !important');
+            }
+            else{
+                $("#lista_log table thead tr>th:last-child").attr('style', 'width: 11% !important');
+            }
+        }
+    });
+
+    $("#lista_log tbody tr td[class='dataTables_empty']").closest("tr").addClass("no_cursor");
+    $("#antiguo_alumno_activo tbody tr td:contains('Promociona')").css("color","#0B610B");
+    $("#antiguo_alumno_activo tbody tr td:contains('Repite')").css("color","#bc1010");
+
+</script>
+
+{% endblock %}
+
+{% block body -%}
+    <div id="lista_log" >
+        <div class="parent_no_form">
+        <div class="child">
+            <div class="contenedor_registro" >  
+                <div>
+                    <div id="cabecera_lista">
+                        <h2 class="text_cabecera_2">Control de entrada y salida de usuarios</h2>
+                        <div id="buscador"> </div>
+                    </div>
+                    <div id="fondo_azul_osc">
+                        <div id="tableContainer" class="tableContainer inner_table vh45">
+                            <table id="log" class="scrollTable lista_color">
+                                <thead class="fixedHeader">
+                                    <tr>
+                                        <th class="w20 left">Usuario</th>
+                                        <th class="w5">Tipo</th>
+                                        <th class="w11">Fecha</th>
+                                        <th class="w15">Tipo de Usuario</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="scrollContent">
+                                    {% for entity in entities%}
+                                        <tr>
+                                            <td class="w20 left">{{ entity.usuario }}</td>
+                                            <td class="w5">{{entity.tipo}}</td>
+                                            <td class="w11">{{ entity.fecha|date('m/d/Y H:m:s')}}</td>
+                                            <td class="w15">{{ entity.tipoUsuario }}</td>
+                                        </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div> 
+                <div class="table_log select_ord_datatable">
+                </div>         
+            </div>
+        </div>
+        </div>
+    </div>
+    {% endblock %}

@@ -43,7 +43,7 @@ class Imparte
     /**
      * @var string
      *
-     * @ORM\Column(name="dia_semanal", type="string", length=255, nullable=true)
+     * @ORM\Column(name="dia_semanal", type="string", length=1, nullable=true)
      */
     private $dia_semanal;
 
