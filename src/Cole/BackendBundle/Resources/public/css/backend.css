@@ -264,7 +264,7 @@ nav{
     width: 11%;
     font-size: 18px;
     font-family: Helvetica,Arial,sans-serif;
-	margin-left: 28px;
+	margin-left: 40px;
     display: table;
     margin-top: 2px;
 }
@@ -275,6 +275,9 @@ nav{
     display: table-cell;
     vertical-align: middle;
     border-radius: 5px 5px 0 0; 
+}
+.menu li:not(.salir) a{
+    padding: 0 10px;
 }
 .menu a:hover{
     background: grey;
@@ -356,8 +359,8 @@ nav{
 	position: relative;
 	display: block;
 	background: #D8D8D8;
-	width: 80%;
-	min-width: 930px;
+	width: 70%;
+	min-width: 855px;
 	height: 120px;
 	-moz-box-shadow:  black 2px 2px 15px;
    	-webkit-box-shadow:  black 2px 2px 15px;
@@ -384,7 +387,7 @@ nav{
 }
 .contenedor div a{
 	float: left;
-	padding: 0 5px;
+	padding: 0 8px;
 	margin: 0 auto;
 	margin-top: -2px;
 	min-width: 50px;
@@ -691,6 +694,9 @@ nav{
 	}
 	#asignaturas_cursos #asignaturas_cursos .simple_column{
 		width: 27% !important;
+	}
+	#asignaturas_cursos .contenido_lista button{
+		display: block !important;
 	}
 	#asignaturas_cursos .lista_cursos{
 		margin: 0.5% 0 0 2% !important;
@@ -3975,6 +3981,9 @@ font-weight: bold;
 	background: #b1cce7;
 	height: 15px;
 }
+.margin_calendar_festivos .ui-datepicker-title{
+	background: none!important;
+}
 #ui-datepicker-div .ui-datepicker-title{
 	line-height: 1em !important;
 }
@@ -4205,6 +4214,34 @@ font-weight: bold;
 .azul_opacity{
 	background:rgba(177, 204, 231, 0.4) !important; 
 }
+.b_verde{
+    background: #1e631e !important;
+    margin-left: 0 !important;
+    margin-right: 0 !important;
+}
+.contenedor_btn_click{
+    height: 76% !important;
+    padding: 8px 0 0 !important;
+    width: 100% !important;
+}
+.contenedor_btn_click:hover{
+    background: none !important;
+}
+.contenedor_btn_click img{
+	max-width: 50px !important;
+	max-height: 50px!important;
+}
+.btn_click{
+	background: #72c372 none repeat scroll 0 0;
+    height: 89px !important;
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+    padding-top: 2px !important;
+}
+.btn_click:hover{
+	background: #5BB15B;
+}
+
 #meses_calendario #mes{
 	display: block;
 }
@@ -5143,10 +5180,12 @@ tbody.scrollContent tr.alternateRow td {
 #consulta_reservas_instalaciones tr th:last-child,#consulta_reservas_equipamientos tr th:last-child{
 	width: 5.5% !important;
 }
+#consulta_instalaciones td, #consulta_equipamientos td{
+	cursor: default !important;
+}
 .scrollContent tr:hover{
 	background: #b1cce7;
 }
-
 .scrollContent td img{
 	margin: 0 auto;
     max-height:28px;

@@ -1,0 +1,196 @@
+{% extends  'IntranetBundle:Profesor:index.html.twig' %}
+
+{% block body %}
+    {{parent()}}
+    <script>
+    	$(".menu li").removeClass('active');
+		$(".menu #calificaciones").addClass('active');
+        $(".menu #calificaciones").addClass('click');
+        
+        //Se selecciona los valores de los select ocultos.
+        profesor={{entity.id|json_encode()|raw}};
+        $("#tarea_profesor option[value='"+profesor+"']").prop('selected', true);
+
+
+        grupos={{grupos|json_encode()|raw}};
+        for(var key in grupos ){
+            $("#tabla_tareas_profesor tr[id='"+key+"'] #grupos_tareas").text(grupos[key]);
+        }
+
+        //Se selecciona el trimestre actual.
+        trimestre={{trimestre|json_encode()|raw}};
+        $("#tarea_trimestre option[value='"+trimestre+"']").prop('selected', true);
+
+
+    </script>
+ {% endblock %}
+
+{% block migas %}
+	<li class="tipo">
+			{% trans %}Profesorado{% endtrans %}
+	</li>
+	<li>
+		<a href="{{path('intranet_profesor')}}">
+			{% trans %}Panel principal{% endtrans %}
+		</a>
+	</li>
+	<li class="active no-seleccion">
+		{% trans %}Calificaciones{% endtrans %}
+	</li>
+{% endblock %}
+
+{% block titulo_cabecera %}
+	<i class="fa fa-list-alt page-header-icon"></i>
+	{% trans %}Calificaciones{% endtrans %}
+{% endblock %}
+{% block titulo_cabecera_movil %}
+    <i class="fa fa-list-alt page-header-icon"></i>
+    {% trans %}Calificaciones{% endtrans %}
+{% endblock %}
+
+{% block contenido %}
+    <h4 id="titulo-seccion" class="titulo-seccion">{% trans %}Calificaciones{% endtrans %}</h4>
+
+	<div id="seleccion_calificaciones" class="contenedor_seleccion col-sm-12" locale="{{ app.request.getLocale() }}" >
+      {% if entity.nivel == "Primaria"%}
+
+        <div id="1" class="col-sm-4 center">
+            <p>{% trans %}Seleccione una opción{% endtrans %}:</p>
+            <div id="opciones" class="seleccion" locale="{{ app.request.getLocale() }}">
+                <button id="nueva" class="btn btn-primary col-xs-11 ">Añadir Tarea</button>
+                <button id="evaluar" class="btn btn-primary col-xs-11 ">Evaluar Tarea</button>
+                <button id="trimestre" class="verde btn btn-primary col-xs-11 ">Evaluar trimestre</button>  
+                {% if tutor_grupo %}
+                    <button id="{{tutor_grupo.id}}" class="verde btn btn-primary col-xs-11 ">Ver evaluación de mi Grupo</button>  
+                {% endif %}          
+            </div>
+            <span id="orden">1</span>
+        </div>
+
+        <div id="2" class="col-sm-4 center hidden">
+            <p>{% trans %}Seleccione una asignatura{% endtrans %}:</p>
+            <div id="asignatura" class="seleccion">
+                {% for asignatura in imparte %}
+                    <button id="{{asignatura.asignatura.id}}" class="btn btn-primary col-xs-11 ">{{asignatura.asignatura.asignatura.nombre}}</button>
+                {% endfor %}
+            </div>
+            <span id="orden">2</span>
+        </div>
+
+		<div id="3_1" class="col-sm-4 center hidden">
+			<p>{% trans %}Seleccione un grupo{% endtrans %}:</p>
+
+    		<div id="cursos" class="seleccion" locale="{{ app.request.getLocale() }}">
+	
+			</div>
+			<span id="orden">3</span>
+		</div>
+        <div id="3_2" class="multiple_seleccion col-sm-4 center hidden">
+            <p>{% trans %}Seleccione los grupos{% endtrans %}:</p>
+
+            <div id="cursos" class="seleccion" locale="{{ app.request.getLocale() }}">
+          
+            </div>
+            <span id="orden">3</span>
+        </div>
+        <div id="4" class="hidden clear">
+        {% set locale = app.request.getLocale() %}
+
+        {{form_start(form, {'method':'Post','attr':{'id':'calificaciones_nuevo', 'data-toggle':"validator", 'role':"form" ,'novalidate':'novalidate', 'autocomplete':'off'}})}}
+            <div  class="col-xs-12 col-sm-10 center">
+                <p>{% trans %}Seleccione el trimestre e inserte el nombre de la tarea{% endtrans %}:</p>
+
+                <div id="descripcion" class=" seleccion col-xs-12" >
+                    {{ form_errors(form) }}
+                    <div class="col-xs-12">
+                        <div class="">
+                            <div class="input-group col-xs-12">
+                                {{ form_widget(form.trimestre, {'attr':{'class': ' col-xs-8 col-sm-3' }}) }}
+
+                                {{ form_widget(form.descripcion, {'attr':{'class': 'col-xs-12 col-sm-offset-1 col-sm-8' }}) }}
+                            </div>
+                            <div class="help-block with-errors"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <span id="orden" class="orden_descripcion hidden-xs">4</span>
+                <span id="orden" class="orden_descripcion_movil hidden-sm hidden-md hidden-lg">4</span>
+
+            </div>
+            <div class="boton_enviar col-sm-2"> 
+                {{ form_row(form.submit,{'id':'intranet_'~form.submit.vars.id , 'attr':{'class': 'btn btn-success center-block' }}) }}
+            </div>
+
+            <div class="hidden">
+                {{ form_rest(form) }}
+            </div>
+            {{ form_end(form) }}
+        </div>
+      {% else %}
+
+        <div id="3" class="col-sm-4 center">
+            <p>{% trans %}Seleccione un grupo{% endtrans %}:</p>
+
+            <div id="cursos" class="seleccion" locale="{{ app.request.getLocale() }}">
+                <button id="{{cursos.id}}" class="btn btn-primary  active">{{cursos}}</button>
+            </div>
+            <span id="orden" style="background-color: rgb(51, 122, 183);">1</span>
+        </div>
+        <div id="3" class="col-sm-4 center">
+            <p>{% trans %}Seleccione destinatario{% endtrans %}:</p>
+            <div id="alumnos" class="seleccion center" locale="{{ app.request.getLocale() }}">
+                <div class="div_btn">
+                    <button id="individual" data-target="#lista_alumnos_calificaciones" class="btn btn-primary" data-toggle="modal" data-backdrop="static" data-keyboard="false"><i class="fa fa-user"></i> Alumno </button>
+                    <button id="grupo" class="btn btn-primary" ><i class="fa fa-users"></i> Grupo</button>
+                </div>
+            </div>  
+            <span id="orden">2</span>
+        </div>
+
+      {% endif %}
+
+	</div>
+
+<div id="tabla_tareas_profesor" class="panel panel-default tab-content">
+    <h4 >Tareas Evaluables</h4>
+    <div class="table-responsive">
+      <table class="table lista-alumnos table-striped ">
+        <thead>
+          <tr >
+            <th class="col-md-5">{% trans %}Nombre de la tarea{% endtrans %}</th>
+            <th class="col-md-4">{% trans %}Asignatura{% endtrans %}</th>
+            <th class="col-md-3">{% trans %}Grupos{% endtrans %}</th>
+
+          </tr>
+        </thead>
+        <tbody class="">
+        {% for entity in tareas %}
+          <tr id="{{ entity.id }}">
+            <td class="col-md-5">{{ entity.descripcion }}</td>
+            <td class="col-md-4" >
+                {{entity.asignatura.asignatura.nombre }}
+            </td>
+            <td id="grupos_tareas" class="col-md-3"></td>
+          </tr>
+        {% endfor %}
+        </tbody>
+      </table>
+      </div>
+</div>
+
+    <div id="lista_alumnos_calificaciones" class="modal fade lista_alumnos_seguimiento" role="dialog" data-backdrop="true" >
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    <h4 class="modal-title">{% trans %}Alumnos del grupo{% endtrans %}</h4>
+                </div>
+                <div class="modal-body"></div>
+                <div class="class-footer">
+                    <button type="button" class="btn btn_azul" data-dismiss="modal">{% trans %}Cerrar{% endtrans %}</button>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

@@ -64,6 +64,16 @@ class AsignaturasCursos
     private $seguimiento;
 
     /**
+     * @ORM\OneToMany(targetEntity="Cole\IntranetBundle\Entity\Cursa", mappedBy="asignaturasCursos")
+     */
+    private $cursa;
+
+    /**
+    * @ORM\OneToMany(targetEntity="Cole\IntranetBundle\Entity\Tarea", mappedBy="asignatura")
+    */
+    private $tarea;
+
+    /**
      * Get id
      *
      * @return integer 

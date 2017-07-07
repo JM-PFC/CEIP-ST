@@ -43,6 +43,8 @@ class ProfesorType extends AbstractType
             //->add('salt')
             //->add('claveUsuario')
             //->add('activo')
+            ->add('horas_intranet','text',array('mapped'=>false, 'required'=>false))
+            ->add('horas_lectivas_intranet','text',array('mapped'=>false, 'required'=>false))
             ->add('limpiar', 'button', array('attr' => array('class' => 'limpiar')))
 
             //->add('role') No debe modificarlo el usuario

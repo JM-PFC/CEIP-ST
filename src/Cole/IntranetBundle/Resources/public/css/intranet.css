@@ -658,6 +658,15 @@ form{
     #contenedor_tutoria .arrow_top{
         left: 20px !important;
     }
+    .orden_descripcion_movil {
+        top: 35px !important;
+    }
+    .table-responsive tr td , .table-responsive tr th {
+        padding: 4px 8px !important;
+    }
+    #seleccion_calificaciones #descripcion {
+        height: 80px !important;
+    }
 }
 /* Estilos para Pc*/
 #titulo_cabecera{
@@ -773,7 +782,7 @@ form{
     line-height: 20px;
     padding: 0 3px !important;
 }
-.tooltip{
+.barramensajes .tooltip{
     min-width: 100px;
 }
 .btn{
@@ -1043,7 +1052,7 @@ ul, ol {
 #barramensajesmovil .azul{
     background-color: #32457B !important;
 }
-#barraanunciosmovil .verde{
+#barraanunciosmovil .verde, #seleccion_calificaciones .verde{
     background-color: #699b54 !important;
 }
 #barraalertasmovil .naranja{
@@ -1867,7 +1876,7 @@ ul, ol {
     margin: 0 5px 10px;
     border: 1px outset grey;
 }
-#contenedor_cursos_profesor button[class*="active"], #seleccion_nuevo_seguimiento button[class*="active"]{
+#contenedor_cursos_profesor button[class*="active"], .contenedor_seleccion button[class*="active"]{
     background: #e57200 !important;
     pointer-events: none;
 }
@@ -1949,7 +1958,7 @@ ul, ol {
 .lista-alumnos tr td{
     border-top: 1px solid grey !important;
     border-bottom: 1px solid grey !important;
-    padding: 4px ;
+    padding: 6px !important;
 }
 .lista-alumnos tr th{
     border: 0 !important;
@@ -2396,8 +2405,8 @@ table tr td a{
     background: #f5f5f5;
     box-shadow: 0 1px 3px 0 rgba(50, 50, 50, 0.75) !important;
 }
-#seleccion_nuevo_seguimiento{
-    min-height: 175px;
+.contenedor_seleccion{
+    min-height: 175px !important;
     min-width: 250px;
 }
 #formulario_nuevo_seguimiento{
@@ -2416,11 +2425,11 @@ table tr td a{
 #formulario_nuevo_seguimiento .help-block ul, #formulario_nuevo_seguimiento .form-group{
     margin-bottom: 0 !important;
 }
-#seleccion_nuevo_seguimiento .seleccion button{
+.contenedor_seleccion .seleccion button{
     border: 1px outset grey;
     margin: 5px 10px;
 }
-#seleccion_nuevo_seguimiento p{
+.contenedor_seleccion p{
     background: #23527c none repeat scroll 0 0;
     border-bottom: 2px solid white;
     border-radius: 5px 5px 0 0;
@@ -2431,7 +2440,7 @@ table tr td a{
     margin-top: 10px;
     padding: 2px;
 }
-#seleccion_nuevo_seguimiento .seleccion{
+.contenedor_seleccion .seleccion{
     background: #cdd6e0 none repeat scroll 0 0;
     border-radius: 0 0 5px 5px;
     box-shadow: 0 1px 1px 0 rgba(50, 50, 50, 0.75) !important;
@@ -2440,7 +2449,7 @@ table tr td a{
     padding: 7px;
     text-align: left;
 }
-#seleccion_nuevo_seguimiento #orden{
+.contenedor_seleccion #orden{
     background: #ea9239 none repeat scroll 0 0;
     border-radius: 5px 0 0 5px;
     box-shadow: 0 1px 1px 0 rgba(50, 50, 50, 0.75) !important;
@@ -2454,20 +2463,20 @@ table tr td a{
     top: 55px;
     width: 22px;
 }
-#seleccion_nuevo_seguimiento #asignatura {
-    padding: 7px 20px !important;
+.contenedor_seleccion #asignatura {
+    padding: 7px !important;
 }
-#seleccion_nuevo_seguimiento #asignatura button{
+.contenedor_seleccion #asignatura button{
     padding: 3px 10px !important;
-    margin: 4px auto !important;
+    margin: -2px 10px 9px !important;
 }
-#seleccion_nuevo_seguimiento #alumnos{
+.contenedor_seleccion #alumnos{
     display: table;
     text-align: center;
     width: 100%;
     padding-top: 0;
 }
-#seleccion_nuevo_seguimiento #alumnos button{
+.contenedor_seleccion #alumnos button{
     height: 47px;
     width: 110px;
 }
@@ -2505,7 +2514,7 @@ table tr td a{
 .nombre_alumno_seguimiento b{
     background: #699b54 none repeat scroll 0 0 !important;
     border: 1px inset grey;
-    border-radius: 5px 0;
+    border-radius: 5px;
     color: white;
     font-weight: bold;
     margin-left: 5px;
@@ -2577,6 +2586,9 @@ table tr td a{
 }
 .modal textarea {
     resize: none;
+}
+.fade-scale .modal-body{
+    min-height: 135px;
 }
 .ediccion_seguimiento_modal label, .div_descripcion label{
     margin-right: 10px !important;
@@ -2692,13 +2704,16 @@ table tr td a{
     padding: 10px 0 !important;
     text-align: left;
 }
+.opciones_reservar .disabled{
+    pointer-events: none !important;
+}
 #reserva_modulos button{
     margin: 10px 0 !important;
     min-width: 96px;
     padding-left: 0;
     padding-right: 0;
     border: 2px outset threedlightshadow ;
-    box-shadow: none !important;
+    box-shadow: 0 1px 1px 1px  rgba(0, 0, 0, 0.42) !important;
 }
 .calendario_lectivos {
     margin: 3% auto;
@@ -2755,7 +2770,7 @@ table tr td a{
 .calendario_lectivos td span, .calendario_lectivos td a {
     margin: 3px !important;
     border-radius: 3px;
-    padding: 10% 0 !important;
+    padding: 8% 0 !important;
     text-align: center !important;
 }
 .calendario_lectivos td a {
@@ -2787,6 +2802,7 @@ table tr td a{
     cursor: pointer;
     pointer-events: auto;
     border: 1px inset !important;
+    box-shadow: 0 0 1px 0 rgba(0, 0, 0, 0.42) !important;
 
 }
 #reserva_modulos button p{
@@ -3072,7 +3088,13 @@ table tr td a{
 #contenedor_tutoria .arrow_top{
     left: 72px;
 }
+.ui-datepicker-current-day a{
+    background: none ;
+}
 
+.calendario_lectivos td[class*=" ui-datepicker-today"] a{
+    background: none;
+}
 #cole_intranetbundle_tutorias_seleccion_nombre{
     margin-bottom: 15px;
 }
@@ -3142,4 +3164,52 @@ table tr td a{
 }
 #btn_cancelar_tutoria_profesor{
     margin-top: -25px !important;
+}
+#tabla_tareas_profesor{
+    clear: both;
+    margin-bottom: 0 !important;
+    margin-top: 10px;
+}
+#tabla_tareas_profesor h4{
+    margin: 0 !important;
+    background: #31708f none repeat scroll 0 0;
+    border-radius: 5px;
+    margin-bottom: 15px !important;
+    padding-left: 20px !important;
+    padding: 5px;
+    color: white;
+}
+#tabla_tareas_profesor table{
+    margin-top: 10px !important;
+}
+#seleccion_calificaciones #opciones button{
+    margin: -2px 10px 9px;
+    padding: 4px;
+}
+.multiple_seleccion button{
+    pointer-events: auto !important;
+}
+#seleccion_calificaciones #descripcion{
+    height: 50px ; 
+    margin-bottom: 10px;
+}
+#seleccion_calificaciones #descripcion input{
+    margin-top: 5px;
+}
+.orden_descripcion{
+    height: 56px !important;
+    padding: 20px 7px !important;
+    top: 20px !important;
+}
+#intranet_tarea_submit{
+    margin-bottom: 10px;
+    margin-top: 30px;
+    padding: 10px;
+    width: 100px;
+}
+#tarea_trimestre{
+    margin-top: 3px;
+    max-width: 140px;
+    padding: 0;
+    text-align: center;
 }

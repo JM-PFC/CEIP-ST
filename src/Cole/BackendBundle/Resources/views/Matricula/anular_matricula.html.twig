@@ -30,7 +30,7 @@
                 select.append( '<option value="nada">nada</option>' )
             } );
         },
-        "order": [[ 0, "asc" ]],
+        "order": [[ 3, "desc" ]],
         "aLengthMenu": [[-1], [ "All"]],
         "columnDefs": [ {
             "targets": 'no-sort',
@@ -49,8 +49,15 @@
             "paginate": {
                 "previous": "Anterior",
                 "next": "Siguiente"
-            }
-        }
+            },
+        },
+        "aoColumns": [
+            null,
+            null,
+            null,
+            {"iDataSort": 4}, // Date format DD/MM/YYYY, sorting dependent on index 1
+            {"bVisible": false}, // Date format YYYY/MM/DD (datatable default) made hidden.
+        ]
     });
 
     $("#anular_matricula .dataTables_info").addClass("oculto");
@@ -111,6 +118,7 @@
                                         <th class="w11">Curso Matriculado</th>
                                         <th class="w11">Año Académido</th>
                                         <th >Fecha</th>
+                                        <th >Fecha</th>
                                     </tr>
                                 </thead>
                                 <tbody class="scrollContent">
@@ -122,6 +130,7 @@
 
                                             <td class="w11">{{ entity.anyoAcademico}}</td>
                                             <td >{{ entity.fecha|date('d/m/Y') }}</td>
+                                            <td >{{ entity.fecha|date('y/m/d') }}</td>
                                         </tr>
                                     {% endfor %}
                                 </tbody>

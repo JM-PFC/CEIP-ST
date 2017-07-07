@@ -47,6 +47,9 @@ class AuthenticationHandler extends ContainerAware implements AuthenticationSucc
         else if($this->security->isGranted('ROLE_USUARIO')){
             $log->setTipoUsuario("Responsable/Alumno");
         }
+        $usuario->setLastAccessAnt($usuario->getLastAccess());
+        $usuario->setLastAccess(new \DateTime('now'));
+
     	$this->em->persist($log);
     	$this->em->flush();
         $locale = explode("_", $request->getLocale());

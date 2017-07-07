@@ -186,20 +186,21 @@
                                     <a id="btn_editar" href="#" class="btn btn-default" data-target="#editar_seguimiento_modal" data-toggle="modal" data-backdrop="static" data-keyboard="false">
                                         <i class="fa fa-pencil"></i>{% trans %}Editar{% endtrans %}
                                     </a>
+                                    <a id="btn_eliminar" href="" class="btn btn-default" data-target="#eliminar_seguimiento_modal" data-toggle="modal" data-backdrop="static" data-keyboard="false">
+                                        <i class="fa fa-trash-o"></i>{% trans %}Eliminar{% endtrans %}
+                                    </a>
                                 {% endif %}  
-                                <a id="btn_eliminar" href="" class="btn btn-default" data-target="#eliminar_seguimiento_modal" data-toggle="modal" data-backdrop="static" data-keyboard="false">
-                                    <i class="fa fa-trash-o"></i>{% trans %}Eliminar{% endtrans %}
-                                </a>
                             </span>
                             <span id="edicion" class="pull-right visible-xs hidden-sm hidden-md hidden-lg">
-                                {% if not seguimiento.respuesta %}
+                                {% if not seguimiento.respuesta and seguimiento.tipoUser == 1 %}
                                     <a id="btn_editar" href="#" data-target="#editar_seguimiento_modal" data-toggle="modal" data-backdrop="static" data-keyboard="false" class="btn btn-default">
                                         <i class="fa fa-pencil"></i>
                                     </a>
+
+                                    <a id="btn_eliminar" href="" class="btn btn-default" data-target="#eliminar_seguimiento_modal" data-toggle="modal" data-backdrop="static" data-keyboard="false">
+                                        <i class="fa fa-trash-o"></i>
+                                    </a>
                                 {% endif %}
-                                <a id="btn_eliminar" href="" class="btn btn-default" data-target="#eliminar_seguimiento_modal" data-toggle="modal" data-backdrop="static" data-keyboard="false">
-                                    <i class="fa fa-trash-o"></i>
-                                </a>
                             </span>
                         </div>
                     </div>
@@ -263,20 +264,20 @@
                                     <a id="btn_editar" href="#" class="btn btn-default" data-target="#editar_seguimiento_modal" data-toggle="modal" data-backdrop="static" data-keyboard="false">
                                         <i class="fa fa-pencil"></i>{% trans %}Editar{% endtrans %}
                                     </a>
+                                    <a id="btn_eliminar" href="" class="btn btn-default" data-target="#eliminar_seguimiento_modal" data-toggle="modal" data-backdrop="static" data-keyboard="false">
+                                        <i class="fa fa-trash-o"></i>{% trans %}Eliminar{% endtrans %}
+                                    </a>
                                 {% endif %} 
-                                <a id="btn_eliminar" href="" class="btn btn-default" data-target="#eliminar_seguimiento_modal" data-toggle="modal" data-backdrop="static" data-keyboard="false">
-                                    <i class="fa fa-trash-o"></i>{% trans %}Eliminar{% endtrans %}
-                                </a>
                             </span>
                             <span id="edicion" class="pull-right visible-xs hidden-sm hidden-md hidden-lg">
-                                {% if not seguimiento.respuesta %}
+                                {% if not seguimiento.respuesta  and seguimiento.tipoUser == 1 %}
                                     <a id="btn_editar" href="#" data-target="#editar_seguimiento_modal" data-toggle="modal" data-backdrop="static" data-keyboard="false" class="btn btn-default">
                                         <i class="fa fa-pencil"></i>
                                     </a>
+                                    <a id="btn_eliminar" href="" class="btn btn-default" data-target="#eliminar_seguimiento_modal" data-toggle="modal" data-backdrop="static" data-keyboard="false">
+                                        <i class="fa fa-trash-o"></i>
+                                    </a>
                                 {% endif %}
-                                <a id="btn_eliminar" href="" class="btn btn-default" data-target="#eliminar_seguimiento_modal" data-toggle="modal" data-backdrop="static" data-keyboard="false">
-                                    <i class="fa fa-trash-o"></i>
-                                </a>
                             </span>
                         </div>
                     </div>
@@ -313,7 +314,24 @@
             <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
             <h4 class="modal-title" id="myModalLabel">{% trans %}Eliminación del Seguimiento{% endtrans %}</h4>
         </div>
-        <div class="modal-body"></div>
+        <div class="modal-body">
+            
+            <p>Se va a eliminar el seguimiento del sistema y no se podrá recuperar.</p>
+            <p>¿Estas seguro de continuar?</p>
+            <div class="class-footer">
+                <button class="btn btn_azul" type="button" data-dismiss="modal" title="">Cancelar</button>
+                <form >
+                <input name="_method" value="DELETE" type="hidden">
+                <div id="form">
+                    <div>
+                        <button id="form_submit" class="btn btn-danger" type="submit" name="form[submit]">Eliminar</button>
+                    </div>
+    
+                </div>
+                </form>
+            </div>
+            
+        </div>
         </div>
     </div>
   </div>

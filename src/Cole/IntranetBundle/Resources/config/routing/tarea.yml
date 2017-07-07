@@ -1,0 +1,30 @@
+tarea:
+    path:     /
+    defaults: { _controller: "IntranetBundle:Tarea:index" }
+
+tarea_show:
+    path:     /{id}/show
+    defaults: { _controller: "IntranetBundle:Tarea:show" }
+
+tarea_new:
+    path:     /new
+    defaults: { _controller: "IntranetBundle:Tarea:new" }
+
+tarea_create:
+    path:     /create
+    defaults: { _controller: "IntranetBundle:Tarea:create" }
+    requirements: { _method: post }
+
+tarea_edit:
+    path:     /{id}/edit
+    defaults: { _controller: "IntranetBundle:Tarea:edit" }
+
+tarea_update:
+    path:     /{id}/update
+    defaults: { _controller: "IntranetBundle:Tarea:update" }
+    requirements: { _method: post|put }
+
+tarea_delete:
+    path:     /{id}/delete
+    defaults: { _controller: "IntranetBundle:Tarea:delete" }
+    requirements: { _method: post|delete }

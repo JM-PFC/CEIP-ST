@@ -145,7 +145,6 @@ class AlumnoRepository extends EntityRepository
 			'grupo'=>$grupo))
 		->getResult();
 	}
-
 	public function findByGrupoOrdenado($grupo)
 	{
 		return $this->getEntityManager()->createQuery(

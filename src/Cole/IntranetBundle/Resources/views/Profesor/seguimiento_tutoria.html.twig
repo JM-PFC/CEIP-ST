@@ -99,7 +99,7 @@
                     <label>{% trans %}Día{% endtrans %}:</label><span>{{ tutoria.fecha | localizeddate('full', 'none', app.request.getLocale()) | capitalize}}</span>       
                  </div>  
                 <div>
-                    <label>{% trans %}Hora{% endtrans %}:</label><span>{{ tutoria.fecha | localizeddate('none', 'short', app.request.getLocale()) | capitalize}}</span>       
+                    <label>{% trans %}Hora{% endtrans %}:</label><span>{{ tutoria.hora | localizeddate('none', 'short', app.request.getLocale()) | capitalize}}</span>       
                 </div>
                 <div class="text-center">
                     <a id="btn_cancelar_tutoria_profesor" class="btn btn-danger pull-right" href="" data-target="#cancelar_tutoria_modal" data-toggle="modal" data-backdrop="static" data-keyboard="false">{% trans %}Cancelar{% endtrans %}</a>

@@ -88,6 +88,16 @@ AlumnosGrupo:
     options:
         expose: true
 
+intranet_profesor_calificaciones:
+    path:     /calificaciones
+    defaults: { _controller: IntranetBundle:Profesor:calificaciones}
+
+grupos_asignaturasGrupo_profesor:
+    path:     grupo/asignaturas/profesor/{id}
+    defaults: { _controller: IntranetBundle:Profesor:GruposAsignaturasGrupoProfesor}
+    options:
+        expose: true
+
 intranet_profesor_reservas:
     path:     /reservas
     defaults: { _controller: IntranetBundle:Profesor:reservas}

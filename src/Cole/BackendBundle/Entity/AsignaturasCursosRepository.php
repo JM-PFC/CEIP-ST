@@ -75,5 +75,16 @@ class AsignaturasCursosRepository extends EntityRepository
 		->getOneOrNullResult();
 	}
 
+	public function findAsignacionNombre($curso, $nombre_asig){
+
+	return $this->getEntityManager()->createQuery(
+		'SELECT a FROM BackendBundle:AsignaturasCursos a INNER JOIN a.curso c INNER JOIN a.asignatura asig WHERE c.id=:id and asig.nombre=:asig')
+		->setParameters(array(
+			'id' => $curso,
+			'asig' => $nombre_asig))
+		->setMaxResults(1)
+		->getOneOrNullResult();
+	}
+
 
 }

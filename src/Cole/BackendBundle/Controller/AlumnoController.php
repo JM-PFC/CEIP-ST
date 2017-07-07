@@ -110,56 +110,34 @@ class AlumnoController extends Controller
             
             $factory = $this->get('security.encoder_factory'); 
             $encoder = $factory->getEncoder($entity);
-            $password1 = $encoder->encodePassword("u".substr($entity->getResponsable1()->getDni(), 0, -2), $entity->getResponsable1()->getSalt());
-            $password2 = $encoder->encodePassword("u".substr($entity->getResponsable2()->getDni(), 0, -2), $entity->getResponsable2()->getSalt());
-            $entity->getResponsable1()->setPassword($password1);
-            $entity->getResponsable1()->setClaveUsuario("prueba: ".substr($entity->getResponsable1()->getDni(), 0, -2).substr($entity->getResponsable1()->getDni(), -1));
 
             //Busqueda y asignación del responsable si ya existe en el hijo correspondiente.        
             $responsable1 = $em->getRepository('BackendBundle:Padres')->findResponsable($entity->getResponsable1()->getDni());
-            /*if (!$responsable1) {
-                throw $this->createNotFoundException('Unable to find Padres entity.');
-            }*/
             $responsable2 = $em->getRepository('BackendBundle:Padres')->findResponsable($entity->getResponsable2()->getDni());
-            /*if (!$responsable2) {
-                throw $this->createNotFoundException('Unable to find Padres entity.');
-            }*/
 
             //En caso de tener sólo un responsable, al segundo se le asigna null.
             if($entity->getResponsable2()->getDni() == "" ){
                 $entity->setResponsable2(NULL); 
-            }
-            else{
-                $entity->getResponsable2()->setPassword($password2);
-                $entity->getResponsable2()->setClaveUsuario("prueba: ".substr($entity->getResponsable2()->getDni(), 0, -2).substr($entity->getResponsable2()->getDni(), -1));
             }
 
             if($responsable1){
                 $entity->setResponsable1($responsable1); 
             }
 
+            if($entity->getResponsable1()->getLastAccessAnt() == null){
+                $password1 = $encoder->encodePassword("u".substr($entity->getResponsable1()->getDni(), 0, -2), $entity->getResponsable1()->getSalt());
+                $entity->getResponsable1()->setPassword($password1);
+            }
+
             if($responsable2){
                 $entity->setResponsable2($responsable2); 
             }
-
-            /* Asignación como 2º responsable el 1º, en caso de no existir segundo. 
-                MODIFICADO a NULL abajo.
-
-            if($responsable2){
-                $entity->setResponsable2($responsable2); 
+            
+            if($entity->getResponsable2()->getLastAccessAnt() == null){
+                $password2 = $encoder->encodePassword("u".substr($entity->getResponsable2()->getDni(), 0, -2), $entity->getResponsable2()->getSalt());
+                $entity->getResponsable2()->setPassword($password2);
             }
 
-            //En caso de tener sólo un responsable, al segundo se le asigna el mismo.
-            if($entity->getResponsable2()->getDni() == "" ){
-                $entity->setResponsable2($entity->getResponsable1()); 
-            }
-
-            $entity->getResponsable1()->setPassword($password1);
-            $entity->getResponsable2()->setPassword($password2);
-
-            $entity->getResponsable1()->setClaveUsuario("prueba: ".substr($entity->getResponsable1()->getDni(), 0, -2).substr($entity->getResponsable1()->getDni(), -1));
-            $entity->getResponsable2()->setClaveUsuario("prueba: ".substr($entity->getResponsable2()->getDni(), 0, -2).substr($entity->getResponsable2()->getDni(), -1));
-            */
             //Se obtiene la foto subida yse guarda en la carpeta destino, asignandole un nombre único.
             $file = $entity->getFoto();
             if($entity->getFoto()!="On" && $entity->getFoto()!="" && $entity->getFoto()!="on"){
@@ -304,8 +282,6 @@ class AlumnoController extends Controller
         {
             $entity->setFoto(null);
         }
-        
-
         return $this->render('BackendBundle:Alumno:edit.html.twig', array(
             'entity'      => $entity,
             'edit_form'   => $editForm->createView(),
@@ -345,6 +321,10 @@ class AlumnoController extends Controller
             throw $this->createNotFoundException('Unable to find Alumno entity.');
         }
         $fileOriginal=$entity->getFoto();
+
+        //Se optiene el password de ambos responsables para asignarlo de nuevo ya que se modifica la contraseña con el valor de la nueva que está vacío(oculto).
+        $password1=$entity->getResponsable1()->getPassword();
+        $password2=$entity->getResponsable2()->getPassword();
 
         $deleteForm = $this->createDeleteForm($id);
         $editForm = $this->createEditForm($entity);
@@ -400,6 +380,9 @@ class AlumnoController extends Controller
             if($entity->getResponsable2()->getDni() == "" ){
                 $entity->setResponsable2(NULL); 
             }
+            $entity->getResponsable1()->setPassword($password1);
+            $entity->getResponsable2()->setPassword($password2);
+
             $em->flush();
 
             if ($request->isXmlHttpRequest()) {

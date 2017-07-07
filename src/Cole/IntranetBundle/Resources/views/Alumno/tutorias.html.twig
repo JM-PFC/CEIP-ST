@@ -198,7 +198,7 @@
                             <div class="text-center col-xs-7">
                             {% if tutoria.fecha|date('m/d/Y') ==  'today'|date('m/d/Y')  %}
                                 {{ "Hoy" }}
-                            {% elseif tutoria.fecha|date('m/d/Y') ==  'tomorrow'|date('m/d/Y') %}
+                            {% elseif tutoria.hora|date('m/d/Y') ==  'tomorrow'|date('m/d/Y') %}
                                 {{"Mañana"}}
                             {% else %}
                                 {{tutoria.fecha| localizeddate('long','none', app.request.getLocale()) }}
@@ -271,7 +271,7 @@
                                     <p class="descripcion">{{seguimiento.descripcion|nl2br }}</p>
                                     <div class="botones_seguimiento margin_btn">
                                         <div>
-                                        {% if seguimiento.respuesta %}
+                                        {% if seguimiento.respuesta  or ( ( not seguimiento.respuesta) and seguimiento.tipoUser == 0)%}
                                             <a id="consultar" href="{{path('intranet_alumno_seguimiento_tutoria', {'id': entity.id, 'num': seguimiento.id}) }}" class="btn btn_azul">
                                                 <i class="fa fa-search"></i>
                                                 {% trans %}Consultar{% endtrans %}
@@ -334,7 +334,7 @@
                                 <p class="descripcion">{{seguimiento.descripcion|nl2br }}</p>
                                 <div class="botones_seguimiento margin_btn">
                                     <div>
-                                    {% if seguimiento.respuesta %}
+                                    {% if seguimiento.respuesta or ( ( not seguimiento.respuesta) and seguimiento.tipoUser == 0) %}
                                         <a id="consultar" href="{{path('intranet_alumno_seguimiento_tutoria', {'id': entity.id, 'num': seguimiento.id}) }}" class="btn btn_azul">
                                             <i class="fa fa-search"></i>
                                             {% trans %}Consultar{% endtrans %}
@@ -411,7 +411,7 @@
                                 <p class="descripcion">{{seguimiento.descripcion|nl2br }}</p>
                                 <div class="botones_seguimiento margin_btn">
                                     <div>
-                                    {% if seguimiento.respuesta %}
+                                    {% if seguimiento.respuesta or ( ( not seguimiento.respuesta) and seguimiento.tipoUser == 0) %}
                                         <a id="consultar" href="{{path('intranet_alumno_seguimiento_tutoria', {'id': entity.id, 'num': seguimiento.id}) }}" class="btn btn_azul">
                                             <i class="fa fa-search"></i>
                                             {% trans %}Consultar{% endtrans %}
@@ -476,7 +476,24 @@
             <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
             <h4 class="modal-title" id="myModalLabel">{% trans %}Eliminación de la consulta de tutoría{% endtrans %}</h4>
         </div>
-        <div class="modal-body"></div>
+        <div class="modal-body">
+            
+            <p>Se va a eliminar el seguimiento del sistema y no se podrá recuperar.</p>
+            <p>¿Estas seguro de continuar?</p>
+            <div class="class-footer">
+                <button class="btn btn_azul" type="button" data-dismiss="modal" title="">Cancelar</button>
+                <form >
+                <input name="_method" value="DELETE" type="hidden">
+                <div id="form">
+                    <div>
+                        <button id="form_submit" class="btn btn-danger" type="submit" name="form[submit]">Eliminar</button>
+                    </div>
+    
+                </div>
+                </form>
+            </div>
+            
+        </div>
         </div>
     </div>
   </div>

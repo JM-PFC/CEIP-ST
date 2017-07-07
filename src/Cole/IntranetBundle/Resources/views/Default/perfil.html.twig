@@ -16,6 +16,16 @@
 		$(".menu #perfil").addClass('active');
 
     	$("#responsable").addClass('hidden');
+		horas=$("#profesor_horas").attr("value").replace(",",".");
+    	$("#profesor_horas").val(horas);
+    	$("#profesor_horas_intranet").val(horas);
+
+    	horasLectivas=$("#profesor_horasLectivas").attr("value").replace(",",".");
+    	$("#profesor_horasLectivas").val(horasLectivas);
+    	$("#profesor_horas_lectivas_intranet").val(horasLectivas);
+setTimeout(function(){ 
+    	$("#intranet_profesor_submit").addClass('disabled');
+    },1000);
     </script>
  {% endblock %}
 

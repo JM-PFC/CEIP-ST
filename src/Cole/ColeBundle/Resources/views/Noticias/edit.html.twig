@@ -141,6 +141,7 @@
     }
   });
 
+
   // Insertar Galería.
   $("#galeria_noticia_dialog").dialog({
     bgiframe: true,
@@ -167,14 +168,15 @@
     $("#noticias_edit #imagen_noticia #cont_imagen_mini img").attr("file",$("#noticias_edit #noticias_foto").val());
 
     $(".imgLiquidFill").imgLiquid();
-
-    foto=$("#noticias_edit #noticias_foto").val();
-    position1=foto.indexOf("_");
-    position2=foto.indexOf(".");
-    slider= foto.substring(parseInt(position1)+1, parseInt(position2));
-    $("#noticias_edit #cont_imagen" ).css('background-position', "0px "+slider+"px");
-    $("#noticias_edit #slider-vertical").slider("value", slider);
+    
     setTimeout(function() {
+      foto=$("#noticias_edit #noticias_foto").val();
+      position1=foto.indexOf("_");
+      position2=foto.indexOf(".");
+      slider= foto.substring(parseInt(position1)+1, parseInt(position2));
+      $("#noticias_edit #cont_imagen" ).css('background-position', "0px "+slider+"px");
+      $("#noticias_edit #slider-vertical").slider("value", slider);
+
       $("#noticias_edit #imagen_noticia").removeClass("oculto");
       $("#noticias_edit #insertar_imagen_edit button").prop("disabled",true);
     }, 100); 

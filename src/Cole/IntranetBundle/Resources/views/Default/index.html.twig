@@ -309,8 +309,8 @@
 										</a>
 									</li>
 									<li id="calificaciones">
-										<a href="{{path('intranet')}}">
-											<i class="fa fa-check-square-o"></i>
+										<a href="{{ path('intranet_profesor_calificaciones') }}">
+											<i class="fa fa-list-alt"></i>
 											{% trans %}Calificaciones{% endtrans %}
 										</a>
 									</li>
@@ -332,7 +332,7 @@
 											{% trans %}Noticias{% endtrans %}
 										</a>
 									</li>
-									{% if 'now'|date('m') == "05" or 'now'|date('m') == "06" %}
+									{% if 'now'|date('m') == "05" or 'now'|date('m') == "06" or 'now'|date('m') == "07" %}
 										<li id="promocionar">
 											<a class="c_verde" href="{{path('intranet')}}">
 												<i class="fa fa-graduation-cap"></i>
@@ -414,8 +414,8 @@
 										</a>
 									</li>
 									<li id="calificaciones">
-										<a href="{{path('intranet')}}" class="waiting">
-											<i class="fa fa-check-square-o"></i>
+										<a href="{{ path('intranet_profesor_calificaciones') }}" class="waiting">
+											<i class="fa fa-list-alt"></i>
 											{% trans %}Calificaciones{% endtrans %}
 										</a>
 									</li>
@@ -437,7 +437,7 @@
 											{% trans %}Noticias{% endtrans %}
 										</a>
 									</li>
-									  {% if 'now'|date('m') == "05" or 'now'|date('m') == "06" %}
+									  {% if 'now'|date('m') == "05" or 'now'|date('m') == "06" or 'now'|date('m') == "07" %}
 									  	<li id="promocionar">
 											<a class="c_verde" href="{{path('intranet')}}" class="waiting">
 												<i class="fa fa-graduation-cap"></i>
@@ -555,6 +555,11 @@
 									<div class="dashboard">
 										{% for flash_message in app.session.flashBag.get('notice') %}
     										<div class="notificacion alert alert-success fade in">
+        										{{ flash_message }}
+    										</div>
+										{% endfor %}
+										{% for flash_message in app.session.flashBag.get('danger') %}
+    										<div class="notificacion alert alert-danger fade in">
         										{{ flash_message }}
     										</div>
 										{% endfor %}

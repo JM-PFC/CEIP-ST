@@ -102,7 +102,7 @@ body {
     width: 10em; /* Aumentar el tamaño de la caja para añadir más redes sociales*/
     text-align: right;
     padding-left: 4px;
-    padding-top: 3px;
+    padding-top: 7px;
 }
 .menu_sup_der>div{
         position: relative;
@@ -768,7 +768,8 @@ fieldset.fsetoculto {
     word-wrap: break-word;
 }
 .contenido_noticia p{
-    margin-top: 10px !important;
+    margin: 0!important;
+
 }
 #recientes{
     padding: 20px 10px;

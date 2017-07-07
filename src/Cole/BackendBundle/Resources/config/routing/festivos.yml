@@ -22,7 +22,7 @@ festivos_create:
     requirements: { _method: post }
 
 festivos_edit:
-    path:     /admin/{id}/edit
+    path:     /{id}/edit
     defaults: { _controller: "BackendBundle:Festivos:edit" }
     options:
         expose: true

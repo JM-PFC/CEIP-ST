@@ -139,14 +139,6 @@ class Padres implements UserInterface, \Serializable
     private $salt;
 
     /**
-     * @var string
-     *
-     * @ORM\Column(name="clave_usuario", type="string", length=255, nullable=true)
-     * 
-     */
-    private $claveUsuario;// variable pararecuperación de clave.
-
-    /**
      * @var boolean
      *
      * @ORM\Column(name="activo", type="boolean", nullable=true)
@@ -413,30 +405,6 @@ class Padres implements UserInterface, \Serializable
     public function getSalt()
     {
         return $this->salt;
-    }
-
-
-    /**
-     * Set claveUsuario
-     *
-     * @param string $claveUsuario
-     * @return Padres
-     */
-    public function setClaveUsuario($claveUsuario)
-    {
-        $this->claveUsuario = $claveUsuario;
-
-        return $this;
-    }
-
-    /**
-     * Get claveUsuario
-     *
-     * @return string 
-     */
-    public function getClaveUsuario()
-    {
-        return $this->claveUsuario;
     }
 
     /**

@@ -223,13 +223,6 @@ class Profesor implements UserInterface, \Serializable
     /**
      * @var string
      *
-     * @ORM\Column(name="clave_usuario", type="string", length=255)
-     */
-    private $claveUsuario;
-
-    /**
-     * @var string
-     *
      * @ORM\Column(name="perfilAcademico", type="string", length=1200, nullable=true)
      * 
      */
@@ -347,6 +340,11 @@ class Profesor implements UserInterface, \Serializable
     * @ORM\OneToMany(targetEntity="Cole\IntranetBundle\Entity\Tutorias", mappedBy="profesor", cascade={"remove"})
     */
     private $tutorias;
+
+    /**
+    * @ORM\OneToMany(targetEntity="Cole\IntranetBundle\Entity\Tarea", mappedBy="profesor", cascade={"remove"})
+    */
+    private $tarea;
     
     public function __construct()
     {
@@ -770,29 +768,6 @@ class Profesor implements UserInterface, \Serializable
     public function getSalt()
     {
         return $this->salt;
-    }
-
-    /**
-     * Set claveUsuario
-     *
-     * @param string $claveUsuario
-     * @return Profesor
-     */
-    public function setClaveUsuario($claveUsuario)
-    {
-        $this->claveUsuario = $claveUsuario;
-
-        return $this;
-    }
-
-    /**
-     * Get claveUsuario
-     *
-     * @return string 
-     */
-    public function getClaveUsuario()
-    {
-        return $this->claveUsuario;
     }
 
     /**

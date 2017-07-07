@@ -64,54 +64,6 @@ class PadresController extends Controller
         return $errors;
     }
 
-
-
-    /**
-     * Creates a new Padres entity.
-     *
-     */
-    /*public function createAction(Request $request)
-    {
-        $entity = new Padres();
-        $form = $this->createCreateForm($entity);
-        $form->handleRequest($request);
-
-        if ($form->isValid()) {
-            $em = $this->getDoctrine()->getEntityManager(); 
-
-            $factory = $this->get('security.encoder_factory'); 
-            $encoder = $factory->getEncoder($entity);
-            $password = $encoder->encodePassword($entity->getPassword(), $entity->getSalt());
-            $entity->setPassword($password);
-            $entity->setActivo(false);
-            $role = $em->getRepository('BackendBundle:Role')->find(1);
-            $entity->setRole($role);
-
-
-            $entity->setUsername("padre1");
-            
-            $entity->setClaveUsuario("padre1");
-            $entity->setEmail("padre1@hotmail.com");
-
-            $exists = $em->getRepository('Cole\BackendBundle\Entity\Padres')->findBy(array(
-    'dni' => $entity->getDni()
-));
-
-            if(!$exists){
-            $em = $this->getDoctrine()->getManager();
-            $em->persist($entity);
-            $em->flush();
-            }
-            
-        return $this->redirect($this->generateUrl('padres_new'));
-         }
-
-        return $this->render('BackendBundle:Padres:new.html.twig', array(
-            'entity' => $entity,
-            'form'   => $form->createView(),
-        ));
-    }*/
-
     public function createAction(Request $request)
     {
     // if request is XmlHttpRequest (AJAX) but not a POSt, throw an exception
@@ -138,7 +90,6 @@ class PadresController extends Controller
             $entity->setActivo(true);
 
             $entity->setUsername("p".substr($entity->getDni(), 0, -2));
-            $entity->setClaveUsuario("padre: ".substr($entity->getDni(), 0, -2).substr($entity->getDni(), -1));
 
             $exists = $em->getRepository('Cole\BackendBundle\Entity\Padres')->findOneBy(array('dni' => $entity->getDni()));
 
@@ -282,6 +233,7 @@ class PadresController extends Controller
      */
     public function updateAction(Request $request, $id)
     {
+
         $em = $this->getDoctrine()->getManager();
 
         $entity = $em->getRepository('BackendBundle:Padres')->find($id);

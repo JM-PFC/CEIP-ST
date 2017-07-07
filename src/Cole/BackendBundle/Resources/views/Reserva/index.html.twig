@@ -126,7 +126,7 @@ setInterval(changeRecord, 5000);
                                     {% set cont = 1 %}
                                     {% for entity in entities %}
                                         {% if entity.profesor != null %}
-                                        <tr id="{{entity.profesor.id}}"  title="Pulsa para contactar con el profesor">
+                                        <tr id="{{entity.profesor.id}}" >
                                             {#<td class="id">{{ cont }}</td>#}
                                             <td class="w20 left">{{ entity.profesor.nombre ~ " " ~ entity.profesor.apellido1 ~ " " ~ entity.profesor.apellido2}}</td>
                                         {% else %}

@@ -15,7 +15,8 @@ use Cole\IntranetBundle\Entity\Avisos;
 use Cole\BackendBundle\Form\ReservaType;
 use Cole\IntranetBundle\Entity\Seguimiento;
 use Cole\IntranetBundle\Form\SeguimientoType;
-
+use Cole\IntranetBundle\Entity\Tarea;
+use Cole\IntranetBundle\Form\TareaType;
 
 use Cole\BackendBundle\Form\AlumnoIntranetType;
 use Symfony\Component\HttpFoundation\Response;
@@ -522,6 +523,109 @@ class ProfesorController extends Controller
         return $this->render('IntranetBundle:Profesor:alumnos_grupo_asignatura.html.twig', array(
             'entities'=>$entities));
     }
+
+    ///////////////////////////////////////////
+    //             Calificaciones            //
+    ///////////////////////////////////////////
+
+    private function createCreateTareaForm(Tarea $entity)
+    {
+        $form = $this->createForm(new TareaType(), $entity, array(
+            'action' => $this->generateUrl('tarea_create'),
+            'method' => 'POST',
+        ));
+        $titulo=$this->get("translator")->trans("Guardar");
+        $form->add('submit', 'submit', array('label' => $titulo, 'attr' => array('class' => 'btn btn-success')));
+
+        return $form;
+    }
+
+
+    public function calificacionesAction(Request $request)
+    {
+        $em = $this->getDoctrine()->getManager();
+
+        $entity = $this->get('security.context')->getToken()->getUser();
+        $tutor_grupo= $em->getRepository('BackendBundle:Grupo')->findOneByProfesor($entity);
+        $tareas= $em->getRepository('IntranetBundle:Tarea')->findTareasComunes($entity);
+        
+        //Se obtiene los grupos agrupados por cada tarea de una asignatura del profesor.
+        $array;
+        foreach ($tareas as $tarea) {
+            $tareasGrupos= $em->getRepository('IntranetBundle:Tarea')->findByDescripcionOrdenado($tarea->getDescripcion(), $tarea->getAsignatura());
+            $cursos="";
+            foreach ($tareasGrupos as $TG) {
+                $cursos=$cursos.$TG->getGrupo()->getCurso()->getCurso().$TG->getGrupo()->getLetra()." - ";
+            }
+            $final = trim($cursos, ' - ');
+            $array[$tarea->getId()]=$final;
+        }
+
+        if($entity->getNivel()=="Primaria"){
+            $cursos = $em->getRepository('BackendBundle:Imparte')->findAsignacionesProfesor($entity);
+            $imparte=$em->getRepository('BackendBundle:Imparte')->findAsignaturasProfesor($entity);
+        }
+        else{
+            //Para los profesores de infantil se asigna sólo el grupo que es tutor.
+            $cursos=$tutor_grupo;
+            $imparte=null;
+        }
+
+        // Se obtiene la fecha inicial y final del curso para usar luego el año correspondiente. 
+        $ini_curso=$em->getRepository('BackendBundle:Centro')->findInicioCurso();
+        $array_ini=explode("-",$ini_curso["inicioCurso"]->format('Y-m-d')); //Conversión de array a String
+        $fin_curso=$em->getRepository('BackendBundle:Centro')->findFinCurso();
+        $array_fin=explode("-",$fin_curso["finCurso"]->format('Y-m-d'));
+
+        // Se obtiene las fechas de inicio de las vacaciones.
+        $ini_nav=$em->getRepository('BackendBundle:Festivos')->findFestivosPorDescripcion("Inicio Vacaciones de Navidad");
+        $ini_ss=$em->getRepository('BackendBundle:Festivos')->findFestivosPorDescripcion("Inicio Vacaciones de Semana Santa");
+        
+        $Fecha_ini_nav = date('Y-m-d', strtotime($array_ini[0]."-".$ini_nav->getNumMes()."-".$ini_nav->getDia()));
+        $Fecha_ini_ss = date('Y-m-d', strtotime($array_fin[0]."-".$ini_ss->getNumMes()."-".$ini_ss->getDia()));
+
+        $hoy=date("Y-m-d");
+
+        if ($hoy <= $Fecha_ini_nav){
+            $trimestre=1;
+        }
+        else if($hoy >= $Fecha_ini_ss){
+            $trimestre=3;
+        }
+        else{
+            $trimestre=2;
+        }
+
+        $tarea = new Tarea();
+        $form   = $this->createCreateTareaForm($tarea);
+
+        return $this->render('IntranetBundle:Profesor:calificaciones.html.twig', array(
+            'entity' => $entity,
+            'tutor_grupo' => $tutor_grupo,
+            'cursos'=>$cursos,
+            'tareas'=>$tareas,
+            'imparte'=>$imparte,
+            'grupos' => $array,
+            'trimestre' =>$trimestre,
+            'form'   => $form->createView(),
+        ));
+    }
+
+    public function  GruposAsignaturasGrupoProfesorAction(Request $request, $id)
+    {
+        $em = $this->getDoctrine()->getManager();
+
+        $entity = $this->get('security.context')->getToken()->getUser();
+        $asignatura= $em->getRepository('BackendBundle:AsignaturasCursos')->findOneById($id);
+
+        #Se devuelve sólo el id, curso y letra para mostrarlo por ajax.
+        $grupos= $em->getRepository('BackendBundle:Imparte')->findGruposProfesorAsignatura($entity, $asignatura->getAsignatura());
+
+        return new JsonResponse(array(
+            'grupos' => $grupos
+            ), 200);
+    }
+
     ///////////////////////////////////////////
     //               Reservas                //
     ///////////////////////////////////////////

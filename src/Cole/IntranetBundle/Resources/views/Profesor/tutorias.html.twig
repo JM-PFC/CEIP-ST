@@ -208,7 +208,7 @@
                             {% endif %}
                             </div>
                             <div class=" contenedor_hora text-center col-xs-3 col-sm-2 no-padding-rl">
-                                {{tutoria.fecha| localizeddate('none','short', app.request.getLocale()) }}
+                                {{tutoria.hora| localizeddate('none','short', app.request.getLocale()) }}
                             </div>
                             <div class="contenedor_icono col-xs-2 col-ms-1 no-padding-rl">
                                 <a id="btn_eliminar" href="" data-target="#eliminar_tutoria_modal" data-toggle="modal" data-backdrop="static" data-keyboard="false"><i class="fa fa-trash-o"></i></a>
@@ -277,7 +277,7 @@
                                     <p class="descripcion">{{seguimiento.descripcion|nl2br }}</p>
                                     <div class="botones_seguimiento margin_btn">
                                         <div>
-                                        {% if seguimiento.respuesta %}
+                                        {% if seguimiento.respuesta or ( ( not seguimiento.respuesta) and seguimiento.tipoUser == 1) %}
                                             <a id="consultar" href="{{path('intranet_profesor_seguimiento_tutoria', {'num': seguimiento.id}) }}" class="btn btn_azul">
                                                 <i class="fa fa-search"></i>
                                                 {% trans %}Consultar{% endtrans %}
@@ -295,9 +295,7 @@
                                                 <a id="btn_editar" href="#" class="btn btn_gris" data-target="#editar_tutoria_modal" data-toggle="modal" data-backdrop="static" data-keyboard="false">
                                                     <i class="fa fa-pencil"></i>{% trans %}Editar{% endtrans %}
                                                 </a>
-                                            {% endif %}
-                                            {% if seguimiento.tipoUser == 1 %}
-                                                <a id="btn_eliminar" href="" class="btn btn_gris" data-target="#eliminar_tutoria_modal" data-toggle="modal" data-backdrop="static" data-keyboard="false">
+                                                <a id="btn_eliminar" href="" class="btn btn_gris" data-target="#eliminar_seguimiento_modal" data-toggle="modal" data-backdrop="static" data-keyboard="false">
                                                     <i class="fa fa-trash-o"></i>{% trans %}Eliminar{% endtrans %}
                                                 </a>
                                             {% endif %}
@@ -307,9 +305,7 @@
                                                 <a id="btn_editar" href="#" class="btn btn_gris" data-target="#editar_tutoria_modal" data-toggle="modal" data-backdrop="static" data-keyboard="false">
                                                     <i class="fa fa-pencil"></i>
                                                 </a>
-                                            {% endif %}
-                                            {% if seguimiento.tipoUser == 1 %}
-                                                <a id="btn_eliminar" href="" class="btn btn_gris" data-target="#eliminar_tutoria_modal" data-toggle="modal" data-backdrop="static" data-keyboard="false">
+                                                <a id="btn_eliminar" href="" class="btn btn_gris" data-target="#eliminar_seguimiento_modal" data-toggle="modal" data-backdrop="static" data-keyboard="false">
                                                     <i class="fa fa-trash-o"></i>
                                                 </a>
                                             {% endif %}
@@ -345,7 +341,7 @@
                                     <p class="descripcion">{{seguimiento.descripcion|nl2br }}</p>
                                     <div class="botones_seguimiento margin_btn">
                                         <div>
-                                            {% if seguimiento.respuesta %}
+                                            {% if seguimiento.respuesta or ( ( not seguimiento.respuesta) and seguimiento.tipoUser == 1) %}
                                                 <a id="consultar" href="{{path('intranet_profesor_seguimiento_tutoria', {'num': seguimiento.id}) }}" class="btn btn_azul">
                                                     <i class="fa fa-search"></i>
                                                     {% trans %}Consultar{% endtrans %}
@@ -362,11 +358,8 @@
                                                     <a id="btn_editar" href="#" class="btn btn_gris" data-target="#editar_tutoria_modal" data-toggle="modal" data-backdrop="static" data-keyboard="false">
                                                         <i class="fa fa-pencil"></i>{% trans %}Editar{% endtrans %}
                                                     </a>
-                                                {% endif %}
-                                            
-                                                {% if seguimiento.tipoUser == 1 %}
-                                                    <a id="btn_eliminar" href="" class="btn btn_gris" data-target="#eliminar_tutoria_modal" data-toggle="modal" data-backdrop="static" data-keyboard="false">
-                                                    <i class="fa fa-trash-o"></i>{% trans %}Eliminar{% endtrans %}
+                                                    <a id="btn_eliminar" href="" class="btn btn_gris" data-target="#eliminar_seguimiento_modal" data-toggle="modal" data-backdrop="static" data-keyboard="false">
+                                                        <i class="fa fa-trash-o"></i>{% trans %}Eliminar{% endtrans %}
                                                     </a>
                                                 {% endif %}
                                             </span>
@@ -375,12 +368,10 @@
                                                 <a id="btn_editar" href="#" class="btn btn_gris" data-target="#editar_tutoria_modal" data-toggle="modal" data-backdrop="static" data-keyboard="false">
                                             <i class="fa fa-pencil"></i>
                                         </a>
-                                    {% endif %}
-                                    {% if seguimiento.tipoUser == 1 %}
-                                        <a id="btn_eliminar" href="" class="btn btn_gris" data-target="#eliminar_tutoria_modal" data-toggle="modal" data-backdrop="static" data-keyboard="false">
+                                        <a id="btn_eliminar" href="" class="btn btn_gris" data-target="#eliminar_seguimiento_modal" data-toggle="modal" data-backdrop="static" data-keyboard="false">
                                             <i class="fa fa-trash-o"></i>
                                         </a>
-                                            {% endif %}
+                                    {% endif %}
                                         </span>
                                         </div>
                                     </div>
@@ -457,6 +448,18 @@
 
     <!-- Ventana modal de eliminación de consulta de tutoría -->
   <div id="eliminar_tutoria_modal" class="modal fade-scale aviso ediccion_seguimiento_modal"  tabindex="-1" role="dialog" data-backdrop="true" >
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+        <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            <h4 class="modal-title" id="myModalLabel">{% trans %}Eliminación de la de tutoría asignada{% endtrans %}</h4>
+        </div>
+        <div class="modal-body"></div>
+        </div>
+    </div>
+  </div>
+
+    <div id="eliminar_seguimiento_modal" class="modal fade-scale aviso ediccion_seguimiento_modal"  tabindex="-1" role="dialog" data-backdrop="true" >
     <div class="modal-dialog" role="document">
         <div class="modal-content">
         <div class="modal-header">

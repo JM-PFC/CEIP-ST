@@ -87,7 +87,7 @@ class SeguimientoController extends Controller
         ));
     }
 
-    //Se crean la respuesta del seguimiento.
+    //Se crea la respuesta del seguimiento.
     public function createRespuestaAction(Request $request)
     {        
         $user = $this->get('security.context')->getToken()->getUser();

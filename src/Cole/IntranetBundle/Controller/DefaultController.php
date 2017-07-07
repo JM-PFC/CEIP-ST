@@ -172,7 +172,7 @@ class DefaultController extends Controller
         }
         //Se optiene el password para asignarlo de nuevo ya que se modifica la contraseña con el valor de la nueva que está vacío(oculto).
         $password=$entity->getPassword();
-        
+
         $deleteForm = $this->createDeleteForm($id);
 
         $editForm->handleRequest($request);
@@ -182,6 +182,19 @@ class DefaultController extends Controller
             if ($this->get('security.context')->isGranted('ROLE_PROFESOR'))
             {
                 $entity->setFoto($foto);
+                $horas = $editForm["horas_intranet"]->getData();
+
+                //Se obtiene las horas de otros input por si tienen decimal que elimine al guardar.
+                $output=str_replace(',', '.', $horas);
+                var_dump($output); // string(4) "5.50"
+                $number = (float)$output;// string(5.50)
+                $entity->setHoras($number);
+
+                $lectivas=$editForm["horas_lectivas_intranet"]->getData();
+                $output=str_replace(',', '.', $lectivas);
+                var_dump($output); // string(4) "5.50"
+                $number = (float)$output;// string(5.50)
+                $entity->setHorasLectivas($number);
             }
             $entity->setPassword($password);
             

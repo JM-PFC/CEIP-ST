@@ -278,6 +278,11 @@ class Alumno
     private $tutorias;
 
     /**
+     * @ORM\OneToMany(targetEntity="Cole\IntranetBundle\Entity\Cursa", mappedBy="alumno")
+     */
+    private $cursa;
+
+    /**
      * Get id
      *
      * @return integer 

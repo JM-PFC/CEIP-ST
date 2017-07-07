@@ -25,7 +25,7 @@ class GrupoRepository extends EntityRepository
 	public function findGruposByCurso($curso)
 	{
 		return $this->getEntityManager()->createQuery(
-		'SELECT g FROM BackendBundle:Grupo g WHERE g.curso=:curso')
+		'SELECT g FROM BackendBundle:Grupo g WHERE g.curso=:curso ORDER BY g.letra')
 		->setParameters(array(
 			'curso' => $curso))
 		->getResult();
@@ -34,7 +34,7 @@ class GrupoRepository extends EntityRepository
 	public function findGruposByNivel($nivel)
 	{
 		return $this->getEntityManager()->createQuery(
-		'SELECT g FROM BackendBundle:Grupo g JOIN g.curso c WHERE c.nivel=:nivel')
+		'SELECT g FROM BackendBundle:Grupo g INNER JOIN g.curso c WHERE c.nivel=:nivel ORDER BY c.numOrden, g.letra')
 		->setParameters(array(
 			'nivel' => $nivel))
 		->getResult();

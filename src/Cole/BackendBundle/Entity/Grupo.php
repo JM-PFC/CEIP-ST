@@ -69,6 +69,11 @@ class Grupo
     private $seguimiento;
 
     /**
+    * @ORM\OneToMany(targetEntity="Cole\IntranetBundle\Entity\Tarea", mappedBy="grupo", cascade={"remove"})
+    */
+    private $tarea;
+
+    /**
      * Get id
      *
      * @return integer 

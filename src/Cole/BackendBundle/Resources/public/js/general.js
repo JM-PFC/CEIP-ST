@@ -1054,13 +1054,14 @@ $(document).on('keyup',"input[id$='responsable2_dni']",function(e){
                   out_class: "fadeOutRight",
                 }
               });
-              //Se actualiza la pestaña de anular matrícula, asignar grupo y asignar optativa.
+              //Actualización de pestañas.
               $("#anular_matricula").update_tab();
               //Se actualiza la pestaña de asignar grupos si está abierta y tiene seleccionado el curso actualizado.
               if($("#asignar_grupos #lista_cursos select option:selected").attr("value")==curso){
                 $("#asignar_grupo").update_tab();   
               }
               $("#asignar_optativa").update_tab();
+              $("#ficha_alumno").update_tab();
             }
           })
           event.stopPropagation();   
@@ -1209,6 +1210,13 @@ $(document).on("submit",".formulario_profesor",function(event){
               out_class: "fadeOutRight",
             }
           });
+          
+          //Actualización de pestañas.
+          $("#tutor_grupo").update_tab();
+          $("#clases_impartidas").update_tab();
+          $("#ficha_profesor").update_tab();
+          $("#profesor_antiguo").update_tab();
+
           event.stopPropagation();   
         },
         error: function (response, desc, err){
@@ -1589,61 +1597,6 @@ $(document).on("submit",".formulario_profesor",function(event){
     $(this).prop("disabled",true);
   });
 
-
-/*
-  $(document).on("submit",".formulario_busqueda_profesor",function(event) {
-    event.preventDefault();
-    form= $(this).closest("form");
-
-    form.find("#contenedor_lista span").remove();
-
-    var val=0;
-    // Se recorre los campos del formulario mirando si estan validados o no.
-    form.find(":input").each(function(){
-      if(!$(this).attr("validated") || !$(this).attr("validated")==false){
-        if($(this).attr("validation")){
-          validation($(this));
-        }
-      }
-    });
-
-    //":input"añade a los input radio,select...
-    form.find(":input").each(function(){
-      if(($(this).attr("validated")=="false")) {
-        //Se muestra el input inválido.
-        $(this).focus();
-        val=1;
-        return false;
-      }       
-    });
-          
-
-    if(val==0){
-      var nombre_profesor= $("#busqueda_profesor_nombre").val();
-      var apellido1_profesor= $("#busqueda_profesor_apellido1").val();
-      var apellido2_profesor= $("#busqueda_profesor_apellido2").val();
-      $.ajax({
-        type: 'POST',
-        url: Routing.generate('comprobar_profesor'),
-        data: {nombre:nombre_profesor, apellido1:apellido1_profesor, apellido2:apellido2_profesor },
-        dataType: 'json',
-        success: function(response) {
-      
-          if(response.data!=null)
-          {
-            div=$("#buscador_profesor").closest("div[id^='tabs-']");
-            $(div).empty();
-            $(div).load(Routing.generate('profesor_edit', {id:response.data}));
-            }
-          else{
-            form.find("#contenedor_lista").empty();
-            form.find("#contenedor_lista").append("<span >No se ha encontrado el profesor</span>"); 
-          }   
-        } 
-      })
-    }
-  });
-*/
 //////////////////////////////////
 // Formularios de actualización //
 //////////////////////////////////
@@ -1992,13 +1945,13 @@ $(document).on("submit",".formulario_profesor",function(event){
         success: function(response) {
       
           $("#icono_restablecer").addClass("disable");
-          //Hay que actualizar la pestaña que contiene la tabla de alumnos. ###############################
+
+          //Actualización de pestañas.
+          $("#anular_matricula").update_tab();
+          $("#alumnos_antiguo").update_tab();
           $("#asignar_optativa").update_tab();
-          
-          //Función para retrasar la ejecución siguiente.
-          //setTimeout(function(){ 
-          //  $("#editar_profesor_restablecer").trigger('click');
-          //}, 6000);
+          $("#ficha_alumno").update_tab();
+          $("#asignar_grupo").update_tab();   
 
           var arr = form.attr('action').split('/');
           div=form.closest("div[id^='tabs-']");
@@ -2139,24 +2092,20 @@ $(document).on("submit",".formulario_profesor",function(event){
         success: function(response) {
       
           $("#icono_restablecer").addClass("disable");
-          //Hay que actualizar la pestaña que contiene la tabla de profesores.
 
+          //Actualización de pestañas.
           $("#consultar_instalaciones").update_tab();
-          //Función para retrasar la ejecución siguiente.
-          //setTimeout(function(){ 
-          //  $("#editar_profesor_restablecer").trigger('click');
-          //}, 6000);
+          $("#profesor_antiguo").update_tab();
+          $("#profesor_asignar_grupo").update_tab();
+          $("#clases_impartidas").update_tab();
+          $("#asignar_horario").update_tab();
+          $("#listarlog").update_tab();
 
           var arr = form.attr('action').split('/');
           div=form.closest("div[id^='tabs-']");
           $(div).load(Routing.generate('profesor_edit', {id:arr[5]}), function(responseTxt, statusTxt, xhr){
             if(statusTxt == "success"){
               form= $("#profesor_edit");
-              // Antiguo aviso de confirmación
-              //form.find("div[id='message']").remove();
-              //form.find("div[id='result']").html("<div id='message'></div>");
-              //form.find("div[id='message']").html("<h2> Datos actualizados</h2>").hide();
-              //form.find("div[id='message']").fadeIn('fast').delay(5000).fadeOut('slow');
 
               // Notificación de confirmación.
               $(".ui-pnotify").remove();
@@ -3085,11 +3034,21 @@ $(document).on("blur","input[id='edit_profesor_dni']",function() {
         
         $("#button_grupos_rest").trigger("click");
 
+        //Actualización del contenido de pestañas.
         $("#asignar_aula").update_tab();
         $("#asignaturas_cursos").update_tab();
+        $("#tutor_grupo").update_tab();
+        $("#profesor_asignar_grupo").update_tab();
+        $("#alumnos_multiple").update_tab();
+        $("#anular_matricula").update_tab();
+        $("#asignar_grupo").update_tab();
+        $("#ficha_alumno").update_tab();
+        $("#grupos_curso").update_tab();
+        $("#asignaturas_cursos").update_tab();
+        $("#ratio_curso").update_tab();
 
         },
-        error: function (response, desc, err){
+      error: function (response, desc, err){
           if (response.responseJSON && response.responseJSON.message) {
             if(response.responseJSON.result == 0) {
               //Se elimina las clases de error, para luego añadirlas a los campos que siguen inválidos.
@@ -3166,6 +3125,20 @@ $(document).on("blur","input[id='edit_profesor_dni']",function() {
         $("#tabs #lista_cursos").empty();
         $("#tabs #lista_cursos").load(Routing.generate('alumno_listaCursos'));
 
+        //Actualización del contenido de pestañas.
+        $("#asignar_aula").update_tab();
+        $("#asignaturas_cursos").update_tab();
+        $("#tutor_grupo").update_tab();
+        $("#profesor_asignar_grupo").update_tab();
+        $("#alumnos_multiple").update_tab();
+        $("#anular_matricula").update_tab();
+        $("#asignar_grupo").update_tab();
+        $("#ficha_alumno").update_tab();
+        $("#grupos_curso").update_tab();
+        $("#asignar_horario").update_tab();
+        $("#asignaturas_cursos").update_tab();
+        $("#ratio_curso").update_tab();
+
         $("#button_grupos_rest").trigger("click");
         }
       })  
@@ -3226,8 +3199,19 @@ $(document).on("blur","input[id='edit_profesor_dni']",function() {
       
                   $("#button_grupos_rest").trigger("click");
 
+                  //Actualización del contenido de pestañas.
                   $("#asignar_aula").update_tab();
                   $("#asignaturas_cursos").update_tab();
+                  $("#tutor_grupo").update_tab();
+                  $("#profesor_asignar_grupo").update_tab();
+                  $("#alumnos_multiple").update_tab();
+                  $("#anular_matricula").update_tab();
+                  $("#asignar_grupo").update_tab();
+                  $("#ficha_alumno").update_tab();
+                  $("#grupos_curso").update_tab();
+                  $("#asignar_horario").update_tab();
+                  $("#asignaturas_cursos").update_tab();
+                  $("#ratio_curso").update_tab();
                 }
               })
             }
@@ -3386,10 +3370,13 @@ $(document).on("blur","input[id='edit_profesor_dni']",function() {
     $("#registro_Ngrupos #button_grupos_all").removeClass('oculto');
     $("#registro_Ngrupos #button_grupos_rest").removeClass('oculto');
     $("#registro_Ngrupos #load").addClass('oculto');
-    // Se actualiza la pestaña de asignar aula una vez asignado todas.
+    // Se actualiza las pestañas una vez asignado todo.
     $("#select_grupos_all option:eq(0)").prop('selected', true);
-       setTimeout(function(){ 
-        $("#asignar_aula").update_tab();},3000);
+      setTimeout(function(){ 
+        $("#asignar_aula").update_tab();
+        $("#tutor_grupo").update_tab();
+        $("#profesor_asignar_grupo").update_tab();
+      },3000);
   
   });
 
@@ -3614,8 +3601,12 @@ $(document).on("blur","input[id='edit_profesor_dni']",function() {
             confirmButtonColor: color,
           });
         }
-        //Se actualiza la pestaña de asignar horario a grupos.
+        
+        //Actualización de pestañas.
+        $("#asignaturas_cursos").update_tab();
+        $("#profesor_asignar_grupo").update_tab();
         $("#asignar_horario").update_tab();
+        $("#asignar_optativa").update_tab();
 
         $("#asignaturas_dialog").dialog('close');
         limpiarForm(form);
@@ -3728,18 +3719,18 @@ $(document).on("blur","input[id='edit_profesor_dni']",function() {
                   });
                 }
 
-                //Se actualiza la pestaña de asignar horario a grupos.
+                //Actualización de pestañas.
+                $("#asignaturas_cursos").update_tab();
+                $("#profesor_asignar_grupo").update_tab();
                 $("#asignar_horario").update_tab();
+                $("#asignar_optativa").update_tab();
 
                 $("#asignaturas_dialog").dialog('close');
                 tab=$(".contenido_main").find("div[aria-hidden='false']");
                 $(tab).load(Routing.generate('asignatura'));
                 //$("#tabs #lista_asignaturas").empty();
                 //$("#tabs #lista_asignaturas").load(Routing.generate('alumno_listaAsignatura'));
-                $("#asignaturas_cursos").update_tab();
-                $("#profesor_asignar_grupo").update_tab();
-                $("#asignar_horario").update_tab();
-                $("#asignar_optativa").update_tab();
+
               }
             })
           }, function (dismiss) {
@@ -3776,18 +3767,17 @@ $(document).on("blur","input[id='edit_profesor_dni']",function() {
               });
             }
 
-            //Se actualiza la pestaña de asignar horario a grupos.
+            //Actualización de pestañas.
+            $("#asignaturas_cursos").update_tab();
+            $("#profesor_asignar_grupo").update_tab();
             $("#asignar_horario").update_tab();
+            $("#asignar_optativa").update_tab();
 
             $("#asignaturas_dialog").dialog('close');
             tab=$(".contenido_main").find("div[aria-hidden='false']");
             $(tab).load(Routing.generate('asignatura'));
             //$("#tabs #lista_asignaturas").empty();
             //$("#tabs #lista_asignaturas").load(Routing.generate('alumno_listaAsignatura'));
-            $("#asignaturas_cursos").update_tab();
-            $("#profesor_asignar_grupo").update_tab();
-            $("#asignar_horario").update_tab();
-            $("#asignar_optativa").update_tab();
           }
         })
       }
@@ -3821,8 +3811,11 @@ $(document).on("blur","input[id='edit_profesor_dni']",function() {
             $(tab).load(Routing.generate('asignatura'));
             //$("#tabs #lista_asignaturas").empty();
             //$("#tabs #lista_asignaturas").load(Routing.generate('alumno_listaAsignatura'));
+            
+            //Actualización de pestañas.
             $("#asignaturas_cursos").update_tab();
             $("#profesor_asignar_grupo").update_tab();
+            $("#asignar_horario").update_tab();
             $("#asignar_optativa").update_tab();
           }
         })
@@ -4199,6 +4192,7 @@ $(document).on("blur","input[id='edit_profesor_dni']",function() {
                               $('#asignatura_curso_dialog').dialog('close');
                               $("#profesor_asignar_grupo").update_tab();
                               $("#asignar_horario").update_tab();
+                              $("#asignar_optativa").update_tab();
                             }
                           })
                         }, function (dismiss) {
@@ -4309,6 +4303,7 @@ $(document).on("blur","input[id='edit_profesor_dni']",function() {
                           $('#asignatura_curso_dialog').dialog('close');
                           $("#profesor_asignar_grupo").update_tab();
                           $("#asignar_horario").update_tab();
+                          $("#asignar_optativa").update_tab();
                         }
                       })
                     }
@@ -4420,6 +4415,7 @@ $(document).on("blur","input[id='edit_profesor_dni']",function() {
                     $('#asignatura_curso_dialog').dialog('close');
                     $("#profesor_asignar_grupo").update_tab();
                     $("#asignar_horario").update_tab();
+                    $("#asignar_optativa").update_tab();
                   }
                 })
                }
@@ -4568,6 +4564,7 @@ $(document).on("blur","input[id='edit_profesor_dni']",function() {
                             $('#asignatura_curso_dialog').dialog('close');
                             $("#profesor_asignar_grupo").update_tab();
                             $("#asignar_horario").update_tab();
+                            $("#asignar_optativa").update_tab();
                           }
                         })
                       }, function (dismiss) {
@@ -4678,6 +4675,7 @@ $(document).on("blur","input[id='edit_profesor_dni']",function() {
                         $('#asignatura_curso_dialog').dialog('close');
                         $("#profesor_asignar_grupo").update_tab();
                         $("#asignar_horario").update_tab();
+                        $("#asignar_optativa").update_tab();
                       }
                     })
                   }
@@ -4789,6 +4787,7 @@ $(document).on("blur","input[id='edit_profesor_dni']",function() {
                   $('#asignatura_curso_dialog').dialog('close');
                   $("#profesor_asignar_grupo").update_tab();
                   $("#asignar_horario").update_tab();
+                  $("#asignar_optativa").update_tab();
                 }
               })
             }
@@ -4932,6 +4931,7 @@ $(document).on("blur","input[id='edit_profesor_dni']",function() {
                       $('#asignatura_curso_dialog').dialog('close');
                       $("#profesor_asignar_grupo").update_tab();
                       $("#asignar_horario").update_tab();
+                      $("#asignar_optativa").update_tab();
                     }
                   })
                 }, function (dismiss) {
@@ -5042,6 +5042,7 @@ $(document).on("blur","input[id='edit_profesor_dni']",function() {
                   $('#asignatura_curso_dialog').dialog('close');
                   $("#profesor_asignar_grupo").update_tab();
                   $("#asignar_horario").update_tab();
+                  $("#asignar_optativa").update_tab();
                 }
               })
             }
@@ -5153,6 +5154,7 @@ $(document).on("blur","input[id='edit_profesor_dni']",function() {
             $('#asignatura_curso_dialog').dialog('close');
             $("#profesor_asignar_grupo").update_tab();
             $("#asignar_horario").update_tab();
+            $("#asignar_optativa").update_tab();
           }
         })
       }
@@ -6049,7 +6051,6 @@ $(document).on("blur","input[id='edit_profesor_dni']",function() {
           return false;
         }
         else{
-
           $.ajax({
             type: 'POST',
             url: $("#festivos_nueva").attr('action'),
@@ -6075,6 +6076,13 @@ $(document).on("blur","input[id='edit_profesor_dni']",function() {
 
               }
               limpiarForm(form);
+
+              //Actualización del contenido de pestañas.
+              $("#reservar_instalaciones").update_tab();
+              $("#reservar_equipamientos").update_tab();
+              $("#registrar_noticias").update_tab();
+              $("#registrar_eventos").update_tab();
+
               $("#actualizar_calendario").trigger("click");
             }
           })
@@ -6123,61 +6131,48 @@ $(document).on("blur","input[id='edit_profesor_dni']",function() {
     var dia= $("#dia_festivo select").val();
     var mes= $("#mes_festivo select").val();
     var descripcion=$("#festivos_descripcion").val();
-    
-    $.ajax({
-      type: 'POST',
-      url: Routing.generate('comprobar_festivo'),
-      data: {dia:dia, mes:mes, descripcion:descripcion},
-      dataType: 'json',
-      success: function(response) {
-        if(response.data!=null)
-        {
-          error.play();
-          swal({
-            title: "Día festivo ya asignado",
-            text: 'El día y mes introducido ya tiene asignado un festivo en el sistema.',
-            type: "error",
-            confirmButtonColor: color
-          });          
-          return false;
-        }
-        else{
-          $.ajax({
-            type: 'PUT',
-            url: $("#festivos_edit").attr('action'),
-            data:$("#festivos_edit").serialize(), 
   
-            success: function() {
-              var tipo= $("#festivos_tipo").attr("value");
-              if($("#festivos_edit").attr("tipo")!=""){
-                tipo2=$("#festivos_tipo").val();
-                $("#festivos_dialog").dialog('close'); 
+    $.ajax({
+      type: 'PUT',
+      url: $("#festivos_edit").attr('action'),
+      data:$("#festivos_edit").serialize(), 
+  
+      success: function() {
+        var tipo= $("#festivos_tipo").attr("value");
+        if($("#festivos_edit").attr("tipo")!=""){
+          tipo2=$("#festivos_tipo").val();
+          $("#festivos_dialog").dialog('close'); 
                 
-                //Se actualizan las listas modificadas de los festivos.
-                div=$("#asignacion_festivos div[id$='"+tipo.toLowerCase()+"'] .Festivos_list");
-                $(div).empty();
-                $(div).load(Routing.generate('festivos_por_tipo', {id:tipo}));
+          //Se actualizan las listas modificadas de los festivos.
+          div=$("#asignacion_festivos div[id$='"+tipo.toLowerCase()+"'] .Festivos_list");
+          $(div).empty();
+          $(div).load(Routing.generate('festivos_por_tipo', {id:tipo}));
 
-                div2=$("#asignacion_festivos div[id$='"+tipo2.toLowerCase()+"'] .Festivos_list");
-                $(div2).empty();
-                $(div2).load(Routing.generate('festivos_por_tipo', {id:tipo2}));
-              }
-              else{
-                $("#festivos_dialog").dialog('close'); 
+          div2=$("#asignacion_festivos div[id$='"+tipo2.toLowerCase()+"'] .Festivos_list");
+          $(div2).empty();
+          $(div2).load(Routing.generate('festivos_por_tipo', {id:tipo2}));
+        }
+          else{
+          $("#festivos_dialog").dialog('close'); 
 
-                //Se actualiza las lista de festivos.
-                div=$("#asignacion_festivos div[style='display: block;'] .Festivos_list");
-                $(div).empty();
-                $(div).load(Routing.generate('festivos_por_tipo', {id:tipo}));
-            }
-              $("#actualizar_calendario").trigger("click");
-            }
-          })
-          return false;
-        } 
-      } 
+          //Se actualiza las lista de festivos.
+          div=$("#asignacion_festivos div[style='display: block;'] .Festivos_list");
+          $(div).empty();
+          $(div).load(Routing.generate('festivos_por_tipo', {id:tipo}));
+        }
+
+        //Actualización del contenido de pestañas.
+        $("#reservar_instalaciones").update_tab();
+        $("#reservar_equipamientos").update_tab();
+        $("#registrar_noticias").update_tab();
+        $("#registrar_eventos").update_tab();
+
+        $("#actualizar_calendario").trigger("click");
+      }
     })
+    return false;
   });
+
   //Eliminación de festivos.
   $(document).on("click","#festivos_delete button",function(event){
     event.preventDefault();
@@ -6215,6 +6210,13 @@ $(document).on("blur","input[id='edit_profesor_dni']",function() {
               $(div).empty();
               $(div).load(Routing.generate('festivos_por_tipo', {id:tipo}));
             }
+
+            //Actualización del contenido de pestañas.
+            $("#reservar_instalaciones").update_tab();
+            $("#reservar_equipamientos").update_tab();
+            $("#registrar_noticias").update_tab();
+            $("#registrar_eventos").update_tab();
+
             $("#actualizar_calendario").trigger("click");
           }
         })
@@ -7285,6 +7287,15 @@ $(document).on("blur","input[id='edit_profesor_dni']",function() {
         url: Routing.generate('editar_horario'),
         data: {clase:clase,ini:ini,fin:fin,duracion:duracion},        
       })
+
+      //Actualización de pestañas.
+      $("#reservar_instalaciones").update_tab();
+      $("#reservar_equipamientos").update_tab();
+      $("#consultar_instalaciones").update_tab();
+      $("#consultar_equipamientos").update_tab();
+      $("#clases_impartidas").update_tab();
+      $("#asignar_horario").update_tab();
+
       $("#registro_horario #registro_horario_guardar #button_horario_all").prop("disabled",true);
       $("#registro_horario #registro_horario_guardar #horario_rest").prop("disabled",true);
     });
@@ -7351,7 +7362,12 @@ $(document).on("blur","input[id='edit_profesor_dni']",function() {
                   out_class: "fadeOutRight",
                 }
               });
-              //Se actualiza la pestaña de asignar horario a grupos.
+              //Actualización de pestañas.
+              $("#reservar_instalaciones").update_tab();
+              $("#reservar_equipamientos").update_tab();
+              $("#consultar_instalaciones").update_tab();
+              $("#consultar_equipamientos").update_tab();
+              $("#clases_impartidas").update_tab();
               $("#asignar_horario").update_tab();
 
               // Se muestra el calendario actual actualizado.
@@ -7411,7 +7427,13 @@ $(document).on("blur","input[id='edit_profesor_dni']",function() {
                       out_class: "fadeOutRight",
                     }
                   });
-                  //Se actualiza la pestaña de asignar horario a grupos.
+
+                  //Actualización de pestañas.
+                  $("#reservar_instalaciones").update_tab();
+                  $("#reservar_equipamientos").update_tab();
+                  $("#consultar_instalaciones").update_tab();
+                  $("#consultar_equipamientos").update_tab();
+                  $("#clases_impartidas").update_tab();
                   $("#asignar_horario").update_tab();
 
                   // Se muestra el calendario actual actualizado.
@@ -7672,9 +7694,11 @@ $(document).on("blur","input[id='edit_profesor_dni']",function() {
             });
             return false;
           }
-          // Se actualiza las pestañas de instalaciones.
+          // Se actualiza las pestañas.
           $("#registrar_instalaciones").update_tab();
           $("#reservar_instalaciones").update_tab();
+          $("#consultar_instalaciones").update_tab();
+          $("#consultar_equipamientos").update_tab();
         }
       })
     }
@@ -7738,7 +7762,8 @@ $(document).on("blur","input[id='edit_profesor_dni']",function() {
           // Se actualiza las pestañas de instalaciones.
           $("#registrar_instalaciones").update_tab();
           $("#reservar_instalaciones").update_tab();
-          $("#consultar_instalación").update_tab();
+          $("#consultar_instalaciones").update_tab();
+          $("#consultar_equipamientos").update_tab();
         }
       })
     }
@@ -7789,6 +7814,8 @@ $(document).on("blur","input[id='edit_profesor_dni']",function() {
                   // Se actualiza las pestañas de equipamientos.
                   $("#registrar_instalaciones").update_tab();
                   $("#reservar_instalaciones").update_tab();
+                  $("#consultar_instalaciones").update_tab();
+                  $("#consultar_equipamientos").update_tab();
                 }
               })
             }
@@ -7850,9 +7877,9 @@ $(document).on("blur","input[id='edit_profesor_dni']",function() {
             });
             return false;
           }
-          // Se actualiza las pestañas de instalaciones y asignar aulas.
+          // Actualización de pestañas.
           $("#registrar_instalaciones").update_tab();
-          $("#asignar_aula").update_tab();
+          $("#asignar_aula").update_tab();  
         }
       })
     }
@@ -7927,9 +7954,11 @@ $(document).on("blur","input[id='edit_profesor_dni']",function() {
             return false;
           }
 
-          // Se actualiza las pestañas de instalaciones y asignar aulas.
+          // Actualización de pestañas.
           $("#registrar_instalaciones").update_tab();
           $("#asignar_aula").update_tab();
+          $("#profesor_asignar_grupo").update_tab();
+          $("#asignar_horario").update_tab();
         }
       })
     }
@@ -8907,16 +8936,6 @@ $(document).on("click","#registro_equipamientos td a",function(event){
     container.find(".contenido_info #sin_seleccionar").removeClass("oculto");
   });
 
-  //Se abre un formulario de mensajes al profesor al hacer click en el registro de la reserva del profesor.
-  $(document).on("click","div[id^='consulta_reservas'] .scrollContent tr", function () {
-    if($(this).attr("id")!="centro"){
-      container= $(this).closest("div[id^='consulta_reservas']");
-
-      alert("ponerse en contacto con el profesor desde su contenedor");
-    }
-
-  });
-
   // Efecto cambio de iconos de eliminar registros.
   $(document).on("mouseenter",".scrollContent tr td #eliminar_0", function () {
       $(this).addClass("oculto");
@@ -9427,13 +9446,16 @@ $(document).on("click","#registro_equipamientos td a",function(event){
                 }
               }); 
             }
-              // Se actualiza la lista de antiguos alumnos y la pestaña de asignar grupo y anular matrícula.
+              // Actualización de pestañas.
               $("#alumnos_antiguo").update_tab();
               //Se actualiza la pestaña de asignar grupos si está abierta y tiene seleccionado el curso actualizado.
               if($("#asignar_grupos #lista_cursos select option:selected").attr("value")==response.curso){
                 $("#asignar_grupo").update_tab();   
               }
               $("#anular_matricula").update_tab();
+              $("#asignar_optativa").update_tab();
+              $("#ficha_alumno").update_tab();
+
 
               div=input.closest("div[id^='tabs-']");
               $(div).load(Routing.generate('search_multiple'));
@@ -9686,7 +9708,7 @@ $(document).on("click","#registro_equipamientos td a",function(event){
             dataType: 'json',
             success: function(response) {
 
-               // Se actualiza la lista de multiples alumnos.
+              // Se actualiza la lista de multiples alumnos.
               $("#alumnos_multiple").update_tab();
 
               div=form.closest("div[id^='tabs-']");
@@ -9713,13 +9735,15 @@ $(document).on("click","#registro_equipamientos td a",function(event){
                     }
                   });
 
-                  //Se actualiza la pestaña de anular matrícula.
-                  $("#anular_matricula").update_tab();
-
+                  // Actualización de pestañas.
+                  $("#alumnos_antiguo").update_tab();
                   //Se actualiza la pestaña de asignar grupos si está abierta y tiene seleccionado el curso actualizado.
                   if($("#asignar_grupos #lista_cursos select option:selected").attr("value")==response.curso){
                     $("#asignar_grupo").update_tab();   
                   }
+                  $("#anular_matricula").update_tab();
+                  $("#asignar_optativa").update_tab();
+                  $("#ficha_alumno").update_tab();
                 }
 
                 if(statusTxt == "error")
@@ -9867,16 +9891,17 @@ $(document).on("click","#registro_equipamientos td a",function(event){
                 out_class: "fadeOutRight",
               }
             });
-
-            // Se actualiza la pestaña de anular matrícula.
+            //Actualización de pestañas.
             $("#anular_matricula").update_tab();
+            $("#alumnos_antiguo").update_tab();
+            $("#asignar_optativa").update_tab();
+            $("#ficha_alumno").update_tab();
+            $("#alumnos_multiple").update_tab();
+
             //Se actualiza la pestaña de asignar grupos si está abierta y tiene seleccionado el curso actualizado.
             if($("#asignar_grupos #lista_cursos select option:selected").attr("value")==curso){
               $("#asignar_grupo").update_tab();   
             }
-            $("#alumnos_antiguo").update_tab();
-            $("#alumnos_multiple").update_tab();
-            $("#ficha_alumno").update_tab();
           }
         })
       }, function (dismiss) {
@@ -10311,8 +10336,10 @@ $(document).on("click","#registro_equipamientos td a",function(event){
         });
         div.load(Routing.generate('asignar_grupo'));
         
-        // Se actualiza todas las pestañas que utilicen grupos.
-        //$("#alumnos_multiple").update_tab();
+        //Actualización de pestañas.
+        $("#ficha_alumno").update_tab();
+        $("#asignar_optativa").update_tab();
+
       },
       error: function (response, desc, err){
         error.play();
@@ -13712,6 +13739,7 @@ $(document).on("click","#registro_equipamientos td a",function(event){
 
         $('#asignar_horario_grupo_dialog').dialog('close');
         
+        //Actualización de la pestaña.
         $("#clases_impartidas").update_tab();
 
         //Añadir más donde se muestre el horario de un grupo.

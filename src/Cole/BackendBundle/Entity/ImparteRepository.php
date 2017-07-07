@@ -352,5 +352,25 @@ class ImparteRepository extends EntityRepository
 		->getOneOrNullResult();
 	}
 
+	public function findAsignaturasProfesor($profesor)
+	{
+		return $this->getEntityManager()->createQuery(
+		'SELECT i FROM BackendBundle:Imparte i INNER JOIN i.profesor p INNER JOIN i.asignatura a INNER JOIN a.asignatura asig  WHERE p=:profesor and asig.nombre not like :asignatura GROUP BY asig.id ORDER BY asig.nombre ASC')
+		->setParameters(array(
+			'profesor'=>$profesor,
+			'asignatura'=>"Tutoría"))
+		->getResult();
+	}
+	
+	#Se devuelve sólo el id, curso y letra para mostrarlo por ajax.
+	public function findGruposProfesorAsignatura($profesor, $asignatura)
+	{
+		return $this->getEntityManager()->createQuery(
+		'SELECT g.id, c.curso, g.letra FROM BackendBundle:Imparte i INNER JOIN i.grupo g  INNER JOIN g.curso c INNER JOIN i.asignatura a INNER JOIN i.profesor p WHERE p=:profesor and  a.asignatura=:asignatura GROUP BY c.numOrden, g.letra')
+		->setParameters(array(
+			'profesor'=>$profesor,
+			'asignatura' => $asignatura))
+		->getResult();
+	}
 
 }

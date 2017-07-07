@@ -262,17 +262,23 @@ class MatriculaController extends Controller
             $entity->setAnyoAcademico((date("Y")-1)." / ".date("Y"));
         }
         $entity->setFecha(new \DateTime("now"));
+
+        $factory = $this->get('security.encoder_factory'); 
+        $encoder = $factory->getEncoder($entity);
+
         //Se comprueba si los responsables están activos. En caso que no lo estén se activan y se restablece la contraseña.
         if((int)$alumno->getResponsable1()->getActivo()== 0 ){
             $alumno->getResponsable1()->setActivo(1); 
-
-            //Restablecer contraseña inicial
+            
+            $password1 = $encoder->encodePassword("u".substr($alumno->getResponsable1()->getDni(), 0, -2), $alumno->getResponsable1()->getSalt());
+            $alumno->getResponsable1()->setPassword($password1);    
         }
-        //En el caso del segundo responsable si comprueba si existe.
+        //En el caso del segundo responsable se comprueba si existe.
         if($alumno->getResponsable2() && (int)$alumno->getResponsable2()->getActivo()==0 ){
             $alumno->getResponsable2()->setActivo(1); 
 
-            //Restablecer contraseña inicial
+            $password2 = $encoder->encodePassword("u".substr($alumno->getResponsable2()->getDni(), 0, -2), $alumno->getResponsable2()->getSalt());
+            $alumno->getResponsable2()->setPassword($password2); 
         }
         $em->persist($alumno);
         $em->persist($entity);

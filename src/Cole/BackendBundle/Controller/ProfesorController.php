@@ -99,8 +99,7 @@ class ProfesorController extends Controller
             $entity->setAccesoSeguimientos(null);
 
             $entity->setUsername("p".substr($entity->getDni(), 0, -2));
-            $entity->setClaveUsuario("profe: ".substr($entity->getDni(), 0, -2).substr($entity->getDni(), -1));
-
+            
             //Se obtiene la foto subida y se guarda en la carpeta destino, asignandole un nombre único.
             $file = $entity->getFoto();    
         
@@ -556,6 +555,11 @@ class ProfesorController extends Controller
             $entity->setFechaBaja(null);
             $entity->setFechaAlta(new \DateTime("now"));
             $entity->setActivo(true);
+            $factory = $this->get('security.encoder_factory'); 
+            $encoder = $factory->getEncoder($entity);
+            $entity->setSalt(base_convert(sha1(uniqid(mt_rand(),true)), 16, 36));
+            $password = $encoder->encodePassword("p".substr($entity->getDni(), 0, -2), $entity->getSalt());
+            $entity->setPassword($password);
 
             $em->persist($entity);                 
             $em->flush();
@@ -590,6 +594,7 @@ class ProfesorController extends Controller
 
             $entity->setFechaBaja(new \DateTime("now"));
             $entity->setActivo(false);
+            $entity->setPassword(null);
 
             $em->persist($entity);                 
             $em->flush();

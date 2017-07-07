@@ -51,7 +51,7 @@
 {% block contenido %}
     <h4 id="titulo-seccion" class="titulo-seccion">{% trans %}Nuevo Seguimiento{% endtrans %}</h4>
 
-	<div id="seleccion_nuevo_seguimiento" class="seleccion_nuevo_seguimiento col-sm-12" locale="{{ app.request.getLocale() }}" >
+	<div id="seleccion_nuevo_seguimiento" class="seleccion_nuevo_seguimiento contenedor_seleccion col-sm-12" locale="{{ app.request.getLocale() }}" >
       {% if entity.nivel == "Primaria"%}
 		<div id="1" class="col-sm-4 center">
 			<p>{% trans %}Seleccione un grupo{% endtrans %}:</p>
@@ -102,9 +102,6 @@
         </div>
 
       {% endif %}
-
-
-
 
 	</div>
 

@@ -26,7 +26,7 @@ class CursoController extends Controller
     {
         $em = $this->getDoctrine()->getManager();
 
-        $entities = $em->getRepository('BackendBundle:Curso')->findAll();
+        $entities = $em->getRepository('BackendBundle:Curso')->findAllCursos();
 
         return $this->render('BackendBundle:Curso:index.html.twig', array(
             'entities' => $entities,
@@ -38,7 +38,8 @@ class CursoController extends Controller
     {
         $em = $this->getDoctrine()->getManager();
 
-        $cursos = $em->getRepository('BackendBundle:Curso')->findAll();
+        $cursos = $em->getRepository('BackendBundle:Curso')->findAllCursos();
+        
 
         return $this->render('BackendBundle:Curso:listaCursos.html.twig', array(
             'cursos' => $cursos,
@@ -49,7 +50,7 @@ class CursoController extends Controller
     {
         $em = $this->getDoctrine()->getManager();
 
-        $cursos = $em->getRepository('BackendBundle:Curso')->findByNivel("Primaria");
+        $cursos = $em->getRepository('BackendBundle:Curso')->findCursosByNivel("Primaria");
 
         return $this->render('BackendBundle:Curso:listaCursos.html.twig', array(
             'cursos' => $cursos,
@@ -155,7 +156,7 @@ class CursoController extends Controller
     {
         $em = $this->getDoctrine()->getManager();
 
-        $entities = $em->getRepository('BackendBundle:Curso')->findAll();
+        $entities = $em->getRepository('BackendBundle:Curso')->findAllCursos();
 
         return $this->render('BackendBundle:Curso:show.html.twig', array(
             'entities' => $entities,
@@ -441,7 +442,7 @@ class CursoController extends Controller
     {
         $em = $this->getDoctrine()->getManager();
 
-        $entities = $em->getRepository('BackendBundle:Curso')->findAll();
+        $entities = $em->getRepository('BackendBundle:Curso')->findAllCursos();
 
         return $this->render('BackendBundle:Curso:ratio.html.twig', array(
             'entities' => $entities,
@@ -490,7 +491,7 @@ class CursoController extends Controller
         }
         
         $em = $this->getDoctrine()->getEntityManager();
-        $entity = $em->getRepository('BackendBundle:Curso')->findAll();
+        $entity = $em->getRepository('BackendBundle:Curso')->findAllCursos();
         $array;
         foreach ($entity as $curso) {
             $grupos = $em->getRepository('BackendBundle:Grupo')->findGruposByCurso($curso);
@@ -519,7 +520,7 @@ class CursoController extends Controller
         }
         
         $em = $this->getDoctrine()->getEntityManager();
-        $entity = $em->getRepository('BackendBundle:Curso')->findAll();
+        $entity = $em->getRepository('BackendBundle:Curso')->findAllCursos();
         $array;
         foreach ($entity as $curso) {
             $matriculados = $em->getRepository('BackendBundle:Alumno')->findAlumnosPorCurso($curso);

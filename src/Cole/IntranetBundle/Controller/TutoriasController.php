@@ -215,12 +215,21 @@ class TutoriasController extends Controller
 
         $inicio =$em->getRepository('BackendBundle:Centro')->findInicioCurso();
         $fin =$em->getRepository('BackendBundle:Centro')->findFinCurso();
+
+        $centro =$em->getRepository('BackendBundle:Centro')->findCentro();
+        $arr_inicio = explode(":", $centro->getInicioHorario());
+        $inicioH=$arr_inicio[0];
+
+        $arr_fin= explode(":", $centro->getFinHorario());
+        $finH=$arr_fin[0];
    
         return $this->render('IntranetBundle:Profesor:asignarTutorias.html.twig', array(
             'entity' => $entity,
             'form'   => $form->createView(),
             'inicio' => $inicio,
-            'fin' => $fin,      
+            'fin' => $fin,
+            'inicioHorario' => $inicioH,
+            'finHorario' => $finH,          
             'grupo' => $tutor_grupo,
             'idalumno' => $alumno->getId(),
             'alumno' => $alumno, 

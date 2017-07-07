@@ -84,7 +84,6 @@
   });
 
   $('#reserva_fecha #contenedor_tutoria a[class*="ui-state-disabled"]').hide();
-  $("#reserva_fecha #actualizar_calendario_lectivo").trigger("click");
 
     //Se muestra el calendario sin opciones marcadas si no hay fecha del curso registrada.
   if(inicio_a<0){
@@ -92,7 +91,11 @@
     $("#reserva_fecha .ui-datepicker-title span").remove();
   }
   // Se elimina el estilo de activado del dia actual.
-  $("#reserva_fecha .ui-datepicker-calendar .ui-datepicker-current-day").removeClass("ui-datepicker-current-day").children().removeClass('ui-state-active"')
+    $("#reserva_fecha .ui-datepicker-calendar .ui-datepicker-current-day a").removeClass('ui-state-active');
+    $("#reserva_fecha .ui-datepicker-calendar .ui-datepicker-current-day").removeClass("ui-datepicker-today");
+
+    //$("#reserva_fecha .ui-datepicker-calendar .ui-datepicker-current-day a").removeClass(' ui-state-highlight');
+    $("#reserva_fecha .ui-datepicker-calendar .ui-datepicker-current-day").removeClass("ui-datepicker-current-day");
 
     //Se establece los margenes del selector de hora con las horas de apertura del centro.
     inicioHorario={{ inicioHorario|json_encode()|raw }};
@@ -104,7 +107,6 @@
     if(finHorario.charAt(0) == 0){
       finHorario=finHorario.charAt(1);
     }
-    alert(finHorario);
 
     //Input time, se vacia cada vez que se carga.
     $("#hora_tutoria").val("");
@@ -141,7 +143,10 @@
       $("#cole_intranetbundle_tutorias_seguimiento option[value='"+consulta+"']").prop('selected', true);
     }
 
+    //$(".ui-state-highlight ").removeClass('ui-state-highlight ');
+    //$(".ui-state-active").removeClass('ui-state-active');
 
+    
     </script>
  {% endblock %}
 

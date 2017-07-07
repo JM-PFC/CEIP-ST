@@ -29,7 +29,7 @@
                                     <p class="descripcion">{{seguimiento.descripcion|nl2br }}</p>
                                     <div class="botones_seguimiento margin_btn">
                                         <div>
-                                        {% if seguimiento.respuesta %}
+                                        {% if seguimiento.respuesta or ( ( not seguimiento.respuesta) and seguimiento.tipoUser == 0) %}
                                             <a id="consultar" href="{{path('intranet_alumno_seguimiento_tutoria', {'id': entity.id, 'num': seguimiento.id}) }}" class="btn btn_azul">
                                                 <i class="fa fa-search"></i>
                                                 {% trans %}Consultar{% endtrans %}
@@ -92,7 +92,7 @@
                                 <p class="descripcion">{{seguimiento.descripcion|nl2br }}</p>
                                 <div class="botones_seguimiento margin_btn">
                                     <div>
-                                    {% if seguimiento.respuesta %}
+                                    {% if seguimiento.respuesta or ( ( not seguimiento.respuesta) and seguimiento.tipoUser == 0) %}
                                         <a id="consultar" href="{{path('intranet_alumno_seguimiento_tutoria', {'id': entity.id, 'num': seguimiento.id}) }}"  class="btn btn_azul">
                                             <i class="fa fa-search"></i>
                                             {% trans %}Consultar{% endtrans %}

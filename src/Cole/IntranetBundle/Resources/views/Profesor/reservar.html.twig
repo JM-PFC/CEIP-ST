@@ -81,7 +81,9 @@
     } 
   });
   $('#reserva_fecha #contenedor_reserva a[class*="ui-state-disabled"]').hide();
-  $("#reserva_fecha #actualizar_calendario_lectivo").trigger("click");
+    setTimeout(function(){
+      $("#reserva_fecha #actualizar_calendario_lectivo").trigger("click");
+    }, 50);
 
     //Se muestra el calendario sin opciones marcadas si no hay fecha del curso registrada.
   if(inicio_a<0){
@@ -161,11 +163,11 @@
         {% for clase in clases %}
           {% if (loop.index is odd) %}
             <div class="col-xs-6  no-padding">
-              <button id="{{clase.id}}" type="radio" class="btn disabled" clase="{{clase.horaClase}}" min="{{  clase.inicio|date('H:i')}}" ><p>{{ " Módulo " ~ clase.horaClase }}</p>{{  "(" ~ clase.inicio|date('H:i') ~ "-" ~ clase.fin|date('H:i') ~ ")" }}</button>
+              <button id="{{clase.id}}" type="radio" class="btn disabled" clase="{{clase.horaClase}}" min="{{  clase.inicio|date('H:i')}}" ><p>{% trans %}Módulo{% endtrans %} {{ " " ~ clase.horaClase }}</p>{{  "(" ~ clase.inicio|date('H:i') ~ "-" ~ clase.fin|date('H:i') ~ ")" }}</button>
             </div>
           {% else %}
             <div class="col-xs-6 col-sm-5 col-sm-offset-0">
-              <button id="{{clase.id}}" type="radio" class="btn  disabled"  clase="{{clase.horaClase}} " min="{{  clase.inicio|date('H:i')}}" ><p>{{ " Módulo " ~ clase.horaClase }}</p>{{  "(" ~ clase.inicio|date('H:i') ~ "-" ~ clase.fin|date('H:i') ~ ")" }}</button>
+              <button id="{{clase.id}}" type="radio" class="btn  disabled"  clase="{{clase.horaClase}}" min="{{  clase.inicio|date('H:i')}}" ><p>{% trans %}Módulo{% endtrans %} {{ " " ~ clase.horaClase }}</p>{{  "(" ~ clase.inicio|date('H:i') ~ "-" ~ clase.fin|date('H:i') ~ ")" }}</button>
             </div>
           {% endif %}
         {% endfor %}
