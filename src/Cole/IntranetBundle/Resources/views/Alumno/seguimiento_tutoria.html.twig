@@ -99,7 +99,7 @@
                     <label>{% trans %}Día{% endtrans %}:</label><span>{{ tutoria.fecha | localizeddate('full', 'none', app.request.getLocale()) | capitalize}}</span>       
                  </div>  
                 <div>
-                    <label>{% trans %}Hora{% endtrans %}:</label><span>{{ tutoria.fecha | localizeddate('none', 'short', app.request.getLocale()) | capitalize}}</span>       
+                    <label>{% trans %}Hora{% endtrans %}:</label><span>{{ tutoria.hora | localizeddate('none', 'short', app.request.getLocale()) | capitalize}}</span>       
                 </div>   
                 <div class="text-center">
                     <a id="btn_confirmar_tutoria" class="btn btn-success" href="{{ path('confirmar_tutoria', { 'id': entity.id, 'num': tutoria.id }) }}">{% trans %}Confirmar{% endtrans %}</a>
@@ -117,7 +117,7 @@
                     <label>{% trans %}Día{% endtrans %}:</label><span>{{ tutoria.fecha | localizeddate('full', 'none', app.request.getLocale()) | capitalize}}</span>       
                  </div>  
                 <div>
-                    <label>{% trans %}Hora{% endtrans %}:</label><span>{{ tutoria.fecha | localizeddate('none', 'short', app.request.getLocale()) | capitalize}}</span>       
+                    <label>{% trans %}Hora{% endtrans %}:</label><span>{{ tutoria.hora | localizeddate('none', 'short', app.request.getLocale()) | capitalize}}</span>       
                 </div> 
                 <div>
                     <label>{% trans %}Responsable{% endtrans %}:</label><span>{{tutoria.responsable}}</span>       

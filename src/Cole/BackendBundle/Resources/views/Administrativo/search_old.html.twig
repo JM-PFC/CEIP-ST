@@ -1,0 +1,218 @@
+{% extends '::base.html.twig' %}
+
+{% block head %}{% endblock %}
+{% block stylesheets %}{% endblock %}
+
+{% block javascript %}
+<script>
+
+    // Tabla con la opción de ordenar y búsqueda de antiguos administrativos.
+    $('#old_admin').DataTable( { //on( 'page.dt',   function () { $(".current").prop("disabled", true); } )
+        //"aLengthMenu": [[25, 50, 100, 250, 500, -1], [25, 50, 100, 250, 500, "All"]],
+                initComplete: function () {
+            this.api().columns().every( function (e) {
+                var column = this;
+                var select = $('<select class="'+e+'"><option value=""></option></select>')
+                    .appendTo('.select_table_old_admin')
+                    .on( 'change', function () {
+                        var val = $.fn.dataTable.util.escapeRegex(
+                            $(this).val()
+                        );
+ 
+                        column
+                            .search( val ? '^'+val+'$' : '', true, false )
+                            .draw();
+                    } );
+ 
+                column.data().unique().sort().each( function ( d, j ) {
+                    select.append( '<option value="'+d+'">'+d+'</option>' )
+                } );
+                select.append( '<option value="nada">nada</option>' )
+            } );
+        },
+        "order": [[ 1, "asc" ]],
+        "aLengthMenu": [[-1], [ "All"]],
+        "columnDefs": [ {
+            "targets": 'no-sort',
+            "orderable": false,} ],
+        "language": {
+            "zeroRecords": "Lo siento, no se ha encontrado ningún registro coincidente",
+            "emptyTable": "Actualmente no hay administrativos registrados en el sistema",
+            "lengthMenu": "Mostrar _MENU_ entradas",
+            "loadingRecords": "Cargando...",
+            "processing":     "Processando...",
+            "info": "Página _PAGE_ de _PAGES_",
+            "infoEmpty": "No hay registros disponibles",
+            "infoFiltered": "(filtrado de _MAX_ registros)",
+            "search": "Buscar:",
+            "Next": "Siguiente",
+            "paginate": {
+                "previous": "Anterior",
+                "next": "Siguiente"
+            }
+        }
+    });
+
+    // Tabla con la opción de ordenar y búsqueda de antiguos administrativo.
+    $('#old_admin_no_active').DataTable( { //on( 'page.dt',   function () { $(".current").prop("disabled", true); } )
+        //"aLengthMenu": [[25, 50, 100, 250, 500, -1], [25, 50, 100, 250, 500, "All"]],
+                initComplete: function () {
+            this.api().columns().every( function (e) {
+                var column = this;
+                var select = $('<select class="'+e+'"><option value=""></option></select>')
+                    .appendTo('.select_table_old_admin')
+                    .on( 'change', function () {
+                        var val = $.fn.dataTable.util.escapeRegex(
+                            $(this).val()
+                        );
+ 
+                        column
+                            .search( val ? '^'+val+'$' : '', true, false )
+                            .draw();
+                    } );
+ 
+                column.data().unique().sort().each( function ( d, j ) {
+                    select.append( '<option value="'+d+'">'+d+'</option>' )
+                } );
+                select.append( '<option value="nada">nada</option>' )
+            } );
+        },
+        "order": [[ 1, "asc" ]],
+        "aLengthMenu": [[-1], [ "All"]],
+        "columnDefs": [ {
+            "targets": 'no-sort',
+            "orderable": false,} ],
+        "language": {
+            "zeroRecords": "Lo siento, no se ha encontrado ningún registro coincidente",
+            "emptyTable": "Actualmente no hay administrativos antiguos en el sistema",
+            "lengthMenu": "Mostrar _MENU_ entradas",
+            "loadingRecords": "Cargando...",
+            "processing":     "Processando...",
+            "info": "Página _PAGE_ de _PAGES_",
+            "infoEmpty": "No hay registros disponibles",
+            "infoFiltered": "(filtrado de _MAX_ registros)",
+            "search": "Buscar:",
+            "Next": "Siguiente",
+            "paginate": {
+                "previous": "Anterior",
+                "next": "Siguiente"
+            }
+        }
+    });
+
+    $("#consulta_antiguo_administrativo .dataTables_info").addClass("oculto");
+    $("#consulta_antiguo_administrativo .dataTables_paginate").addClass("oculto");
+    $("#consulta_antiguo_administrativo .dataTables_length").addClass("oculto");
+
+    $("#consulta_antiguo_administrativo .old_admin_active .dataTables_filter").appendTo($("#consulta_antiguo_administrativo #buscador_activo"));
+    $("#consulta_antiguo_administrativo .old_admin_no_active .dataTables_filter").appendTo($("#consulta_antiguo_administrativo #buscador"));
+
+    $("#consulta_antiguo_administrativo tbody tr td[class='dataTables_empty']").closest("tr").addClass("no_cursor");
+</script>
+
+{% endblock %}
+
+{% block body -%}
+    <div id="consulta_antiguo_administrativo" class="intercambiar">
+        <div class="parent_no_form">
+        <div class="child">
+            <div class="contenedor_registro" >  
+                <div>
+                    <div id="cabecera_lista">
+                        <div id="buscador_activo"> </div>
+                        <h2 class="text_cabecera">Altas / Bajas del Personal Administrativo</h2>
+                        <div id="buscador"> </div>
+                    </div>
+                    <div id="fondo_azul_osc" class="tabla_con_info old_admin_active">
+                        <div id="tableContainer" class="tableContainer inner_table vh45">
+                            <table id="old_admin" class="scrollTable lista_color">
+                                <thead class="fixedHeader">
+                                    <tr>
+                                        <th class="w15">Dni</th>
+                                        <th class="w35 left">Nombre y Apellidos</th>
+                                        <th class="oculto">Personal</th>
+                                        <th class="no-sort"></th>
+                                    </tr>
+                                </thead>
+                                <tbody class="scrollContent">
+                                    {% for entity in entities_active %}
+                                        <tr id="{{entity.id}}">
+                                            <td class="w11">{{entity.dni}}</td>
+                                            <td class="w35 left">{{ entity.nombre ~ " " ~ entity.apellido1 ~ " " ~ entity.apellido2}}</td>
+                                            <td id="tipo" class="oculto">{{entity.tipo}}</td>
+                                            <td>
+                                                <input type="checkbox" name="checkbox-{{entity.id}}" id="checkbox-{{entity.id}}">
+                                            </td>
+                                        </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                        <div id="loading"></div>
+                        <div class="cabecera_info">Personal Administrativo Actual (Activos)</div>
+                    </div>
+                    <div class="info_en_tabla">
+                        <div class="cabecera_info">
+                            Datos del administrativo
+                        </div>
+                        <div id="alta" class=" alta alta_disable">
+                            <button disabled="disabled"><img src="/Symfony/web/bundles/backend/images/menu/prev.png">Dar de Alta</button>
+                        </div>
+                        <div id="alta" class=" alta alta_active oculto">
+                            <button class="btn_success"><img src="/Symfony/web/bundles/backend/images/menu/prev_w.png">Dar de Alta</button>
+                        </div>
+                        <div id="alta" class="alta alta_limpiar oculto">
+                            <button>Limpiar Selección </button>
+                        </div>
+                        <div class="contenido_info">
+                            <div id="sin_seleccionar">
+                                <p>Para ver detalles seleccione un administrativo</p>
+                            </div>
+                            <div id="seleccionado" class="oculto"></div>
+                        </div>  
+                        <div id="baja" class="baja_disable">
+                            <button disabled="disabled">Dar de Baja <img src="/Symfony/web/bundles/backend/images/menu/next.png"></button>
+                        </div>
+                        <div id="baja" class="baja_active oculto">
+                            <button class="btn_danger">Dar de Baja <img src="/Symfony/web/bundles/backend/images/menu/next_w.png"></button>
+                        </div>
+                        <div id="baja" class="baja_limpiar oculto">
+                            <button>Limpiar Selección </button>
+                        </div>
+                    </div>
+                    <div id="fondo_azul_osc" class="tabla_con_info old_admin_no_active">
+                        <div id="tableContainer" class="tableContainer inner_table vh45">
+                            <table id="old_admin_no_active" class="scrollTable lista_color">
+                                <thead class="fixedHeader">
+                                    <tr>
+                                        <th class="no-sort"></th>
+                                        <th class="w25 left">Nombre y Apellidos</th>
+                                        <th class="oculto">Personal</th>
+                                        <th class="w11">Dni</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="scrollContent">
+                                    {% for entity in entities %}
+                                        <tr id="{{entity.id}}">
+                                            <td >
+                                                <input type="checkbox" name="checkbox-{{entity.id}}" id="checkbox-{{entity.id}}">
+                                            </td>
+                                            <td class="w25 left">{{ entity.nombre ~ " " ~ entity.apellido1 ~ " " ~ entity.apellido2}}</td>
+                                            <td id="tipo" class="oculto">{{entity.tipo}}</td>
+                                            <td class="w11">{{ entity.dni}}</td>
+                                        </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                        <div id="loading"></div>
+                        <div class="cabecera_info">Personal Administrativo Antiguo (No Activos)</div>
+                    </div>
+                </div> 
+                <div class="select_table_old_admin select_ord_datatable">
+                </div>         
+            </div>
+        </div>
+        </div>
+    </div>
+    {% endblock %}

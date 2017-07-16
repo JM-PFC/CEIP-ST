@@ -12,6 +12,12 @@ login_check:
 logout:
     path:     /logout
 
+restablecerPassword:
+    path:     /restablecerPassword
+    defaults: { _controller: "BackendBundle:Security:restablecerPassword" }
+    options:
+        expose: true
+
 denegada:
    pattern: /Forbidden
    defaults: { _controller: BackendBundle:Security:denegada }
@@ -80,3 +86,6 @@ BackendBundle_log:
     resource: "@BackendBundle/Resources/config/routing/log.yml"
     prefix:   /log
 
+BackendBundle_administrativo:
+    resource: "@BackendBundle/Resources/config/routing/administrativo.yml"
+    prefix:   /administrativo

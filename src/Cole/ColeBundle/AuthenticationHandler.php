@@ -47,13 +47,26 @@ class AuthenticationHandler extends ContainerAware implements AuthenticationSucc
         else if($this->security->isGranted('ROLE_USUARIO')){
             $log->setTipoUsuario("Responsable/Alumno");
         }
+        else if($this->security->isGranted('ROLE_ADMINISTRATIVO')){
+            $log->setTipoUsuario("Administrativo");
+        }
+        else if($this->security->isGranted('ROLE_ADMIN_WEB')){
+            $log->setTipoUsuario("Administrador web");
+        }
+
         $usuario->setLastAccessAnt($usuario->getLastAccess());
         $usuario->setLastAccess(new \DateTime('now'));
 
     	$this->em->persist($log);
     	$this->em->flush();
         $locale = explode("_", $request->getLocale());
-    	return new RedirectResponse($this->router->generate('intranet', array('_locale' => $locale[0])));
+
+        if($this->security->isGranted('ROLE_ADMINISTRATIVO') || $this->security->isGranted('ROLE_ADMIN_WEB') ){
+            return new RedirectResponse($this->router->generate('backend'));
+        }
+        else{
+            return new RedirectResponse($this->router->generate('intranet', array('_locale' => $locale[0])));
+        }
     }
 
     public function onLogoutSuccess(Request $request){
@@ -68,7 +81,15 @@ class AuthenticationHandler extends ContainerAware implements AuthenticationSucc
         }
         else if($this->security->isGranted('ROLE_USUARIO')){
             $log->setTipoUsuario("Responsable/Alumno");
-        }        $this->em->persist($log);
+        }
+        else if($this->security->isGranted('ROLE_ADMINISTRATIVO')){
+            $log->setTipoUsuario("Administrativo");
+        }
+        else if($this->security->isGranted('ROLE_ADMIN_WEB')){
+            $log->setTipoUsuario("Administrador web");
+        }
+
+        $this->em->persist($log);
         $this->em->flush();
         return new RedirectResponse($this->router->generate('index'));
     }

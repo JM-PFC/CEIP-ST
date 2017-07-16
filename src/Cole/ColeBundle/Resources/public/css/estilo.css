@@ -1216,17 +1216,66 @@ tr {page-break-inside: avoid;}
 .c-grid-title {
     height: 28px !important;
 }
+#recuperarPassword p:first-child{
+    margin: 0 !important;
+    margin-bottom: 35px !important;
+}
+#recuperarPassword p{
+    margin: 15px 0;
+}
+#recuperar{
+    clear: both;
+    margin: 0 auto;
+    display: block;
 
+    width: 100px !important;
+}
+#recuperarPassword .mensaje_error{
+    height: 20px !important;
+    clear: both;
+    display: block;
+}
+#recuperarPassword  #passolvidado{
+    height: 35px;
+}
+#recuperarPassword #dni{
+    padding-left: 9px !important;
+    text-transform: uppercase !important;
+    height: 34px;
+}
+#recuperarPassword #tipo_user{
+    margin: 0 auto;
+    max-width: 196px;
+    text-align: center;
+}
 
-
-
-
-
-
-
-
-
-
+#recuperarPassword #dni_user {
+    max-width: 137px;
+    margin: 0 auto;
+}
+#recuperarPassword .input-group-addon{
+    min-width: 20px !important;
+}
+#container_restPass{
+    border: 1px solid grey;
+    padding: 0;
+    padding-bottom: 5px !important;
+    border-radius: 5px;
+    -moz-box-shadow:  1px 2px 4px black;
+    -webkit-box-shadow: 1px 2px 4px black;
+    box-shadow:  1px 2px 4px black;
+    margin-top: 35px;
+    margin-bottom: 27px;
+}
+#container_restPass .titulo-bloque{
+    border: none;
+    border-bottom: 1px solid grey !important;
+    border-radius: 5px 5px 0 0 !important;
+}
+#restablecerPassword_submit{
+    margin-bottom: 10px;
+    min-width: 100px;
+}
 
 
 

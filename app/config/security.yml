@@ -41,26 +41,28 @@ security:
         - { path: ^/(en|es)/intranet/alumno, roles: ROLE_USUARIO }
         - { path: ^/(en|es)/intranet, roles: [ROLE_USUARIO,ROLE_PROFESOR] }
         - { path: ^/(en|es)/intranet/, roles: ROLE_PROFESOR }
-
-        - { path: ^/admin, roles: ROLE_ADMIN }
+        - { path: ^/admin, roles: [ROLE_ADMIN,ROLE_ADMINISTRATIVO,ROLE_ADMIN_WEB,ROLE_JEFE_ESTUDIO]}
 
     providers:
         chain_provider:
             chain:
-                providers: [profesores, padres]
+                providers: [profesores, padres, administrativo]
         profesores:
             entity: { class: Cole\BackendBundle\Entity\Profesor, property: username}
         padres:
             entity: { class: Cole\BackendBundle\Entity\Padres, property: username}
+        administrativo:
+            entity: { class: Cole\BackendBundle\Entity\Administrativo, property: username}
 
     encoders:
 
       #si no defines un valor para la opción iterations, Symfony2 codifica cada contraseña 5.000 veces consecutivas utilizando el algoritmo SHA 512
-       #Cole\BackendBundle\Entity\Profesor: { algorithm: sha512, iterations: 10 }
-       Cole\BackendBundle\Entity\Profesor: { algorithm: sha512 }
-       Cole\BackendBundle\Entity\Padres: { algorithm: sha512 }
-       Cole\BackendBundle\Entity\Alumno: { algorithm: sha512 }
-
+      #Cole\BackendBundle\Entity\Profesor: { algorithm: sha512, iterations: 10 }
+      Cole\BackendBundle\Entity\Profesor: { algorithm: sha512 }
+      Cole\BackendBundle\Entity\Padres: { algorithm: sha512 }
+      Cole\BackendBundle\Entity\Alumno: { algorithm: sha512 }
+      Cole\BackendBundle\Entity\Matricula: { algorithm: sha512 }
+      Cole\BackendBundle\Entity\Administrativo: { algorithm: sha512 }
 
        #Con datos de prueba tedremos que utilizar plaintext, pag 201
        #Symfony\Component\Security\Core\User\User: plaintext
@@ -69,6 +71,7 @@ security:
        #Symfony\Component\Security\Core\User\User: plaintext
 
     role_hierarchy:
-        ROLE_ADMIN:       [ROLE_PROFESOR]
+        ROLE_ADMIN:      [ROLE_PROFESOR]
         ROLE_USER:       [ROLE_USUARIO, ROLE_PROFESOR]
+        ROLE_JEFE_ESTUDIO:      [ROLE_PROFESOR]
         #ROLE_SUPER_ADMIN: [ROLE_USER, ROLE_ADMIN, ROLE_ALLOWED_TO_SWITCH]

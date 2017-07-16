@@ -12,4 +12,78 @@ use Doctrine\ORM\EntityRepository;
  */
 class CursaRepository extends EntityRepository
 {
+
+	public function findTareasEvaluadas($grupo, $asignatura)
+	{
+		return $this->getEntityManager()->createQuery(
+			'SELECT c FROM IntranetBundle:Cursa c INNER JOIN c.tarea t WHERE t.grupo=:grupo AND t.asignatura=:asignatura  
+			AND c.nota IS NOT NULL AND t.descripcion not like :descripcion AND t.trimestre is not null GROUP BY c.tarea ORDER BY t.fecha DESC')
+			->setParameters(array(
+			'grupo' => $grupo,
+			'asignatura' => $asignatura,
+			'descripcion'=>"Evaluación_Trimestral"))
+			->getResult();
+	}
+
+	public function findTareasNoEvaluadas($grupo, $asignatura)
+	{
+		return $this->getEntityManager()->createQuery(
+			'SELECT c FROM IntranetBundle:Cursa c INNER JOIN c.tarea t WHERE t.grupo=:grupo AND t.asignatura=:asignatura  AND c.nota IS NULL 
+			AND t.descripcion not like :descripcion AND t.trimestre is not null AND c.tarea NOT IN(select tarea FROM IntranetBundle:Cursa cur INNER JOIN cur.tarea tarea WHERE tarea.grupo=:grupo AND tarea.asignatura=:asignatura  
+			AND cur.nota IS NOT NULL AND tarea.descripcion not like :descripcion AND tarea.trimestre is not null) GROUP BY c.tarea ORDER BY t.fecha DESC')
+			->setParameters(array(
+			'grupo' => $grupo,
+			'asignatura' => $asignatura,
+			'descripcion'=>"Evaluación_Trimestral"))
+			->getResult();
+	}
+
+	public function findByAlumnoTrimestre($alumno, $trimestre)
+	{
+		return $this->getEntityManager()->createQuery(
+			'SELECT c FROM IntranetBundle:Cursa c INNER JOIN c.tarea t WHERE c.alumno=:alumno AND t.trimestre=:trimestre AND t.descripcion=:descripcion ORDER BY t.fecha DESC')
+			->setParameters(array(
+			'alumno' => $alumno,
+			'trimestre' => $trimestre,
+			'descripcion'=>"Evaluación_Trimestral"))
+		->setMaxResults(1)
+		->getOneOrNullResult();
+	}
+
+	public function findByAsignacionesTrimestre($grupo, $asignatura, $trimestre)
+	{
+		return $this->getEntityManager()->createQuery(
+			'SELECT c FROM IntranetBundle:Cursa c INNER JOIN c.tarea t WHERE t.grupo=:grupo AND t.asignatura=:asignatura  
+			AND t.trimestre=:trimestre AND t.descripcion=:descripcion ORDER BY t.fecha DESC')
+			->setParameters(array(
+			'grupo' => $grupo,
+			'asignatura' => $asignatura,
+			'trimestre' => $trimestre,
+			'descripcion' => "Evaluación_Trimestral"))
+			->getResult();
+	}
+
+	public function findByTareasAlumnoTrimestre($alumno, $trimestre)
+	{
+		return $this->getEntityManager()->createQuery(
+			'SELECT c FROM IntranetBundle:Cursa c INNER JOIN c.tarea t WHERE c.alumno=:alumno AND t.trimestre=:trimestre AND t.descripcion not like :descripcion ORDER BY t.fecha DESC')
+			->setParameters(array(
+			'alumno' => $alumno,
+			'trimestre' => $trimestre,
+			'descripcion'=>"Evaluación_Trimestral"))
+			->getResult();
+	}
+
+
+	public function findByTareasAlumnoAsignaturaTrimestre($alumno, $trimestre, $asignatura)
+	{
+		return $this->getEntityManager()->createQuery(
+			'SELECT c FROM IntranetBundle:Cursa c INNER JOIN c.tarea t WHERE c.alumno=:alumno AND t.asignatura=:asignatura AND t.trimestre=:trimestre AND t.descripcion not like :descripcion ORDER BY t.fecha DESC')
+			->setParameters(array(
+			'alumno' => $alumno,
+			'trimestre' => $trimestre,
+			'asignatura' => $asignatura,
+			'descripcion'=>"Evaluación_Trimestral"))
+			->getResult();
+	}
 }

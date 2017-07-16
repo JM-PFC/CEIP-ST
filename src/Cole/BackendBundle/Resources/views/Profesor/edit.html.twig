@@ -8,7 +8,7 @@
     
     $("#edit_profesor_horasLectivas").attr("title","Horas Lectivas sin contar las 2.5 horas del Recreo");
     $("#edit_profesor_horasLectivas").prev().text("Horas Lectivas");
-    //Se evita poder cortar o pegar datos en los inpur de las horasde trabajo.
+    //Se evita poder cortar o pegar datos en los input de las horasde trabajo.
     $(document).on("paste cut",".datos_registro input",function() {
       return false;
     });

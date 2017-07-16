@@ -4,7 +4,57 @@ $(document).ready(function () {
 
 	//Mascaras
 	$('.telefono').mask('000 00 00 00'); 
+  $('.telefono').mask('00'); 
 
+  /*
+  $(document).on('keydown',".notas",function(e){
+    // Se asigna una máscara según el primer valor introducido.
+    if($(this).val().trim().length>0 && $(this).val().trim().length<2 && e.keyCode != 8){
+      if($(this).val().substr(0, 1)==0){
+        $(this).unmask();
+        // Máscara para las notas con un dígito.
+        $(this).mask('A',
+        {'translation': {A: {pattern: /[0-9]/}}});
+      }
+      else{
+        $(this).unmask();
+        // Máscara para las notas con dos dígitos.
+        $(this).mask('AB',
+        {'translation': {A: {pattern: /[0-1]/}, B: {pattern: /[0]/}}});
+      }
+    }
+    else{
+      $(this).mask('A',{'translation': {A: {pattern: /[0-9]/}}});
+    }
+  });
+*/
+   $(document).on("change ",".notas",function(event) {
+    var max = parseInt(10);
+    var min = parseInt(0);
+    if ($(this).val() > max)
+    {
+        $(this).val("");
+    }
+    else if ($(this).val() < min)
+    {
+        $(this).val("");
+    }  
+
+    if($(this).val().length==2){
+      valor=$(this).val().replace(/^0+/, '');
+      $(this).val(valor);
+    }
+  });
+
+
+   $(document).on("paste ",".notas",function() {
+
+    if(parseInt($(this).val())<0 || parseInt($(this).val())>10){
+      $(this).val("")
+    }
+  });
+
+  
   // Se establece las variables con los audios para las notificaciones.
   if (navigator.userAgent.search("Firefox") >= 0) { //Firefox solo admite archivos .ogg
     var aviso = new Audio();
@@ -53,7 +103,7 @@ $(document).ready(function () {
 
 	//Se activa la descripción emergente en los avisos.
 	$("*").tooltip({
-		placement: "bottom"
+		//placement: "left"
 	});
 
   $("#gallery").unitegallery({
@@ -136,7 +186,7 @@ $(document).ready(function () {
   });
 
 
-  $(document).on('click',".sidebar-nav a, .enrutaje a, #enlacemiperfil a, .contenedor_noticia a, .barramensajes a, .modal #form_submit,.boton_enviar button, .modal button[type='submit'], #consultar, .bloque-dashboard>a",function(event){ 
+  $(document).on('click',".sidebar-nav a, .enrutaje a, #enlacemiperfil a, .contenedor_noticia a, .barramensajes a, .modal #form_submit,.boton_enviar button, .modal button[type='submit'], #consultar, .bloque-dashboard>a,.waiting",function(event){ 
     $('body').addClass('waiting');
   });
   //Se utiliza para que se elimine la clase waiting al volver atrás en el navegador.
@@ -421,7 +471,7 @@ $(document).ready(function () {
   //Se añade el id del seguimiento en botón de eliminar de la ventana modal para luego generar la ruta.
   $(document).on('click','.botones_seguimiento #btn_eliminar' ,function() {
     id=$(this).closest('.seguimiento').attr("id");
-    $(" .modal-body").load(Routing.generate("seguimiento_eliminar", {id:id, _locale:locale}), function(){
+    $("#eliminar_seguimiento_modal .modal-body").load(Routing.generate("seguimiento_eliminar", {id:id, _locale:locale}), function(){
     }); 
   });
 
@@ -1119,7 +1169,7 @@ $(document).ready(function () {
     profesor=$(this).attr("profesor");
     grupo=$(this).attr("grupo");
     alumno=$(this).attr("alumno");
-    $("#nueva_tutoria_modal #contenido").load(Routing.generate("seguimiento_tutoria_alumno_new", {id:grupo, _locale:locale}), function(){
+    $("#nueva_tutoria_modal #contenido").load(Routing.generate("seguimiento_tutoria_alumno_new", {id:alumno, _locale:locale}), function(){
       $("#turotias_new #seguimiento_grupo option[value='"+grupo+"']").prop('selected', true);
       $("#turotias_new #seguimiento_profesor option[value='"+profesor+"']").prop('selected', true);
       $("#turotias_new #seguimiento_alumno option[value='"+alumno+"']").prop('selected', true);
@@ -1231,7 +1281,7 @@ $(document).ready(function () {
     //Se comprueba si estan todos los datos del formulario desde el campos descripción.
     $("#cole_intranetbundle_tutorias_descripcion").blur();
   });
-});
+
 
 
   ///////////////////////////////////////////
@@ -1257,11 +1307,10 @@ $(document).ready(function () {
       $("#seleccion_calificaciones #3_1").addClass('hidden');
       $("#seleccion_calificaciones #3_2").addClass('hidden');
       $("#seleccion_calificaciones #4").addClass('hidden');
-      $("#seleccion_calificaciones #cursos").empty();
+      $("#seleccion_calificaciones #3_1 #cursos a").addClass('hidden');
+      $("#seleccion_calificaciones #3_2 #cursos").empty();
 
-      $("#seleccion_calificaciones #asignatura").removeClass('avtive');
-
-
+      $("#seleccion_calificaciones #asignatura").removeClass('active');
 
       if ($(window).width() < 768) {
         var pos = $("#seleccion_calificaciones #2").offset().top;
@@ -1272,7 +1321,7 @@ $(document).ready(function () {
       $("#tarea_descripcion").val("");
       $("#tarea_descripcion").blur();
       //Se oculta todas las opciones si se pulsa en evaluación de grupo.
-      if($(this).attr("id")!="nueva" && $(this).attr("id")!="evaluar" ){
+      if($(this).attr("id")!="nueva" && $(this).attr("id")!="evaluar"  && $(this).attr("id")!="trimestre"){
         $("#seleccion_calificaciones #2").addClass('hidden');
       }
     }
@@ -1287,11 +1336,47 @@ $(document).ready(function () {
       $("#tarea_descripcion").blur();
 
       
-      if(!$("#seleccion_calificaciones #nueva").hasClass('active') ){
+      if($("#seleccion_calificaciones #nueva").hasClass('active') ){
+        $("#seleccion_calificaciones #3_2 #orden").css("background-color", "#ea9239");
+        $("#seleccion_calificaciones #3_2").removeClass('hidden');
+        $("#seleccion_calificaciones #3_2 button").removeClass('active');
+        $("#seleccion_calificaciones #3_1").addClass('hidden');
+        $("#seleccion_calificaciones #3_3").addClass('hidden');
+
+        id=$("#asignatura button[class*='active']").attr("id");
+
+        //Se obtiene los grupos donde el profesor imparte la asignatura seleccionada.
+        $.ajax({
+          type: 'POST',
+          url: Routing.generate('grupos_asignaturasGrupo_profesor', {id:id, _locale:locale}),
+          success: function(response){
+           $("#seleccion_calificaciones #3_2 #cursos").empty();
+            for(key in response.grupos){
+              $("#seleccion_calificaciones #3_2 #cursos").append('<button id="'+response.grupos[key]["id"]+'" class="btn btn-primary">'+response.grupos[key]["curso"]+' '+response.grupos[key]["letra"]+'</button>');
+            }
+          }
+        })
+
+        //Se selecciona la asignatura en el select oculto.
+        $("#tarea_asignatura option[value='"+id+"']").prop('selected', true);
+
+
+        if ($(window).width() < 768) {
+          var pos = $("#seleccion_calificaciones #3_1").offset().top;
+          $("html").scrollTop(pos-300);
+        }
+      }
+      else if($("#seleccion_calificaciones #evaluar").hasClass('active')){
+        $("#seleccion_calificaciones #3_1 #cursos a").addClass('hidden');
         $("#seleccion_calificaciones #3_1 #orden").css("background-color", "#ea9239");
         $("#seleccion_calificaciones #3_1").removeClass('hidden');
-        $("#seleccion_calificaciones #3_1 button").removeClass('active');
+        $("#seleccion_calificaciones #3_1 a").removeClass('active');
         $("#seleccion_calificaciones #3_2").addClass('hidden');
+        $("#seleccion_calificaciones #3_3").addClass('hidden');
+
+        asig=$(this).attr("asig");
+        $("#seleccion_calificaciones #3_1 a[asig='"+asig+"']").removeClass('hidden');
+
 
         if ($(window).width() < 768) {
           var pos = $("#seleccion_calificaciones #3_1").offset().top;
@@ -1299,48 +1384,36 @@ $(document).ready(function () {
         }
       }
       else{
-        $("#seleccion_calificaciones #3_2 #orden").css("background-color", "#ea9239");
-        $("#seleccion_calificaciones #3_2").removeClass('hidden');
-        $("#seleccion_calificaciones #3_2 button").removeClass('active');
+        $("#seleccion_calificaciones #3_3 #cursos a").addClass('hidden');
+        $("#seleccion_calificaciones #3_3 #orden").css("background-color", "#ea9239");
+        $("#seleccion_calificaciones #3_3").removeClass('hidden');
+        $("#seleccion_calificaciones #3_3 a").removeClass('active');
         $("#seleccion_calificaciones #3_1").addClass('hidden');
+        $("#seleccion_calificaciones #3_2").addClass('hidden');
+
+        asig=$(this).attr("asig");
+        $("#seleccion_calificaciones #3_3 a[asig='"+asig+"']").removeClass('hidden');
+
 
         if ($(window).width() < 768) {
-          var pos = $("#seleccion_calificaciones #3_2").offset().top;
+          var pos = $("#seleccion_calificaciones #3_3").offset().top;
           $("html").scrollTop(pos-300);
         }
+
       }
       $("#seleccion_calificaciones #4").addClass('hidden');
 
-
-      id=$("#asignatura button[class*='active']").attr("id");
-      //Se obtiene los grupos donde el profesor imparte la asignatura seleccionada.
-      $.ajax({
-          type: 'POST',
-          url: Routing.generate('grupos_asignaturasGrupo_profesor', {id:id, _locale:locale}),
-          success: function(response){
-           $("#seleccion_calificaciones #cursos").empty();
-            for(key in response.grupos){
-              $("#seleccion_calificaciones #cursos").append('<button id="'+response.grupos[key]["id"]+'" class="btn btn-primary">'+response.grupos[key]["curso"]+' '+response.grupos[key]["letra"]+'</button>');
-            }
-
-          }
-      })
-      //Se selecciona la asignatura en el select oculto.
-      $("#tarea_asignatura option[value='"+id+"']").prop('selected', true);
     }
     else{
       id=$(this).attr("id");
 
-      if(!$("#seleccion_calificaciones #nueva").hasClass('active') ){
-        div.find("button").removeClass('active');
-        $(this).addClass('active');
-      }
-      else{
+      if($("#seleccion_calificaciones #nueva").hasClass('active')){
+
         $("#seleccion_calificaciones #4 #orden").css("background-color", "#ea9239");
         $("#seleccion_calificaciones #4").removeClass('hidden');
         $("#seleccion_calificaciones #4 button").removeClass('active');
       }
-
+     
       //Se activa o desactiva los grupos selecionados en los checkbox ocultos.
       if($("#tarea_seleccion_"+id).is(':checked')){
         $("#tarea_seleccion_"+id).prop('checked', false);
@@ -1393,7 +1466,6 @@ $(document).ready(function () {
   });
 
 
-
   $(document).on('click',".multiple_seleccion button",function(event){
 
     if($(this).hasClass("active")){
@@ -1403,3 +1475,62 @@ $(document).ready(function () {
       $(this).addClass("active");
     }
   });
+
+
+  //Se añade el id del la tarea en botón de eliminar de la ventana modal para luego generar la ruta.
+  $(document).on('click','#tabla_tareas_profesor #btn_eliminar' ,function() {
+    id=$(this).closest('tr').attr("id");
+    $("#eliminar_tarea_modal .modal-body").load(Routing.generate("tarea_eliminar", {id:id, _locale:locale}), function(){
+    }); 
+  });
+
+  $(document).on('change','#tabla_alum_trimestre input' ,function() {
+    if($(this).attr("value")!=$(this).val()){
+      $(this).addClass('nota_modificada');
+    }
+    else{
+      $(this).removeClass('nota_modificada');
+    }
+  });
+
+
+  
+  $(document).on('click','#tabla_alum_trimestre table td i' ,function() {
+
+    id=$(this).closest('tr').attr("id");
+    trimestre=$(this).closest('td').attr("trimestre");
+    asignatura=$("#tabla_alum_trimestre #asignatura").attr("asignatura");
+    $("#lista_tareas_alumno .modal-body").load(Routing.generate("lista_tareas_alumno", {id:id, trimestre:trimestre, asignatura:asignatura,  _locale:locale}), function(){
+      $("#lista_tareas_alumno h4").empty();
+      if(locale=="es"){
+        if(trimestre==1){
+          $("#lista_tareas_alumno h4").append("<span>Tareas del alumno - 1<sup>er</sup> Trimestre</span>");
+        }
+        else if(trimestre==2){
+          $("#lista_tareas_alumno h4").append("<span>Tareas del alumno - 2º Trimestre</span>");
+        }
+        else{
+          $("#lista_tareas_alumno h4").append("<span>Tareas del alumno - 3<sup>er</sup> Trimestre</span>");
+        }
+      }
+      else{
+        if(trimestre==1){
+          $("#lista_tareas_alumno h4").append("<span>Student Assignments - 1st quarter</span>");
+        }
+        else if(trimestre==2){
+          $("#lista_tareas_alumno h4").append("<span>Student Assignments - 2nd quarter</span>");
+        }
+        else{
+          $("#lista_tareas_alumno h4").append("<span>Student Assignments - 3rd quarter</span>");
+        }
+      }
+    }); 
+  });
+
+
+
+
+
+
+
+});

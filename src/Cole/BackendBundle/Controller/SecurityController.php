@@ -19,6 +19,13 @@ class SecurityController extends Controller
 			'error'       => $error
 		));
 	}
+
+	public function restablecerPasswordAction()
+	{
+		return $this->render('BackendBundle:Security:restablecerPassword.html.twig');
+	}
+
+
 	public function denegadaAction(){
 
       return $this->render('BackendBundle:Security:denegada.html.twig');

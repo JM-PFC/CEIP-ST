@@ -218,10 +218,10 @@ $(document).ready(function () {
         // Se reorganiza el id de todas las pestañas restantes.
         for (i = 2; i <= tabCounter+1; i++){
           id = "tabs-" + (i-1);
-          $("#tabs ul li:nth-child("+i+")").attr("aria-controls",id);
-          $("#tabs ul li:nth-child("+i+") a").attr("href",'#'+id);
-          $("#tabs ul li:nth-child("+i+")").attr("aria-labelledby",'ui-id-'+(i-1));
-          $("#tabs ul li:nth-child("+i+") a").attr("id",'ui-id-'+(i-1));
+          $("#tabs>ul li:nth-child("+i+")").attr("aria-controls",id);
+          $("#tabs>ul li:nth-child("+i+") a").attr("href",'#'+id);
+          $("#tabs>ul li:nth-child("+i+")").attr("aria-labelledby",'ui-id-'+(i-1));
+          $("#tabs>ul li:nth-child("+i+") a").attr("id",'ui-id-'+(i-1));
           $("#tabs>div:nth-child("+(i)+")").attr("id",id);     
         }
         //variables para el hash de la barra de navegación para el elemtento actualizado.
@@ -246,10 +246,10 @@ $(document).ready(function () {
       // Se reorgaiza el id de todas las pestañas restantes.
       for (i = 2; i <= tabCounter+1; i++){
         id = "tabs-" + (i-1);
-        $("#tabs ul li:nth-child("+i+")").attr("aria-controls",id);
-        $("#tabs ul li:nth-child("+i+") a").attr("href",'#'+id);
-        $("#tabs ul li:nth-child("+i+")").attr("aria-labelledby",'ui-id-'+(i-1));
-        $("#tabs ul li:nth-child("+i+") a").attr("id",'ui-id-'+(i-1));
+        $("#tabs>ul li:nth-child("+i+")").attr("aria-controls",id);
+        $("#tabs>ul li:nth-child("+i+") a").attr("href",'#'+id);
+        $("#tabs>ul li:nth-child("+i+")").attr("aria-labelledby",'ui-id-'+(i-1));
+        $("#tabs>ul li:nth-child("+i+") a").attr("id",'ui-id-'+(i-1));
         $("#tabs>div:nth-child("+(i)+")").attr("id",id);     
       }
 
@@ -298,7 +298,7 @@ $(document).ready(function () {
   });
    	      
   // Se selecciona una opción del menú.
-  $(".contenedor div div").on("click", "a",function(event) {
+  $(".contenedor div div").on("click", "a:not(.no_tab)",function(event) {
   	event.preventDefault(); //cancela el comportamiento por defecto
     // Se cierra las notificaciones.
     PNotify.removeAll();

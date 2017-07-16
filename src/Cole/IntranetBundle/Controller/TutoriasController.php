@@ -363,7 +363,7 @@ class TutoriasController extends Controller
 
             //Se añade un comentario para mostrar como aviso del sistema (FechaActualizada == null)
             $seguimiento = new Seguimiento();
-            $seguimiento->setProfesor($alumno->getGrupo()->getProfesor());
+            $seguimiento->setProfesor($profesor);
             $seguimiento->setAlumno($alumno);
             $seguimiento->setResponsable($tutoria->getResponsable());
             $seguimiento->setAsignatura(null);

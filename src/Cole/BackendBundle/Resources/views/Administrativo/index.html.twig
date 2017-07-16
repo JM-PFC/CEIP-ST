@@ -1,0 +1,77 @@
+{% extends '::base.html.twig' %}
+
+{% block body -%}
+    <h1>Administrativo list</h1>
+
+    <table class="records_list">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Dni</th>
+                <th>Nombre</th>
+                <th>Apellido1</th>
+                <th>Apellido2</th>
+                <th>Direccion</th>
+                <th>Localidad</th>
+                <th>Provincia</th>
+                <th>Cp</th>
+                <th>Telefono</th>
+                <th>Movil</th>
+                <th>Email</th>
+                <th>Fechaalta</th>
+                <th>Fechabaja</th>
+                <th>Username</th>
+                <th>Password</th>
+                <th>Salt</th>
+                <th>Tipo</th>
+                <th>Lastaccess</th>
+                <th>Lastaccessant</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for entity in entities %}
+            <tr>
+                <td><a href="{{ path('administrativo_show', { 'id': entity.id }) }}">{{ entity.id }}</a></td>
+                <td>{{ entity.dni }}</td>
+                <td>{{ entity.nombre }}</td>
+                <td>{{ entity.apellido1 }}</td>
+                <td>{{ entity.apellido2 }}</td>
+                <td>{{ entity.direccion }}</td>
+                <td>{{ entity.localidad }}</td>
+                <td>{{ entity.provincia }}</td>
+                <td>{{ entity.cp }}</td>
+                <td>{{ entity.telefono }}</td>
+                <td>{{ entity.movil }}</td>
+                <td>{{ entity.email }}</td>
+                <td>{% if entity.fechaAlta %}{{ entity.fechaAlta|date('Y-m-d H:i:s') }}{% endif %}</td>
+                <td>{% if entity.fechaBaja %}{{ entity.fechaBaja|date('Y-m-d H:i:s') }}{% endif %}</td>
+                <td>{{ entity.username }}</td>
+                <td>{{ entity.password }}</td>
+                <td>{{ entity.salt }}</td>
+                <td>{{ entity.tipo }}</td>
+                <td>{% if entity.lastAccess %}{{ entity.lastAccess|date('Y-m-d H:i:s') }}{% endif %}</td>
+                <td>{% if entity.lastAccessAnt %}{{ entity.lastAccessAnt|date('Y-m-d H:i:s') }}{% endif %}</td>
+                <td>
+                <ul>
+                    <li>
+                        <a href="{{ path('administrativo_show', { 'id': entity.id }) }}">show</a>
+                    </li>
+                    <li>
+                        <a href="{{ path('administrativo_edit', { 'id': entity.id }) }}">edit</a>
+                    </li>
+                </ul>
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+        <ul>
+        <li>
+            <a href="{{ path('administrativo_new') }}">
+                Create a new entry
+            </a>
+        </li>
+    </ul>
+    {% endblock %}

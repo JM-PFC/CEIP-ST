@@ -1,0 +1,190 @@
+{% extends '::base.html.twig' %}
+
+{% block head %}{% endblock %}
+{% block stylesheets %}{% endblock %}
+
+{% block javascript %}
+<script>
+
+    // Tabla con la opción de ordenar y búsqueda de antiguos profesores.
+    $('#equipo_directivo_teachers').DataTable( { //on( 'page.dt',   function () { $(".current").prop("disabled", true); } )
+        //"aLengthMenu": [[25, 50, 100, 250, 500, -1], [25, 50, 100, 250, 500, "All"]],
+                initComplete: function () {
+            this.api().columns().every( function (e) {
+                var column = this;
+                var select = $('<select class="'+e+'"><option value=""></option></select>')
+                    .appendTo('.select_table_equipo_directivo')
+                    .on( 'change', function () {
+                        var val = $.fn.dataTable.util.escapeRegex(
+                            $(this).val()
+                        );
+ 
+                        column
+                            .search( val ? '^'+val+'$' : '', true, false )
+                            .draw();
+                    } );
+ 
+                column.data().unique().sort().each( function ( d, j ) {
+                    select.append( '<option value="'+d+'">'+d+'</option>' )
+                } );
+                select.append( '<option value="nada">nada</option>' )
+            } );
+        },
+        "order": [[ 1, "asc" ]],
+        "aLengthMenu": [[-1], [ "All"]],
+        "columnDefs": [ {
+            "targets": 'no-sort',
+            "orderable": false,} ],
+        "language": {
+            "zeroRecords": "Lo siento, no se ha encontrado ningún registro coincidente",
+            "emptyTable": "Actualmente no hay profesores antiguos en el sistema",
+            "lengthMenu": "Mostrar _MENU_ entradas",
+            "loadingRecords": "Cargando...",
+            "processing":     "Processando...",
+            "info": "Página _PAGE_ de _PAGES_",
+            "infoEmpty": "No hay registros disponibles",
+            "infoFiltered": "(filtrado de _MAX_ registros)",
+            "search": "Buscar:",
+            "Next": "Siguiente",
+            "paginate": {
+                "previous": "Anterior",
+                "next": "Siguiente"
+            }
+        }
+    });
+
+    $("#equipo_directivo .dataTables_info").addClass("oculto");
+    $("#equipo_directivo .dataTables_paginate").addClass("oculto");
+    $("#equipo_directivo .dataTables_length").addClass("oculto");
+
+    $("#equipo_directivo .old_teacher_active .dataTables_filter").appendTo($("#equipo_directivo #buscador_activo"));
+    $("#equipo_directivo tbody tr td[class='dataTables_empty']").closest("tr").addClass("no_cursor");
+</script>
+
+{% endblock %}
+
+{% block body -%}
+    <div id="equipo_directivo" class="intercambiar">
+        <div class="parent_no_form">
+        <div class="child">
+            <div class="contenedor_registro" >  
+                <div>
+                    <div id="cabecera_lista">
+                        <div id="buscador_activo"> </div>
+                        <h2 class="text_cabecera">Asignación del Equipo Directivo</h2>
+                        <div id="buscador"> </div>
+                    </div>
+                    <div id="fondo_azul_osc" class="tabla_con_info old_teacher_active">
+                        <div id="tableContainer" class="tableContainer inner_table vh45">
+                            <table id="equipo_directivo_teachers" class="scrollTable lista_color">
+                                <thead class="fixedHeader">
+                                    <tr>
+                                        <th class="w15">Dni</th>
+                                        <th class="w35 left">Nombre y Apellidos</th>
+                                        <th class="oculto">Nivel</th>
+                                        <th class="no-sort"></th>
+                                    </tr>
+                                </thead>
+                                <tbody class="scrollContent">
+                                    {% for entity in entities %}
+                                        <tr id="{{entity.id}}">
+                                            <td class="w11">{{entity.dni}}</td>
+                                            <td class="w35 left">{{ entity.nombre ~ " " ~ entity.apellido1 ~ " " ~ entity.apellido2}}</td>
+                                            <td id="nivel" class="oculto">{{entity.nivel}}</td>
+                                            <td>
+                                                <input id="radio_profesores" type="radio" name="radio_profesores" id="checkbox-{{entity.id}}">
+                                            </td>
+                                        </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                        <div id="loading"></div>
+                        <div class="cabecera_info">Profesores Actuales (Activos)</div>
+                    </div>
+                    <div class="info_en_tabla">
+                        <div class="cabecera_info">
+                            Datos del Profesor
+                        </div>
+                        <div class=" alta alta_disable">
+                            <button disabled="disabled">Asignar Director<img src="/Symfony/web/bundles/backend/images/menu/next.png"></button>
+                        </div>
+                        <div id="asig_director" class=" alta alta_active oculto">
+                            <button class="btn_primary">Asignar Director<img src="/Symfony/web/bundles/backend/images/menu/next_w.png"></button>
+                        </div>
+                        <div class="contenido_info">
+                            <div id="sin_seleccionar">
+                                <p>Para ver detalles seleccione un profesor</p>
+                            </div>
+                            <div id="seleccionado" class="oculto"></div>
+                        </div>  
+                        <div class="alta alta_disable">
+                            <button disabled="disabled">Asignar Jefe de Estudios<img src="/Symfony/web/bundles/backend/images/menu/next.png"></button>
+                        </div>
+                        <div id="asig_jefe_estudios" class="alta alta_active oculto">
+                            <button class="btn_primary">Asignar Jefe de Estudios<img src="/Symfony/web/bundles/backend/images/menu/next_w.png"></button>
+                        </div>
+                    </div>
+                    <div id="fondo_azul_osc" class="tabla_con_info old_teacher_no_active">
+                        <div class="cabecera_info">Director del Centro</div>
+                        <div id="container_director" class="container_datos_ED">
+                            {% if director %}
+                                <div class="columna_foto">
+                                {% if director.foto != null %}
+                                    <img id="foto" class="img-mini" src="{{ asset('uploads/images/' ~ director.foto) }}">
+                                {% else %}
+                                    {% if director.sexo == "Femenino" %}
+                                    <img id="sin_foto" class="img-mini" src="{{ asset('bundles/backend/images/perfil/SinFoto-M.png') }}">
+                                    {% else %}
+                                    <img id="sin_foto" class="img-mini" src="{{ asset('bundles/backend/images/perfil/SinFoto-H.png') }}">
+                                    {% endif %}
+                                {% endif %}
+                                </div>
+                                <div class="datos_ED">
+                                    <h3>Nombre:</h3> 
+                                    <p class="nombre_ED">{{director}}</p>
+                                    <div class="dos_columnas_ED">
+                                        <h3>Nivel:</h3> 
+                                        <p>{{ director.nivel }}</p>    
+                                    </div>
+                                    <div  class="dos_columnas_ED">
+
+                                        <h3>Fecha de Alta:</h3>
+                                        <p>{{ director.fechaAlta|date("d-m-Y") }}</p>             
+                                    </div>
+ 
+                                </div>
+                            {% else %}
+                                <p class="color_rojo">(Sin Asignar)</p>
+                            {% endif %}
+                        </div>
+                        <div class="separacion"></div>
+                        <div id="container_jefe_estudios" class="container_datos_ED">
+                            {% if jefeEstudios %}
+                                <div class="columna_foto">
+                                {% if jefeEstudios.foto != null %}
+                                    <img id="foto" class="img-mini" src="{{ asset('uploads/images/' ~ director.foto) }}">
+                                {% else %}
+                                    {% if jefeEstudios.sexo == "Femenino" %}
+                                    <img id="sin_foto" class="img-mini" src="{{ asset('bundles/backend/images/perfil/SinFoto-M.png') }}">
+                                    {% else %}
+                                    <img id="sin_foto" class="img-mini" src="{{ asset('bundles/backend/images/perfil/SinFoto-H.png') }}">
+                                    {% endif %}
+                                {% endif %}
+                                </div>
+                                <p class="nombre_ED">{{jefeEstudios}}</p>
+                            {% else %}
+                                <p class="color_rojo">(Sin Asignar)</p>
+                            {% endif %}
+                        </div>
+
+                        <div class="cabecera_info" >Jefe de Estudios</div>
+                    </div>
+                </div> 
+                <div class="select_table_equipo_directivo select_ord_datatable">
+                </div>         
+            </div>
+        </div>
+        </div>
+    </div>
+    {% endblock %}

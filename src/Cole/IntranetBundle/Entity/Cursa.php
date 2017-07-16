@@ -1,6 +1,7 @@
 <?php
 
 namespace Cole\IntranetBundle\Entity;
+use Symfony\Component\Validator\Constraints as Assert;
 
 use Doctrine\ORM\Mapping as ORM;
 
@@ -21,19 +22,22 @@ class Cursa
      */
     private $id;
 
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="trimestre", type="string", length=1, nullable=true)
-     */
-    private $trimestre;
 
     /**
      * @var integer
      *
-     * @ORM\Column(name="nota", type="integer", nullable=true)
+     * @ORM\Column(name="nota", type="string", length=2, nullable=true)
+     * @Assert\Length(max=2)
      */
     private $nota;
+
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="ord", type="string", length=2, nullable=true)
+     * @Assert\Length(max=2)
+     */
+    private $ord;
 
     /**
     * @ORM\ManyToOne(targetEntity="Cole\BackendBundle\Entity\Alumno", inversedBy="Cursa")
@@ -61,29 +65,6 @@ class Cursa
     public function getId()
     {
         return $this->id;
-    }
-
-    /**
-     * Set trimestre
-     *
-     * @param string $trimestre
-     * @return Cursa
-     */
-    public function setTrimestre($trimestre)
-    {
-        $this->trimestre = $trimestre;
-
-        return $this;
-    }
-
-    /**
-     * Get trimestre
-     *
-     * @return string 
-     */
-    public function getTrimestre()
-    {
-        return $this->trimestre;
     }
 
     /**
@@ -184,5 +165,28 @@ class Cursa
     public function getTarea()
     {
         return $this->tarea;
+    }
+
+    /**
+     * Set ord
+     *
+     * @param string $ord
+     * @return Cursa
+     */
+    public function setOrd($ord)
+    {
+        $this->ord = $ord;
+
+        return $this;
+    }
+
+    /**
+     * Get ord
+     *
+     * @return string 
+     */
+    public function getOrd()
+    {
+        return $this->ord;
     }
 }

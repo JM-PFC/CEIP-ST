@@ -1,4 +1,9 @@
 $(document).ready(function () {
+  //Mascaras
+  $('.dni').mask('A0000000-S',
+  {'translation': {A: {pattern: /[X-Zx-z]|[0-9]/}},
+     placeholder: "________-__"});
+  
   /*** El siguiente código es el evento para plegar y desplegar cajas. Despliega la caja login. **/
   $('div.usuariologin').click(function() {
     $(this).next().slideToggle();

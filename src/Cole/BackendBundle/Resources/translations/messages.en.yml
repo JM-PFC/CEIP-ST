@@ -58,6 +58,7 @@ Seguimiento: Tracing
 Comunicación: Communication
 Asistencia: Assistance
 Calificaciones: Score
+Calificaciones del curso: Course Qualifications
 Expediente: Case file
 Tutorías: Tutorials
 Noticias: News
@@ -276,3 +277,31 @@ Aún no se ha asignado ningún alumno al grupo. Espere a que finalice el proceso
 Se va a eliminar la tutoría asignada y no se podrá recuperar: It will remove assigned tutoring and can not be recovered
 La tutoría ha sido cancelada.: The tutoring has been canceled.
 Módulo: Module
+Trimestre: Quarter
+Seleccione una opción: Select an option
+Añadir Tarea: Add Task
+Evaluar Tarea: Evaluate Task
+Evaluar trimestre: Evaluate quarter
+Ver evaluación de mi Grupo: See my group evaluation
+Evaluación de mi grupo: My group evaluation
+Tareas Evaluables: Evaluable tasks
+Nombre de la tarea: Name of the task
+Seleccione los grupos: Select groups
+Seleccione el trimestre e inserte el nombre de la tarea: Select the quarter and insert the name of the task
+Evaluación de la asignatura: Assessment of the subject
+Tareas no evaluadas: Tasks not evaluated
+Tareas evaluadas: Tasks evaluated
+Tareas: Tasks
+no evaluadas: not evaluated
+evaluadas: evaluated
+No hay tareas pendientes para evaluar: There are no pending tasks to evaluate
+No hay tareas evaluadas en el sistema: There are no tasks evaluated in the system
+Seleccione una tarea de la lista superior para mostrar los alumnos a evaluar: Select a task from the top list to show students to evaluate
+No hay alumnos asignados a esta tarea: There are no students assigned to this task
+Elimine la tarea y espere a que se asigne a los alumnos al grupo para añadirla de nuevo: Delete the task and wait for the students to be assigned to the group to add it again
+Las calificaciones han sido guardadas correctamente.: Ratings have been successfully saved.
+Calificación: Qualification
+Eliminación de la tarea: Removal of the task
+Edición de la tarea: Editing the task
+Se va a eliminar la tarea del sistema y no se podrá recuperar: The task will be deleted from the system and can not be recovered
+Evaluación de tareas: Assessment of tasks

@@ -133,7 +133,7 @@ class AlumnoController extends Controller
                 $entity->setResponsable2($responsable2); 
             }
             
-            if($entity->getResponsable2()->getLastAccessAnt() == null){
+            if($entity->getResponsable2() && $entity->getResponsable2()->getLastAccessAnt() == null){
                 $password2 = $encoder->encodePassword("u".substr($entity->getResponsable2()->getDni(), 0, -2), $entity->getResponsable2()->getSalt());
                 $entity->getResponsable2()->setPassword($password2);
             }
@@ -899,6 +899,10 @@ class AlumnoController extends Controller
 
         $fileOriginal=$entity->getFoto();
 
+        //Se optiene el password de ambos responsables para asignarlo de nuevo ya que se modifica la contraseña con el valor de la nueva que está vacío(oculto).
+        $password1=$entity->getResponsable1()->getPassword();
+        $password2=$entity->getResponsable2()->getPassword();
+
         $deleteForm = $this->createDeleteForm($id);
         $editForm = $this->createEditForm($entity);
 
@@ -922,7 +926,7 @@ class AlumnoController extends Controller
                 $file->move($photoDir, $fileName);
                 $entity->setFoto($fileName);
   
-                // Comprueba que existe el arcivo de la imagen anterior y lo elimina.
+                // Comprueba que existe el archivo de la imagen anterior y lo elimina.
                 $dir_file=$photoDir.$fileOriginal;
                 if(is_file( $dir_file )){
                 unlink($dir_file);
@@ -976,7 +980,8 @@ class AlumnoController extends Controller
             }
             $entity->setActivo(1);
             $entity->setNumAlum(null);
-            
+            $entity->getResponsable1()->setPassword($password1);
+            $entity->getResponsable2()->setPassword($password2);
             $em->persist($entity);
             $em->flush();
 

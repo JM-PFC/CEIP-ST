@@ -1,0 +1,10 @@
+{% extends '::base.html.twig' %}
+
+{% block body -%}
+	<p>{% trans %}Se va a eliminar la tarea del sistema y no se podrá recuperar{% endtrans %}.</p>
+	<p>{% trans %}¿Estas seguro de continuar?{% endtrans %}</p>
+	<div class="class-footer">
+		<button class="btn btn_azul" type="button" data-dismiss="modal" title="">{% trans %}Cancelar{% endtrans %}</button>
+			{{ form(delete_form) }}
+	</div>
+{% endblock %}

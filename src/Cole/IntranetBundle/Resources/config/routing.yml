@@ -62,15 +62,18 @@ IntranetBundle_profesores:
     prefix:   /intranet
 
 IntranetBundle_seguimiento:
-        resource: "@IntranetBundle/Resources/config/routing/seguimiento.yml"
-        prefix:   /intranet/seguimiento
+    resource: "@IntranetBundle/Resources/config/routing/seguimiento.yml"
+    prefix:   /intranet/seguimiento
 
 IntranetBundle_tutorias:
-        resource: "@IntranetBundle/Resources/config/routing/tutorias.yml"
-        prefix:   /tutorias
+    resource: "@IntranetBundle/Resources/config/routing/tutorias.yml"
+    prefix:   /tutorias
 
 IntranetBundle_tarea:
-        resource: "@IntranetBundle/Resources/config/routing/tarea.yml"
-        prefix:   /tarea
+    resource: "@IntranetBundle/Resources/config/routing/tarea.yml"
+    prefix:   /tarea
 
+IntranetBundle_cursa:
+    resource: "@IntranetBundle/Resources/config/routing/cursa.yml"
+    prefix:   /cursa
 

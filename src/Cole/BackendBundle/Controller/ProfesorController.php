@@ -320,7 +320,6 @@ class ProfesorController extends Controller
 
         if ($editForm->isValid()) {
 
-
             $estado = $this->get('request')->request->get('estado');
 
             //Se obtiene la foto subida y se guarda en la carpeta destino, asignandole un nombre único.
@@ -542,7 +541,7 @@ class ProfesorController extends Controller
         $em = $this->getDoctrine()->getManager();
 
         foreach ($profesores as $profesor ) {
-            $entity = $em->getRepository('BackendBundle:Profesor')->find($profesor);
+            $entity = $em->getRepository('BackendBundle:Profesor')->findOneById($profesor);
 
             if (!$entity) {
                 throw $this->createNotFoundException('Unable to find Profesor entity.');
@@ -574,7 +573,7 @@ class ProfesorController extends Controller
         $em = $this->getDoctrine()->getManager();
 
         foreach ($profesores as $profesor ) {
-            $entity = $em->getRepository('BackendBundle:Profesor')->find($profesor);
+            $entity = $em->getRepository('BackendBundle:Profesor')->findOneById($profesor);
 
             if (!$entity) {
                 throw $this->createNotFoundException('Unable to find Profesor entity.');
@@ -798,6 +797,21 @@ class ProfesorController extends Controller
         );
     }
 
+    public function EquipoDirectivoAction()
+    {
+        $em = $this->getDoctrine()->getManager();
 
+        $profesores= $em->getRepository('BackendBundle:Profesor')->findProfesoresCandidatos();
+
+        $director= $em->getRepository('BackendBundle:Profesor')->findRolProfesor("ROLE_ADMIN");
+        $jefeEstudios= $em->getRepository('BackendBundle:Profesor')->findRolProfesor("ROLE_JEFE_ESTUDIO");
+
+        return $this->render('BackendBundle:Profesor:equipo_directivo.html.twig', array(
+            'entities' => $profesores,
+            'director' => $director,
+            'jefeEstudios' => $jefeEstudios,
+
+        ));
+    }
 
 }

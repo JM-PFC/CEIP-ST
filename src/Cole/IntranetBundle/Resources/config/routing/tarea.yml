@@ -24,7 +24,37 @@ tarea_update:
     defaults: { _controller: "IntranetBundle:Tarea:update" }
     requirements: { _method: post|put }
 
+notas_update:
+    path:     /{id}/{tipo}/update/notas
+    defaults: { _controller: "IntranetBundle:Tarea:updateNotas" }
+    requirements: { _method: post|put }
+
+tarea_eliminar:
+    path:     /{id}/eliminar
+    defaults: { _controller: "IntranetBundle:Tarea:eliminarTarea" }
+    options:
+        expose: true
+
 tarea_delete:
     path:     /{id}/delete
     defaults: { _controller: "IntranetBundle:Tarea:delete" }
     requirements: { _method: post|delete }
+
+evaluar_asignatura:
+    path:     /{id}-{asig}/evaluación
+    defaults: { _controller: IntranetBundle:Tarea:evaluarAsignatura}
+    options:
+        expose: true
+
+evaluar_tarea:     
+    path:     /{id}-{asig}/evaluación/{tarea}
+    defaults: { _controller: IntranetBundle:Tarea:evaluarTarea}
+    options:
+        expose: true
+
+evaluar_trimestre:
+    path:     /{id}/{asig}/evaluación/trimestre
+    defaults: { _controller: IntranetBundle:Tarea:evaluarTrimestre}
+    options:
+        expose: true
+        

@@ -28,9 +28,9 @@ body.waiting * {
 	background: #b1cce7;
 	border-radius: 10px;
 	padding: 10px;
-	-moz-box-shadow:  black 5px 5px 15px;
-   	-webkit-box-shadow:  black 5px 5px 15px;
-   	box-shadow:  black 5px 5px 15px;
+	-moz-box-shadow:  1px 2px 4px black;
+   	-webkit-box-shadow: 1px 2px 4px black;
+   	box-shadow:  1px 2px 4px black;
 }
 #passolvidado{
     background: #001f51 none repeat scroll 0 0;
@@ -667,6 +667,20 @@ form{
     #seleccion_calificaciones #descripcion {
         height: 80px !important;
     }
+    .cabecera_tabla>div{
+        margin-right: 3% !important;
+    }
+    .cabecera_tabla h4{
+        max-width: 97%;
+    }
+    .tab_tareas .container_contenido_tabla > div {
+        padding-left: 6px !important;
+        padding-right: 6px !important;
+    }
+    .container_contenido_tabla >div:nth-child(2){
+        text-align: center !important;
+    }
+    
 }
 /* Estilos para Pc*/
 #titulo_cabecera{
@@ -692,6 +706,8 @@ form{
 }
 .header-usuario .anuncios-usuario li {
     height: 35px !important;
+    padding-left: 3px !important;
+    padding-right: 3px !important;
 }
 .header-usuario .anuncios-usuario li a .fa{
     color: #334c73;
@@ -818,8 +834,10 @@ form{
     color: #333 !important;
 }
 .btn_admin{
-    float: right;
     width: 43px;
+}
+.f_left{
+    float: left;
 }
 a {
     color: #337ab7;
@@ -1282,15 +1300,19 @@ ul, ol {
     cursor: default;
     pointer-events: none; 
 }
-#menu .click, #menuMovil .click{
+ .click{
     cursor: pointer !important;
     pointer-events: auto !important; 
+}
+.no-click{
+    pointer-events: none !important;
+    cursor: default !important;
 }
 .pointer{
     pointer-events: auto !important; 
 }
 .barramensajes a{
-    padding: 0 5px !important;
+    padding: 0 3px !important;
 }
 #menuMovil li a:hover:not(.active), #menu_principal li a:hover:not(.active){
     color: #31708f;
@@ -1423,7 +1445,7 @@ ul, ol {
     padding: 30px;
 }
 .item-verde { 
-    background: #A6DF95;
+    background: #A6DF95!important;
     color: #195C04 !important;
     border-color: #195C04;
 }
@@ -1734,7 +1756,7 @@ ul, ol {
     border-right: 1px solid grey !important;
     border-left: 1px solid grey !important;
     border-bottom: 1px solid grey !important;
-    min-height: 270px ;
+    min-height: 274px ;
 }
 .img-small {
     background-position: center center;
@@ -1928,7 +1950,7 @@ ul, ol {
 #tutor {
     background: #31708f none repeat scroll 0 0;
     border-radius: 5px;
-    margin-bottom: 15px !important;
+    margin-bottom: 16px !important;
     padding-left: 20px !important;
 }
 #tutor h5{
@@ -1986,9 +2008,9 @@ ul, ol {
     background: #EFF3F9 !important;
 }
 .aviso_listado {
-    font-size: 1.2em;
+    font-size: 1.1em;
     color: #414141;
-    margin-top: 100px;
+    margin-top: 110px;
     text-align: center;
     font-family: "verdana";
 }
@@ -2425,7 +2447,7 @@ table tr td a{
 #formulario_nuevo_seguimiento .help-block ul, #formulario_nuevo_seguimiento .form-group{
     margin-bottom: 0 !important;
 }
-.contenedor_seleccion .seleccion button{
+.contenedor_seleccion .seleccion button, .contenedor_seleccion .seleccion a{
     border: 1px outset grey;
     margin: 5px 10px;
 }
@@ -2554,6 +2576,9 @@ table tr td a{
 .lista_alumnos_seguimiento tr:hover{
     background:#F7BD83 !important;
     border-radius: 3px !important;
+}
+.lista_alumnos_seguimiento tr th, .lista_alumnos_seguimiento tr td {
+   padding: 4px !important;
 }
 .lista_alumnos_seguimiento tr th:first-child, .lista_alumnos_seguimiento tr td:first-child {
     max-width: 70px;
@@ -2834,19 +2859,19 @@ table tr td a{
     color: white !important;
     cursor: default;
 }
-#datos_tutoria{
+#datos_tutoria, .datos_tabla{
     margin-bottom: 0!important;
 }
-#datos_tutoria label{
+#datos_tutoria label, .datos_tabla label{
     min-width: 80px !important;
 }
-#datos_tutoria h5{
+#datos_tutoria h5, .datos_tabla h5{
     margin-top: 0 !important;
 }
-#datos_tutoria th{
+#datos_tutoria th, .datos_tabla th{
     padding-bottom: 0 !important;
 }
-#datos_tutoria .container-content{
+#datos_tutoria .container-content, .datos_tabla .container-content{
     min-height: 150px;
     max-height: 150px;
 }
@@ -2887,12 +2912,12 @@ table tr td a{
     margin-top: 10px;
     margin-bottom: -15px;
 }
-#datos_tutoria th {
+#datos_tutoria th, .datos_tabla th {
     padding: 0;
     padding-top: 5px !important;
     border-radius: 5px 5px 0 0;
 }
-#datos_tutoria .vacio {
+#datos_tutoria .vacio, .datos_tabla .vacio {
     margin-top: 60px !important;
 }
 .tab_tutoria #activas .vacio, .tab_tutoria #inactivas .vacio{
@@ -3170,6 +3195,9 @@ table tr td a{
     margin-bottom: 0 !important;
     margin-top: 10px;
 }
+#tabla_tareas_profesor td:nth-child(3){
+    text-align: center !important;
+}
 #tabla_tareas_profesor h4{
     margin: 0 !important;
     background: #31708f none repeat scroll 0 0;
@@ -3182,7 +3210,7 @@ table tr td a{
 #tabla_tareas_profesor table{
     margin-top: 10px !important;
 }
-#seleccion_calificaciones #opciones button{
+#seleccion_calificaciones #opciones button, #seleccion_calificaciones #opciones a{
     margin: -2px 10px 9px;
     padding: 4px;
 }
@@ -3212,4 +3240,157 @@ table tr td a{
     max-width: 140px;
     padding: 0;
     text-align: center;
+}
+.input-group-addon {
+    min-width: 55px;
+}
+.notas  {
+    max-width: 50px !important;
+    text-align: center !important;
+}
+.tab_tareas>div{
+    min-height: 150px;
+    max-height: 150px;
+    overflow: auto;
+}
+.tab_tareas .tab-content{
+    padding: 10px;
+}
+.tab_tareas .container_contenido_tabla{
+    min-height: 30px !important;
+}
+.tab_tareas .container_contenido_tabla>div{
+    padding-top: 4px !important;
+    padding-bottom: 1px !important;
+    padding-left: 35px;
+}
+#datos_tarea label{
+    min-width: 102px !important;
+}
+#datos_tarea{
+    margin-bottom: 25px !important;
+}
+.lista_notas{
+    min-height: 220px !important;
+    border-top: 1px solid grey !important;
+    border-radius: 5px;
+    clear: both;
+}
+.lista_notas .aviso_listado{
+    margin-top: 85px;
+}
+#tab_tareas_evaluadas{
+    margin-right: 0 !important;
+}
+.head_list {
+    background: #31708f none repeat scroll 0 0;
+    border-radius: 5px;
+    margin-bottom: 16px !important;
+    padding-left: 20px !important;
+    color: white !important;
+}
+.head_list h5{
+    margin-bottom: 5px !important;
+    margin-top: 5px !important;
+}
+.lista_notas table{
+    margin-bottom: 10px !important;
+}
+.lista_notas #submit{
+    display: contents;
+}
+.opciones_calificaciones{
+    margin-bottom: 20px !important;
+}
+ #seleccion_calificaciones button {
+    white-space: normal;
+ }
+.cabecera_tabla h4{
+    background: #31708f none repeat scroll 0 0;
+    border-radius: 5px;
+    color: white;
+    font-family: serif;
+    font-size: 17px;
+    font-weight: bold;
+    margin: 8px 0;
+    padding-bottom: 0;
+    padding-right: 5px;
+}
+.cabecera_tabla .curso_cab{
+    background: #cdd6e0 none repeat scroll 0 0;
+    border-radius: 3px;
+    box-shadow: 0 1px 1px 1px rgba(0, 0, 0, 0.42);
+    color: #334c73;
+    font-family: "verdana";
+    font-weight: bold;
+    min-width: 85px;
+    padding: 2px 0 !important;
+    text-align: center;
+}
+.cabecera_tabla > div {
+    display: block;
+    margin-bottom: 5px;
+    margin-top: 5px;
+    min-height: 26px;
+    padding: 10px 15px 0;
+}
+.btn_descargar {
+    color: #333;
+    float: right;
+    height: 30px;
+    margin-bottom: 5px;
+    margin-right: 15px;
+}
+.btn_descargar button{
+
+    padding: 3px 5px 3px 0;
+}
+.contenedor_btn_descarga{
+    clear: both;
+    display: block;
+}
+#tabla_alum_trimestre{
+    min-height: 390px !important;
+}
+#tabla_alum_trimestre th, #tabla_alum_trimestre td{
+    min-width: 95px;
+}
+.nota_modificada{
+    color: #E30F21;
+}
+
+
+
+.lista_tareas_alumno .modal-body{
+    min-height: 200px;
+}
+.lista_tareas_alumno {
+    margin-bottom: 20px !important;
+}
+.lista_tareas_alumno button:not(.close){
+    margin: 0 20px 15px !important;
+}
+.lista_tareas_alumno tr{
+    border: 1px solid #ddd;
+    border-radius: 5px;
+}
+.lista_tareas_alumno tr:nth-child(2n){
+    background:#cdd6e0;
+}
+.lista_tareas_alumno tr th, .lista_tareas_alumno tr td {
+   padding: 4px !important;
+}
+.lista_tareas_alumno tr th:first-child, .lista_tareas_alumno tr td:first-child {
+    text-align: left;
+    padding-left: 20px !important;
+}
+.lista_tareas_alumno tr th:nth-child(2), .lista_tareas_alumno tr td:nth-child(2) {
+    text-align: center;
+}
+.lista_tareas_alumno tr th {
+    background: #23527c;
+    color: white;
+}
+#lista_tareas_alumno label{
+    min-width: 105px !important;
 }

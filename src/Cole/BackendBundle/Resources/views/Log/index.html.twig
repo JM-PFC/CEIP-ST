@@ -116,7 +116,7 @@
                                         <tr>
                                             <td class="w20 left">{{ entity.usuario }}</td>
                                             <td class="w5">{{entity.tipo}}</td>
-                                            <td class="w11">{{ entity.fecha|date('m/d/Y H:m:s')}}</td>
+                                            <td class="w11">{{ entity.fecha|localizeddate('long', 'short', format="dd MMMM yyyy - HH:mm:ss")}}</td>
                                             <td class="w15">{{ entity.tipoUsuario }}</td>
                                         </tr>
                                     {% endfor %}

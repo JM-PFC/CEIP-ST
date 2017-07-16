@@ -1,0 +1,14 @@
+{% for entity in entity %}
+  <div class="old_t_data">
+    <h3>Personal:</h3> 
+    <p>{{ entity.tipo }}</p> 
+
+    <h3>Fecha de Alta:</h3>
+    <p>{{ entity.fechaAlta|date("d-m-Y") }}</p> 
+
+    {% if entity.fechaBaja %}
+    <h3>Fecha de Baja:</h3>
+    <p>{{ entity.fechaBaja|date("d-m-Y") }}</p>   
+    {% endif %}
+  <div>
+{% endfor %}

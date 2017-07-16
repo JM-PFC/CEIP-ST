@@ -92,8 +92,20 @@ intranet_profesor_calificaciones:
     path:     /calificaciones
     defaults: { _controller: IntranetBundle:Profesor:calificaciones}
 
+lista_tareas_alumno:
+    path:     /lista_tareas_alumno/{id}/{trimestre}/{asignatura}
+    defaults: { _controller: IntranetBundle:Profesor:ListaTareasAlumno}
+    options:
+        expose: true
+
+evaluacion_grupo:    
+    path:     /evaluación/grupo/{id}
+    defaults: { _controller: IntranetBundle:Profesor:evaluacionGrupo}
+    options:
+        expose: true
+
 grupos_asignaturasGrupo_profesor:
-    path:     grupo/asignaturas/profesor/{id}
+    path:     /grupo/asignaturas/profesor/{id}
     defaults: { _controller: IntranetBundle:Profesor:GruposAsignaturasGrupoProfesor}
     options:
         expose: true

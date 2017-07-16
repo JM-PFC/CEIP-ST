@@ -114,7 +114,7 @@
                     <label>{% trans %}Día{% endtrans %}:</label><span>{{ tutoria.fecha | localizeddate('full', 'none', app.request.getLocale()) | capitalize}}</span>       
                  </div>  
                 <div>
-                    <label>{% trans %}Hora{% endtrans %}:</label><span>{{ tutoria.fecha | localizeddate('none', 'short', app.request.getLocale()) | capitalize}}</span>       
+                    <label>{% trans %}Hora{% endtrans %}:</label><span>{{ tutoria.hora | localizeddate('none', 'short', app.request.getLocale()) | capitalize}}</span>       
                 </div> 
                 <div>
                     <label>{% trans %}Responsable{% endtrans %}:</label><span>{{tutoria.responsable}}</span>       

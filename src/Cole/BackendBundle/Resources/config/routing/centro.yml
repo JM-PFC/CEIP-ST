@@ -57,3 +57,9 @@ registrar_horario_atencion:
     defaults: { _controller: "BackendBundle:Centro:registrarHorariosAtencion" }
     options:
         expose: true
+
+obtener_curso_academico:
+    path:     /obtener_fecha_curso
+    defaults: { _controller: "BackendBundle:Centro:ObtenerCursoAcademico" }
+    options:
+        expose: true

@@ -28,7 +28,7 @@
 						{{ error.message|trans () }}
 					{% endif %}</div>
 					<input id="acceder" type="submit" name="login" value="{% trans %}ENTRAR {% endtrans %}" title="Entrar en la zona privada">
-					<div id="passolvidado"><a href="#" title="Recuperar clave para la zona privada">{% trans %}Contraseña olvidada{% endtrans %}</a></div>
+					<div id="passolvidado"><a href="{{path('restablecerPassword')}}"  title="Recuperar clave para la zona privada">{% trans %}Contraseña olvidada{% endtrans %}</a></div>
 
 					
 			</fieldset>

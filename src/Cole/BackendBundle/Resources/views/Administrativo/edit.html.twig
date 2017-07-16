@@ -1,0 +1,102 @@
+
+{% block head %}{% endblock %}
+{% block stylesheets %}{% endblock %}
+
+{% block javascript %}
+  
+  <script> 
+    
+    //Se añade el atributo con el elemento seleccionado a cada select.
+    $("#profesor_edit select option:selected").each(function(){
+      $(this).closest("select").attr("seleccionado", $(this).val());
+    });
+
+    // Se deshabilita los botones de guardar y restablecer.      
+    $("#edit_administrativo_submit").prop("disabled",true);
+    $("#editar_administrativo_restablecer").prop("disabled",true);
+
+    //Se deshabilita las fechas de alta y baja. (input sólo lectura)
+    $("#administrativo_edit .datos_registro input[type!='number']").prop('readonly', true); 
+
+    //Sólo se permite usar 2 de las feclas del teclado.
+    $(document).on("keypress cut paste","#administrativo_edit .datos_registro input",function(event) {
+      if(event.keyCode !=38 && event.keyCode!=40 ){
+        event.preventDefault();
+      }
+    });
+   </script>
+
+{% endblock %}
+
+{% block body -%}
+	{{form_start(edit_form, {'action':path('administrativo_update',{'id':entity.id}),'method':'Put','attr':{'class':'edit_administrativo', 'id':'administrativo_edit', novalidate:'novalidate', 'autocomplete':'off'}})}}
+
+	{{ form_errors(edit_form) }}
+	<div>
+ 		<div id="content-form">
+     	<fieldset class="ajustada">
+        <legend>Ficha del administrativo: {{entity.nombre}} {{entity.apellido1}} {{entity.apellido2}}</legend> 
+        <div class="marco_columna_contenido">  
+          	<div class="columna_contenido">
+            	<div class="block-one">
+              		<h3 class="label_contenido">Información Personal<span> (Datos básicos de identificación)</span></h3>
+              		<div class="big_column">
+         	    		{{ form_row(edit_form.dni,{'id':'edit_'~edit_form.dni.vars.id }) }}
+        	    		{{ form_row(edit_form.nombre,{'id':'edit_'~edit_form.nombre.vars.id }) }}
+         	  			{{ form_row(edit_form.apellido1,{'id':'edit_'~edit_form.apellido1.vars.id }) }}
+         	  			{{ form_row(edit_form.apellido2,{'id':'edit_'~edit_form.apellido2.vars.id }) }}
+         	  			{{ form_row(edit_form.tipo,{'id':'edit_'~edit_form.tipo.vars.id }) }}
+
+			    	</div>
+				  	
+				  	<div class="big_column">
+	       	  			{{ form_row(edit_form.direccion,{'id':'edit_'~edit_form.direccion.vars.id }) }}
+	          			{{ form_row(edit_form.localidad,{'id':'edit_'~edit_form.localidad.vars.id }) }}
+          				{{ form_row(edit_form.provincia,{'id':'edit_'~edit_form.provincia.vars.id }) }}
+    	    			{{ form_row(edit_form.cp,{'id':'edit_'~edit_form.cp.vars.id }) }}
+        				{{ form_row(edit_form.email,{'id':'edit_'~edit_form.email.vars.id }) }}
+					</div>
+
+					<div class="end_column">
+        				{{ form_row(edit_form.telefono,{'id':'edit_'~edit_form.telefono.vars.id }) }}
+						{{ form_row(edit_form.movil,{'id':'edit_'~edit_form.movil.vars.id }) }}
+                		<button id="{{entity.id}}" type="button" class="btn_restablecer">Restrablecer <br> Contraseña</button>
+					</div>
+				</div>
+            <div class="block-one">
+              <h3 class="label_contenido">Datos de Registro<span> (Fechas de registro del administrativo)</span></h3>
+
+              <div class="datos_registro">
+                {{ form_row(edit_form.fechaAlta,{'id':'edit_'~edit_form.fechaAlta.vars.id }) }}
+                {{ form_row(edit_form.fechaBaja,{'id':'edit_'~edit_form.fechaBaja.vars.id }) }}
+
+              </div>
+
+            </div>
+					</div>
+				</div>
+    	</fieldset>       
+  	</div>
+        
+  	<div id="botones_form">
+   		{{ form_row(edit_form.submit,{'id':'edit_'~edit_form.submit.vars.id }) }}
+  		<div>
+   	  	<button id="editar_administrativo_restablecer" type="button" name="editar_administrativo[restablecer]" >Restablecer</button>
+    	</div> 
+   	
+   		<div>
+      	<button id="editar_administrativo_nuevaFicha" type="button" name="editar_administrativo[nuevaFicha]" >Buscar otra ficha</button>
+    	</div>
+  	</div>
+        
+
+  
+  	<div id="result"></div>
+		{{form_end(edit_form)}} 
+	</div>
+
+  	<div class="oculto">
+   		{{ form_rest(edit_form) }} 
+  	</div>
+
+{% endblock %}      

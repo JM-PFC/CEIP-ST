@@ -43,12 +43,36 @@ class ProfesorRepository extends EntityRepository
 
 	public function findProfesoresDePrimaria()
 	{
-	return $this->getEntityManager()->createQuery(
+		return $this->getEntityManager()->createQuery(
 			' SELECT p FROM BackendBundle:Profesor p WHERE p.activo=1  and p.nivel=:nivel ORDER BY p.nombre')
 			->setParameters(array(
 			'nivel' => "Primaria"))
 		->getResult();
 	}
+
+	//Profesores para la asignación de director y jefe de estudio, excepto los que ya estan.
+	public function findProfesoresCandidatos()
+	{
+		return $this->getEntityManager()->createQuery(
+			' SELECT p FROM BackendBundle:Profesor p INNER JOIN p.role r WHERE p.activo=1  and r.nombre not like :role1 
+			and r.nombre not like :role2  ORDER BY p.apellido1, p.apellido2, p.nombre')
+			->setParameters(array(
+			'role1' => "ROLE_JEFE_ESTUDIO",
+			'role2' => "ROLE_ADMIN"
+			))
+		->getResult();
+	}
 	
+	//Se obtiene el profesor con el rol correspondiente.
+	public function findRolProfesor($rol)
+	{
+		return $this->getEntityManager()->createQuery(
+			' SELECT p FROM BackendBundle:Profesor p INNER JOIN p.role r WHERE p.activo=1  and r.nombre=:rol')
+			->setParameters(array(
+			'rol' => $rol
+			))
+		->setMaxResults(1)
+		->getOneOrNullResult();
+	}
 
 }

@@ -1,0 +1,86 @@
+administrativo:
+    path:     /
+    defaults: { _controller: "BackendBundle:Administrativo:index" }
+
+administrativo_show:
+    path:     /{id}/show
+    defaults: { _controller: "BackendBundle:Administrativo:show" }
+
+administrativo_new:
+    path:     /new
+    defaults: { _controller: "BackendBundle:Administrativo:new" }
+    options:
+        expose: true
+
+administrativo_create:
+    path:     /create
+    defaults: { _controller: "BackendBundle:Administrativo:create" }
+    requirements: { _method: post }
+    options:
+        expose: true
+
+administrativo_edit:
+    path:     /{id}/edit
+    defaults: { _controller: "BackendBundle:Administrativo:edit" }
+    options:
+        expose: true
+
+administrativo_update:
+    path:     /{id}/update
+    defaults: { _controller: "BackendBundle:Administrativo:update" }
+    requirements: { _method: post|put }
+    options:
+        expose: true
+
+administrativo_delete:
+    path:     /{id}/delete
+    defaults: { _controller: "BackendBundle:Administrativo:delete" }
+    requirements: { _method: post|delete }
+
+administrativo_search:
+    path:     /administrativo/search
+    defaults: { _controller: "BackendBundle:Administrativo:search" }
+    options:
+        expose: true
+
+restablecer_contraseña_administrativo:
+    pattern:  /restablecer_password/{id}
+    defaults: { _controller: "BackendBundle:Administrativo:RestablecerPassword"}
+    options:
+      expose: true
+
+search_old_admin:
+    path:     /administrativo/old/search
+    defaults: { _controller: "BackendBundle:Administrativo:SearchOld" }
+    options:
+        expose: true
+
+comprobar_dni_administrativo:
+    path:     /comprobar_dni_administrativo
+    defaults: { _controller: "BackendBundle:Administrativo:ComprobarDniAdministrativo" }
+    options:
+        expose: true
+
+comprobar_dni_administrativo_editado:
+    path:     /comprobar_dni_administrativo_editado
+    defaults: { _controller: "BackendBundle:Administrativo:ComprobarDniAdministrativoEditado" }
+    options:
+        expose: true        
+
+datos_antiguo_administrativo:
+    path:     /datos_antiguo_administrativo/{id}
+    defaults: { _controller: "BackendBundle:Administrativo:DatosAntiguoAdministrativo" }
+    options:
+        expose: true
+
+baja_administrativo:
+    path:     /administrativo/baja
+    defaults: { _controller: "BackendBundle:Administrativo:BajaAdministrativo" }
+    options:
+        expose: true
+
+alta_administrativo:
+    path:     /administrativo/alta
+    defaults: { _controller: "BackendBundle:Administrativo:AltaAdministrativo" }
+    options:
+        expose: true

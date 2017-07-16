@@ -12,6 +12,7 @@
     <link href="{{ asset('bundles/cole/js/unitegallery-master/package/unitegallery/css/unite-gallery.css') }}" rel="stylesheet" type="text/css" />
     <link href="{{ asset('bundles/cole/js/unitegallery-master/package/unitegallery/themes/default/ug-theme-default.css') }}" rel="stylesheet" type="text/css" />
     <link rel="stylesheet" href="{{ asset('bundles/intranet/css/bootstrap/bootstrap.min.css') }}"/>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 
 {% endblock %}
 {% block javascript %}
@@ -25,7 +26,7 @@
     <script type="text/javascript" src="{{ asset('bundles/fosjsrouting/js/router.js') }}"></script>
     <script type="text/javascript" src="{{ path('fos_js_routing_js', {'callback': 'fos.Router.setData'}) }}"></script>
     <script type="text/javascript" src="{{ asset('bundles/intranet/js/bootstrap/bootstrap.min.js') }}"></script>
-
+    <script src="{{ asset('bundles/backend/js/jquery.mask.min.js') }}" type="text/javascript"></script>
     <script>
     
     $.ajax({
@@ -88,7 +89,7 @@
                                 </fieldset>
                                 </form>
                                 <div class="recuperar">
-                                    <p><a href="#" title="Recuperar clave para la zona privada">Contraseña olvidada</a></p>
+                                    <p><a href="{{path('restablecerPassword')}}" title="Recuperar clave para la zona privada">Contraseña olvidada</a></p>
                                 </div>
                             </div>
                         </div>

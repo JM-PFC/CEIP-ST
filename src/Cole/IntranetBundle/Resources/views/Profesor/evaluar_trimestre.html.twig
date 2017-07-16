@@ -1,0 +1,205 @@
+{% extends  'IntranetBundle:Profesor:index.html.twig' %}
+
+{% block body %}
+    {{parent()}}
+    <script>
+        $(".menu li").removeClass('active');
+        $(".menu #calificaciones").addClass('active');
+        $(".menu #calificaciones").addClass('click');
+
+        locale=$("#intranet").attr("locale");
+
+
+        trimestre={{trimestre|json_encode()|raw}};
+
+        if(trimestre==2 || trimestre==3){
+            array={{trimestre1|json_encode()|raw}};
+            for (var key in array){
+                clave=key.split("-");
+                alumno=clave[0];
+                media=clave[1];
+                nota=array[key];
+                //Si tiene calificación se inserta en la tabla.  
+                if(nota!=""){
+                    $("#tabla_alum_trimestre tr[id='"+alumno+"'] td[trimestre='1']").text(nota);
+                }
+            }
+        }
+        if(trimestre==3){
+            array={{trimestre2|json_encode()|raw}};
+            for (var key in array){
+               clave=key.split("-");
+                alumno=clave[0];
+                media=clave[1];
+                nota=array[key];
+                //Si tiene calificación se inserta en la tabla.  
+                if(nota!=""){
+                    $("#tabla_alum_trimestre tr[id='"+alumno+"'] td[trimestre='2']").text(nota);
+                }
+            }
+        }
+
+        if(trimestre==3){
+            array={{trimestre3|json_encode()|raw}};
+            for (var key in array){
+                alumno=key;
+                media=array[key];
+                //Se asigna la media al aviso.
+                if(locale=="es"){
+                    $("#tabla_alum_trimestre tr[id='"+alumno+"'] td[trimestre='3'] i").attr("data-original-title","Media: "+media);
+                }
+                else{
+                    $("#tabla_alum_trimestre tr[id='"+alumno+"'] td[trimestre='3'] i").attr("data-original-title","Mean: "+media);
+
+                }
+                //Se añade la clase click para que se pueda pulsar y ver la lista de notas.
+                $("#tabla_alum_trimestre tr[id='"+alumno+"'] td[trimestre='3'] i").addClass('click');
+
+            }
+        }
+
+    </script>
+ {% endblock %}
+
+{% block migas %}
+    <li class="tipo">
+            {% trans %}Profesorado{% endtrans %}
+    </li>
+    <li>
+        <a href="{{path('intranet_profesor')}}">
+            {% trans %}Panel principal{% endtrans %}
+        </a>
+    </li>
+    <li>
+        <a href="{{path('intranet_profesor_calificaciones')}}">
+            {% trans %}Calificaciones{% endtrans %}
+        </a>
+    </li>
+    <li class="active no-seleccion">
+        {% trans %}Evaluación de la asignatura{% endtrans %}
+    </li>
+{% endblock %}
+
+{% block titulo_cabecera %}
+    <i class="fa fa-list-alt page-header-icon"></i>
+    {% trans %}Calificaciones{% endtrans %}
+{% endblock %}
+{% block titulo_cabecera_movil %}
+    <i class="fa fa-list-alt page-header-icon"></i>
+    {% trans %}Calificaciones{% endtrans %}
+{% endblock %}
+
+{% block contenido %}
+    <h4 id="titulo-seccion" class="titulo-seccion">{% trans %}Evaluación de la asignatura{% endtrans %}</h4>
+    <div id="tabla_alum_trimestre" class="tab-content lista_notas">
+        {% if alumnos != null %}
+
+            {{ form_start (edit_form, {'attr':{novalidate:'novalidate', 'autocomplete':'off'}})}}
+
+                <div class="col-xs-12 no-padding head_list" >
+                    <div class="col-xs-12 col-sm-11 no-padding cabecera_tabla" >
+                        <div id="grupo" class="curso_cab col-xs-13 col-sm-1 no-padding" grupo="{{grupo.id}}">{{ grupo.curso.curso ~ " " ~ grupo.letra}}</div>
+                        <h4 id="asignatura" class="text-center col-xs-12 col-sm-10 no-padding" asignatura="{{asignaturaCurso.id}}" >
+                            {{ asignatura.nombre }}
+                        </h4>
+                    </div>
+                </div>    
+
+                <div class="table-responsive col-xs-12">
+                    <table class="lista-alumnos table table-striped">
+                        <thead >
+                            <tr>
+                                <th class="col-xs-1 center">Nº</th>
+                                <th class="col-xs-8 col-sm-6">{% trans %}Apellidos, Nombre{% endtrans %}</th>
+                                <th class="col-xs-1 center">{% trans %}1ª EVA{% endtrans %}</th>
+                                {% if trimestre == 2 or trimestre == 3 %}
+                                    <th class="col-xs-1 center">{% trans %}2ª EVA{% endtrans %}</th>
+                                {% else %}
+                                    <th class="col-xs-1 center"></th>
+                                {% endif %}
+                                {% if trimestre == 3 %}
+                                    <th class="col-xs-1 center">{% trans %}3ª EVA{% endtrans %}</th>
+                                    <th class="col-xs-1 center">{% trans %}ORD{% endtrans %}</th>
+                                {% else %}
+                                    <th class="col-xs-1 center"></th>
+                                    <th class="col-xs-1 center"></th>
+                                {% endif %}
+                            </tr>
+                        </thead> 
+                        <tbody>
+                            {% for alumno in edit_form.cursa %}
+                            <tr id="{{ alumno.vars.value.alumno.id }}">
+                                <td class="col-xs-1 center">
+                                    {{ alumno.vars.value.alumno.numAlum }}
+                                </td>
+                                <td class="col-xs-8 col-sm-6">
+                                    {{ alumno.vars.value.alumno }}
+                                </td>
+                                {% if trimestre == 1 %}
+                                    <td trimestre="1" class="col-xs-1 center">
+                                        <i class="fa fa-calculator" data-target="#lista_tareas_alumno" data-toggle="modal" data-backdrop="static" data-placement="left" title="" data-original-title=""></i>
+                                        {{ form_widget(alumno.nota,{ 'attr':{'class':'notas'}}) }}
+                                    </td>
+                                {% else %}
+                                    <td trimestre="1" class="col-xs-1 center"></td>
+                                {% endif %}
+                                {% if trimestre == 2 %}
+                                    <td trimestre="2" class="col-xs-1 center">
+                                        <i class="fa fa-calculator" data-target="#lista_tareas_alumno" data-toggle="modal" data-backdrop="static" data-placement="left" title="" data-original-title=""></i>
+                                        {{ form_widget(alumno.nota,{ 'attr':{'class':'notas'}}) }}
+                                    </td>
+                                {% else %}
+                                    <td trimestre="2" class="col-xs-1 center"></td>
+                                {% endif %}
+                                {% if trimestre == 3 %}
+                                    <td trimestre="3" class="col-xs-1 center">
+                                        <i class="fa fa-calculator" data-target="#lista_tareas_alumno" data-toggle="modal" data-backdrop="static" data-placement="left" title="" data-original-title=""></i>
+                                        {{ form_widget(alumno.nota,{ 'attr':{'class':'notas'}}) }}
+                                    </td>
+                                    <td class="col-xs-1 center">
+                                        {{ form_widget(alumno.ord,{ 'attr':{'class':'notas'}}) }}
+                                    </td>
+                                {% else %}
+                                    <td trimestre="3" class="col-xs-1 center"></td>
+                                {% endif %}
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+
+
+                <div id="submit" class="col-xs-12 ">
+                    {{ form_widget(edit_form.submit,{ 'attr':{'class':'center-block btn btn_azul waiting'}}) }}
+                </div>
+                <div class="hidden">
+                    {{ form_rest(edit_form) }}
+                </div>
+            {{ form_end (edit_form)}}
+        {% else %}
+            <div class="alert alert-info alert-block">
+                <small>
+                    <h4>{% trans %}No hay alumnos asignados a esta tarea{% endtrans %}.</h4>
+                    <h6>{% trans %}Elimine la tarea y espere a que se asigne a los alumnos al grupo para añadirla de nuevo{% endtrans %}.</h6>
+                </small>
+            </div>
+        {% endif %}
+    </div>
+
+
+    <div id="lista_tareas_alumno" class="modal fade lista_tareas_alumno" role="dialog" data-backdrop="true" >
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    <h4 class="modal-title"></h4>
+                </div>
+                <div class="modal-body"></div>
+                <div class="class-footer">
+                    <button type="button" class="btn btn_azul" data-dismiss="modal">{% trans %}Cerrar{% endtrans %}</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}

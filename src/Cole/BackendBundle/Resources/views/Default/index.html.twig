@@ -113,7 +113,7 @@
 					</div>
 
 					<div class="btn_click">
-						<a id="finalizar_curso" class="contenedor_btn_click" title="Finalizar Curso Académico" href="{{path('equipamiento')}}">
+						<a id="finalizar_curso" class="no_tab contenedor_btn_click" title="Finalizar Curso Académico" href="javascript:void(0);">
 							<img src="{{ asset('bundles/backend/images/menu/fin_curso.png')}}">
 						</a>
 						<span class="b_verde">Finalizar Curso </span>
@@ -126,12 +126,23 @@
 							<span> Nuevo</span>
 						</a>
 
-						<a id="profesor_antiguo" title="Altas/bajas" href="{{path('search_old_teacher')}}">
+						<a id="profesor_antiguo" title="Altas/bajas profesores" href="{{path('search_old_teacher')}}">
 							<img src="{{ asset('bundles/backend/images/menu/antiguo_profesor.png')}}">
 							<span> Altas/Bajas </span>
 						</a>
 												
 						<span> Registro Profesor</span>
+					</div>
+					<div>
+						<a id="ficha_profesor" title="Ficha Profesor" href="{{path('profesor_search')}}">
+							<img src="{{ asset('bundles/backend/images/menu/profesor-ficha.png')}}">
+							<span> Ficha </span>
+						</a>
+						<a id="clases_impartidas" title="Clases Impartidas" href="{{path('clases_impartidas')}}">
+							<img src="{{ asset('bundles/backend/images/menu/cursos-impartidos.png')}}">
+							<span>Clases<br>Impartidas</span>
+						</a>
+						<span> Información </span>
 					</div>
 					<div>
 						<a id="tutor_grupo" title="Asignar Tutor"  href="{{path('tutor_grupo')}}">
@@ -146,15 +157,11 @@
 						<span> Asignaciones </span>
 					</div>
 					<div>
-						<a id="ficha_profesor" title="Ficha Profesor" href="{{path('profesor_search')}}">
-							<img src="{{ asset('bundles/backend/images/menu/profesor-ficha.png')}}">
-							<span> Ficha </span>
+						<a id="equipo_directivo" title="Equipo Directivo" href="{{path('equipo_directivo')}}">
+							<img src="{{ asset('bundles/backend/images/menu/equipo_directivo.png')}}">
+							<span>Asignar Director/<br>Jefe de Estudios</span>
 						</a>
-						<a id="clases_impartidas" title="Clases Impartidas" href="{{path('clases_impartidas')}}">
-							<img src="{{ asset('bundles/backend/images/menu/cursos-impartidos.png')}}">
-							<span>Clases<br>Impartidas</span>
-						</a>
-						<span> Información </span>
+						<span> Equipo Directivo </span>
 					</div>
 				</div>
 				<div id="3">
@@ -178,7 +185,18 @@
 						<span> Matrícula Alumnos</span>
 					</div>
 					<div>
-						<a id="asignar_grupo" title="Asignar Alumnos" href="{{path('asignar_grupo')}}">
+						<a id="ficha_alumno" title="Ficha Alumno" href="{{path('alumno_search')}}">
+							<img src="{{ asset('bundles/backend/images/menu/alumno-ficha.png')}}">
+							<span> Ficha </span>
+						</a>
+						<a id="listado_alumnos"title="Listas de Alumnos" href="javascript:void(0);">
+							<img src="{{ asset('bundles/backend/images/menu/lista_alumnos.png')}}">
+							<span> Listado de <br> Alumnos </span>
+						</a>
+						<span> Información </span>
+					</div>
+					<div>
+						<a id="asignar_grupo" title="Asignar Grupos" href="{{path('asignar_grupo')}}">
 							<img src="{{ asset('bundles/backend/images/menu/alumno-grupo.png')}}">
 							<span> Asignar <br>Grupos</span>
 						</a>
@@ -187,17 +205,6 @@
 							<span> Asignar <br>Optativa</span>
 						</a>							
 						<span> Asignaciones </span>
-					</div>
-					<div id="segundo">
-						<a id="ficha_alumno" title="Ficha Alumno" href="{{path('alumno_search')}}">
-							<img src="{{ asset('bundles/backend/images/menu/alumno-ficha.png')}}">
-							<span> Ficha </span>
-						</a>
-						<a title="Listas de Alumnos" href="javascript:void(0);">
-							<img src="{{ asset('bundles/backend/images/menu/lista_alumnos.png')}}">
-							<span> Listas de <br> Alumnos </span>
-						</a>
-						<span> Información </span>
 					</div>
 					{#
 					<div id="tercero">
@@ -209,7 +216,7 @@
 					</div>
 					#}
 					<div class="btn_click">
-						<a id="finalizar_matriculacion" class="contenedor_btn_click" title="Finalizar proceso de matriculación" href="{{path('equipamiento')}}">
+						<a id="finalizar_matriculacion" class="no_tab contenedor_btn_click" title="Finalizar proceso de matriculación" href="javascript:void(0);">
 							<img src="{{ asset('bundles/backend/images/menu/fin_matriculacion.png')}}">
 						</a>
 						<span class="b_verde"> Finalizar Matriculación </span>
@@ -263,22 +270,25 @@
 				</div>
 				<div id="5">
 					<div>
-						<a id="personal_nuevo" title="Nuevo personal" href="{{path('profesor_new')}}">
+						<a id="administrativo_nuevo" title="Nuevo personal" href="{{path('administrativo_new')}}">
 							<img src="{{ asset('bundles/backend/images/menu/administrativos.png')}}">
-							<span> Nuevo <br> personal</span>
+							<span> Nuevo</span>
 						</a>
-
-						<a id="profesor_antiguo" title="Altas/bajas" href="{{path('search_old_teacher')}}">
+						<a id="ficha_administrativo" title="Ficha Administrativo" href="{{path('administrativo_search')}}">
+							<img src="{{ asset('bundles/backend/images/menu/administrativos_ficha.png')}}">
+							<span> Ficha</span>
+						</a>
+						<a id="administrativo_antiguo" title="Altas/bajas" href="{{path('search_old_admin')}}">
 							<img src="{{ asset('bundles/backend/images/menu/administrativos_bajas.png')}}">
 							<span> Altas/Bajas </span>
 						</a>
 												
-						<span> Registro Administrativos</span>
+						<span> Gestión Administrativos</span>
 					</div>
 					<div>
 						<a id="listarlog" title="Entradas / Salidas" href="{{path('log')}}">
 							<img src="{{ asset('bundles/backend/images/menu/control-usuarios.png')}}">
-							<span> Entradas / Salidas</span>
+							<span> Entradas / Salidas <br>al sistema</span>
 						</a>
 						<span> Control de Usuarios </span>
 					</div>
@@ -303,6 +313,13 @@
 							<span> Consulta </span>
 						</a>
 						<span> Noticias </span>
+					</div>
+					<div>
+						<a id="registrar_noticias" title="Registro Noticias" href="{{path('equipamiento_new')}}">
+							<img src="{{ asset('bundles/backend/images/menu/editar_publica.png')}}">
+							<span> Editar <br> Parte Pública </span>
+						</a>
+						<span> Contenido Estático</span>
 					</div>
 				</div>
 

@@ -1,0 +1,30 @@
+cursa:
+    path:     /
+    defaults: { _controller: "IntranetBundle:Cursa:index" }
+
+cursa_show:
+    path:     /{id}/show
+    defaults: { _controller: "IntranetBundle:Cursa:show" }
+
+cursa_new:
+    path:     /new
+    defaults: { _controller: "IntranetBundle:Cursa:new" }
+
+cursa_create:
+    path:     /create
+    defaults: { _controller: "IntranetBundle:Cursa:create" }
+    requirements: { _method: post }
+
+cursa_edit:
+    path:     /{id}/edit
+    defaults: { _controller: "IntranetBundle:Cursa:edit" }
+
+cursa_update:
+    path:     /{id}/update
+    defaults: { _controller: "IntranetBundle:Cursa:update" }
+    requirements: { _method: post|put }
+
+cursa_delete:
+    path:     /{id}/delete
+    defaults: { _controller: "IntranetBundle:Cursa:delete" }
+    requirements: { _method: post|delete }

@@ -1,6 +1,7 @@
 <?php
 
 namespace Cole\IntranetBundle\Entity;
+use Symfony\Component\Validator\Constraints as Assert;
 
 use Doctrine\ORM\Mapping as ORM;
 
@@ -57,7 +58,13 @@ class Tarea
     * @ORM\JoinColumn(name="asignatura_id", referencedColumnName="id", nullable=true)
     */
     private $asignatura;
-
+    
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="trimestre", type="string", length=1, nullable=true)
+     */
+    private $trimestre;
 
     /**
      * Get id
@@ -222,5 +229,34 @@ class Tarea
     public function getAsignatura()
     {
         return $this->asignatura;
+    }
+
+    public function __toString()
+    {
+        return $this->getDescripcion();
+    }
+
+
+    /**
+     * Set trimestre
+     *
+     * @param string $trimestre
+     * @return Tarea
+     */
+    public function setTrimestre($trimestre)
+    {
+        $this->trimestre = $trimestre;
+
+        return $this;
+    }
+
+    /**
+     * Get trimestre
+     *
+     * @return string 
+     */
+    public function getTrimestre()
+    {
+        return $this->trimestre;
     }
 }

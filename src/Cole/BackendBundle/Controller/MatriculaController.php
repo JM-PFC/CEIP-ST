@@ -263,8 +263,9 @@ class MatriculaController extends Controller
         }
         $entity->setFecha(new \DateTime("now"));
 
-        $factory = $this->get('security.encoder_factory'); 
-        $encoder = $factory->getEncoder($entity);
+            $factory = $this->get('security.encoder_factory'); 
+            $encoder = $factory->getEncoder($entity);
+
 
         //Se comprueba si los responsables están activos. En caso que no lo estén se activan y se restablece la contraseña.
         if((int)$alumno->getResponsable1()->getActivo()== 0 ){

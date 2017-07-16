@@ -315,5 +315,21 @@ class CentroController extends Controller
         return new JsonResponse(array('message' => 'Success!','success' => true), 200);
     }
 
+
+    public function ObtenerCursoAcademicoAction()
+    {
+        $em = $this->getDoctrine()->getManager();
+        $tipo=$this->get('request')->request->get('tipo');
+        $horario=$this->get('request')->request->get('contenido');
+
+
+        // Se obtiene la fecha inicial y final del curso para usar luego el año correspondiente. 
+        $ini_curso=$em->getRepository('BackendBundle:Centro')->findInicioCurso();
+        $array_ini=explode("-",$ini_curso["inicioCurso"]->format('Y-m-d')); //Conversión de array a String
+        $fin_curso=$em->getRepository('BackendBundle:Centro')->findFinCurso();
+        $array_fin=explode("-",$fin_curso["finCurso"]->format('Y-m-d'));
+
+        return new JsonResponse(array('message' => 'Success!','inicio' => $array_ini[0], 'fin' => $array_fin[0] ), 200);
+    }
     
 }

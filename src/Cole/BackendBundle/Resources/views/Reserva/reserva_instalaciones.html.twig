@@ -83,6 +83,37 @@
     $("#reserva_{{ tipo }} .ui-datepicker-title span").remove();
   }
 
+  // Se establece las variables con los audios para las notificaciones.
+  if (navigator.userAgent.search("Firefox") >= 0) { //Firefox solo admite archivos .ogg
+    var aviso = new Audio();
+    aviso.src = "/Symfony/web/bundles/backend/sounds/aviso.ogg";
+    var ok = new Audio();
+    ok.src = "/Symfony/web/bundles/backend/sounds/ok.ogg"
+    var exito = new Audio();
+    exito.src = "/Symfony/web/bundles/backend/sounds/exito.ogg";
+    var error = new Audio();
+    error.src = "/Symfony/web/bundles/backend/sounds/error.ogg";
+    var errorPNotify = new Audio();
+    errorPNotify.src = "/Symfony/web/bundles/backend/sounds/errorPNotify.ogg";
+    var blocker = new Audio();
+    blocker.src = "/Symfony/web/bundles/backend/sounds/blocker.ogg";   
+  }
+  else{
+    var aviso = new Audio();
+    aviso.src = "/Symfony/web/bundles/backend/sounds/aviso.mp3";
+    var ok = new Audio();
+    ok.src = "/Symfony/web/bundles/backend/sounds/ok.mp3"
+    var exito = new Audio();
+    exito.src = "/Symfony/web/bundles/backend/sounds/exito.mp3";
+    var error = new Audio();
+    error.src = "/Symfony/web/bundles/backend/sounds/error.mp3";
+    var errorPNotify = new Audio();
+    errorPNotify.src = "/Symfony/web/bundles/backend/sounds/errorPNotify.mp3";
+    var blocker = new Audio();
+    blocker.src = "/Symfony/web/bundles/backend/sounds/blocker.mp3";
+  }
+    
+
   // Se comprueba si estan registradas las fechas del curso.
   $.ajax({
     type: 'POST',
@@ -107,7 +138,8 @@
         else{
           titulo="No se pueden reservar los equipamientos";
         }
-
+        aviso.play();
+        
         swal({
           title: titulo,
           html: texto,

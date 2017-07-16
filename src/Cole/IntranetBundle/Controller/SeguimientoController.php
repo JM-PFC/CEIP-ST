@@ -251,6 +251,7 @@ class SeguimientoController extends Controller
 
         $entity = $this->get('security.context')->getToken()->getUser();
         $alumno=$em->getRepository('BackendBundle:Alumno')->findOneById($id);
+
         //Precondicion: el alumno tiene grupo y tutor.
         $grupo= $alumno->getGrupo();
         $tutor=$grupo->getProfesor();

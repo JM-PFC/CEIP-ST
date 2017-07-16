@@ -1,0 +1,272 @@
+{% extends 'BackendBundle:Default:index.html.twig' %}
+
+{% block head %}{% endblock %}
+{% block stylesheets %}{% endblock %}
+
+{% block javascript %}
+ <script>
+     $("#busqueda_administrativo_limpiar").prop("disabled",true);
+
+     // Tabla con la opción de ordenar y búsqueda de antiguos alumnos activos.
+    $('#busqueda_administrativo #admin_active').DataTable( { //on( 'page.dt',   function () { $(".current").prop("disabled", true); } )
+        //"aLengthMenu": [[25, 50, 100, 250, 500, -1], [25, 50, 100, 250, 500, "All"]],
+        initComplete: function () {
+            this.api().columns().every( function (e) {
+                var column = this;
+                var select = $('<select class="'+e+'"><option value=""></option></select>')
+                    .appendTo('.select_table_p_active')
+                    .on( 'change', function () {
+                        var val = $.fn.dataTable.util.escapeRegex(
+                            $(this).val()
+                        );
+ 
+                        column
+                            .search( val ? '^'+val+'$' : '', true, false )
+                            .draw();
+                    } );
+ 
+                column.data().unique().sort().each( function ( d, j ) {
+                    select.append( '<option value="'+d+'">'+d+'</option>' )
+                } );
+                select.append( '<option value="nada">nada</option>' )
+            } );
+        },
+        "order": [[ 0, "asc" ]],
+        "sScrollY": "41vh",
+        "bAutoWidth": false,
+        "bScrollCollapse": true,
+        "aLengthMenu": [[-1], [ "All"]],
+        "columnDefs": [ {
+            "targets": 'no-sort',
+            "orderable": false,} ],
+        "language": {
+            "zeroRecords": "Lo siento, no se ha encontrado ningún registro coincidente",
+            "emptyTable": "No hay personal administrativo registrado en el sistema",
+            "lengthMenu": "Mostrar _MENU_ entradas",
+            "loadingRecords": "Cargando...",
+            "processing":     "Processando...",
+            "info": "Página _PAGE_ de _PAGES_",
+            "infoEmpty": "No hay registros disponibles",
+            "infoFiltered": "(filtrado de _MAX_ registros)",
+            "search": "Buscar:",
+            "Next": "Siguiente",
+            "paginate": {
+                "previous": "Anterior",
+                "next": "Siguiente"
+            }
+        }
+    });
+
+
+    // Tabla con la opción de ordenar y búsqueda de antiguos alumnos inactivos.
+    $('#busqueda_administrativo #admin_no_active').DataTable( { //on( 'page.dt',   function () { $(".current").prop("disabled", true); } )
+        //"aLengthMenu": [[25, 50, 100, 250, 500, -1], [25, 50, 100, 250, 500, "All"]],
+                initComplete: function () {
+            this.api().columns().every( function (e) {
+                var column = this;
+                var select = $('<select class="'+e+'"><option value=""></option></select>')
+                    .appendTo('.select_table_p')
+                    .on( 'change', function () {
+                        var val = $.fn.dataTable.util.escapeRegex(
+                            $(this).val()
+                        );
+ 
+                        column
+                            .search( val ? '^'+val+'$' : '', true, false )
+                            .draw();
+                    } );
+ 
+                column.data().unique().sort().each( function ( d, j ) {
+                    select.append( '<option value="'+d+'">'+d+'</option>' )
+                } );
+                select.append( '<option value="nada">nada</option>' )
+            } );
+        },
+        "order": [[ 0, "asc" ]],
+        "sScrollY": "41vh",
+        "bAutoWidth": false,
+        "bScrollCollapse": true,
+        "aLengthMenu": [[-1], [ "All"]],
+        "columnDefs": [ {
+            "targets": 'no-sort',
+            "orderable": false,} ],
+        "language": {
+            "zeroRecords": "Lo siento, no se ha encontrado ningún registro coincidente",
+            "emptyTable": "No hay personal administrativo de baja en el sistema",
+            "lengthMenu": "Mostrar _MENU_ entradas",
+            "loadingRecords": "Cargando...",
+            "processing":     "Processando...",
+            "info": "Página _PAGE_ de _PAGES_",
+            "infoEmpty": "No hay registros disponibles",
+            "infoFiltered": "(filtrado de _MAX_ registros)",
+            "search": "Buscar:",
+            "Next": "Siguiente",
+            "paginate": {
+                "previous": "Anterior",
+                "next": "Siguiente"
+            }
+        }
+    });
+
+    $("#busqueda_administrativo .dataTables_info").addClass("oculto");
+    $("#busqueda_administrativo .dataTables_paginate").addClass("oculto");
+    $("#busqueda_administrativo .dataTables_length").addClass("oculto");
+    $('#busqueda_administrativo .contenedor_registro').each (function(){ 
+      $(this).find(".dataTables_filter").appendTo($(this).find('#buscador'));
+    });   
+    $("#busqueda_administrativo #buscador").addClass('oculto');
+
+
+  $(document).on("keyup","#busqueda_administrativo .block_search input",function(event) {
+    event.preventDefault();
+    form= $(this).closest("form");
+    filtro="";
+    if($("#busqueda_administrativo_nombre").val()!=""){
+      filtro+=$("#busqueda_administrativo_nombre").val()+" ";
+    }
+
+    if($("#busqueda_administrativo .activos").hasClass('oculto')){
+       //Se busca el contenido en la primera columna 
+      var table = $('#busqueda_administrativo #admin_no_active').DataTable();
+      table.column( 0 ).search(  filtro ).draw();    
+    }
+    else{
+       //Se busca el contenido en la primera columna 
+      var table = $('#busqueda_administrativo #admin_active').DataTable();
+      table.column( 0 ).search(  filtro ).draw();    
+    }
+    //Se oculta la segunda cabecera que aparece al utilizar el scroll
+    $('#busqueda_administrativo .dataTables_scrollBody thead').addClass('oculto');
+    
+    //Se muestra/oculta el botón de limpiar búsqueda.
+    $("#busqueda_administrativo_limpiar").prop("disabled",false);
+
+    if($(this).val()==""){
+        $("#busqueda_administrativo_limpiar").prop("disabled",true);
+    }
+    //Se busca el contenido en cualqeuier columna.
+    //$("#busqueda_alumno #buscador input").val(filtro);
+    //$("#busqueda_alumno #buscador input").keyup();
+  });
+
+ </script>
+{% endblock %}
+{% block body %}
+  <div id="buscador_administrativo">
+    {{form_start(form, {'action':path('administrativo_search'),'method':'POST','attr':{'class':'formulario_busqueda_administrativo', 'id':'busqueda_administrativo','tipo':'administrativos', novalidate:'novalidate', 'autocomplete':'off'}})}}
+    <div class="double_column">
+        <h2>Búsqueda del Personal Administrativo</h2>
+        <p>Seleccione un método de búsqueda para el administrativo:</p>
+        <div>
+          <div class="block_search">
+            <h2 class="h2_label"><span>Búsqueda por Tipo de Personal</span></h2>
+            <div id="lista_cursos">
+              <select>
+                <option selected="selected" class="oculto" value="">Seleccione tipo</option>
+                <option value="administrativo">Administrativo</option>
+                <option value="administradorWeb">Administrador web</option>
+                <option value="0">Mostrar todo</option>
+              </select>
+            </div> 
+          </div> 
+          <div class="block_search">
+            <h2 class="h2_label"><span>Búsqueda por Nombre o Apellidos</span></h2>
+            {{ form_row(form.nombre) }}
+              {#
+                {{ form_row(form.apellido1) }}
+                {{ form_row(form.apellido2) }}
+              #}
+            <div class=".dis_block">
+              {{ form_row(form.limpiar,{'attr': {'class': 'limpiar_busqueda'}}) }}
+              <div class="oculto">
+                {{ form_row(form.submit) }}
+              </div>
+            </div>
+          </div>
+        </div>
+    </div>          
+
+            <div class="contenedor_registro activos derecha" id="contenedor_lista" >  
+                <div>
+                    <div id="cabecera_lista">
+                        <h2 class="text_cabecera">Personal Administrativo</h2>
+                        <div class="opciones btn_2opciones">    
+                            <label class="btn_selected" id="btn_activos" for="activos">Activos</label>
+                            <input type="radio" name="activos" id="activos">
+                            <label for="inactivos" id="btn_inactivos">Inactivos</label>
+                            <input type="radio" name="inactivos" id="inactivos">
+                        </div>
+                        <div id="buscador"> </div>
+                    </div>
+                    <div id="fondo_azul_osc" class="tabla_con_info">
+                        <div id="tableContainer" class="tableContainer inner_table vh45">
+                            <table id="admin_active" class="scrollTable lista_color">
+                                <thead class="fixedHeader">
+                                    <tr>
+                                        <th class="w20 left">Apellidos, Nombre</th>
+                                        <th class="w11">Personal</th>
+                                        <th class="w11">Fecha Alta</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="scrollContent">
+                                    {% for entity in entities_active %}
+                                        <tr id="{{ entity.id }}">
+                                            <td class="w20 left">{{ entity.apellido1 ~ " " ~ entity.apellido2 ~ ", " ~ entity.nombre}}</td>
+                                            <td class="w11">{{ entity.tipo}}</td>                       
+                                            <td class="w11">{{ entity.fechaAlta|date("d-m-Y")}}</td>
+                                        </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div> 
+                <div class="select_table_p_active select_ord_datatable">
+                </div>         
+            </div>
+
+            {# Profesores Inactivos #}
+
+            <div class="contenedor_registro derecha  inactivos oculto" id="contenedor_lista" >  
+                <div>
+                    <div id="cabecera_lista">
+                        <h2 class="text_cabecera">Personal Administrativo</h2>
+                        <div class="btn_2opciones">    
+                            <label  id="btn_activos" for="activos">Activos</label>
+                            <input type="radio" name="activos" id="activos">
+                            <label class="btn_selected" for="inactivos" id="btn_inactivos">Inactivos</label>
+                            <input type="radio" name="inactivos" id="inactivos">
+                        </div>
+                        <div id="buscador"> </div>
+                    </div>
+                    <div id="fondo_azul_osc" class="tabla_con_info">
+                        <div id="tableContainer" class="tableContainer inner_table vh45">
+                            <table id="admin_no_active" class="scrollTable lista_color">
+                                <thead class="fixedHeader">
+                                    <tr>
+                                        <th class="w25 left">Apellidos, Nombre</th>
+                                        <th class="w11">Personal</th>
+                                        <th class="w11">Fecha Baja</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="scrollContent">
+                                {% if entities %}
+                                    {% for entity in entities %}
+                                        <tr id="{{ entity.id }}">
+                                            <td class="w25 left">{{ entity.apellido1 ~ " " ~ entity.apellido2 ~ ", " ~ entity.nombre}}</td>
+                                            <td class="w11">{{ entity.tipo}}</td>
+                                            <td class="w11">{{ entity.fechaBaja|date("d-m-Y")}}</td>
+                                        </tr>
+                                    {% endfor %}
+                                {% endif %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div> 
+                <div class="select_table_p select_ord_datatable">
+                </div>         
+            </div>
+  </div>     
+
+{% endblock %}

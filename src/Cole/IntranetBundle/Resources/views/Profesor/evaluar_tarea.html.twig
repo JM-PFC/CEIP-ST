@@ -1,0 +1,197 @@
+{% extends  'IntranetBundle:Profesor:index.html.twig' %}
+
+{% block body %}
+    {{parent()}}
+    <script>
+    	$(".menu li").removeClass('active');
+		$(".menu #calificaciones").addClass('active');
+        $(".menu #calificaciones").addClass('click');
+
+        //Se selecciona marca en la lista la tarea mostrada.
+        tarea={{tarea|json_encode()|raw}};
+        $("#datos_tarea #lista_tareas a>div[id='"+tarea+"']").addClass('item-verde');
+        $("#datos_tarea #lista_tareas a[id='"+tarea+"']").addClass('no-click');
+        $("#datos_tarea .tab_tareas li").closest("li").removeClass('active');
+        tab=$("#datos_tarea #lista_tareas a[id='"+tarea+"']").closest("div").attr("id");
+
+        $("#datos_tarea .tab_tareas li:not(.hidden) a[aria-controls='"+tab+"']").closest("li").addClass('active');
+        $("#datos_tarea #lista_tareas a").closest("div").removeClass('active');
+        $("#datos_tarea #lista_tareas p").closest(".tab-pane").removeClass('active');
+        $("#datos_tarea #lista_tareas a[id='"+tarea+"']").closest("div").addClass('active');
+
+     
+
+    </script>
+ {% endblock %}
+
+{% block migas %}
+	<li class="tipo">
+			{% trans %}Profesorado{% endtrans %}
+	</li>
+	<li>
+		<a href="{{path('intranet_profesor')}}">
+			{% trans %}Panel principal{% endtrans %}
+		</a>
+	</li>
+    <li>
+        <a href="{{path('intranet_profesor_calificaciones')}}">
+            {% trans %}Calificaciones{% endtrans %}
+        </a>
+    </li>
+	<li class="active no-seleccion">
+		{% trans %}Evaluación de tareas{% endtrans %}
+	</li>
+{% endblock %}
+
+{% block titulo_cabecera %}
+	<i class="fa fa-list-alt page-header-icon"></i>
+	{% trans %}Calificaciones{% endtrans %}
+{% endblock %}
+{% block titulo_cabecera_movil %}
+    <i class="fa fa-list-alt page-header-icon"></i>
+    {% trans %}Calificaciones{% endtrans %}
+{% endblock %}
+
+{% block contenido %}
+    <h4 id="titulo-seccion" class="titulo-seccion">{% trans %}Evaluación de tareas{% endtrans %}</h4>
+
+    <div id="datos_tarea" class="container-fluid div_datos_curso datos_tabla">
+        <div class="pull-left col-xs-12 col-sm-5 no-padding datos_curso">
+            <label>{% trans %}Curso{% endtrans %}:</label>
+            <span> {{grupo.curso.curso ~ " " ~ grupo.letra ~ " - " ~ grupo.curso.nivel}}</span >
+            <br>
+            <label>{% trans %}Trimestre{% endtrans %}:</label>
+            {% if trimestre == 1 %}
+                <span>{{" 1"}}</span><sup>{{"er"}}</sup><span>{{" Trimestre"}}</span>
+            {% elseif trimestre  == 2 %}
+                <span>{{" 2"}}</span><sup>{{"o"}}</sup><span>{{" Trimestre"}}</span>
+            {% else %}
+                <span>{{" 3"}}</span><sup>{{"er"}}</sup><span>{{" Trimestre"}}</span>
+            <br>
+            {% endif %}
+            <label>{% trans %}Asignatura{% endtrans %}:</label>
+            <span> {{asignatura.nombre}}</span >
+            <br>                
+        </div>
+
+        <div id="lista_tareas" class="pull-left col-xs-12 col-sm-7 no-padding ">
+            <div class=" col-xs-12 no-padding">
+                <div role="tabpanel" class="tab_tareas">
+                    <ul class="nav nav-tabs" role="tablist">
+                        <li role="presentation" class="active col-xs-6 no-padding text-center hidden-xs"><a id="tab_tareas_noEvaluadas" href="#noEvaluadas" aria-controls="noEvaluadas" data-toggle="tab" role="tab">{% trans %}Tareas no evaluadas{% endtrans %}</a></li>
+                        <li role="presentation" class="col-xs-6 no-padding text-center hidden-xs"><a id="tab_tareas_evaluadas" href="#evaluadas" aria-controls="evaluadas" data-toggle="tab" role="tab">{% trans %}Tareas evaluadas{% endtrans %}</a></li>
+
+                        <li role="presentation" class="active col-xs-6 no-padding text-center hidden-sm hidden-md hidden-lg"><a id="tab_tareas_noEvaluadas" href="#noEvaluadas" aria-controls="noEvaluadas" data-toggle="tab" role="tab">{% trans %}Tareas{% endtrans %}<br>{% trans %}no evaluadas{% endtrans %}</a></li>
+                        <li role="presentation" class="col-xs-6 no-padding text-center hidden-sm hidden-md hidden-lg"><a id="tab_tareas_evaluadas" href="#evaluadas" aria-controls="evaluadas" data-toggle="tab" role="tab">{% trans %}Tareas{% endtrans %}<br>{% trans %}evaluadas{% endtrans %}</a></li>
+                    </ul>
+                    <div class="tab-content clearfix no-padding">
+                        <div role="tabpanel" class="tab-pane active clearfix" id="noEvaluadas">
+                        {% if tareas_noEvaluadas %}
+                            {% for tarea in tareas_noEvaluadas %}
+                            <a id="{{tarea.tarea.id}}" href="{{ path('evaluar_tarea', {"id": tarea.tarea.grupo.id, "asig":tarea.tarea.asignatura.asignatura.id,"tarea":tarea.tarea.id}) }}" class="waiting">
+                                <div id="{{tarea.tarea.id}}" class="container_contenido_tabla">
+                                    <div class="col-xs-7 col-sm-8">{{tarea.tarea.descripcion}}</div>
+                                    <div class="col-xs-5 col-sm-4">
+                                        {% if tarea.tarea.trimestre == 1 %}
+                                            <span>{{"1"}}</span><sup>{{"er"}}</sup><span>{{" Trimestre"}}</span>
+                                        {% elseif tarea.tarea.trimestre == 2 %}
+                                            <span>{{"2"}}</span><sup>{{"o"}}</sup><span>{{" Trimestre"}}</span>
+                                        {% else %}
+                                            <span>{{"3"}}</span><sup>{{"er"}}</sup><span>{{" Trimestre"}}</span>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                            </a>
+                            {% endfor %}
+                        {% else %}
+                            <div>
+                                <div class="vacio col-xs-12"><p class="color_rojo">{% trans %}No hay tareas pendientes para evaluar{% endtrans %}</p></div>
+                            </div>
+                        {% endif %}
+                        </div>
+                
+                        <div role="tabpanel" class="tab-pane clearfix" id="evaluadas">
+                        {% if tareas_evaluadas %}
+                            {% for tarea in tareas_evaluadas %}
+                            <a id="{{tarea.tarea.id}}" href="{{ path('evaluar_tarea', {"id": tarea.tarea.grupo.id, "asig":tarea.tarea.asignatura.asignatura.id,"tarea":tarea.tarea.id}) }}" class="waiting">
+                                <div id="{{tarea.tarea.id}}" class="container_contenido_tabla">
+                                    <div class="col-xs-7 col-sm-8">{{tarea.tarea.descripcion}}</div>
+                                    <div class="col-xs-5 col-sm-4">
+                                        {% if tarea.tarea.trimestre == 1 %}
+                                            <span>{{"1"}}</span><sup>{{"er"}}</sup><span>{{" Trimestre"}}</span>
+                                        {% elseif tarea.tarea.trimestre == 2 %}
+                                            <span>{{"2"}}</span><sup>{{"o"}}</sup><span>{{" Trimestre"}}</span>
+                                        {% else %}
+                                            <span>{{"3"}}</span><sup>{{"er"}}</sup><span>{{" Trimestre"}}</span>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                            </a>
+                            {% endfor %}
+                        {% else %}
+                            <div>
+                                <div class="vacio col-xs-12"><p class="color_rojo">{% trans %}No hay tareas evaluadas en el sistema{% endtrans %}</p></div>
+                            </div>
+                        {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="tab-content lista_notas">
+        {% if alumnos != null %}
+
+            {{ form_start (edit_form, {'attr':{novalidate:'novalidate', 'autocomplete':'off'}})}}
+
+                <div class="col-xs-12 no-padding head_list" >
+                    <div class="col-xs-12 col-sm-11 no-padding cabecera_profesor cabecera_tabla" >
+                        <h4 class="text-center" >
+                            {{ edit_form.vars.value.descripcion}}
+                        </h4>
+                    </div>
+                </div>             
+
+                <table class="lista-alumnos table table-striped">
+                    <thead >
+                        <tr>
+                            <th class="col-xs-1 center">Nº</th>
+                            <th class="col-xs-8 col-sm-7">{% trans %}Apellidos, Nombre{% endtrans %}</th>
+                            <th class="col-xs-3 col-sm-4 center">{% trans %}Calificación{% endtrans %}</th>
+                        </tr>
+                    </thead> 
+                    <tbody>
+                        {% for alumno in edit_form.cursa %}
+                        <tr>
+                            <td class="col-xs-1 center">
+                                {{ alumno.vars.value.alumno.numAlum }}
+                            </td>
+                            <td class="col-xs-8 col-sm-7 ">
+                                {{ alumno.vars.value.alumno }}
+                            </td>
+                            <td class="col-xs-3 col-sm-4 center">
+                                {{ form_widget(alumno.nota,{ 'attr':{'class':'notas'}}) }}
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+
+                <div id="submit" class="col-xs-12 ">
+                    {{ form_widget(edit_form.submit,{ 'attr':{'class':'center-block btn btn_azul waiting'}}) }}
+                </div>
+                <div class="hidden">
+                    {{ form_rest(edit_form) }}
+                </div>
+            {{ form_end (edit_form)}}
+        {% else %}
+            <div class="alert alert-info alert-block">
+                <small>
+                    <h4>{% trans %}No hay alumnos asignados a esta tarea{% endtrans %}.</h4>
+                    <h6>{% trans %}Elimine la tarea y espere a que se asigne a los alumnos al grupo para añadirla de nuevo{% endtrans %}.</h6>
+                </small>
+            </div>
+        {% endif %}
+    </div>
+{% endblock %}

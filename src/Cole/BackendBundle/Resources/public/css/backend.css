@@ -393,6 +393,9 @@ nav{
 	min-width: 50px;
 	height: 85%;
 }
+.contenedor div[id="5"] div a{
+	padding: 0 7px;
+}
 .contenedor div a:hover{
 	background: #9FCBE9;
 	height: 85%;
@@ -775,17 +778,23 @@ nav{
 	#asignar_optativa .info_en_tabla ul {
     	margin: 0px !important;
 	}
-	#consulta_antiguo_profesor .img-mini {
+	.intercambiar .img-mini {
     	height: 85px !important;
     	width: 70px !important;
 	}
-	#consulta_antiguo_profesor .old_t_data span {
+	.intercambiar .old_t_data span {
     	padding-bottom: 5px !important;
     	margin-top: 0 !important;
     	margin-left: 4% !important;
 	}
 	.registro_equipamientos .block_insert h2{
 		font-size: 1.1em;
+	}
+	.contenedor div[id="5"] div a{
+		padding: 0 5px !important;
+	}
+	#consulta_antiguo_administrativo .old_t_data h3 {
+    	margin-top: 15px !important;
 	}
 }
 
@@ -912,6 +921,36 @@ tbody tr td{
 }
 #content-form-menu>div{
 	display: none ;
+}
+#content-form-menu-sintabs{
+   height: 46.5vh;
+   min-height: 292px;
+   width: 98%;
+   min-width: 98%;
+   margin: 0;
+   padding: 3px 15px;
+   
+   background-color: #b1cce7;
+   border: 1px solid #888;
+   /*overflow:hidden;*/
+
+   border-radius: 5px 5px 5px 5px;
+   box-shadow: 0 -2px 3px -2px rgba(0, 0, 0, .5);
+}
+#administrativo_nuevo #content-form-menu>div{
+	display: block; 
+}
+#administrativo_nuevo #content-form-menu{
+	margin: 0 !important;
+	width: 100% !important;
+	min-width: 99% !important;
+}
+#administrativo_tipo{
+	width: 100%;
+}
+.tipo_admin{
+	margin-left: 3%;
+	margin-right: 2%;
 }
 #content-form
 {
@@ -1115,6 +1154,14 @@ legend{
 	max-width: 250px;
 	width: 28%;
 }
+.formulario_administrativo .izquierda>div{
+	float: left;
+	clear: right;
+	margin-left: 3%;
+	margin-right: 3%;
+	max-width: 290px;
+	width: 26%;
+}
 .izquierda>label{
 
 	margin-right: 3%;
@@ -1185,6 +1232,9 @@ legend{
 	-webkit-box-shadow: 0px 1px 5px 0px rgba(0, 0, 0, 1);
 	-moz-box-shadow: 0px 1px 5px 0px rgba(0, 0, 0, 1);
 	padding-right: 2px;
+}
+#administrativo_edit .marco_columna_contenido{
+	width: 96%;
 }
 .label_contenido{
 	width: 98%;
@@ -1575,44 +1625,44 @@ form button{
 	color: #424242;
 	text-align: center;
 }
-#busqueda_alumno .double_column>div, #busqueda_profesor .double_column>div{
+#busqueda_alumno .double_column>div, #busqueda_profesor .double_column>div, #busqueda_administrativo .double_column>div{
 	width: 100%;
 }
-#busqueda_alumno .block_search, #busqueda_profesor .block_search{
+#busqueda_alumno .block_search, #busqueda_profesor .block_search, #busqueda_administrativo .block_search{
 	margin-left: 4%;
 	margin-top: 5%;
 }
 
-#busqueda_alumno .block_search > div > div > button, #busqueda_profesor .block_search > div > div > button{
+#busqueda_alumno .block_search > div > div > button, #busqueda_profesor .block_search > div > div > button, #busqueda_administrativo .block_search > div > div > button{
 	margin-top: 3%;
 }
 
-#busqueda_alumno .btn_2opciones, #busqueda_profesor  .btn_2opciones{
+#busqueda_alumno .btn_2opciones, #busqueda_profesor .btn_2opciones, #busqueda_administrativo .btn_2opciones{
 	float: right;
 }
-#busqueda_alumno .btn_2opciones label, #busqueda_profesor  .btn_2opciones label{
+#busqueda_alumno .btn_2opciones label, #busqueda_profesor  .btn_2opciones label, #busqueda_administrativo  .btn_2opciones label{
 	margin: 0;
 	padding: 2px !important;
 	height: 18px;
 	font-size: 14px;
 }
-#busqueda_alumno #tableContainer table, #busqueda_profesor #tableContainer table{
+#busqueda_alumno #tableContainer table, #busqueda_profesor #tableContainer table, #busqueda_administrativo #tableContainer table{
 	border: none;
 }
-#busqueda_alumno .tabla_con_info, #busqueda_profesor .tabla_con_info{
+#busqueda_alumno .tabla_con_info, #busqueda_profesor .tabla_con_info, #busqueda_administrativo .tabla_con_info{
 	width: 100% !important;
 }
-#busqueda_alumno .contenedor_registro, #busqueda_profesor .contenedor_registro{
+#busqueda_alumno .contenedor_registro, #busqueda_profesor .contenedor_registro, #busqueda_administrativo .contenedor_registro{
 	width: 60% !important;
 	margin-left: 0 !important;
 }
-#busqueda_alumno #contenedor_lista div table tr, #busqueda_profesor #contenedor_lista div table tr{
+#busqueda_alumno #contenedor_lista div table tr, #busqueda_profesor #contenedor_lista div table tr, #busqueda_administrativo #contenedor_lista div table tr{
 	border-top: none;
 }
-#busqueda_alumno #contenedor_lista div table tbody tr[class*="odd"], #busqueda_profesor #contenedor_lista div table tbody tr[class*="odd"]{
+#busqueda_alumno #contenedor_lista div table tbody tr[class*="odd"], #busqueda_profesor #contenedor_lista div table tbody tr[class*="odd"], #busqueda_administrativo #contenedor_lista div table tbody tr[class*="odd"]{
 	border-bottom: none;
 }
-#busqueda_alumno #contenedor_lista div table tbody tr[role="row"], #busqueda_profesor #contenedor_lista div table tbody tr[role="row"]{
+#busqueda_alumno #contenedor_lista div table tbody tr[role="row"], #busqueda_profesor #contenedor_lista div table tbody tr[role="row"], #busqueda_administrativo #contenedor_lista div table tbody tr[role="row"]{
 	border-bottom: 2px solid #b1cce7 !important;
 }
 
@@ -1620,7 +1670,7 @@ form button{
 	width: 60% !important;
 	margin-left: 0 !important;
 }
-#busqueda_alumno tbody.scrollContent,#busqueda_profesor tbody.scrollContent{
+#busqueda_alumno tbody.scrollContent, #busqueda_profesor tbody.scrollContent, #busqueda_administrativo tbody.scrollContent{
 	height: auto;
 }
 #busqueda_profesor #lista_cursos select{
@@ -1817,6 +1867,9 @@ button[class*="elected"]{
     box-shadow: 0 1px 1px 1px rgba(0, 0, 0, 0.5);
     height: 284px;
     margin-top: 2px;
+}
+#asignatura_curso_dialog #contenedor_asignaturas input{
+    text-transform: none !important;
 }
 #asignatura_curso_dialog #contenedor_asignaturas .aviso, #profesor_asignatura_grupo_dialog #contenedor_asignaturas .aviso{
     color: #334c73;
@@ -2090,6 +2143,7 @@ button[class*="elected"]{
 }
 #contenedor_registro_Ngrupos .inner_table{
 	max-height: 245px !important;
+	min-height: 245px !important;
 }
 #contenedor_registro_Ngrupos table select {
 	margin-top: 3px;
@@ -2330,6 +2384,7 @@ button[class*="elected"]{
 }
 #contenedor_asignar_aula .inner_table {
     max-height: 259px !important;
+    min-height: 259px !important;
 }
 #contenedor_asignar_aula div table td{
     min-width: 19%;
@@ -4490,11 +4545,14 @@ border: 1px solid;
     font-size: 12px;
     font-weight: bold;
     margin-left: 3%;
-    margin-top: 3%;
-    margin-bottom: 12px;
+    margin-top: 2.5%;
+    margin-bottom: 15px;
     overflow: auto;
     width: 95%;
     /*min-height:44vh;*/
+}
+#registro_horario .margin_top_2{
+    margin-bottom: 6px !important;
 }
 #registro_horario .block_insert{
 	margin: 3% 6%;
@@ -4635,10 +4693,9 @@ border: 1px solid;
 	min-height: 52vh;
 }
 #registro_horario #aviso_error span{
-	float: left;
-	margin: 0;
-	margin-right: 5px ;
 	clear: none;
+    float: left;
+    margin: -10px 5px 0 0;
 }
 #registro_horario #aviso_error span:nth-child(2){
 	float: left;
@@ -4662,6 +4719,9 @@ border: 1px solid;
     float: left;
     text-align: right;
     width: 30%;
+}
+#registro_horario .margin_top{
+	padding-top: 1% !important;
 }
 .center_button{
 	clear: both;
@@ -5226,6 +5286,7 @@ tbody.scrollContent tr.alternateRow td {
 	display: block;
 	margin: 5px auto;
 	margin-bottom: 10px;
+	box-shadow: 0 1px 3px 0 rgb(0, 0, 0);
 }
 .contenido_info #seleccionado ul{
 	padding: 0;
@@ -5559,73 +5620,73 @@ tbody.scrollContent tr.alternateRow td {
 .tabla_con_seleccion .contenido_info #sin_seleccionar p{
 	margin-top: 15vh;
 }
-#consulta_antiguo_profesor .tabla_con_info{
+.intercambiar .tabla_con_info{
 	width: 41.5% !important;
 	float: left;
 }
-#consulta_antiguo_profesor .info_en_tabla{
+.intercambiar .info_en_tabla{
 	width: 16.78% !important;
 	float: left;
 	border-left: 1px solid grey;
 	border-right: 1px solid grey;
 }
-#consulta_antiguo_profesor #tableContainer table{
+.intercambiar #tableContainer table{
 	border: none;
 }
-#consulta_antiguo_profesor .text_cabecera{
-	width: 32%;
+.intercambiar .text_cabecera{
+	width: 34%;
 }
 input[type="checkbox"]:hover{
 	cursor: pointer;
 }
 
-#consulta_antiguo_profesor tbody td input{
+.intercambiar tbody td input{
 	z-index: 100 !important;
 }
-#consulta_antiguo_profesor #buscador_activo{
+.intercambiar #buscador_activo{
 	float: left;
 	font-size: 13px;
     margin-top: -2px;
     width: 26%;
 }
-#consulta_antiguo_profesor .cabecera_info{
+.intercambiar .cabecera_info{
 	padding: 3.5px 0;
 }
-#consulta_antiguo_profesor #baja, #consulta_antiguo_profesor #alta{
+.intercambiar #baja, .intercambiar .alta{
 	height: 11%;
 	text-align: center;
 	font-size: 1em;
 }
-#consulta_antiguo_profesor #baja button{
+.intercambiar #baja button{
 	margin-top: 1%;
 	padding-left: 5%;
 }
-#consulta_antiguo_profesor #alta button{
+.intercambiar .alta button{
 	padding-right: 5%;
 }
-#consulta_antiguo_profesor #baja button, #consulta_antiguo_profesor #alta button{
+.intercambiar #baja button, .intercambiar .alta button{
 	min-width: 100px
 }
-#consulta_antiguo_profesor #baja img,#consulta_antiguo_profesor #alta img{
+.intercambiar #baja img,.intercambiar .alta img{
 	width: 9px;
 	margin: 0 2px;
 }
-#consulta_antiguo_profesor .baja_disable img,#consulta_antiguo_profesor .alta_disable img{
+.intercambiar .baja_disable img,.intercambiar .alta_disable img{
 	opacity: 0.5;
 }
 
-#consulta_antiguo_profesor .contenido_info{
+.intercambiar .contenido_info{
 	border-top: 1px solid grey;
 	border-bottom: 1px solid grey;
 	height: 68.7%;
 }
-#consulta_antiguo_profesor  .contenido_info #sin_seleccionar p{
+.intercambiar  .contenido_info #sin_seleccionar p{
 	margin-top: 40%;
 }
-#consulta_antiguo_profesor #alta button{
+.intercambiar .alta button{
 	margin-top: 1%;
 }
-#consulta_antiguo_profesor .scrollContent{
+.intercambiar .scrollContent{
 	height: 37vh;
 }
 .child #loading{
@@ -7730,4 +7791,75 @@ cursor: default !important;
 }
 #lista_log tr, #lista_log td{
 	cursor: default !important;
+}
+#equipo_directivo .alta button {
+	min-width: 175px !important;
+	padding: 2px !important;
+}
+#equipo_directivo .text_cabecera {
+    width: 36%;
+}
+.container_datos_ED{
+	height: 40px;
+	background: red;
+}
+.container_datos_ED{
+	background: #B0D5A9;
+	height: 18.1vh;
+}
+.separacion{
+	background: #334c73;
+	height: 5px;
+}
+.container_datos_ED p{
+    text-align: center;
+    font-size: 14px;
+}
+.container_datos_ED .columna_foto{
+	width: 20% !important;
+	margin-left: 5%;
+}
+.container_datos_ED img{
+   	box-shadow:  0 1px 3px 0 rgb(0, 0, 0);
+    height: 100px !important;
+    width: 80px !important; 
+    margin-top: -3px;	
+}
+.container_datos_ED p:not(.color_rojo){
+
+	text-align: left;
+}
+.datos_ED{
+	padding-top: 15px;
+}
+.datos_ED p {
+    color: #334c73;
+    font-size: 1.2em;
+    margin-left: 2%;
+    margin-bottom: 5px;
+}
+.dos_columnas_ED{
+    float: left;
+    width: 28%;
+}
+.container_datos_ED p[class='color_rojo']{
+    padding: 45px 30px !important;
+}
+#consulta_antiguo_administrativo .old_t_data{
+	margin: 0 auto;
+	text-align: center;
+	
+}
+#consulta_antiguo_administrativo .old_t_data h3{
+	margin-top: 20px;
+	width: 96%;
+	margin-bottom: 5px;
+
+}
+#consulta_antiguo_administrativo .old_t_data  p{
+	margin: 0 auto;
+	text-align: center;
+	width: 90%;
+	color: #334c73;
+	font-size: 1.2em;
 }

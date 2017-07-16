@@ -1,0 +1,31 @@
+	
+
+  <label >{% trans %}Alumno{% endtrans %}: </label>
+  <span>{{alumno}}</span>
+  <div>
+    <label >{% trans %}Asignatura{% endtrans %}: </label>
+    <span>{{asignatura.asignatura.nombre}}</span>
+  </div>
+
+  <div class="panel panel-default">
+      <table class="table table-striped">
+        <thead>
+          <tr >
+            <th class="cold-md-11">{% trans %}Nombre de la tarea{% endtrans %}</th>
+            <th class="cold-md-4">{% trans %}Calificación{% endtrans %}</th>
+          </tr>
+        </thead>
+        <tbody class="">
+        {% for entity in tareas %}
+          <tr>
+            <td class="cold-xs-11">
+              {{ entity.tarea.descripcion }}
+            </td>
+            <td class="cold-xs-4" >
+            	{{entity.nota }}
+            </td>
+          </tr>
+        {% endfor %}
+        </tbody>
+      </table>
+  </div>

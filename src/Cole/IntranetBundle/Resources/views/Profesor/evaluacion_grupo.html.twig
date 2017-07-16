@@ -1,0 +1,74 @@
+{% extends  'IntranetBundle:Profesor:index.html.twig' %}
+
+{% block body %}
+    {{parent()}}
+    <script>
+        $(".menu li").removeClass('active');
+        $(".menu #calificaciones").addClass('active');
+        $(".menu #calificaciones").addClass('click');
+
+        locale=$("#intranet").attr("locale");
+
+
+    </script>
+ {% endblock %}
+
+{% block migas %}
+    <li class="tipo">
+            {% trans %}Profesorado{% endtrans %}
+    </li>
+    <li>
+        <a href="{{path('intranet_profesor')}}">
+            {% trans %}Panel principal{% endtrans %}
+        </a>
+    </li>
+    <li>
+        <a href="{{path('intranet_profesor_calificaciones')}}">
+            {% trans %}Calificaciones{% endtrans %}
+        </a>
+    </li>
+    <li class="active no-seleccion">
+        {% trans %}Evaluación de mi grupo{% endtrans %}
+    </li>
+{% endblock %}
+
+{% block titulo_cabecera %}
+    <i class="fa fa-list-alt page-header-icon"></i>
+    {% trans %}Calificaciones{% endtrans %}
+{% endblock %}
+{% block titulo_cabecera_movil %}
+    <i class="fa fa-list-alt page-header-icon"></i>
+    {% trans %}Calificaciones{% endtrans %}
+{% endblock %}
+
+{% block contenido %}
+    <h4 id="titulo-seccion" class="titulo-seccion">{% trans %}Evaluación de mi grupo{% endtrans %}</h4>
+    <div class="contenedor_btn_descarga">
+        <a id="alumnos_grupo_pdf" class=" btn_descargar hidden-xs #1" href="{{ path('alumnos_grupo_pdf', { 'id': entity.id }) }}">
+            <button ><i class="fa fa-file-pdf-o"></i>{% trans %}Prueebaaaaaaaaaa PDF{% endtrans %}</button>
+        </a>  
+    </div>
+
+    <div class="tab-content lista_notas">
+        <div id="lista_alumnos">
+            <p class="aviso_listado">{% trans %}Seleccione una tarea de la lista superior para mostrar los alumnos a evaluar{% endtrans %}</p>
+        </div>
+    </div>
+
+
+    <div id="lista_tareas_alumno" class="modal fade lista_tareas_alumno" role="dialog" data-backdrop="true" >
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    <h4 class="modal-title"></h4>
+                </div>
+                <div class="modal-body"></div>
+                <div class="class-footer">
+                    <button type="button" class="btn btn_azul" data-dismiss="modal">{% trans %}Cerrar{% endtrans %}</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}

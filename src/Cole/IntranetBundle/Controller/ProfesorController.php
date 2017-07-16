@@ -508,7 +508,8 @@ class ProfesorController extends Controller
         }
 
         return $this->render('IntranetBundle:Profesor:alumnos_grupo_asignatura.html.twig', array(
-            'entities'=>$entities));
+            'entities'=>$entities,
+            'asignatura' => $asignatura));
     }
 
     public function AlumnosGrupoAction($id)
@@ -548,11 +549,11 @@ class ProfesorController extends Controller
         $entity = $this->get('security.context')->getToken()->getUser();
         $tutor_grupo= $em->getRepository('BackendBundle:Grupo')->findOneByProfesor($entity);
         $tareas= $em->getRepository('IntranetBundle:Tarea')->findTareasComunes($entity);
-        
+
         //Se obtiene los grupos agrupados por cada tarea de una asignatura del profesor.
-        $array;
+        $array=null;
         foreach ($tareas as $tarea) {
-            $tareasGrupos= $em->getRepository('IntranetBundle:Tarea')->findByDescripcionOrdenado($tarea->getDescripcion(), $tarea->getAsignatura());
+            $tareasGrupos= $em->getRepository('IntranetBundle:Tarea')->findByDescripcionOrdenado($tarea->getDescripcion(), $tarea->getAsignatura()->getAsignatura()->getNombre());
             $cursos="";
             foreach ($tareasGrupos as $TG) {
                 $cursos=$cursos.$TG->getGrupo()->getCurso()->getCurso().$TG->getGrupo()->getLetra()." - ";
@@ -562,7 +563,7 @@ class ProfesorController extends Controller
         }
 
         if($entity->getNivel()=="Primaria"){
-            $cursos = $em->getRepository('BackendBundle:Imparte')->findAsignacionesProfesor($entity);
+            $cursos = $em->getRepository('BackendBundle:Imparte')->findAsignacionesProfesorAsignaturaGrupo($entity);
             $imparte=$em->getRepository('BackendBundle:Imparte')->findAsignaturasProfesor($entity);
         }
         else{
@@ -625,6 +626,47 @@ class ProfesorController extends Controller
             'grupos' => $grupos
             ), 200);
     }
+
+
+    public function ListaTareasAlumnoAction($id, $trimestre, $asignatura)
+    {
+        $em = $this->getDoctrine()->getManager();
+
+        $profesor = $this->get('security.context')->getToken()->getUser();
+        $asignatura=$em->getRepository('BackendBundle:AsignaturasCursos')->findOneById($asignatura);
+        $alumno=$em->getRepository('BackendBundle:Alumno')->findOneById($id);
+
+        $tareas=$em->getRepository('IntranetBundle:Cursa')->findByTareasAlumnoAsignaturaTrimestre($alumno, $trimestre, $asignatura);
+      
+        return $this->render('IntranetBundle:Profesor:lista_tareas_alumno.html.twig', array(
+            'profesor' => $profesor,
+            'tareas'=>$tareas,
+            'asignatura' => $asignatura,
+            'alumno' => $alumno,
+            'trimestre' => $trimestre));
+    }
+
+    public function evaluacionGrupoAction($id)
+    {
+        $em = $this->getDoctrine()->getManager();
+
+        $profesor = $this->get('security.context')->getToken()->getUser();
+        $grupo=$em->getRepository('BackendBundle:Grupo')->findOneById($id);
+        //$asignatura=$em->getRepository('BackendBundle:AsignaturasCursos')->findOneById($asignatura);
+        $alumnos=$em->getRepository('BackendBundle:Alumno')->findOneByGrupo($grupo);
+
+        //$tareas=$em->getRepository('IntranetBundle:Cursa')->findByTareasAlumnoAsignaturaTrimestre($alumno, $trimestre, $asignatura);
+      
+        return $this->render('IntranetBundle:Profesor:evaluacion_grupo.html.twig', array(
+            'entity' => $profesor,
+            //'tareas'=>$tareas,
+            //'asignatura' => $asignatura,
+            'alumnos' => $alumnos,
+            //'trimestre' => $trimestre
+            ));
+    }
+
+
 
     ///////////////////////////////////////////
     //               Reservas                //

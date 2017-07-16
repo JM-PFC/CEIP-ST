@@ -826,7 +826,7 @@ class GrupoController extends Controller
             throw $this->createNotFoundException('Unable to find Grupo entity.');
         }
 
-        $imparte= $em->getRepository('BackendBundle:Imparte')->findByGrupo($grupo);
+        $imparte= $em->getRepository('BackendBundle:Imparte')->findByGrupoTodas($grupo);
         
         $data=1;
         if(!$imparte){

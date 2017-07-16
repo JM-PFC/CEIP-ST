@@ -18,6 +18,7 @@ $(document).ready(function () {
 
   //Se establece el color del botón de confirmación de las notificaciones para usar con swal().
   color="#5A88B6";
+  color_rojo="#DE5757";
   // Se establece el estilo para pNotify
   //PNotify.prototype.options.styling = "jqueryui";
 
@@ -792,43 +793,6 @@ $(document).on("blur","input[id$='responsable1_dni']",function() {
       $(this).attr("edit",false);
     }
   });
-/*
-$(document).on('keyup',"#alumno_responsable1_dni",function(e){
-
-    if($(this).val().trim().length == 0){
-        $("#tab2").find("input[id^='alumno_responsable1_']").each(function(){
-          $(this).val("");
-          $(this).prev().find(".error").remove();
-          $(this).next(".mensaje").remove();
-          $(this).removeClass("invalid");
-          $(this).attr("validated", false);
-          $(this).prop("readonly", false);
-        });      
-        $("#alumno_responsable1_estadoCivil").prop("readonly", false);  
-        $("#alumno_responsable1_dni").prop("disabled", false);
-    }
-    if(($(this).val().trim().length == 10)){
-      $("#tab2").find(":input[id^='alumno_responsable1_']").each(function(){
-        $(this).attr("validated", "");
-        $(this).prop("disabled", false);
-      });
-    }
-    if(($(this).val().trim().length < 10) && $("#alumno_responsable1_nombre").attr("readonly")=='readonly'){
-        var dni=$("#alumno_responsable1_dni").val();
-        $("#tab2").find("input[id^='alumno_responsable1_']").each(function(){
-          $(this).val("");
-          $(this).prev().find(".error").remove();
-          $(this).next(".mensaje").remove();
-          $(this).removeClass("invalid");
-          $(this).attr("validated", false);
-          $(this).prop("readonly", false);
-        });   
-        $("#alumno_responsable1_dni").val(dni);   
-        $("#alumno_responsable1_estadoCivil").prop("readonly", false);  
-        $("#alumno_responsable1_dni").prop("disabled", false);
-    }
-  });
-*/
 
 $(document).on('keyup',"input[id$='responsable1_dni']",function(e){
   form= $(this).closest("form");
@@ -1116,6 +1080,9 @@ $(document).on("submit",".formulario_profesor",function(event){
     event.preventDefault();
     form= $(this).closest("form");
 
+    //Se comrpueba si el dni existe en el sistema con la funcion comprobar dni al salir del input.
+    $("#profesor_dni").blur();
+
     var val=0;
     // Se recorre los campos del formulario mirando si estan validados o no.
       $(this).find(":input").each(function(){
@@ -1216,6 +1183,7 @@ $(document).on("submit",".formulario_profesor",function(event){
           $("#clases_impartidas").update_tab();
           $("#ficha_profesor").update_tab();
           $("#profesor_antiguo").update_tab();
+          $("#equipo_directivo").update_tab();
 
           event.stopPropagation();   
         },
@@ -2100,6 +2068,8 @@ $(document).on("submit",".formulario_profesor",function(event){
           $("#clases_impartidas").update_tab();
           $("#asignar_horario").update_tab();
           $("#listarlog").update_tab();
+          $("#equipo_directivo").update_tab();
+          
 
           var arr = form.attr('action').split('/');
           div=form.closest("div[id^='tabs-']");
@@ -2322,7 +2292,7 @@ $(document).on("submit",".formulario_profesor",function(event){
     return false;
   });
 
-$(document).on("blur","input[id='profesor_dni']",function() {
+$(document).on("blur","input[id='profesor_dni']",function(event) {
   form= $(this).closest("form");
 
   if($(this).val()!=''){
@@ -2338,7 +2308,7 @@ $(document).on("blur","input[id='profesor_dni']",function() {
           form.find("input[id$='profesor_dni']").attr("validated", false);
           form.find("input[id$='profesor_dni']").after("<span class='mensaje'>Este DNI ya existe en el sistema.</span>");
           //Se comprueba que no exista el aviso de error para no repetirlo.
-          if(!form.find("input[id$='profesor_dni']").prev().find('span[class="error"]')){
+          if(form.find("input[id$='profesor_dni']").prev().find('span[class="error"]').size()==0){
             form.find("input[id$='profesor_dni']").prev().append("<span class='error'>Dato inválido</span>");
           }
           form.find("input[id$='profesor_nombre']").focus();
@@ -2351,10 +2321,11 @@ $(document).on("blur","input[id='profesor_dni']",function() {
       } 
     })
   }
+  event.stopPropagation();  
 });
   
 
-$(document).on("blur","input[id='edit_profesor_dni']",function() {
+$(document).on("blur","input[id='edit_profesor_dni']",function(event) {
   form= $(this).closest("form");
 
   var arr = form.attr('action').split('/');
@@ -2373,7 +2344,7 @@ $(document).on("blur","input[id='edit_profesor_dni']",function() {
           form.find("input[id$='profesor_dni']").attr("validated", false);
           form.find("input[id$='profesor_dni']").after("<span class='mensaje'>Este DNI ya existe en el sistema.</span>");
           //Se comprueba que no exista el aviso de error para no repetirlo.
-          if(!form.find("input[id$='profesor_dni']").prev().find('span[class="error"]')){
+          if(form.find("input[id$='profesor_dni']").prev().find('span[class="error"]').size()==0){
             form.find("input[id$='profesor_dni']").prev().append("<span class='error'>Dato inválido</span>");
           }
           form.find("input[id$='profesor_nombre']").focus();
@@ -2386,6 +2357,7 @@ $(document).on("blur","input[id='edit_profesor_dni']",function() {
       } 
     })
   }
+  event.stopPropagation();
 });
 
   // Función para mostrar imagen previa de un input file
@@ -3273,7 +3245,7 @@ $(document).on("blur","input[id='edit_profesor_dni']",function() {
   
         success: function(response) {
 
-          // Si no hay alumnos o profesoresasignados al grupo se puede eliminar.
+          // Si no hay alumnos o profesores asignados al grupo se puede eliminar.
           if(response.data!=null){
             blocker.play();  
             tr.find("select").addClass("modified");
@@ -6459,6 +6431,20 @@ $(document).on("blur","input[id='edit_profesor_dni']",function() {
     }
   });
 
+  $(document).on('focus',"#registro_fecha_curso input",function(event){
+    setTimeout(function(){ 
+        $("#registro_fecha_curso").next().addClass('oculto');
+    },100);
+
+  });
+
+   $(document).on('blur',"#registro_fecha_curso input",function(event){
+
+  $("#registro_fecha_curso").next().removeClass('oculto');
+  });
+
+
+
   $(document).on('change',"#registro_fecha_curso input",function(event){
 
     if($(this).val()!=" " && $(this).val()!=""){
@@ -7013,6 +6999,32 @@ $(document).on("blur","input[id='edit_profesor_dni']",function() {
     }
   }
 
+  // Se desplaza los botones hacia arriba para mostrar bienel mensaje de error en registro de horario académico.
+  $(document).on('blur keyup',"#registro_horario #contenedor_nuevo_horario input",function(e){
+    setTimeout(function(){ 
+      if($("#registro_horario #contenedor_nuevo_horario .invalid").size()>0){
+        $("#registro_horario #button_two").addClass('margin_top');
+        $("#registro_horario #contenedor_nuevo_horario").addClass('margin_top_2');
+      }
+      else{
+        $("#registro_horario #button_two").removeClass('margin_top');
+        $("#registro_horario #contenedor_nuevo_horario").removeClass('margin_top_2');
+      }    
+    },10);
+  });
+  
+  $(document).on('blur keyup',"#registro_horario #contenedor_registro_horario input",function(e){
+    setTimeout(function(){ 
+      if($("#registro_horario #contenedor_registro_horario .invalid").size()>0){
+        $("#registro_horario #button_one").addClass('margin_top');
+        $("#registro_horario #contenedor_registro_horario").addClass('margin_top_2');
+      }
+      else{
+        $("#registro_horario #button_one").removeClass('margin_top');
+        $("#registro_horario #contenedor_registro_horario").removeClass('margin_top_2');
+      }    
+    },10);
+  });
   // Se ejecuta al pulsar una tecla en los input de horario escolar.
   $(document).on('keyup',"#registro_horario div[id$='_horario'] input",function(e){
     div_actual=$(this).closest("div[id$='_horario']");
@@ -8567,6 +8579,51 @@ $(document).on("click","#registro_equipamientos td a",function(event){
 
     contenedor= $(this).closest("div[id^='reserva_']");
 
+
+    if(contenedor.find(".contenedor_reserva .elected").size()>1 || contenedor.find("#contenedor_reserva .ui-state-active").size()>1 ){
+
+      arr=contenedor.attr("id").split("_");
+      var texto="";
+
+      if(contenedor.find(".contenedor_reserva .elected").size()>1){
+
+        arr=contenedor.attr("id").split("_");
+        if(arr[1]=="instalaciones"){
+          texto+="<span>Instalación<span>";
+        }
+        else{
+          texto+="<span>Equipamiento<span>";
+        }
+      }
+
+      if(contenedor.find("#contenedor_reserva .ui-state-active").size()>1){
+        texto+="<span>Fecha de reserva<span>";
+      }
+      errorPNotify.play();
+      new PNotify({
+        title: "Las siguientes opciones no pueden tener valores multiples seleccionados:",
+        text:texto,
+        addclass: "custom",
+        type: "error",
+        shadow: true,
+        hide: true,
+        width: "335px",
+        buttons: {
+          sticker: false,
+          labels:{close: "Cerrar"}
+        },
+        stack: left_Stack,
+        animate_speed: "fast",
+        animate: {
+          animate: true,
+          in_class: "fadeInLeft",
+          out_class: "fadeOutLeft",
+        }
+      });
+      contenedor.find("#reserva_save").prop("disabled",true);
+      return false;
+    }
+
     fecha=contenedor.find("#dia_seleccionado").val();
     if(fecha){
       fecha= fecha.split("/");
@@ -9854,7 +9911,7 @@ $(document).on("click","#registro_equipamientos td a",function(event){
 
     aviso.play();
     swal({
-      title: "Anulación de Matrículas",
+      title: "Anulación de Matrícula",
       html: "<table><p>Se va a eliminar la siguiente matrícula, ¿Estas seguro de continuar? <br></p><thead><tr><th>Alumno</th><th>Curso Matriculado</th><th>Año Académico</th></tr></thead><tbody><tr><td>"+$(this).closest("tr").find("td:nth-child(1)").text()+"</td><td>"+$(this).closest("tr").find("td:nth-child(2)").text()+"</td><td>"+$(this).closest("tr").find("td:nth-child(3)").text()+"</td></tr></tbody><br></p></table>",
       type: "warning",
       showCancelButton: true,
@@ -10054,6 +10111,15 @@ $(document).on("click","#registro_equipamientos td a",function(event){
     $("#consulta_antiguo_profesor .contenido_info #sin_seleccionar").removeClass("oculto");
   });
 
+  // Se elimina la información con retraso al salir de la tabla por si aún se estan cargando datos anteriores.
+  $(document).on("mouseleave","#old_teacher", function () {
+    setTimeout(function() {
+      $("#consulta_antiguo_profesor .contenido_info #seleccionado").addClass("oculto");
+      $("#consulta_antiguo_profesor .contenido_info #seleccionado").empty();
+      $("#consulta_antiguo_profesor .contenido_info #sin_seleccionar").removeClass("oculto");
+    }, 300);
+  });
+
   //Se realiza la nueva alta del profesor.
   $(document).on("click","#consulta_antiguo_profesor .alta_active button", function(event) {
     event.preventDefault();
@@ -10134,7 +10200,11 @@ $(document).on("click","#registro_equipamientos td a",function(event){
             $("#ficha_profesor").update_tab();
             $("#consultar_equipamientos").update_tab();
             $("#consultar_instalaciones").update_tab();
-            ////Añadir más: profesor_asignar_grupo, mensaje profesores...
+            $("#tutor_grupo").update_tab();
+            $("#profesor_asignar_grupo").update_tab();
+            $("#clases_impartidas").update_tab();
+            $("#equipo_directivo").update_tab();
+            $("#clases_impartidas").update_tab();
           }
         })
       }, function (dismiss) {
@@ -10142,6 +10212,7 @@ $(document).on("click","#registro_equipamientos td a",function(event){
       }
     );
   });
+
   //Se realiza la baja del profesor.
   $(document).on("click","#consulta_antiguo_profesor .baja_active button", function(event)  {
     event.preventDefault();
@@ -10160,7 +10231,7 @@ $(document).on("click","#registro_equipamientos td a",function(event){
     });
 
       //titulo="<table><p>Se va a registrar el alta del antiguo profesor X, ¿Estas seguro de continuar? <br></p><thead><tr><th>Evento</th><th>Fecha</th><th>Hora</th></tr></thead><tbody><tr><td>"+titulo+"</td><td>"+fecha+"</td><td>"+hora+"</td></tr></tbody><br></p></table>",
-      titulo="<table><p>Se va a registrar la baja del siguiente profesor:<br></p><thead><tr><th>Nombre</th><th>Nivel</th></tr></thead><tbody><tr><td>"+nombre+"</td><td>"+nivel+"</td></tr></tbody><br></table><br><span>AVISO: Si el profesor está asignado a un grupo o es tutor, se eliminará automáticamente esa asignación y no se podrá recuperar.</span><br><br>¿Estas seguro de continuar?";
+      titulo="<table><p>Se va a registrar la baja del siguiente profesor:<br></p><thead><tr><th>Nombre</th><th>Nivel</th></tr></thead><tbody><tr><td>"+nombre+"</td><td>"+nivel+"</td></tr></tbody><br></table><br><br><span>AVISO:</span><span> Si el profesor está asignado a un grupo o es tutor, se eliminará automáticamente esa asignación y no se podrá recuperar.</span><br><br>¿Estas seguro de continuar?";
     }
     else{
       titulo="<table><p>Se va a registrar la baja de los siguientes profesores:<br></p><thead><tr><th>Nombre</th><th>Nivel</th></tr></thead><tbody>";
@@ -10221,7 +10292,11 @@ $(document).on("click","#registro_equipamientos td a",function(event){
             $("#ficha_profesor").update_tab();
             $("#consultar_equipamientos").update_tab();
             $("#consultar_instalaciones").update_tab();
-            ////Añadir más: profesor_asignar_grupo, mensaje profesores...
+            $("#tutor_grupo").update_tab();
+            $("#profesor_asignar_grupo").update_tab();
+            $("#clases_impartidas").update_tab();
+            $("#equipo_directivo").update_tab();
+            $("#clases_impartidas").update_tab();
           }
         })
       }, function (dismiss) {
@@ -13741,10 +13816,6 @@ $(document).on("click","#registro_equipamientos td a",function(event){
         
         //Actualización de la pestaña.
         $("#clases_impartidas").update_tab();
-
-        //Añadir más donde se muestre el horario de un grupo.
-        //$("#profesor_asignar_grupo").update_tab();
-
       }
     })
   });
@@ -14110,19 +14181,989 @@ $(document).on("click","#registro_equipamientos td a",function(event){
             $("#asignar_optativa .btn_2opciones label[id='btn_no_asignados']").click();
           });
         }
-
-        
-        //$("#clases_impartidas").update_tab();
-
+        $("#listado_alumnos").update_tab();
       }
     })
 
   });
   
 
+  ///////////////////////////////////////////
+  //            Administrativos            //
+  ///////////////////////////////////////////
+
+$(document).on("submit",".formulario_administrativo",function(event){
+    event.preventDefault();
+    form= $(this).closest("form");
+
+    var val=0;
+    // Se recorre los campos del formulario mirando si estan validados o no.
+      $(this).find(":input").each(function(){
+        if((!$(this).attr("validated") || !$(this).attr("validated")==false)){
+          if($(this).attr("validation")){
+            validation($(this));
+          }
+        }
+      });
+
+    //":input"añade a los input radio,select...
+    $(this).find(":input").each(function(){
+      if(($(this).attr("validated")=="false")) {
+        //Se muestra el input inválido.
+        tab= $(this).closest("div[id^='tab']").attr("id");
+        mostrarTab($(this).closest("form"),tab);
+        $(this).focus();
+        val=1;
+        return false;
+      }       
+    });
+
+          
+    var formdata=new FormData($(this)[0])
+
+    if(val==0){
+      $.ajax({
+        type: 'POST',
+        url: Routing.generate('administrativo_create'),//url: $(this).attr('action')
+        data:formdata, //$(this).serialize()
+        dataType: 'json',
+        processData: false,
+        contentType: false,
+        cache: false,
+
+        // Mostramos un mensaje con la respuesta de PHP
+        success: function(response) {
+        
+          limpiarForm(form);
+
+          // Notificación de confirmación.
+          exito.play();
+          new PNotify({
+            text:"Personal administrativo registrado",
+            addclass: "custom",
+            type: "success",
+            shadow: true,
+            hide: true,
+            buttons: {
+            sticker: false,
+            labels:{close: "Cerrar"}
+            },
+            stack: right_Stack,
+            animate: {
+              animate: true,
+              in_class: "fadeInRight",
+              out_class: "fadeOutRight",
+            }
+          });
+          
+          //Actualización de pestañas.
+          $("#ficha_administrativo").update_tab();
+          $("#administrativo_antiguo").update_tab();
+
+
+          event.stopPropagation();   
+        },
+        error: function (response, desc, err){
+          if (response.responseJSON && response.responseJSON.message) {
+            if(response.responseJSON.result == 0) {
+              //Se elimina las clases de error, para luego añadirlas a los campos que siguen inválidos.
+               form.find(":input").each(function(i){  
+                $(this).prev().find(".error").remove();
+                $(this).next(".mensaje").remove();
+                $(this).removeClass("invalid");
+                $(this).attr("validated", true);
+              });
+              //Se muestra los campos inválidos.        
+              for (var key in response.responseJSON.data) { 
+                form.find(":input[id='"+key+"']").addClass("invalid");   
+                form.find(":input[id='"+key+"']").attr("validated", false);
+                form.find(":input[id='"+key+"']").after("<span class='mensaje'>"+response.responseJSON.data[key]+"</span>");
+                form.find(":input[id='"+key+"']").prev().append("<span class='error'>Dato inválido</span>");
+              }
+            } 
+            alert(response.responseJSON.message);
+          } 
+          else {
+            alert(desc);
+          }
+        }
+      })
+    }
+      return false;
+  });
+
+  $(document).on("submit","#administrativo_edit",function(event) {
+    event.preventDefault();
+    form= $(this).closest("form");
+
+    var val=0;
+    // Se recorre los campos del formulario mirando si estan validados o no.
+    form.find(":input[type!='file']").each(function(){
+
+      if((!$(this).attr("validated") || $(this).attr("validated")==false)){
+        if($(this).attr("validation")){
+          validation($(this));
+        }
+      }
+    });
+
+    //":input"añade a los input radio,select...
+    form.find(":input").each(function(){
+      if(($(this).attr("validated")=="false")) {
+        //Se muestra el input inválido.
+        $(this).focus();
+        val=1;
+        return false;
+      }       
+    });
+
+    var formdata=new FormData($(this)[0]);
+
+    if(val==0){
+      $.ajax({
+        type: 'POST',
+        url: $(this).attr('action'),
+        data: formdata, 
+        dataType: 'json',
+        processData: false,
+        contentType: false,
+        cache: false,
+        success: function(response) {
+      
+          //Actualización de pestañas.
+          $("#administrativo_antiguo").update_tab();
+          $("#listarlog").update_tab();
+
+          var arr = form.attr('action').split('/');
+          div=form.closest("div[id^='tabs-']");
+          $(div).load(Routing.generate('administrativo_edit', {id:arr[5]}), function(responseTxt, statusTxt, xhr){
+            if(statusTxt == "success"){
+              form= $("#administrativo_edit");
+
+              // Notificación de confirmación.
+              $(".ui-pnotify").remove();
+              exito.play();
+
+              new PNotify({
+                text:"Datos actualizados",
+                addclass: "custom",
+                type: "success",
+                shadow: true,
+                hide: true,
+                buttons: {
+                  sticker: false,
+                  labels:{close: "Cerrar"}
+                },
+                stack: right_Stack,
+                animate: {
+                  animate: true,
+                  in_class: "fadeInRight",
+                  out_class: "fadeOutRight",
+                }
+              });
+            }
+
+            if(statusTxt == "error")
+              alert("Error: " + xhr.status + ": " + xhr.statusText);
+          });
+        } 
+      })
+    }
+  });
+
+  //Se restablece la contraseña del administrativo.
+  $(document).on("click","#administrativo_edit .btn_restablecer",function(event) {
+    event.preventDefault();
+    id=$(this).attr("id");
+
+    aviso.play();
+    swal({
+      title: "Restablecer contraseña del administrativo",
+      html: "<p class='justificado'>Se va a restablecer la contraseña del administrativo a la inicial y no se podrá recuperar la actual. ¿Estas seguro de continuar?</p>",
+      type: "warning",
+      showCancelButton: true,
+      cancelButtonText: "Cancelar",
+      confirmButtonColor: color,
+      confirmButtonText: "¡Adelante!"
+      }).then(function () {
+
+        $.ajax({
+          type: 'POST',
+          url: Routing.generate('restablecer_contraseña_administrativo', {id:id}),
+          data:{id:id},
+          dataType: 'json',
+  
+          success: function(response) {
+            // Notificación de confirmación.
+            $(".ui-pnotify").remove();
+            exito.play();
+
+            new PNotify({
+              text:"Contraseña restablecida.",
+              addclass: "custom",
+              type: "success",
+              shadow: true,
+              hide: true,
+              buttons: {
+                sticker: false,
+                labels:{close: "Cerrar"}
+              },
+              stack: right_Stack,
+              animate: {
+                animate: true,
+                in_class: "fadeInRight",
+                out_class: "fadeOutRight",
+              }
+            });
+          }
+        })
+      }, function (dismiss) {
+
+      }
+    ); 
+  });
+
+$(document).on("blur","input[id='administrativo_dni']",function(event) {
+  form= $(this).closest("form");
+
+  if($(this).val()!=''){
+    var dni=$(this).val();
+    $.ajax({
+      type: 'POST',
+      url: Routing.generate('comprobar_dni_administrativo'),
+      data: {dni:dni},
+      dataType: 'json',
+      success: function(response) {      
+        if(response.data!=null){
+          form.find("input[id$='administrativo_dni']").addClass("invalid");   
+          form.find("input[id$='administrativo_dni']").attr("validated", false);
+          form.find("input[id$='administrativo_dni']").after("<span class='mensaje'>Este DNI ya existe en el sistema.</span>");
+          //Se comprueba que no exista el aviso de error para no repetirlo.
+          if(form.find("input[id$='administrativo_dni']").prev().find('span[class="error"]').size()==0){
+            form.find("input[id$='administrativo_dni']").prev().append("<span class='error'>Dato inválido</span>");
+          }
+          form.find("input[id$='administrativo_nombre']").focus();
+          if(form.find("input[id$='administrativo_nombre']").val()==''){
+            form.find("input[id$='administrativo_nombre']").removeClass("invalid");
+            form.find("input[id$='administrativo_nombre']").prev().find(".error").remove();
+            form.find("input[id$='administrativo_nombre']").next(".mensaje").remove();         
+          }
+        }
+      } 
+    })
+  }
+  event.stopPropagation();  
+});
+  
+
+$(document).on("blur","input[id='edit_administrativo_dni']",function(event) {
+  form= $(this).closest("form");
+
+  var arr = form.attr('action').split('/');
+
+  if($(this).val()!=''){
+    var dni=$(this).val();
+
+    $.ajax({
+      type: 'POST',
+      url: Routing.generate('comprobar_dni_administrativo_editado'),
+      data: {dni:dni, id:arr[5]},
+      dataType: 'json',
+      success: function(response) {      
+        if(response.data!=null){
+          form.find("input[id$='administrativo_dni']").addClass("invalid");   
+          form.find("input[id$='administrativo_dni']").attr("validated", false);
+          form.find("input[id$='administrativo_dni']").after("<span class='mensaje'>Este DNI ya existe en el sistema.</span>");
+          //Se comprueba que no exista el aviso de error para no repetirlo.
+          if(form.find("input[id$='administrativo_dni']").prev().find('span[class="error"]').size()==0){
+            form.find("input[id$='administrativo_dni']").prev().append("<span class='error'>Dato inválido</span>");
+          }
+          form.find("input[id$='administrativo_nombre']").focus();
+          if(form.find("input[id$='administrativo_nombre']").val()==''){
+            form.find("input[id$='administrativo_nombre']").removeClass("invalid");
+            form.find("input[id$='administrativo_nombre']").prev().find(".error").remove();
+            form.find("input[id$='administrativo_nombre']").next(".mensaje").remove();         
+          }
+        }
+      } 
+    })
+  }
+  event.stopPropagation();
+});
+
+
+  ///////////////////////////////////////////
+  //       Antiguos administrativos        //
+  ///////////////////////////////////////////
+
+
+  //Se muestra la info del profesor al colocar el cursor.
+  $(document).on("mouseenter","#consulta_antiguo_administrativo .scrollContent tr", function(){
+    // Se evita que se muestre el mensaje predeterminado si pasamos de un enlace a otro.
+    $("#consulta_antiguo_administrativo .contenido_info #sin_seleccionar").addClass("oculto");
+
+    //Se comprueba que no es un aviso predeterminado.
+    if(!$(this).find("td").hasClass("dataTables_empty")){
+
+      $("#consulta_antiguo_administrativo .contenido_info #seleccionado").load(Routing.generate('datos_antiguo_administrativo', {id:$(this).attr("id")}), function(){
+        $("#consulta_antiguo_administrativo .contenido_info #seleccionado").removeClass("oculto");
+        $("#consulta_antiguo_administrativo .contenido_info #sin_seleccionar").addClass("oculto");     
+      });
+    }
+    else{
+      $("#consulta_antiguo_administrativo .contenido_info #seleccionado").empty();
+      $("#consulta_antiguo_administrativo .contenido_info #seleccionado").addClass("oculto");
+      $("#consulta_antiguo_administrativo .contenido_info #sin_seleccionar").removeClass("oculto");
+    }
+  });
+
+  // Se elimina la información mostrada del profesor al quitar el puntero.
+  $(document).on("mouseleave","#consulta_antiguo_administrativo .scrollContent tr", function () {
+    $("#consulta_antiguo_administrativo .contenido_info #seleccionado").addClass("oculto");
+    $("#consulta_antiguo_administrativo .contenido_info #seleccionado").empty();
+    $("#consulta_antiguo_administrativo .contenido_info #sin_seleccionar").removeClass("oculto");
+  });
+
+  // Se elimina la información con retraso al salir de la tabla por si aún se estan cargando datos anteriores.
+  $(document).on("mouseleave","#old_admin", function () {
+    setTimeout(function() {
+      $("#consulta_antiguo_administrativo .contenido_info #seleccionado").addClass("oculto");
+      $("#consulta_antiguo_administrativo .contenido_info #seleccionado").empty();
+      $("#consulta_antiguo_administrativo .contenido_info #sin_seleccionar").removeClass("oculto");
+    }, 300);
+  });
+
+
+  $(document).on('click',"#consulta_antiguo_administrativo #old_admin tbody td",function(event){
+    event.preventDefault();
+    input=$(this).closest("tr").find("td:last-child input");
+    //Se desactiva seleccionar cuando hay selección en la otra tabla.
+    if(input.is(":disabled")){
+      return false;
+    }
+
+    if(!$(event.target).is('input')){
+
+      if(input.is(':checked') ){
+        input.prop("checked",false);
+      }
+      else{
+        input.prop("checked",true);
+      }
+    }
+    else{
+      //Retardo para poder mostar el input seleccionado.
+      setTimeout(function(){
+        if(input.is(':checked') ){
+          input.prop("checked",false);
+        }
+        else{
+          input.prop("checked",true);
+        }
+      }, 5);
+    }
+    // Se habilita/deshabilita el botón enviar selecionados.
+    if( $("#consulta_antiguo_administrativo #old_admin td input").is(':checked') ) {
+      $("#consulta_antiguo_administrativo #baja").addClass("oculto");
+      $("#consulta_antiguo_administrativo .baja_active").removeClass("oculto");
+      $("#consulta_antiguo_administrativo #alta").addClass("oculto");
+      $("#consulta_antiguo_administrativo .alta_limpiar").removeClass("oculto");
+      $("#consulta_antiguo_administrativo #old_admin_no_active tbody td input").each (function(){ 
+        $(this).prop("disabled",true);
+      });
+    } 
+    else {
+      $("#consulta_antiguo_administrativo #baja").addClass("oculto");
+      $("#consulta_antiguo_administrativo .baja_disable").removeClass("oculto");
+      $("#consulta_antiguo_administrativo #alta").addClass("oculto");
+      $("#consulta_antiguo_administrativo .alta_disable").removeClass("oculto");
+      $("#consulta_antiguo_administrativo #old_admin_no_active tbody td input").each (function(){ 
+        $(this).prop("disabled",false);
+      });
+    }
+  });
+
+
+  $(document).on('click',"#consulta_antiguo_administrativo #old_admin_no_active tbody td",function(event){
+    event.preventDefault();
+    input=$(this).closest("tr").find("td:first-child input");
+    
+    //Se desactiva seleccionar cuando hay selección en la otra tabla.
+    if(input.is(":disabled")){
+      return false;
+    }
+
+    if(!$(event.target).is('input')){
+
+      if(input.is(':checked') ){
+        input.prop("checked",false);
+      }
+      else{
+        input.prop("checked",true);
+      }
+    }
+    else{
+      //Retardo para poder mostar el input seleccionado.
+      setTimeout(function(){
+        if(input.is(':checked') ){
+          input.prop("checked",false);
+        }
+        else{
+          input.prop("checked",true);
+        }
+      }, 5);
+    }
+    // Se habilita/deshabilita el botón enviar selecionados.
+    if( $("#consulta_antiguo_administrativo #old_admin_no_active td input").is(':checked') ) {
+          $("#consulta_antiguo_administrativo #alta").addClass("oculto");
+          $("#consulta_antiguo_administrativo .alta_active").removeClass("oculto");
+          $("#consulta_antiguo_administrativo #baja").addClass("oculto");
+          $("#consulta_antiguo_administrativo .baja_limpiar").removeClass("oculto");
+      $("#consulta_antiguo_administrativo #old_admin tbody td input").each (function(){ 
+        $(this).prop("disabled",true);
+      });
+    } 
+    else {
+          $("#consulta_antiguo_administrativo #alta").addClass("oculto");
+          $("#consulta_antiguo_administrativo .alta_disable").removeClass("oculto");
+          $("#consulta_antiguo_administrativo #baja").addClass("oculto");
+          $("#consulta_antiguo_administrativo .baja_disable").removeClass("oculto");
+      $("#consulta_antiguo_administrativo #old_admin tbody td input").each (function(){ 
+        $(this).prop("disabled",false);
+      });
+    }
+  });
+  //Se limpia la selección al pulsar el botón correspondiente.
+  $(document).on("click","#consulta_antiguo_administrativo .baja_limpiar button", function () {
+    $("#consulta_antiguo_administrativo #old_admin_no_active tbody td input:checked").each (function(){ 
+       //Se realiza el evento en el td ya que en input haría click dos veces.
+       $(this).closest("td").click();
+    });
+  });
+
+  $(document).on("click","#consulta_antiguo_administrativo .alta_limpiar button", function () {
+    $("#consulta_antiguo_administrativo #old_admin tbody td input:checked").each (function(){ 
+      $(this).closest("td").click();
+    });
+  });
+
+  //Se realiza la nueva alta del administrativo.
+  $(document).on("click","#consulta_antiguo_administrativo .alta_active button", function(event) {
+    event.preventDefault();
+    var array= Array(); 
+    $("#consulta_antiguo_administrativo #old_admin_no_active tbody td input:checked").each (function(){ 
+      array.push($(this).closest("tr").attr("id"));
+    });
+
+    if(array.length==1){
+      nombre="";
+      nivel="";
+    $("#consulta_antiguo_administrativo #old_admin_no_active tbody td input:checked").each (function(){ 
+      nombre=$(this).closest("tr").find("td:nth-child(2)").text();
+      nivel=$(this).closest("tr").find("#nivel").text();
+    });
+      titulo="<table><p>Se va a registrar el alta del antiguo administrativo:<br></p><thead><tr><th>Nombre</th><th>Nivel</th></tr></thead><tbody><tr><td>"+nombre+"</td><td>"+nivel+"</td></tr></tbody><br></p></table><br>¿Estas seguro de continuar?";
+    }
+    else{
+      titulo="<table ><p>Se va a registrar el alta de los antiguos administrativos:<br></p><thead><tr><th>Nombre</th><th>Nivel</th></tr></thead><tbody>";
+      $("#consulta_antiguo_administrativo #old_admin_no_active tbody td itput:checked").each (function(){ 
+        nombre=$(this).closest("tr").find("td:nth-child(2)").text();
+        nivel=$(this).closest("tr").find("#nivel").text();
+        titulo+="<tr><td>"+nombre+"</td><td>"+nivel+"</td></tr>";
+       });
+      titulo+="</tbody><br></p></table><br>¿Estas seguro de continuar?";
+    }
+
+    aviso.play();
+    swal({
+      title: "Alta del Personal Administrativo",
+      html: titulo,
+      type: "warning",
+      showCancelButton: true,
+      cancelButtonText: "Cancelar",
+      width: "500px",
+      confirmButtonColor: color,
+      confirmButtonText: "¡Adelante!"
+      }).then(function () {
+
+        $.ajax({
+          type: 'POST',
+          url: Routing.generate('alta_administrativo'),
+          data: {array:array},
+          dataType: 'json',
+          success: function(response) {
+            if(array.length==1){
+              texto="Alta registrada.";
+            }else{
+              texto=array.length+" altas registradas.";
+            }
+            // Notificación de confirmación
+            exito.play();
+            
+            new PNotify({
+              text:texto,
+              addclass: "custom",
+              type: "success",
+              shadow: true,
+              hide: true,
+              buttons: {
+                sticker: false,
+                labels:{close: "Cerrar"}
+              },
+              stack: right_Stack,
+              animate: {
+                animate: true,
+                in_class: "fadeInRight",
+                out_class: "fadeOutRight",
+              }
+            });
+
+            // Se actualiza todas las pestañas con tablas de administrativos.
+            $("#administrativo_antiguo").update_tab();
+            $("#ficha_administrativo").update_tab();
+          }
+        })
+      }, function (dismiss) {
+
+      }
+    );
+  });
+
+  //Se realiza la baja del profesor.
+  $(document).on("click","#consulta_antiguo_administrativo .baja_active button", function(event)  {
+    event.preventDefault();
+    var array= Array(); 
+    $("#consulta_antiguo_administrativo #old_admin tbody td input:checked").each (function(){ 
+      array.push($(this).closest("tr").attr("id"));
+    });
+
+    if(array.length==1){
+      nombre="";
+      tipo="";
+    $("#consulta_antiguo_administrativo #old_admin tbody td input:checked").each (function(){ 
+      nombre=$(this).closest("tr").find("td:nth-child(2)").text();
+      tipo=$(this).closest("tr").find("#tipo").text();
+    });
+      titulo="<table><p>Se va a registrar la baja del siguiente administrativo:<br></p><thead><tr><th>Nombre</th><th>Personal</th></tr></thead><tbody><tr><td>"+nombre+"</td><td>"+tipo+"</td></tr></tbody><br></table><br><br>¿Estas seguro de continuar?";
+    }
+    else{
+      titulo="<table><p>Se va a registrar la baja de los siguientes administrativos:<br></p><thead><tr><th>Nombre</th><th>Personal</th></tr></thead><tbody>";
+      $("#consulta_antiguo_administrativo #old_admin tbody td input:checked").each (function(){ 
+        nombre=$(this).closest("tr").find("td:nth-child(2)").text();
+        tipo=$(this).closest("tr").find("#tipo").text();
+        titulo+="<tr><td>"+nombre+"</td><td>"+tipo+"</td></tr>";
+       });
+      titulo+="</tbody><br></p></table><br><br>¿Estas seguro de continuar?";
+    }
+
+    aviso.play();
+    swal({
+      title: "Baja del Personal Administrativo",
+      html: titulo,
+      type: "warning",
+      showCancelButton: true,
+      cancelButtonText: "Cancelar",
+      width: "500px",
+      confirmButtonColor: color,
+      confirmButtonText: "¡Adelante!"
+      }).then(function () {
+        $.ajax({
+          type: 'POST',
+          url: Routing.generate('baja_administrativo'),
+          data: {array:array},
+          dataType: 'json',
+          success: function(response) {
+            if(array.length==1){
+              texto="Baja registrada.";
+            }else{
+              texto=array.length+" bajas registradas.";
+            }
+
+            // Notificación de confirmación
+            exito.play();
+            
+            new PNotify({
+              text:texto,
+              addclass: "custom",
+              type: "success",
+              shadow: true,
+              hide: true,
+              buttons: {
+                sticker: false,
+                labels:{close: "Cerrar"}
+              },
+              stack: right_Stack,
+              animate: {
+                animate: true,
+                in_class: "fadeInRight",
+                out_class: "fadeOutRight",
+              }
+            });
+            // Se actualiza todas las pestañas con tablas de administrativos.
+            $("#administrativo_antiguo").update_tab();
+            $("#ficha_administrativo").update_tab();
+          }
+        })
+      }, function (dismiss) {
+      }
+    );
+  });
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  ///////////////////////////////////////////
+  //            Equipo Directivo           //
+  ///////////////////////////////////////////
+
+  $(document).on('click',"#equipo_directivo tbody td",function(event){
+    event.preventDefault();
+    input=$(this).closest("tr").find("td:last-child input");
+
+    if(!$(event.target).is('input')){
+        input.prop("checked",true);
+    }
+    else{
+      //Retardo para poder mostar el input seleccionado.
+      setTimeout(function(){
+          input.prop("checked",true);
+      }, 2);
+    }
+
+    // Se habilita/deshabilita el botón enviar selecionados.
+      $("#equipo_directivo .alta_active").removeClass("oculto");
+      $("#equipo_directivo .alta_disable").addClass("oculto");
+  });
+
+
+  //Se muestra la info del profesor al colocar el cursor.
+  $(document).on("mouseenter","#equipo_directivo .scrollContent tr", function(){
+    // Se evita que se muestre el mensaje predeterminado si pasamos de un enlace a otro.
+    $("#equipo_directivo .contenido_info #sin_seleccionar").addClass("oculto");
+
+    //Se comprueba que no es un aviso predeterminado.
+    if(!$(this).find("td").hasClass("dataTables_empty")){
+
+      $("#equipo_directivo .contenido_info #seleccionado").load(Routing.generate('datos_antiguo_profesor', {id:$(this).attr("id")}), function(){
+        $("#equipo_directivo .contenido_info #seleccionado").removeClass("oculto");
+        $("#equipo_directivo .contenido_info #sin_seleccionar").addClass("oculto");     
+      });
+    }
+    else{
+      $("#equipo_directivo .contenido_info #seleccionado").empty();
+      $("#equipo_directivo .contenido_info #seleccionado").addClass("oculto");
+      $("#equipo_directivo .contenido_info #sin_seleccionar").removeClass("oculto");
+    }
+  });
+
+  // Se elimina la información mostrada del profesor al quitar el puntero.
+  $(document).on("mouseleave","#equipo_directivo .scrollContent tr", function () {
+    $("#equipo_directivo .contenido_info #seleccionado").addClass("oculto");
+    $("#equipo_directivo .contenido_info #seleccionado").empty();
+    $("#equipo_directivo .contenido_info #sin_seleccionar").removeClass("oculto");
+  });
+
+  // Se elimina la información con retraso al salir de la tabla por si aún se estan cargando datos anteriores.
+  $(document).on("mouseleave","#equipo_directivo_teachers", function () {
+    setTimeout(function() {
+      $("#equipo_directivo .contenido_info #seleccionado").addClass("oculto");
+      $("#equipo_directivo .contenido_info #seleccionado").empty();
+      $("#equipo_directivo .contenido_info #sin_seleccionar").removeClass("oculto");
+    }, 300);
+  });
+
+
+
+  //Se realiza la nueva alta del profesor.
+  $(document).on("click","#consulta_antiguo_profesor .alta_active button", function(event) {
+    event.preventDefault();
+    var array= Array(); 
+    $("#consulta_antiguo_profesor #old_teacher_no_active tbody td input:checked").each (function(){ 
+      //alert($(this).closest("tr").find("#nivel").text());
+      array.push($(this).closest("tr").attr("id"));
+    });
+
+    if(array.length==1){
+      nombre="";
+      nivel="";
+    $("#consulta_antiguo_profesor #old_teacher_no_active tbody td input:checked").each (function(){ 
+      nombre=$(this).closest("tr").find("td:nth-child(2)").text();
+      nivel=$(this).closest("tr").find("#nivel").text();
+    });
+
+      //titulo="<table><p>Se va a registrar el alta del antiguo profesor X, ¿Estas seguro de continuar? <br></p><thead><tr><th>Evento</th><th>Fecha</th><th>Hora</th></tr></thead><tbody><tr><td>"+titulo+"</td><td>"+fecha+"</td><td>"+hora+"</td></tr></tbody><br></p></table>",
+      titulo="<table><p>Se va a registrar el alta del antiguo profesor:<br></p><thead><tr><th>Nombre</th><th>Nivel</th></tr></thead><tbody><tr><td>"+nombre+"</td><td>"+nivel+"</td></tr></tbody><br></p></table><br>¿Estas seguro de continuar?";
+    }
+    else{
+      titulo="<table ><p>Se va a registrar el alta de los antiguos profesores:<br></p><thead><tr><th>Nombre</th><th>Nivel</th></tr></thead><tbody>";
+      $("#consulta_antiguo_profesor #old_teacher_no_active tbody td input:checked").each (function(){ 
+        nombre=$(this).closest("tr").find("td:nth-child(2)").text();
+        nivel=$(this).closest("tr").find("#nivel").text();
+        titulo+="<tr><td>"+nombre+"</td><td>"+nivel+"</td></tr>";
+       });
+      titulo+="</tbody><br></p></table><br>¿Estas seguro de continuar?";
+    }
+
+    aviso.play();
+    swal({
+      title: "Alta de Profesores",
+      html: titulo,
+      type: "warning",
+      showCancelButton: true,
+      cancelButtonText: "Cancelar",
+      width: "500px",
+      confirmButtonColor: color,
+      confirmButtonText: "¡Adelante!"
+      }).then(function () {
+
+        $.ajax({
+          type: 'POST',
+          url: Routing.generate('alta_profesor'),
+          data: {array:array},
+          dataType: 'json',
+          success: function(response) {
+            if(array.length==1){
+              texto="Alta registrada.";
+            }else{
+              texto=array.length+" altas registradas.";
+            }
+
+            // Notificación de confirmación
+            exito.play();
+            
+            new PNotify({
+              text:texto,
+              addclass: "custom",
+              type: "success",
+              shadow: true,
+              hide: true,
+              buttons: {
+                sticker: false,
+                labels:{close: "Cerrar"}
+              },
+              stack: right_Stack,
+              animate: {
+                animate: true,
+                in_class: "fadeInRight",
+                out_class: "fadeOutRight",
+              }
+            });
+
+            // Se actualiza todas las pestañas con tablas de profesores.
+            $("#profesor_antiguo").update_tab();
+            $("#ficha_profesor").update_tab();
+            $("#consultar_equipamientos").update_tab();
+            $("#consultar_instalaciones").update_tab();
+            $("#tutor_grupo").update_tab();
+            $("#profesor_asignar_grupo").update_tab();
+            $("#clases_impartidas").update_tab();
+            $("#equipo_directivo").update_tab();
+            $("#clases_impartidas").update_tab();
+          }
+        })
+      }, function (dismiss) {
+
+      }
+    );
+  });
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+//////////////////////////////////
+//   Finalizar curso académico  //
+//////////////////////////////////
+
+
+  $(document).on("click","#finalizar_curso",function(event){
+    event.preventDefault();
+
+        $.ajax({
+          type: 'POST',
+          url: Routing.generate('obtener_curso_academico'),
+
+          dataType: 'json',
+          success: function(response) {
+
+    aviso.play();
+    swal({
+      title: "Finalización del Curso Académico "+response.inicio+"/"+response.fin,
+      html: "<p class='justificado'>Se va a finalizar el curso académico almacenando todos los datos del curso en el expediente de los alumnos y restableciendo los datos del sistema para el nuevo curso.</p></br>¿Estas seguro de continuar? No podrás deshacer este paso...",
+      type: "warning",
+      showCancelButton: true,
+      cancelButtonText: "Cancelar",
+      confirmButtonColor: color_rojo,
+      confirmButtonText: "Finalizar"
+      }).then(function () {
+
+        $.ajax({
+          type: 'DELETE',
+          url: Routing.generate(arr[4]+"_delete", {id:arr[5]}),
+          data: $('#asignatura_delete').serialize(),
+        
+          success: function() {
+            $("#asignaturas_dialog").dialog('close');
+            tab=$(".contenido_main").find("div[aria-hidden='false']");
+            $(tab).load(Routing.generate('asignatura'));
+            //$("#tabs #lista_asignaturas").empty();
+            //$("#tabs #lista_asignaturas").load(Routing.generate('alumno_listaAsignatura'));
+            
+            //Actualización de pestañas.
+            $("#asignaturas_cursos").update_tab();
+            $("#profesor_asignar_grupo").update_tab();
+            $("#asignar_horario").update_tab();
+            $("#asignar_optativa").update_tab();
+          }
+        })
+      }, function (dismiss) {
+
+      }
+    );
+      return false;
+
+
+
+          }
+        })
+
+  });
+
+
+//////////////////////////////////
+//   Finalizar matriculación    //
+//////////////////////////////////
+
+
+  $(document).on("click","#finalizar_matriculacion",function(event){
+    event.preventDefault();
+
+        $.ajax({
+          type: 'POST',
+          url: Routing.generate('obtener_curso_academico'),
+
+          dataType: 'json',
+          success: function(response) {
+
+    aviso.play();
+    swal({
+      title: "Finalización del proceso de matriculación del curso "+response.inicio+"/"+response.fin,
+      html: "<p class='justificado'>Se va a finalizar el proceso de matriculación del curso académico desactivando a los alumnos del curso anterior que no han sido matriculados.</p><br><p class='justificado'> Los responsables de estos alumnos también serán desactivados en el sistema si no tiene más alumnos matriculados en el centro.</p></br>¿Estas seguro de continuar? No podrás deshacer este paso...",
+      type: "warning",
+      showCancelButton: true,
+      cancelButtonText: "Cancelar",
+      confirmButtonColor: color_rojo,
+      confirmButtonText: "Finalizar"
+      }).then(function () {
+
+        $.ajax({
+          type: 'DELETE',
+          url: Routing.generate(arr[4]+"_delete", {id:arr[5]}),
+          data: $('#asignatura_delete').serialize(),
+        
+          success: function() {
+            $("#asignaturas_dialog").dialog('close');
+            tab=$(".contenido_main").find("div[aria-hidden='false']");
+            $(tab).load(Routing.generate('asignatura'));
+            //$("#tabs #lista_asignaturas").empty();
+            //$("#tabs #lista_asignaturas").load(Routing.generate('alumno_listaAsignatura'));
+            
+            //Actualización de pestañas.
+            $("#asignaturas_cursos").update_tab();
+            $("#profesor_asignar_grupo").update_tab();
+            $("#asignar_horario").update_tab();
+            $("#asignar_optativa").update_tab();
+          }
+        })
+      }, function (dismiss) {
+
+      }
+    );
+      return false;
+
+
+
+          }
+        })
+
+  });
+
+
+
+
+
+
+
+
+
+
+
 
 
 });
-//alert($('#tabs ul li:eq(0)').outerWidth(true));
-
 

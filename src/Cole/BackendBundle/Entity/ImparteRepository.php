@@ -21,6 +21,15 @@ class ImparteRepository extends EntityRepository
 		->getResult();
 	}
 
+	public function findByGrupoTodas($grupo)
+	{
+		return $this->getEntityManager()->createQuery(
+		'SELECT i FROM BackendBundle:Imparte i WHERE i.grupo=:grupo')
+		->setParameters(array(
+			'grupo' => $grupo))
+		->getResult();
+	}
+
 	public function findByDatos($dia_semanal,$ini,$fin,$profesor)
 	{
 		return $this->getEntityManager()->createQuery(
@@ -128,6 +137,15 @@ class ImparteRepository extends EntityRepository
 		->getResult();
 	}
 
+	public function findAsignacionesProfesorAsignaturaGrupo($profesor)
+	{
+		return $this->getEntityManager()->createQuery(
+		'SELECT i FROM BackendBundle:Imparte i INNER JOIN i.grupo g INNER JOIN g.curso c INNER JOIN i.asignatura a INNER JOIN a.asignatura asig  WHERE i.profesor=:profesor and asig.nombre not like :asignatura GROUP BY i.grupo, i.asignatura  ORDER BY c.numOrden, g.letra')
+		->setParameters(array(
+			'asignatura'=>"Tutoría",
+			'profesor' => $profesor))
+		->getResult();
+	}
 
 	public function findConHorario()
 	{

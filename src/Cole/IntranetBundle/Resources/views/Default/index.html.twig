@@ -58,15 +58,19 @@
 					</div>
 					{% if is_granted("ROLE_ADMIN") %}
 						{% if app.user.sexo == "Masculino" %}
+						<div class="f_left">
 							<a href="{{path('backend')}}">
 								<img id="img_admin" class="img-responsive btn_admin" alt="Área de Administración" src="{{ asset('bundles/intranet/images/btn_admin_m.png')}}">
 								<img id="img_admin_hover" class="img-responsive btn_admin hide" alt="Área de Administración" data-toggle="tooltip" data-placement="bottom" data-original-title="{% trans %}Área de Administración{% endtrans %}" src="{{ asset('bundles/intranet/images/btn_admin_m_hover.png')}}">
 							</a>
+						</div>
 						{% else %}
+						<div class="f_left">
 							<a href="{{path('backend')}}">
 								<img id="img_admin" class="img-responsive btn_admin" alt="Área de Administración" src="{{ asset('bundles/intranet/images/btn_admin_f.png')}}">
 								<img id="img_admin_hover" class="img-responsive btn_admin hide" alt="Área de Administración" data-toggle="tooltip" data-placement="bottom" data-original-title="{% trans %}Área de Administración{% endtrans %}" src="{{ asset('bundles/intranet/images/btn_admin_f_hover.png')}}">
 							</a>
+						</div>
 						{% endif %}
 					{% endif %}
 				</div>

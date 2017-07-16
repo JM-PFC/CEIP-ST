@@ -5,7 +5,6 @@
     <script>
     	$(".menu li").removeClass('active');
 		$(".menu #calificaciones").addClass('active');
-        $(".menu #calificaciones").addClass('click');
         
         //Se selecciona los valores de los select ocultos.
         profesor={{entity.id|json_encode()|raw}};
@@ -49,7 +48,7 @@
 {% endblock %}
 
 {% block contenido %}
-    <h4 id="titulo-seccion" class="titulo-seccion">{% trans %}Calificaciones{% endtrans %}</h4>
+    <h4 id="titulo-seccion" class="titulo-seccion">{% trans %}Calificaciones del curso{% endtrans %}</h4>
 
 	<div id="seleccion_calificaciones" class="contenedor_seleccion col-sm-12" locale="{{ app.request.getLocale() }}" >
       {% if entity.nivel == "Primaria"%}
@@ -57,12 +56,16 @@
         <div id="1" class="col-sm-4 center">
             <p>{% trans %}Seleccione una opción{% endtrans %}:</p>
             <div id="opciones" class="seleccion" locale="{{ app.request.getLocale() }}">
-                <button id="nueva" class="btn btn-primary col-xs-11 ">Añadir Tarea</button>
-                <button id="evaluar" class="btn btn-primary col-xs-11 ">Evaluar Tarea</button>
-                <button id="trimestre" class="verde btn btn-primary col-xs-11 ">Evaluar trimestre</button>  
                 {% if tutor_grupo %}
-                    <button id="{{tutor_grupo.id}}" class="verde btn btn-primary col-xs-11 ">Ver evaluación de mi Grupo</button>  
-                {% endif %}          
+                    <button id="nueva" class="btn btn-primary col-xs-11 col-lg-5 ">{% trans %}Añadir Tarea{% endtrans %}</button>
+                    <button id="evaluar" class="btn btn-primary col-xs-11 col-lg-5 ">{% trans %}Evaluar Tarea{% endtrans %}</button>
+                    <button id="trimestre" class="btn btn-primary col-xs-11 ">{% trans %}Evaluar trimestre{% endtrans %}</button>
+                    <a href="{{ path('evaluacion_grupo', { 'id': tutor_grupo.id }) }}" id="{{tutor_grupo.id}}" class="verde btn btn-primary col-xs-11 waiting">{% trans %}Ver evaluación de mi Grupo{% endtrans %}</a>  
+                {% else %}  
+                    <button id="nueva" class="btn btn-primary col-xs-11 ">{% trans %}Añadir Tarea{% endtrans %}</button>
+                    <button id="evaluar" class="btn btn-primary col-xs-11 ">{% trans %}Evaluar Tarea{% endtrans %}</button>
+                    <button id="trimestre" class="verde btn btn-primary col-xs-11 ">{% trans %}Evaluar trimestre{% endtrans %}</button>  
+                {% endif %} 
             </div>
             <span id="orden">1</span>
         </div>
@@ -71,7 +74,7 @@
             <p>{% trans %}Seleccione una asignatura{% endtrans %}:</p>
             <div id="asignatura" class="seleccion">
                 {% for asignatura in imparte %}
-                    <button id="{{asignatura.asignatura.id}}" class="btn btn-primary col-xs-11 ">{{asignatura.asignatura.asignatura.nombre}}</button>
+                    <button id="{{asignatura.asignatura.id}}" asig="{{asignatura.asignatura.asignatura.id}}" class="btn btn-primary col-xs-11 ">{{asignatura.asignatura.asignatura.nombre}}</button>
                 {% endfor %}
             </div>
             <span id="orden">2</span>
@@ -79,20 +82,29 @@
 
 		<div id="3_1" class="col-sm-4 center hidden">
 			<p>{% trans %}Seleccione un grupo{% endtrans %}:</p>
-
-    		<div id="cursos" class="seleccion" locale="{{ app.request.getLocale() }}">
-	
+            <div id="cursos" class="seleccion" locale="{{ app.request.getLocale() }}">
+                    {% for curso in cursos %}
+                    <a id="{{curso.grupo}}" asig="{{curso.asignatura.asignatura.id}}" href="{{ path('evaluar_asignatura', {"id": curso.grupo.id, "asig":curso.asignatura.asignatura.id}) }}" locale="{{ app.request.getLocale() }}" class="btn btn-primary waiting">{{curso.grupo.curso.curso ~ " " ~ curso.grupo.letra}}</a>
+                {% endfor %}   
 			</div>
 			<span id="orden">3</span>
 		</div>
         <div id="3_2" class="multiple_seleccion col-sm-4 center hidden">
             <p>{% trans %}Seleccione los grupos{% endtrans %}:</p>
+            <div id="cursos" class="seleccion" locale="{{ app.request.getLocale() }}"></div>    
+            <span id="orden">3</span>
+        </div>
 
+        <div id="3_3" class="col-sm-4 center hidden">
+            <p>{% trans %}Seleccione un grupo{% endtrans %}:</p>
             <div id="cursos" class="seleccion" locale="{{ app.request.getLocale() }}">
-          
+                    {% for curso in cursos %}
+                    <a id="{{curso.grupo}}" asig="{{curso.asignatura.asignatura.id}}" href="{{ path('evaluar_trimestre', {"id": curso.grupo.id, "asig":curso.asignatura.asignatura.id}) }}" locale="{{ app.request.getLocale() }}" class="btn btn-primary waiting">{{curso.grupo.curso.curso ~ " " ~ curso.grupo.letra}}</a>
+                {% endfor %}   
             </div>
             <span id="orden">3</span>
         </div>
+
         <div id="4" class="hidden clear">
         {% set locale = app.request.getLocale() %}
 
@@ -153,25 +165,32 @@
 	</div>
 
 <div id="tabla_tareas_profesor" class="panel panel-default tab-content">
-    <h4 >Tareas Evaluables</h4>
+    <h4 >{% trans %}Tareas Evaluables{% endtrans %}</h4>
     <div class="table-responsive">
       <table class="table lista-alumnos table-striped ">
         <thead>
           <tr >
-            <th class="col-md-5">{% trans %}Nombre de la tarea{% endtrans %}</th>
+            <th class="col-md-4">{% trans %}Nombre de la tarea{% endtrans %}</th>
             <th class="col-md-4">{% trans %}Asignatura{% endtrans %}</th>
-            <th class="col-md-3">{% trans %}Grupos{% endtrans %}</th>
-
+            <th class="col-md-1">{% trans %}Trimestre{% endtrans %}</th>
+            <th class="col-md-2">{% trans %}Grupos{% endtrans %}</th>
+            <th class="col-md-1"></th>
           </tr>
         </thead>
         <tbody class="">
         {% for entity in tareas %}
           <tr id="{{ entity.id }}">
-            <td class="col-md-5">{{ entity.descripcion }}</td>
+            <td class="col-md-4">{{ entity.descripcion }}</td>
             <td class="col-md-4" >
                 {{entity.asignatura.asignatura.nombre }}
             </td>
-            <td id="grupos_tareas" class="col-md-3"></td>
+            <td class="col-md-1">{{entity.trimestre ~ "º"}}</td>
+            <td id="grupos_tareas" class="col-md-2"></td>
+            <td class="col-md-1">
+                <a id="btn_eliminar" href="javascript:void(0);"  data-target="#eliminar_tarea_modal" data-toggle="modal" data-backdrop="static" data-keyboard="false">
+                    <i class="fa fa-trash-o"></i>
+                </a>
+            </td> 
           </tr>
         {% endfor %}
         </tbody>
@@ -179,18 +198,34 @@
       </div>
 </div>
 
-    <div id="lista_alumnos_calificaciones" class="modal fade lista_alumnos_seguimiento" role="dialog" data-backdrop="true" >
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                    <h4 class="modal-title">{% trans %}Alumnos del grupo{% endtrans %}</h4>
+    <!-- Ventana modal de eliminación de la tarea -->
+  <div id="eliminar_tarea_modal" class="modal fade-scale aviso"  tabindex="-1" role="dialog" data-backdrop="true" >
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+        <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            <h4 class="modal-title" id="myModalLabel">{% trans %}Eliminación de la tarea{% endtrans %}</h4>
+        </div>
+        <div class="modal-body">
+            
+            <p>Se va a eliminar la tarea del sistema y no se podrá recuperar.</p>
+            <p>¿Estas seguro de continuar?</p>
+            <div class="class-footer">
+                <button class="btn btn_azul" type="button" data-dismiss="modal" title="">Cancelar</button>
+                <form >
+                <input name="_method" value="DELETE" type="hidden">
+                <div id="form">
+                    <div>
+                        <button id="form_submit" class="btn btn-danger" type="submit" name="form[submit]">Eliminar</button>
+                    </div>
+    
                 </div>
-                <div class="modal-body"></div>
-                <div class="class-footer">
-                    <button type="button" class="btn btn_azul" data-dismiss="modal">{% trans %}Cerrar{% endtrans %}</button>
-                </div>
+                </form>
             </div>
+            
+        </div>
         </div>
     </div>
+  </div>
+
 {% endblock %}
