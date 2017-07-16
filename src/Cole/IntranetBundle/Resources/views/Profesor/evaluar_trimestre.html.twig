@@ -106,7 +106,7 @@
                 </div>    
 
                 <div class="table-responsive col-xs-12">
-                    <table class="lista-alumnos table table-striped">
+                    <table class="lista-alumnos table table-striped table-bordered">
                         <thead >
                             <tr>
                                 <th class="col-xs-1 center">Nº</th>
@@ -120,9 +120,6 @@
                                 {% if trimestre == 3 %}
                                     <th class="col-xs-1 center">{% trans %}3ª EVA{% endtrans %}</th>
                                     <th class="col-xs-1 center">{% trans %}ORD{% endtrans %}</th>
-                                {% else %}
-                                    <th class="col-xs-1 center"></th>
-                                    <th class="col-xs-1 center"></th>
                                 {% endif %}
                             </tr>
                         </thead> 
@@ -159,8 +156,6 @@
                                     <td class="col-xs-1 center">
                                         {{ form_widget(alumno.ord,{ 'attr':{'class':'notas'}}) }}
                                     </td>
-                                {% else %}
-                                    <td trimestre="3" class="col-xs-1 center"></td>
                                 {% endif %}
                             </tr>
                             {% endfor %}

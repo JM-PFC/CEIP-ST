@@ -3352,6 +3352,9 @@ table tr td a{
 #tabla_alum_trimestre{
     min-height: 390px !important;
 }
+#tabla_alum_trimestre tr td:first-child,#tabla_alum_trimestre tr td:nth-child(2) {
+    border: none !important;
+}
 #tabla_alum_trimestre th, #tabla_alum_trimestre td{
     min-width: 95px;
 }
@@ -3393,4 +3396,20 @@ table tr td a{
 }
 #lista_tareas_alumno label{
     min-width: 105px !important;
+}
+#tabla_alumnos_grupo .titulo_curso{
+    margin-bottom: 0 !important;
+    text-decoration: none !important;
+}
+#tabla_alumnos_grupo .table-responsive{
+    float: none !important;
+}
+#tabla_alumnos_grupo>div{
+    margin-bottom: 0 !important;
+}
+#evaluacion_alumno #evaluacion_pdf{
+    margin-top: -40px;
+}
+.titulo_boletin{
+    text-transform: underline !important;
 }

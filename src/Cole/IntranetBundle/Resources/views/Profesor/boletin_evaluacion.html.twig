@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta content="Alumnos del grupo" name="description" />
+    <meta content="CEIP, SANTA TERESA, CÁDIZ, WEB, COLEGIO" name="keywords" />
+    <link id="favicon" rel="icon" type="image/x-icon" href="{{ asset('favicon.ico') }}" />
+    <link href="{{ app.request.scheme ~ '://' ~ app.request.httpHost ~ asset('bundles/cole/css/estilo.css') }}" rel="stylesheet" type="text/css" />
+      <link href="{{app.request.scheme ~ '://' ~ app.request.httpHost ~ asset('bundles/backend/js/jquery-ui/    jquery-ui.css') }}" rel="stylesheet" type="text/css" />
+    <script src="{{app.request.scheme ~ '://' ~ app.request.httpHost ~ asset('bundles/cole/js/jquery-1.11.2.js')}}" type="text/javascript"></script>
+    <script type="text/javascript" src="{{app.request.scheme ~ '://' ~ app.request.httpHost ~ asset('bundles/backend/js/jquery-ui/jquery-ui.js') }}"></script>
+    <link rel="stylesheet" href="{{ app.request.scheme ~ '://' ~ app.request.httpHost ~  asset('bundles/intranet/css/bootstrap/bootstrap.min.css') }}">
+    <script type="text/javascript" src="{{ app.request.scheme ~ '://' ~ app.request.httpHost ~  asset('bundles/intranet/js/bootstrap/bootstrap.min.js') }}"></script>
+
+  </head>
+    
+  <body id="boletin_evaluacion_pdf" class="lista_pdf">
+
+      <div id="grupo">
+        <h3 class="titulo_boletin">Boletín de Calificaciones</h3>
+      </div>
+    <div class="div_datos">
+        <label >{% trans %}Alumno{% endtrans %}: </label>
+        <span>{{alumno}}</span>
+    </div>
+    <div class="div_datos">
+        <label >{% trans %}Nivel{% endtrans %}: </label>
+        <span>{{alumno.grupo.curso.nivel}}</span>
+    </div>
+    <div class="div_datos">
+        <label >{% trans %}Grupo{% endtrans %}: </label>
+        <span>{{alumno.grupo}}</span>
+    </div>
+    
+    <table class="lista-alumnos table table-striped " class="col-sm-offset-1 col-sm-10">
+        <thead >
+            <tr>
+                <th class="col-xs-7 col-sm-4">{% trans %}Asignaturas{% endtrans %}</th>
+                <th class="col-xs-1 center">{% trans %}1ª EVA{% endtrans %}</th>
+                {% if trimestre == 2 or trimestre == 3 %}
+                    <th class="col-xs-1 center">{% trans %}2ª EVA{% endtrans %}</th>
+                {% endif %}
+                {% if trimestre == 3 %}
+                    <th class="col-xs-1 center">{% trans %}3ª EVA{% endtrans %}</th>
+                    <th class="col-xs-1 center">{% trans %}ORD{% endtrans %}</th>
+                {% endif %}
+            </tr>
+        </thead> 
+        <tbody>
+            {% for asignatura in asignaturas %}
+                <tr id="{{ asignatura.id }}">
+                    <td class="col-xs-7 col-sm-4">
+                        {{ asignatura.asignatura.nombre }}
+                    </td>
+                    <td trimestre="1" class="col-xs-1 center"></td>
+                    {% if trimestre == 2 or trimestre == 3  %}
+                        <td trimestre="2" class="col-xs-1 center"></td>
+                    {% endif %} 
+                    {% if trimestre == 3 %}
+                        <td trimestre="3" class="col-xs-1 center"></td>
+                        <td id="ord" class="col-xs-1 center"></td>
+                    {% endif %}
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <label class="div_datos">Resumen de faltas de asistencia en el curso</label>
+    <table class="faltas table table-striped " class="col-sm-offset-1 col-sm-10">
+        <thead >
+            <tr>
+                <th class="col-xs-7"></th>
+                <th class="col-xs-2 center">Justificadas</th>
+                <th class="col-xs-2 center">Injustificadas</th>
+                <th class="col-xs-2 center">Retrasos</th>
+            </tr>
+        </thead> 
+        <tbody>
+            <tr id="completo">
+                <td class="col-xs-7">Día/s Completo/s</td>
+                <td class="col-xs-2 center"></td>
+                <td class="col-xs-2 center"></td>
+                <td class="col-xs-2 center" style="color:grey;"></td>
+            </tr>
+            <tr id="tramos">
+                <td class="col-xs-7">Tramo/s Horario/s</td>
+                <td class="col-xs-2 center"></td>
+                <td class="col-xs-2 center"></td>
+                <td class="col-xs-2 center"></td>
+            </tr>
+        </tbody>
+    </table>
+
+    <div class="footer_boletin">
+        <span class="div_datos">Les saluda cordialmente,</span>
+        <div class="saluda_tutor">
+            {% if entity.sexo == "Masculino"%}
+                <label class="div_datos">Tutor:</label><p class="div_datos">{{entity.apellido1 ~ " " ~ entity.apellido2 ~ ", " ~ entity.nombre}}</p>
+            {% else %}
+                <label class="div_datos">Tutora:</label><p class="div_datos">{{entity.apellido1 ~ " " ~ entity.apellido2 ~ ", " ~ entity.nombre}}</p>
+            {% endif %}
+        </div>
+    </div>
+    <div class="footer_boletin horarios">
+        <div>
+            <label class="div_datos">Horario de tutoría:</label>
+        </div>
+        <div class="horario"></div>
+    </div>
+
+
+
+
+
+    <script>
+    locale=$("#intranet").attr("locale");
+    inicial=['IN','IN','IN','IN','SU','BI','NT','NT','SB','SB'];
+
+
+    array={{trimestre1|json_encode()|raw}};
+    for (var key in array){
+        clave=key.split("-");
+        asignatura=clave[0];
+        trimestre=clave[1];
+        nota=array[key];
+        //Si tiene calificación se inserta en la tabla.  
+        if(nota!=""){
+            $("#boletin_evaluacion_pdf table tr[id='"+asignatura+"'] td[trimestre='1']").append("<p class='contenedor_nota'>"+inicial[nota-1]+"</p>");
+            $("#boletin_evaluacion_pdf table tr[id='"+asignatura+"'] td[trimestre='1']").append("<p class='contenedor_nota'>"+nota+"</p>");
+        }
+    }
+
+    array={{trimestre2|json_encode()|raw}};
+    for (var key in array){
+        clave=key.split("-");
+        asignatura=clave[0];
+        trimestre=clave[1];
+        nota=array[key];
+
+        //Si tiene calificación se inserta en la tabla.  
+        if(nota!=""){
+            $("#boletin_evaluacion_pdf table tr[id='"+asignatura+"'] td[trimestre='2']").append("<p class='contenedor_nota'>"+inicial[nota-1]+"</p>");
+            $("#boletin_evaluacion_pdf table tr[id='"+asignatura+"'] td[trimestre='2']").append("<p class='contenedor_nota'>"+nota+"</p>");
+        }
+    }
+    array={{trimestre3|json_encode()|raw}};
+    for (var key in array){
+        clave=key.split("-");
+        asignatura=clave[0];
+        trimestre=clave[1];
+        nota=array[key];
+
+        //Si tiene calificación se inserta en la tabla.  
+        if(nota!=""){
+            $("#boletin_evaluacion_pdf table tr[id='"+asignatura+"'] td[trimestre='3']").append("<p class='contenedor_nota'>"+inicial[nota-1]+"</p>");
+            $("#boletin_evaluacion_pdf table tr[id='"+asignatura+"'] td[trimestre='3']").append("<p class='contenedor_nota'>"+nota+"</p>");
+        }
+    }
+  h_tutorias={{h_tutorias|json_encode()|raw}};
+
+
+  function reemplazarDatos(array) {
+    array=array.replace("L|","{% trans %}Lunes{% endtrans %}|");
+    array=array.replace("M|","{% trans %}Martes{% endtrans %}|");
+    array=array.replace("X|","{% trans %}Miércoles{% endtrans %}|");
+    array=array.replace("J|","{% trans %}Jueves{% endtrans %}|");
+    array=array.replace("V|","{% trans %}Viernes{% endtrans %}|");
+    array=array.replace("|",": ");
+    array=array.replace("-"," a ");
+    return array;
+  }
+
+    array=h_tutorias.split("*");
+
+    for(var i=0; i < array.length ; i++){
+        horario=reemplazarDatos(array[i]);
+        $(".horario").append('<p class="">'+horario+'</p');
+
+    };
+
+    </script>
+  </body>
+</html>
+
+
+
+

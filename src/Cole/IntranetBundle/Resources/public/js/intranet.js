@@ -1362,7 +1362,7 @@ $(document).ready(function () {
 
 
         if ($(window).width() < 768) {
-          var pos = $("#seleccion_calificaciones #3_1").offset().top;
+          var pos = $("#seleccion_calificaciones #3_2").offset().top;
           $("html").scrollTop(pos-300);
         }
       }
@@ -1432,35 +1432,10 @@ $(document).ready(function () {
         }
       },10);
 
-    /*
-      if($(this).attr("id")=="grupo"){
-        $("#seguimiento_descripcion").prop("disabled", false);
-        if ($(window).width() < 768) {
-          var pos = $("#seguimiento_descripcion").offset().top;
-          $("html").scrollTop(pos);
-        }
-        if($("#seguimiento_descripcion").val().length == 0){
-          $("#formulario_nuevo_seguimiento .boton_enviar button").prop('disabled', true);
-        }
-        else{
-          $("#formulario_nuevo_seguimiento .boton_enviar button").prop('disabled', false);
-        }
+      if ($(window).width() < 768) {
+        var pos = $("#seleccion_calificaciones #4").offset().top;
+        $("html").scrollTop(pos);
       }
-      else{
-
-        grupo=$("#seleccion_calificaciones #cursos .active").attr("id");
-        asignatura=$("#seleccion_calificaciones #asignatura .active").attr("id");
-        if(asignatura){
-          $("#lista_alumnos_seguimiento .modal-body").load(Routing.generate("AlumnosGrupoAsignatura", {id:grupo, asig:asignatura, _locale:locale}), function(){
-        
-          });
-        }
-        else{//Para Infantil
-          $("#lista_alumnos_seguimiento .modal-body").load(Routing.generate("AlumnosGrupo", {id:grupo, _locale:locale}), function(){
-            });
-        }
-             
-      }*/
     }
 
   });
@@ -1475,7 +1450,6 @@ $(document).ready(function () {
       $(this).addClass("active");
     }
   });
-
 
   //Se añade el id del la tarea en botón de eliminar de la ventana modal para luego generar la ruta.
   $(document).on('click','#tabla_tareas_profesor #btn_eliminar' ,function() {
@@ -1492,11 +1466,8 @@ $(document).ready(function () {
       $(this).removeClass('nota_modificada');
     }
   });
-
-
-  
+  //Se carga la ventana modal de información de tareas del trimestre del alumno.
   $(document).on('click','#tabla_alum_trimestre table td i' ,function() {
-
     id=$(this).closest('tr').attr("id");
     trimestre=$(this).closest('td').attr("trimestre");
     asignatura=$("#tabla_alum_trimestre #asignatura").attr("asignatura");
@@ -1527,7 +1498,12 @@ $(document).ready(function () {
     }); 
   });
 
-
+  //Se carga en la ventana modal la información de la evaluación del alumno.
+  $(document).on('click','#tabla_alumnos_grupo table td i' ,function() {
+    id=$(this).closest('tr').attr("id");
+    $("#evaluacion_alumno .modal-body").load(Routing.generate("evaluacion_alumno", {id:id, _locale:locale}), function(){
+    }); 
+  });
 
 
 

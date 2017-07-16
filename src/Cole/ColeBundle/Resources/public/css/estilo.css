@@ -1074,7 +1074,6 @@ fieldset.fsetoculto {
     box-shadow: 2px 2px 5px black;
     height: 220px;
 }
-
 footer{
     position: relative;
     float: left;
@@ -1277,7 +1276,94 @@ tr {page-break-inside: avoid;}
     min-width: 100px;
 }
 
+#boletin_evaluacion_pdf #grupo{
+    color: #001f51 !important;
+    text-align: center !important;
+    margin-top: 100px;
+    margin-bottom: 50px;
+    font-weight: bold !important;
+    text-decoration: underline;
+}
+#boletin_evaluacion_pdf span,#boletin_evaluacion_pdf label {
+    color: #001f51 !important;
+    font-size: 15px;
+}
+#boletin_evaluacion_pdf th{
+    color: #001f51 !important;
+    background: #b1cce7;
+    border: 1px solid  grey !important;
+    text-align: center;
+}
+#boletin_evaluacion_pdf td{
+    background: white !important;
+    text-align: center;
+    min-width: 80px !important;
+    padding: 0!important;
+}
+#boletin_evaluacion_pdf td:first-child{
+    background: white !important;
+    text-align: left !important;
+    padding: 8px !important;
+}
+#boletin_evaluacion_pdf td span{
+    display: inline-block;
+    padding: 8px 10px!important;
+    max-width: 52px;
+}
+#boletin_evaluacion_pdf td span:first-child{
+    border-right: 1px solid grey;
+}
+.contenedor_nota {
+    float: left;
+    padding: 8px 0;    
+    width: 49%;
+    margin: 0;
+}
+#boletin_evaluacion_pdf td .contenedor_nota:first-child {
+    border-right: 1px solid grey;
+}
 
+
+#boletin_evaluacion_pdf .table {
+    margin: 3% 5%;
+    width: 90%;
+}
+#boletin_evaluacion_pdf .faltas {
+    width: 55%;
+}
+
+.div_datos {
+    margin-left: 5% !important;
+    width: 90%!important;
+}
+#boletin_evaluacion_pdf .table #completo td:last-child {
+    background: lightgrey !important;
+}
+.saluda_tutor{
+    margin-top: 80px;
+}
+.footer_boletin label,.footer_boletin span {
+    margin-left: 10% !important;
+}
+.footer_boletin{
+    float: left;
+    width: 50%; 
+}
+.footer_boletin .horario p {
+    margin-left: 50px !important;
+}
+.saluda_tutor label {
+    width: 15% !important;
+    float: left;
+}
+.saluda_tutor p {
+    float: left !important;
+    margin-left: 0 !important;
+    width: 60% !important;
+}
+#boletin_evaluacion_pdf .horarios{
+    margin-top: 100px;
+}
 
 @media (max-width: 1100px){
     .carrusel{

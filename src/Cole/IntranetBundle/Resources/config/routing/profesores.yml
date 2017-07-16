@@ -97,12 +97,29 @@ lista_tareas_alumno:
     defaults: { _controller: IntranetBundle:Profesor:ListaTareasAlumno}
     options:
         expose: true
+evaluacion_alumno:
+    path:     /evaluación/alumno/{id}
+    defaults: { _controller: IntranetBundle:Profesor:evaluacionAlumno}
+    options:
+        expose: true
 
 evaluacion_grupo:    
     path:     /evaluación/grupo/{id}
     defaults: { _controller: IntranetBundle:Profesor:evaluacionGrupo}
     options:
         expose: true
+
+boletin_evaluacion:
+    pattern:  /boletin/{id}
+    defaults: { _controller: "IntranetBundle:Profesor:BoletinEvaluacion"}
+    options:
+      expose: true
+
+boletin_evaluacion_pdf:
+    pattern:  /boletinPdf/{id}
+    defaults: { _controller: "IntranetBundle:Profesor:BoletinEvaluacionPdf", _format: pdf}
+    options:
+      expose: true
 
 grupos_asignaturasGrupo_profesor:
     path:     /grupo/asignaturas/profesor/{id}

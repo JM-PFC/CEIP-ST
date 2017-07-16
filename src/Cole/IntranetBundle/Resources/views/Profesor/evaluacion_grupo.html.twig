@@ -45,23 +45,61 @@
     <h4 id="titulo-seccion" class="titulo-seccion">{% trans %}Evaluación de mi grupo{% endtrans %}</h4>
     <div class="contenedor_btn_descarga">
         <a id="alumnos_grupo_pdf" class=" btn_descargar hidden-xs #1" href="{{ path('alumnos_grupo_pdf', { 'id': entity.id }) }}">
-            <button ><i class="fa fa-file-pdf-o"></i>{% trans %}Prueebaaaaaaaaaa PDF{% endtrans %}</button>
+            <button ><i class="fa fa-file-pdf-o"></i>{% trans %}Boletines Alumnos PDF{% endtrans %}</button>
         </a>  
     </div>
 
-    <div class="tab-content lista_notas">
-        <div id="lista_alumnos">
-            <p class="aviso_listado">{% trans %}Seleccione una tarea de la lista superior para mostrar los alumnos a evaluar{% endtrans %}</p>
-        </div>
+    <div id="tabla_alumnos_grupo" class="tab-content lista_notas">
+        {% if alumnos != null %}
+                <div class="col-xs-12 no-padding head_list" >
+                    <div class="col-xs-12 col-sm-11 no-padding cabecera_tabla" >
+                        <div id="grupo" class="curso_cab col-xs-13 col-sm-5 center-block no-padding" grupo="{{grupo.id}}"><p class="titulo_curso">{{ grupo.curso.curso ~ " de " ~ grupo.curso.nivel ~ " - "}} <span> {{"Grupo  " ~ grupo.letra}}</span> </p></div>
+                    </div>
+                </div>    
+
+                <div class="table-responsive col-xs-12">
+                    <table class="lista-alumnos table table-striped">
+                        <thead >
+                            <tr>
+                                <th class="col-xs-1 center">Nº</th>
+                                <th class="col-xs-7 col-sm-5">{% trans %}Apellidos, Nombre{% endtrans %}</th>
+                                <th class="col-xs-1 center"></th>
+                            </tr>
+                        </thead> 
+                        <tbody>
+                            {% for alumno in alumnos %}
+                            <tr id="{{ alumno.id }}">
+                                <td class="col-xs-1 center">
+                                    {{ alumno.numAlum }}
+                                </td>
+                                <td class="col-xs-7 col-sm-5">
+                                    {{ alumno }}
+                                </td>
+                                <td class="col-xs-1 center"> 
+                                    <i class="fa fa-search click" data-target="#evaluacion_alumno" data-toggle="modal" data-backdrop="static" data-placement="left" title="" data-original-title="{% trans %}Ver Evaluación{% endtrans %}"> </i>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+        {% else %}
+            <div class="alert alert-info alert-block">
+                <small>
+                    <h4>{% trans %}No hay alumnos asignados a este grupo{% endtrans %}.</h4>
+                    <h6>{% trans %}Espere a que se asigne a los alumnos al grupo para poder ver sus calificaciones{% endtrans %}.</h6>
+                </small>
+            </div>
+        {% endif %}
     </div>
 
 
-    <div id="lista_tareas_alumno" class="modal fade lista_tareas_alumno" role="dialog" data-backdrop="true" >
+    <div id="evaluacion_alumno" class="modal fade lista_tareas_alumno" role="dialog" data-backdrop="true" >
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                    <h4 class="modal-title"></h4>
+                    <h4 class="modal-title">{% trans %}Evaluación del alumno{% endtrans %}</h4>
                 </div>
                 <div class="modal-body"></div>
                 <div class="class-footer">
@@ -70,5 +108,4 @@
             </div>
         </div>
     </div>
-
 {% endblock %}

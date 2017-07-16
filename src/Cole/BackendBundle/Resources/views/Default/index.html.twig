@@ -121,22 +121,22 @@
 				</div>
 				<div id="2">
 					<div>
-						<a id="profesor_nuevo" title="Nuevo profesor" href="{{path('profesor_new')}}">
+						<a id="profesor_nuevo" title="Nuevo docente" href="{{path('profesor_new')}}">
 							<img src="{{ asset('bundles/backend/images/menu/nuevo_profesor.png')}}">
-							<span> Nuevo</span>
+							<span> Nuevo <br> Docente</span>
 						</a>
 
-						<a id="profesor_antiguo" title="Altas/bajas profesores" href="{{path('search_old_teacher')}}">
+						<a id="profesor_antiguo" title="Alta/baja docente" href="{{path('search_old_teacher')}}">
 							<img src="{{ asset('bundles/backend/images/menu/antiguo_profesor.png')}}">
-							<span> Altas/Bajas </span>
+							<span> Alta/Baja <br> Docente</span>
 						</a>
 												
-						<span> Registro Profesor</span>
+						<span> Registro</span>
 					</div>
 					<div>
-						<a id="ficha_profesor" title="Ficha Profesor" href="{{path('profesor_search')}}">
+						<a id="ficha_profesor" title="Ficha docente" href="{{path('profesor_search')}}">
 							<img src="{{ asset('bundles/backend/images/menu/profesor-ficha.png')}}">
-							<span> Ficha </span>
+							<span> Ficha <br>Docente</span>
 						</a>
 						<a id="clases_impartidas" title="Clases Impartidas" href="{{path('clases_impartidas')}}">
 							<img src="{{ asset('bundles/backend/images/menu/cursos-impartidos.png')}}">
@@ -168,26 +168,26 @@
 					<div>
 						<a id="alumnos_nuevo" title="Nuevo Alumno" href="{{path('alumno_new')}}">
 							<img src="{{ asset('bundles/backend/images/menu/matricular.png')}}">
-							<span> Nuevo</span>
+							<span> Nuevo <br> Alumno</span>
 						</a>
 						<a id="alumnos_antiguo" title="Antiguo Alumno " href="{{path('search_old')}}">
 							<img src="{{ asset('bundles/backend/images/menu/matricular_antiguo.png')}}">
-							<span> Antiguo</span>
+							<span> Antiguo<br> Alumno</span>
 						</a>
 						<a id="alumnos_multiple" title="Matrícula Múltiple" href="{{path('search_multiple')}}">
 							<img src="{{ asset('bundles/backend/images/menu/matricular+.png')}}">
-							<span> Múltiple</span>
+							<span> Múltiples<br> Matrículas </span>
 						</a>
 						<a id="anular_matricula" title="Anular Matrícula" href="{{path('show_matriculas')}}">
 							<img src="{{ asset('bundles/backend/images/menu/cancelado.png')}}">
 							<span> Anular <br>Matrícula</span>
 						</a>								
-						<span> Matrícula Alumnos</span>
+						<span> Matrícula</span>
 					</div>
 					<div>
 						<a id="ficha_alumno" title="Ficha Alumno" href="{{path('alumno_search')}}">
 							<img src="{{ asset('bundles/backend/images/menu/alumno-ficha.png')}}">
-							<span> Ficha </span>
+							<span> Ficha <br> Alumno</span>
 						</a>
 						<a id="listado_alumnos"title="Listas de Alumnos" href="javascript:void(0);">
 							<img src="{{ asset('bundles/backend/images/menu/lista_alumnos.png')}}">
@@ -233,7 +233,7 @@
 					<div>
 						<a title="Registro Asignatura" href="{{path('asignatura')}}">
 							<img src="{{ asset('bundles/backend/images/menu/asignaturas.png')}}">
-							<span> Registro </span>
+							<span> Registro <br>Asignaturas<span>
 						</a>	
 						<a id="asignaturas_cursos" title="Asignaturas por curso" href="{{path('asignaturas_cursos')}}">
 							<img src="{{ asset('bundles/backend/images/menu/asigCursos.png')}}">
@@ -244,7 +244,7 @@
 					<div>
 						<a id="nuevo_curso" title="Registro Curso" href="{{path('curso')}}">
 							<img src="{{ asset('bundles/backend/images/menu/curso.png')}}">
-							<span> Registro </span>
+							<span> Registro <br> Curso</span>
 						</a>			
 						<a id="grupos_curso" title="Nº grupos/curso" href="{{path('curso_show')}}">
 							<img src="{{ asset('bundles/backend/images/menu/grupo-cursos.png')}}">
@@ -272,15 +272,15 @@
 					<div>
 						<a id="administrativo_nuevo" title="Nuevo personal" href="{{path('administrativo_new')}}">
 							<img src="{{ asset('bundles/backend/images/menu/administrativos.png')}}">
-							<span> Nuevo</span>
+							<span> Nuevo <br>Personal</span>
 						</a>
 						<a id="ficha_administrativo" title="Ficha Administrativo" href="{{path('administrativo_search')}}">
 							<img src="{{ asset('bundles/backend/images/menu/administrativos_ficha.png')}}">
-							<span> Ficha</span>
+							<span> Ficha <br>Personal</span>
 						</a>
-						<a id="administrativo_antiguo" title="Altas/bajas" href="{{path('search_old_admin')}}">
+						<a id="administrativo_antiguo" title="Alta/baja personal" href="{{path('search_old_admin')}}">
 							<img src="{{ asset('bundles/backend/images/menu/administrativos_bajas.png')}}">
-							<span> Altas/Bajas </span>
+							<span> Alta/Baja <br>Personal </span>
 						</a>
 												
 						<span> Gestión Administrativos</span>
@@ -295,22 +295,22 @@
 					<div>
 						<a id="registrar_eventos" title="Registro Eventos" href="{{path('eventos_new')}}">
 							<img src="{{ asset('bundles/backend/images/menu/eventos.png')}}">
-							<span> Registro </span>
+							<span> Registro <br> Evento </span>
 					
 						<a id="consultar_eventos" title="Consulta Eventos" href="{{path('eventos')}}">
 							<img src="{{ asset('bundles/backend/images/menu/consultar.png')}}">
-							<span> Consulta </span>
+							<span> Consulta <br> Eventos</span>
 						</a>
 						<span> Eventos </span>
 					</div>
 					<div>
 						<a id="registrar_noticias" title="Registro Noticias" href="{{path('noticias_new')}}">
 							<img src="{{ asset('bundles/backend/images/menu/noticias.png')}}">
-							<span> Registro </span>
+							<span> Registro <br> Noticia</span>
 						</a>
 						<a id="consultar_noticias" title="Consulta Noticias" href="{{path('noticias_consultar')}}">
 							<img src="{{ asset('bundles/backend/images/menu/consultar.png')}}">
-							<span> Consulta </span>
+							<span> Consulta <br> Noticias </span>
 						</a>
 						<span> Noticias </span>
 					</div>

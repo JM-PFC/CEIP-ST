@@ -86,5 +86,16 @@ class AsignaturasCursosRepository extends EntityRepository
 		->getOneOrNullResult();
 	}
 
+	public function findAsignaturasAlumno($curso, $optativa)
+	{
+	return $this->getEntityManager()->createQuery(
+		'SELECT a FROM BackendBundle:AsignaturasCursos a INNER JOIN a.curso c INNER JOIN a.asignatura asig WHERE a.curso=:curso AND (asig.opcional=0 OR (asig.opcional=1 AND a.id=:optativa)) AND asig.nombre not like :asignatura  ORDER BY  asig.tipo DESC,asig.nombre')
+		->setParameters(array(
+			'curso' => $curso,
+			'optativa' => $optativa,
+			'asignatura' => "Tutoría"))
+		->getResult();
+	}
+
 
 }

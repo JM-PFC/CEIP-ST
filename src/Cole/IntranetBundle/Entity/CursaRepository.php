@@ -86,4 +86,17 @@ class CursaRepository extends EntityRepository
 			'descripcion'=>"Evaluación_Trimestral"))
 			->getResult();
 	}
+
+	public function findByNotasAlumnoTrimestre($alumno, $trimestre)
+	{
+		return $this->getEntityManager()->createQuery(
+			'SELECT c FROM IntranetBundle:Cursa c INNER JOIN c.tarea t INNER JOIN c.asignaturasCursos a INNER JOIN a.asignatura asig WHERE c.alumno=:alumno AND t.trimestre=:trimestre AND t.descripcion=:descripcion ORDER BY t.trimestre ,asig.nombre DESC')
+			->setParameters(array(
+			'alumno' => $alumno,
+			'trimestre' => $trimestre,
+			'descripcion'=>"Evaluación_Trimestral"))
+			->getResult();
+	}
+
+
 }

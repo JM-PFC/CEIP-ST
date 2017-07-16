@@ -75,6 +75,7 @@ Miércoles: Wednesday
 Jueves: Thursday
 Viernes: Friday
 Maestros / Asignaturas: Teachers / Subjects
+Asignaturas: Subjects
 Maestro: Teacher
 Maestra: Teacher
 Asignatura: Subject
@@ -305,3 +306,9 @@ Eliminación de la tarea: Removal of the task
 Edición de la tarea: Editing the task
 Se va a eliminar la tarea del sistema y no se podrá recuperar: The task will be deleted from the system and can not be recovered
 Evaluación de tareas: Assessment of tasks
+No hay alumnos asignados a este grupo: No students are assigned to this group
+Espere a que se asigne a los alumnos al grupo para poder ver sus calificaciones : Wait for the students to be assigned to the group so they can see their grades
+Ver Evaluación: See Evaluation
+Evaluación del alumno: Student Assessment
+Boletín PDF: Student Bulletin PDF
+Boletines Alumnos PDF: Students Bulletins PDF

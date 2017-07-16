@@ -521,7 +521,6 @@ class TareaController extends Controller
         else{
             $trimestre=2;
         }
-
         $tarea = $em->getRepository('IntranetBundle:Tarea')->findFinalTrimestre($grupo, $asignatura, $trimestre);
 
         //Se obtiene la lista de alumnos comprobando si es una asignatura opcional o no.

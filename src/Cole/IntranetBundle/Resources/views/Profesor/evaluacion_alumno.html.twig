@@ -1,0 +1,84 @@
+    <script>
+        locale=$("#intranet").attr("locale");
+
+            array={{trimestre1|json_encode()|raw}};
+            for (var key in array){
+                clave=key.split("-");
+                asignatura=clave[0];
+                trimestre=clave[1];
+                nota=array[key];
+                //Si tiene calificación se inserta en la tabla.  
+                if(nota!=""){
+                    $("#evaluacion_alumno tr[id='"+asignatura+"'] td[trimestre='1']").text(nota);
+                }
+            }
+
+            array={{trimestre2|json_encode()|raw}};
+            for (var key in array){
+                clave=key.split("-");
+                asignatura=clave[0];
+                trimestre=clave[1];
+                nota=array[key];
+                //Si tiene calificación se inserta en la tabla.  
+                if(nota!=""){
+                    $("#evaluacion_alumno tr[id='"+asignatura+"'] td[trimestre='2']").text(nota);
+                }
+            }
+            array={{trimestre3|json_encode()|raw}};
+            for (var key in array){
+                clave=key.split("-");
+                asignatura=clave[0];
+                trimestre=clave[1];
+                nota=array[key];
+                //Si tiene calificación se inserta en la tabla.  
+                if(nota!=""){
+                    $("#evaluacion_alumno tr[id='"+asignatura+"'] td[trimestre='3']").text(nota);
+                }
+            }
+
+    </script>
+
+
+    <label >{% trans %}Alumno{% endtrans %}: </label>
+    <span>{{alumno}}</span>
+    <div>
+        <label >{% trans %}Grupo{% endtrans %}: </label>
+        <span>{{alumno.grupo}}</span>
+    </div>
+
+    <a id="evaluacion_pdf" class=" btn_descargar" href="{{ path('boletin_evaluacion_pdf', { 'id': alumno.id }) }}">
+        <button ><i class="fa fa-file-pdf-o"></i>{% trans %}Boletín Alumno PDF{% endtrans %}</button>
+    </a>  
+    
+    <table class="lista-alumnos table table-striped table-bordered">
+        <thead >
+            <tr>
+                <th class="col-xs-7 col-sm-5">{% trans %}Asignaturas{% endtrans %}</th>
+                <th class="col-xs-1 center">{% trans %}1ª EVA{% endtrans %}</th>
+                {% if trimestre == 2 or trimestre == 3 %}
+                    <th class="col-xs-1 center">{% trans %}2ª EVA{% endtrans %}</th>
+                {% endif %}
+                {% if trimestre == 3 %}
+                    <th class="col-xs-1 center">{% trans %}3ª EVA{% endtrans %}</th>
+                    <th class="col-xs-1 center">{% trans %}ORD{% endtrans %}</th>
+                {% endif %}
+            </tr>
+        </thead> 
+        <tbody>
+            {% for asignatura in asignaturas %}
+                <tr id="{{ asignatura.id }}">
+                    <td class="col-xs-7 col-sm-5">
+                        {{ asignatura.asignatura.nombre }}
+                    </td>
+                    <td trimestre="1" class="col-xs-1 center"></td>
+                    {% if trimestre == 2 or trimestre == 3  %}
+                        <td trimestre="2" class="col-xs-1 center"></td>
+                    {% endif %} 
+                    {% if trimestre == 3 %}
+                        <td trimestre="3" class="col-xs-1 center"></td>
+                        <td id="ord" class="col-xs-1 center"></td>
+                    {% endif %}
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>

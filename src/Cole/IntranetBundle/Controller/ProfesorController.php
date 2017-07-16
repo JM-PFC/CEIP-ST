@@ -653,20 +653,334 @@ class ProfesorController extends Controller
         $profesor = $this->get('security.context')->getToken()->getUser();
         $grupo=$em->getRepository('BackendBundle:Grupo')->findOneById($id);
         //$asignatura=$em->getRepository('BackendBundle:AsignaturasCursos')->findOneById($asignatura);
-        $alumnos=$em->getRepository('BackendBundle:Alumno')->findOneByGrupo($grupo);
-
-        //$tareas=$em->getRepository('IntranetBundle:Cursa')->findByTareasAlumnoAsignaturaTrimestre($alumno, $trimestre, $asignatura);
-      
+        $alumnos=$em->getRepository('BackendBundle:Alumno')->findByGrupoOrdenado($grupo);
+   
         return $this->render('IntranetBundle:Profesor:evaluacion_grupo.html.twig', array(
             'entity' => $profesor,
-            //'tareas'=>$tareas,
-            //'asignatura' => $asignatura,
             'alumnos' => $alumnos,
-            //'trimestre' => $trimestre
+            'grupo' => $grupo,
             ));
     }
 
+    public function evaluacionAlumnoAction($id)
+    {
 
+        $em = $this->getDoctrine()->getManager();
+
+        $profesor = $this->get('security.context')->getToken()->getUser();
+        $alumno=$em->getRepository('BackendBundle:Alumno')->findOneById($id);
+
+        $asignaturas=$em->getRepository('BackendBundle:AsignaturasCursos')->findAsignaturasAlumno($alumno->getCurso(), $alumno->getOptativa());
+
+        // Se obtiene la fecha inicial y final del curso para usar luego el año correspondiente. 
+        $ini_curso=$em->getRepository('BackendBundle:Centro')->findInicioCurso();
+        $array_ini=explode("-",$ini_curso["inicioCurso"]->format('Y-m-d')); //Conversión de array a String
+        $fin_curso=$em->getRepository('BackendBundle:Centro')->findFinCurso();
+        $array_fin=explode("-",$fin_curso["finCurso"]->format('Y-m-d'));
+
+        // Se obtiene las fechas de inicio de las vacaciones.
+        $ini_nav=$em->getRepository('BackendBundle:Festivos')->findFestivosPorDescripcion("Inicio Vacaciones de Navidad");
+        $ini_ss=$em->getRepository('BackendBundle:Festivos')->findFestivosPorDescripcion("Inicio Vacaciones de Semana Santa");
+        
+        $Fecha_ini_nav = date('Y-m-d', strtotime($array_ini[0]."-".$ini_nav->getNumMes()."-".$ini_nav->getDia()));
+        $Fecha_ini_ss = date('Y-m-d', strtotime($array_fin[0]."-".$ini_ss->getNumMes()."-".$ini_ss->getDia()));
+
+        $hoy=date("Y-m-d");
+
+        if ($hoy <= $Fecha_ini_nav){
+            $trimestre=1;
+        }
+        else if($hoy >= $Fecha_ini_ss){
+            $trimestre=3;
+        }
+        else{
+            $trimestre=2;
+        }   
+        $trimestre1= $em->getRepository('IntranetBundle:Cursa')->findByNotasAlumnoTrimestre($alumno,1);
+        $trimestre2= $em->getRepository('IntranetBundle:Cursa')->findByNotasAlumnoTrimestre($alumno,2);
+        $trimestre3= $em->getRepository('IntranetBundle:Cursa')->findByNotasAlumnoTrimestre($alumno,3);
+
+        $array1=[];
+        foreach($trimestre1 as $registro){
+
+            if($registro->getNota()){
+                $nota=$registro->getNota();
+            }
+            else{
+                $nota="";
+            }
+            $array1[$registro->getAsignaturasCursos()->getId()."-".$registro->getTarea()->getTrimestre()]=$nota;
+        }
+
+        $array2=[];
+        foreach($trimestre2 as $registro){
+
+            if($registro->getNota()){
+                $nota=$registro->getNota();
+            }
+            else{
+                $nota="";
+            }
+            $array2[$registro->getAsignaturasCursos()->getId()."-".$registro->getTarea()->getTrimestre()]=$nota;
+
+        }
+
+        $array3=[];
+        foreach($trimestre3 as $registro){
+
+            if($registro->getNota()){
+                $nota=$registro->getNota();
+            }
+            else{
+                $nota="";
+            }
+            $array3[$registro->getAsignaturasCursos()->getId()."-".$registro->getTarea()->getTrimestre()."-".$registro->getOrd()]=$nota;
+        }
+
+        return $this->render('IntranetBundle:Profesor:evaluacion_alumno.html.twig', array(
+            'entity' => $profesor,
+            'asignaturas' => $asignaturas,
+            'alumno' => $alumno,
+            'trimestre' => $trimestre,
+            'trimestre1' => $array1,
+            'trimestre2' => $array2, 
+            'trimestre3' => $array3  
+        ));
+    }
+
+
+
+    //Función de prueba para ver los resultados del boletin en html.
+    public function BoletinEvaluacionAction($id)
+    {
+        $em = $this->getDoctrine()->getManager();
+
+        $profesor = $this->get('security.context')->getToken()->getUser();
+        $alumno=$em->getRepository('BackendBundle:Alumno')->findOneById($id);        
+        $asignaturas=$em->getRepository('BackendBundle:AsignaturasCursos')->findAsignaturasAlumno($alumno->getCurso(), $alumno->getOptativa());
+
+        $centro =$em->getRepository('BackendBundle:Centro')->findCentro();
+        $horario=$centro->getHTutorias();
+
+        // Se obtiene la fecha inicial y final del curso para usar luego el año correspondiente. 
+        $ini_curso=$em->getRepository('BackendBundle:Centro')->findInicioCurso();
+        $array_ini=explode("-",$ini_curso["inicioCurso"]->format('Y-m-d')); //Conversión de array a String
+        $fin_curso=$em->getRepository('BackendBundle:Centro')->findFinCurso();
+        $array_fin=explode("-",$fin_curso["finCurso"]->format('Y-m-d'));
+
+        // Se obtiene las fechas de inicio de las vacaciones.
+        $ini_nav=$em->getRepository('BackendBundle:Festivos')->findFestivosPorDescripcion("Inicio Vacaciones de Navidad");
+        $ini_ss=$em->getRepository('BackendBundle:Festivos')->findFestivosPorDescripcion("Inicio Vacaciones de Semana Santa");
+        
+        $Fecha_ini_nav = date('Y-m-d', strtotime($array_ini[0]."-".$ini_nav->getNumMes()."-".$ini_nav->getDia()));
+        $Fecha_ini_ss = date('Y-m-d', strtotime($array_fin[0]."-".$ini_ss->getNumMes()."-".$ini_ss->getDia()));
+
+        $hoy=date("Y-m-d");
+
+        if ($hoy <= $Fecha_ini_nav){
+            $trimestre=1;
+        }
+        else if($hoy >= $Fecha_ini_ss){
+            $trimestre=3;
+        }
+        else{
+            $trimestre=2;
+        }   
+        $trimestre1= $em->getRepository('IntranetBundle:Cursa')->findByNotasAlumnoTrimestre($alumno,1);
+        $trimestre2= $em->getRepository('IntranetBundle:Cursa')->findByNotasAlumnoTrimestre($alumno,2);
+        $trimestre3= $em->getRepository('IntranetBundle:Cursa')->findByNotasAlumnoTrimestre($alumno,3);
+
+        $array1=[];
+        foreach($trimestre1 as $registro){
+
+            if($registro->getNota()){
+                $nota=$registro->getNota();
+            }
+            else{
+                $nota="";
+            }
+            $array1[$registro->getAsignaturasCursos()->getId()."-".$registro->getTarea()->getTrimestre()]=$nota;
+        }
+
+        $array2=[];
+        foreach($trimestre2 as $registro){
+
+            if($registro->getNota()){
+                $nota=$registro->getNota();
+            }
+            else{
+                $nota="";
+            }
+            $array2[$registro->getAsignaturasCursos()->getId()."-".$registro->getTarea()->getTrimestre()]=$nota;
+
+        }
+
+        $array3=[];
+        foreach($trimestre3 as $registro){
+
+            if($registro->getNota()){
+                $nota=$registro->getNota();
+            }
+            else{
+                $nota="";
+            }
+            $array3[$registro->getAsignaturasCursos()->getId()."-".$registro->getTarea()->getTrimestre()."-".$registro->getOrd()]=$nota;
+        }
+
+        return $this->render('IntranetBundle:Profesor:boletin_evaluacion.html.twig', array(
+            'entity' => $profesor,
+            'asignaturas' => $asignaturas,
+            'alumno' => $alumno,
+            'trimestre' => $trimestre,
+            'trimestre1' => $array1,
+            'trimestre2' => $array2, 
+            'trimestre3' => $array3,
+            'h_tutorias' => $horario  
+        ));
+    }
+
+
+
+    public function BoletinEvaluacionPdfAction($id)
+    {
+        $em = $this->getDoctrine()->getManager();
+
+        $profesor = $this->get('security.context')->getToken()->getUser();
+        $alumno=$em->getRepository('BackendBundle:Alumno')->findOneById($id);
+
+        $asignaturas=$em->getRepository('BackendBundle:AsignaturasCursos')->findAsignaturasAlumno($alumno->getCurso(), $alumno->getOptativa());
+        
+        $centro =$em->getRepository('BackendBundle:Centro')->findCentro();
+        $horario=$centro->getHTutorias();
+
+        // Se obtiene la fecha inicial y final del curso para usar luego el año correspondiente. 
+        $ini_curso=$em->getRepository('BackendBundle:Centro')->findInicioCurso();
+        $array_ini=explode("-",$ini_curso["inicioCurso"]->format('Y-m-d')); //Conversión de array a String
+        $fin_curso=$em->getRepository('BackendBundle:Centro')->findFinCurso();
+        $array_fin=explode("-",$fin_curso["finCurso"]->format('Y-m-d'));
+
+        // Se obtiene las fechas de inicio de las vacaciones.
+        $ini_nav=$em->getRepository('BackendBundle:Festivos')->findFestivosPorDescripcion("Inicio Vacaciones de Navidad");
+        $ini_ss=$em->getRepository('BackendBundle:Festivos')->findFestivosPorDescripcion("Inicio Vacaciones de Semana Santa");
+        
+        $Fecha_ini_nav = date('Y-m-d', strtotime($array_ini[0]."-".$ini_nav->getNumMes()."-".$ini_nav->getDia()));
+        $Fecha_ini_ss = date('Y-m-d', strtotime($array_fin[0]."-".$ini_ss->getNumMes()."-".$ini_ss->getDia()));
+
+        $hoy=date("Y-m-d");
+
+        if ($hoy <= $Fecha_ini_nav){
+            $trimestre=1;
+        }
+        else if($hoy >= $Fecha_ini_ss){
+            $trimestre=3;
+        }
+        else{
+            $trimestre=2;
+        }   
+        $trimestre1= $em->getRepository('IntranetBundle:Cursa')->findByNotasAlumnoTrimestre($alumno,1);
+        $trimestre2= $em->getRepository('IntranetBundle:Cursa')->findByNotasAlumnoTrimestre($alumno,2);
+        $trimestre3= $em->getRepository('IntranetBundle:Cursa')->findByNotasAlumnoTrimestre($alumno,3);
+
+        $array1=[];
+        foreach($trimestre1 as $registro){
+
+            if($registro->getNota()){
+                $nota=$registro->getNota();
+            }
+            else{
+                $nota="";
+            }
+            $array1[$registro->getAsignaturasCursos()->getId()."-".$registro->getTarea()->getTrimestre()]=$nota;
+        }
+
+        $array2=[];
+        foreach($trimestre2 as $registro){
+
+            if($registro->getNota()){
+                $nota=$registro->getNota();
+            }
+            else{
+                $nota="";
+            }
+            $array2[$registro->getAsignaturasCursos()->getId()."-".$registro->getTarea()->getTrimestre()]=$nota;
+
+        }
+
+        $array3=[];
+        foreach($trimestre3 as $registro){
+
+            if($registro->getNota()){
+                $nota=$registro->getNota();
+            }
+            else{
+                $nota="";
+            }
+            $array3[$registro->getAsignaturasCursos()->getId()."-".$registro->getTarea()->getTrimestre()."-".$registro->getOrd()]=$nota;
+        }
+
+        if($trimestre==1){
+            $titulo="1ª Evaluación";
+        }
+        else if($trimestre==2){
+            $titulo="2ª Evaluación";
+        }
+        else{
+            $titulo="3ª Evaluación";
+        }
+        $subtitulo=null;
+        $html = $this->renderView('IntranetBundle:Profesor:boletin_evaluacion.html.twig', array(
+            'entity' => $profesor,
+            'asignaturas' => $asignaturas,
+            'alumno' => $alumno,
+            'trimestre' => $trimestre,
+            'trimestre1' => $array1,
+            'trimestre2' => $array2, 
+            'trimestre3' => $array3,
+            'h_tutorias' => $horario   
+        ));
+        $header = $this->renderView('IntranetBundle:Default:header_boletin.html.twig', array(
+            'inicio' => $ini_curso,
+            'fin' => $fin_curso,
+            'grupo' => $alumno->getGrupo(),
+            'titulo' => $titulo,
+            'subtitulo' =>$subtitulo
+        ));
+        $options = [
+            'margin-top'    => 40,
+            'margin-right'  => 7,
+            'margin-bottom' => 20,
+            'margin-left'   => 7,
+          //Opciones para orientación horizontal.
+            //'orientation'=>'Landscape', 
+            //'default-header'=>false,
+            //'header-html' =>'http://www.pikemere.co.uk/testerpdf.html',
+            
+    //'footer-right'=>utf8_decode('Seite [page] von [topage] - '.date('\ d.m.Y\ H:i')),
+    //'footer-left'=>utf8_decode('Klaus Müller'),
+             //'header-left' => 'nothing',
+        'header-html' => $header,
+
+            //'footer-center' => '[page] / [topage]',
+            'footer-font-size' => 8,
+            //'footer-left' => 'Confidential',
+            //'page-size' => 'A4',
+
+            'header-spacing' => 5, 
+            'footer-spacing' => 10
+        ];
+        $iniciales=substr($alumno->getNombre(), 0, 1).substr($alumno->getApellido1(), 0, 1).substr($alumno->getApellido2(), 0, 1);
+        return new Response(
+            $this->get('knp_snappy.pdf')->getOutputFromHtml($html,$options),
+            200,
+            array(
+                'Content-Type'        => 'application/pdf',
+                'Content-Disposition' => 'attachment; filename="Boletin_'. $iniciales.'.pdf"'
+            )
+        );  
+
+
+
+    }
 
     ///////////////////////////////////////////
     //               Reservas                //

@@ -198,7 +198,7 @@
 				{% if entity.nivel == "Primaria" %}
 				<div role="tabpanel" class="tab-pane active clearfix horario-profesor horario_intranet" id="horarios">
 
-					<a id="horario_pdf"class=" descargar-datos descargar-datos visible-md visible-lg hidden-xs visible-sm"   href="{{ path('horario_profesor_pdf', { 'id': entity.id }) }}"><button><i class="fa fa-file-pdf-o"></i>{% trans %}Horario PDF{% endtrans %}</button></a>
+					<a id="horario_pdf"class=" descargar-datos visible-md visible-lg hidden-xs visible-sm"   href="{{ path('horario_profesor_pdf', { 'id': entity.id }) }}"><button><i class="fa fa-file-pdf-o"></i>{% trans %}Horario PDF{% endtrans %}</button></a>
 
 					<div class="col-xs-12">
 					  <div class="visible-md visible-lg hidden-xs visible-sm">
