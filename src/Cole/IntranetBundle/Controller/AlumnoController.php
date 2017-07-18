@@ -667,6 +667,113 @@ class AlumnoController extends Controller
     }
 
     ///////////////////////////////////////////
+    //            Calificaciones             //
+    ///////////////////////////////////////////
+
+    public function calificacionesAction(Request $request, $id)
+    {
+        $this->comprobarHijo($id);
+        $em = $this->getDoctrine()->getManager();
+
+        $entity= $em->getRepository('BackendBundle:Alumno')->findOneById($id);
+        $responsable = $this->get('security.context')->getToken()->getUser();
+
+        // Se obtiene la fecha inicial y final del curso para usar luego el año correspondiente. 
+        $ini_curso=$em->getRepository('BackendBundle:Centro')->findInicioCurso();
+        $array_ini=explode("-",$ini_curso["inicioCurso"]->format('Y-m-d')); //Conversión de array a String
+        $fin_curso=$em->getRepository('BackendBundle:Centro')->findFinCurso();
+        $array_fin=explode("-",$fin_curso["finCurso"]->format('Y-m-d'));
+
+        // Se obtiene las fechas de inicio de las vacaciones.
+        $ini_nav=$em->getRepository('BackendBundle:Festivos')->findFestivosPorDescripcion("Inicio Vacaciones de Navidad");
+        $ini_ss=$em->getRepository('BackendBundle:Festivos')->findFestivosPorDescripcion("Inicio Vacaciones de Semana Santa");
+        
+        $Fecha_ini_nav = date('Y-m-d', strtotime($array_ini[0]."-".$ini_nav->getNumMes()."-".$ini_nav->getDia()));
+        $Fecha_ini_ss = date('Y-m-d', strtotime($array_fin[0]."-".$ini_ss->getNumMes()."-".$ini_ss->getDia()));
+
+        $hoy=date("Y-m-d");
+
+        if ($hoy <= $Fecha_ini_nav){
+            $trimestre=1;
+        }
+        else if($hoy >= $Fecha_ini_ss){
+            $trimestre=3;
+        }
+        else{
+            $trimestre=2;
+        }
+        $tareasEvaluadas=$em->getRepository('IntranetBundle:Cursa')->findTareasAlumnoEvaluadas($entity);
+        $asignaturas=$em->getRepository('IntranetBundle:Cursa')->findTareasAlumnoEvaluadasAgrupadas($entity);
+
+        //Incluye las notas de evaluación para comprobar si tiene notas asignadas notas aunque no tenga tareas evaluables.
+        $tareas=$em->getRepository('IntranetBundle:Cursa')->findTareasAlumnoSinTrimestreActual($entity, $trimestre);
+
+        $asignaturasAlum=$em->getRepository('BackendBundle:AsignaturasCursos')->findAsignaturasAlumno($entity->getCurso(), $entity->getOptativa());
+
+        $trimestre1= $em->getRepository('IntranetBundle:Cursa')->findByNotasAlumnoTrimestre($entity,1);
+        $trimestre2= $em->getRepository('IntranetBundle:Cursa')->findByNotasAlumnoTrimestre($entity,2);
+
+        $array1=[];
+        foreach($trimestre1 as $registro){
+
+            if($registro->getNota()){
+                $nota=$registro->getNota();
+            }
+            else{
+                $nota="";
+            }
+            $array1[$registro->getAsignaturasCursos()->getId()."-".$registro->getTarea()->getTrimestre()]=$nota;
+        }
+
+        $array2=[];
+        foreach($trimestre2 as $registro){
+
+            if($registro->getNota()){
+                $nota=$registro->getNota();
+            }
+            else{
+                $nota="";
+            }
+            $array2[$registro->getAsignaturasCursos()->getId()."-".$registro->getTarea()->getTrimestre()]=$nota;
+
+        }
+
+        return $this->render('IntranetBundle:Alumno:calificaciones.html.twig', array(
+            'entity' => $entity, 
+            'tareas' => $tareas,
+            'tareasEvaluadas' => $tareasEvaluadas,
+            'trimestre' => $trimestre,
+            'asignaturas' => $asignaturas,
+            'asignaturasAlum' => $asignaturasAlum,
+            'trimestre1' => $array1,
+            'trimestre2' => $array2, 
+        ));
+    }
+
+
+    public function calificacionesTareasAlumnoAction(Request $request, $id, $asig)
+    {
+        $em = $this->getDoctrine()->getManager();
+        $responsable = $this->get('security.context')->getToken()->getUser();
+
+        $entity= $em->getRepository('BackendBundle:Alumno')->findOneById($id);
+        if($asig=="todas"){
+            $tareas= $em->getRepository('IntranetBundle:Cursa')->findTareasAlumnoEvaluadas($entity);
+        }
+        else{
+            $asignatura= $em->getRepository('BackendBundle:AsignaturasCursos')->findOneById($asig);
+            $tareas= $em->getRepository('IntranetBundle:Cursa')->findTareasAlumnoEvaluadasAsignatura($entity, $asig);
+        }
+
+
+        return $this->render('IntranetBundle:Alumno:calificacionesTareas.html.twig', array(
+            'tareas' => $tareas, 
+
+            ));
+    }
+
+
+    ///////////////////////////////////////////
     //               Tutorias                //
     ///////////////////////////////////////////
 

@@ -654,11 +654,13 @@ class ProfesorController extends Controller
         $grupo=$em->getRepository('BackendBundle:Grupo')->findOneById($id);
         //$asignatura=$em->getRepository('BackendBundle:AsignaturasCursos')->findOneById($asignatura);
         $alumnos=$em->getRepository('BackendBundle:Alumno')->findByGrupoOrdenado($grupo);
+        $asignaturas=$em->getRepository('BackendBundle:AsignaturasCursos')->findByCurso($grupo->getCurso()->getId());
    
         return $this->render('IntranetBundle:Profesor:evaluacion_grupo.html.twig', array(
             'entity' => $profesor,
             'alumnos' => $alumnos,
             'grupo' => $grupo,
+            'asignaturas' => $asignaturas,
             ));
     }
 
@@ -977,10 +979,138 @@ class ProfesorController extends Controller
                 'Content-Disposition' => 'attachment; filename="Boletin_'. $iniciales.'.pdf"'
             )
         );  
-
-
-
     }
+
+
+    public function BoletinEvaluacionesPdfAction($id)
+    {
+        $em = $this->getDoctrine()->getManager();
+
+        $profesor = $this->get('security.context')->getToken()->getUser();
+
+        $centro =$em->getRepository('BackendBundle:Centro')->findCentro();
+        $horario=$centro->getHTutorias();
+        $grupo =$em->getRepository('BackendBundle:Grupo')->findOneById($id);
+
+        // Se obtiene la fecha inicial y final del curso para usar luego el año correspondiente. 
+        $ini_curso=$em->getRepository('BackendBundle:Centro')->findInicioCurso();
+        $array_ini=explode("-",$ini_curso["inicioCurso"]->format('Y-m-d')); //Conversión de array a String
+        $fin_curso=$em->getRepository('BackendBundle:Centro')->findFinCurso();
+        $array_fin=explode("-",$fin_curso["finCurso"]->format('Y-m-d'));
+
+        // Se obtiene las fechas de inicio de las vacaciones.
+        $ini_nav=$em->getRepository('BackendBundle:Festivos')->findFestivosPorDescripcion("Inicio Vacaciones de Navidad");
+        $ini_ss=$em->getRepository('BackendBundle:Festivos')->findFestivosPorDescripcion("Inicio Vacaciones de Semana Santa");
+        
+        $Fecha_ini_nav = date('Y-m-d', strtotime($array_ini[0]."-".$ini_nav->getNumMes()."-".$ini_nav->getDia()));
+        $Fecha_ini_ss = date('Y-m-d', strtotime($array_fin[0]."-".$ini_ss->getNumMes()."-".$ini_ss->getDia()));
+
+        $hoy=date("Y-m-d");
+
+        if ($hoy <= $Fecha_ini_nav){
+            $trimestre=1;
+        }
+        else if($hoy >= $Fecha_ini_ss){
+            $trimestre=3;
+        }
+        else{
+            $trimestre=2;
+        }
+
+        $alumnos=$em->getRepository('BackendBundle:Alumno')->findByGrupo($id);
+
+        foreach($alumnos as $alumno){
+            $asignaturas=$em->getRepository('BackendBundle:AsignaturasCursos')->findAsignaturasAlumno($alumno->getCurso(), $alumno->getOptativa());
+
+            $trimestre1= $em->getRepository('IntranetBundle:Cursa')->findByNotasAlumnoTrimestre($alumno,1);
+            $trimestre2= $em->getRepository('IntranetBundle:Cursa')->findByNotasAlumnoTrimestre($alumno,2);
+            $trimestre3= $em->getRepository('IntranetBundle:Cursa')->findByNotasAlumnoTrimestre($alumno,3);
+
+            $array1=[];
+            foreach($trimestre1 as $registro){
+
+                if($registro->getNota()){
+                    $nota=$registro->getNota();
+                }
+                else{
+                    $nota="";
+                }
+                $array1[$registro->getAsignaturasCursos()->getId()."-".$registro->getTarea()->getTrimestre()]=$nota;
+            }
+
+            $array2=[];
+            foreach($trimestre2 as $registro){
+
+                if($registro->getNota()){
+                    $nota=$registro->getNota();
+                }
+                else{
+                    $nota="";
+                }
+                $array2[$registro->getAsignaturasCursos()->getId()."-".$registro->getTarea()->getTrimestre()]=$nota;
+            }
+
+            $array3=[];
+            foreach($trimestre3 as $registro){
+
+                if($registro->getNota()){
+                    $nota=$registro->getNota();
+                }
+                else{
+                    $nota="";
+                }
+                $array3[$registro->getAsignaturasCursos()->getId()."-".$registro->getTarea()->getTrimestre()."-".$registro->getOrd()]=$nota;
+            }
+
+            if($trimestre==1){
+                $titulo="1ª Evaluación";
+            }
+            else if($trimestre==2){
+                $titulo="2ª Evaluación";
+            }
+            else{
+                $titulo="3ª Evaluación";
+            }
+            $subtitulo=null;
+             $html[] = $this->renderView('IntranetBundle:Profesor:boletin_evaluacion.html.twig', array(
+                'entity' => $profesor,
+                'asignaturas' => $asignaturas,
+                'alumno' => $alumno,
+                'trimestre' => $trimestre,
+                'trimestre1' => $array1,
+                'trimestre2' => $array2, 
+                'trimestre3' => $array3,
+                'h_tutorias' => $horario   
+            ));
+        } 
+
+        $header = $this->renderView('IntranetBundle:Default:header_boletin.html.twig', array(
+            'inicio' => $ini_curso,
+            'fin' => $fin_curso,
+            'grupo' => $alumno->getGrupo(),
+            'titulo' => $titulo,
+            'subtitulo' =>$subtitulo
+        ));
+        $options = [
+            'margin-top'    => 40,
+            'margin-right'  => 7,
+            'margin-bottom' => 20,
+            'margin-left'   => 7,
+            'header-html' => $header,
+            'footer-font-size' => 8,
+            'header-spacing' => 5, 
+            'footer-spacing' => 10
+        ];
+        $curso=$grupo;
+        return new Response(
+            $this->get('knp_snappy.pdf')->getOutputFromHtml($html,$options),200,
+            array(
+                'Content-Type'        => 'application/pdf',
+                'Content-Disposition' => 'attachment; filename="Boletines_'. $curso.'.pdf"'
+            )
+        ); 
+    }
+
 
     ///////////////////////////////////////////
     //               Reservas                //

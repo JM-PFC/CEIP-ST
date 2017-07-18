@@ -521,7 +521,7 @@ class CursoController extends Controller
         
         $em = $this->getDoctrine()->getEntityManager();
         $entity = $em->getRepository('BackendBundle:Curso')->findAllCursos();
-        $array;
+        $array=null;
         foreach ($entity as $curso) {
             $matriculados = $em->getRepository('BackendBundle:Alumno')->findAlumnosPorCurso($curso);
             $max=(int)$curso->getNumGrupos()*(int)$curso->getRatio();

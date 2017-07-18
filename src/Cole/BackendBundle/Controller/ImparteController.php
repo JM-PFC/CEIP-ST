@@ -423,12 +423,13 @@ class ImparteController extends Controller
                     $horario=$em->getRepository('BackendBundle:Horario')->findDuracionHorarioAutomatico();
                     $duracion=$horario->getDuracion();
                          
-                    $asignaciones=$em->getRepository('BackendBundle:Imparte')->findByProfesor($profesor);
+                    $asignaciones=$em->getRepository('BackendBundle:Imparte')->findAsignaturasProfesor($profesor);
 
                     $num_modulos=0;
                     foreach ($asignaciones as $asignacion) {
                         $num_modulos+=$asignacion->getAsignatura()->getNumModulos();
                     }
+
                     $tiempo_impartido=(int)$num_modulos*(int)$duracion;//Se usas [1] para recuerar el valor del count().
                     $tiempo_asignado=$profesor->getHorasLectivas()*60;
                     $tiempo_restante=(int)$tiempo_asignado-(int)$tiempo_impartido;

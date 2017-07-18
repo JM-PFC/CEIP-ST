@@ -1506,6 +1506,27 @@ $(document).ready(function () {
   });
 
 
+  ///////////////////////////////////////////
+  //        Calificaciones Alumno          //
+  ///////////////////////////////////////////
+
+  //Se filtra la tabla de tareas evaluadas por asignaturas.
+  $(document).on('change','#busqueda_calificaciones' ,function() {
+    id=$("#tab_calificaciones table").attr("id");
+    asig=$(this).find("option:selected").attr("value");
+
+    $("#tab_calificaciones #tareas table tbody").load(Routing.generate("calificacionesTareasAlumno", {id:id, asig:asig, _locale:locale}), function(){
+    }); 
+    //Se selecciona el nombre inicial.
+    if(asig=="todas"){
+      $("#busqueda_calificaciones option:eq(0)").prop('selected', true);
+    }
+
+  });
+
+
+
+
 
 
 

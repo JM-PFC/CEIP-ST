@@ -168,7 +168,7 @@
     $("#noticias_edit #imagen_noticia #cont_imagen_mini img").attr("file",$("#noticias_edit #noticias_foto").val());
 
     $(".imgLiquidFill").imgLiquid();
-    
+
     setTimeout(function() {
       foto=$("#noticias_edit #noticias_foto").val();
       position1=foto.indexOf("_");
@@ -226,6 +226,13 @@
   $("#noticias_edit #btn_activos #show").addClass('oculto');
   $("#noticias_edit #btn_inactivos #hidden").removeClass('oculto');
  }
+
+  //Se actualiza el valor del slider por el que contiene la imagen guardada.
+  nombre=$("#noticias_edit #noticias_foto").val();
+  array=nombre.split("_");
+  array2=array[1].split(".");
+  $("#noticias_edit #slider-vertical").attr("value",array2[0]);
+
 
   </script>
 {% endblock %}

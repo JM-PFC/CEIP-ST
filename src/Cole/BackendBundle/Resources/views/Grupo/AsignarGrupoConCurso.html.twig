@@ -670,9 +670,8 @@
                         <ol id="ordenar_cursos">
                         {% for alumno in alumnos_sin_grupo %}
                             <li id="curso-{{alumno.alumno.id}}" sexo={{ alumno.alumno.sexo }} title="Nuevo Alumno"> {#Se utiliza para el método serialize de sortable. Usar: curso-id, curso_id ó curso=id#}
-                                <p class="nuevo">Nuevo</p>
                                 <p>{{ alumno.alumno.apellido1 ~ " " ~ alumno.alumno.apellido2 ~ ", " ~ alumno.alumno.nombre }}</p>
-
+                                <p class="nuevo">Nuevo</p>
                             </li>
                         {% endfor %}
                         </ul>

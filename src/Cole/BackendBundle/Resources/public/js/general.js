@@ -130,7 +130,7 @@ $(document).ready(function () {
     if(!$(field).val()){
       return true;
     }
-    var filter = /^[A-Za-záéíóúÁÉÍÓÚüÜñÑ]{2,}([\s][A-Za-záéíóúÁÉÍÓÚüÜñÑ.]+)*$/;
+    var filter = /^[A-Za-záéíóúÁÉÍÓÚüÜñÑ]{2,}([\s][A-Za-záéíóúÁÉÍÓÚüÜñÑ.\(\)]+)*$/;
     if (!filter.test($(field).val())) {
       $(field).prev().append("<span class='error'>Dato inválido</span>");
       return false
@@ -11904,7 +11904,6 @@ $(document).on("click","#registro_equipamientos td a",function(event){
       imagen="";
       pos=null;
     }
-    
     if(!$("#noticias_edit #galeria_noticia").hasClass("oculto")){
       galeria=$("#noticias_edit #galeria_noticia").attr("title").split(' ').join('_');
     }
@@ -15044,54 +15043,32 @@ $(document).on("blur","input[id='edit_administrativo_dni']",function(event) {
   $(document).on("click","#finalizar_curso",function(event){
     event.preventDefault();
 
-        $.ajax({
-          type: 'POST',
-          url: Routing.generate('obtener_curso_academico'),
+    $.ajax({
+      type: 'POST',
+      url: Routing.generate('obtener_curso_academico'),
+      dataType: 'json',
+      success: function(response) {
 
-          dataType: 'json',
-          success: function(response) {
+      aviso.play();
+      swal({
+        title: "Finalización del Curso Académico "+response.inicio+"/"+response.fin,
+        html: "<p class='justificado'>Se va a finalizar el curso académico almacenando todos los datos del curso en el expediente de los alumnos y restableciendo los datos del sistema para el nuevo curso.</p></br>¿Estas seguro de continuar? No podrás deshacer este paso...",
+        type: "warning",
+        showCancelButton: true,
+        cancelButtonText: "Cancelar",
+        confirmButtonColor: color_rojo,
+        confirmButtonText: "Finalizar"
+        }).then(function () {
+        /*
+          Finalizar curso
+        */
+        }, function (dismiss) {
 
-    aviso.play();
-    swal({
-      title: "Finalización del Curso Académico "+response.inicio+"/"+response.fin,
-      html: "<p class='justificado'>Se va a finalizar el curso académico almacenando todos los datos del curso en el expediente de los alumnos y restableciendo los datos del sistema para el nuevo curso.</p></br>¿Estas seguro de continuar? No podrás deshacer este paso...",
-      type: "warning",
-      showCancelButton: true,
-      cancelButtonText: "Cancelar",
-      confirmButtonColor: color_rojo,
-      confirmButtonText: "Finalizar"
-      }).then(function () {
-
-        $.ajax({
-          type: 'DELETE',
-          url: Routing.generate(arr[4]+"_delete", {id:arr[5]}),
-          data: $('#asignatura_delete').serialize(),
-        
-          success: function() {
-            $("#asignaturas_dialog").dialog('close');
-            tab=$(".contenido_main").find("div[aria-hidden='false']");
-            $(tab).load(Routing.generate('asignatura'));
-            //$("#tabs #lista_asignaturas").empty();
-            //$("#tabs #lista_asignaturas").load(Routing.generate('alumno_listaAsignatura'));
-            
-            //Actualización de pestañas.
-            $("#asignaturas_cursos").update_tab();
-            $("#profesor_asignar_grupo").update_tab();
-            $("#asignar_horario").update_tab();
-            $("#asignar_optativa").update_tab();
-          }
-        })
-      }, function (dismiss) {
-
-      }
-    );
+        }
+      );
       return false;
-
-
-
-          }
-        })
-
+      }
+    })
   });
 
 
@@ -15102,55 +15079,33 @@ $(document).on("blur","input[id='edit_administrativo_dni']",function(event) {
 
   $(document).on("click","#finalizar_matriculacion",function(event){
     event.preventDefault();
+   
+    $.ajax({
+      type: 'POST',
+      url: Routing.generate('obtener_curso_academico'),
+      dataType: 'json',
+      success: function(response) {
 
-        $.ajax({
-          type: 'POST',
-          url: Routing.generate('obtener_curso_academico'),
+      aviso.play();
+      swal({
+        title: "Finalización del proceso de matriculación del curso "+response.inicio+"/"+response.fin,
+        html: "<p class='justificado'>Se va a finalizar el proceso de matriculación del curso académico desactivando a los alumnos del curso anterior que no han sido matriculados.</p><br><p class='justificado'> Los responsables de estos alumnos también serán desactivados en el sistema si no tiene más alumnos matriculados en el centro.</p></br>¿Estas seguro de continuar? No podrás deshacer este paso...",
+        type: "warning",
+        showCancelButton: true,
+        cancelButtonText: "Cancelar",
+        confirmButtonColor: color_rojo,
+        confirmButtonText: "Finalizar"
+        }).then(function () {
 
-          dataType: 'json',
-          success: function(response) {
-
-    aviso.play();
-    swal({
-      title: "Finalización del proceso de matriculación del curso "+response.inicio+"/"+response.fin,
-      html: "<p class='justificado'>Se va a finalizar el proceso de matriculación del curso académico desactivando a los alumnos del curso anterior que no han sido matriculados.</p><br><p class='justificado'> Los responsables de estos alumnos también serán desactivados en el sistema si no tiene más alumnos matriculados en el centro.</p></br>¿Estas seguro de continuar? No podrás deshacer este paso...",
-      type: "warning",
-      showCancelButton: true,
-      cancelButtonText: "Cancelar",
-      confirmButtonColor: color_rojo,
-      confirmButtonText: "Finalizar"
-      }).then(function () {
-
-        $.ajax({
-          type: 'DELETE',
-          url: Routing.generate(arr[4]+"_delete", {id:arr[5]}),
-          data: $('#asignatura_delete').serialize(),
-        
-          success: function() {
-            $("#asignaturas_dialog").dialog('close');
-            tab=$(".contenido_main").find("div[aria-hidden='false']");
-            $(tab).load(Routing.generate('asignatura'));
-            //$("#tabs #lista_asignaturas").empty();
-            //$("#tabs #lista_asignaturas").load(Routing.generate('alumno_listaAsignatura'));
-            
-            //Actualización de pestañas.
-            $("#asignaturas_cursos").update_tab();
-            $("#profesor_asignar_grupo").update_tab();
-            $("#asignar_horario").update_tab();
-            $("#asignar_optativa").update_tab();
-          }
-        })
-      }, function (dismiss) {
-
-      }
-    );
+        /*
+          Finalizar curso
+        */
+        }, function (dismiss) {
+        }
+      );
       return false;
-
-
-
-          }
-        })
-
+      }
+    })
   });
 
 

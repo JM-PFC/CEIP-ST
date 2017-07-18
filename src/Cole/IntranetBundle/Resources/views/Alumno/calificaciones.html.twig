@@ -1,0 +1,170 @@
+{% extends  'IntranetBundle:Alumno:index.html.twig' %}
+
+{% block body %}
+    {{parent()}}
+    <script>
+    	$(".menu li").removeClass('active');
+		$(".menu #calificaciones").addClass('active');
+
+		$("#busqueda_calificaciones option:eq(0)").prop('selected', true);
+    </script>
+ {% endblock %}
+
+{% block migas %}
+	<li class="tipo">
+			{% trans %}Alumnado{% endtrans %}
+	</li>
+	<li>
+		<a href="{{path('intranet_alumno', { 'id': entity.id })}}">
+			{% trans %}Panel principal{% endtrans %}
+		</a>
+	</li>
+	<li class="active no-seleccion">
+		{% trans %}Calificaciones{% endtrans %}
+	</li>
+{% endblock %}
+
+{% block titulo_cabecera %}
+	<i class="fa fa-book page-header-icon"></i>
+	{% trans %}Calificaciones{% endtrans %}
+{% endblock %}
+{% block titulo_cabecera_movil %}
+	<i class="fa fa-book page-header-icon"></i>
+	{% trans %}Calificaciones{% endtrans %}
+{% endblock %}
+
+{% block contenido %}
+	<h4 id="titulo-seccion" class="titulo-seccion">{% trans %}Calificaciones del alumno{% endtrans %}</h4>
+
+	{% if tareas != null %}
+	 	<div role="tabpanel" id="tab_calificaciones">
+	 		
+			<ul class="nav nav-tabs" role="tablist">
+				<li role="presentation" class="active"><a href="#tareas" aria-controls="tareas" data-toggle="tab" role="tab">{% trans %}Tareas Evaluables{% endtrans %}</a></li>
+				{% if trimestre != 1 %}
+					<li role="presentation"><a href="#trimestre" aria-controls="trimestre" data-toggle="tab" role="tab">{% trans %}Evaluación del curso{% endtrans %}</a></li>
+				{% endif %}
+			</ul>
+			<div class="tab-content clearfix">
+				<div role="tabpanel" class="tab-pane active clearfix" id="tareas">
+					{% if tareasEvaluadas != null %}
+						<span>{% trans %}Filtrar por asignaturas{% endtrans %}: </span>
+						<select id="busqueda_calificaciones">
+							<option value="0" hidden>Seleccione una asignatura</option>
+							{% for asignatura in asignaturas %}
+								<option value="{{asignatura.asignaturasCursos.id}}">{{asignatura.asignaturasCursos.asignatura.nombre}}</option>
+							{% endfor %}
+							<option id="todos" value="todas" >{% trans %}Todas{% endtrans %}</option>
+						</select>
+	        			<div class="table-responsive">
+        					<table id="{{entity.id}}" class="table lista-alumnos table_task table-striped ">
+            					<thead>
+                					<tr>
+                    					<th class="col-md-4">{% trans %}Nombre de la tarea{% endtrans %}</th>
+                    					<th class="col-md-4">{% trans %}Asignatura{% endtrans %}</th>
+                    					<th class="col-md-1">{% trans %}Trimestre{% endtrans %}</th>
+                    					<th class="col-md-2">{% trans %}Calificación{% endtrans %}</th>
+                					</tr>
+            					</thead>
+            
+            					<tbody class="">
+            					{% for entity in tareasEvaluadas %}
+                					<tr id="{{ entity.asignaturasCursos.id }}">
+                    					<td class="col-md-4">{{ entity.tarea.descripcion }}</td>
+                    					<td id="asignatura" class="col-md-4" >
+                        					{{entity.asignaturasCursos.asignatura.nombre }}
+                    					</td>
+                    					<td class="col-md-1">{{entity.tarea.trimestre ~ "º"}}</td>
+                    					<td class="col-md-2">{{entity.nota}}</td>
+                					</tr>
+            					{% endfor %}
+            					</tbody>
+        					</table>
+      					</div>
+					{% else %}
+						<div class="alert alert-info alert-block">
+							<small>
+								<h4>{% trans %}El alumno no tiene ninguna tarea evaluada{% endtrans %}.</h4>
+								<h6>{% trans %}Actualmente el alumno no tiene ninguna tarea evaluada. Puedes consultar la evaluación del trimestre anterior en la otra pestaña{% endtrans %}.</h6>
+							</small>
+						</div>
+					{% endif %}	
+				</div>
+
+				<div role="tabpanel" class="tab-pane" id="trimestre">
+    				<table class="lista-alumnos table table-striped table-bordered" class="col-sm-offset-1 col-sm-10">
+       					<thead >
+            				<tr>
+                				<th class="col-xs-7 col-sm-4">{% trans %}Asignaturas{% endtrans %}</th>
+                				<th class="col-xs-1 center">{% trans %}1ª EVA{% endtrans %}</th>
+                				{% if trimestre == 3 %}
+                    				<th class="col-xs-1 center">{% trans %}2ª EVA{% endtrans %}</th>
+                    			{% else %}
+                    				<th class="col-xs-1 center"></th>
+                				{% endif %}
+
+            				</tr>
+        				</thead> 
+       					<tbody>
+            				{% for asignatura in asignaturasAlum %}
+                				<tr id="{{ asignatura.id }}">
+                    				<td class="col-xs-7 col-sm-4">
+                        			{{ asignatura.asignatura.nombre }}
+                    				</td>
+                    				<td trimestre="1" class="col-xs-1 center"></td>
+                    				{% if trimestre == 2 or trimestre == 3  %}
+                        				<td trimestre="2" class="col-xs-1 center"></td>
+                    				{% endif %} 
+                				</tr>
+            				{% endfor %}
+        				</tbody>
+    				</table>
+				</div>
+			</div>
+		</div>
+	{% else %}
+		<div class="alert alert-info alert-block">
+			<small>
+				<h4>{% trans %}El alumno no tiene ninguna tarea evaluada{% endtrans %}.</h4>
+				<h6>{% trans %}Actualmente no se ha evaluado al alumno de ninguna tarea. Vuelva para ver las calificaciones del alumno cuando realice alguna tarea{% endtrans %}.</h6>
+			</small>
+		</div>
+	{% endif %}
+
+
+    <script>
+
+    locale=$("#intranet").attr("locale");
+    inicial=['IN','IN','IN','IN','SU','BI','NT','NT','SB','SB'];
+
+    array={{trimestre1|json_encode()|raw}};
+    for (var key in array){
+        clave=key.split("-");
+        asignatura=clave[0];
+        trimestre=clave[1];
+        nota=array[key];
+        //Si tiene calificación se inserta en la tabla.  
+        if(nota!=""){
+            $("#tab_calificaciones table tr[id='"+asignatura+"'] td[trimestre='1']").text(nota);
+        }
+    }
+
+    array={{trimestre2|json_encode()|raw}};
+    for (var key in array){
+        clave=key.split("-");
+        asignatura=clave[0];
+        trimestre=clave[1];
+        nota=array[key];
+
+        //Si tiene calificación se inserta en la tabla.  
+        if(nota!=""){
+            $("#tab_calificaciones table tr[id='"+asignatura+"'] td[trimestre='2']").text(nota);
+        }
+    }
+
+
+    </script>
+
+
+
+{% endblock %}

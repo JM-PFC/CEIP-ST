@@ -3195,10 +3195,10 @@ table tr td a{
     margin-bottom: 0 !important;
     margin-top: 10px;
 }
-#tabla_tareas_profesor td:nth-child(3){
+.table_task td:nth-child(3),.table_task td:nth-child(4),.table_task th:nth-child(3),.table_task th:nth-child(4){
     text-align: center !important;
 }
-#tabla_tareas_profesor h4{
+#tabla_tareas_profesor>h4{
     margin: 0 !important;
     background: #31708f none repeat scroll 0 0;
     border-radius: 5px;
@@ -3412,4 +3412,26 @@ table tr td a{
 }
 .titulo_boletin{
     text-transform: underline !important;
+}
+#tab_calificaciones .tab-content {
+    min-height: 400px;
+}
+#busqueda_calificaciones{
+    min-width: 200px;
+    text-align: center;
+}
+#busqueda_calificaciones option{
+   padding: 2px;
+
+}
+#busqueda_calificaciones #todos{
+   padding-top: 2px;
+   font-weight: bold;
+   border-top: 1px solid grey;
+}
+.table-bordered tbody td:first-child{
+    border-left: 0 !important;
+}
+.table-bordered tbody td:last-child{
+    border-right: 0 !important;
 }

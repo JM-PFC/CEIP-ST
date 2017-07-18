@@ -161,7 +161,7 @@
 
 {% block contenido %}
     <h4 id="titulo-seccion" class="titulo-seccion">{% trans %}Tutorías presenciales{% endtrans %}</h4>
-
+{% if tutor_grupo %}
     <div id="datos_tutoria" class="container-fluid div_datos_curso">
         <div class="pull-left col-xs-12 col-sm-4 no-padding datos_curso">
             <label>{% trans %}Curso{% endtrans %}:</label>
@@ -442,9 +442,15 @@
 
             </div>
         </div>
- 
     </div>
-
+{% else %}
+        <div class="alert alert-info alert-block m_top60">
+            <small>
+                <h4>{% trans %}No tienes asignado ningún grupo{% endtrans %}.</h4>
+                <h6>{% trans %}No podrás usar esta opción hasta que no se le asigne un grupo{% endtrans %}.</h6>
+            </small>
+        </div>
+{% endif %}
 
     <!-- Ventana modal de eliminación de consulta de tutoría -->
   <div id="eliminar_tutoria_modal" class="modal fade-scale aviso ediccion_seguimiento_modal"  tabindex="-1" role="dialog" data-backdrop="true" >

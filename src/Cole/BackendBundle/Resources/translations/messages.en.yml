@@ -147,7 +147,7 @@ Impartiendo clase en: Teaching class in
 No tiene grupo asignado a esta hora: No group assigned at this time
 Seguimiento del curso: Course Tracking
 No hay ningún seguimiento: There is no follow-up
-No has realizado ningún seguimiento de alumno o grupo. Puedes realizar en cualquier momento un seguimiento pulsando en la opción "añadir nuevo seguimiento" en la parte superior: You have not followed a student or group. You can make a follow-up at any time by clicking on the "add new tracking" option at the top
+No has realizado ningún seguimiento de alumno o grupo. Puedes realizar en cualquier momento un seguimiento pulsando en la opción "Nuevo Seguimiento" en la parte superior: You have not followed a student or group. You can make a follow-up at any time by clicking on the "New Tracking" option at the top
 No se ha realizado ningún seguimiento del alumno o grupo. Cuando tenga un nuevo seguimiento se le notificará en los avisos de la barra superior: There was no follow-up of the student or group. When you have a new follow up you will be notified in the announcements of the top bar
 Actualizado: Updated
 Actualizada: Updated
@@ -309,6 +309,19 @@ Evaluación de tareas: Assessment of tasks
 No hay alumnos asignados a este grupo: No students are assigned to this group
 Espere a que se asigne a los alumnos al grupo para poder ver sus calificaciones : Wait for the students to be assigned to the group so they can see their grades
 Ver Evaluación: See Evaluation
+Evaluación del curso: Course Evaluation
 Evaluación del alumno: Student Assessment
 Boletín PDF: Student Bulletin PDF
 Boletines Alumnos PDF: Students Bulletins PDF
+No tienes traeras evaluables registradas en el sistema: You do not have evaluable trails registered in the system
+Para añadir una nueva tarea pulse sobre la opción "Añadir Tarea" y siga los pasos: To add a new task click on the "Add Task" option and follow the steps
+No tienes asignado ningún grupo: You have no group assigned
+No podrás usar esta opción hasta que no se le asigne un grupo: You will not be able to use this option until you are assigned a group
+El curso no tiene asignaturas asignadas: The course has no assigned subjects
+Los alumnos no podrán ser evaluados hasta que no se le asigne las asignaturas al curso: Students can not be evaluated until they are assigned to the course
+Calificaciones del alumno: Student Qualifications
+El alumno no tiene ninguna tarea evaluada: The student does not have any task evaluated
+Actualmente el alumno no tiene ninguna tarea evaluada. Puedes consultar la evaluación del trimestre anterior en la otra pestaña: At the moment the student does not have any task evaluated. You can check the evaluation of the previous quarter in the other tab
+Actualmente no se ha evaluado al alumno de ninguna tarea. Vuelva para ver las calificaciones del alumno cuando realice alguna tarea: The student has not been evaluated for any homework. Return to see the student's grades when doing some homework
+Filtrar por asignaturas: Filter by Subject
+Todas: All

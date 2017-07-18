@@ -50,6 +50,18 @@ intranet_alumno_seguimiento:
     path:     /seguimiento/{num}
     defaults: { _controller: IntranetBundle:Alumno:seguimiento}
 
+intranet_alumno_calificaciones:
+    path:     /calificaciones
+    defaults: { _controller: IntranetBundle:Alumno:calificaciones}
+    options:
+        expose: true
+
+calificacionesTareasAlumno:
+    path:     /calificacionesTareasAlumno/{asig}
+    defaults: { _controller: IntranetBundle:Alumno:calificacionesTareasAlumno}
+    options:
+        expose: true
+
 intranet_alumno_tutorias:
     path:     /tutorias
     defaults: { _controller: IntranetBundle:Alumno:tutorias}

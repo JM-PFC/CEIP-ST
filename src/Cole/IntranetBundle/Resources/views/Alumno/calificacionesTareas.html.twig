@@ -1,0 +1,10 @@
+    {% for entity in tareas %}
+        <tr id="{{ entity.asignaturasCursos.id }}">
+            <td class="col-md-4">{{ entity.tarea.descripcion }}</td>
+            <td id="asignatura" class="col-md-4" >
+                {{entity.asignaturasCursos.asignatura.nombre }}
+            </td>
+            <td class="col-md-1">{{entity.tarea.trimestre ~ "º"}}</td>
+            <td class="col-md-2">{{entity.nota}}</td>
+        </tr>
+    {% endfor %}

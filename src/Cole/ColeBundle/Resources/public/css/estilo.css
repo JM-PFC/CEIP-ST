@@ -660,8 +660,16 @@ fieldset.fsetoculto {
 .aside_columna p,.aside_columna span{
     font-size: 12px;
     margin-bottom: 5px;
-    padding:0 10px;
+    padding:0;
     color: #001F51;
+}
+#img_calendario{
+    display: block;
+    margin-bottom: -16px;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 13px !important;
+    text-align: center;
 }
 .horarios p span{
     display: block;

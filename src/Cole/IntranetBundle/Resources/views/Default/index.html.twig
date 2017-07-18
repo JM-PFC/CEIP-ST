@@ -56,7 +56,7 @@
 						<img class="img-responsive img-header pull-left" alt="Logo del colegio" src="{{ asset('bundles/backend/images/logo_trans.png')}}">
 						<div class="titulo no-seleccion pull-left">{% trans %}Colegio de Educación Infantil y Primaria{% endtrans %}<br> <strong class="no-seleccion c_naranja">Santa Teresa</strong> - Cádiz</div>
 					</div>
-					{% if is_granted("ROLE_ADMIN") %}
+					{% if is_granted("ROLE_ADMIN")  or is_granted("ROLE_JEFE_ESTUDIO")%}
 						{% if app.user.sexo == "Masculino" %}
 						<div class="f_left">
 							<a href="{{path('backend')}}">

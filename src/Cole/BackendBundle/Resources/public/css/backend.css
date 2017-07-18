@@ -261,7 +261,7 @@ nav{
     position:relative;
     float: left;
     text-align: center;
-    width: 11%;
+    min-width: 11%;
     font-size: 18px;
     font-family: Helvetica,Arial,sans-serif;
 	margin-left: 40px;
@@ -796,8 +796,10 @@ nav{
 	#consulta_antiguo_administrativo .old_t_data h3 {
     	margin-top: 15px !important;
 	}
+	#asignar_grupos #contenedor_asignar_grupos li p {
+    	padding: 2% 0 !important;
+	}
 }
-
 
 /*Contenido*/
 #tabs>div{
@@ -2244,9 +2246,11 @@ button[class*="elected"]{
 #tutor_grupos #lista_grupos tbody:first-child th, #tutor_grupos #lista_grupos tbody:first-child td{
 	border-top: none !important;
 }
+/*
 #tutor_grupos #lista_grupos tbody:last-child th, #tutor_grupos #lista_grupos tbody:last-child td{
 	border-bottom: none !important;
 }
+*/
 #tutor_grupos #lista_grupos th{
 	background: #b1cce7;
 	border-bottom: 1px solid #334c73 ;
@@ -5705,7 +5709,7 @@ input[type="checkbox"]:hover{
     border-radius: 5px;
     color: #454545;
     font-weight: normal;
-    width: 85%;
+    width: 88%;
     margin:3px auto;
     list-style: none;
     min-height: 15px;
@@ -5889,10 +5893,17 @@ input[type="checkbox"]:hover{
 #asignar_grupos #contenedor_asignar_grupos li p:not(.nuevo) {
 	width: 86%;
 }
+#asignar_grupos #contenedor_asignar_grupos .ui-sortable li[title="Nuevo Alumno"] p:not(.nuevo), #asignar_grupos #contenedor_cursos .ui-sortable li[title="Nuevo Alumno"] p:not(.nuevo)  {
+    width: 66% !important;
+}
+#asignar_grupos #contenedor_asignar_grupos .ui-sortable li[title="Nuevo Alumno"] p:last-child, #asignar_grupos #contenedor_cursos .ui-sortable li[title="Nuevo Alumno"] p:last-child  {
+    width: 12% !important;
+}
 #asignar_grupos  li p {
 	font-size: 12.5px !important;
 	display: inline-table;
 }
+
 
 #asignar_grupos  li p:last-child {
 	font-size: 12px !important;

@@ -166,36 +166,47 @@
 
 <div id="tabla_tareas_profesor" class="panel panel-default tab-content">
     <h4 >{% trans %}Tareas Evaluables{% endtrans %}</h4>
-    <div class="table-responsive">
-      <table class="table lista-alumnos table-striped ">
-        <thead>
-          <tr >
-            <th class="col-md-4">{% trans %}Nombre de la tarea{% endtrans %}</th>
-            <th class="col-md-4">{% trans %}Asignatura{% endtrans %}</th>
-            <th class="col-md-1">{% trans %}Trimestre{% endtrans %}</th>
-            <th class="col-md-2">{% trans %}Grupos{% endtrans %}</th>
-            <th class="col-md-1"></th>
-          </tr>
-        </thead>
-        <tbody class="">
-        {% for entity in tareas %}
-          <tr id="{{ entity.id }}">
-            <td class="col-md-4">{{ entity.descripcion }}</td>
-            <td class="col-md-4" >
-                {{entity.asignatura.asignatura.nombre }}
-            </td>
-            <td class="col-md-1">{{entity.trimestre ~ "º"}}</td>
-            <td id="grupos_tareas" class="col-md-2"></td>
-            <td class="col-md-1">
-                <a id="btn_eliminar" href="javascript:void(0);"  data-target="#eliminar_tarea_modal" data-toggle="modal" data-backdrop="static" data-keyboard="false">
-                    <i class="fa fa-trash-o"></i>
-                </a>
-            </td> 
-          </tr>
-        {% endfor %}
-        </tbody>
-      </table>
+
+    {% if tareas != null %}
+        <div class="table-responsive">
+        <table class="table lista-alumnos table_task table-striped ">
+            <thead>
+                <tr>
+                    <th class="col-md-4">{% trans %}Nombre de la tarea{% endtrans %}</th>
+                    <th class="col-md-4">{% trans %}Asignatura{% endtrans %}</th>
+                    <th class="col-md-1">{% trans %}Trimestre{% endtrans %}</th>
+                    <th class="col-md-2">{% trans %}Grupos{% endtrans %}</th>
+                    <th class="col-md-1"></th>
+                </tr>
+            </thead>
+            
+            <tbody class="">
+            {% for entity in tareas %}
+                <tr id="{{ entity.id }}">
+                    <td class="col-md-4">{{ entity.descripcion }}</td>
+                    <td class="col-md-4" >
+                        {{entity.asignatura.asignatura.nombre }}
+                    </td>
+                    <td class="col-md-1">{{entity.trimestre ~ "º"}}</td>
+                    <td id="grupos_tareas" class="col-md-2"></td>
+                    <td class="col-md-1">
+                        <a id="btn_eliminar" href="javascript:void(0);"  data-target="#eliminar_tarea_modal" data-toggle="modal" data-backdrop="static" data-keyboard="false">
+                            <i class="fa fa-trash-o"></i>
+                        </a>
+                    </td> 
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
       </div>
+    {% else %}
+            <div class="alert alert-info alert-block">
+                <small>
+                    <h4>{% trans %}No tienes traeras evaluables registradas en el sistema{% endtrans %}.</h4>
+                    <h6>{% trans %}Para añadir una nueva tarea pulse sobre la opción "Añadir Tarea" y siga los pasos{% endtrans %}.</h6>
+                </small>
+            </div>
+    {% endif %}
 </div>
 
     <!-- Ventana modal de eliminación de la tarea -->

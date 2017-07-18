@@ -319,6 +319,15 @@ class MatriculaController extends Controller
         $id=$this->get('request')->request->get('id');
 
         $alumno=$em->getRepository('BackendBundle:Alumno')->findOneById($id);
+        if($alumno->getGrupo()){
+            $grupo=$alumno->getGrupo();
+            $numAlum=$alumno->getNumAlum();
+        }
+        else{
+            $grupo=null;
+            $numAlum=null;
+        }
+        
         //Se comprueba si es nuevo alumno o antiguo.
         $expediente=$em->getRepository('BackendBundle:Expediente')->findByAlumno($alumno);
         //nuevo alumno
@@ -426,6 +435,21 @@ class MatriculaController extends Controller
             $em->persist($alumno);
         }
         $em->flush();
+
+        //Si el alumno estaba asignado a un grupo se restablece el número de alumno del resto.
+        if($grupo){
+            $alumnos=$em->getRepository('BackendBundle:Alumno')->findByGrupoOrdenado($grupo);
+            //Se comprueba si era el último para no hacer nada.
+            if($numAlum!=count($alumnos)){
+                $cont=1;
+                foreach ($alumnos as $alum) {
+                    $alum->SetNumAlum($cont);
+                    $cont++;
+                    $em->persist($alum);
+                    $em->flush();
+                } 
+            }
+        }
 
         return new JsonResponse(array(
             'success' => true), 200);

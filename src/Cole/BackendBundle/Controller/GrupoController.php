@@ -1062,18 +1062,19 @@ class GrupoController extends Controller
     }
 
     public function HorariosGruposPdfAction()
-    {
+    {   
        $em = $this->getDoctrine()->getManager();
-       $html = array();
+        $html = array();
 
-       $grupo= $em->getRepository('BackendBundle:Grupo')->findPrimariaByCurso();
-       foreach($grupo as $grupo){
+        $grupo= $em->getRepository('BackendBundle:Grupo')->findPrimariaByCurso();
 
         $inicio =$em->getRepository('BackendBundle:Centro')->findInicioCurso();
         $fin =$em->getRepository('BackendBundle:Centro')->findFinCurso();
 
         $horarios = $em->getRepository('BackendBundle:Horario')->findAll();
-        
+       
+       foreach($grupo as $grupo){
+
         $entities = $em->getRepository('BackendBundle:Imparte')->findByGrupoConHorario($grupo);
         $imparte= $em->getRepository('BackendBundle:Imparte')->findAsignacionesNoOpcionales($grupo);
 

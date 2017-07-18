@@ -98,5 +98,46 @@ class CursaRepository extends EntityRepository
 			->getResult();
 	}
 
+	public function findTareasAlumnoEvaluadas($alumno)
+	{
+		return $this->getEntityManager()->createQuery(
+			'SELECT c FROM IntranetBundle:Cursa c INNER JOIN c.tarea t INNER JOIN c.asignaturasCursos a INNER JOIN a.asignatura asig WHERE c.alumno=:alumno AND t.descripcion not like :descripcion ORDER BY t.trimestre ,asig.nombre DESC')
+			->setParameters(array(
+			'alumno' => $alumno,
+			'descripcion'=>"Evaluación_Trimestral"))
+			->getResult();
+	}
+
+	public function findTareasAlumnoEvaluadasAsignatura($alumno, $asignatura)
+	{
+		return $this->getEntityManager()->createQuery(
+			'SELECT c FROM IntranetBundle:Cursa c INNER JOIN c.tarea t INNER JOIN c.asignaturasCursos a INNER JOIN a.asignatura asig WHERE c.alumno=:alumno AND c.asignaturasCursos=:asignatura AND t.descripcion not like :descripcion ORDER BY t.trimestre ,asig.nombre DESC')
+			->setParameters(array(
+			'alumno' => $alumno,
+			'asignatura' => $asignatura,
+			'descripcion'=>"Evaluación_Trimestral"))
+			->getResult();
+	}
+
+	public function findTareasAlumnoEvaluadasAgrupadas($alumno)
+	{
+		return $this->getEntityManager()->createQuery(
+			'SELECT c FROM IntranetBundle:Cursa c INNER JOIN c.tarea t INNER JOIN c.asignaturasCursos a INNER JOIN a.asignatura asig WHERE c.alumno=:alumno AND t.descripcion not like :descripcion GROUP BY c.asignaturasCursos ORDER BY asig.nombre ASC')
+			->setParameters(array(
+			'alumno' => $alumno,
+			'descripcion'=>"Evaluación_Trimestral"))
+			->getResult();
+	}
+
+	public function findTareasAlumnoSinTrimestreActual($alumno, $trimestre)
+	{
+		return $this->getEntityManager()->createQuery(
+			'SELECT c FROM IntranetBundle:Cursa c INNER JOIN c.tarea t INNER JOIN c.asignaturasCursos a INNER JOIN a.asignatura asig WHERE c.alumno=:alumno AND (t.descripcion not like :descripcion OR( t.descripcion=:descripcion AND t.trimestre not like :trimestre)) ORDER BY t.trimestre ,asig.nombre DESC')
+			->setParameters(array(
+			'alumno' => $alumno,
+			'trimestre' => $trimestre,
+			'descripcion'=>"Evaluación_Trimestral"))
+			->getResult();
+	}
 
 }

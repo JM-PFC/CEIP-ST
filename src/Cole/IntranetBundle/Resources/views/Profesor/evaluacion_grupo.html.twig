@@ -43,13 +43,15 @@
 
 {% block contenido %}
     <h4 id="titulo-seccion" class="titulo-seccion">{% trans %}Evaluación de mi grupo{% endtrans %}</h4>
-    <div class="contenedor_btn_descarga">
-        <a id="alumnos_grupo_pdf" class=" btn_descargar hidden-xs #1" href="{{ path('alumnos_grupo_pdf', { 'id': entity.id }) }}">
-            <button ><i class="fa fa-file-pdf-o"></i>{% trans %}Boletines Alumnos PDF{% endtrans %}</button>
-        </a>  
-    </div>
 
-    <div id="tabla_alumnos_grupo" class="tab-content lista_notas">
+    {% if asignaturas != null %}
+        <div class="contenedor_btn_descarga">
+            <a id="alumnos_grupo_pdf" class=" btn_descargar hidden-xs #1" href="{{ path('boletin_evaluaciones_pdf', { 'id': grupo.id }) }}">
+                <button ><i class="fa fa-file-pdf-o"></i>{% trans %}Boletines Alumnos PDF{% endtrans %}</button>
+            </a>  
+        </div>
+
+        <div id="tabla_alumnos_grupo" class="tab-content lista_notas">
         {% if alumnos != null %}
                 <div class="col-xs-12 no-padding head_list" >
                     <div class="col-xs-12 col-sm-11 no-padding cabecera_tabla" >
@@ -91,8 +93,15 @@
                 </small>
             </div>
         {% endif %}
-    </div>
-
+        </div>
+    {% else %}
+            <div class="alert alert-info alert-block">
+                <small>
+                    <h4>{% trans %}El curso no tiene asignaturas asignadas{% endtrans %}.</h4>
+                    <h6>{% trans %}Los alumnos no podrán ser evaluados hasta que no se le asigne las asignaturas al curso{% endtrans %}.</h6>
+                </small>
+            </div>
+    {% endif %}
 
     <div id="evaluacion_alumno" class="modal fade lista_tareas_alumno" role="dialog" data-backdrop="true" >
         <div class="modal-dialog">

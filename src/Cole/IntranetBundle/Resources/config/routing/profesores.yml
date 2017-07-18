@@ -121,6 +121,12 @@ boletin_evaluacion_pdf:
     options:
       expose: true
 
+boletin_evaluaciones_pdf:
+    pattern:  /boletinesPdf/{id}
+    defaults: { _controller: "IntranetBundle:Profesor:BoletinEvaluacionesPdf", _format: pdf}
+    options:
+      expose: true
+
 grupos_asignaturasGrupo_profesor:
     path:     /grupo/asignaturas/profesor/{id}
     defaults: { _controller: IntranetBundle:Profesor:GruposAsignaturasGrupoProfesor}

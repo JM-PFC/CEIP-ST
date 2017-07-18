@@ -42,22 +42,27 @@
 	<script src="{{ asset('bundles/backend/js/TimePicki-master/js/timepicki.js') }}" type="text/javascript"></script>
 	<script src="{{ asset('bundles/backend/js/Croppie/croppie.js') }}" type="text/javascript"></script>
 	<script src="{{ asset('bundles/backend/js/JQ-Image-Drag-master/script/jquery.imagedrag.js') }}" type="text/javascript"></script>
-	
 {% endblock %}
-
 
 {% block body %}
 	<div class="centrado oculto">
     	<header>
 			<h2> C.E.I.P SANTA TERESA </h2> 
 			{% if is_granted("ROLE_ADMIN") %}
-				<p class="usuario"><span>{{ app.user }} (Director) <a href="{{path('intranet', { '_locale': 'es' })}}" title="Volver a Intranet"><img src="{{ asset('bundles/backend/images/menu/inicio.png')}}"></a></span></p>
+				<p class="usuario"><span>{{ app.user }} (Dirección) <a href="{{path('intranet', { '_locale': 'es' })}}" title="Volver a Intranet"><img src="{{ asset('bundles/backend/images/menu/inicio.png')}}"></a></span></p>
+			{% elseif is_granted("ROLE_JEFE_ESTUDIO") %}
+				<p class="usuario"><span>{{ app.user }} ( Jefatura de Estudios ) <a href="{{path('intranet', { '_locale': 'es' })}}" title="Volver a Intranet"><img src="{{ asset('bundles/backend/images/menu/inicio.png')}}"></a></span></p>
+			{% elseif is_granted("ROLE_ADMINISTRATIVO") %}
+				<p class="usuario"><span>{{ app.user }}</span></p>
+			{% elseif is_granted("ROLE_ADMIN_WEB") %}
+				<p class="usuario"><span>{{ app.user }} (Administrador web)</span></p>
 			{% endif %}
-			
 			<h3> Área de Administración</h3>
     	</header>
     	<nav class="barra_menu">
-			 <div class="contenedor">
+			<div class="contenedor">
+			{# Director #}
+			{% if is_granted("ROLE_ADMIN") %}
 				<ul class="menu">
 					<li><a href="#1" title="Institución"> Institución </a></li>
 					<li><a href="#2" title="Docentes"> Docentes </a></li>
@@ -206,15 +211,6 @@
 						</a>							
 						<span> Asignaciones </span>
 					</div>
-					{#
-					<div id="tercero">
-						<a  title="Padres" href="{{path('padres')}}">
-							<img src="{{ asset('bundles/backend/images/menu/alumno.png')}}">
-							<span> Padres </span>
-						</a>
-						<span> Contacto </span>
-					</div>
-					#}
 					<div class="btn_click">
 						<a id="finalizar_matriculacion" class="no_tab contenedor_btn_click" title="Finalizar proceso de matriculación" href="javascript:void(0);">
 							<img src="{{ asset('bundles/backend/images/menu/fin_matriculacion.png')}}">
@@ -315,27 +311,228 @@
 						<span> Noticias </span>
 					</div>
 					<div>
-						<a id="registrar_noticias" title="Registro Noticias" href="{{path('equipamiento_new')}}">
+						<a id="registrar_noticias" title="Contenido Estático" href="javascript:void(0);">
 							<img src="{{ asset('bundles/backend/images/menu/editar_publica.png')}}">
 							<span> Editar <br> Parte Pública </span>
 						</a>
 						<span> Contenido Estático</span>
 					</div>
 				</div>
+			{# Jefe de Estudios #}
+			{% elseif is_granted("ROLE_JEFE_ESTUDIO") %}
 
+				<ul class="menu">
+					<li class="activo"><a href="#1" title="Alumnos / Docentes"> Alumnos / Docentes </a></li>
+					<li><a href="#2" title="Académico"> Académico </a></li>
+					<li class="salir"><a href="{{path('logout')}}" title="Salir de Administración"> <img src="{{ asset('bundles/backend/images/menu/salir.png')}}"> <p>Salir</p></a></li>
+				</ul>
+				<div id="1">
+					<div>
+						<a id="ficha_profesor" title="Ficha docente" href="{{path('profesor_search')}}">
+							<img src="{{ asset('bundles/backend/images/menu/profesor-ficha.png')}}">
+							<span> Ficha <br>Docente</span>
+						</a>
+						<a id="ficha_alumno" title="Ficha Alumno" href="{{path('alumno_search')}}">
+							<img src="{{ asset('bundles/backend/images/menu/alumno-ficha.png')}}">
+							<span> Ficha <br> Alumno</span>
+						</a>
+						<a id="clases_impartidas" title="Clases Docentes" href="{{path('clases_impartidas')}}">
+							<img src="{{ asset('bundles/backend/images/menu/cursos-impartidos.png')}}">
+							<span>Clases<br>Docentes</span>
+						</a>
+						<a id="listado_alumnos"title="Listas de Alumnos" href="javascript:void(0);">
+							<img src="{{ asset('bundles/backend/images/menu/lista_alumnos.png')}}">
+							<span> Listado de <br> Alumnos </span>
+						</a>
+						<span> Información </span>
+					</div>
+					<div>
+						<a id="tutor_grupo" title="Asignar Tutor"  href="{{path('tutor_grupo')}}">
+							<img src="{{ asset('bundles/backend/images/menu/asignar.png')}}">
+							<span> Asignar <br>Tutor</span>
+						</a>		
+						
+						<a id="profesor_asignar_grupo" title="Asignar Profesores" href="{{path('asignar_grupo_profesores_show')}}">
+							<img src="{{ asset('bundles/backend/images/menu/profesor-grupo.png')}}">
+							<span> Asignar <br>Profesores</span>
+						</a>	
+						<a id="asignar_grupo" title="Asignar Grupos" href="{{path('asignar_grupo')}}">
+							<img src="{{ asset('bundles/backend/images/menu/alumno-grupo.png')}}">
+							<span> Asignar <br>Grupos</span>
+						</a>
+						<a id="asignar_optativa" title="Asignar Optativa" href="{{path('show_optativas')}}">
+							<img src="{{ asset('bundles/backend/images/menu/asignar_optativa.png')}}">
+							<span> Asignar <br>Optativa</span>
+						</a>							
+						<span> Asignaciones </span>
+					</div>
+				</div>
+				<div id="2">
+					<div>
+						<a id="registrar_horario_academico" title="Registro Horario" href="{{path('horario_show')}}">
+							<img src="{{ asset('bundles/backend/images/menu/horario_escolar.png')}}">
+							<span> Registro <br>H. Escolar </span>
+						</a>					
+						<span> Horario </span>
+					</div>
+					<div>
+						<a title="Registro Asignatura" href="{{path('asignatura')}}">
+							<img src="{{ asset('bundles/backend/images/menu/asignaturas.png')}}">
+							<span> Registro <br>Asignaturas<span>
+						</a>	
+						<a id="asignaturas_cursos" title="Asignaturas por curso" href="{{path('asignaturas_cursos')}}">
+							<img src="{{ asset('bundles/backend/images/menu/asigCursos.png')}}">
+							<span> Asignaturas<br>por curso</span>
+						</a>				
+						<span> Asignaturas </span>
+					</div>
+					<div>
+						<a id="nuevo_curso" title="Registro Curso" href="{{path('curso')}}">
+							<img src="{{ asset('bundles/backend/images/menu/curso.png')}}">
+							<span> Registro <br> Curso</span>
+						</a>			
+						<a id="grupos_curso" title="Nº grupos/curso" href="{{path('curso_show')}}">
+							<img src="{{ asset('bundles/backend/images/menu/grupo-cursos.png')}}">
+							<span> Grupos <br>por curso </span>
+						</a>
+						<a id="ratio_curso" title="Nº Alumnos/grupo" href="{{path('ratio_cursos')}}">
+							<img src="{{ asset('bundles/backend/images/menu/aula.png')}}">
+							<span>Alumnos <br>por grupo </span>
+						</a>		
+						<span> Cursos </span>
+					</div>
+					<div>
+						<a id="asignar_aula"  title="Asignar Aula" href="{{path('grupo_show')}}">
+							<img src="{{ asset('bundles/backend/images/menu/asignar_aula.png')}}">
+							<span> Asignar <br>Aula</span>
+						</a>	
+						<a id="asignar_horario" title="Asignar Horario" href="{{path('asignar_horario_show')}}">
+							<img src="{{ asset('bundles/backend/images/menu/horarios2.png')}}">
+							<span> Asignar <br>Horario</span>
+						</a>				
+						<span> Grupos </span>
+					</div>
+				</div>
+
+			{# Administrativo #}
+			{% elseif is_granted("ROLE_ADMINISTRATIVO")%}
+
+				<ul class="menu">
+					<li class="salir"><a href="{{path('logout')}}" title="Salir de Administración"> <img src="{{ asset('bundles/backend/images/menu/salir.png')}}"> <p>Salir</p></a></li>
+				</ul>
+				<div>
+					<div>
+						<a id="profesor_nuevo" title="Nuevo docente" href="{{path('profesor_new')}}">
+							<img src="{{ asset('bundles/backend/images/menu/nuevo_profesor.png')}}">
+							<span> Nuevo <br> Docente</span>
+						</a>
+
+						<a id="profesor_antiguo" title="Alta/baja docente" href="{{path('search_old_teacher')}}">
+							<img src="{{ asset('bundles/backend/images/menu/antiguo_profesor.png')}}">
+							<span> Alta/Baja <br> Docente</span>
+						</a>
+						<a id="ficha_profesor" title="Ficha docente" href="{{path('profesor_search')}}">
+							<img src="{{ asset('bundles/backend/images/menu/profesor-ficha.png')}}">
+							<span>Ficha <br>Docentes</span>
+						</a>				
+						<span> Gestión Docentes</span>
+					</div>
+					<div>
+						<a id="alumnos_nuevo" title="Nuevo Alumno" href="{{path('alumno_new')}}">
+							<img src="{{ asset('bundles/backend/images/menu/matricular.png')}}">
+							<span> Nuevo <br> Alumno</span>
+						</a>
+						<a id="alumnos_antiguo" title="Antiguo Alumno " href="{{path('search_old')}}">
+							<img src="{{ asset('bundles/backend/images/menu/matricular_antiguo.png')}}">
+							<span> Antiguo<br> Alumno</span>
+						</a>
+						<a id="alumnos_multiple" title="Matrícula Múltiple" href="{{path('search_multiple')}}">
+							<img src="{{ asset('bundles/backend/images/menu/matricular+.png')}}">
+							<span> Múltiples<br> Matrículas </span>
+						</a>
+						<a id="anular_matricula" title="Anular Matrícula" href="{{path('show_matriculas')}}">
+							<img src="{{ asset('bundles/backend/images/menu/cancelado.png')}}">
+							<span> Anular <br>Matrícula</span>
+						</a>		
+						<a id="ficha_alumno" title="Ficha Alumno" href="{{path('alumno_search')}}">
+							<img src="{{ asset('bundles/backend/images/menu/alumno-ficha.png')}}">
+							<span> Ficha <br> Alumno</span>
+						</a>						
+						<span>Gestión Alumnos</span>
+					</div>
+					<div>
+						<a id="administrativo_nuevo" title="Nuevo personal" href="{{path('administrativo_new')}}">
+							<img src="{{ asset('bundles/backend/images/menu/administrativos.png')}}">
+							<span> Nuevo <br>Personal</span>
+						</a>
+						<a id="ficha_administrativo" title="Ficha Administrativo" href="{{path('administrativo_search')}}">
+							<img src="{{ asset('bundles/backend/images/menu/administrativos_ficha.png')}}">
+							<span> Ficha <br>Personal</span>
+						</a>
+						<a id="administrativo_antiguo" title="Alta/baja personal" href="{{path('search_old_admin')}}">
+							<img src="{{ asset('bundles/backend/images/menu/administrativos_bajas.png')}}">
+							<span> Alta/Baja <br>Personal </span>
+						</a>					
+						<span> Gestión Administrativos</span>
+					</div>
+				</div>
+			{# Administrador Web #}
+			{% elseif is_granted("ROLE_ADMIN_WEB")%}
+				<ul class="menu">
+					<li class="salir"><a href="{{path('logout')}}" title="Salir de Administración"> <img src="{{ asset('bundles/backend/images/menu/salir.png')}}"> <p>Salir</p></a></li>
+				</ul>
+				<div>
+					<div>
+						<a title="Datos del Centro" href="{{path('centro')}}">
+							<img src="{{ asset('bundles/backend/images/menu/centro2.png')}}">
+							<span> Datos del </br> Centro </span>
+						</a>							
+						<span> Institución </span>
+					</div>
+					<div>
+						<a id="registrar_eventos" title="Registro Eventos" href="{{path('eventos_new')}}">
+							<img src="{{ asset('bundles/backend/images/menu/eventos.png')}}">
+							<span> Registro <br> Evento </span>
+					
+						<a id="consultar_eventos" title="Consulta Eventos" href="{{path('eventos')}}">
+							<img src="{{ asset('bundles/backend/images/menu/consultar.png')}}">
+							<span> Consulta <br> Eventos</span>
+						</a>
+						<span> Eventos </span>
+					</div>
+					<div>
+						<a id="registrar_noticias" title="Registro Noticias" href="{{path('noticias_new')}}">
+							<img src="{{ asset('bundles/backend/images/menu/noticias.png')}}">
+							<span> Registro <br> Noticia</span>
+						</a>
+						<a id="consultar_noticias" title="Consulta Noticias" href="{{path('noticias_consultar')}}">
+							<img src="{{ asset('bundles/backend/images/menu/consultar.png')}}">
+							<span> Consulta <br> Noticias </span>
+						</a>
+						<span> Noticias </span>
+					</div>
+					<div>
+						<a id="registrar_noticias" title="Contenido Estático" href="javascript:void(0);">
+							<img src="{{ asset('bundles/backend/images/menu/editar_publica.png')}}">
+							<span> Editar <br> Parte Pública </span>
+						</a>
+						<span> Contenido Estático</span>
+					</div>
+				</div>
+			{% endif %}
 				<div  class="oculto" id="dialog-message" title="Número máximo de Pestañas">
 					<div>
 						<p>Número máximo de pestañas permitidas.</p>
 						<p><b>Por favor cierre alguna pestaña para continuar.</b></p>
 					</div>
 				</div>
-			  </div>
-			</nav>
+			</div>
+		</nav>
     	<acticle class="main">
 			{% block main %} 
 				<div class="contenido_main"> 
 					<div id="fondo_logo">
-						<img alt="logo del colegio"   src="{{ asset('bundles/backend/images/logo_trans.png')}}">
+						<img alt="logo del colegio" src="{{ asset('bundles/backend/images/logo_trans.png')}}">
 					</div>
 					<div id="tabs">
 						<ul>
@@ -357,7 +554,6 @@
     	</article>
 		<footer>
 		</footer>
-
 	</div>
 	<div  class="oculto" id="dialog-message" title="Número máximo de Pestañas">
 		<p>Número máximo de pestañas permitidas.</p>
