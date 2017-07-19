@@ -3,6 +3,11 @@ intranet:
     defaults: { _controller: IntranetBundle:Default:index }
     options:
         expose: true
+intranet_confirmar:
+    path:     /confirmación
+    defaults: { _controller: IntranetBundle:Default:intranetConfirmar }
+    options:
+        expose: true
 
 intranet_responsable:
     path:     /intranet/responsable
@@ -31,6 +36,13 @@ datos_personales_alumno:
 datos_personales:
     path:     /intranet/datos_personales/{id}
     defaults: { _controller: IntranetBundle:Default:DatosPersonales}
+    options:
+        expose: true
+    requirements: { _method: post|put|get }
+
+datos_confirmacion:
+    path:     /intranet/datos_confirmacion/{id}
+    defaults: { _controller: IntranetBundle:Default:DatosConfirmacion}
     options:
         expose: true
     requirements: { _method: post|put|get }

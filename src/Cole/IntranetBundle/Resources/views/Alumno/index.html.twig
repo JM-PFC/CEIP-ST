@@ -82,6 +82,7 @@
 {% block usuario %}
 	<div id="bs-example-navbar-collapse-1" class="collapse navbar-collapse">
 		<ul class="nav navbar-nav navbar-right barra_cabecera">
+		{% block confirmacion %}
 			<li id="barramensajesmovil" class="barramensajes">
 				<a href="/intranet/dashboard">
 					<span class="fa fa-envelope-o animated swing"></span>
@@ -151,6 +152,7 @@
 					</li>
 				</ul>
 			</li>
+		{% endblock %}
 		</ul>
 	</div>
 {% endblock %}

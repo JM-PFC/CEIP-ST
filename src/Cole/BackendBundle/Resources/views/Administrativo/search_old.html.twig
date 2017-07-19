@@ -129,7 +129,7 @@
                                 <thead class="fixedHeader">
                                     <tr>
                                         <th class="w15">Dni</th>
-                                        <th class="w35 left">Nombre y Apellidos</th>
+                                        <th class="w35 left">Apellidos, Nombre</th>
                                         <th class="oculto">Personal</th>
                                         <th class="no-sort"></th>
                                     </tr>
@@ -138,7 +138,7 @@
                                     {% for entity in entities_active %}
                                         <tr id="{{entity.id}}">
                                             <td class="w11">{{entity.dni}}</td>
-                                            <td class="w35 left">{{ entity.nombre ~ " " ~ entity.apellido1 ~ " " ~ entity.apellido2}}</td>
+                                            <td class="w35 left">{{ entity.apellido1 ~ " " ~ entity.apellido2 ~ ", " ~ entity.nombre }}</td>
                                             <td id="tipo" class="oculto">{{entity.tipo}}</td>
                                             <td>
                                                 <input type="checkbox" name="checkbox-{{entity.id}}" id="checkbox-{{entity.id}}">
@@ -186,7 +186,7 @@
                                 <thead class="fixedHeader">
                                     <tr>
                                         <th class="no-sort"></th>
-                                        <th class="w25 left">Nombre y Apellidos</th>
+                                        <th class="w25 left">Apellidos, Nombre</th>
                                         <th class="oculto">Personal</th>
                                         <th class="w11">Dni</th>
                                     </tr>
@@ -197,7 +197,7 @@
                                             <td >
                                                 <input type="checkbox" name="checkbox-{{entity.id}}" id="checkbox-{{entity.id}}">
                                             </td>
-                                            <td class="w25 left">{{ entity.nombre ~ " " ~ entity.apellido1 ~ " " ~ entity.apellido2}}</td>
+                                            <td class="w25 left">{{ entity.apellido1 ~ " " ~ entity.apellido2 ~ ", " ~ entity.nombre }}</td>
                                             <td id="tipo" class="oculto">{{entity.tipo}}</td>
                                             <td class="w11">{{ entity.dni}}</td>
                                         </tr>

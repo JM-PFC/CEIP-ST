@@ -4,7 +4,7 @@ $(document).ready(function () {
 
 	//Mascaras
 	$('.telefono').mask('000 00 00 00'); 
-  $('.telefono').mask('00'); 
+  //$('.notas').mask('00'); 
 
   /*
   $(document).on('keydown',".notas",function(e){

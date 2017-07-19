@@ -37,11 +37,17 @@ class AlumnoController extends Controller
     	}
     }
 
-    public function indexAction($id)
+    public function indexAction(Request $request, $id)
     {
     	$this->comprobarHijo($id);
-
     	$em = $this->getDoctrine()->getManager();
+        $locale = $request->getLocale();
+        $usuario = $this->get('security.context')->getToken()->getUser();
+
+        if($usuario->getLastAccess()==null){
+            return $this->redirect($this->generateUrl('intranet_confirmar', array('_locale' => $locale )));
+        }
+
 
 		$entity= $em->getRepository('BackendBundle:Alumno')->findOneById($id);
 
@@ -84,10 +90,16 @@ class AlumnoController extends Controller
         ;
     }
 
-    public function perfilAction($id)
+    public function perfilAction(Request $request, $id)
     {
         $this->comprobarHijo($id);
         $em = $this->getDoctrine()->getManager();
+        $locale = $request->getLocale();
+        $usuario = $this->get('security.context')->getToken()->getUser();
+
+        if($usuario->getLastAccess()==null){
+            return $this->redirect($this->generateUrl('intranet_confirmar', array('_locale' => $locale )));
+        }
         
         $entity= $em->getRepository('BackendBundle:Alumno')->findOneById($id);
         $editForm = $this->createEditAlumnoForm($entity);
@@ -136,10 +148,17 @@ class AlumnoController extends Controller
     //             Cursos actual             //
     ///////////////////////////////////////////
 
-    public function cursoAction($id)
+    public function cursoAction(Request $request, $id)
     {
         $this->comprobarHijo($id);
         $em = $this->getDoctrine()->getManager();
+
+        $locale = $request->getLocale();
+        $usuario = $this->get('security.context')->getToken()->getUser();
+
+        if($usuario->getLastAccess()==null){
+            return $this->redirect($this->generateUrl('intranet_confirmar', array('_locale' => $locale )));
+        }
 
         $entity= $em->getRepository('BackendBundle:Alumno')->findOneById($id);
         if($entity->getGrupo()){
@@ -192,10 +211,19 @@ class AlumnoController extends Controller
             'asignaciones_profesores'=>$asignaciones_profesores));
     }
 
-    public function HorariosGruposAction($id, $id_alumno,$num)
+    public function HorariosGruposAction(Request $request, $id, $id_alumno,$num)
     {
         $this->comprobarHijo($id);
         $em = $this->getDoctrine()->getManager();
+
+
+        $locale = $request->getLocale();
+        $usuario = $this->get('security.context')->getToken()->getUser();
+
+        if($usuario->getLastAccess()==null){
+            return $this->redirect($this->generateUrl('intranet_confirmar', array('_locale' => $locale )));
+        }
+
         $grupo = $em->getRepository('BackendBundle:Grupo')->findOneById($id);
         $entity = $em->getRepository('BackendBundle:Horario')->findAll();
         $alumno=$em->getRepository('BackendBundle:Alumno')->findOneById($id_alumno);
@@ -392,10 +420,17 @@ class AlumnoController extends Controller
         
     }
 
-    public function HorarioPdfAction($id)
+    public function HorarioPdfAction(Request $request, $id)
     {
         $this->comprobarHijo($id);
         $em = $this->getDoctrine()->getManager();
+
+        $locale = $request->getLocale();
+        $usuario = $this->get('security.context')->getToken()->getUser();
+
+        if($usuario->getLastAccess()==null){
+            return $this->redirect($this->generateUrl('intranet_confirmar', array('_locale' => $locale )));
+        }
 
         $alumno= $em->getRepository('BackendBundle:Alumno')->findOneById($id);
 
@@ -521,6 +556,11 @@ class AlumnoController extends Controller
         $entity= $em->getRepository('BackendBundle:Alumno')->findOneById($id);
         $responsable = $this->get('security.context')->getToken()->getUser();
 
+        $locale = $request->getLocale();
+        if($responsable->getLastAccess()==null){
+            return $this->redirect($this->generateUrl('intranet_confirmar', array('_locale' => $locale )));
+        }
+
         $seguimientosNuevos=$em->getRepository('IntranetBundle:Seguimiento')->findSeguimientosActualizadosAlumno($entity, $responsable->getId(), $entity->getGrupo());
         if(count($seguimientosNuevos)<5){
             $seguimientos= $em->getRepository('IntranetBundle:Seguimiento')->findAntiguosSeguimientosContadorAlumno($entity, $responsable->getId(), $entity->getGrupo(), 5-count($seguimientosNuevos));
@@ -540,6 +580,13 @@ class AlumnoController extends Controller
     {
         $this->comprobarHijo($id);
         $em = $this->getDoctrine()->getManager();
+        
+        $locale = $request->getLocale();
+        $usuario = $this->get('security.context')->getToken()->getUser();
+
+        if($usuario->getLastAccess()==null){
+            return $this->redirect($this->generateUrl('intranet_confirmar', array('_locale' => $locale )));
+        }
 
         $entity= $em->getRepository('BackendBundle:Alumno')->findOneById($id);
         $seguimiento=$em->getRepository('IntranetBundle:Seguimiento')->findOneById($num);
@@ -678,6 +725,11 @@ class AlumnoController extends Controller
         $entity= $em->getRepository('BackendBundle:Alumno')->findOneById($id);
         $responsable = $this->get('security.context')->getToken()->getUser();
 
+        $locale = $request->getLocale();
+        if($responsable->getLastAccess()==null){
+            return $this->redirect($this->generateUrl('intranet_confirmar', array('_locale' => $locale )));
+        }
+
         // Se obtiene la fecha inicial y final del curso para usar luego el año correspondiente. 
         $ini_curso=$em->getRepository('BackendBundle:Centro')->findInicioCurso();
         $array_ini=explode("-",$ini_curso["inicioCurso"]->format('Y-m-d')); //Conversión de array a String
@@ -753,8 +805,14 @@ class AlumnoController extends Controller
 
     public function calificacionesTareasAlumnoAction(Request $request, $id, $asig)
     {
+        $this->comprobarHijo($id);
         $em = $this->getDoctrine()->getManager();
         $responsable = $this->get('security.context')->getToken()->getUser();
+
+        $locale = $request->getLocale();
+        if($responsable->getLastAccess()==null){
+            return $this->redirect($this->generateUrl('intranet_confirmar', array('_locale' => $locale )));
+        }
 
         $entity= $em->getRepository('BackendBundle:Alumno')->findOneById($id);
         if($asig=="todas"){
@@ -784,6 +842,11 @@ class AlumnoController extends Controller
 
         $entity= $em->getRepository('BackendBundle:Alumno')->findOneById($id);
         $responsable = $this->get('security.context')->getToken()->getUser();
+
+        $locale = $request->getLocale();
+        if($responsable->getLastAccess()==null){
+            return $this->redirect($this->generateUrl('intranet_confirmar', array('_locale' => $locale )));
+        }
 
         $grupo= $entity->getGrupo();
 
@@ -827,6 +890,13 @@ class AlumnoController extends Controller
         $this->comprobarHijo($id);
         $em = $this->getDoctrine()->getManager();
 
+        $locale = $request->getLocale();
+        $responsable = $this->get('security.context')->getToken()->getUser();
+
+        if($responsable->getLastAccess()==null){
+            return $this->redirect($this->generateUrl('intranet_confirmar', array('_locale' => $locale )));
+        }
+
         $entity= $em->getRepository('BackendBundle:Alumno')->findOneById($id);
 
         $seguimiento=$em->getRepository('IntranetBundle:Seguimiento')->findOneById($num);
@@ -840,7 +910,7 @@ class AlumnoController extends Controller
             'seguimiento'=> $seguimiento,
             'respuestas' => $respuestas,
             'tutoria' =>$tutoria
-            ));
+        ));
     }
 
 
@@ -959,11 +1029,16 @@ class AlumnoController extends Controller
             'success' => true), 200);
     }
 
-    public function InfoTutoriaAction($id, $num)
+    public function InfoTutoriaAction(Request $request, $id, $num)
     {
         $em = $this->getDoctrine()->getManager();
 
+        $this->comprobarHijo($id);
         $entity = $this->get('security.context')->getToken()->getUser();
+        $locale = $request->getLocale();
+        if($entity->getLastAccess()==null){
+            return $this->redirect($this->generateUrl('intranet_confirmar', array('_locale' => $locale )));
+        }
 
         $tutoria=$em->getRepository('IntranetBundle:Tutorias')->findOneById($num);
 
@@ -1082,6 +1157,10 @@ class AlumnoController extends Controller
         $entity= $em->getRepository('BackendBundle:Alumno')->findOneById($id);
         $responsable = $this->get('security.context')->getToken()->getUser();
 
+        $locale = $request->getLocale();
+        if($responsable->getLastAccess()==null){
+            return $this->redirect($this->generateUrl('intranet_confirmar', array('_locale' => $locale )));
+        }
 
         if($entity->getCurso()->getNivel()=="Primaria"){
             $noticias= $em->getRepository('ColeBundle:Noticias')->findBy(array('categoria'=>'primaria'), array('fecha'=>'DESC'));
@@ -1106,7 +1185,7 @@ class AlumnoController extends Controller
     }
 
 
-    public function noticiaAction($id,$num)
+    public function noticiaAction(Request $request, $id, $num)
     {
         $this->comprobarHijo($id);
         $em = $this->getDoctrine()->getManager();
@@ -1114,6 +1193,11 @@ class AlumnoController extends Controller
         $entity= $em->getRepository('BackendBundle:Alumno')->findOneById($id);
         $noticia= $em->getRepository('ColeBundle:Noticias')->findOneById($num);
         $responsable = $this->get('security.context')->getToken()->getUser();
+
+        $locale = $request->getLocale();
+        if($responsable->getLastAccess()==null){
+            return $this->redirect($this->generateUrl('intranet_confirmar', array('_locale' => $locale )));
+        }
      
         $imagenes = array();
         if($noticia->getGaleria()!=null) {

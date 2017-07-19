@@ -156,6 +156,7 @@ Nuevo seguimiento creado.: New tracking created.
 Consulta de Seguimiento: Follow-up Consultation
 Consultar: Consult
 Respuesta: Answer
+Pregunta: Question
 Respuesta de: Answer of
 Comentario de: Comment from
 Leido: Read
@@ -325,3 +326,12 @@ Actualmente el alumno no tiene ninguna tarea evaluada. Puedes consultar la evalu
 Actualmente no se ha evaluado al alumno de ninguna tarea. Vuelva para ver las calificaciones del alumno cuando realice alguna tarea: The student has not been evaluated for any homework. Return to see the student's grades when doing some homework
 Filtrar por asignaturas: Filter by Subject
 Todas: All
+Mi panel: My panel
+Bienvenido: Welcome
+La dirección del colegio Santa Teresa le da la bienvenida a la plataforma educativa del centro: The management of the Santa Teresa school welcomes you to the educational platform of the center
+Para acceder a tu área personal, debes cambiar la contraseña de acceso que te han proporcionado por otra diferente y definir una pregunta de seguridad. Si olvidas tu contraseña usaremos esta pregunta para restablecer la contraseña a la inicial: To access your personal area, you must change the access password provided by a different one and define a security question. If you forget your password we will use this question to reset the password to the initial one
+No podrás acceder al contenido de la plataforma educativa hasta que no actualices estos datos: You will not be able to access the content of the educational platform until you update this data
+Panel de confirmación: Confirmation panel
+Pregunta de seguridad: Security Question
+Confirmar datos: Confirm data
+Debes seleccionar una contraseña diferente a la actual.: You must select a different password than the current one.

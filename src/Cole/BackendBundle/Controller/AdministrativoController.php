@@ -136,6 +136,10 @@ class AdministrativoController extends Controller
         $entity->setSalt(base_convert(sha1(uniqid(mt_rand(),true)), 16, 36));
         $password = $encoder->encodePassword(substr($entity->getDni(), 0, -2).substr($entity->getDni(),-1), $entity->getSalt());
         $entity->setPassword($password);
+        $entity->setLastAccessAnt(null);
+        $entity->setLastAccess(null);
+        $entity->setPregunta(null);
+        $entity->setRespuesta(null);
         $em->persist($entity);
         $em->flush();
 
@@ -464,6 +468,7 @@ class AdministrativoController extends Controller
 
             $entity->setFechaBaja(new \DateTime("now"));
             $entity->setPassword(null);
+            $entity->setLastAccess(null);
 
             $em->persist($entity);                 
             $em->flush();

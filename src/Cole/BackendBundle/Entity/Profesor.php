@@ -311,6 +311,23 @@ class Profesor implements UserInterface, \Serializable
      * @ORM\Column(name="lastAccessAnt", type="datetime" , nullable=true)
      */
     private $lastAccessAnt;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="pregunta", type="string", length=100, nullable=true)
+     * 
+     */
+    private $pregunta;
+
+        /**
+     * @var string
+     *
+     * @ORM\Column(name="respuesta", type="string", length=100, nullable=true)
+     * 
+     */
+    private $respuesta;
+
     /**
      * @ORM\ManyToOne(targetEntity="Role", cascade={"persist"})
      */
@@ -1254,5 +1271,84 @@ class Profesor implements UserInterface, \Serializable
     public function getAccesoTutorias()
     {
         return $this->accesoTutorias;
+    }
+
+    /**
+     * Set pregunta
+     *
+     * @param string $pregunta
+     * @return Profesor
+     */
+    public function setPregunta($pregunta)
+    {
+        $this->pregunta = $pregunta;
+
+        return $this;
+    }
+
+    /**
+     * Get pregunta
+     *
+     * @return string 
+     */
+    public function getPregunta()
+    {
+        return $this->pregunta;
+    }
+
+    /**
+     * Set respuesta
+     *
+     * @param string $respuesta
+     * @return Profesor
+     */
+    public function setRespuesta($respuesta)
+    {
+        $this->respuesta = $respuesta;
+
+        return $this;
+    }
+
+    /**
+     * Get respuesta
+     *
+     * @return string 
+     */
+    public function getRespuesta()
+    {
+        return $this->respuesta;
+    }
+
+    /**
+     * Add tarea
+     *
+     * @param \Cole\IntranetBundle\Entity\Tarea $tarea
+     * @return Profesor
+     */
+    public function addTarea(\Cole\IntranetBundle\Entity\Tarea $tarea)
+    {
+        $this->tarea[] = $tarea;
+
+        return $this;
+    }
+
+    /**
+     * Remove tarea
+     *
+     * @param \Cole\IntranetBundle\Entity\Tarea $tarea
+     */
+    public function removeTarea(\Cole\IntranetBundle\Entity\Tarea $tarea)
+    {
+        $this->tarea->removeElement($tarea);
+    }
+
+    /**
+     * Get tarea
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getTarea()
+    {
+        return $this->tarea;
     }
 }

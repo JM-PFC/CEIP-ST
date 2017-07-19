@@ -67,7 +67,31 @@ class ProfesorRepository extends EntityRepository
 	public function findRolProfesor($rol)
 	{
 		return $this->getEntityManager()->createQuery(
-			' SELECT p FROM BackendBundle:Profesor p INNER JOIN p.role r WHERE p.activo=1  and r.nombre=:rol')
+			' SELECT p FROM BackendBundle:Profesor p INNER JOIN p.role r WHERE p.activo=1  AND r.nombre=:rol')
+			->setParameters(array(
+			'rol' => $rol
+			))
+		->setMaxResults(1)
+		->getOneOrNullResult();
+	}
+
+	//Profesores activos excepto el director
+	public function findProfesoresNoDirector()
+	{
+		return $this->getEntityManager()->createQuery(
+			' SELECT p FROM BackendBundle:Profesor p INNER JOIN p.role r WHERE p.activo=1  and r.nombre not like :role 
+			  ORDER BY p.apellido1, p.apellido2, p.nombre')
+			->setParameters(array(
+			'role' => "ROLE_ADMIN"
+			))
+		->getResult();
+	}
+
+
+	public function findAnteriorProfesor($rol)
+	{
+		return $this->getEntityManager()->createQuery(
+			' SELECT p FROM BackendBundle:Profesor p INNER JOIN p.role r WHERE p.activo=1  AND r.nombre=:rol')
 			->setParameters(array(
 			'rol' => $rol
 			))

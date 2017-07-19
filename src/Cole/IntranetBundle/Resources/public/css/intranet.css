@@ -245,7 +245,9 @@ form{
     #contenedor_tutoria .arrow_top{
         left: 20px !important;
     }
-
+    .container_submit div{
+        margin-left: 30% !important;
+    }
 }
 /*Estilos para Móvil*/
 @media (max-width: 767px) {
@@ -680,6 +682,13 @@ form{
     .container_contenido_tabla >div:nth-child(2){
         text-align: center !important;
     }
+    #confirmacion .input-group{
+        margin-left: 0 !important;
+        margin-right: 0 !important;
+    }
+    .container_submit div{
+        margin-left: 15% !important;
+    }
     
 }
 /* Estilos para Pc*/
@@ -860,7 +869,7 @@ img {
     margin-left: -5px;
     padding-left: 0;
 }
-#wrapper {
+.wrapper {
     margin-top: 55px;
     padding-left: 250px;
     transition: all 0.5s ease 0s;
@@ -3422,7 +3431,6 @@ table tr td a{
 }
 #busqueda_calificaciones option{
    padding: 2px;
-
 }
 #busqueda_calificaciones #todos{
    padding-top: 2px;
@@ -3434,4 +3442,63 @@ table tr td a{
 }
 .table-bordered tbody td:last-child{
     border-right: 0 !important;
+}
+.panel_confirmacion{
+    border-top: 1px solid grey !important;
+    border-radius: 5px !important;
+    margin-top: 20px;
+    min-height: 150px;
+    margin-bottom: 20px;
+}
+.img_confirm{
+    padding: 0 4px !important;
+    width: 38px !important;
+}
+.panel_confirmacion p{
+    color: #123645;
+    font-family: Georgia;
+    margin: 15px 0;
+}
+#confirmacion label{
+    margin-bottom: 0;
+}
+#confirmacion .input-group{
+    margin-bottom: 5px !important;
+    margin-left: 30px;
+    margin-right: 30px;
+}
+#confirmacion .container_submit{
+   display: block;
+   clear: both;
+}
+#confirmacion .input-group-addon {
+   min-width: 100px;
+}
+.panel_confirmacion{
+    padding-top: 0px !important;
+    padding-bottom: 0px !important; 
+}
+#confirmacion #password label{
+    padding: 7px 16px;
+}
+#confirmacion>div:first-child ul,#confirmacion>div:first-child .help-block{
+    margin:  0 !important;
+}
+
+#confirmacion #errores_pregunta li{
+    margin-left: 30px !important;
+    margin-right: 30px !important;
+}
+.no_margin_left{
+    margin-left: 0 !important;
+    margin-top: 55px !important;
+}
+.container_submit button, .container_submit a{
+    display: inline-block;
+    float: left;
+    margin: 0 10px;
+    min-width: 120px
+}
+.container_submit div{
+    margin-left: 39%;
 }

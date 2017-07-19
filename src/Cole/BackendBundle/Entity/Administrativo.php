@@ -201,6 +201,22 @@ class Administrativo implements UserInterface, \Serializable
      */
     private $lastAccessAnt;
 
+      /**
+     * @var string
+     *
+     * @ORM\Column(name="pregunta", type="string", length=100, nullable=true)
+     * 
+     */
+    private $pregunta;
+
+        /**
+     * @var string
+     *
+     * @ORM\Column(name="respuesta", type="string", length=100, nullable=true)
+     * 
+     */
+    private $respuesta;
+
     /**
      * @ORM\ManyToOne(targetEntity="Role", cascade={"persist"})
      */
@@ -687,5 +703,51 @@ class Administrativo implements UserInterface, \Serializable
     public function __toString()
     {
         return $this->getNombre().' '.$this->getApellido1().' '.$this->getApellido2();
+    }
+
+    /**
+     * Set pregunta
+     *
+     * @param string $pregunta
+     * @return Administrativo
+     */
+    public function setPregunta($pregunta)
+    {
+        $this->pregunta = $pregunta;
+
+        return $this;
+    }
+
+    /**
+     * Get pregunta
+     *
+     * @return string 
+     */
+    public function getPregunta()
+    {
+        return $this->pregunta;
+    }
+
+    /**
+     * Set respuesta
+     *
+     * @param string $respuesta
+     * @return Administrativo
+     */
+    public function setRespuesta($respuesta)
+    {
+        $this->respuesta = $respuesta;
+
+        return $this;
+    }
+
+    /**
+     * Get respuesta
+     *
+     * @return string 
+     */
+    public function getRespuesta()
+    {
+        return $this->respuesta;
     }
 }

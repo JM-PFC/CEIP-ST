@@ -126,3 +126,15 @@ equipo_directivo:
     defaults: { _controller: "BackendBundle:Profesor:EquipoDirectivo" }
     options:
         expose: true
+
+asignacion_jefe_estudios:
+    path:     /asignacion_jefe_estudios
+    defaults: { _controller: "BackendBundle:Profesor:AsignacionJefeEstudios" }
+    options:
+        expose: true
+
+asignacion_director:
+    path:     /asignacion_director
+    defaults: { _controller: "BackendBundle:Profesor:AsignacionDirector" }
+    options:
+        expose: true

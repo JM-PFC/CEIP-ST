@@ -161,6 +161,22 @@ class Padres implements UserInterface, \Serializable
     private $lastAccessAnt;
 
     /**
+     * @var string
+     *
+     * @ORM\Column(name="pregunta", type="string", length=100, nullable=true)
+     * 
+     */
+    private $pregunta;
+
+        /**
+     * @var string
+     *
+     * @ORM\Column(name="respuesta", type="string", length=100, nullable=true)
+     * 
+     */
+    private $respuesta;
+
+    /**
      * @ORM\ManyToOne(targetEntity="Role", cascade={"persist"})
     */
     private $role;
@@ -631,5 +647,51 @@ class Padres implements UserInterface, \Serializable
     public function getTutorias()
     {
         return $this->tutorias;
+    }
+
+    /**
+     * Set pregunta
+     *
+     * @param string $pregunta
+     * @return Padres
+     */
+    public function setPregunta($pregunta)
+    {
+        $this->pregunta = $pregunta;
+
+        return $this;
+    }
+
+    /**
+     * Get pregunta
+     *
+     * @return string 
+     */
+    public function getPregunta()
+    {
+        return $this->pregunta;
+    }
+
+    /**
+     * Set respuesta
+     *
+     * @param string $respuesta
+     * @return Padres
+     */
+    public function setRespuesta($respuesta)
+    {
+        $this->respuesta = $respuesta;
+
+        return $this;
+    }
+
+    /**
+     * Get respuesta
+     *
+     * @return string 
+     */
+    public function getRespuesta()
+    {
+        return $this->respuesta;
     }
 }

@@ -391,6 +391,8 @@ class MatriculaController extends Controller
                 // Si no tiene más hermanos en el sistema se desactiva el responsable.
                 if(count($busqueda)==1){
                     $alumno->getResponsable1()->setActivo(0);
+                    $alumno->getResponsable1()->setLastAccess(null);
+                    $alumno->getResponsable1()->setPassword(null);
                 }
                 // Si existe algún alummno con el mismo responsable, se comprueba si está activo el alumno para dejar activo al responsable.
                 else{
@@ -409,6 +411,8 @@ class MatriculaController extends Controller
                 // Si no tiene más hermanos en el sistema se desactiva el responsable.
                 if(count($busqueda)==1){
                     $alumno->getResponsable2()->setActivo(0);
+                    $alumno->getResponsable2()->setLastAccess(null);
+                    $alumno->getResponsable2()->setPassword(null);
                 }
                 // Si existe algún alummno con el mismo responsable, se comprueba si está activo el alumno para dejar activo al responsable.
                 else{

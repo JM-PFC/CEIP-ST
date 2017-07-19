@@ -153,6 +153,10 @@ class ProfesorController extends Controller
         $entity->setSalt(base_convert(sha1(uniqid(mt_rand(),true)), 16, 36));
         $password = $encoder->encodePassword("p".substr($entity->getDni(), 0, -2), $entity->getSalt());
         $entity->setPassword($password);
+        $entity->setLastAccessAnt(null);
+        $entity->setLastAccess(null);
+        $entity->setPregunta(null);
+        $entity->setRespuesta(null);
         $em->persist($entity);
         $em->flush();
 
@@ -453,7 +457,7 @@ class ProfesorController extends Controller
         $em = $this->getDoctrine()->getManager();
 
         $entities = $em->getRepository('BackendBundle:Profesor')->findByActivo(0);
-        $entities_active = $em->getRepository('BackendBundle:Profesor')->findByActivo(1);
+        $entities_active = $em->getRepository('BackendBundle:Profesor')->findProfesoresNoDirector();
 
         return $this->render('BackendBundle:Profesor:search_old.html.twig', array(
             'entities' => $entities,
@@ -594,6 +598,7 @@ class ProfesorController extends Controller
             $entity->setFechaBaja(new \DateTime("now"));
             $entity->setActivo(false);
             $entity->setPassword(null);
+            $entity->setLastAccess(null);
 
             $em->persist($entity);                 
             $em->flush();
@@ -812,6 +817,49 @@ class ProfesorController extends Controller
             'jefeEstudios' => $jefeEstudios,
 
         ));
+    }
+
+
+    public function AsignacionJefeEstudiosAction()
+    {
+        $em = $this->getDoctrine()->getManager();
+        
+        $id_profesor=$this->get('request')->request->get('id');
+        $role= $em->getRepository('BackendBundle:Role')->findOneByNombre("ROLE_JEFE_ESTUDIO");
+        $roleProf= $em->getRepository('BackendBundle:Role')->findOneByNombre("ROLE_PROFESOR");
+
+        //Se modifica el rol del actual jefe de estudios.
+        $prof_anterior= $em->getRepository('BackendBundle:Profesor')->findAnteriorProfesor("ROLE_JEFE_ESTUDIO");
+        $prof_anterior->setRole($roleProf);
+        $em->persist($prof_anterior);
+        $em->flush();
+        //Se modifica el rol del nuevo jefe de estudios.
+        $profesor= $em->getRepository('BackendBundle:Profesor')->findOneById($id_profesor);
+        $profesor->setRole($role);
+        $em->persist($profesor);
+        $em->flush();
+        return new JsonResponse(array('message' => 'Success!','success' => true), 200);
+    }
+
+    public function AsignacionDirectorAction()
+    {
+        $em = $this->getDoctrine()->getManager();
+        
+        $id_profesor=$this->get('request')->request->get('id');
+        $role= $em->getRepository('BackendBundle:Role')->findOneByNombre("ROLE_ADMIN");
+        $roleProf= $em->getRepository('BackendBundle:Role')->findOneByNombre("ROLE_PROFESOR");
+
+        //Se modifica el rol del actual director
+        $prof_anterior= $em->getRepository('BackendBundle:Profesor')->findAnteriorProfesor("ROLE_ADMIN");
+        $prof_anterior->setRole($roleProf);
+        $em->persist($prof_anterior);
+        $em->flush();
+        //Se modifica el rol del nuevo director.
+        $profesor= $em->getRepository('BackendBundle:Profesor')->findOneById($id_profesor);
+        $profesor->setRole($role);
+        $em->persist($profesor);
+        $em->flush();
+        return new JsonResponse(array('message' => 'Success!','success' => true), 200);
     }
 
 }

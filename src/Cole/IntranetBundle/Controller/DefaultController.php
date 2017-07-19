@@ -15,6 +15,10 @@ use Cole\BackendBundle\Entity\Profesor;
 use Cole\BackendBundle\Form\ProfesorType;
 use Cole\BackendBundle\Entity\Padres;
 use Cole\BackendBundle\Form\PadresType;
+use Cole\BackendBundle\Entity\Administrativo;
+use Cole\BackendBundle\Entity\Log;
+
+use Cole\IntranetBundle\Form\ConfirmacionType;
 
 class DefaultController extends Controller
 {
@@ -47,6 +51,72 @@ class DefaultController extends Controller
             throw new AccessDeniedException();
         }
     }
+
+    private function createEditConfirmacionPadresForm(Padres $entity)
+    {
+        $form = $this->createForm(new ConfirmacionType(), $entity, array(
+            'action' => $this->generateUrl('datos_confirmacion', array('id' => $entity->getId())),
+            'method' => 'PUT',
+            //'validation_groups' => array('actualizar')
+        ));
+
+        $titulo=$this->get("translator")->trans("Confirmar datos");
+        $form->add('submit', 'submit', array('label' => $titulo));
+
+        return $form;
+    }
+
+    private function createEditConfirmacionProfesorForm(Profesor $entity)
+    {
+        $form = $this->createForm(new ConfirmacionType(), $entity, array(
+            'action' => $this->generateUrl('datos_confirmacion', array('id' => $entity->getId())),
+            'method' => 'PUT',
+            //'validation_groups' => array('actualizar')
+        ));
+
+        $titulo=$this->get("translator")->trans("Confirmar datos");
+        $form->add('submit', 'submit', array('label' => $titulo));
+
+        return $form;
+    }
+
+    private function createEditConfirmacionAdministrativoForm(Administrativo $entity)
+    {
+        $form = $this->createForm(new ConfirmacionType(), $entity, array(
+            'action' => $this->generateUrl('datos_confirmacion', array('id' => $entity->getId())),
+            'method' => 'PUT',
+            //'validation_groups' => array('actualizar')
+        ));
+
+        $titulo=$this->get("translator")->trans("Confirmar datos");
+        $form->add('submit', 'submit', array('label' => $titulo));
+
+        return $form;
+    }
+
+    public function intranetConfirmarAction()
+    {
+        $em = $this->getDoctrine()->getManager();
+        $entity = $this->get('security.context')->getToken()->getUser();
+
+        if($this->get('security.context')->isGranted('ROLE_USUARIO')){
+            $editForm = $this->createEditConfirmacionPadresForm($entity);
+        }
+        else if ($this->get('security.context')->isGranted('ROLE_PROFESOR')){
+            $editForm = $this->createEditConfirmacionProfesorForm($entity);
+        }
+        else{
+            $editForm = $this->createEditConfirmacionAdministrativoForm($entity);
+        }
+        
+
+        return $this->render('IntranetBundle:Default:confirmar.html.twig', array(
+            'entity' => $entity,
+            'form'   => $editForm->createView(),
+        ));
+    }
+
+
 
     public function responsableAction()
     {
@@ -214,6 +284,96 @@ class DefaultController extends Controller
             'form'   => $editForm->createView(),
             'delete_form' => $deleteForm->createView(),
         ));
+    }
+
+
+    public function DatosConfirmacionAction(Request $request, $id)
+    {
+        $em = $this->getDoctrine()->getManager();
+
+        if ($this->get('security.context')->isGranted('ROLE_PROFESOR'))
+        {
+            $entity = $em->getRepository('BackendBundle:Profesor')->find($id);
+            $form = $this->createEditConfirmacionProfesorForm($entity);
+        }
+        else if($this->get('security.context')->isGranted('ROLE_USUARIO'))
+        {
+            $entity = $em->getRepository('BackendBundle:Padres')->find($id);
+            $form = $this->createEditConfirmacionPadresForm($entity);
+        }
+        else{
+            $entity = $em->getRepository('BackendBundle:Administrativo')->find($id);
+            $form = $this->createEditConfirmacionAdministrativoForm($entity);
+        }
+
+        if (!$entity) {
+            throw $this->createNotFoundException('Unable to find Usuario entity.');
+        }
+
+
+        $form->handleRequest($request);
+        
+        $factory = $this->get('security.encoder_factory'); 
+        $encoder = $factory->getEncoder($entity);
+        $password = $encoder->encodePassword($form->get('password')->getData(), $entity->getSalt());
+        if($entity->getPassword() == $password){
+            $ms = $this->get('translator')->trans('Debes seleccionar una contraseña diferente a la actual.');
+            $this->get('session')->getFlashBag()->add('danger',$ms);
+            return $this->render('IntranetBundle:Default:confirmar.html.twig', array(
+                'entity'      => $entity,
+                'form'   => $form->createView(),
+            ));
+        }
+
+            
+            $factory = $this->get('security.encoder_factory'); 
+            $encoder = $factory->getEncoder($entity);
+            $password = $encoder->encodePassword($form->get('password')->getData(), $entity->getSalt());
+            $entity->setPassword($password);
+
+            $pregunta=$form->get('pregunta')->getData();
+            $entity->setPregunta($pregunta);
+
+            $respuesta=$form->get('respuesta')->getData();
+            $entity->setRespuesta($respuesta);
+
+            $entity->setLastAccess(new \DateTime('now'));
+            
+            $em->persist($entity);
+            $em->flush();
+
+            $log = new Log();
+            $log->setFecha(new \DateTime('now'));
+            $log->setTipo("Entrada");
+            $log->setUsuario($entity);
+            if ($this->get('security.context')->isGranted('ROLE_PROFESOR'))
+            {
+                $log->setTipoUsuario("Profesor");
+            }
+            else if($this->get('security.context')->isGranted('ROLE_USUARIO')){
+                $log->setTipoUsuario("Responsable/Alumno");
+            }
+            else if($this->get('security.context')->isGranted('ROLE_ADMINISTRATIVO')){
+                $log->setTipoUsuario("Administrativo");
+            }
+            else if($this->get('security.context')->isGranted('ROLE_ADMIN_WEB')){
+                $log->setTipoUsuario("Administrador web");
+            }        
+
+            $em->persist($log);
+            $em->flush();
+
+            if ($this->get('security.context')->isGranted('ROLE_PROFESOR'))
+            {
+                return $this->redirect($this->generateUrl('intranet_profesor', array('_locale' => $this->get('request')->getLocale())));
+            }
+            else if($this->get('security.context')->isGranted('ROLE_USUARIO'))    
+            {
+                return $this->redirect($this->generateUrl('intranet', array('_locale' => $this->get('request')->getLocale())));
+            } 
+            else{
+                return $this->redirect($this->generateUrl('backend'));
+            }
     }
 
 

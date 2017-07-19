@@ -14808,48 +14808,6 @@ $(document).on("blur","input[id='edit_administrativo_dni']",function(event) {
     );
   });
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
   ///////////////////////////////////////////
   //            Equipo Directivo           //
   ///////////////////////////////////////////
@@ -14910,41 +14868,17 @@ $(document).on("blur","input[id='edit_administrativo_dni']",function(event) {
     }, 300);
   });
 
-
-
-  //Se realiza la nueva alta del profesor.
-  $(document).on("click","#consulta_antiguo_profesor .alta_active button", function(event) {
+  //Se realiza la asignación del nuevo jefe de estudios.
+  $(document).on("click","#equipo_directivo #asig_jefe_estudios button", function(event) {
     event.preventDefault();
-    var array= Array(); 
-    $("#consulta_antiguo_profesor #old_teacher_no_active tbody td input:checked").each (function(){ 
-      //alert($(this).closest("tr").find("#nivel").text());
-      array.push($(this).closest("tr").attr("id"));
-    });
 
-    if(array.length==1){
-      nombre="";
-      nivel="";
-    $("#consulta_antiguo_profesor #old_teacher_no_active tbody td input:checked").each (function(){ 
-      nombre=$(this).closest("tr").find("td:nth-child(2)").text();
-      nivel=$(this).closest("tr").find("#nivel").text();
-    });
-
-      //titulo="<table><p>Se va a registrar el alta del antiguo profesor X, ¿Estas seguro de continuar? <br></p><thead><tr><th>Evento</th><th>Fecha</th><th>Hora</th></tr></thead><tbody><tr><td>"+titulo+"</td><td>"+fecha+"</td><td>"+hora+"</td></tr></tbody><br></p></table>",
-      titulo="<table><p>Se va a registrar el alta del antiguo profesor:<br></p><thead><tr><th>Nombre</th><th>Nivel</th></tr></thead><tbody><tr><td>"+nombre+"</td><td>"+nivel+"</td></tr></tbody><br></p></table><br>¿Estas seguro de continuar?";
-    }
-    else{
-      titulo="<table ><p>Se va a registrar el alta de los antiguos profesores:<br></p><thead><tr><th>Nombre</th><th>Nivel</th></tr></thead><tbody>";
-      $("#consulta_antiguo_profesor #old_teacher_no_active tbody td input:checked").each (function(){ 
-        nombre=$(this).closest("tr").find("td:nth-child(2)").text();
-        nivel=$(this).closest("tr").find("#nivel").text();
-        titulo+="<tr><td>"+nombre+"</td><td>"+nivel+"</td></tr>";
-       });
-      titulo+="</tbody><br></p></table><br>¿Estas seguro de continuar?";
-    }
-
+    id=$("#equipo_directivo_teachers input:checked").closest("tr").attr("id");
+    nombre=$("#equipo_directivo_teachers_wrapper tr[id='"+id+"']").find("td:nth-child(2)").text();
+    titulo="<table><p>Se va a asignar la jefatura de estudios al profesor: <br><br> <span class='negrita'>"+nombre+"</span> <br><br>El jefe de estudios actual perderá el acceso al área de administración.<br><br>¿Estas seguro de continuar? ";
+  
     aviso.play();
     swal({
-      title: "Alta de Profesores",
+      title: "Asignación de Jefatura de Estudios",
       html: titulo,
       type: "warning",
       showCancelButton: true,
@@ -14956,15 +14890,12 @@ $(document).on("blur","input[id='edit_administrativo_dni']",function(event) {
 
         $.ajax({
           type: 'POST',
-          url: Routing.generate('alta_profesor'),
-          data: {array:array},
+          url: Routing.generate('asignacion_jefe_estudios'),
+          data: {id:id},
           dataType: 'json',
           success: function(response) {
-            if(array.length==1){
-              texto="Alta registrada.";
-            }else{
-              texto=array.length+" altas registradas.";
-            }
+
+              texto="Asignación realizada.";
 
             // Notificación de confirmación
             exito.play();
@@ -14986,26 +14917,72 @@ $(document).on("blur","input[id='edit_administrativo_dni']",function(event) {
                 out_class: "fadeOutRight",
               }
             });
-
-            // Se actualiza todas las pestañas con tablas de profesores.
-            $("#profesor_antiguo").update_tab();
-            $("#ficha_profesor").update_tab();
-            $("#consultar_equipamientos").update_tab();
-            $("#consultar_instalaciones").update_tab();
-            $("#tutor_grupo").update_tab();
-            $("#profesor_asignar_grupo").update_tab();
-            $("#clases_impartidas").update_tab();
+            // Se actualiza las pestañas..
             $("#equipo_directivo").update_tab();
-            $("#clases_impartidas").update_tab();
           }
         })
       }, function (dismiss) {
-
       }
     );
   });
 
+  //Se realiza la asignación del nuevo director.
+  $(document).on("click","#equipo_directivo #asig_director button", function(event) {
+    event.preventDefault();
 
+    id=$("#equipo_directivo_teachers input:checked").closest("tr").attr("id");
+    nombre=$("#equipo_directivo_teachers_wrapper tr[id='"+id+"']").find("td:nth-child(2)").text();
+    titulo="<table><p>Se va a asignar la dirección del centro al profesor: <br><br> <span class='negrita'>"+nombre+"</span> <br><br>El director actual perderá el acceso al área de administración.<br><br>¿Estas seguro de continuar? ";
+  
+    aviso.play();
+    swal({
+      title: "Asignación de la Dirección del Centro",
+      html: titulo,
+      type: "warning",
+      showCancelButton: true,
+      cancelButtonText: "Cancelar",
+      width: "500px",
+      confirmButtonColor: color,
+      confirmButtonText: "¡Adelante!"
+      }).then(function () {
+
+        $.ajax({
+          type: 'POST',
+          url: Routing.generate('asignacion_director'),
+          data: {id:id},
+          dataType: 'json',
+          success: function(response) {
+
+              texto="Asignación realizada.";
+
+            // Notificación de confirmación
+            exito.play();
+            
+            new PNotify({
+              text:texto,
+              addclass: "custom",
+              type: "success",
+              shadow: true,
+              hide: true,
+              buttons: {
+                sticker: false,
+                labels:{close: "Cerrar"}
+              },
+              stack: right_Stack,
+              animate: {
+                animate: true,
+                in_class: "fadeInRight",
+                out_class: "fadeOutRight",
+              }
+            });
+            // Se actualiza las pestañas..
+            $("#equipo_directivo").update_tab();
+          }
+        })
+      }, function (dismiss) {
+      }
+    );
+  });
 
 
 

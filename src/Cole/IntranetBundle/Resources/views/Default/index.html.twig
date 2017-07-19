@@ -372,7 +372,7 @@
 	</header>
 	
 	{# contenido #}
-	<div id="wrapper">
+	<div id="wrapper" class="wrapper">
 		<section>
 			<article>
 			{% block main %}
@@ -568,7 +568,7 @@
     										</div>
 										{% endfor %}
 										{% block contenido %}
-											<h4 id="titulo-seccion" class="titulo-seccion">Mi panel</h4>
+											<h4 id="titulo-seccion" class="titulo-seccion">{% trans %}Mi panel{% endtrans %}</h4>
 
 										{% endblock %}
 									</div>

@@ -52,7 +52,7 @@
  {% if hijos != null %}
     {% for entity in hijos %}
         <div class="col-md-6 col-sm-6 col-xs-12 bloque-dashboard" id="{{entity.id}}">
-        	<a href="{{ path('intranet_alumno', { 'id': entity.id }) }}" title="{% trans %}Acceder al área del alumno{% endtrans %}">
+        	<a href="{{ path('intranet_alumno', { 'id': entity.id }) }}" data-placement="bottom" title="{% trans %}Acceder al área del alumno{% endtrans %}">
 				<div class="bloque bloque-stats">
 					<div class="informacion">
 						<div class="stats-title">

@@ -80,7 +80,7 @@
                                 <thead class="fixedHeader">
                                     <tr>
                                         <th class="w15">Dni</th>
-                                        <th class="w35 left">Nombre y Apellidos</th>
+                                        <th class="w35 left">Apellidos, Nombre</th>
                                         <th class="oculto">Nivel</th>
                                         <th class="no-sort"></th>
                                     </tr>
@@ -89,7 +89,7 @@
                                     {% for entity in entities %}
                                         <tr id="{{entity.id}}">
                                             <td class="w11">{{entity.dni}}</td>
-                                            <td class="w35 left">{{ entity.nombre ~ " " ~ entity.apellido1 ~ " " ~ entity.apellido2}}</td>
+                                            <td class="w35 left">{{entity.apellido1 ~ " " ~ entity.apellido2 ~ ", " ~ entity.nombre}}</td>
                                             <td id="nivel" class="oculto">{{entity.nivel}}</td>
                                             <td>
                                                 <input id="radio_profesores" type="radio" name="radio_profesores" id="checkbox-{{entity.id}}">
@@ -163,7 +163,7 @@
                             {% if jefeEstudios %}
                                 <div class="columna_foto">
                                 {% if jefeEstudios.foto != null %}
-                                    <img id="foto" class="img-mini" src="{{ asset('uploads/images/' ~ director.foto) }}">
+                                    <img id="foto" class="img-mini" src="{{ asset('uploads/images/' ~ jefeEstudios.foto) }}">
                                 {% else %}
                                     {% if jefeEstudios.sexo == "Femenino" %}
                                     <img id="sin_foto" class="img-mini" src="{{ asset('bundles/backend/images/perfil/SinFoto-M.png') }}">
@@ -172,7 +172,19 @@
                                     {% endif %}
                                 {% endif %}
                                 </div>
-                                <p class="nombre_ED">{{jefeEstudios}}</p>
+                                <div class="datos_ED">
+                                    <h3>Nombre:</h3> 
+                                    <p class="nombre_ED">{{jefeEstudios}}</p>
+                                    <div class="dos_columnas_ED">
+                                        <h3>Nivel:</h3> 
+                                        <p>{{ jefeEstudios.nivel }}</p>    
+                                    </div>
+                                    <div  class="dos_columnas_ED">
+
+                                        <h3>Fecha de Alta:</h3>
+                                        <p>{{ jefeEstudios.fechaAlta|date("d-m-Y") }}</p>             
+                                    </div>
+                                </div>
                             {% else %}
                                 <p class="color_rojo">(Sin Asignar)</p>
                             {% endif %}

@@ -367,6 +367,10 @@ class PadresController extends Controller
         $entity->setSalt(base_convert(sha1(uniqid(mt_rand(),true)), 16, 36));
         $password = $encoder->encodePassword("u".substr($entity->getDni(), 0, -2), $entity->getSalt());
         $entity->setPassword($password);
+        $entity->setLastAccessAnt(null);
+        $entity->setLastAccess(null);
+        $entity->setPregunta(null);
+        $entity->setRespuesta(null);
         $em->persist($entity);
         $em->flush();
 
