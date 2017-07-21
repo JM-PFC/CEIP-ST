@@ -206,6 +206,12 @@ class SeguimientoController extends Controller
 
         $entity = $this->get('security.context')->getToken()->getUser();
         $tutor_grupo= $em->getRepository('BackendBundle:Grupo')->findOneByProfesor($entity);
+        if($tutor_grupo){
+            $id_grupo=$tutor_grupo->getId();
+        }
+        else{
+            $id_grupo=null;
+        }
 
         if($entity->getNivel()=="Primaria"){
             $cursos = $em->getRepository('BackendBundle:Imparte')->findAsignacionesProfesor($entity);
@@ -221,7 +227,7 @@ class SeguimientoController extends Controller
         return $this->render('IntranetBundle:Seguimiento:new.html.twig', array(
             'entity' => $entity,
             'seguimiento' => $seguimiento,
-            'tutor_grupo' => $tutor_grupo,
+            'tutor_grupo' => $id_grupo,
             'cursos'=>$cursos,
             'form'   => $form->createView(),
         ));

@@ -66,6 +66,12 @@ class Horario
     */
     private $imparte;
 
+   /**
+    * @ORM\OneToMany(targetEntity="Cole\IntranetBundle\Entity\Ausencia", mappedBy="horario", cascade={"remove"})
+    */
+    private $ausencia;
+
+
     /**
      * Get id
      *
@@ -267,5 +273,39 @@ class Horario
     public function getReserva()
     {
         return $this->reserva;
+    }
+
+
+    /**
+     * Add ausencia
+     *
+     * @param \Cole\IntranetBundle\Entity\Ausencia $ausencia
+     * @return Horario
+     */
+    public function addAusencium(\Cole\IntranetBundle\Entity\Ausencia $ausencia)
+    {
+        $this->ausencia[] = $ausencia;
+
+        return $this;
+    }
+
+    /**
+     * Remove ausencia
+     *
+     * @param \Cole\IntranetBundle\Entity\Ausencia $ausencia
+     */
+    public function removeAusencium(\Cole\IntranetBundle\Entity\Ausencia $ausencia)
+    {
+        $this->ausencia->removeElement($ausencia);
+    }
+
+    /**
+     * Get ausencia
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getAusencia()
+    {
+        return $this->ausencia;
     }
 }

@@ -154,6 +154,7 @@
 				</div>
 			  {% endif %}
 
+			  {% if alumnos_optativa %}
 			  <table class="lista-alumnos table table-striped">
 				<thead >
 					<tr>
@@ -189,6 +190,14 @@
 					{% endfor %}
 				</tbody>
 			  </table>
+			  {% else %}
+            	<div id="no_alumnos_optativa" class="alert alert-info alert-block">
+                	<small>
+                    	<h4>{% trans %}No hay alumnos asignados a esta asignatura{% endtrans %}.</h4>
+                    	<h6>{% trans %}Espere a que se realice la asignación de los alumnos{% endtrans %}.</h6>
+                	</small>
+            	</div>
+    		  {% endif %}
 			{% else %}
         	  <div class="alert alert-info alert-block">
             	<small>

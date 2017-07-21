@@ -1341,7 +1341,7 @@ tr {page-break-inside: avoid;}
 }
 
 .div_datos {
-    margin-left: 5% !important;
+    margin-left: 10% !important;
     width: 90%!important;
 }
 #boletin_evaluacion_pdf .table #completo td:last-child {

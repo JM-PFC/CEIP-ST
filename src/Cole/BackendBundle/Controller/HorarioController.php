@@ -9,6 +9,8 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Cole\BackendBundle\Entity\Horario;
 use Cole\BackendBundle\Entity\Reserva;
 use Cole\BackendBundle\Entity\Imparte;
+use Cole\IntranetBundle\Entity\Ausencia;
+
 use Cole\BackendBundle\Form\HorarioType;
 
 /**
@@ -26,7 +28,7 @@ class HorarioController extends Controller
     {
         $em = $this->getDoctrine()->getManager();
 
-        $entities = $em->getRepository('BackendBundle:Horario')->findAll();
+        $entities = $em->getRepository('BackendBundle:Horario')->findAllOrdenado();
 
         return $this->render('BackendBundle:Horario:index.html.twig', array(
             'entities' => $entities,
@@ -99,7 +101,8 @@ class HorarioController extends Controller
         $em = $this->getDoctrine()->getManager();
         $centro =$em->getRepository('BackendBundle:Centro')->findCentro();
 
-        $entities = $em->getRepository('BackendBundle:Horario')->findAll();
+        $entities = $em->getRepository('BackendBundle:Horario')->findAllOrdenado();
+        
            return $this->render('BackendBundle:Horario:show.html.twig', array(
             'entities' => $entities,
             'inicio' => $centro->getInicioHorario(),
@@ -191,7 +194,7 @@ class HorarioController extends Controller
         }
         
         $em = $this->getDoctrine()->getEntityManager();
-        $entities = $em->getRepository('BackendBundle:Horario')->findAll();
+        $entities = $em->getRepository('BackendBundle:Horario')->findAllOrdenado();
         if ($entities) {
             foreach ($entities  as $entity ) {
                 $em->remove($entity);
@@ -244,7 +247,14 @@ class HorarioController extends Controller
             }
         }
 
-        $entities = $em->getRepository('BackendBundle:Horario')->findAll();
+        $faltas = $em->getRepository('IntranetBundle:Ausencia')->findAll();
+        if ($faltas) {
+            foreach ($faltas  as $falta ) {
+                $em->remove($falta);
+            }
+        }
+
+        $entities = $em->getRepository('BackendBundle:Horario')->findAllOrdenado();
         if ($entities) {
             foreach ($entities  as $entity ) {
                 $em->remove($entity);
@@ -320,7 +330,7 @@ class HorarioController extends Controller
 
         $em = $this->getDoctrine()->getManager();
 
-            $entities = $em->getRepository('BackendBundle:Horario')->findAll();
+            $entities = $em->getRepository('BackendBundle:Horario')->findAllOrdenado();
             return $this->render('BackendBundle:Horario:horario_escolar.html.twig', array(
             'entities' => $entities,
             ));

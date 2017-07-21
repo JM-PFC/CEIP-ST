@@ -264,9 +264,9 @@
 		</a>
 	</li>
 	<li id="asistencia">
-		<a href="#">
+		<a href="{{ path('intranet_alumno_ausencia', { 'id': entity.id }) }}">
 			<i class="fa fa-calendar-check-o"></i>
-			{% trans %}Asistencia{% endtrans %}
+			{% trans %}Faltas de asistencia{% endtrans %}
 		</a>
 	</li>
 	<li id="calificaciones">
@@ -321,9 +321,9 @@
 		</a>
 	</li>
 	<li id="asistencia">
-		<a href="#">
+		<a href="{{ path('intranet_alumno_ausencia', { 'id': entity.id }) }}">
 			<i class="fa fa-calendar-check-o"></i>
-			{% trans %}Asistencia{% endtrans %}
+			{% trans %}Faltas de asistencia{% endtrans %}
 		</a>
 	</li>
 	<li id="calificaciones">
@@ -411,11 +411,11 @@
         </div>
         <div class="col-md-3 col-sm-3 col-xs-6 bloque-menu">
 			<div class="bloque-item-menu">
-				<a href="{{ path('intranet_alumno', { 'id': entity.id }) }}" color="item-marron" class="waiting">
+				<a href="{{ path('intranet_alumno_ausencia', { 'id': entity.id }) }}" color="item-marron" class="waiting">
 					<i class="fa fa-calendar-check-o i-margin-left-22"></i>
 				</a>
 			</div>
-			<p>{% trans %}Asistencia{% endtrans %}</p>
+			<p>{% trans %}Faltas de asistencia{% endtrans %}</p>
         </div>
         <div class="col-md-3 col-sm-3 col-xs-6 bloque-menu">
 			<div class="bloque-item-menu">

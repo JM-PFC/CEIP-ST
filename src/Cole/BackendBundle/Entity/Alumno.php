@@ -283,6 +283,11 @@ class Alumno
     private $cursa;
 
     /**
+     * @ORM\OneToMany(targetEntity="Cole\IntranetBundle\Entity\Ausencia", mappedBy="alumno")
+     */
+    private $ausencia;
+
+    /**
      * Get id
      *
      * @return integer 
@@ -1110,5 +1115,71 @@ class Alumno
     public function getAccesoTutoriasResponsable2()
     {
         return $this->accesoTutoriasResponsable2;
+    }
+
+    /**
+     * Add cursa
+     *
+     * @param \Cole\IntranetBundle\Entity\Cursa $cursa
+     * @return Alumno
+     */
+    public function addCursa(\Cole\IntranetBundle\Entity\Cursa $cursa)
+    {
+        $this->cursa[] = $cursa;
+
+        return $this;
+    }
+
+    /**
+     * Remove cursa
+     *
+     * @param \Cole\IntranetBundle\Entity\Cursa $cursa
+     */
+    public function removeCursa(\Cole\IntranetBundle\Entity\Cursa $cursa)
+    {
+        $this->cursa->removeElement($cursa);
+    }
+
+    /**
+     * Get cursa
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getCursa()
+    {
+        return $this->cursa;
+    }
+
+    /**
+     * Add ausencia
+     *
+     * @param \Cole\IntranetBundle\Entity\Ausencia $ausencia
+     * @return Alumno
+     */
+    public function addAusencium(\Cole\IntranetBundle\Entity\Ausencia $ausencia)
+    {
+        $this->ausencia[] = $ausencia;
+
+        return $this;
+    }
+
+    /**
+     * Remove ausencia
+     *
+     * @param \Cole\IntranetBundle\Entity\Ausencia $ausencia
+     */
+    public function removeAusencium(\Cole\IntranetBundle\Entity\Ausencia $ausencia)
+    {
+        $this->ausencia->removeElement($ausencia);
+    }
+
+    /**
+     * Get ausencia
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getAusencia()
+    {
+        return $this->ausencia;
     }
 }

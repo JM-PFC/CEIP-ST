@@ -1,5 +1,5 @@
-	
-<div class="panel panel-default">
+{%  if entities %}	
+  <div class="panel panel-default">
       <table class="table table-striped">
         <thead>
           <tr >
@@ -20,5 +20,13 @@
         {% endfor %}
         </tbody>
       </table>
-</div>
+  </div>
+{% else %}
+  <div class="alert alert-info alert-block">
+    <small>
+      <h4>{% trans %}El grupo no tiene asignados alumnos en este momento{% endtrans %}.</h4>
+      <h6>{% trans %}Se podrá consultar el listado de alumnos cuando se asigen los alumnos al grupo{% endtrans %}.</h6>
+    </small>
+  </div>
+{% endif %}
 

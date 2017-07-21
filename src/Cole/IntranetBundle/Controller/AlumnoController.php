@@ -714,6 +714,56 @@ class AlumnoController extends Controller
     }
 
     ///////////////////////////////////////////
+    //              Asistencia               //
+    ///////////////////////////////////////////
+
+    public function ausenciaAction(Request $request, $id)
+    {
+        $this->comprobarHijo($id);
+        $em = $this->getDoctrine()->getManager();
+
+        $entity= $em->getRepository('BackendBundle:Alumno')->findOneById($id);
+        $responsable = $this->get('security.context')->getToken()->getUser();
+
+        $locale = $request->getLocale();
+        if($responsable->getLastAccess()==null){
+            return $this->redirect($this->generateUrl('intranet_confirmar', array('_locale' => $locale )));
+        }
+
+        // Se obtiene la fecha inicial y final del curso para usar luego el año correspondiente. 
+        $ini_curso=$em->getRepository('BackendBundle:Centro')->findInicioCurso();
+        $array_ini=explode("-",$ini_curso["inicioCurso"]->format('Y-m-d')); //Conversión de array a String
+        $fin_curso=$em->getRepository('BackendBundle:Centro')->findFinCurso();
+        $array_fin=explode("-",$fin_curso["finCurso"]->format('Y-m-d'));
+
+        // Se obtiene las fechas de inicio de las vacaciones.
+        $ini_nav=$em->getRepository('BackendBundle:Festivos')->findFestivosPorDescripcion("Inicio Vacaciones de Navidad");
+        $ini_ss=$em->getRepository('BackendBundle:Festivos')->findFestivosPorDescripcion("Inicio Vacaciones de Semana Santa");
+        
+        $Fecha_ini_nav = date('Y-m-d', strtotime($array_ini[0]."-".$ini_nav->getNumMes()."-".$ini_nav->getDia()));
+        $Fecha_ini_ss = date('Y-m-d', strtotime($array_fin[0]."-".$ini_ss->getNumMes()."-".$ini_ss->getDia()));
+
+        $hoy=date("Y-m-d");
+
+        if ($hoy <= $Fecha_ini_nav){
+            $trimestre=1;
+        }
+        else if($hoy >= $Fecha_ini_ss){
+            $trimestre=3;
+        }
+        else{
+            $trimestre=2;
+        }
+   
+
+        return $this->render('IntranetBundle:Alumno:asistencia.html.twig', array(
+            'entity' => $entity, 
+
+        ));
+    }
+
+
+    ///////////////////////////////////////////
     //            Calificaciones             //
     ///////////////////////////////////////////
 

@@ -38,6 +38,7 @@ class Tarea
 
     /**
     * @ORM\OneToMany(targetEntity="Cursa", mappedBy="tarea", cascade={"remove"})
+    * @ORM\OrderBy({"alumno" = "ASC"})
     */
     private $cursa;
 

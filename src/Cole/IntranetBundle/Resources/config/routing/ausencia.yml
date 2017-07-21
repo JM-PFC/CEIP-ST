@@ -1,0 +1,36 @@
+ausencia:
+    path:     /
+    defaults: { _controller: "IntranetBundle:Ausencia:index" }
+
+ausencia_show:
+    path:     /{id}/show
+    defaults: { _controller: "IntranetBundle:Ausencia:show" }
+
+ausencia_new:
+    path:     /new
+    defaults: { _controller: "IntranetBundle:Ausencia:new" }
+
+ausencia_create:
+    path:     /create
+    defaults: { _controller: "IntranetBundle:Ausencia:create" }
+    requirements: { _method: post }
+
+ausencia_edit:
+    path:     /{id}/edit
+    defaults: { _controller: "IntranetBundle:Ausencia:edit" }
+
+ausencia_update:
+    path:     /{id}/update
+    defaults: { _controller: "IntranetBundle:Ausencia:update" }
+    requirements: { _method: post|put }
+
+ausencia_delete:
+    path:     /{id}/delete
+    defaults: { _controller: "IntranetBundle:Ausencia:delete" }
+    requirements: { _method: post|delete }
+
+ausencia_eliminar:
+    path:     /{id}/eliminar
+    defaults: { _controller: "IntranetBundle:Ausencia:eliminarAusencia" }
+    options:
+        expose: true

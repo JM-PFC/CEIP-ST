@@ -74,6 +74,11 @@ class AsignaturasCursos
     private $tarea;
 
     /**
+     * @ORM\OneToMany(targetEntity="Cole\IntranetBundle\Entity\Ausencia", mappedBy="asignatura")
+     */
+    private $ausencia;
+
+    /**
      * Get id
      *
      * @return integer 
@@ -284,5 +289,104 @@ class AsignaturasCursos
     public function __toString()
     {
         return $this->getCurso()->getCurso()." - ".  $this->getAsignatura()->getNombre();
+    }
+
+    /**
+     * Add cursa
+     *
+     * @param \Cole\IntranetBundle\Entity\Cursa $cursa
+     * @return AsignaturasCursos
+     */
+    public function addCursa(\Cole\IntranetBundle\Entity\Cursa $cursa)
+    {
+        $this->cursa[] = $cursa;
+
+        return $this;
+    }
+
+    /**
+     * Remove cursa
+     *
+     * @param \Cole\IntranetBundle\Entity\Cursa $cursa
+     */
+    public function removeCursa(\Cole\IntranetBundle\Entity\Cursa $cursa)
+    {
+        $this->cursa->removeElement($cursa);
+    }
+
+    /**
+     * Get cursa
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getCursa()
+    {
+        return $this->cursa;
+    }
+
+    /**
+     * Add tarea
+     *
+     * @param \Cole\IntranetBundle\Entity\Tarea $tarea
+     * @return AsignaturasCursos
+     */
+    public function addTarea(\Cole\IntranetBundle\Entity\Tarea $tarea)
+    {
+        $this->tarea[] = $tarea;
+
+        return $this;
+    }
+
+    /**
+     * Remove tarea
+     *
+     * @param \Cole\IntranetBundle\Entity\Tarea $tarea
+     */
+    public function removeTarea(\Cole\IntranetBundle\Entity\Tarea $tarea)
+    {
+        $this->tarea->removeElement($tarea);
+    }
+
+    /**
+     * Get tarea
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getTarea()
+    {
+        return $this->tarea;
+    }
+
+    /**
+     * Add ausencia
+     *
+     * @param \Cole\IntranetBundle\Entity\Ausencia $ausencia
+     * @return AsignaturasCursos
+     */
+    public function addAusencium(\Cole\IntranetBundle\Entity\Ausencia $ausencia)
+    {
+        $this->ausencia[] = $ausencia;
+
+        return $this;
+    }
+
+    /**
+     * Remove ausencia
+     *
+     * @param \Cole\IntranetBundle\Entity\Ausencia $ausencia
+     */
+    public function removeAusencium(\Cole\IntranetBundle\Entity\Ausencia $ausencia)
+    {
+        $this->ausencia->removeElement($ausencia);
+    }
+
+    /**
+     * Get ausencia
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getAusencia()
+    {
+        return $this->ausencia;
     }
 }

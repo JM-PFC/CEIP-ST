@@ -1,0 +1,187 @@
+
+
+<script>
+        
+    // Tabla con la opción de ordenar y búsqueda.
+    $('#table_teacher').DataTable( { //on( 'page.dt',   function () { $(".current").prop("disabled", true); } )
+        //"aLengthMenu": [[25, 50, 100, 250, 500, -1], [25, 50, 100, 250, 500, "All"]],
+                initComplete: function () {
+            this.api().columns().every( function (e) {
+                var column = this;
+                var select = $('<select class="'+e+'"><option value=""></option></select>')
+                    .appendTo('.select_table')
+                    .on( 'change', function () {
+                        var val = $.fn.dataTable.util.escapeRegex(
+                            $(this).val()
+                        );
+ 
+                        column
+                            .search( val ? '^'+val+'$' : '', true, false )
+                            .draw();
+                    } );
+ 
+                column.data().unique().sort().each( function ( d, j ) {
+                    select.append( '<option value="'+d+'">'+d+'</option>' )
+                } );
+                select.append( '<option value="nada">nada</option>' )
+            } );
+        },
+        "order": [[ 0, "asc" ]],
+        "aLengthMenu": [[-1], [ "All"]],
+        "columnDefs": [ {
+            "targets": 'no-sort',
+            "orderable": false,} ],
+        "language": {
+            "zeroRecords": "Lo siento, no se ha encontrado ningún registro coincidente",
+            "emptyTable": "No hay alumnos en el curso anterior pendientes de matriculación",
+            "lengthMenu": "Mostrar _MENU_ entradas",
+            "loadingRecords": "Cargando...",
+            "processing":     "Processando...",
+            "info": "Página _PAGE_ de _PAGES_",
+            "infoEmpty": "No hay registros disponibles",
+            "infoFiltered": "(filtrado de _MAX_ registros)",
+            "search": "Buscar:",
+            "Next": "Siguiente",
+            "paginate": {
+                "previous": "Anterior",
+                "next": "Siguiente"
+            }
+        }
+    });
+
+    $(".dataTables_info").addClass("hidden");
+    $(".dataTables_paginate").addClass("hidden");
+    $(".dataTables_length").addClass("hidden");
+    $('.dataTables_filter').addClass("hidden");
+
+    //Se muestra las faltas en el listado
+    array={{faltas|json_encode()|raw}};
+    for (var key in array){
+        clave=key.split("-");
+        alumno=clave[0];
+        falta=clave[1];
+        tipo=array[key];
+
+
+        $("#tabla_ausencia_profesor tr[id='"+alumno+"'] td:last-child").append('<a id="btn_eliminar" falta="'+falta+'" href="javascript:void(0);"  data-target="#eliminar_ausencia_modal" data-toggle="modal" data-backdrop="static" data-keyboard="false"><i class="fa fa-trash-o"></i></a>'); 
+
+        if(tipo=="Falta" || tipo=="Falta justificada"){
+            $("#tabla_ausencia_profesor tr[id='"+alumno+"'] td[id='falta']").empty();
+            $("#tabla_ausencia_profesor tr[id='"+alumno+"'] td[id='falta']").append('<i class="fa fa-check-square-o"></i>'); 
+            $("#tabla_ausencia_profesor tr[id='"+alumno+"'] td[id='retraso']").empty();
+        }
+        else{
+            $("#tabla_ausencia_profesor tr[id='"+alumno+"'] td[id='retraso']").empty(); 
+            $("#tabla_ausencia_profesor tr[id='"+alumno+"'] td[id='retraso']").append('<i class="fa fa-check-square-o"></i>');  
+            $("#tabla_ausencia_profesor tr[id='"+alumno+"'] td[id='falta']").empty();
+        }
+    }
+
+
+    //Se marcan las opción del formulario.
+    asignatura={{asig|json_encode()|raw}};
+    horario={{id_horario|json_encode()|raw}};
+    fecha={{fecha|json_encode()|raw}};
+
+    $("#ausencia_asignatura option[value='"+asignatura+"']").prop('selected', true);
+    $("#ausencia_horario option[value='"+horario+"']").prop('selected', true);
+    array=fecha.split("-");
+    $("#ausencia_fecha_date_day").val(array[0]);
+    $("#ausencia_fecha_date_month").val(array[1]);
+    $("#ausencia_fecha_date_year").val(array[2]);
+
+
+</script>
+
+    <h4 class="text-center"><span>{{grupo ~ " - "}}</span><span>{{asignatura.asignatura.nombre}}</span>  </h4>
+    <p class="center"> {% trans %}Faltas del día{% endtrans %}:<span class="fecha">{{" " ~ fecha ~ " (" ~ horario ~ ") "}}</span></p>
+
+    {% if alumnos != null %}
+        <div>
+       <table id="table_teacher" class="lista-alumnos table table-striped table-bordered" class="col-sm-offset-1 col-sm-10">
+        <thead >
+            <tr>
+                <th class="col-xs-1 center">Nº</th>
+                <th class="col-xs-7 col-sm-9 no-sort">{% trans %}Apellidos, Nombre{% endtrans %}</th>
+                <th class="col-xs-1 center no-sort no-padding">
+                    <span class="hidden-xs">{% trans %}Falta{% endtrans %}</span>
+                    <span class="hidden-sm hidden-md hidden-lg">{% trans %}F{% endtrans %}</span>
+                </th>
+                <th class="col-xs-1 center no-sort no-padding">
+                    <span class="hidden-xs">{% trans %}Retraso{% endtrans %}</span>
+                    <span class="hidden-sm hidden-md hidden-lg">{% trans %}R{% endtrans %}</span>
+                </th>
+                <th class="col-xs-1 no-sort no-padding"> </th>
+            </tr>
+        </thead> 
+        <tbody>
+            {% for alumno in alumnos %}
+                <tr id="{{ alumno.id }}">
+                    <td class="col-xs-1 center">{{alumno.numAlum}}</td>
+                    <td class="col-xs-7 col-sm-9">
+                        {{ alumno.apellido1 ~ " " ~ alumno.apellido2 ~ ", " ~ alumno.nombre }}
+                    </td>
+                    <td id="falta" class="col-xs-1 center no-padding"><input type="checkbox"></td>
+                    <td id="retraso" class="col-xs-1 center no-padding"><input type="checkbox"></td>
+                    <td class="col-xs-1 center no-padding"> </td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+      {% set locale = app.request.getLocale() %}
+
+    {{form_start(form, {'method':'Post','attr':{'id':'ausencia', 'data-toggle':"validator", 'role':"form" ,'novalidate':'novalidate', 'autocomplete':'off'}})}}
+        {{ form_errors(form) }}
+        {{ form_row(form.submit,{'id':'intranet_'~form.submit.vars.id , 'attr':{'class': 'btn btn-success center-block disabled' }}) }}
+
+        <div class="hidden">
+        {{ form_rest(form) }}
+        </div>
+
+        </div>
+    {{ form_end(form) }}
+
+      </div>
+    {% else %}
+            <div class="alert alert-info alert-block">
+                <small>
+                    <h4>{% trans %}No hay alumnos asignados al grupo{% endtrans %}.</h4>
+                    <h6>{% trans %}Espere a que se realice la asignación de los alumnos{% endtrans %}.</h6>
+                </small>
+            </div>
+    {% endif %}
+</div>
+
+
+
+
+
+    <!-- Ventana modal de eliminación de la falta o retraso -->
+  <div id="eliminar_ausencia_modal" class="modal fade-scale aviso"  tabindex="-1" role="dialog" data-backdrop="true" >
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+        <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            <h4 class="modal-title" id="myModalLabel">{% trans %}Eliminación de la ausencia del alumno{% endtrans %}</h4>
+        </div>
+        <div class="modal-body">
+            
+            <p>Se va a eliminar la falta de asistencia o el retraso del alumno del sistema y no se podrá recuperar.</p>
+            <p>¿Estas seguro de continuar?</p>
+            <div class="class-footer">
+                <button class="btn btn_azul" type="button" data-dismiss="modal" title="">Cancelar</button>
+                <form >
+                <input name="_method" value="DELETE" type="hidden">
+                <div id="form">
+                    <div>
+                        <button id="form_submit" class="btn btn-danger" type="submit" name="form[submit]">Eliminar</button>
+                    </div>
+    
+                </div>
+                </form>
+            </div>   
+        </div>
+        </div>
+    </div>
+  </div>

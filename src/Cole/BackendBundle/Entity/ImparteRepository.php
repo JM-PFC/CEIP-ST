@@ -391,4 +391,28 @@ class ImparteRepository extends EntityRepository
 		->getResult();
 	}
 
+	public function findDiasSemanaProfesor($profesor, $grupo, $asignatura)
+	{
+		return $this->getEntityManager()->createQuery(
+		'SELECT i FROM BackendBundle:Imparte i WHERE i.profesor=:profesor AND i.asignatura=:asignatura AND i.grupo=:grupo AND i.dia_semanal is not null GROUP BY i.dia_semanal ORDER BY i.dia_semanal ASC')
+		->setParameters(array(
+			'profesor'=>$profesor,
+			'grupo'=>$grupo,
+			'asignatura' => $asignatura))
+		->getResult();
+	}
+
+	public function findHorasImpartidaClaseProfesor($profesor, $grupo, $asignatura, $dia)
+	{
+		return $this->getEntityManager()->createQuery(
+		'SELECT i FROM BackendBundle:Imparte i WHERE i.profesor=:profesor AND i.asignatura=:asignatura AND i.grupo=:grupo AND i.dia_semanal=:dia ORDER BY i.dia_semanal ASC')
+		->setParameters(array(
+			'profesor'=>$profesor,
+			'grupo'=>$grupo,
+			'dia'=>$dia,
+			'asignatura' => $asignatura))
+		->getResult();
+	}
+
+
 }

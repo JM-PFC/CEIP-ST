@@ -94,7 +94,7 @@ class GrupoController extends Controller
     {
         $em = $this->getDoctrine()->getManager();
         $grupo= $em->getRepository('BackendBundle:Grupo')->findOneById($id);
-        $horario = $em->getRepository('BackendBundle:Horario')->findAll();
+        $horario = $em->getRepository('BackendBundle:Horario')->findAllOrdenado();
 
         $entities_troncales = $em->getRepository('BackendBundle:AsignaturasCursos')->findAsignaturasTroncalesCurso($grupo->getCurso());
         $entities_especificas_no_opcional = $em->getRepository('BackendBundle:AsignaturasCursos')->findAsignaturasEspecificasNoOpcionalesCurso($grupo->getCurso());
@@ -175,7 +175,7 @@ class GrupoController extends Controller
             $numAsignaturasCursos=1;
         }
 
-        $horarios=$em->getRepository('BackendBundle:Horario')->findAll();
+        $horarios=$em->getRepository('BackendBundle:Horario')->findAllOrdenado();
         if (!$horarios) {
             $horario=0;
         }
@@ -527,7 +527,7 @@ class GrupoController extends Controller
     {
         $em = $this->getDoctrine()->getManager();
         $grupo = $em->getRepository('BackendBundle:Grupo')->findOneById($id);
-        $entity = $em->getRepository('BackendBundle:Horario')->findAll();
+        $entity = $em->getRepository('BackendBundle:Horario')->findAllOrdenado();
         
         $imparte = $em->getRepository('BackendBundle:Imparte')->findByGrupo($id);
 
@@ -624,7 +624,7 @@ class GrupoController extends Controller
     {
         $em = $this->getDoctrine()->getManager();
         $grupo = $em->getRepository('BackendBundle:Grupo')->findOneById($id);
-        $entity = $em->getRepository('BackendBundle:Horario')->findAll();
+        $entity = $em->getRepository('BackendBundle:Horario')->findAllOrdenado();
 
         $asignaciones = $em->getRepository('BackendBundle:Imparte')->findByGrupoConHorario($grupo);
         if($asignaciones){
@@ -880,7 +880,7 @@ class GrupoController extends Controller
         $inicio =$em->getRepository('BackendBundle:Centro')->findInicioCurso();
         $fin =$em->getRepository('BackendBundle:Centro')->findFinCurso();
 
-        $horarios = $em->getRepository('BackendBundle:Horario')->findAll();
+        $horarios = $em->getRepository('BackendBundle:Horario')->findAllOrdenado();
 
         $entities = $em->getRepository('BackendBundle:Imparte')->findByGrupoConHorario($grupo);
 
@@ -969,7 +969,7 @@ class GrupoController extends Controller
         $inicio =$em->getRepository('BackendBundle:Centro')->findInicioCurso();
         $fin =$em->getRepository('BackendBundle:Centro')->findFinCurso();
 
-        $horarios = $em->getRepository('BackendBundle:Horario')->findAll();
+        $horarios = $em->getRepository('BackendBundle:Horario')->findAllOrdenado();
         
         $entities = $em->getRepository('BackendBundle:Imparte')->findByGrupoConHorario($grupo);
         $imparte= $em->getRepository('BackendBundle:Imparte')->findAsignacionesNoOpcionales($grupo);
@@ -1071,7 +1071,7 @@ class GrupoController extends Controller
         $inicio =$em->getRepository('BackendBundle:Centro')->findInicioCurso();
         $fin =$em->getRepository('BackendBundle:Centro')->findFinCurso();
 
-        $horarios = $em->getRepository('BackendBundle:Horario')->findAll();
+        $horarios = $em->getRepository('BackendBundle:Horario')->findAllOrdenado();
        
        foreach($grupo as $grupo){
 

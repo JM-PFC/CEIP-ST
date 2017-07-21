@@ -88,6 +88,28 @@ AlumnosGrupo:
     options:
         expose: true
 
+intranet_profesor_ausencia:
+    path:     /ausencia
+    defaults: { _controller: IntranetBundle:Profesor:ausencia}
+
+fechasImpartidas_profesor:
+    path:     /clases/{id}/profesor/{grupo}/{num}
+    defaults: { _controller: IntranetBundle:Profesor:FechasImpartidasProfesor}
+    options:
+        expose: true
+
+horasImpartidaClase_profesor:
+    path:     /horas/{id}/profesor/{grupo}/{fecha}
+    defaults: { _controller: IntranetBundle:Profesor:HorasImpartidaClaseProfesor}
+    options:
+        expose: true
+
+claseSeleccionada_profesor:
+    path:     /claseSeleccionada/{fecha}/{horario}/{asig}/{grupo}
+    defaults: { _controller: IntranetBundle:Profesor:claseSeleccionadaProfesor}
+    options:
+        expose: true
+
 intranet_profesor_calificaciones:
     path:     /calificaciones
     defaults: { _controller: IntranetBundle:Profesor:calificaciones}

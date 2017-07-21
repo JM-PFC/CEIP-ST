@@ -618,7 +618,7 @@ class ProfesorController extends Controller
             $numProfesores=1;
         }
 
-        $horarios=$em->getRepository('BackendBundle:Horario')->findAll();
+        $horarios=$em->getRepository('BackendBundle:Horario')->findAllOrdenado();
         if (!$horarios) {
             $horario=0;
         }
@@ -637,7 +637,7 @@ class ProfesorController extends Controller
     {
         $em = $this->getDoctrine()->getManager();
         $profesor = $em->getRepository('BackendBundle:Profesor')->findOneById($id);
-        $entity = $em->getRepository('BackendBundle:Horario')->findAll();
+        $entity = $em->getRepository('BackendBundle:Horario')->findAllOrdenado();
         
         $imparte = $em->getRepository('BackendBundle:Imparte')->findByProfesor($id);
 
@@ -684,7 +684,7 @@ class ProfesorController extends Controller
         $inicio =$em->getRepository('BackendBundle:Centro')->findInicioCurso();
         $fin =$em->getRepository('BackendBundle:Centro')->findFinCurso();
 
-        $horarios = $em->getRepository('BackendBundle:Horario')->findAll();
+        $horarios = $em->getRepository('BackendBundle:Horario')->findAllOrdenado();
 
         $grupo_tutor= $em->getRepository('BackendBundle:Grupo')->findOneByProfesor($id);
 
@@ -739,7 +739,7 @@ class ProfesorController extends Controller
         $inicio =$em->getRepository('BackendBundle:Centro')->findInicioCurso();
         $fin =$em->getRepository('BackendBundle:Centro')->findFinCurso();
 
-        $horarios = $em->getRepository('BackendBundle:Horario')->findAll();
+        $horarios = $em->getRepository('BackendBundle:Horario')->findAllOrdenado();
 
         $grupo_tutor= $em->getRepository('BackendBundle:Grupo')->findOneByProfesor($id);
 

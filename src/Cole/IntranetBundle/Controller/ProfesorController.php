@@ -18,6 +18,9 @@ use Cole\IntranetBundle\Form\SeguimientoType;
 use Cole\IntranetBundle\Entity\Tarea;
 use Cole\IntranetBundle\Form\TareaType;
 
+use Cole\IntranetBundle\Entity\Ausencia;
+use Cole\IntranetBundle\Form\AusenciaType;
+
 use Cole\BackendBundle\Form\AlumnoIntranetType;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -526,6 +529,570 @@ class ProfesorController extends Controller
     }
 
     ///////////////////////////////////////////
+    //               asistencia              //
+    ///////////////////////////////////////////
+    
+    private function createCreateAusenciaForm(Ausencia $entity)
+    {
+        $form = $this->createForm(new AusenciaType(), $entity, array(
+            'action' => $this->generateUrl('ausencia_create'),
+            'method' => 'POST',
+        ));
+        $titulo=$this->get("translator")->trans("Guardar");
+        $form->add('submit', 'submit', array('label' => $titulo, 'attr' => array('class' => 'btn btn-success')));
+
+        return $form;
+    }
+
+
+    public function ausenciaAction(Request $request)
+    {
+        $em = $this->getDoctrine()->getManager();
+
+        $entity = $this->get('security.context')->getToken()->getUser();
+        $tutor_grupo= $em->getRepository('BackendBundle:Grupo')->findOneByProfesor($entity);
+        if($tutor_grupo){
+            $id_grupo=$tutor_grupo->getId();
+        }
+        else{
+            $id_grupo=null;
+        }
+
+        if($entity->getNivel()=="Primaria"){
+            $cursos = $em->getRepository('BackendBundle:Imparte')->findAsignacionesProfesor($entity);
+        }
+        else{
+            //Para los profesores de infantil se asigna sólo el grupo que es tutor.
+            $cursos=$tutor_grupo;
+        }
+
+        // Se obtiene la fecha inicial y final del curso para usar luego el año correspondiente. 
+        $ini_curso=$em->getRepository('BackendBundle:Centro')->findInicioCurso();
+        $array_ini=explode("-",$ini_curso["inicioCurso"]->format('Y-m-d')); //Conversión de array a String
+        $fin_curso=$em->getRepository('BackendBundle:Centro')->findFinCurso();
+        $array_fin=explode("-",$fin_curso["finCurso"]->format('Y-m-d'));
+
+        // Se obtiene las fechas de inicio de las vacaciones.
+        $ini_nav=$em->getRepository('BackendBundle:Festivos')->findFestivosPorDescripcion("Inicio Vacaciones de Navidad");
+        $ini_ss=$em->getRepository('BackendBundle:Festivos')->findFestivosPorDescripcion("Inicio Vacaciones de Semana Santa");
+        
+        $Fecha_ini_nav = date('Y-m-d', strtotime($array_ini[0]."-".$ini_nav->getNumMes()."-".$ini_nav->getDia()));
+        $Fecha_ini_ss = date('Y-m-d', strtotime($array_fin[0]."-".$ini_ss->getNumMes()."-".$ini_ss->getDia()));
+
+        $hoy=date("Y-m-d");
+
+        if ($hoy <= $Fecha_ini_nav){
+            $trimestre=1;
+        }
+        else if($hoy >= $Fecha_ini_ss){
+            $trimestre=3;
+        }
+        else{
+            $trimestre=2;
+        }
+        $horarios=$em->getRepository('BackendBundle:Horario')->findClases();
+        $dia_semana = date('N', strtotime(date("Y-m-d")));
+        $hora=date('H:i');
+
+        $clase=0;
+        foreach ($horarios as $horario) {
+
+            $inicio=$horario->getInicio()->format('H:i');
+            $fin=$horario->getFin()->format('H:i');
+
+            if($clase==0 && $inicio<=$hora  && $hora<=$fin){
+                $clase=$horario->getId();
+            }
+        }
+        
+        $centro =$em->getRepository('BackendBundle:Centro')->findCentro();
+
+        $hora_inicio=$centro->getInicioHorario();
+        $hora_fin=$centro->getFinHorario();
+        $alumnos=null;
+        $asignatura=null;
+        $faltas=null;
+        if($hora_inicio<$hora && $hora<$hora_fin){
+            $horario = $em->getRepository('BackendBundle:Horario')->findById($clase);
+            $imparte = $em->getRepository('BackendBundle:Imparte')->findExistence($entity, $dia_semana, $horario);
+
+            if($imparte){
+                //Se obtiene el grupo y asignatura actual.
+                $grupo=$imparte->getGrupo();
+                $asignatura=$imparte->getAsignatura();
+
+                //Se obtiene la lista de alumnos del grupo.
+                $alumnos = $em->getRepository('BackendBundle:Alumno')->findByGrupo($grupo);
+                
+                //Se obtiene las faltas asignadas a la clase actual.
+                $faltas = $em->getRepository('IntranetBundle:Ausencia')->findFaltasClase($grupo, $asignatura, $hoy, $horario);
+            }
+        }
+
+        $array=null;
+        if($faltas){
+            foreach ($faltas as $falta) {
+                $array[$falta->getAlumno()->getId()."-".$falta->getId()]=$falta->getTipo();     
+            }
+        }
+
+
+        $ausencia = new Ausencia();
+        $form   = $this->createCreateAusenciaForm($ausencia);
+
+        if($horario){
+            $id_horario=$horario->getId();
+        }
+        else{
+            $id_horario=null;
+        }
+
+        if($asignatura){
+            $id_asignatura=$asignatura->getId();
+        }
+        else{
+            $id_asignatura=null;
+        }
+        
+
+        return $this->render('IntranetBundle:Profesor:asistencia.html.twig', array(
+            'entity' => $entity,
+            'tutor_grupo' => $id_grupo,
+            'cursos'=>$cursos,
+            'alumnos'=>$alumnos,
+            'form'   => $form->createView(),
+            'asignatura'=>$id_asignatura,
+            'horario'=>$id_horario,
+            'fecha'=>$hoy,
+            'faltas'=>$array
+        ));
+    }
+
+
+    protected function ComprobarDiaNoLectivo($dia,$mes,$anyo) 
+    {
+        // Se comprueba que no es festivo.
+        $em = $this->getDoctrine()->getManager();
+        $entities = $em->getRepository('BackendBundle:Festivos')->findFestivo($dia, $mes);
+        if(!empty($entities)){
+            return true;
+        }
+
+        // Se comprueba que siendo lunes y el domingo no sea festivo.
+        $fecha=$anyo."-".$mes."-".$dia;
+        $dw = date('w', strtotime($fecha));
+
+        if($dw==1){
+            $dia_anterior = date( 'Y-m-d', strtotime( $fecha.' -1 day' ) );
+            $fecha_ant=explode("-",$dia_anterior);
+            $DomingoFestivo= $em->getRepository('BackendBundle:Festivos')->findFestivo($fecha_ant[2], $fecha_ant[1]);
+            if(!empty($DomingoFestivo)){
+                return true;
+            }
+        }
+
+        // Se comprueba que no sea un día de vacaciones.
+        $dw = date('Y-m-d', strtotime($fecha));
+        // Se obtiene la fecha inicial y final del curso para usar luego el año correspondiente. 
+        $ini_curso=$em->getRepository('BackendBundle:Centro')->findInicioCurso();
+        $array_ini=explode("-",$ini_curso["inicioCurso"]->format('Y-m-d')); //Conversión de array a String
+        $fin_curso=$em->getRepository('BackendBundle:Centro')->findFinCurso();
+        $array_fin=explode("-",$fin_curso["finCurso"]->format('Y-m-d'));
+
+        // Se obtiene las fechas de vacaciones.
+        $ini_nav=$em->getRepository('BackendBundle:Festivos')->findFestivosPorDescripcion("Inicio Vacaciones de Navidad");
+        $fin_nav=$em->getRepository('BackendBundle:Festivos')->findFestivosPorDescripcion("Fin Vacaciones de Navidad");
+        $ini_ss=$em->getRepository('BackendBundle:Festivos')->findFestivosPorDescripcion("Inicio Vacaciones de Semana Santa");
+        $fin_ss=$em->getRepository('BackendBundle:Festivos')->findFestivosPorDescripcion("Fin Vacaciones de Semana Santa");
+        
+        // Se comrpueba si existe vacaciones de Navidad y si un día de esas vacaciones.
+        if(!empty($ini_nav) && !empty($fin_nav)) {
+            $Fecha_ini_nav = date('Y-m-d', strtotime($array_ini[0]."-".$ini_nav->getNumMes()."-".$ini_nav->getDia()));
+            $Fecha_fin_nav = date('Y-m-d', strtotime($array_fin[0]."-".$fin_nav->getNumMes()."-".$fin_nav->getDia()));
+
+            if (($dw >= $Fecha_ini_nav) && ($dw <= $Fecha_fin_nav)){
+                return true;
+            }
+        }
+         // Se comrpueba si existe vacaciones de Semana Santa y si un día de esas vacaciones.
+        if(!empty($ini_ss) && !empty($fin_ss)){
+
+            $Fecha_ini_ss = date('Y-m-d', strtotime($array_fin[0]."-".$ini_ss->getNumMes()."-".$ini_ss->getDia()));
+            $Fecha_fin_ss = date('Y-m-d', strtotime($array_fin[0]."-".$fin_ss->getNumMes()."-".$fin_ss->getDia()));
+
+            if (($dw >= $Fecha_ini_ss) && ($dw <= $Fecha_fin_ss)){
+                return true;
+            }
+        }
+        // En caso de que no exista ningún festivo se devolverá false para que se pueda guardar la reserva.
+        return false;
+    }
+
+
+    //se muestra las fechas que ha impartido el profesor en los N días anteriores.
+    public function  FechasImpartidasProfesorAction(Request $request, $num, $id, $grupo)
+    {
+        $em = $this->getDoctrine()->getManager();
+
+        $entity = $this->get('security.context')->getToken()->getUser();
+        $grupo= $em->getRepository('BackendBundle:Grupo')->findOneById($grupo);
+        $asignatura= $em->getRepository('BackendBundle:AsignaturasCursos')->findOneById($id);
+
+        // Se obtiene la fecha inicial y final del curso para. 
+        $ini_curso=$em->getRepository('BackendBundle:Centro')->findInicioCurso();
+        $array_ini=explode("-",$ini_curso["inicioCurso"]->format('Y-m-d')); //Conversión de array a String
+        $fin_curso=$em->getRepository('BackendBundle:Centro')->findFinCurso();
+        $array_fin=explode("-",$fin_curso["finCurso"]->format('Y-m-d'));
+
+        $Fecha_Fin=$fin_curso["finCurso"]->format('Y-m-d');
+        $Fecha_Ini=$ini_curso["inicioCurso"]->format('Y-m-d');
+
+        // Se obtiene las fechas de vacaciones.
+        $ini_nav=$em->getRepository('BackendBundle:Festivos')->findFestivosPorDescripcion("Inicio Vacaciones de Navidad");
+        $fin_nav=$em->getRepository('BackendBundle:Festivos')->findFestivosPorDescripcion("Fin Vacaciones de Navidad");
+        $ini_ss=$em->getRepository('BackendBundle:Festivos')->findFestivosPorDescripcion("Inicio Vacaciones de Semana Santa");
+        $fin_ss=$em->getRepository('BackendBundle:Festivos')->findFestivosPorDescripcion("Fin Vacaciones de Semana Santa");
+        
+        $Fecha_ini_nav = date('Y-m-d', strtotime($array_ini[0]."-".$ini_nav->getNumMes()."-".$ini_nav->getDia()));
+        $Fecha_fin_nav = date('Y-m-d', strtotime($array_fin[0]."-".$fin_nav->getNumMes()."-".$fin_nav->getDia()));
+        $Fecha_ini_ss = date('Y-m-d', strtotime($array_fin[0]."-".$ini_ss->getNumMes()."-".$ini_ss->getDia()));
+        $Fecha_fin_ss = date('Y-m-d', strtotime($array_fin[0]."-".$fin_ss->getNumMes()."-".$fin_ss->getDia()));
+
+        $hoy=date("Y-m-d");
+
+        if ($hoy <= $Fecha_ini_nav){
+            $trimestre=1;
+        }
+        else if($hoy >= $Fecha_ini_ss){
+            $trimestre=3;
+        }
+        else{
+            $trimestre=2;
+        }
+
+        //Se obtiene los días de la semana que da clase el profesor para luego comprobar si la fecha corresponde a esos días.
+        $imparte=$em->getRepository('BackendBundle:Imparte')->findDiasSemanaProfesor($entity,$grupo,$asignatura);
+        $array=null;
+        
+        //Se obtiene las fechas impartidas por el profesor.
+        if($trimestre==1){
+            //Primer día del primer trimestre.
+            $T1_fin= date("Y-m-d", strtotime($Fecha_ini_nav."- 1 days" ));  
+
+            //Se comprueba si el dia actual ha pasado del final de trimestre para omitir las fechas siguientes.
+            if($hoy < $T1_fin){
+                //Se establece el último día a buscar.
+                if(date("Y-m-d", strtotime($hoy."- ".$num." days" ))<$Fecha_Ini){
+                    $ultima=$Fecha_Ini;
+                }
+                else{
+                    $ultima=date("Y-m-d", strtotime($hoy."- ".$num." days" ));
+                }
+
+                for($i=$hoy;$i>=$ultima;$i = date("Y-m-d", strtotime($i ."- 1 days"))){
+                    //Se comprueba si es fectivo.
+                    $fecha_det= explode("-",$i);
+                    $festivo=$this->ComprobarDiaNoLectivo($fecha_det[2],$fecha_det[1],$fecha_det[0]) ;
+                    if(!$festivo){
+                        //Se comprueba si es un día de la semana donde imparte el profesor.
+
+                        //Día de la semana de cada fecha.
+                        $dia_semanal=date("N", strtotime($i));
+
+                        //Variable para detectar si la fecha coincide en el dia semanal qe imparte clase el profesor en ese grupo.
+                        $dia_clase=0;
+                        foreach ($imparte as $clase) {
+                            if($dia_clase==0 && $clase->getDiaSemanal()== $dia_semanal ){
+                                $dia_clase=1;
+                            }
+                        }
+                        if($dia_clase==1){
+                            $array[]=date("d-m-Y", strtotime($i));
+                        }
+                    }
+                }
+            }
+            else{
+                //Se establece el último día a buscar.
+                if(date("Y-m-d", strtotime($T1_fin."- ".$num." days" ))<$Fecha_Ini){
+                    $ultima=$Fecha_Ini;
+                }
+                else{
+
+                    $ultima=date("Y-m-d", strtotime($T1_fin."- ".$num." days" ));
+                }
+
+                for($i=$T1_fin;$i>=$ultima;$i = date("Y-m-d", strtotime($i ."- 1 days"))){
+                    
+                    //Se comprueba si es fectivo.
+                    $fecha_det= explode("-",$i);
+                    $festivo=$this->ComprobarDiaNoLectivo($fecha_det[2],$fecha_det[1],$fecha_det[0]) ;
+                    if(!$festivo){
+                        //Se comprueba si es un día de la semana donde imparte el profesor.
+
+                        //Día de la semana de cada fecha.
+                        $dia_semanal=date("N", strtotime($i));
+
+                        //Variable para detectar si la fecha coincide en el dia semanal qe imparte clase el profesor en ese grupo.
+                        $dia_clase=0;
+                        foreach ($imparte as $clase) {
+                            if($dia_clase==0 && $clase->getDiaSemanal()== $dia_semanal ){
+                                $dia_clase=1;
+                            }
+                        }
+                        if($dia_clase==1){
+                            $array[]=date("d-m-Y", strtotime($i));
+                        }
+                    }
+                }
+            }
+        }
+        else if($trimestre==2){
+            //Primer día del segundo trimestre.
+            $T2_ini= date("Y-m-d", strtotime($Fecha_fin_nav."+ 1 days" ));  
+
+            //Se comprueba si el dia actual ha pasado del final de trimestre para omitir las fechas siguientes.
+            if($hoy < $Fecha_ini_ss){
+                //Se establece el último día a buscar.
+                if(date("Y-m-d", strtotime($hoy."- ".$num." days" ))<$T2_ini){
+                    $ultima=$T2_ini;
+                }
+                else{
+                    $ultima=date("Y-m-d", strtotime($hoy."- ".$num." days" ));
+                }
+
+                for($i=$hoy;$i>=$ultima;$i = date("Y-m-d", strtotime($i ."- 1 days"))){
+                    //Se comprueba si es fectivo.
+                    $fecha_det= explode("-",$i);
+                    $festivo=$this->ComprobarDiaNoLectivo($fecha_det[2],$fecha_det[1],$fecha_det[0]) ;
+                    if(!$festivo){
+                        //Se comprueba si es un día de la semana donde imparte el profesor.
+
+                        //Día de la semana de cada fecha.
+                        $dia_semanal=date("N", strtotime($i));
+
+                        //Variable para detectar si la fecha coincide en el dia semanal qe imparte clase el profesor en ese grupo.
+                        $dia_clase=0;
+                        foreach ($imparte as $clase) {
+                            if($dia_clase==0 && $clase->getDiaSemanal()== $dia_semanal ){
+                                $dia_clase=1;
+                            }
+                        }
+                        if($dia_clase==1){
+                            $array[]=date("d-m-Y", strtotime($i));
+                        }
+                    }
+                }
+            }
+            else{
+                //Se establece el último día a buscar.
+                if(date("Y-m-d", strtotime($Fecha_ini_ss."- ".$num." days" ))<$Fecha_Ini){
+                    $ultima=$Fecha_Ini;
+                }
+                else{
+
+                    $ultima=date("Y-m-d", strtotime($Fecha_ini_ss."- ".$num." days" ));
+                }
+
+                for($i=$Fecha_ini_ss;$i>=$ultima;$i = date("Y-m-d", strtotime($i ."- 1 days"))){
+                    
+                    //Se comprueba si es fectivo.
+                    $fecha_det= explode("-",$i);
+                    $festivo=$this->ComprobarDiaNoLectivo($fecha_det[2],$fecha_det[1],$fecha_det[0]) ;
+                    if(!$festivo){
+                        //Se comprueba si es un día de la semana donde imparte el profesor.
+
+                        //Día de la semana de cada fecha.
+                        $dia_semanal=date("N", strtotime($i));
+
+                        //Variable para detectar si la fecha coincide en el dia semanal qe imparte clase el profesor en ese grupo.
+                        $dia_clase=0;
+                        foreach ($imparte as $clase) {
+                            if($dia_clase==0 && $clase->getDiaSemanal()== $dia_semanal ){
+                                $dia_clase=1;
+                            }
+                        }
+                        if($dia_clase==1){
+                            $array[]=date("d-m-Y", strtotime($i));
+                        }
+                    }
+                }
+            }
+        }
+        else{
+            //Primer día del tercer trimestre.
+            $T3_ini= date("Y-m-d", strtotime($Fecha_fin_ss."+ 1 days" ));  
+
+            //Se comprueba si el dia actual ha pasado del final de curso para omitir las fechas siguientes.
+            if($hoy < $Fecha_Fin){
+                //Se establece el último día a buscar.
+                if(date("Y-m-d", strtotime($hoy."- ".$num." days" ))<$T3_ini){
+                    $ultima=$T3_ini;
+                }
+                else{
+                    $ultima=date("Y-m-d", strtotime($hoy."- ".$num." days" ));
+                }
+
+                for($i=$hoy;$i>=$ultima;$i = date("Y-m-d", strtotime($i ."- 1 days"))){
+                //echo $Fecha_fin_ss . "<br />";
+                    //Se comprueba si es fectivo.
+                    $fecha_det= explode("-",$i);
+                    $festivo=$this->ComprobarDiaNoLectivo($fecha_det[2],$fecha_det[1],$fecha_det[0]) ;
+                    if(!$festivo){
+                        //Se comprueba si es un día de la semana donde imparte el profesor.
+
+                        //Día de la semana de cada fecha.
+                        $dia_semanal=date("N", strtotime($i));
+
+                        //Variable para detectar si la fecha coincide en el dia semanal qe imparte clase el profesor en ese grupo.
+                        $dia_clase=0;
+                        foreach ($imparte as $clase) {
+                            if($dia_clase==0 && $clase->getDiaSemanal()== $dia_semanal ){
+                                $dia_clase=1;
+                            }
+                        }
+                        if($dia_clase==1){
+                            $array[]=date("d-m-Y", strtotime($i));
+                        }
+                    }
+                }
+            }
+            else{
+                //Se establece el último día a buscar.
+                if(date("Y-m-d", strtotime($Fecha_Fin."- ".$num." days" ))<$T3_ini){
+                    $ultima=$T3_ini;
+                }
+                else{
+                    $ultima=date("Y-m-d", strtotime($Fecha_Fin."- ".$num." days" ));
+                }
+
+                for($i=$Fecha_Fin;$i>=$ultima;$i = date("Y-m-d", strtotime($i ."- 1 days"))){
+                    
+                    //Se comprueba si es fectivo.
+                    $fecha_det= explode("-",$i);
+                    $festivo=$this->ComprobarDiaNoLectivo($fecha_det[2],$fecha_det[1],$fecha_det[0]) ;
+                    if(!$festivo){
+                        //Se comprueba si es un día de la semana donde imparte el profesor.
+
+                        //Día de la semana de cada fecha.
+                        $dia_semanal=date("N", strtotime($i));
+
+                        //Variable para detectar si la fecha coincide en el dia semanal qe imparte clase el profesor en ese grupo.
+                        $dia_clase=0;
+                        foreach ($imparte as $clase) {
+                            if($dia_clase==0 && $clase->getDiaSemanal()== $dia_semanal ){
+                                $dia_clase=1;
+                            }
+                        }
+                        if($dia_clase==1){
+                            $array[]=date("d-m-Y", strtotime($i));
+                        }
+                    }
+                }
+            }
+        }
+
+        return new JsonResponse(array('fechas' => $array), 200);
+    }
+
+
+
+    public function  HorasImpartidaClaseProfesorAction(Request $request, $fecha, $id, $grupo)
+    {
+        $em = $this->getDoctrine()->getManager();
+
+        $entity = $this->get('security.context')->getToken()->getUser();
+        $grupo= $em->getRepository('BackendBundle:Grupo')->findOneById($grupo);
+        $asignatura= $em->getRepository('BackendBundle:AsignaturasCursos')->findOneById($id);
+
+        $array=explode("-",$fecha);
+
+        $Fecha = date('Y-m-d', strtotime($array[2]."-".$array[1]."-".$array[0]));
+        $dia_semanal=date("N", strtotime($Fecha));
+
+        $array=null;
+        //Se obtiene las horas de la las clases del mismo día.
+        $imparte=$em->getRepository('BackendBundle:Imparte')->findHorasImpartidaClaseProfesor($entity,$grupo,$asignatura,$dia_semanal);
+        foreach ($imparte as $clase) {
+            $inicio=$clase->getHorario()->getInicio();
+            $fin=$clase->getHorario()->getFin();
+
+            $array[$clase->getHorario()->getId()]=$inicio->format('H:i')." - ".$fin->format('H:i');     
+        }
+        
+        $num=count($imparte);
+
+        return new JsonResponse(array('fechas' => $array,'num'=> $num), 200);
+    }
+
+
+    public function  claseSeleccionadaProfesorAction(Request $request, $fecha, $horario, $asig, $grupo)
+    {
+        $em = $this->getDoctrine()->getManager();
+
+        $entity = $this->get('security.context')->getToken()->getUser();
+        $grupo= $em->getRepository('BackendBundle:Grupo')->findOneById($grupo);
+        $asignatura= $em->getRepository('BackendBundle:AsignaturasCursos')->findOneById($asig);
+        $_horario= $em->getRepository('BackendBundle:Horario')->findOneById($horario);
+        
+        $array=explode("-",$fecha);
+
+        $Fecha = date('Y-m-d', strtotime($array[2]."-".$array[1]."-".$array[0]));
+        $dia_semanal=date("N", strtotime($Fecha));
+
+        //Se obtiene los alumnos según el tipo de asignatura.
+        $alumnos=null;
+        if($asignatura->getAsignatura()->getOpcional() == 0){
+            $alumnos=$em->getRepository('BackendBundle:Alumno')->findByGrupoOrdenado($grupo);
+        }
+        else{
+            $alumnos=$em->getRepository('BackendBundle:Alumno')->findAlumnosOptativaGrupo($asignatura, $grupo);
+        }
+
+        //Se obtiene las faltas de la clase seleccionada.
+        $array=null;
+
+        $faltas=$em->getRepository('IntranetBundle:Ausencia')->findFaltasClase($grupo,$asignatura,$Fecha,$_horario);
+        foreach ($faltas as $falta) {
+            $array[$falta->getAlumno()->getId()."-".$falta->getId()]=$falta->getTipo();     
+        }
+        //Horario para mostrar.
+        $inicio=$_horario->getInicio();
+        $fin=$_horario->getFin();
+        $modulo=$inicio->format('H:i')."-".$fin->format('H:i'); 
+
+        $ausencia = new Ausencia();
+        $form   = $this->createCreateAusenciaForm($ausencia);
+        
+        return $this->render('IntranetBundle:Profesor:claseAsignada.html.twig', array(
+            'alumnos' => $alumnos,
+            'faltas'=>$array,
+            'grupo'=>$grupo,
+            'asignatura'=>$asignatura,
+            'asig'=>$asig,
+            'fecha'=>$fecha,
+            'horario'=>$modulo,
+            'id_horario'=>$horario,
+            'form'   => $form->createView(),
+
+        ));
+
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    ///////////////////////////////////////////
     //             Calificaciones            //
     ///////////////////////////////////////////
 
@@ -1017,7 +1584,8 @@ class ProfesorController extends Controller
             $trimestre=2;
         }
 
-        $alumnos=$em->getRepository('BackendBundle:Alumno')->findByGrupo($id);
+        $alumnos=$em->getRepository('BackendBundle:Alumno')->findByGrupoOrdenado($grupo);
+
 
         foreach($alumnos as $alumno){
             $asignaturas=$em->getRepository('BackendBundle:AsignaturasCursos')->findAsignaturasAlumno($alumno->getCurso(), $alumno->getOptativa());

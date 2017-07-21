@@ -140,4 +140,13 @@ class CursaRepository extends EntityRepository
 			->getResult();
 	}
 
+	public function findTarea($tarea)
+	{
+		return $this->getEntityManager()->createQuery(
+			'SELECT c FROM IntranetBundle:Cursa c INNER JOIN c.alumno a WHERE c.tarea=:tarea  ORDER BY a.apellido1, a.apellido2, a.nombre  ASC')
+			->setParameters(array(
+			'tarea' => $tarea))
+			->getResult();
+	}
+
 }

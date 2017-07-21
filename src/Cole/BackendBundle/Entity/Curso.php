@@ -61,7 +61,6 @@ class Curso
      */
     private $ratio;
 
-
     /**
     * @ORM\OneToMany(targetEntity="Grupo", mappedBy="curso", cascade={"remove"})
     */
@@ -81,6 +80,7 @@ class Curso
     * @ORM\OneToMany(targetEntity="AsignaturasCursos", mappedBy="curso", cascade={"remove"})
     */
     private $asignaturas_cursos;
+
     
     public function __construct()
     {

@@ -12,6 +12,13 @@ use Doctrine\ORM\EntityRepository;
  */
 class HorarioRepository extends EntityRepository
 {
+	public function findAllOrdenado()
+	{
+		return $this->getEntityManager()->createQuery(
+		'SELECT h FROM BackendBundle:Horario h ORDER BY h.id ASC')
+		->getResult();
+	}
+
 	public function findHoraClase($clase)
 	{
 		return $this->getEntityManager()->createQuery(

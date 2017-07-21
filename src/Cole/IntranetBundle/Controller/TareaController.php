@@ -443,7 +443,8 @@ class TareaController extends Controller
 
         $asignatura = $em->getRepository('BackendBundle:AsignaturasCursos')->findAsignacion($grupo->getCurso(),$asig);
         $task = $em->getRepository('IntranetBundle:Tarea')->findOneById($tarea);
-        $alumnos=$em->getRepository('IntranetBundle:Cursa')->findOneByTarea($task);
+        $alumnos=$em->getRepository('IntranetBundle:Cursa')->findTarea($task);
+        
         $tareas_evaluadas = $em->getRepository('IntranetBundle:Cursa')->findTareasEvaluadas($grupo, $asignatura);
         $tareas_noEvaluadas = $em->getRepository('IntranetBundle:Cursa')->findTareasNoEvaluadas($grupo, $asignatura);
 

@@ -1405,7 +1405,7 @@ ul, ol {
     height: 200px !important;
     margin: 0 auto;
     padding-bottom: 10px !important;
-    padding-top: 10px !important;
+    padding-top: 30px !important;
 }
 .bloque-menu{
     padding: 20px 30px !important;
@@ -1765,7 +1765,7 @@ ul, ol {
     border-right: 1px solid grey !important;
     border-left: 1px solid grey !important;
     border-bottom: 1px solid grey !important;
-    min-height: 274px ;
+    min-height: 265px ;
 }
 .img-small {
     background-position: center center;
@@ -1987,9 +1987,12 @@ ul, ol {
     background: white !important;
 }
 .lista-alumnos tr td{
-    border-top: 1px solid grey !important;
+    border-top: 0px solid grey ;
     border-bottom: 1px solid grey !important;
-    padding: 6px !important;
+    padding: 6px;
+}
+.lista-alumnos tr:first-child td{
+    border-top: 1px solid grey !important;
 }
 .lista-alumnos tr th{
     border: 0 !important;
@@ -2498,8 +2501,8 @@ table tr td a{
     padding: 7px !important;
 }
 .contenedor_seleccion #asignatura button{
-    padding: 3px 10px !important;
-    margin: -2px 10px 9px !important;
+    margin: -1px 10px 9px !important;
+    padding: 4px 10px !important;
 }
 .contenedor_seleccion #alumnos{
     display: table;
@@ -3199,7 +3202,7 @@ table tr td a{
 #btn_cancelar_tutoria_profesor{
     margin-top: -25px !important;
 }
-#tabla_tareas_profesor{
+.tablas{
     clear: both;
     margin-bottom: 0 !important;
     margin-top: 10px;
@@ -3207,7 +3210,7 @@ table tr td a{
 .table_task td:nth-child(3),.table_task td:nth-child(4),.table_task th:nth-child(3),.table_task th:nth-child(4){
     text-align: center !important;
 }
-#tabla_tareas_profesor>h4{
+.tablas>h4{
     margin: 0 !important;
     background: #31708f none repeat scroll 0 0;
     border-radius: 5px;
@@ -3501,4 +3504,64 @@ table tr td a{
 }
 .container_submit div{
     margin-left: 39%;
+}
+#seleccion_ausencias #fecha select{
+    padding: 0 5px;
+}
+#seleccion_ausencias #fecha #error{
+    margin-top: 40px;
+    display: block;
+}
+#seleccion_ausencias #fecha #dia, #seleccion_ausencias #fecha #hora{
+    min-width: 170px;
+    margin: 5px auto;
+}
+#seleccion_ausencias #fecha>div{
+    text-align: center;
+}
+#seleccion_ausencias #fecha #num_fechas{
+    color: black;
+    margin: 0 5px;
+    text-align: center;
+}
+#seleccion_ausencias #ultimas_fechas{
+    background-color: #CDD6E0;
+    color: #31708f;
+}
+#tabla_ausencia_profesor{
+    display: block;
+    clear: both;
+}
+#tabla_ausencia_profesor h4{
+    margin: 0;
+}
+#tabla_ausencia_profesor>p{
+    margin: 0 !important;
+    margin-top: -10px !important;
+    margin-bottom: 10px !important;
+}
+#tabla_ausencia_profesor .fecha{
+    color: #31708f;
+    font-weight: bold;
+}
+#tabla_ausencia_profesor .lista-alumnos{
+    margin-top: 3px !important;
+}
+#tabla_ausencia_profesor td, #tabla_ausencia_profesor th{
+    min-width: 35px;
+}
+table.dataTable.no-footer {
+    border-bottom: 0px!important;
+}
+table[class*='lista-alumnos']{
+    border: 1px solid grey !important;
+}
+#no_alumnos_optativa{
+    margin-top: 30px;
+}
+#ausencia{
+    margin-top: 10px;
+}
+#ausencia button{
+    min-width: 100px;
 }

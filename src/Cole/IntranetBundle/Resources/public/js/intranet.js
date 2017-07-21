@@ -348,12 +348,12 @@ $(document).ready(function () {
     //Se marca la opción actual.
     $("#seleccion_nuevo_seguimiento #orden").css("background-color", "#337ab7");
     if(orden.attr("id")=="1"){
-      $("#seleccion_nuevo_seguimiento #2 #orden").css("background-color", "#ea9239");
-      $("#seleccion_nuevo_seguimiento #2").removeClass('hidden');
-      $("#seleccion_nuevo_seguimiento #3 button").removeClass('active');
+      $("#seleccion_nuevo_seguimiento>#2 #orden").css("background-color", "#ea9239");
+      $("#seleccion_nuevo_seguimiento>#2").removeClass('hidden');
+      $("#seleccion_nuevo_seguimiento>#3 button").removeClass('active');
 
       if ($(window).width() < 768) {
-        var pos = $("#seleccion_nuevo_seguimiento #2").offset().top;
+        var pos = $("#seleccion_nuevo_seguimiento>#2").offset().top;
         $("html").scrollTop(pos-300);
       }
       id=$(this).attr("id");
@@ -367,53 +367,84 @@ $(document).ready(function () {
               $("#seleccion_nuevo_seguimiento #asignatura").append('<button id="'+response.asignaturas[key]["id"]+'" class="btn btn-primary col-xs-11 ">'+response.asignaturas[key]["abreviatura"]+'</button>');
             }
 
-            $("#seleccion_nuevo_seguimiento #3").addClass('hidden');
+            $("#seleccion_nuevo_seguimiento>#3").addClass('hidden');
           }
       })
       //Se selecciona el grupo en el select oculto.
       $("#seguimiento_grupo option[value='"+id+"']").prop('selected', true);
     }
     else if(orden.attr("id")=="2"){
-      id=$(this).attr("id");
-      $("#seleccion_nuevo_seguimiento #3 button").removeClass('active');
-      $("#seleccion_nuevo_seguimiento #3 #orden").css("background-color", "#ea9239");
-      $("#seleccion_nuevo_seguimiento #3").removeClass('hidden');
-
-      if ($(window).width() < 768) {
-        var pos = $("#seleccion_nuevo_seguimiento #3").offset().top;
-        $("html").scrollTop(pos-300);
+      if($("#seleccion_nuevo_seguimiento #cursos .active").size()>1){
+        blocker.play();
+        $("#seleccion_nuevo_seguimiento #cursos .active").removeClass('active');
+        $("#seleccion_nuevo_seguimiento #asignatura .active").removeClass('active');
+        $("#seleccion_nuevo_seguimiento>#1 #orden").css("background-color", "");
+        $("#seleccion_nuevo_seguimiento>#2 #orden").css("background-color", "#337ab7");
+        $("#seleccion_nuevo_seguimiento>#2").addClass('hidden');
       }
-      //Se selecciona el grupo en el select oculto.
-      $("#seguimiento_asignatura option[value='"+id+"']").prop('selected', true);
+      else{
+        id=$(this).attr("id");
+        $("#seleccion_nuevo_seguimiento>#3 button").removeClass('active');
+        $("#seleccion_nuevo_seguimiento>#3 #orden").css("background-color", "#ea9239");
+        $("#seleccion_nuevo_seguimiento>#3").removeClass('hidden');
+
+        if ($(window).width() < 768) {
+          var pos = $("#seleccion_nuevo_seguimiento>#3").offset().top;
+          $("html").scrollTop(pos-300);
+        }
+        //Se selecciona el grupo en el select oculto.
+        $("#seguimiento_asignatura option[value='"+id+"']").prop('selected', true);
+      }
     }
     else{
-      if($(this).attr("id")=="grupo"){
-        $("#seguimiento_descripcion").prop("disabled", false);
-        if ($(window).width() < 768) {
-          var pos = $("#seguimiento_descripcion").offset().top;
-          $("html").scrollTop(pos);
-        }
-        if($("#seguimiento_descripcion").val().length == 0){
-          $("#formulario_nuevo_seguimiento .boton_enviar button").prop('disabled', true);
+      //Se comprueba que las opciones anteriores sólo tenga un botón seleccionado.
+      if($("#seleccion_nuevo_seguimiento #cursos .active").size()>1 || $("#seleccion_nuevo_seguimiento #asignatura .active").size()>1){
+        blocker.play();
+
+        if($("#seleccion_nuevo_seguimiento #cursos .active").size()>1){
+          $("#seleccion_nuevo_seguimiento #cursos .active").removeClass('active');
+          $("#seleccion_nuevo_seguimiento #asignatura .active").removeClass('active');
+          $("#seleccion_nuevo_seguimiento #alumnos .active").removeClass('active');
+          $("#seleccion_nuevo_seguimiento>#1 #orden").css("background-color", "");
+          $("#seleccion_nuevo_seguimiento>#2 #orden").css("background-color", "#337ab7");
+          $("#seleccion_nuevo_seguimiento>#2").addClass('hidden');
+          $("#seleccion_nuevo_seguimiento>#3 #orden").css("background-color", "#337ab7");
+          $("#seleccion_nuevo_seguimiento>#3").addClass('hidden');
         }
         else{
-          $("#formulario_nuevo_seguimiento .boton_enviar button").prop('disabled', false);
+          $("#seleccion_nuevo_seguimiento #asignatura .active").removeClass('active');
+          $("#seleccion_nuevo_seguimiento #alumnos .active").removeClass('active');
+          $("#seleccion_nuevo_seguimiento>#2 #orden").css("background-color", "");
+          $("#seleccion_nuevo_seguimiento>#3 #orden").css("background-color", "#337ab7");
+          $("#seleccion_nuevo_seguimiento>#3").addClass('hidden');
         }
       }
       else{
-
-        grupo=$("#seleccion_nuevo_seguimiento #cursos .active").attr("id");
-        asignatura=$("#seleccion_nuevo_seguimiento #asignatura .active").attr("id");
-        if(asignatura){
-          $("#lista_alumnos_seguimiento .modal-body").load(Routing.generate("AlumnosGrupoAsignatura", {id:grupo, asig:asignatura, _locale:locale}), function(){
-        
-          });
+        if($(this).attr("id")=="grupo"){
+          $("#seguimiento_descripcion").prop("disabled", false);
+          if ($(window).width() < 768) {
+            var pos = $("#seguimiento_descripcion").offset().top;
+            $("html").scrollTop(pos);
+          }
+          if($("#seguimiento_descripcion").val().length == 0){
+            $("#formulario_nuevo_seguimiento .boton_enviar button").prop('disabled', true);
+          }
+          else{
+            $("#formulario_nuevo_seguimiento .boton_enviar button").prop('disabled', false);
+          }
         }
-        else{//Para Infantil
-          $("#lista_alumnos_seguimiento .modal-body").load(Routing.generate("AlumnosGrupo", {id:grupo, _locale:locale}), function(){
+        else{
+          grupo=$("#seleccion_nuevo_seguimiento #cursos .active").attr("id");
+          asignatura=$("#seleccion_nuevo_seguimiento #asignatura .active").attr("id");
+          if(asignatura){
+            $("#lista_alumnos_seguimiento .modal-body").load(Routing.generate("AlumnosGrupoAsignatura", {id:grupo, asig:asignatura, _locale:locale}), function(){
             });
+          }
+          else{//Para Infantil
+            $("#lista_alumnos_seguimiento .modal-body").load(Routing.generate("AlumnosGrupo", {id:grupo, _locale:locale}), function(){
+            });
+          }     
         }
-             
       }
     }
   });
@@ -942,8 +973,6 @@ $(document).ready(function () {
     if(contenedor.find("#reserva_fecha tbody td a").hasClass("ui-state-default ui-state-active")){
       HorasReserva(contenedor.find("#reserva_modulos"));
     }
-
-    //Asignar el valor del select de en equipamiento!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
   });
 
   //Se simula el hacer click en el calendario, haciendo click en un input oculto que contiene el día deleccionado.
@@ -1300,20 +1329,20 @@ $(document).ready(function () {
       div.find("button").removeClass('active');
       $(this).addClass('active');
      
-      $("#seleccion_calificaciones #2 #orden").css("background-color", "#ea9239");
-      $("#seleccion_calificaciones #2").removeClass('hidden');
-      $("#seleccion_calificaciones #2 button").removeClass('active');
+      $("#seleccion_calificaciones>#2 #orden").css("background-color", "#ea9239");
+      $("#seleccion_calificaciones>#2").removeClass('hidden');
+      $("#seleccion_calificaciones>#2 button").removeClass('active');
 
-      $("#seleccion_calificaciones #3_1").addClass('hidden');
-      $("#seleccion_calificaciones #3_2").addClass('hidden');
-      $("#seleccion_calificaciones #4").addClass('hidden');
-      $("#seleccion_calificaciones #3_1 #cursos a").addClass('hidden');
-      $("#seleccion_calificaciones #3_2 #cursos").empty();
+      $("#seleccion_calificaciones>#3_1").addClass('hidden');
+      $("#seleccion_calificaciones>#3_2").addClass('hidden');
+      $("#seleccion_calificaciones>#4").addClass('hidden');
+      $("#seleccion_calificaciones>#3_1 #cursos a").addClass('hidden');
+      $("#seleccion_calificaciones>#3_2 #cursos").empty();
 
       $("#seleccion_calificaciones #asignatura").removeClass('active');
 
       if ($(window).width() < 768) {
-        var pos = $("#seleccion_calificaciones #2").offset().top;
+        var pos = $("#seleccion_calificaciones>#2").offset().top;
         $("html").scrollTop(pos-300);
       }
 
@@ -1322,122 +1351,156 @@ $(document).ready(function () {
       $("#tarea_descripcion").blur();
       //Se oculta todas las opciones si se pulsa en evaluación de grupo.
       if($(this).attr("id")!="nueva" && $(this).attr("id")!="evaluar"  && $(this).attr("id")!="trimestre"){
-        $("#seleccion_calificaciones #2").addClass('hidden');
+        $("#seleccion_calificaciones>#2").addClass('hidden');
       }
     }
     else if(orden.attr("id")=="2"){
-      div.find("button").removeClass('active');
-    
-      $(this).addClass('active');
-      id=$(this).attr("id");
-
-      //Se elimina el contenido del input al pulsar una opción anterior.
-      $("#tarea_descripcion").val("");
-      $("#tarea_descripcion").blur();
-
-      
-      if($("#seleccion_calificaciones #nueva").hasClass('active') ){
-        $("#seleccion_calificaciones #3_2 #orden").css("background-color", "#ea9239");
-        $("#seleccion_calificaciones #3_2").removeClass('hidden');
-        $("#seleccion_calificaciones #3_2 button").removeClass('active');
-        $("#seleccion_calificaciones #3_1").addClass('hidden');
-        $("#seleccion_calificaciones #3_3").addClass('hidden');
-
-        id=$("#asignatura button[class*='active']").attr("id");
-
-        //Se obtiene los grupos donde el profesor imparte la asignatura seleccionada.
-        $.ajax({
-          type: 'POST',
-          url: Routing.generate('grupos_asignaturasGrupo_profesor', {id:id, _locale:locale}),
-          success: function(response){
-           $("#seleccion_calificaciones #3_2 #cursos").empty();
-            for(key in response.grupos){
-              $("#seleccion_calificaciones #3_2 #cursos").append('<button id="'+response.grupos[key]["id"]+'" class="btn btn-primary">'+response.grupos[key]["curso"]+' '+response.grupos[key]["letra"]+'</button>');
-            }
-          }
-        })
-
-        //Se selecciona la asignatura en el select oculto.
-        $("#tarea_asignatura option[value='"+id+"']").prop('selected', true);
-
-
-        if ($(window).width() < 768) {
-          var pos = $("#seleccion_calificaciones #3_2").offset().top;
-          $("html").scrollTop(pos-300);
-        }
-      }
-      else if($("#seleccion_calificaciones #evaluar").hasClass('active')){
-        $("#seleccion_calificaciones #3_1 #cursos a").addClass('hidden');
-        $("#seleccion_calificaciones #3_1 #orden").css("background-color", "#ea9239");
-        $("#seleccion_calificaciones #3_1").removeClass('hidden');
-        $("#seleccion_calificaciones #3_1 a").removeClass('active');
-        $("#seleccion_calificaciones #3_2").addClass('hidden');
-        $("#seleccion_calificaciones #3_3").addClass('hidden');
-
-        asig=$(this).attr("asig");
-        $("#seleccion_calificaciones #3_1 a[asig='"+asig+"']").removeClass('hidden');
-
-
-        if ($(window).width() < 768) {
-          var pos = $("#seleccion_calificaciones #3_1").offset().top;
-          $("html").scrollTop(pos-300);
-        }
+      //Se comprueba que sólo hay una opción marcada en opciones.
+      if($("#seleccion_calificaciones #opciones .active").size()>1){
+        blocker.play();
+        $("#seleccion_calificaciones #opciones .active").removeClass('active');
+        $("#seleccion_calificaciones #asignatura .active").removeClass('active');
+        $("#seleccion_calificaciones>#1 #orden").css("background-color", "");
+        $("#seleccion_calificaciones>#2 #orden").css("background-color", "#337ab7");
+        $("#seleccion_calificaciones>#2").addClass('hidden');
       }
       else{
-        $("#seleccion_calificaciones #3_3 #cursos a").addClass('hidden');
-        $("#seleccion_calificaciones #3_3 #orden").css("background-color", "#ea9239");
-        $("#seleccion_calificaciones #3_3").removeClass('hidden');
-        $("#seleccion_calificaciones #3_3 a").removeClass('active');
-        $("#seleccion_calificaciones #3_1").addClass('hidden');
-        $("#seleccion_calificaciones #3_2").addClass('hidden');
 
-        asig=$(this).attr("asig");
-        $("#seleccion_calificaciones #3_3 a[asig='"+asig+"']").removeClass('hidden');
+        div.find("button").removeClass('active');
+    
+        $(this).addClass('active');
+        id=$(this).attr("id");
 
+        //Se elimina el contenido del input al pulsar una opción anterior.
+        $("#tarea_descripcion").val("");
+        $("#tarea_descripcion").blur();
 
-        if ($(window).width() < 768) {
-          var pos = $("#seleccion_calificaciones #3_3").offset().top;
-          $("html").scrollTop(pos-300);
+        if($("#seleccion_calificaciones #nueva").hasClass('active') ){
+          $("#seleccion_calificaciones>#3_2 #orden").css("background-color", "#ea9239");
+          $("#seleccion_calificaciones>#3_2").removeClass('hidden');
+          $("#seleccion_calificaciones>#3_2 button").removeClass('active');
+          $("#seleccion_calificaciones>#3_1").addClass('hidden');
+          $("#seleccion_calificaciones>#3_3").addClass('hidden');
+
+          id=$("#asignatura button[class*='active']").attr("id");
+
+          //Se obtiene los grupos donde el profesor imparte la asignatura seleccionada.
+          $.ajax({
+            type: 'POST',
+            url: Routing.generate('grupos_asignaturasGrupo_profesor', {id:id, _locale:locale}),
+            success: function(response){
+            $("#seleccion_calificaciones>#3_2 #cursos").empty();
+              for(key in response.grupos){
+                $("#seleccion_calificaciones>#3_2 #cursos").append('<button id="'+response.grupos[key]["id"]+'" class="btn btn-primary">'+response.grupos[key]["curso"]+' '+response.grupos[key]["letra"]+'</button>');
+              }
+            }
+          })
+
+          //Se selecciona la asignatura en el select oculto.
+          $("#tarea_asignatura option[value='"+id+"']").prop('selected', true);
+
+          if ($(window).width() < 768) {
+            var pos = $("#seleccion_calificaciones>#3_2").offset().top;
+            $("html").scrollTop(pos-300);
+          }
         }
+        else if($("#seleccion_calificaciones #evaluar").hasClass('active')){
+          $("#seleccion_calificaciones>#3_1 #cursos a").addClass('hidden');
+          $("#seleccion_calificaciones>#3_1 #orden").css("background-color", "#ea9239");
+          $("#seleccion_calificaciones>#3_1").removeClass('hidden');
+          $("#seleccion_calificaciones>#3_1 a").removeClass('active');
+          $("#seleccion_calificaciones>#3_2").addClass('hidden');
+          $("#seleccion_calificaciones>#3_3").addClass('hidden');
 
+          asig=$(this).attr("asig");
+          $("#seleccion_calificaciones>#3_1 a[asig='"+asig+"']").removeClass('hidden');
+
+          if ($(window).width() < 768) {
+            var pos = $("#seleccion_calificaciones>#3_1").offset().top;
+            $("html").scrollTop(pos-300);
+          }
+        }
+        else{
+          $("#seleccion_calificaciones>#3_3 #cursos a").addClass('hidden');
+          $("#seleccion_calificaciones>#3_3 #orden").css("background-color", "#ea9239");
+          $("#seleccion_calificaciones>#3_3").removeClass('hidden');
+          $("#seleccion_calificaciones>#3_3 a").removeClass('active');
+          $("#seleccion_calificaciones>#3_1").addClass('hidden');
+          $("#seleccion_calificaciones>#3_2").addClass('hidden');
+
+          asig=$(this).attr("asig");
+          $("#seleccion_calificaciones>#3_3 a[asig='"+asig+"']").removeClass('hidden');
+
+          if ($(window).width() < 768) {
+            var pos = $("#seleccion_calificaciones>#3_3").offset().top;
+            $("html").scrollTop(pos-300);
+          }
+        }
+        $("#seleccion_calificaciones>#4").addClass('hidden');
       }
-      $("#seleccion_calificaciones #4").addClass('hidden');
-
     }
     else{
-      id=$(this).attr("id");
-
-      if($("#seleccion_calificaciones #nueva").hasClass('active')){
-
-        $("#seleccion_calificaciones #4 #orden").css("background-color", "#ea9239");
-        $("#seleccion_calificaciones #4").removeClass('hidden');
-        $("#seleccion_calificaciones #4 button").removeClass('active');
-      }
-     
-      //Se activa o desactiva los grupos selecionados en los checkbox ocultos.
-      if($("#tarea_seleccion_"+id).is(':checked')){
-        $("#tarea_seleccion_"+id).prop('checked', false);
+      //Se comprueba que sólo hay una opción marcada en las opciones anteriores.
+      if($("#seleccion_calificaciones #opciones .active").size()>1 || $("#seleccion_calificaciones #asignatura .active").size()>1){
+        blocker.play();
+        if($("#seleccion_calificaciones #opciones .active").size()>1){
+          $("#seleccion_calificaciones #opciones .active").removeClass('active');
+          $("#seleccion_calificaciones #asignatura .active").removeClass('active');
+          $("#seleccion_calificaciones #cursos .active").removeClass('active');
+          $("#seleccion_calificaciones>#1 #orden").css("background-color", "");
+          $("#seleccion_calificaciones>#2 #orden").css("background-color", "#337ab7");
+          $("#seleccion_calificaciones>#2").addClass('hidden');
+          $("#seleccion_calificaciones>#3_1 #orden").css("background-color", "#337ab7");
+          $("#seleccion_calificaciones>#3_1").addClass('hidden');
+          $("#seleccion_calificaciones>#3_2 #orden").css("background-color", "#337ab7");
+          $("#seleccion_calificaciones>#3_2").addClass('hidden');
+          $("#seleccion_calificaciones>#3_3 #orden").css("background-color", "#337ab7");
+          $("#seleccion_calificaciones>#3_3").addClass('hidden');
+        }
+        else{
+          $("#seleccion_calificaciones #asignatura .active").removeClass('active');
+          $("#seleccion_calificaciones #cursos .active").removeClass('active');
+          $("#seleccion_calificaciones>#2 #orden").css("background-color", "");
+          $("#seleccion_calificaciones>#3_1 #orden").css("background-color", "#337ab7");
+          $("#seleccion_calificaciones>#3_1").addClass('hidden');
+          $("#seleccion_calificaciones>#3_2 #orden").css("background-color", "#337ab7");
+          $("#seleccion_calificaciones>#3_2").addClass('hidden');
+          $("#seleccion_calificaciones>#3_3 #orden").css("background-color", "#337ab7");
+          $("#seleccion_calificaciones>#3_3").addClass('hidden');
+        }
       }
       else{
-        $("#tarea_seleccion_"+id).prop('checked', true);
-      }
-
-      //Se selecciona en la lista el grupo seleccionado, aunque sólo vale para validar el formulario ya que se obtiene en el controlador mediante el array.
-      setTimeout(function(){
-        if($("#cursos .active").size()>0){
-          $("#tarea_grupo option[value='"+id+"']").prop('selected', true);
-        }else{
-          $("#tarea_grupo option[value='']").prop('selected', true);
-          $("#seleccion_calificaciones #4").addClass('hidden');
+        id=$(this).attr("id");
+        if($("#seleccion_calificaciones #nueva").hasClass('active')){
+          $("#seleccion_calificaciones>#4 #orden").css("background-color", "#ea9239");
+          $("#seleccion_calificaciones>#4").removeClass('hidden');
+          $("#seleccion_calificaciones>#4 button").removeClass('active');
         }
-      },10);
+     
+        //Se activa o desactiva los grupos selecionados en los checkbox ocultos.
+        if($("#tarea_seleccion_"+id).is(':checked')){
+          $("#tarea_seleccion_"+id).prop('checked', false);
+        }
+        else{
+          $("#tarea_seleccion_"+id).prop('checked', true);
+        }
 
-      if ($(window).width() < 768) {
-        var pos = $("#seleccion_calificaciones #4").offset().top;
-        $("html").scrollTop(pos);
+        //Se selecciona en la lista el grupo seleccionado, aunque sólo vale para validar el formulario ya que se obtiene en el controlador mediante el array.
+        setTimeout(function(){
+          if($("#cursos .active").size()>0){
+            $("#tarea_grupo option[value='"+id+"']").prop('selected', true);
+          }else{
+            $("#tarea_grupo option[value='']").prop('selected', true);
+            $("#seleccion_calificaciones>#4").addClass('hidden');
+          }
+        },10);
+
+        if ($(window).width() < 768) {
+          var pos = $("#seleccion_calificaciones>#4").offset().top;
+          $("html").scrollTop(pos);
+        }
       }
     }
-
   });
 
 
@@ -1521,7 +1584,341 @@ $(document).ready(function () {
     if(asig=="todas"){
       $("#busqueda_calificaciones option:eq(0)").prop('selected', true);
     }
+  });
 
+
+
+  ///////////////////////////////////////////
+  //    Faltas de Asistencia   Profesor    //
+  ///////////////////////////////////////////
+
+
+  //Se pulsa un botón en las opciones de selección.
+  $(document).on('click',"#seleccion_ausencias button",function(event){ 
+    div=$(this).closest("div");
+    div.find("button").removeClass('active');
+    $(this).addClass('active');
+
+    locale=$("#seleccion_ausencias").attr("locale");
+    orden=$(this).closest("div").parent();
+    //Se marca la opción actual.
+    $("#seleccion_ausencias #orden").css("background-color", "#337ab7");
+    if(orden.attr("id")=="1"){
+      $("#seleccion_ausencias>#2 #orden").css("background-color", "#ea9239");
+      $("#seleccion_ausencias>#2").removeClass('hidden');
+      $("#seleccion_ausencias>#3 button").removeClass('active');
+
+      if ($(window).width() < 768) {
+        var pos = $("#seleccion_ausencias>#2").offset().top;
+        $("html").scrollTop(pos-300);
+      }
+      id=$(this).attr("id");
+      //Se obtiene las asignaturas impartidas por el profesor en ese grupo.
+      $.ajax({
+          type: 'POST',
+          url: Routing.generate('asignaturasGrupo_profesor', {id:id, _locale:locale}),
+          success: function(response){
+           $("#seleccion_ausencias #asignatura").empty();
+            for(key in response.asignaturas){
+              $("#seleccion_ausencias #asignatura").append('<button id="'+response.asignaturas[key]["id"]+'" class="btn btn-primary col-xs-11 ">'+response.asignaturas[key]["abreviatura"]+'</button>');
+            }
+
+            $("#seleccion_ausencias>#3").addClass('hidden');
+          }
+      })
+    }
+    else if(orden.attr("id")=="2"){
+      //Se comprueba que sólo se marca una opción.
+      if($("#seleccion_ausencias #cursos .active").size()>1){
+        blocker.play();
+        $("#seleccion_ausencias #cursos .active").removeClass('active');
+        $("#seleccion_ausencias #asignatura .active").removeClass('active');
+        $("#seleccion_ausencias>#1 #orden").css("background-color", "");
+        $("#seleccion_ausencias>#2 #orden").css("background-color", "#337ab7");
+        $("#seleccion_ausencias>#2").addClass('hidden');
+      }
+      else{
+        $("body").addClass('waiting');
+
+        id=$(this).attr("id");
+        $("#seleccion_ausencias>#3 button").removeClass('active');
+        $("#seleccion_ausencias>#3 #orden").css("background-color", "#ea9239");
+
+        if ($(window).width() < 768) {
+          var pos = $("#seleccion_ausencias>#3").offset().top;
+          $("html").scrollTop(pos-300);
+        }
+        num=10; //Números de días anteriores a buscar.
+        id=$(this).attr("id");
+        grupo=$("#seleccion_ausencias #cursos .active").attr("id");
+        //Se obtiene las fechas donde el profesor ha imparte clase al grupo en los últimos 10 días.
+        $.ajax({
+            type: 'POST',
+            url: Routing.generate('fechasImpartidas_profesor', {num:num, id:id, grupo:grupo, _locale:locale}),
+            success: function(response){
+              $("#seleccion_ausencias #fecha #dia").empty();
+              $("#seleccion_ausencias #fecha #hora").empty();
+              $("#seleccion_ausencias #fecha #dia").removeClass('hidden');
+              $("#seleccion_ausencias #fecha #hora").addClass('hidden');
+              $("#seleccion_ausencias #fecha #error").addClass('hidden');
+              //Se asigna el valor inicial al select del nº de fechas a mostrar.
+              $("#seleccion_ausencias #num_fechas option[value='10']").prop('selected', true);
+              $("body").removeClass('waiting');
+
+              if(response.fechas){
+                if(locale=="es"){
+                  $("#seleccion_ausencias #fecha #dia").append('<option value="" class="col-xs-12 hidden selected">Seleccione una fecha</option>');
+                }
+                else{
+                  $("#seleccion_ausencias #fecha #dia").append('<option value="" class="col-xs-12 hidden selected">Select a date</option>');
+                }                for(key in response.fechas){
+                  $("#seleccion_ausencias #fecha #dia").append('<option value="'+response.fechas[key]+'" class="col-xs-12 ">'+response.fechas[key]+'</option>');
+                }
+                $("#seleccion_ausencias #ultimas_fechas").removeClass('hidden');
+
+              }
+              else{
+                $("#seleccion_ausencias #fecha #error").removeClass('hidden');
+                $("#seleccion_ausencias #fecha #dia").addClass('hidden');
+                $("#seleccion_ausencias #fecha #hora").addClass('hidden');
+                $("#seleccion_ausencias #ultimas_fechas").addClass('hidden');
+              }
+
+              $("#seleccion_ausencias>#3").removeClass('hidden');
+            }
+        })
+      }
+    }
+  });
+
+
+  //Selección para mostrar el nº de fechas impartidas anteriormente por el profesor.
+  $(document).on('change',"#seleccion_ausencias #num_fechas",function(event){ 
+    num=$(this).find("option:selected").val();
+    //Se comprueba que las opciones anteriores sólo tenga un botón seleccionado.
+    if($("#seleccion_ausencias #cursos .active").size()>1 || $("#seleccion_ausencias #asignatura .active").size()>1){
+        blocker.play();
+
+        if($("#seleccion_ausencias #cursos .active").size()>1){
+          $("#seleccion_ausencias #cursos .active").removeClass('active');
+          $("#seleccion_ausencias #asignatura .active").removeClass('active');
+          $("#seleccion_ausencias #alumnos .active").removeClass('active');
+          $("#seleccion_ausencias>#1 #orden").css("background-color", "");
+          $("#seleccion_ausencias>#2 #orden").css("background-color", "#337ab7");
+          $("#seleccion_ausencias>#2").addClass('hidden');
+          $("#seleccion_ausencias>#3 #orden").css("background-color", "#337ab7");
+          $("#seleccion_ausencias>#3").addClass('hidden');
+        }
+        else{
+          $("#seleccion_ausencias #asignatura .active").removeClass('active');
+          $("#seleccion_ausencias #alumnos .active").removeClass('active');
+          $("#seleccion_ausencias>#2 #orden").css("background-color", "");
+          $("#seleccion_ausencias>#3 #orden").css("background-color", "#337ab7");
+          $("#seleccion_ausencias>#3").addClass('hidden');
+        }
+      }
+      else{
+        grupo=$("#seleccion_ausencias #cursos .active").attr("id");
+        id=$("#seleccion_ausencias #asignatura .active").attr("id");
+        $("body").addClass('waiting');
+
+        //Se obtiene las fechas donde el profesor imparte clase al grupo en los último N días.
+        $.ajax({
+            type: 'POST',
+            url: Routing.generate('fechasImpartidas_profesor', {num:num, id:id, grupo:grupo, _locale:locale}),
+            success: function(response){
+
+              $("#seleccion_ausencias #fecha #hora").empty();
+
+              $("#seleccion_ausencias #fecha #dia").empty();
+              $("#seleccion_ausencias #fecha #hora").empty();
+              $("#seleccion_ausencias #fecha #dia").removeClass('hidden');
+              $("#seleccion_ausencias #fecha #hora").addClass('hidden');
+              $("#seleccion_ausencias #fecha #error").addClass('hidden');
+              $("body").removeClass('waiting');
+
+              if(response.fechas){
+
+                if(locale=="es"){
+                  $("#seleccion_ausencias #fecha #dia").append('<option value="" class="col-xs-12 hidden selected">Seleccione una fecha</option>');
+                }
+                else{
+                  $("#seleccion_ausencias #fecha #dia").append('<option value="" class="col-xs-12 hidden selected">Select a date</option>');
+                }
+                for(key in response.fechas){
+                  $("#seleccion_ausencias #fecha #dia").append('<option value="'+response.fechas[key]+'" class="col-xs-12 ">'+response.fechas[key]+'</option>');
+                }
+                $("#seleccion_ausencias #ultimas_fechas").removeClass('hidden');
+              }
+              else{
+                $("#seleccion_ausencias #fecha #error").removeClass('hidden');
+                $("#seleccion_ausencias #fecha #dia").addClass('hidden');
+                $("#seleccion_ausencias #fecha #hora").addClass('hidden');
+                $("#seleccion_ausencias #ultimas_fechas").addClass('hidden');
+              }
+
+              $("#seleccion_ausencias>#3").removeClass('hidden');
+            }
+        })
+      }
+  });
+
+  //Selección del día.
+  $(document).on('change',"#seleccion_ausencias #dia",function(event){ 
+    fecha=$(this).find("option:selected").val();
+    //Se comprueba que las opciones anteriores sólo tenga un botón seleccionado.
+    if($("#seleccion_ausencias #cursos .active").size()>1 || $("#seleccion_ausencias #asignatura .active").size()>1){
+        blocker.play();
+        if($("#seleccion_ausencias #cursos .active").size()>1){
+          $("#seleccion_ausencias #cursos .active").removeClass('active');
+          $("#seleccion_ausencias #asignatura .active").removeClass('active');
+          $("#seleccion_ausencias #alumnos .active").removeClass('active');
+          $("#seleccion_ausencias>#1 #orden").css("background-color", "");
+          $("#seleccion_ausencias>#2 #orden").css("background-color", "#337ab7");
+          $("#seleccion_ausencias>#2").addClass('hidden');
+          $("#seleccion_ausencias>#3 #orden").css("background-color", "#337ab7");
+          $("#seleccion_ausencias>#3").addClass('hidden');
+        }
+        else{
+          $("#seleccion_ausencias #asignatura .active").removeClass('active');
+          $("#seleccion_ausencias #alumnos .active").removeClass('active');
+          $("#seleccion_ausencias>#2 #orden").css("background-color", "");
+          $("#seleccion_ausencias>#3 #orden").css("background-color", "#337ab7");
+          $("#seleccion_ausencias>#3").addClass('hidden');
+        }
+      }
+      else{
+        grupo=$("#seleccion_ausencias #cursos .active").attr("id");
+        id=$("#seleccion_ausencias #asignatura .active").attr("id");
+        $("body").addClass('waiting');
+
+        $.ajax({
+            type: 'POST',
+            url: Routing.generate('horasImpartidaClase_profesor', {fecha:fecha, id:id, grupo:grupo, _locale:locale}),
+            success: function(response){
+
+              $("body").removeClass('waiting');
+              $("#seleccion_ausencias #fecha #hora").empty();
+              $("#seleccion_ausencias #fecha #hora").removeClass('hidden');
+              $("#seleccion_ausencias #fecha #input_hora").addClass('hidden');
+              
+              if(response.num == 1){
+                for(key in response.fechas){
+                  $("#seleccion_ausencias #fecha #hora").append('<option value="'+key+'" class="col-xs-12 ">'+response.fechas[key]+'</option>');
+                }
+                //Al tener solo una hora se llama a la función de obtener el listado de fastas directamente (ver evento change siguiente).
+                $("#seleccion_ausencias #hora").change();
+              }
+              else{
+                if(locale=="es"){
+                  $("#seleccion_ausencias #fecha #hora").append('<option value="" class="col-xs-12 hidden selected">Seleccione una hora</option>');
+                }
+                else{
+                  $("#seleccion_ausencias #fecha #hora").append('<option value="" class="col-xs-12 hidden selected">Select an hour</option>');
+                }
+                for(key in response.fechas){
+                  $("#seleccion_ausencias #fecha #hora").append('<option value="'+key+'" class="col-xs-12 ">'+response.fechas[key]+'</option>');
+                }
+              }
+            }
+        })
+      }
+  });
+
+  //Selección de la hora.
+  $(document).on('change',"#seleccion_ausencias #hora",function(event){ 
+    //Se comprueba que las opciones anteriores sólo tenga un botón seleccionado.
+    if($("#seleccion_ausencias #cursos .active").size()>1 || $("#seleccion_ausencias #asignatura .active").size()>1){
+        blocker.play();
+        if($("#seleccion_ausencias #cursos .active").size()>1){
+          $("#seleccion_ausencias #cursos .active").removeClass('active');
+          $("#seleccion_ausencias #asignatura .active").removeClass('active');
+          $("#seleccion_ausencias #alumnos .active").removeClass('active');
+          $("#seleccion_ausencias>#1 #orden").css("background-color", "");
+          $("#seleccion_ausencias>#2 #orden").css("background-color", "#337ab7");
+          $("#seleccion_ausencias>#2").addClass('hidden');
+          $("#seleccion_ausencias>#3 #orden").css("background-color", "#337ab7");
+          $("#seleccion_ausencias>#3").addClass('hidden');
+        }
+        else{
+          $("#seleccion_ausencias #asignatura .active").removeClass('active');
+          $("#seleccion_ausencias #alumnos .active").removeClass('active');
+          $("#seleccion_ausencias>#2 #orden").css("background-color", "");
+          $("#seleccion_ausencias>#3 #orden").css("background-color", "#337ab7");
+          $("#seleccion_ausencias>#3").addClass('hidden');
+        }
+      }
+      else{
+        horario=$(this).find("option:selected").val();
+        fecha=$("#seleccion_ausencias #dia option:selected").val();
+        grupo=$("#seleccion_ausencias #cursos .active").attr("id");
+        asig=$("#seleccion_ausencias #asignatura .active").attr("id");
+        $("body").addClass('waiting');
+
+        $("#tabla_ausencia_profesor").load(Routing.generate("claseSeleccionada_profesor", {fecha:fecha,horario:horario, asig:asig, grupo:grupo, _locale:locale}), function(){
+          $("body").removeClass('waiting');
+        }); 
+      }
+  });
+
+
+  //Se habilita o deshabilita el input de retraso al seleccionar el de falta.
+  $(document).on('change',"#tabla_ausencia_profesor table td[id='falta'] input",function(event){ 
+
+    if($(this).closest("td").find(':checkbox:checked').length > 0){
+      $(this).closest("td").next().find("input").attr('disabled', 'disabled');
+    }
+    else{
+      $(this).closest("td").next().find("input").removeAttr( "disabled" );
+    }
+
+    //Se habilita o deshabilita el submit según las faltas seleccionadas.
+    if($("#tabla_ausencia_profesor td :checkbox:checked").length > 0){
+      $("#intranet_ausencia_submit").removeClass( "disabled" );
+    }
+    else{
+      $("#intranet_ausencia_submit").addClass( "disabled" );
+    }
+  });
+
+    //Se habilita o deshabilita el input de falta al seleccionar el de retraso.
+  $(document).on('change',"#tabla_ausencia_profesor table td[id='retraso'] input",function(event){ 
+
+    if($(this).closest("td").find(':checkbox:checked').length > 0){
+      $(this).closest("td").prev().find("input").attr('disabled', 'disabled');
+    }
+    else{
+      $(this).closest("td").prev().find("input").removeAttr( "disabled" );
+    }
+
+    //Se habilita o deshabilita el submit según las faltas seleccionadas.
+    if($("#tabla_ausencia_profesor td :checkbox:checked").length > 0){
+      $("#intranet_ausencia_submit").removeClass( "disabled" );
+    }
+    else{
+      $("#intranet_ausencia_submit").addClass( "disabled" );
+    }
+  });
+
+  //Se habilita o deshabilita el input de falta al seleccionar el de retraso.
+  $(document).on('click',"#tabla_ausencia_profesor td :checkbox",function(event){ 
+    
+    id=$(this).closest("tr").attr("id");
+
+    if($(this).closest("td").attr("id")=="falta"){
+      $("#ausencia #ausencia_faltas_"+id).click();
+    }
+    else{
+      $("#ausencia #ausencia_retrasos_"+id).click();
+    }
+  });
+
+
+  //Se añade el id de la asencia en botón de eliminar de la ventana modal para luego generar la ruta.
+  $(document).on('click','#tabla_ausencia_profesor #btn_eliminar' ,function() {
+    id=$(this).attr("falta");
+    $("#eliminar_ausencia_modal .modal-body").load(Routing.generate("ausencia_eliminar", {id:id, _locale:locale}), function(){
+    }); 
   });
 
 
@@ -1531,3 +1928,5 @@ $(document).ready(function () {
 
 
 });
+
+

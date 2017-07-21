@@ -20,6 +20,57 @@
         $("#datos_tarea #lista_tareas a[id='"+tarea+"']").closest("div").addClass('active');
 
      
+    // Tabla con la opción de ordenar y búsqueda.
+    $('#table_teacher').DataTable( { //on( 'page.dt',   function () { $(".current").prop("disabled", true); } )
+        //"aLengthMenu": [[25, 50, 100, 250, 500, -1], [25, 50, 100, 250, 500, "All"]],
+                initComplete: function () {
+            this.api().columns().every( function (e) {
+                var column = this;
+                var select = $('<select class="'+e+'"><option value=""></option></select>')
+                    .appendTo('.select_table')
+                    .on( 'change', function () {
+                        var val = $.fn.dataTable.util.escapeRegex(
+                            $(this).val()
+                        );
+ 
+                        column
+                            .search( val ? '^'+val+'$' : '', true, false )
+                            .draw();
+                    } );
+ 
+                column.data().unique().sort().each( function ( d, j ) {
+                    select.append( '<option value="'+d+'">'+d+'</option>' )
+                } );
+                select.append( '<option value="nada">nada</option>' )
+            } );
+        },
+        "order": [[ 0, "asc" ]],
+        "aLengthMenu": [[-1], [ "All"]],
+        "columnDefs": [ {
+            "targets": 'no-sort',
+            "orderable": false,} ],
+        "language": {
+            "zeroRecords": "Lo siento, no se ha encontrado ningún registro coincidente",
+            "emptyTable": "No hay alumnos en el curso anterior pendientes de matriculación",
+            "lengthMenu": "Mostrar _MENU_ entradas",
+            "loadingRecords": "Cargando...",
+            "processing":     "Processando...",
+            "info": "Página _PAGE_ de _PAGES_",
+            "infoEmpty": "No hay registros disponibles",
+            "infoFiltered": "(filtrado de _MAX_ registros)",
+            "search": "Buscar:",
+            "Next": "Siguiente",
+            "paginate": {
+                "previous": "Anterior",
+                "next": "Siguiente"
+            }
+        }
+    });
+
+    $(".dataTables_info").addClass("hidden");
+    $(".dataTables_paginate").addClass("hidden");
+    $(".dataTables_length").addClass("hidden");
+    $('.dataTables_filter').addClass("hidden");
 
     </script>
  {% endblock %}
@@ -153,12 +204,12 @@
                     </div>
                 </div>             
 
-                <table class="lista-alumnos table table-striped">
+                <table id="table_teacher" class="lista-alumnos table table-striped">
                     <thead >
                         <tr>
                             <th class="col-xs-1 center">Nº</th>
-                            <th class="col-xs-8 col-sm-7">{% trans %}Apellidos, Nombre{% endtrans %}</th>
-                            <th class="col-xs-3 col-sm-4 center">{% trans %}Calificación{% endtrans %}</th>
+                            <th class="col-xs-8 col-sm-7 no-sort">{% trans %}Apellidos, Nombre{% endtrans %}</th>
+                            <th class="col-xs-3 col-sm-4 center no-sort">{% trans %}Calificación{% endtrans %}</th>
                         </tr>
                     </thead> 
                     <tbody>
@@ -168,7 +219,7 @@
                                 {{ alumno.vars.value.alumno.numAlum }}
                             </td>
                             <td class="col-xs-8 col-sm-7 ">
-                                {{ alumno.vars.value.alumno }}
+                                {{ alumno.vars.value.alumno.apellido1 ~ " " ~ alumno.vars.value.alumno.apellido2 ~ ", " ~ alumno.vars.value.alumno.nombre }}
                             </td>
                             <td class="col-xs-3 col-sm-4 center">
                                 {{ form_widget(alumno.nota,{ 'attr':{'class':'notas'}}) }}

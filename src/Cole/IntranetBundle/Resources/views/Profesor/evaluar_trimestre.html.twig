@@ -130,7 +130,7 @@
                                     {{ alumno.vars.value.alumno.numAlum }}
                                 </td>
                                 <td class="col-xs-8 col-sm-6">
-                                    {{ alumno.vars.value.alumno }}
+                                    {{alumno.vars.value.alumno.apellido1 ~ " " ~ alumno.vars.value.alumno.apellido2 ~ ", " ~ alumno.vars.value.alumno.nombre }}
                                 </td>
                                 {% if trimestre == 1 %}
                                     <td trimestre="1" class="col-xs-1 center">

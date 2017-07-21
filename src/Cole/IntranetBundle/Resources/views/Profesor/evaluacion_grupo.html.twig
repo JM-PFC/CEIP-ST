@@ -75,7 +75,7 @@
                                     {{ alumno.numAlum }}
                                 </td>
                                 <td class="col-xs-7 col-sm-5">
-                                    {{ alumno }}
+                                    {{ alumno.apellido1 ~ " " ~ alumno.apellido2 ~ ", " ~ alumno.nombre  }}
                                 </td>
                                 <td class="col-xs-1 center"> 
                                     <i class="fa fa-search click" data-target="#evaluacion_alumno" data-toggle="modal" data-backdrop="static" data-placement="left" title="" data-original-title="{% trans %}Ver Evaluación{% endtrans %}"> </i>

@@ -12,8 +12,8 @@
         $("#seguimiento_profesor option[value='"+profesor+"']").prop('selected', true);
 
         nivel={{entity.nivel|json_encode()|raw}};
-        if(nivel=="Infantil"){
-            grupo={{tutor_grupo.id|json_encode()|raw}};
+        if(nivel=="Infantil" && tutor_grupo){
+            grupo={{tutor_grupo|json_encode()|raw}};
             $("#seguimiento_grupo option[value='"+grupo+"']").prop('selected', true);
         }
 

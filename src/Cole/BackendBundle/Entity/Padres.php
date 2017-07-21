@@ -197,6 +197,11 @@ class Padres implements UserInterface, \Serializable
     */
     private $tutorias;
 
+    /**
+    * @ORM\OneToMany(targetEntity="Cole\IntranetBundle\Entity\Ausencia", mappedBy="responsable", cascade={"remove"})
+    */
+    private $faltas;
+
     public function __construct()
     {
         $this->activo = true;
@@ -693,5 +698,39 @@ class Padres implements UserInterface, \Serializable
     public function getRespuesta()
     {
         return $this->respuesta;
+    }
+
+
+    /**
+     * Add faltas
+     *
+     * @param \Cole\IntranetBundle\Entity\Ausencia $faltas
+     * @return Padres
+     */
+    public function addFalta(\Cole\IntranetBundle\Entity\Ausencia $faltas)
+    {
+        $this->faltas[] = $faltas;
+
+        return $this;
+    }
+
+    /**
+     * Remove faltas
+     *
+     * @param \Cole\IntranetBundle\Entity\Ausencia $faltas
+     */
+    public function removeFalta(\Cole\IntranetBundle\Entity\Ausencia $faltas)
+    {
+        $this->faltas->removeElement($faltas);
+    }
+
+    /**
+     * Get faltas
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getFaltas()
+    {
+        return $this->faltas;
     }
 }

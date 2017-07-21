@@ -89,3 +89,6 @@ IntranetBundle_cursa:
     resource: "@IntranetBundle/Resources/config/routing/cursa.yml"
     prefix:   /cursa
 
+IntranetBundle_ausencia:
+    resource: "@IntranetBundle/Resources/config/routing/ausencia.yml"
+    prefix:   /ausencia

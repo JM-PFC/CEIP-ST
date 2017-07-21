@@ -50,6 +50,12 @@ intranet_alumno_seguimiento:
     path:     /seguimiento/{num}
     defaults: { _controller: IntranetBundle:Alumno:seguimiento}
 
+intranet_alumno_ausencia:
+    path:     /ausencia
+    defaults: { _controller: IntranetBundle:Alumno:ausencia}
+    options:
+        expose: true
+
 intranet_alumno_calificaciones:
     path:     /calificaciones
     defaults: { _controller: IntranetBundle:Alumno:calificaciones}
