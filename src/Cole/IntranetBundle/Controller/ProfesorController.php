@@ -33,9 +33,11 @@ class ProfesorController extends Controller
     	$em = $this->getDoctrine()->getManager();
 
         $entity = $this->get('security.context')->getToken()->getUser();
+        $tutor_grupo= $em->getRepository('BackendBundle:Grupo')->findOneByProfesor($entity);
 
 		return $this->render('IntranetBundle:Profesor:index.html.twig', array(
             'entity' => $entity,
+            'tutor_grupo' =>$tutor_grupo,
             'id'=>$entity->getId()));
     }
 
@@ -550,13 +552,6 @@ class ProfesorController extends Controller
         $em = $this->getDoctrine()->getManager();
 
         $entity = $this->get('security.context')->getToken()->getUser();
-        $tutor_grupo= $em->getRepository('BackendBundle:Grupo')->findOneByProfesor($entity);
-        if($tutor_grupo){
-            $id_grupo=$tutor_grupo->getId();
-        }
-        else{
-            $id_grupo=null;
-        }
 
         if($entity->getNivel()=="Primaria"){
             $cursos = $em->getRepository('BackendBundle:Imparte')->findAsignacionesProfesor($entity);
@@ -613,7 +608,7 @@ class ProfesorController extends Controller
         $asignatura=null;
         $faltas=null;
         if($hora_inicio<$hora && $hora<$hora_fin){
-            $horario = $em->getRepository('BackendBundle:Horario')->findById($clase);
+            $horario = $em->getRepository('BackendBundle:Horario')->findOneById($clase);
             $imparte = $em->getRepository('BackendBundle:Imparte')->findExistence($entity, $dia_semana, $horario);
 
             if($imparte){
@@ -636,7 +631,6 @@ class ProfesorController extends Controller
             }
         }
 
-
         $ausencia = new Ausencia();
         $form   = $this->createCreateAusenciaForm($ausencia);
 
@@ -653,18 +647,32 @@ class ProfesorController extends Controller
         else{
             $id_asignatura=null;
         }
-        
+
+
+        $tutor_grupo= $em->getRepository('BackendBundle:Grupo')->findOneByProfesor($entity);
+        if($tutor_grupo){
+            $id_grupo=$tutor_grupo->getId();
+
+            //Se obtiene las faltas justificadas pendientes de de confirmación.
+            $pendientes=$em->getRepository('IntranetBundle:Ausencia')->findFaltasPendientes($tutor_grupo); 
+        }
+        else{
+            $id_grupo=null;
+
+            $pendientes=null;
+        }
 
         return $this->render('IntranetBundle:Profesor:asistencia.html.twig', array(
             'entity' => $entity,
             'tutor_grupo' => $id_grupo,
             'cursos'=>$cursos,
             'alumnos'=>$alumnos,
-            'form'   => $form->createView(),
+            'form'=> $form->createView(),
             'asignatura'=>$id_asignatura,
             'horario'=>$id_horario,
-            'fecha'=>$hoy,
-            'faltas'=>$array
+            'fecha'=>date('d-m-Y'),
+            'faltas'=>$array,
+            'pendientes' => $pendientes
         ));
     }
 

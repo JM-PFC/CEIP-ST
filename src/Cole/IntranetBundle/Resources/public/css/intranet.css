@@ -689,6 +689,12 @@ form{
     .container_submit div{
         margin-left: 15% !important;
     }
+    #tabla_ausencia_profesor{
+        margin-bottom: 20px !important;
+    }
+    #tabla_justificaciones{
+        padding: 0 !important;
+    }
     
 }
 /* Estilos para Pc*/
@@ -1765,7 +1771,7 @@ ul, ol {
     border-right: 1px solid grey !important;
     border-left: 1px solid grey !important;
     border-bottom: 1px solid grey !important;
-    min-height: 265px ;
+    min-height: 265px !important;
 }
 .img-small {
     background-position: center center;
@@ -2861,7 +2867,7 @@ table tr td a{
     opacity: 0.5;
 }
 .container_contenido_tabla i:hover{
-    color: #bc1010 !important;
+    color: #bc1010 ;
 }
 #contenedor_reserva  .ui-datepicker-prev a:hover{
     background: none !important;
@@ -3531,6 +3537,11 @@ table tr td a{
 #tabla_ausencia_profesor{
     display: block;
     clear: both;
+    margin-top: 0;
+}
+#tabla_ausencia_profesor i{
+    cursor: default;
+    background: none !important;
 }
 #tabla_ausencia_profesor h4{
     margin: 0;
@@ -3564,4 +3575,70 @@ table[class*='lista-alumnos']{
 }
 #ausencia button{
     min-width: 100px;
+}
+#tabla_asistencia .container_contenido_tabla div, #tabla_retrasos .container_contenido_tabla div {
+    padding-bottom: 6px !important;
+    padding-top: 6px !important;
+}
+#tabla_asistencia .container_contenido_tabla i{
+    font-size: 23px !important;
+}
+#tabla_asistencia .container_contenido_tabla #justificar{
+    padding-top: 4px !important; 
+    padding-bottom: 2px !important; 
+
+}
+.tablas_faltas th:nth-child(2) {
+    border-radius: 0 !important;
+}
+.tablas_faltas th, #tabla_asistencia .container-content div, #tabla_retrasos .container-content div {
+    text-align: center;
+}
+#tabla_asistencia .container-content div, #tabla_retrasos .container-content div{
+    padding-left: 10px !important;
+    padding-right: 5px  !important;
+}
+#tabla_asistencia i[class*='fa-check-square']{
+    background: none !important;
+    cursor:default;
+}
+#tabla_asistencia i[class*='fa-check-square']:hover{
+    color: none !important;
+}
+#tabla_justificaciones{
+    padding-right: 0 !important;
+}
+#tabla_justificaciones .container-content{
+    min-height: 236px !important;
+    max-height: 236px !important;
+}
+#tabla_justificaciones th{
+    text-align: center !important;
+    border-radius: 5px 5px 0 0;
+    background: #1e631e none repeat scroll 0 0 !important;
+}
+#tabla_justificaciones .container_contenido_tabla:hover{
+    cursor: pointer;
+}
+#tabla_justificaciones .container_contenido_tabla>div{
+    background: #C5EBB9 ;
+    color: #195c04;
+}
+#tabla_justificaciones .container_contenido_tabla>div:hover{
+    background: #F7BD83 !important;
+    color: #334c73 !important;
+}
+ #confirmar_justificacion_modal textarea {
+    height: 130px !important;
+    background: #f5f5f5;
+}
+ #confirmar_justificacion_modal label{
+    width: 22% !important;
+}
+#confirmar_justificacion_modal .btn_azul{
+    margin: 10px 15px;
+}
+#confirmar_justificacion_modal .active {
+    background: #e57200 none repeat scroll 0 0 !important;
+    border: 1px grey inset !important;
 }

@@ -60,8 +60,23 @@ class AusenciaController extends Controller
 
                 $alum = $em->getRepository('BackendBundle:Alumno')->findOneById($alumno);
                 $entity->setAlumno($alum);  
-                $entity->setTipo("Falta");      
+                $entity->setTipo("Falta"); 
 
+                //Se comprueba si ya el responsable ha justificado otra falta del mismo día previamente.
+                $falta_justificada=$em->getRepository('IntranetBundle:Ausencia')->findFaltaDiaJustificada($alum, $entity->getFecha());   
+                if($falta_justificada){
+                    $entity->setJustificacion($falta_justificada->getJustificacion());
+
+                    if($falta_justificada->getResponsable()){
+                        $entity->setResponsable($falta_justificada->getResponsable());
+                    }
+                    if($falta_justificada->getTipo()=="Falta justificada"){
+                        $entity->setTipo("Falta justificada");
+                    }
+                    if($falta_justificada->getJustificada()!=null){
+                        $entity->setJustificada($falta_justificada->getJustificada());
+                    }
+                }
                 $em->persist($entity);
                 $em->flush();
             }
@@ -173,6 +188,33 @@ class AusenciaController extends Controller
         ));
     }
 
+    public function confirmarAction($id)
+    {
+        $em = $this->getDoctrine()->getManager();
+
+        $entity = $em->getRepository('IntranetBundle:Ausencia')->find($id);
+
+        if (!$entity) {
+            throw $this->createNotFoundException('Unable to find Ausencia entity.');
+        }
+
+
+        $alumno=$entity->getAlumno();
+        $responsable=$entity->getResponsable();
+        $fecha=$entity->getFecha();
+
+        $editForm = $this->createEditConfirmarForm($entity);
+        $deleteForm = $this->createDeleteForm($id);
+
+        return $this->render('IntranetBundle:Ausencia:confirmar.html.twig', array(
+            'entity'      => $entity,
+            'edit_form'   => $editForm->createView(),
+            'delete_form' => $deleteForm->createView(),
+            'alumno'=>$alumno,
+            'responsable'=>$responsable,
+            'fecha'=>$fecha
+        ));
+    }
 
     public function eliminarAusenciaAction($id)
     {
@@ -203,7 +245,21 @@ class AusenciaController extends Controller
             'method' => 'PUT',
         ));
 
-        $form->add('submit', 'submit', array('label' => 'Update'));
+        $titulo=$this->get("translator")->trans("Enviar");
+        $form->add('submit', 'submit', array('label' => $titulo, 'attr' => array('class' => 'btn btn-success')));
+
+        return $form;
+    }
+
+    private function createEditConfirmarForm(Ausencia $entity)
+    {
+        $form = $this->createForm(new AusenciaType(), $entity, array(
+            'action' => $this->generateUrl('ausencia_update_confirmar', array('id' => $entity->getId())),
+            'method' => 'PUT',
+        ));
+
+        $titulo=$this->get("translator")->trans("Enviar");
+        $form->add('submit', 'submit', array('label' => $titulo, 'attr' => array('class' => 'btn btn-success')));
 
         return $form;
     }
@@ -215,20 +271,34 @@ class AusenciaController extends Controller
     {
         $em = $this->getDoctrine()->getManager();
 
+        $responsable = $this->get('security.context')->getToken()->getUser();
         $entity = $em->getRepository('IntranetBundle:Ausencia')->find($id);
-
         if (!$entity) {
             throw $this->createNotFoundException('Unable to find Ausencia entity.');
         }
+        //Se obtiene el alumno y el día para obtener las faltas del mismo día y añadirle la justificación a todas.
+        $alumno=$entity->getAlumno();
+        $fecha=$entity->getFecha();
+        $faltas_dia=$em->getRepository('IntranetBundle:Ausencia')->findFaltasAlumnoDia($alumno, $fecha);
+
 
         $deleteForm = $this->createDeleteForm($id);
         $editForm = $this->createEditForm($entity);
         $editForm->handleRequest($request);
 
         if ($editForm->isValid()) {
+            $justificacion=$entity->getJustificacion();
+            foreach($faltas_dia as $falta){
+                $falta->setJustificacion($justificacion);
+                $falta->setResponsable($responsable);
+                $em->flush();
+            }
+            $entity->setResponsable($responsable);
             $em->flush();
-
-            return $this->redirect($this->generateUrl('ausencia_edit', array('id' => $id)));
+                
+            $ms = $this->get('translator')->trans('La justificación ha sido enviada correctamente. En caso de ser aceptada se mostrará la afirmación en la tabla de ausencias.');
+            $this->get('session')->getFlashBag()->add('notice',$ms);
+            return $this->redirect($this->generateUrl('intranet_alumno_ausencia', array('id' =>$entity->getAlumno()->getId())));
         }
 
         return $this->render('IntranetBundle:Ausencia:edit.html.twig', array(
@@ -237,6 +307,57 @@ class AusenciaController extends Controller
             'delete_form' => $deleteForm->createView(),
         ));
     }
+
+    public function updateConfirmarAction(Request $request, $id)
+    {
+        $em = $this->getDoctrine()->getManager();
+
+        $responsable = $this->get('security.context')->getToken()->getUser();
+        $entity = $em->getRepository('IntranetBundle:Ausencia')->find($id);
+        if (!$entity) {
+            throw $this->createNotFoundException('Unable to find Ausencia entity.');
+        }
+        //Se obtiene el alumno y el día para obtener las faltas del mismo día y añadirle la confirmación a todas.
+        $alumno=$entity->getAlumno();
+        $fecha=$entity->getFecha();
+        $faltas_dia=$em->getRepository('IntranetBundle:Ausencia')->findFaltasAlumnoDia($alumno, $fecha);
+
+        $justificacion=$entity->getJustificacion();
+
+        $deleteForm = $this->createDeleteForm($id);
+        $editForm = $this->createEditForm($entity);
+        $editForm->handleRequest($request);
+
+        if ($editForm->isValid()) {
+            $confirmacion=$entity->getConfirmada();
+            foreach($faltas_dia as $falta){
+                $falta->setConfirmada($confirmacion);
+                $falta->setJustificacion($justificacion);
+                if($confirmacion==1){
+                    $falta->setTipo("Falta justificada");
+                }
+                $em->flush();
+            }
+            $entity->setJustificacion($justificacion);
+            if($entity->getConfirmada()==1){
+                $falta->setTipo("Falta justificada");
+            }
+            $em->flush();
+                
+            $ms = $this->get('translator')->trans('Se ha confirmado la justificación de la ausencia correctamente.');
+            $this->get('session')->getFlashBag()->add('notice',$ms);
+            return $this->redirect($this->generateUrl('intranet_profesor_ausencia'));
+        }
+
+        return $this->render('IntranetBundle:Ausencia:edit.html.twig', array(
+            'entity'      => $entity,
+            'edit_form'   => $editForm->createView(),
+            'delete_form' => $deleteForm->createView(),
+        ));
+    }
+
+
+
     /**
      * Deletes a Ausencia entity.
      *

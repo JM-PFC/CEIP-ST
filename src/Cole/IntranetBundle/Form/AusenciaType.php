@@ -24,6 +24,7 @@ class AusenciaType extends AbstractType
             ->add('faltas','entity',array('class' => 'BackendBundle:Alumno','multiple'=>true,'property' => 'id','mapped' => false,'expanded' => true,'query_builder' => function (\Cole\BackendBundle\Entity\AlumnoRepository $er) {return $er->createQueryBuilder('u')->where('u.activo IN(:act)')->setParameter(':act', 1)->orderBy('u.id','ASC');},'required'=> false))
             ->add('retrasos','entity',array('class' => 'BackendBundle:Alumno','multiple'=>true,'property' => 'id','mapped' => false,'expanded' => true,'query_builder' => function (\Cole\BackendBundle\Entity\AlumnoRepository $er) {return $er->createQueryBuilder('u')->where('u.activo IN(:act)')->setParameter(':act', 1)->orderBy('u.id','ASC');},'required'=> false))
             ->add('fecha','datetime',array('date_widget'=> 'text','required'=> true))
+            ->add('confirmada')
         ;
     }
     

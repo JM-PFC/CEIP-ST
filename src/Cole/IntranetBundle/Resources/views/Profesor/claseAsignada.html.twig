@@ -65,9 +65,14 @@
 
         $("#tabla_ausencia_profesor tr[id='"+alumno+"'] td:last-child").append('<a id="btn_eliminar" falta="'+falta+'" href="javascript:void(0);"  data-target="#eliminar_ausencia_modal" data-toggle="modal" data-backdrop="static" data-keyboard="false"><i class="fa fa-trash-o"></i></a>'); 
 
-        if(tipo=="Falta" || tipo=="Falta justificada"){
+        if(tipo=="Falta"){
             $("#tabla_ausencia_profesor tr[id='"+alumno+"'] td[id='falta']").empty();
-            $("#tabla_ausencia_profesor tr[id='"+alumno+"'] td[id='falta']").append('<i class="fa fa-check-square-o"></i>'); 
+            $("#tabla_ausencia_profesor tr[id='"+alumno+"'] td[id='falta']").append('<i class="fa fa-check-square-o" title="{% trans %}Falta sin justificar{% endtrans %}"></i>'); 
+            $("#tabla_ausencia_profesor tr[id='"+alumno+"'] td[id='retraso']").empty();
+        }
+        else if(tipo=="Falta justificada"){
+            $("#tabla_ausencia_profesor tr[id='"+alumno+"'] td[id='falta']").empty();
+            $("#tabla_ausencia_profesor tr[id='"+alumno+"'] td[id='falta']").append('<i class="fa fa-check-square-o item-verde" title="{% trans %}Falta justificada{% endtrans %}"></i>'); 
             $("#tabla_ausencia_profesor tr[id='"+alumno+"'] td[id='retraso']").empty();
         }
         else{
@@ -139,7 +144,6 @@
         {{ form_rest(form) }}
         </div>
 
-        </div>
     {{ form_end(form) }}
 
       </div>

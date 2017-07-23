@@ -754,12 +754,60 @@ class AlumnoController extends Controller
         else{
             $trimestre=2;
         }
+        $faltas=$em->getRepository('IntranetBundle:Ausencia')->findFaltasAlumnoPorDia($entity);
+
+        $retrasos=$em->getRepository('IntranetBundle:Ausencia')->findRetrasosAlumnoPorDia($entity);
+
+        $horarios=$em->getRepository('BackendBundle:Horario')->findClases();
+        
+        //Se obtiene las faltas justificadas pendientes de confirmar.
+        $array=null;
+        foreach($faltas as $falta){
+            $dia=$falta->getFecha()->format('d/m/Y');
+            
+            $faltas_dia=$em->getRepository('IntranetBundle:Ausencia')->findFaltasAlumnoDia($entity, $dia);
+            //Se comprueba si tiene falta en todas las clases del día o solo en algún tramo.
+            $tipo=null;
+            if(count($faltas_dia)==count($horarios)){
+                if($request->getLocale()=="es"){
+                    $tipo="Día completo";
+                }
+                else{
+                    $tipo="Complete day";
+                }
+            }
+            else{
+                if($request->getLocale()=="es"){
+                    $tipo="Tramos del día";
+                }
+                else{
+                    $tipo="Sections of the day";
+                }
+            }
+
+            $justificacion=null;
+            //Se comprueba si está justificada para indicarlo.
+            if($falta->getJustificacion()){
+                $justificacion="justificado";
+            }
+
+            $array[$falta->getFecha()->format('d/m/Y')."-".$justificacion]=$tipo;
+        }
+
+        //Se obtiene las faltas justificadas confirmadas.
+        foreach($faltas as $falta){
    
+            if($falta->getTipo()=="Falta justificada"){
+                $justificadas[]=$falta->getFecha()->format('d/m/Y');
+            }
+        }
 
         return $this->render('IntranetBundle:Alumno:asistencia.html.twig', array(
             'entity' => $entity, 
-
-        ));
+            'faltas'=> $faltas,
+            'retrasos' =>$retrasos,
+            'array'=> $array,
+            'justificadas'=>$justificadas));
     }
 
 

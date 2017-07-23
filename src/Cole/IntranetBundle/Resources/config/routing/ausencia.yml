@@ -18,10 +18,23 @@ ausencia_create:
 ausencia_edit:
     path:     /{id}/edit
     defaults: { _controller: "IntranetBundle:Ausencia:edit" }
+    options:
+        expose: true
+
+ausencia_confirmar:
+    path:     /{id}/confirmar
+    defaults: { _controller: "IntranetBundle:Ausencia:confirmar" }
+    options:
+        expose: true
 
 ausencia_update:
     path:     /{id}/update
     defaults: { _controller: "IntranetBundle:Ausencia:update" }
+    requirements: { _method: post|put }
+
+ausencia_update_confirmar:
+    path:     /{id}/updateConfirmar
+    defaults: { _controller: "IntranetBundle:Ausencia:updateConfirmar" }
     requirements: { _method: post|put }
 
 ausencia_delete:

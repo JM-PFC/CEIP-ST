@@ -4,9 +4,27 @@
     {{parent()}}
     <script>
     	$(".menu li").removeClass('active');
-		$(".menu #calificaciones").addClass('active');
+		  $(".menu #asistencia").addClass('active');
+      
+      //Se elimina el enlace de justificar a todas las faltas justificadas.
+      array={{array|json_encode()|raw}};
+      for (var key in array){
+        clave=key.split("-");
+        fecha=clave[0];
+        justificacion=clave[1];
+        tipo=array[key];
 
-		$("#busqueda_calificaciones option:eq(0)").prop('selected', true);
+        $("#tabla_asistencia div[id='"+fecha+"'] #tipo").text(tipo); 
+        if(justificacion=="justificado" ){
+          $("#tabla_asistencia div[id='"+fecha+"'] #justificar").empty();
+        }
+      }
+      //Se marca las faltas justificadas confirmadas por el tutor.
+      justificadas={{justificadas|json_encode()|raw}};
+      for (var key in justificadas){
+      
+          $("#tabla_asistencia div[id='"+fecha+"'] #justificar").append('<i class="fa fa-check-square item-verde"></i>');
+      }
     </script>
  {% endblock %}
 
@@ -20,151 +38,113 @@
 		</a>
 	</li>
 	<li class="active no-seleccion">
-		{% trans %}Calificaciones{% endtrans %}
+		{% trans %}Faltas de asistencia{% endtrans %}
 	</li>
 {% endblock %}
 
 {% block titulo_cabecera %}
-	<i class="fa fa-book page-header-icon"></i>
-	{% trans %}Calificaciones{% endtrans %}
+	<i class="fa fa-list-alt page-header-icon"></i>
+	{% trans %}Faltas de asistencia{% endtrans %}
 {% endblock %}
 {% block titulo_cabecera_movil %}
-	<i class="fa fa-book page-header-icon"></i>
-	{% trans %}Calificaciones{% endtrans %}
+	<i class="fa fa-list-alt page-header-icon"></i>
+	{% trans %}Faltas de asistencia{% endtrans %}
 {% endblock %}
 
 {% block contenido %}
-	<h4 id="titulo-seccion" class="titulo-seccion">{% trans %}Calificaciones del alumno{% endtrans %}</h4>
 
-	{% if tareas != null %}
-	 	<div role="tabpanel" id="tab_calificaciones">
-	 		
-			<ul class="nav nav-tabs" role="tablist">
-				<li role="presentation" class="active"><a href="#tareas" aria-controls="tareas" data-toggle="tab" role="tab">{% trans %}Tareas Evaluables{% endtrans %}</a></li>
-				{% if trimestre != 1 %}
-					<li role="presentation"><a href="#trimestre" aria-controls="trimestre" data-toggle="tab" role="tab">{% trans %}Evaluación del curso{% endtrans %}</a></li>
-				{% endif %}
-			</ul>
-			<div class="tab-content clearfix">
-				<div role="tabpanel" class="tab-pane active clearfix" id="tareas">
-					{% if tareasEvaluadas != null %}
-						<span>{% trans %}Filtrar por asignaturas{% endtrans %}: </span>
-						<select id="busqueda_calificaciones">
-							<option value="0" hidden>Seleccione una asignatura</option>
-							{% for asignatura in asignaturas %}
-								<option value="{{asignatura.asignaturasCursos.id}}">{{asignatura.asignaturasCursos.asignatura.nombre}}</option>
-							{% endfor %}
-							<option id="todos" value="todas" >{% trans %}Todas{% endtrans %}</option>
-						</select>
-	        			<div class="table-responsive">
-        					<table id="{{entity.id}}" class="table lista-alumnos table_task table-striped ">
-            					<thead>
-                					<tr>
-                    					<th class="col-md-4">{% trans %}Nombre de la tarea{% endtrans %}</th>
-                    					<th class="col-md-4">{% trans %}Asignatura{% endtrans %}</th>
-                    					<th class="col-md-1">{% trans %}Trimestre{% endtrans %}</th>
-                    					<th class="col-md-2">{% trans %}Calificación{% endtrans %}</th>
-                					</tr>
-            					</thead>
-            
-            					<tbody class="">
-            					{% for entity in tareasEvaluadas %}
-                					<tr id="{{ entity.asignaturasCursos.id }}">
-                    					<td class="col-md-4">{{ entity.tarea.descripcion }}</td>
-                    					<td id="asignatura" class="col-md-4" >
-                        					{{entity.asignaturasCursos.asignatura.nombre }}
-                    					</td>
-                    					<td class="col-md-1">{{entity.tarea.trimestre ~ "º"}}</td>
-                    					<td class="col-md-2">{{entity.nota}}</td>
-                					</tr>
-            					{% endfor %}
-            					</tbody>
-        					</table>
-      					</div>
-					{% else %}
-						<div class="alert alert-info alert-block">
-							<small>
-								<h4>{% trans %}El alumno no tiene ninguna tarea evaluada{% endtrans %}.</h4>
-								<h6>{% trans %}Actualmente el alumno no tiene ninguna tarea evaluada. Puedes consultar la evaluación del trimestre anterior en la otra pestaña{% endtrans %}.</h6>
-							</small>
-						</div>
-					{% endif %}	
-				</div>
+	<h4 id="titulo-seccion" class="titulo-seccion">{% trans %}Faltas de asistencia{% endtrans %}</h4>
+    <div id="tabla_asistencia" class=" col-xs-12  col-sm-6">
+      <div>
+        <h4 class="text-center titulo_reserva">{% trans %}Ausencias{% endtrans %}</h4>
+      </div>
+      <div>         
+        <table class="col-xs-12 table-hover table-condensed table-striped equipamientos tablas_faltas">
+          <thead class="cabecera-tabla">
+            <tr>
+              <th class="col-xs-6">{% trans %}Día completo / Tramos del día{% endtrans %}</th>
+              <th class="text-center col-xs-4 col-ms-5">{% trans %}Fecha{% endtrans %}</th>
+              <th class="col-xs-2 col-ms-1">Just.</th>
+            </tr>
+          </thead>
+        </table>
+      </div>
+      <div  class="container-content">
+        {% if faltas %}
+          {% for falta in faltas %}
+            <div id="{{ falta.fecha | localizeddate('none', 'none', 'none',none , "d/MM/Y")}}" class="container_contenido_tabla">
+              <div id="tipo" class="col-xs-6 no-seleccion"></div>
+              <div class="text-center col-xs-4 col-ms-5 no-seleccion">
+                {{falta.fecha| localizeddate('short','none', app.request.getLocale()) }}
+              </div>
+              <div id="justificar" class="col-xs-2 col-ms-1">
+                <a falta="{{falta.id}}" id="btn_justificar" href="" data-target="#justificar_modal" data-toggle="modal" data-backdrop="static" data-keyboard="false"><i class="fa fa-pencil-square"></i></a>
+              </div>
+            </div>
+          {% endfor %}
+        {% else %}
+          <div>
+            <div class="vacio col-xs-12"><p class="color_rojo">{% trans %}No hay ninguna falta de asistencia{% endtrans %}</p></div>
+          </div>
+        {% endif %} 
+      </div>
+    </div>
+    <div id="tabla_retrasos" class="col-xs-12 col-sm-6">
+      <div>
+        <h4 class="text-center titulo_reserva">{% trans %}Retrasos{% endtrans %}</h4>
+      </div>
+      <div>         
+        <table class="col-xs-12 table-hover table-condensed table-striped equipamientos tablas_faltas">
+          <thead class="cabecera-tabla">
+            <tr>
+                <th class="col-xs-8">{% trans %}Tramo del día{% endtrans %}</th>
+                <th class="text-center col-xs-4">{% trans %}Fecha{% endtrans %}</th>
+            </tr>
+          </thead>
+        </table>
+      </div>
+      <div  class="container-content">
+        {% if retrasos %}
+          {% for retraso in retrasos %}
+            <div id="{{retraso.id}}" class="container_contenido_tabla">
+              <div class="col-xs-8 no-seleccion">
+                {{retraso.horario.inicio| localizeddate('none','short', app.request.getLocale()) ~ " - " ~ retraso.horario.fin| localizeddate('none','short', app.request.getLocale())}}
+              </div>
+              <div class="text-center col-xs-4 no-seleccion">
+                {{retraso.fecha| localizeddate('short','none', app.request.getLocale())}}
+              </div>
+            </div>
+          {% endfor %}
+        {% else %}
+          <div>
+            <div class="vacio col-xs-12"><p class="color_rojo">{% trans %}No hay ningún retraso{% endtrans %}</p></div>
+          </div>
+        {% endif %} 
+      </div>
+    </div>
 
-				<div role="tabpanel" class="tab-pane" id="trimestre">
-    				<table class="lista-alumnos table table-striped table-bordered" class="col-sm-offset-1 col-sm-10">
-       					<thead >
-            				<tr>
-                				<th class="col-xs-7 col-sm-4">{% trans %}Asignaturas{% endtrans %}</th>
-                				<th class="col-xs-1 center">{% trans %}1ª EVA{% endtrans %}</th>
-                				{% if trimestre == 3 %}
-                    				<th class="col-xs-1 center">{% trans %}2ª EVA{% endtrans %}</th>
-                    			{% else %}
-                    				<th class="col-xs-1 center"></th>
-                				{% endif %}
-
-            				</tr>
-        				</thead> 
-       					<tbody>
-            				{% for asignatura in asignaturasAlum %}
-                				<tr id="{{ asignatura.id }}">
-                    				<td class="col-xs-7 col-sm-4">
-                        			{{ asignatura.asignatura.nombre }}
-                    				</td>
-                    				<td trimestre="1" class="col-xs-1 center"></td>
-                    				{% if trimestre == 2 or trimestre == 3  %}
-                        				<td trimestre="2" class="col-xs-1 center"></td>
-                    				{% endif %} 
-                				</tr>
-            				{% endfor %}
-        				</tbody>
-    				</table>
-				</div>
-			</div>
-		</div>
-	{% else %}
-		<div class="alert alert-info alert-block">
-			<small>
-				<h4>{% trans %}El alumno no tiene ninguna tarea evaluada{% endtrans %}.</h4>
-				<h6>{% trans %}Actualmente no se ha evaluado al alumno de ninguna tarea. Vuelva para ver las calificaciones del alumno cuando realice alguna tarea{% endtrans %}.</h6>
-			</small>
-		</div>
-	{% endif %}
-
-
-    <script>
-
-    locale=$("#intranet").attr("locale");
-    inicial=['IN','IN','IN','IN','SU','BI','NT','NT','SB','SB'];
-
-    array={{trimestre1|json_encode()|raw}};
-    for (var key in array){
-        clave=key.split("-");
-        asignatura=clave[0];
-        trimestre=clave[1];
-        nota=array[key];
-        //Si tiene calificación se inserta en la tabla.  
-        if(nota!=""){
-            $("#tab_calificaciones table tr[id='"+asignatura+"'] td[trimestre='1']").text(nota);
-        }
-    }
-
-    array={{trimestre2|json_encode()|raw}};
-    for (var key in array){
-        clave=key.split("-");
-        asignatura=clave[0];
-        trimestre=clave[1];
-        nota=array[key];
-
-        //Si tiene calificación se inserta en la tabla.  
-        if(nota!=""){
-            $("#tab_calificaciones table tr[id='"+asignatura+"'] td[trimestre='2']").text(nota);
-        }
-    }
-
-
-    </script>
-
+    <!-- Ventana modal de justificación de falta -->
+    <div id="justificar_modal" class="modal fade aviso ediccion_seguimiento_modal " role="dialog" data-backdrop="true" >
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    <h4 class="modal-title">{% trans %}Justificación de la ausencia del alumno/a{% endtrans %}</h4>
+                </div>
+                <div class="modal-body">
+                    {#Formulario de prueba para que se muestre la ventana con el formulario cargado y luego se actualiza#}
+                    <form>
+                        <label>{% trans %}Justificación{% endtrans %}</label>
+                        <textarea id="falta_justificacion"></textarea>
+                        <div class="class-footer">
+                            <button class="btn btn_azul">Cancelar</button>
+                            <button id="seguimiento_submit" class="btn btn-success">Enviar</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
 
 
 {% endblock %}

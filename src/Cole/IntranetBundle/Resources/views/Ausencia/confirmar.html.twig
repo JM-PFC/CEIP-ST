@@ -1,0 +1,35 @@
+{% extends '::base.html.twig' %}
+
+{% block body -%}
+{{ form_start (edit_form)}}
+	
+	<div>
+		<label class="col-xs-2">{% trans %}Alumno/a{% endtrans %}:</label>
+		<span >{{alumno}}</span>
+	</div>
+	<div>
+		<label class="col-xs-2">{% trans %}Responsable{% endtrans %}:</label>
+		<span >{{responsable}}</span>
+	</div>
+	<div>
+		<label class="col-xs-2">{% trans %}Fecha{% endtrans %}:</label>
+		<span >{{ fecha | localizeddate('none', 'none', 'none',none , "d/MM/Y")}}</span>
+	</div>
+	<label>{% trans %}Motivo{% endtrans %}</label>
+	{{ form_widget(edit_form.justificacion, {'attr':{'disabled':'disabled'}}) }}
+
+	<div>
+		<a id="justificada" class="btn btn_azul">{% trans %}Justificada{% endtrans %}</a>
+		<a id="injustificada" class="btn btn_azul">{% trans %}No Justificada{% endtrans %}</a>
+	</div>
+
+	<div class="class-footer">
+		{{ form_widget(edit_form.submit) }}
+	</div>
+	<div class="hidden">
+		{{ form_rest(edit_form) }}
+	</div>
+
+	{{ form_end (edit_form)}}
+
+{% endblock %}

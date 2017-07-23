@@ -208,7 +208,7 @@
                                 {{tutoria.fecha| localizeddate('none','short', app.request.getLocale()) }}
                             </div>
                             <div class="col-xs-2 no-padding-rl">
-                                <a id="btn_eliminar" href="" data-target="#eliminar_reserva_modal" data-toggle="modal" data-backdrop="static" data-keyboard="false"><i class="fa fa-trash-o"></i></a>
+                                <a id="btn_eliminar" href="" data-target="#eliminar_tutoria_modal" data-toggle="modal" data-backdrop="static" data-keyboard="false"><i class="fa fa-trash-o"></i></a>
                             </div>
                         </div>
                     </a>
@@ -289,7 +289,7 @@
                                                     <i class="fa fa-pencil"></i>{% trans %}Editar{% endtrans %}
                                                 </a>
                                             
-                                                <a id="btn_eliminar" href="" class="btn btn_gris" data-target="#eliminar_tutoria_modal" data-toggle="modal" data-backdrop="static" data-keyboard="false">
+                                                <a id="btn_eliminar" href="" class="btn btn_gris" data-target="#eliminar_seguimiento_modal" data-toggle="modal" data-backdrop="static" data-keyboard="false">
                                                     <i class="fa fa-trash-o"></i>{% trans %}Eliminar{% endtrans %}
                                                 </a>
                                             {% endif %}
@@ -299,7 +299,7 @@
                                                 <a id="btn_editar" href="" class="btn btn_gris" data-target="#editar_tutoria_modal" data-toggle="modal" data-backdrop="static" data-keyboard="false">
                                                     <i class="fa fa-pencil"></i>
                                                 </a>
-                                                <a id="btn_eliminar" href="" class="btn btn_gris" data-target="#eliminar_tutoria_modal" data-toggle="modal" data-backdrop="static" data-keyboard="false">
+                                                <a id="btn_eliminar" href="" class="btn btn_gris" data-target="#eliminar_seguimiento_modal" data-toggle="modal" data-backdrop="static" data-keyboard="false">
                                                     <i class="fa fa-trash-o"></i>
                                                 </a>
                                             {% endif %}
@@ -352,7 +352,7 @@
                                                 <i class="fa fa-pencil"></i>{% trans %}Editar{% endtrans %}
                                             </a>
                                 
-                                            <a id="btn_eliminar" href="" class="btn btn_gris" data-target="#eliminar_tutoria_modal" data-toggle="modal" data-backdrop="static" data-keyboard="false">
+                                            <a id="btn_eliminar" href="" class="btn btn_gris" data-target="#eliminar_seguimiento_modal" data-toggle="modal" data-backdrop="static" data-keyboard="false">
                                                 <i class="fa fa-trash-o"></i>{% trans %}Eliminar{% endtrans %}
                                             </a>
                                         {% endif %}
@@ -362,7 +362,7 @@
                                             <a id="btn_editar" href="" class="btn btn_gris" data-target="#editar_tutoria_modal" data-toggle="modal" data-backdrop="static" data-keyboard="false">
                                                 <i class="fa fa-pencil"></i>
                                             </a>
-                                            <a id="btn_eliminar" href="" class="btn btn_gris" data-target="#eliminar_tutoria_modal" data-toggle="modal" data-backdrop="static" data-keyboard="false">
+                                            <a id="btn_eliminar" href="" class="btn btn_gris" data-target="#eliminar_seguimiento_modal" data-toggle="modal" data-backdrop="static" data-keyboard="false">
                                                 <i class="fa fa-trash-o"></i>
                                             </a>
                                         {% endif %}
@@ -429,7 +429,7 @@
                                                 <i class="fa fa-pencil"></i>{% trans %}Editar{% endtrans %}
                                             </a>
                                 
-                                            <a id="btn_eliminar" href="" class="btn btn_gris" data-target="#eliminar_tutoria_modal" data-toggle="modal" data-backdrop="static" data-keyboard="false">
+                                            <a id="btn_eliminar" href="" class="btn btn_gris" data-target="#eliminar_seguimiento_modal" data-toggle="modal" data-backdrop="static" data-keyboard="false">
                                                 <i class="fa fa-trash-o"></i>{% trans %}Eliminar{% endtrans %}
                                             </a>
                                         {% endif %}
@@ -439,7 +439,7 @@
                                             <a id="btn_editar" href="" class="btn btn_gris" data-target="#editar_tutoria_modal" data-toggle="modal" data-backdrop="static" data-keyboard="false">
                                                 <i class="fa fa-pencil"></i>
                                             </a>
-                                            <a id="btn_eliminar" href="" class="btn btn_gris" data-target="#eliminar_tutoria_modal" data-toggle="modal" data-backdrop="static" data-keyboard="false">
+                                            <a id="btn_eliminar" href="" class="btn btn_gris" data-target="#eliminar_seguimiento_modal" data-toggle="modal" data-backdrop="static" data-keyboard="false">
                                                 <i class="fa fa-trash-o"></i>
                                             </a>
                                         {% endif %}
@@ -467,6 +467,18 @@
         </div>
  
     </div>
+
+    <div id="eliminar_seguimiento_modal" class="modal fade-scale aviso ediccion_seguimiento_modal"  tabindex="-1" role="dialog" data-backdrop="true" >
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+        <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            <h4 class="modal-title" id="myModalLabel">{% trans %}Eliminación de la consulta de tutoría{% endtrans %}</h4>
+        </div>
+        <div class="modal-body"></div>
+        </div>
+    </div>
+  </div>
 
      <!-- Ventana modal de eliminación de consulta de tutoría -->
   <div id="eliminar_tutoria_modal" class="modal fade-scale aviso ediccion_seguimiento_modal"  tabindex="-1" role="dialog" data-backdrop="true" >

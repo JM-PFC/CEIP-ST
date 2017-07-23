@@ -25,4 +25,70 @@ class AusenciaRepository extends EntityRepository
 			->getResult();
 	}
 
+	public function findFaltasAlumnoPorDia($alumno)
+	{
+		return $this->getEntityManager()->createQuery(
+			'SELECT a FROM IntranetBundle:Ausencia a WHERE a.alumno=:alumno AND (a.tipo=:tipo1 OR a.tipo=:tipo2) GROUP BY a.fecha ORDER BY a.fecha DESC')
+			->setParameters(array(
+			'alumno' => $alumno,
+			'tipo1' => "Falta",
+			'tipo2' => "Falta justificada"))
+			->getResult();
+	}
+
+	public function findRetrasosAlumnoPorDia($alumno)
+	{
+		return $this->getEntityManager()->createQuery(
+			'SELECT a FROM IntranetBundle:Ausencia a WHERE a.alumno=:alumno AND a.tipo=:tipo ORDER BY a.fecha DESC')
+			->setParameters(array(
+			'alumno' => $alumno,
+			'tipo' => "Retraso"))
+			->getResult();
+	}
+
+	public function findFaltasAlumnoDia($alumno, $fecha)
+	{
+		return $this->getEntityManager()->createQuery(
+			'SELECT a FROM IntranetBundle:Ausencia a WHERE a.alumno=:alumno AND a.fecha=:fecha AND (a.tipo=:tipo1 OR a.tipo=:tipo2) ORDER BY a.fecha DESC')
+			->setParameters(array(
+			'alumno' => $alumno,
+			'fecha' => $fecha,
+			'tipo1' => "Falta",
+			'tipo2' => "Falta justificada"))
+			->getResult();
+	}
+
+	public function findFaltasAlumnoDiaJustificadas($alumno, $fecha)
+	{
+		return $this->getEntityManager()->createQuery(
+			'SELECT a FROM IntranetBundle:Ausencia a WHERE a.alumno=:alumno AND a.fecha=:fecha AND a.tipo=:tipo ORDER BY a.fecha DESC')
+			->setParameters(array(
+			'alumno' => $alumno,
+			'fecha' => $fecha,
+			'tipo' => "Falta justificada"))
+			->getResult();
+	}
+
+	public function findFaltaDiaJustificada($alumno, $fecha)
+	{
+		return $this->getEntityManager()->createQuery(
+			'SELECT a FROM IntranetBundle:Ausencia a WHERE a.alumno=:alumno AND a.fecha=:fecha AND a.tipo=:tipo GROUP BY a.fecha')
+			->setParameters(array(
+			'alumno' => $alumno,
+			'fecha' => $fecha,
+			'tipo' => "Falta justificada"))
+			->setMaxResults(1)
+			->getOneOrNullResult();
+	}
+
+
+	public function findFaltasPendientes($grupo)
+	{
+		return $this->getEntityManager()->createQuery(
+			'SELECT a FROM IntranetBundle:Ausencia a INNER JOIN a.alumno alum WHERE alum.grupo=:grupo AND a.justificacion IS NOT NULL AND a.confirmada IS NULL GROUP BY a.fecha ORDER BY a.fecha DESC')
+			->setParameters(array(
+			'grupo' => $grupo))
+			->getResult();
+	}
+
 }

@@ -1,16 +1,18 @@
 {% extends '::base.html.twig' %}
 
 {% block body -%}
-    <h1>Ausencia edit</h1>
+{{ form_start (edit_form)}}
+	
+	<label for="seguimiento_descripcion">{% trans %}Justificación{% endtrans %}</label>
+	{{ form_widget(edit_form.justificacion,{ 'attr':{'placeholder':'Introduzca los motivos de la ausencia del alumno/a'}}) }}
+	<div class="class-footer">
+		<button class="btn btn_azul" type="button" data-dismiss="modal" title="">{% trans %}Cancelar{% endtrans %}</button>
+		{{ form_widget(edit_form.submit) }}
+	</div>
+	<div class="hidden">
+		{{ form_rest(edit_form) }}
+	</div>
 
-    {{ form(edit_form) }}
+	{{ form_end (edit_form)}}
 
-        <ul class="record_actions">
-    <li>
-        <a href="{{ path('ausencia') }}">
-            Back to the list
-        </a>
-    </li>
-    <li>{{ form(delete_form) }}</li>
-</ul>
 {% endblock %}

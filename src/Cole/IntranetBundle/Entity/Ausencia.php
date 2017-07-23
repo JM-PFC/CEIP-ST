@@ -43,6 +43,14 @@ class Ausencia
     private $justificacion;
 
     /**
+     * @var string
+     *
+     * @ORM\Column(name="confirmada", type="string", length=1 , nullable=true)
+     * 
+     */
+    private $confirmada;
+
+    /**
     * @ORM\ManyToOne(targetEntity="Cole\BackendBundle\Entity\Alumno", inversedBy="Ausencia")
     * @ORM\JoinColumn(name="alumno_id", referencedColumnName="id", nullable=false)
     */
@@ -235,5 +243,31 @@ class Ausencia
     public function getResponsable()
     {
         return $this->responsable;
+    }
+
+
+   
+
+    /**
+     * Set confirmada
+     *
+     * @param string $confirmada
+     * @return Ausencia
+     */
+    public function setConfirmada($confirmada)
+    {
+        $this->confirmada = $confirmada;
+
+        return $this;
+    }
+
+    /**
+     * Get confirmada
+     *
+     * @return string 
+     */
+    public function getConfirmada()
+    {
+        return $this->confirmada;
     }
 }

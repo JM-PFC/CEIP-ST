@@ -135,8 +135,10 @@ Grupo Sanguíneo: Blood type
 No disponible: Not available
 No asignado: Not assigned
 Responsables: Responsible
+Responsable:
 Observaciones: Observations
 Alumnos: Students
+Alumno/a: Student
 Horario: Schedule
 Profesores: Teachers
 Optativas: Optional
@@ -336,6 +338,7 @@ Pregunta de seguridad: Security Question
 Confirmar datos: Confirm data
 Debes seleccionar una contraseña diferente a la actual.: You must select a different password than the current one.
 Faltas de asistencia: Absences
+Faltas: Absences
 El grupo no tiene asignados alumnos en este momento: The group has no assigned students at this time
 Se podrá consultar el listado de alumnos cuando se asigen los alumnos al grupo: You can consult the list of students when the students are assigned to the group
 No se han impartido clases en ese grupo: No classes have been given in that group
@@ -354,3 +357,22 @@ Espere a que se realice la asignación de los alumnos: Wait for the students to 
 Faltas del día: Faults of the day
 Eliminación de la ausencia del alumno: Elimination of student absence
 Se va a eliminar la falta de asistencia o el retraso del alumno del sistema y no se podrá recuperar: It will eliminate the lack of attendance or the delay of the student of the system and can not be recovered
+Se ha eliminado la falta de asistencia o restraso correctamente.: Missing or delayed successfully.
+Retrasos: Delays
+Día completo / tramos: Full day/sections
+Ausencias: Absences
+No hay ninguna falta de asistencia: There is no lack of assistance
+No hay ningún retraso: There is no delay
+Tramos del día: Tranche of the day
+Justificación de la ausencia del alumno/a: Justification of the student's absence
+Tramos del día: Portions of the day
+Justificación: Justification
+La justificación ha sido enviada correctamente. En caso de ser aceptada se mostrará la afirmación en la tabla de ausencias.: The justification has been sent correctly. In case of being accepted, the statement will be shown in the absences table.
+Falta sin justificar: Missing without justification
+Falta justificada: Justified absence
+Justificaciones: Justifications
+Justificación de faltas: Justification of absences
+Justificada: Justified
+No Justificada: Not justified
+Motivo: Reason
+Se ha confirmado la justificación de la ausencia correctamente.: The absence justification has been confirmed correctly.

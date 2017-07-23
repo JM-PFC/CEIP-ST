@@ -1148,14 +1148,12 @@ $(document).ready(function () {
   });
 
   $(document).on('click','#eliminar_tutoria_modal #eliminar' ,function() {
-    alert();
     $('#eliminar_tutoria_modal').modal('toggle');
     id=$(this).attr("seguimiento");
     $.ajax({
       type: 'POST',
       url: Routing.generate("seguimiento_delete", {id:id, _locale:locale}),        
       success: function() {
-
       }
     })
   });
@@ -1917,13 +1915,55 @@ $(document).ready(function () {
   //Se añade el id de la asencia en botón de eliminar de la ventana modal para luego generar la ruta.
   $(document).on('click','#tabla_ausencia_profesor #btn_eliminar' ,function() {
     id=$(this).attr("falta");
+          aviso.play();
+
     $("#eliminar_ausencia_modal .modal-body").load(Routing.generate("ausencia_eliminar", {id:id, _locale:locale}), function(){
     }); 
   });
 
+  //Se añade la falta en botón de editar de la ventana modal para luego generar la ruta.
+  $(document).on('click','#tabla_asistencia #btn_justificar' ,function() {
+    //Se quita el contenido del textarea para que no se muestre el anterior al abrir la ventana y cargar el nuevo dato.
+    $("#falta_justificacion").val(" ");
+    id=$(this).attr("falta");
+    $("#justificar_modal .modal-body").load(Routing.generate("ausencia_edit", {id:id, _locale:locale}), function(){
+    }); 
+  });
 
 
+  //Se añade la falta en botón de editar de la ventana modal para luego generar la ruta.
+  $(document).on('click','#tabla_justificaciones #btn_confirmar' ,function() {
+    //Se quita el contenido del textarea para que no se muestre el anterior al abrir la ventana y cargar el nuevo dato.
+    $("#falta_justificacion").val(" ");
+    id=$(this).parent().attr("id");
+    $("#confirmar_justificacion_modal .modal-body").load(Routing.generate("ausencia_confirmar", {id:id, _locale:locale}), function(){
+    }); 
+  });
 
+  //Se selecciona los botones de confirmación de los motivos de la ausencia en la ventana modal.
+  $(document).on('click','#confirmar_justificacion_modal #justificada',function() {
+    if($(this).hasClass('active')){
+      $(this).removeClass('active');
+      $("#confirmar_justificacion_modal #ausencia_confirmada").val("");
+    }
+    else{
+      $(this).addClass('active');
+      $("#confirmar_justificacion_modal #injustificada").removeClass('active');
+      $("#confirmar_justificacion_modal #ausencia_confirmada").val(1);
+    }
+  });
+
+  $(document).on('click','#confirmar_justificacion_modal #injustificada',function() {
+    if($(this).hasClass('active')){
+      $(this).removeClass('active');
+      $("#confirmar_justificacion_modal #ausencia_confirmada").val("");
+    }
+    else{
+      $(this).addClass('active');
+      $("#confirmar_justificacion_modal #justificada").removeClass('active');
+      $("#confirmar_justificacion_modal #ausencia_confirmada").val(0);
+    }
+  });
 
 
 

@@ -66,12 +66,16 @@
         falta=clave[1];
         tipo=array[key];
 
-
         $("#tabla_ausencia_profesor tr[id='"+alumno+"'] td:last-child").append('<a id="btn_eliminar" falta="'+falta+'" href="javascript:void(0);"  data-target="#eliminar_ausencia_modal" data-toggle="modal" data-backdrop="static" data-keyboard="false"><i class="fa fa-trash-o"></i></a>'); 
 
-        if(tipo=="Falta" || tipo=="Falta justificada"){
+        if(tipo=="Falta"){
             $("#tabla_ausencia_profesor tr[id='"+alumno+"'] td[id='falta']").empty();
-            $("#tabla_ausencia_profesor tr[id='"+alumno+"'] td[id='falta']").append('<i class="fa fa-check-square-o"></i>'); 
+            $("#tabla_ausencia_profesor tr[id='"+alumno+"'] td[id='falta']").append('<i class="fa fa-check-square-o" title="{% trans %}Falta sin justificar{% endtrans %}"></i>'); 
+            $("#tabla_ausencia_profesor tr[id='"+alumno+"'] td[id='retraso']").empty();
+        }
+        else if(tipo=="Falta justificada"){
+            $("#tabla_ausencia_profesor tr[id='"+alumno+"'] td[id='falta']").empty();
+            $("#tabla_ausencia_profesor tr[id='"+alumno+"'] td[id='falta']").append('<i class="fa fa-check-square-o item-verde" title="{% trans %}Falta justificada{% endtrans %}"></i>'); 
             $("#tabla_ausencia_profesor tr[id='"+alumno+"'] td[id='retraso']").empty();
         }
         else{
@@ -84,14 +88,15 @@
     //Se marcan las opción del formulario.
     asignatura={{asignatura|json_encode()|raw}};
     horario={{horario|json_encode()|raw}};
-    //fecha={{fecha|json_encode()|raw}};
+    fecha={{fecha|json_encode()|raw}};
 
     $("#ausencia_asignatura option[value='"+asignatura+"']").prop('selected', true);
     $("#ausencia_horario option[value='"+horario+"']").prop('selected', true);
     
-   // $("#ausencia_fecha_date_day").val(fecha.getDate());
-    //$("#ausencia_fecha_date_month").val(fecha.getMonth()+1);
-    //$("#ausencia_fecha_date_year").val(fecha.getFullYear());
+    array=fecha.split("-");
+    $("#ausencia_fecha_date_day").val(array[0]);
+    $("#ausencia_fecha_date_month").val(array[1]);
+    $("#ausencia_fecha_date_year").val(array[2]);
 
     </script>
  {% endblock %}
@@ -193,76 +198,104 @@
 
     </div>
 
-    <div id="tabla_ausencia_profesor" class="panel panel-default tab-content tablas">
-         <h4 class="text-center">{% trans %}Listado de alumnos de la clase actual{% endtrans %}</h4>
+    {% if pendientes == null %}
+        <div id="tabla_ausencia_profesor" class="panel panel-default tab-content tablas">
+    {% else %}
+        <div id="tabla_ausencia_profesor" class="panel panel-default tab-content tablas col-xs-12 col-sm-8">
+    {% endif %}
+            <h4 class="text-center">{% trans %}Listado de alumnos de la clase actual{% endtrans %}</h4>
 
-    {% if alumnos != null %}
-        <div>
-       <table id="table_teacher" class="lista-alumnos table table-striped table-bordered" class="col-sm-offset-1 col-sm-10">
-        <thead >
+            {% if alumnos != null %}
+                <div>
+                    <table id="table_teacher" class="lista-alumnos table table-striped table-bordered" class="col-sm-offset-1 col-sm-10">
+                        <thead >
+                            <tr>
+                                <th class="col-xs-1 center">Nº</th>
+                                <th class="col-xs-7 col-sm-9 no-sort">{% trans %}Apellidos, Nombre{% endtrans %}</th>
+                                <th class="col-xs-1 center no-sort no-padding">
+                                    <span class="hidden-xs">{% trans %}Falta{% endtrans %}</span>
+                                    <span class="hidden-sm hidden-md hidden-lg">{% trans %}F{% endtrans %}</span>
+                                </th>
+                                <th class="col-xs-1 center no-sort no-padding">
+                                    <span class="hidden-xs">{% trans %}Retraso{% endtrans %}</span>
+                                    <span class="hidden-sm hidden-md hidden-lg">{% trans %}R{% endtrans %}</span>
+                                </th>
+                                <th class="col-xs-1 no-sort no-padding"></th>
+                            </tr>
+                        </thead> 
+                        <tbody>
+                        {% for alumno in alumnos %}
+                            <tr id="{{ alumno.id }}">
+                                <td class="col-xs-1 center">{{alumno.numAlum}}</td>
+                                <td class="col-xs-7 col-sm-9">
+                                    {{ alumno.apellido1 ~ " " ~ alumno.apellido2 ~ ", " ~ alumno.nombre }}
+                                </td>
+                                <td id="falta" class="col-xs-1 center no-padding"><input type="checkbox"></td>
+                                <td id="retraso" class="col-xs-1 center no-padding"><input type="checkbox"></td>
+                                <td class="col-xs-1 center no-padding"></td>
+                            </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                    {% set locale = app.request.getLocale() %}
+
+                    {{form_start(form, {'method':'Post','attr':{'id':'ausencia', 'role':"form" ,'novalidate':'novalidate', 'autocomplete':'off'}})}}
+                        {{ form_errors(form) }}
+                        {{ form_row(form.submit,{'id':'intranet_'~form.submit.vars.id , 'attr':{'class': 'btn btn-success center-block disabled' }}) }}
+
+                    <div class="hidden">
+                        {{ form_rest(form) }}
+                    </div>
+
+                    {{ form_end(form) }}
+                </div>
+            {% else %}
+                <div class="alert alert-info alert-block">
+                    <small>
+                        <h4>{% trans %}No tienes asignada ninguna clase a esta hora{% endtrans %}.</h4>
+                        <h6>{% trans %}Para gestionar las faltas de asistencia de días anteriores seleccione las distintas opciones en la parte superior{% endtrans %}.</h6>
+                    </small>
+                </div>
+            {% endif %}
+        </div>
+
+    {% if pendientes %}
+    <div id="tabla_justificaciones" class="col-xs-12 col-sm-4">
+      <div>         
+        <table class="col-xs-12 table-hover table-condensed table-striped equipamientos">
+          <thead class="cabecera-tabla">
             <tr>
-                <th class="col-xs-1 center">Nº</th>
-                <th class="col-xs-7 col-sm-9 no-sort">{% trans %}Apellidos, Nombre{% endtrans %}</th>
-                <th class="col-xs-1 center no-sort no-padding">
-                    <span class="hidden-xs">{% trans %}Falta{% endtrans %}</span>
-                    <span class="hidden-sm hidden-md hidden-lg">{% trans %}F{% endtrans %}</span>
-                </th>
-                <th class="col-xs-1 center no-sort no-padding">
-                    <span class="hidden-xs">{% trans %}Retraso{% endtrans %}</span>
-                    <span class="hidden-sm hidden-md hidden-lg">{% trans %}R{% endtrans %}</span>
-                </th>
-                <th class="col-xs-1 no-sort no-padding"></th>
+                <th class="col-xs-12">{% trans %}Justificación de faltas{% endtrans %}</th>
             </tr>
-        </thead> 
-        <tbody>
-            {% for alumno in alumnos %}
-                <tr id="{{ alumno.id }}">
-                    <td class="col-xs-1 center">{{alumno.numAlum}}</td>
-                    <td class="col-xs-7 col-sm-9">
-                        {{ alumno.apellido1 ~ " " ~ alumno.apellido2 ~ ", " ~ alumno.nombre }}
-                    </td>
-                    <td id="falta" class="col-xs-1 center no-padding"><input type="checkbox"></td>
-                    <td id="retraso" class="col-xs-1 center no-padding"><input type="checkbox"></td>
-                    <td class="col-xs-1 center no-padding"></td>
-                </tr>
-            {% endfor %}
-        </tbody>
-      </table>
-      {% set locale = app.request.getLocale() %}
-
-        {{form_start(form, {'method':'Post','attr':{'id':'ausencia', 'data-toggle':"validator", 'role':"form" ,'novalidate':'novalidate', 'autocomplete':'off'}})}}
-            {{ form_errors(form) }}
-            {{ form_row(form.submit,{'id':'intranet_'~form.submit.vars.id , 'attr':{'class': 'btn btn-success center-block disabled' }}) }}
-
-            <div class="hidden">
-             {{ form_rest(form) }}
+          </thead>
+        </table>
+      </div>
+      <div  class="container-content">
+        
+          {% for falta in pendientes %}
+            <div id="{{falta.id}}" class="container_contenido_tabla">
+              <div class="col-xs-12" id="btn_confirmar" href="javascript:void(0);" data-target="#confirmar_justificacion_modal" data-toggle="modal" data-backdrop="static" data-keyboard="false">
+                {{ falta.fecha | localizeddate('none', 'none', 'none',none , "d/MM/Y") ~ " - " ~falta.alumno.apellido1 ~ " " ~ falta.alumno.apellido1 ~ ", " ~ falta.alumno.nombre}}
+              </div>
             </div>
-
-            </div>
-        {{ form_end(form) }}
+          {% endfor %}
 
       </div>
-    {% else %}
-            <div class="alert alert-info alert-block">
-                <small>
-                    <h4>{% trans %}No tienes asignada ninguna clase a esta hora{% endtrans %}.</h4>
-                    <h6>{% trans %}Para gestionar las faltas de asistencia de días anteriores seleccione las distintas opciones en la parte superior{% endtrans %}.</h6>
-                </small>
-            </div>
-    {% endif %}
-</div>
+    </div>
+{% endif %}
 
-    <!-- Ventana modal de eliminación de la tarea -->
-  <div id="eliminar_tarea_modal" class="modal fade-scale aviso"  tabindex="-1" role="dialog" data-backdrop="true" >
+
+    <!-- Ventana modal de eliminación de la falta o retraso -->
+  <div id="eliminar_ausencia_modal" class="modal fade-scale aviso"  tabindex="-1" role="dialog" data-backdrop="true" >
     <div class="modal-dialog" role="document">
         <div class="modal-content">
         <div class="modal-header">
             <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-            <h4 class="modal-title" id="myModalLabel">{% trans %}Eliminación de la tarea{% endtrans %}</h4>
+            <h4 class="modal-title" id="myModalLabel">{% trans %}Eliminación de la ausencia del alumno{% endtrans %}</h4>
         </div>
         <div class="modal-body">
             
-            <p>Se va a eliminar la tarea del sistema y no se podrá recuperar.</p>
+            <p>Se va a eliminar la falta de asistencia o el retraso del alumno del sistema y no se podrá recuperar.</p>
             <p>¿Estas seguro de continuar?</p>
             <div class="class-footer">
                 <button class="btn btn_azul" type="button" data-dismiss="modal" title="">Cancelar</button>
@@ -275,11 +308,35 @@
     
                 </div>
                 </form>
-            </div>
-            
+            </div>   
         </div>
         </div>
     </div>
   </div>
+
+
+    <!-- Ventana modal de confirmación de la justificación de la falta -->
+    <div id="confirmar_justificacion_modal" class="modal fade aviso ediccion_seguimiento_modal " role="dialog" data-backdrop="true" >
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    <h4 class="modal-title">{% trans %}Justificación de la ausencia del alumno/a{% endtrans %}</h4>
+                </div>
+                <div class="modal-body">
+                    {#Formulario de prueba para que se muestre la ventana con el formulario cargado y luego se actualiza#}
+                    <form>
+                        <label>{% trans %}Justificación{% endtrans %}</label>
+                        <textarea id="falta_justificacion"></textarea>
+                        <div class="class-footer">
+                            <button id="seguimiento_submit" class="btn btn-success">Enviar</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+  
 
 {% endblock %}
