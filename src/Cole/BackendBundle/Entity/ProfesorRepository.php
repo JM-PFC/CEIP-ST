@@ -99,4 +99,15 @@ class ProfesorRepository extends EntityRepository
 		->getOneOrNullResult();
 	}
 
+	public function findOtrosProfesoresActivos($profesor)
+	{
+		return $this->getEntityManager()->createQuery(
+			' SELECT p FROM BackendBundle:Profesor p WHERE p.activo=1 AND p.id not like :profesor ORDER BY p.apellido1, p.apellido2, p.nombre')
+			->setParameters(array(
+			'profesor' => $profesor
+			))
+		->getResult();
+	}
+
+
 }

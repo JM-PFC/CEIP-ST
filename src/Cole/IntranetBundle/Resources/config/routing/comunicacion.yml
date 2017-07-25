@@ -1,0 +1,50 @@
+comunicacion:
+    path:     /
+    defaults: { _controller: "IntranetBundle:Comunicacion:index" }
+
+comunicacion_show:
+    path:     /{id}/show
+    defaults: { _controller: "IntranetBundle:Comunicacion:show" }
+    options:
+        expose: true
+
+comunicacion_new:
+    path:     /new
+    defaults: { _controller: "IntranetBundle:Comunicacion:new" }
+
+comunicacion_create:
+    path:     /create
+    defaults: { _controller: "IntranetBundle:Comunicacion:create" }
+    requirements: { _method: post }
+
+comunicacion_edit:
+    path:     /{id}/edit
+    defaults: { _controller: "IntranetBundle:Comunicacion:edit" }
+
+comunicacion_update:
+    path:     /{id}/update
+    defaults: { _controller: "IntranetBundle:Comunicacion:update" }
+    requirements: { _method: post|put }
+
+comunicacion_delete:
+    path:     /{id}/delete
+    defaults: { _controller: "IntranetBundle:Comunicacion:delete" }
+    requirements: { _method: post|delete }
+
+listar_destinatarios:
+    path:     /destinatarios/{id}
+    defaults: { _controller: IntranetBundle:Comunicacion:Destinatarios}
+    options:
+        expose: true
+
+comprobar_mensajes_leidos:
+    path:     /comprobarLeidos/{id}
+    defaults: { _controller: IntranetBundle:Comunicacion:comprobarLeidos}
+    options:
+        expose: true
+
+mensaje_a_papelera:
+    path:     /enviarMensajePapelera/{id}
+    defaults: { _controller: IntranetBundle:Comunicacion:enviarMensajePapelera}
+    options:
+        expose: true

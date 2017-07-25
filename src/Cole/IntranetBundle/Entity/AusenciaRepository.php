@@ -80,8 +80,7 @@ class AusenciaRepository extends EntityRepository
 			->setMaxResults(1)
 			->getOneOrNullResult();
 	}
-
-
+	
 	public function findFaltasPendientes($grupo)
 	{
 		return $this->getEntityManager()->createQuery(
@@ -90,5 +89,6 @@ class AusenciaRepository extends EntityRepository
 			'grupo' => $grupo))
 			->getResult();
 	}
+
 
 }

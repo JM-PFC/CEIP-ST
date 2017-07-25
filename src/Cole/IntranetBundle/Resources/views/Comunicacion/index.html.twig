@@ -1,0 +1,55 @@
+{% extends '::base.html.twig' %}
+
+{% block body -%}
+    <h1>Comunicacion list</h1>
+
+    <table class="records_list">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Emisor</th>
+                <th>Receptor</th>
+                <th>Asunto</th>
+                <th>Mensaje</th>
+                <th>Leido</th>
+                <th>Fichero</th>
+                <th>Tipoemisor</th>
+                <th>Tiporeceptor</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for entity in entities %}
+            <tr>
+                <td><a href="{{ path('comunicacion_show', { 'id': entity.id }) }}">{{ entity.id }}</a></td>
+                <td>{{ entity.emisor }}</td>
+                <td>{{ entity.receptor }}</td>
+                <td>{{ entity.asunto }}</td>
+                <td>{{ entity.mensaje }}</td>
+                <td>{{ entity.leido }}</td>
+                <td>{{ entity.fichero }}</td>
+                <td>{{ entity.tipoEmisor }}</td>
+                <td>{{ entity.tipoReceptor }}</td>
+                <td>
+                <ul>
+                    <li>
+                        <a href="{{ path('comunicacion_show', { 'id': entity.id }) }}">show</a>
+                    </li>
+                    <li>
+                        <a href="{{ path('comunicacion_edit', { 'id': entity.id }) }}">edit</a>
+                    </li>
+                </ul>
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+        <ul>
+        <li>
+            <a href="{{ path('comunicacion_new') }}">
+                Create a new entry
+            </a>
+        </li>
+    </ul>
+    {% endblock %}

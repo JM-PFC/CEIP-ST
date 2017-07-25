@@ -4,15 +4,47 @@
 		"selected_items":
 		[
 			[
-				"pad",
-				"padding-right"
+				"font",
+				"font-weight"
+			],
+			[
+				"te",
+				"text-align"
+			],
+			[
+				"tex",
+				"text-decoration"
+			],
+			[
+				"min",
+				"min-height"
 			],
 			[
 				"margin",
-				"margin-top"
+				"margin-bottom"
+			],
+			[
+				"pad",
+				"padding"
+			],
+			[
+				"padd",
+				"padding-left"
+			],
+			[
+				"fon",
+				"font-weight"
 			],
 			[
 				"border",
+				"border-left"
+			],
+			[
+				"list",
+				"list-style"
+			],
+			[
+				"boder",
 				"border"
 			],
 			[
@@ -28,24 +60,12 @@
 				"ROLE_JEFE_ESTUDIO"
 			],
 			[
-				"te",
-				"text-align"
-			],
-			[
 				"remove",
 				"removeClass	.removeClass()"
 			],
 			[
 				"bo",
 				"border-top"
-			],
-			[
-				"font",
-				"font-weight"
-			],
-			[
-				"min",
-				"min-width"
 			],
 			[
 				"border-ri",
@@ -66,10 +86,6 @@
 			[
 				"bord",
 				"border-radius"
-			],
-			[
-				"padd",
-				"padding"
 			],
 			[
 				"no",
@@ -94,10 +110,6 @@
 			[
 				"Pa",
 				"parseInt"
-			],
-			[
-				"fon",
-				"font-size"
 			],
 			[
 				"marg",
@@ -134,10 +146,6 @@
 			[
 				"fecha",
 				"fechaActualizada"
-			],
-			[
-				"tex",
-				"text-align"
 			],
 			[
 				"borde",
@@ -379,7 +387,7 @@
 			"file": "src/Cole/IntranetBundle/Resources/views/Default/index.html.twig",
 			"settings":
 			{
-				"buffer_size": 29328,
+				"buffer_size": 29376,
 				"line_ending": "Unix"
 			}
 		},
@@ -427,7 +435,7 @@
 			"file": "src/Cole/IntranetBundle/Resources/public/js/intranet.js",
 			"settings":
 			{
-				"buffer_size": 92033,
+				"buffer_size": 95634,
 				"line_ending": "Unix"
 			}
 		},
@@ -435,7 +443,7 @@
 			"file": "src/Cole/IntranetBundle/Resources/public/css/intranet.css",
 			"settings":
 			{
-				"buffer_size": 80059,
+				"buffer_size": 83924,
 				"line_ending": "Unix"
 			}
 		},
@@ -484,7 +492,7 @@
 			"file": "src/Cole/BackendBundle/Resources/translations/messages.en.yml",
 			"settings":
 			{
-				"buffer_size": 20560,
+				"buffer_size": 21634,
 				"line_ending": "Unix"
 			}
 		},
@@ -500,7 +508,7 @@
 			"file": "src/Cole/IntranetBundle/Controller/AlumnoController.php",
 			"settings":
 			{
-				"buffer_size": 57177,
+				"buffer_size": 57538,
 				"line_ending": "Unix"
 			}
 		},
@@ -516,7 +524,7 @@
 			"file": "src/Cole/IntranetBundle/Controller/ProfesorController.php",
 			"settings":
 			{
-				"buffer_size": 90608,
+				"buffer_size": 98640,
 				"line_ending": "Unix"
 			}
 		},
@@ -540,7 +548,7 @@
 			"file": "src/Cole/BackendBundle/Entity/Padres.php",
 			"settings":
 			{
-				"buffer_size": 13955,
+				"buffer_size": 14940,
 				"line_ending": "Unix"
 			}
 		},
@@ -604,7 +612,7 @@
 			"file": "src/Cole/BackendBundle/Entity/Profesor.php",
 			"settings":
 			{
-				"buffer_size": 25336,
+				"buffer_size": 26317,
 				"line_ending": "Unix"
 			}
 		},
@@ -644,18 +652,47 @@
 			"file": "src/Cole/IntranetBundle/Controller/AusenciaController.php",
 			"settings":
 			{
-				"buffer_size": 9522,
+				"buffer_size": 14008,
 				"line_ending": "Unix"
 			}
 		},
 		{
-			"contents": "*{\n    margin: 0;\n    padding: 0;\n}\na {\n    text-decoration: none !important;\n    color: #001F51 !important;\n    outline: none !important;\n}\na:focus {\n    text-decoration: underline;\n}\na:hover {\n    color: #496a9f !important ;\n}\nbody {\n    background-color: #FFF;\n    border: 0px none;\n    width: 100%;\n    height: 100%;\n    font-size: 16px !important;\n    font-family: Trebuchet MS,Tahoma,Verdana,sans-serif !important;\n    color: #001F51;\n}\n.cab_sup {\n    position: relative;\n    float: left;\n    padding: 0.2em 0 ;\n    width: 100%;\n    background-color: #001F51;\n    color: #FFF;\n    z-index: 0;\n}\n.cab_sup a{\n    color: #FFF;\n}\n.centrado {\n    clear: both;\n    position: relative;\n    /*max-width: 74.0625em;*/\n    max-width: 70em;\n    margin: 0px auto;\n}\n.cab_sup .centrado {\n    z-index: 10;\n    overflow: visible;\n}\n.menu_sup_izq {\n    position: relative;\n    float: left;\n    font-family: \"Times New Roman\", Times, serif;\n    padding-top: 6px;\n}\n.menu_sup_izq img{\n    margin: 2px 5px;\n}\n.menu_sup_izq li {\n    list-style-type: none;\n    float: left;\n    position: relative;\n}\n.menu_sup_izq li a{\n        color: #E3E7EB !important;\n    }\n.menu_sup_izq a:hover{\n    text-decoration: underline;\n}\n.primero,.siguiente{\n    text-transform: uppercase;\n    padding:0 0.25em;\n    border: medium green;\n}\n.primero a,.siguiente a{\n        padding:0 0.25em;\n}\n.siguiente{\n    border-left: 1px solid;\n}\n\n#logotipo {\n    position: absolute;\n    top: 0px;\n    left: 43%;\n    width: 189px;\n    height: 179px;\n    overflow: hidden;\n    font-size: 1em;\n    z-index: 5;\n}\n#logotipo span {\n    position: relative;\n    float: left;\n    width: 189px;\n    height: 179px;\n    cursor: pointer;\n    z-index: 2;\n}\n/*----------Menú superior derecha--------------*/\n.menu_sup_der{\n    position: relative;\n    float: right;\n    width: 10em; /* Aumentar el tamaño de la caja para añadir más redes sociales*/\n    text-align: right;\n    padding-left: 4px;\n    padding-top: 7px;\n}\n.menu_sup_der>div{\n        position: relative;\n        float: left;\n}\n.usuariologin{\n    padding: 0.15em 0px 0.15em 2em;\n    background: url(\"../images/cabecera//fnd_login.png\") no-repeat scroll left center transparent;\n    cursor: pointer;\n    font-family: \"Times New Roman\", Times, serif;\n    color: #E3E7EB;\n    text-transform: uppercase;\n}\n.caja_login {\n    position: absolute;\n    top: 26px;\n    left: -2.5em;\n    padding: 2px;\n    width: 200px;\n    z-index: 60;\n    background-color: #001F51;\n}\n.caja_login #login{\n    height: 90px;\n}\n.caja_login .recuperar a{\n    color: white !important;\n}\n.caja_login .recuperar p{\n    margin: 0;\n}\n.login label{\n    width: 13em;\n}\n.oculto {\n    display: none;\n}\n.bloque_login {\n    position: relative;\n    float: left;\n    margin: 0px;\n    padding: 0px;\n    clear: both;\n    width: 100%;\n    font-size: 0.8em;\n    text-align: center;\n}\n.bloque_login>h2{\n    position: relative;\n    margin: 0px;\n    padding: 10px;\n    font-size: 1.8em !important;\n    font-family:\"Times New Roman\",serif;;\n    font-weight: normal;\n    color: #FFF;\n    line-height: 100%;\n    padding-bottom: 0.25em;\n    text-align: right;\n}\n.bloque_login>form div{\n\n    margin: 6px;\n}\n.bloque_login input[type=\"text\"],.bloque_login input[type=\"password\" ] {\n        background:  #b1cce7;\n        border: grey solid 1px;\n        color: #001f51;\n        padding: 0px 5px;\n        width: 100%;\n        margin-bottom: 2px;\n        float: right;\n        border-radius: 3px;\n        -moz-box-sizing: border-box;\n        -webkit-box-sizing: border-box;\n        box-sizing: border-box;\n\n}\n.bloque_login label{\n    margin-right: 4px;\n    padding: 3px 0px;\n    font-size: 0.9em;\n}\n.bloque_login .recordar{\n    float: left;\n    margin-top: 8px;\n    font-size: 15px;\n}\n.recordar label input{\n    margin: 0  1px!important;\n    vertical-align: sub;\n    cursor: pointer;\n}\n\n.bloque_login input[type=\"submit\"]{\n    width: 40%;\n    margin: 6px 5px 6px 0;\n    float: right;\n    color: grey ;\n}\n.bloque_login div:last-child:hover{\ntext-decoration: underline;\n}\n\nfieldset.fsetoculto {\n    border: medium none;\n}\n\n.bl_izq {\n    position: relative;\n    float: left;\n    margin: 0;\n    padding: 0;\n}\n\n.redes_soc_sup,.redes_soc_sup a{\n    position: relative;\n    float: left;\n    margin-left: 0.25em;\n}\n\n.icon_face, .icon_twitter{\n    width: 25px;\n}\n.icon_twitter{\n    background: transparent url(\"../images/menu/twitter.png\") no-repeat scroll right top;\n}\n.icon_facebook{\n    background: transparent url(\"../images/menu/facebook.png\") no-repeat scroll right top;\n}\n}\n/*---------------------------------------*/\n.cabecera {\n    position: relative;\n    float: left;\n    width: 100%;\n    height: 150px;\n    z-index: -2;\n}\n\n.titulo{\n    position: relative;\n    float: left;\n    margin-top: 1em;\n    font-family: \"Comic Sans MS\", cursive;\n    font-size: 1.40em;\n    color: #001F51;\n    line-height: 150%;\n}\n.titulo>strong{\n        font-size:1.2em;\n}\n\n.carrusel{\n    position: relative;\n    float: right;\n    width: 400px;\n    height: 145px;\n    margin: 0   auto;\n    z-index: -1;\n}\n.carrusel>div{\n    position: absolute;\n    width: 100%;\n    height: 100%;\n}\n\n.carrusel>img{\n    position: relative;\n    float: right;\n    width: 447px;\n    height: 200px;\n    z-index: 30;\n    margin: 0px;   \n    padding: 0px;\n\n\n}\n.fondo_menu{\n    position: absolute;\n    width: 100%;\n    top: 190px;\n    height: 7em;\n    background-color: #b1cce7;\n    color: #FFF;\n    opacity: 0.3;\n    z-index:2;\n\n}\n/* Estilo Páginas Restringida*/\n\n#div_restringida{\n    width: 80%;\n    min-height: 150px;\n    background: #b1cce7 none repeat scroll 0 0;\n    border-radius: 10px;\n    box-shadow: 5px 5px 15px black;\n    padding: 7px;\n    margin: 3.8% auto;\n    overflow: auto;\n}\n#div_restringida h3{\n    color: #001f51;\n    margin-bottom: 15px !important;\n    margin: 0;\n    padding: 5px 0;\n    text-align: center;\n}\n#div_restringida img{\n    display: inline;\n    float: left;\n    width: 85px;\n}\n#div_restringida p{\n    display: inline;\n    float: left;\n    font-family: \"Comic Sans MS\";\n    font-size: 14px;\n    line-height: 25px;\n    padding: 0;\n}\n\n/* Menú Principal*/\n.barra_menu{\n    width: 93%;\n    z-index: 50;\n    position: relative;\n    float: left;\n    height: 60px;\n    margin: 5px 40px;\n    padding-top: 10px;\n}\n.menu{\n    width: 100%;\n    position: relative;\n    float: left;\n    color: white;\n    list-style: none;\n    z-index: 21;\n    height: 45px;\n    background-color:  #001F51;\n    -moz-box-shadow:  black 5px 5px 15px;\n    -webkit-box-shadow:  black 5px 5px 15px;\n    box-shadow:  black 5px 5px 15px;\n    z-index: 10;\n}\n.barra_menu:before, .barra_menu:after{\n    content: \"\";\n    position: absolute;\n    display: block;\n    bottom: -10px;\n    border: 1.59em solid #001c4a;\n    z-index: -1;\n}\n.barra_menu:before{\n    left: -2.1em;\n    border-right-width: 1.5em;\n    border-left-color: transparent;\n}\n.barra_menu:after {\n    right: -2.1em;\n    border-left-width: 1.5em;\n    border-right-color: transparent;\n}\n.menu:before, .menu:after {\n    content: \"\";\n    position: absolute;\n    display: block;\n    border-style: solid;\n    border-color: #000c20 transparent transparent transparent;\n    bottom: -1em;\n}\n.menu:before {\n    left: 0;\n    top:45px;\n    border-width: 0.96em 0 0 1em;\n}\n.menu:after {\n    right: 0;\n    border-width: 1em 1em 0.06em 0;\n}\n.menu > li{ \n    list-style: none;\n    display: inline-block;\n    position:relative;\n    float: left;\n    border-radius: 10px 10px 0px 0px;\n    text-align: center;\n    width: 13%;\n    height: 40px;\n    font-family: Helvetica,Arial,sans-serif;\n    -webkit-transition: all 0.2s ease-in;\n    -moz-transition: all 0.2s ease-in;\n    -o-transition: all 0.2s ease-in;\n     background-color:  #001F51;\n    display: table;\n}\n.menu > li a{\n    height: 45px;\n    display: inline-block;\n    font-size: 0.9em;\n    color: white !important;\n    display: table-cell;\n    vertical-align: middle; \n}\n.menu li:hover a{\n    color: #001F51;\n}\n.menu > li a:hover{\n        display: table-cell;\n        vertical-align: middle;\n        color: #001F51 ;\n}\n.submenu{\n    list-style: none;\n    position: absolute;\n    text-align: left;\n    padding: 1px;\n    top: 30px;\n    left: 50%;\n    margin-left: -83px;\n    width: 160px;\n    opacity: 0;\n    visibility: hidden;\n    -moz-transition: all .3s .02s;\n    -webkit-transition: all .3s .02s;\n    -o-transition: all .3s .02s;\n    transition: all .3s .02s;\n     z-index: -3;\n}\n.menu > li:hover >ul{\n    opacity: 1;\n    top:45px;\n    visibility: visible;\n}\n.submenu > li, .submenu  ul li{\n    background-color:  #f26e26;\n    width: 100%;\n    display: table;\n    border: 2px ridge #CCC;\n    border-top: none;\n    border-bottom: none;\n    border-top: 1px solid white !important;\n}\n.submenu li a, .submenu  ul li a{\n    height: auto;\n    min-width: 10px;\n    color:#fff !important;\n    text-decoration:none !important;\n    display:block;\n    padding: 6px 3px;\n}\n.submenu li:hover>a, .submenu  ul li:hover>a{\n        color: #001F51 !important;\n}\n\n.submenu li:first-child, .submenu  ul li:first-child{\n    border-radius:5px 5px 0 0;\n    margin-top:15px;\n    position:relative;\n    border: 2px ridge #CCC;\n    border-top: 2px ridge #CCC !important;\n    border-bottom: none;\n}\n.submenu li:last-child, .submenu  ul li:last-child{\n    border: 2px ridge #CCC;\n    border-radius: 0 0 5px 5px;\n}\n.submenu li:first-child:before{ \n    content:'';\n    position:absolute;\n    width:0.5px;\n    border:8px solid transparent ;\n    border-bottom-color:#001F51;\n    left:50%;\n    top:-16px;\n    margin-left:-8px;\n}\n.menu > li:hover {\n    border-radius: 10px 10px 0px 0px;\n    height: 50px;\n    -moz-transform: translate(0px, -5px);\n    -webkit-transform: translate(0px, -5px);\n    transform: translate(0px, -5px);\n    border: 2px ridge #CCC;\n        \n    -moz-box-sizing: border-box;\n    -webkit-box-sizing: border-box;\n    box-sizing: border-box;\n}   \n.submenu  ul {\n    list-style: none;\n    position: absolute;\n    text-align: left;\n    padding: 16px 0px 0px 0px;\n    top: -31px;\n    left: 259px;\n    margin-left: -79px;\n    width: 170px;\n    opacity: 0;\n    visibility: hidden;\n    -moz-transition: all .3s .02s;\n    -webkit-transition: all .3s .02s;\n    -o-transition: all .3s .02s;\n    transition: all .3s .02s;\n}\n.submenu li:hover ul{\n    opacity: 1;\n    visibility: visible;\n}\n .submenu li ul li:first-child:before{ \n    content:'';\n    position:absolute;\n    width:0.5px;\n    border:8px solid transparent ;\n    border-right-color:#001F51;\n    left:-8px;\n    top:20%;\n}\n.submenu li{\n    position: relative;\n}\n\n/* Botones del menú principal*/\n\n.boton_inicio{\n\n    width: 80px !important;\n}\n.boton_inicio a:hover{\n\n    color: #f26e26 !important;\n}\n.boton_inicio:hover{\n    -moz-transform: none !important;\n    -webkit-transform: none !important;\n    transform: none !important;\n    border: none !important;\n    height: 40px !important;\n}\n/*Colores botones menú*/\n\n.boton_naranja:hover{\n    background-color:  #f26e26;\n}\n.boton_azul:hover{\n    background-color:  #327AFF;\n}\n.boton_amarillo:hover{\n    background-color:  #f8ad48;\n}\n.boton_verde:hover{\n    background-color:  #37db45;\n}\n.boton_rojo:hover{\n    background-color:  #dc3f36;\n}\n.boton_lila:hover{\n    background: #b067a9;\n}\n        /*Colores botones submenú*/\n.boton_naranja ul li{\n    background-color:  #f26e26;\n}\n.boton_azul ul li{\n    background-color:  #327AFF;\n}\n.boton_amarillo ul li{\n    background-color:  #f8ad48;\n}\n.boton_verde ul li{\n    background-color:  #37db45;\n}\n.boton_rojo ul li{\n    background-color:  #dc3f36;\n}\n.boton_lila ul li{\n    background: #b067a9;\n}\n.boton_naranja ul li:hover{\n    background:#FDB358;\n}\n.boton_azul ul li:hover{\n    background-color:  #7BAAFF;\n}\n.boton_amarillo ul li:hover{\n    background-color:  #FFED8F;\n}\n.boton_verde ul li:hover{\n    background-color:  #A1FF90;\n}\n.boton_rojo ul li:hover{\n    background-color:  #FF7575;\n}\n.boton_lila ul li:hover{\n    background: #EC9DFF;\n}\n.migas{\n    margin-top: 70px;\n    color: #496A9F;\n    font-size: 0.95em;\n    height: 30px;\n}\n.migas > span{\n    float: right;\n}\n.migas > :first-child{\n    float: left !important;\n}\n.main{\n    width: 100%;\n    float: left;\n    text-align: left;\n    font-size: 0.8em;\n    margin-top: 35px;\n    padding-top: 10px;\n    min-height: 190px;\n}\n.contenido{\n    width: 68.5%;\n    float: left;\n    -moz-box-sizing: border-box;\n    -webkit-box-sizing: border-box;\n    box-sizing: border-box;\n}\n.main aside{\n    padding: 10px;\n    width: 30%;\n    float: left;\n    -moz-box-sizing: border-box;\n    -webkit-box-sizing: border-box;\n    box-sizing: border-box;\n    margin-left: 10px;\n}\n.contenido, .main aside{\n    display: inline-block;\n    vertical-align: top;\n}\n.aside_columna{\n    text-align: justify;\n    margin-bottom: 25px;\n}\n.aside_columna h3{\n    font-size: 1.2em;\n    font-family: Helvetica, Arial, sans-serif;\n    border-radius: 0 0 5px 5px;\n    box-shadow: 0 1px 1px 1px rgba(0, 0, 0, 0.5);\n    letter-spacing: 0.2px;\n    color: #001F51;\n    padding: 5px 25px;\n    background: #DBE6F1;\n    border-top: 1.5px solid blue;\n    margin: 0 10px 10px 10px;\n    text-align: center;\n}\n.aside_columna p,.aside_columna span{\n    font-size: 12px;\n    margin-bottom: 5px;\n    padding:0;\n    color: #001F51;\n}\n#img_calendario{\n    display: block;\n    margin-bottom: -16px;\n    margin-left: auto;\n    margin-right: auto;\n    margin-top: 13px !important;\n    text-align: center;\n}\n.horarios p span{\n    display: block;\n    text-align: center;\n    border-left: #334c73 2px solid;\n    border-right: #334c73 2px solid;\n}\n.aside_columna p strong{\n    background: #334c73;\n    color: white;\n    text-align: center;\n    display: block;\n}\n.aside_columna p .dias{\n    font-weight: bold;\n    margin-bottom: 0;\n    padding-bottom: 5px;\n}\n.aside_columna p .horas{\n    margin-bottom: 0;\n    padding-bottom: 5px;\n}\n.aside_columna p[id^='cont_']{\n    margin: 7px !important;\n    border-radius: 5px;\n}\n.aside_columna p[id^='cont_'] span:last-child{\n   border-bottom: 2px solid #334c73;\n   border-radius: 0 0 5px 5px;\n}\n.aside_columna p[id^='cont_'] span:nth-child(2){\n   padding-top: 5px !important;\n}\n.aside_columna p[id^='cont_'] strong{\n   padding: 2px;\n   border-radius: 5px 5px 0 0;\n   font-family: serif;\n}\n.aside_twiter>div{\n    padding: 0 3%;\n}\n/*Noticias portada*/\n\n.contenedor_noticia{\n    padding:10px;\n    display:inline-block;\n    width: 100%;\n    -moz-box-sizing: border-box;\n    -webkit-box-sizing: border-box;\n    box-sizing: border-box;\n    border-bottom: 2px solid rgb(51, 76, 115);\n    border-bottom: 2px solid rgba(51, 76, 115, .2);\n    -webkit-background-clip: padding-box; /* for Safari */\n    background-clip: padding-box; /* for IE9+, Firefox 4+, Opera, Chrome */\n    min-height: 160px;\n    overflow: hidden;\n}\n.noticia h2{\n    margin-top: 10px !important;\n    margin-bottom: 15px !important;\n}\n.main .contenedor_noticia:last-child{\n    border: none !important;\n}\n.fecha_publicada{\n    position: relative;\n    display: inline-block;\n    float: left;\n    background-color: #001F51 !important;\n    color: #FFF !important;\n    width: 8.2%;\n    height: 145px;\n    background-image: url(\"../images/mascara_publicada.png\");\n    background-repeat: no-repeat;\n    padding: 15px 10px 20px;\n    text-align: center;\n    line-height: 1.2;\n    margin-right: 10px;\n    font-size: 15px;\n    border-radius: 3px;\n    box-shadow: 2px 2px 1px #888888;\n}\n.valor_day{\n    font-size: 30px;\n    font-weight: bold;\n}\n.valor_month{\n    font-size: 16px;\n    margin-top: 4px;\n    text-transform: uppercase;\n}\n.valor_year{\n    font-size: 14px;\n    margin-top: 2px;\n}\n\n.contenido_noticia{\n    display: inline-block;\n    float: left;\n    width: 100%;\n    -moz-box-sizing: border-box;\n    -webkit-box-sizing: border-box;\n    box-sizing: border-box;\n    word-wrap: break-word;\n}\n.contenido_noticia p{\n    margin: 0!important;\n\n}\n#recientes{\n    padding: 20px 10px;\n}\n#recientes .contenido_noticia img{\n    display: none;\n}\n#recientes .contenido_noticia{\n    width: 89%;\n}\n#recientes .contenido_noticia p{\n    margin-top: 0px !important;\n\n}\n.imgLiquidFill{\n    position: relative;\n    display: block;\n    width:100%; \n    height:180px;\n    margin-bottom: 10px;\n    border-radius: 3px !important;\n    box-shadow: 2px 2px 5px #888888;\n}\n.img-small{\n    width:150px !important; \n    height:130px !important;\n    float: left;\n    margin-right: 20px;\n    margin-bottom: 20px;\n    border-radius: 3px !important;\n    background-position: center;/*Se centra la imagen pequeña de la noticia*/\n}\n.normal{\n    width:530px !important; \n    height:300px !important;\n    margin: 30px auto;\n    border-radius: 3px !important;\n    background-position: center;/*Se centra la imagen pequeña de la noticia*/\n}\n/*.no_foto{\n    padding-left: 170px;\n}*/\n.no-seleccion-foto:hover{\n    opacity: 0 !important;\n}\n.no-seleccion:hover{\n    -webkit-user-select: none;\n    -moz-user-select: none;\n    -ms-user-select: none;\n    user-select: none;\n    cursor: default;\n}\n.contenido_noticia>div>a:hover{\n    width: 100%;\n    opacity: 0.1;\n    background-color: white;\n}\n.contenido_noticia h2{\n    position: relative;\n    /*display: block;\n    clear: both;*/\n    margin-bottom: 3px;\n    margin-top: -5px;\n    font-size: 25px;\n    font-family: serif;\n    text-transform: capitalize;\n}\n.contenido_noticia p{\n    font-size: 14px;\n}\n#nuevo{\n    margin-top: 10px;\n}\n#calendar{\n    clear: both;\n    display: inline-block;\n    height: auto !important;\n    width: 100%;\n}\n#calendar .c-grid{\n    background: #eff4f9 none repeat scroll 0 0;\n    clear: both;\n    display: block;\n    \n    margin: 0 5%;\n    width: 90%;\n    border-radius: 5px 5px 0 0;\n}\n#calendar .c-event-item{\n    margin: 5px !important;\n    padding-left: 0 !important;\n}\n#calendar .c-event-item > div{\n    white-space: pre-wrap;\n}\n#calendar .c-event-item span{\n    padding: 0 8px;\n    margin-left: 5px;\n    border-radius: 8px;\n    background: #5cb85c;\n    white-space: nowrap;\n}\n#calendar .c-grid div[class*=\"c-week-day\"], #calendar .c-grid div[class*=\"c-grid-title\"]{\n    padding-top: 1% !important;\n    background: #001f51 none repeat scroll 0 0;\n    opacity: 0.8;\n    height: 24px;\n}\n#calendar .c-grid div[class*=\"c-grid-title\"]{\n    border-bottom: 1px solid white;\n    font-size: 1.2em;\n    padding: 0 6px !important;\n}\n#calendar .c-grid div[class*=\"c-day\"]{\n    padding: 3px 0 !important;\n    font-size: 13px;\n}\n#calendar .c-grid .c-day:not(.c-event){\n    pointer-events: none !important ;\n    cursor: none !important;\n}\n#calendar .c-event-grid{\n    background: #eff4f9 none repeat scroll 0 0;\n    border-radius: 0 0 5px 5px;\n    box-shadow: 2px 2px 5px #888888;\n    clear: both;\n    display: block;\n    margin: 0 5%;\n    min-height: 60px;\n    padding-bottom: 5px;\n    width: 90%;\n}\n#calendar .c-event-grid .c-event-title {\n    color: white;\n    font-weight: bold;\n    height: 12%;\n    margin-left: 0;\n    text-align: center;\n    width: 100%;\n    background: #001f51 none repeat scroll 0 0;\n    padding: 1% !important;\n    opacity: 0.8;\n}\n#calendar .c-grid .c-event {\n    border-radius: 25px;\n    margin: 0 2.65%;\n    width: 9%;\n    background: #001f51;\n    opacity: 0.8;\n}\n#calendar .c-grid .c-event-over {\n    background: #fa8258 !important;\n    color: #001f51 !important;\n}\n#calendar .c-event-grid .c-event-body {\n    background-color: #eff4f9;\n    max-height: 170px;\n    overflow: auto;\n}\n#calendar .c-today {\n    background-color: #abd0d5;\n    border-radius: 25px;\n    margin: 0 2.6%;\n    width: 9.1%;\n    text-decoration: underline;\n    font-weight: bold;\n}\n#calendar .c-month {\n    width: 82%;\n}\n#calendar .c-next {\n    width: 9%;\n    border-radius: 0 5px 0 0;\n}\n#calendar .c-previous {\n    width: 9%;\n    border-radius: 5px 0 0 0;\n}\n#calendar .div-over {\n    margin: 0 auto;\n    margin-top: 3%;\n    text-align: center;\n    opacity: 0.5\n}\n#calendar .weekend {\n    background: lightgray none repeat scroll 0 0;\n    border-radius: 0;\n    margin: 0;\n    width: 14.28%;\n}\n.dia_select{\n    background: #5cb85c !important;\n    color: #001f51 !important;   \n}\n.icon {\n    background-repeat: no-repeat;\n    display: inline-block;\n    margin-top: -0.25em;\n    overflow: hidden;\n    position: relative;\n    text-indent: -99999px;\n    vertical-align: middle;\n    height: 16px;\n    width: 16px;\n    background-image: url(\"../images/menu/ui-icons_334c73_256x240.png\");\n}\n.icon-triangle-1-e {\n    background-position: -32px -16px;\n}\n.calendar .description{\n    background: #abd0d5;\n    border-top: 1px solid #001f51 !important;\n    padding: 10px;\n    border-radius: 5px;\n}\n.arrow-right{\n    width: 0 !important;\n    height: 0!important;\n    border-top: 5px solid transparent !important;\n    border-bottom: 5px solid transparent !important;\n    border-left: 5px solid #001f51 !important;\n    float: left !important;\n    margin-top: 3px !important;\n    margin-right: 3px !important;\n}\n.arrow-down{\n    width: 0 !important;\n    height: 0 !important;\n    border-top: 5px solid #001f51 !important;\n    border-right: 5px solid transparent !important;\n    border-left: 5px solid transparent !important;\n    float: left !important;\n    margin-top: 6px !important;\n    margin-right: 3px !important;\n}\n.calendar .c-event-list .title:hover{\n    pointer-events: auto !important;\n    cursor: pointer !important;\n}\n#gallery{\n    margin: 50px auto;\n    border-radius: 5px;\n    box-shadow: 2px 2px 5px grey\n}\n#pre_footer{\n    margin: 0 auto -25px;\n    height: 250px;\n}\n#bg_white{\n    background-color: #fff;\n    height: 30px;\n    position: absolute;\n    top: 0;\n    width: 100%;\n}\n#pre_footer #redes_sociales{\n    display: block;\n}\n.footer_wrapper{\n    background: #e6e6e6 none repeat scroll 0 0;\n    border-bottom: 2px outset floralwhite;\n    border-top: 2px inset floralwhite;\n    color: #001f51 !important;\n    padding: 2px;\n    margin-top: 35px;\n}\n#pre_footer .region h2 .icono{\n    display: block;\n    height: 32px;\n    left: -5px;\n    position: absolute;\n    top: -10px;\n    width: 32px;\n}\n.col-rs{\n    width: 35%;\n    font-size: 9px !important;\n    font-family: Helvetica,Arial,sans-serif;\n    text-transform: uppercase;\n    font-weight: normal !important;\n    color: black;\n    float: left;\n    min-height: 1px;\n    margin: 0 7%;\n    position: relative;\n    letter-spacing: 1px;\n    -webkit-box-sizing: border-box;\n    -moz-box-sizing: border-box;\n    box-sizing: border-box;\n    height: 250px;\n    background: white;\n\n}\n.col-rs h2{\n    background: lightgrey;\n    border-radius: 5px 5px 0 0;\n    font-size: 18px !important;\n    margin: 0;\n    padding: 5px 0;\n}\n.col-rs .content{\n    box-shadow: 2px 2px 5px black;\n    height: 220px;\n}\nfooter{\n    position: relative;\n    float: left;\n    padding-bottom: 5px;\n    width: 100%;\n    background-color: #001F51;\n    text-align: center;\n    color: #88BAED;\n    font-size: 0.8em;\n    z-index: -5;\n}\nfooter a{\n    padding: 2px 5px;\n    display: inline-block;\n}\nfooter a:hover{\n    text-decoration: underline;\n}\nthead tr th {\n    background: #334C73;\n    min-width: 80px !important;\n    text-align: left;\n    padding: 0 5px;\n    font: 1em solid ;\n    color:white;\n}\ntbody:not(.lista_alumnos) tr td{\n    background: #b1cce7;\n    min-width: 80px !important;\n    /*text-align: left;*/\n    padding: 0 5px;\n}\n\n.horario_alumno_intranet .aula_horario_intranet{\n    font-size: 17px;\n    vertical-align: middle;\n}\n.horario_alumno_intranet #alumno{\n    clear: none;\n    float: left;\n    font-size: 17px;\n    margin-bottom: 5px;\n    margin-top: 15px;\n    width: 100%;\n}\n.horario_alumno_intranet #alumno .label{\n    display: block;\n    float: left;\n    font-weight: bold;\n    height: 26px;\n    margin-left: 30px;\n    margin-right: 7px;\n}\n\nthead{display: table-header-group;}\ntfoot {display: table-row-group;}\ntr {page-break-inside: avoid;}\n\n.cabecera_listado .horario_grupo_pdf  img{\n    height: 30px;\n    vertical-align: middle;\n    width: 30px;\n    float: left;\n}\n#cabecera_listado #logo{\n    float: left;\n    width: 80px !important;\n    height: 80px !important;\n    margin-top: 13px !important;\n}\n#cabecera_listado .titulo{\n    font-size: 1em !important;\n    float:left!important;\n}\n#cabecera_listado #curso{\n    margin-top: 20px !important;\n    font-size: 1.4em !important;\n    float:right!important;\n    margin-right: 10px;\n    text-align: right;\n    width: 300px;\n}\n#cabecera_listado #curso h6{\n    font-weight: normal;\n    margin-bottom: 5px !important;\n    margin-top: -3px;\n}\n#cabecera_listado .subtitulo{\n    margin-top: 5px !important;\n}\n/*Se usa para mostrar diferentes subtitulos en varias páginas (Ej. Lista de alumnos por optativas)*/\n.subtitulo_pdf{\n    color: #e57200;\n    font-size: 1.1em !important;\n    float:right!important;\n    margin-right: 10px;\n    text-align: right;\n    width: 100%;\n    font-weight: bold;\n}\n\n#cabecera_listado #grupo{\n    clear: both;\n    text-align: center;\n}\n\n.lista_pdf tr th:first-child,.lista_pdf tr td:first-child{\n    text-align: center !important;\n    width: 100px !important;\n}\n.lista_pdf tr th:last-child,.lista_pdf tr td:last-child{\n    padding-left: 10px;\n}\n\n.lista_pdf tr th{\n    line-height: 0.9 !important;\n    padding-top: 7px !important;\n    padding-bottom: 7px !important;\n    font-size: 14px !important;\n}\n.lista_pdf tr td{\n    line-height: 0.9 !important;\n    padding-top: 6px !important;\n    padding-bottom: 6px !important;\n    font-size: 13px !important;\n}\n.lista_pdf tr:nth-child(2n+1){\n    background: #eff3f9 !important;\n}\n.lista_pdf tr td, .lista_pdf thead tr{\n    border: 1px solid grey ;\n}\n.lista_pdf tr th{\n    border: none ;\n}\n.lista_pdf tr th:first-child{\n    border-right: 1px solid #ddd !important;\n}\n.c-grid-title {\n    height: 28px !important;\n}\n#recuperarPassword p:first-child{\n    margin: 0 !important;\n    margin-bottom: 35px !important;\n}\n#recuperarPassword p{\n    margin: 15px 0;\n}\n#recuperar{\n    clear: both;\n    margin: 0 auto;\n    display: block;\n\n    width: 100px !important;\n}\n#recuperarPassword .mensaje_error{\n    height: 20px !important;\n    clear: both;\n    display: block;\n}\n#recuperarPassword  #passolvidado{\n    height: 35px;\n}\n#recuperarPassword #dni{\n    padding-left: 9px !important;\n    text-transform: uppercase !important;\n    height: 34px;\n}\n#recuperarPassword #tipo_user{\n    margin: 0 auto;\n    max-width: 196px;\n    text-align: center;\n}\n\n#recuperarPassword #dni_user {\n    max-width: 145px;\n    margin: 0 auto;\n}\n#recuperarPassword .input-group-addon{\n    min-width: 20px !important;\n}\n#container_restPass{\n    border: 1px solid grey;\n    padding: 0;\n    padding-bottom: 5px !important;\n    border-radius: 5px;\n    -moz-box-shadow:  1px 2px 4px black;\n    -webkit-box-shadow: 1px 2px 4px black;\n    box-shadow:  1px 2px 4px black;\n    margin-top: 35px;\n    margin-bottom: 27px;\n}\n#container_restPass .titulo-bloque{\n    border: none;\n    border-bottom: 1px solid grey !important;\n    border-radius: 5px 5px 0 0 !important;\n}\n#restablecerPassword_submit{\n    margin-bottom: 10px;\n    min-width: 100px;\n}\n\n#boletin_evaluacion_pdf #grupo{\n    color: #001f51 !important;\n    text-align: center !important;\n    margin-top: 100px;\n    margin-bottom: 50px;\n    font-weight: bold !important;\n    text-decoration: underline;\n}\n#boletin_evaluacion_pdf span,#boletin_evaluacion_pdf label {\n    color: #001f51 !important;\n    font-size: 15px;\n}\n#boletin_evaluacion_pdf th{\n    color: #001f51 !important;\n    background: #b1cce7;\n    border: 1px solid  grey !important;\n    text-align: center;\n}\n#boletin_evaluacion_pdf td{\n    background: white !important;\n    text-align: center;\n    min-width: 80px !important;\n    padding: 0!important;\n}\n#boletin_evaluacion_pdf td:first-child{\n    background: white !important;\n    text-align: left !important;\n    padding: 8px !important;\n}\n#boletin_evaluacion_pdf td span{\n    display: inline-block;\n    padding: 8px 10px!important;\n    max-width: 52px;\n}\n#boletin_evaluacion_pdf td span:first-child{\n    border-right: 1px solid grey;\n}\n.contenedor_nota {\n    float: left;\n    padding: 8px 0;    \n    width: 49%;\n    margin: 0;\n}\n#boletin_evaluacion_pdf td .contenedor_nota:first-child {\n    border-right: 1px solid grey;\n}\n\n\n#boletin_evaluacion_pdf .table {\n    margin: 3% 5%;\n    width: 90%;\n}\n#boletin_evaluacion_pdf .faltas {\n    width: 55%;\n}\n.div_datos {\n    margin-left: 10% !important;\n    width: 90%!important;\n}\n#boletin_evaluacion_pdf .table #completo td:last-child {\n    background: lightgrey !important;\n}\n.saluda_tutor{\n    margin-top: 80px;\n}\n.footer_boletin label,.footer_boletin span {\n    margin-left: 10% !important;\n}\n.footer_boletin{\n    float: left;\n    width: 50%; \n}\n.footer_boletin .horario p {\n    margin-left: 50px !important;\n}\n.saluda_tutor label {\n    width: 15% !important;\n    float: left;\n}\n.saluda_tutor p {\n    float: left !important;\n    margin-left: 0 !important;\n    width: 60% !important;\n}\n#boletin_evaluacion_pdf .horarios{\n    margin-top: 100px;\n}\n\n@media (max-width: 1100px){\n    .carrusel{\n        clear: both;\n        position: relative;\n        float: left;\n\n        margin-top: 80px;\n    }\n        #logotipo{\n        left: 70%;\n        top: 30px;\n    }\n        #logo{\n             width: 80%;\n            height: 80%;\n    }\n        .main{\n        margin-top: 250px;\n    }\n    .barra_menu{\n    padding-top: 0;\n    }\n  \n}\n@media (max-width: 820px){\n\n\n\n}\n@media (max-width: 650px){\n\n    #logotipo{\n        left: 70%;\n        top: 40px;\n    }\n    #logo{\n             width: 60%;\n            height: 60%;\n    }\n    .titulo{\n            font-size: 1.1em;\n    }\n}\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n",
-			"file": "src/Cole/ColeBundle/Resources/public/css/estilo.css",
-			"file_size": 29328,
-			"file_write_time": 1500578344000000,
+			"file": "src/Cole/IntranetBundle/Form/ComunicacionType.php",
 			"settings":
 			{
-				"buffer_size": 29315,
+				"buffer_size": 1268,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "src/Cole/IntranetBundle/Entity/Comunicacion.php",
+			"settings":
+			{
+				"buffer_size": 8994,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "src/Cole/IntranetBundle/Controller/ComunicacionController.php",
+			"settings":
+			{
+				"buffer_size": 8552,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "src/Cole/IntranetBundle/Resources/config/routing/comunicacion.yml",
+			"settings":
+			{
+				"buffer_size": 1049,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "src/Cole/ColeBundle/Resources/public/css/estilo.css",
+			"settings":
+			{
+				"buffer_size": 29388,
 				"line_ending": "Unix"
 			}
 		},
@@ -698,7 +735,7 @@
 			"file": "src/Cole/IntranetBundle/Resources/config/routing.yml",
 			"settings":
 			{
-				"buffer_size": 2784,
+				"buffer_size": 2916,
 				"line_ending": "Unix"
 			}
 		},
@@ -730,7 +767,7 @@
 			"file": "src/Cole/IntranetBundle/Resources/config/routing/profesores.yml",
 			"settings":
 			{
-				"buffer_size": 7355,
+				"buffer_size": 7717,
 				"line_ending": "Unix"
 			}
 		},
@@ -738,7 +775,7 @@
 			"file": "src/Cole/IntranetBundle/Resources/views/Profesor/index.html.twig",
 			"settings":
 			{
-				"buffer_size": 6136,
+				"buffer_size": 7076,
 				"line_ending": "Unix"
 			}
 		},
@@ -746,7 +783,7 @@
 			"file": "src/Cole/IntranetBundle/Resources/views/Alumno/index.html.twig",
 			"settings":
 			{
-				"buffer_size": 17126,
+				"buffer_size": 17273,
 				"line_ending": "Unix"
 			}
 		},
@@ -762,7 +799,7 @@
 			"file": "src/Cole/IntranetBundle/Resources/views/Alumno/asistencia.html.twig",
 			"settings":
 			{
-				"buffer_size": 5805,
+				"buffer_size": 6118,
 				"line_ending": "Unix"
 			}
 		},
@@ -999,6 +1036,13 @@
 			}
 		},
 		{
+			"settings":
+			{
+				"buffer_size": 0,
+				"line_ending": "Unix"
+			}
+		},
+		{
 			"file": "src/Cole/IntranetBundle/Form/CursaType.php",
 			"settings":
 			{
@@ -1050,7 +1094,15 @@
 			"file": "src/Cole/IntranetBundle/Resources/config/routing/ausencia.yml",
 			"settings":
 			{
-				"buffer_size": 1021,
+				"buffer_size": 1350,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "src/Cole/IntranetBundle/Entity/ComunicacionRepository.php",
+			"settings":
+			{
+				"buffer_size": 1590,
 				"line_ending": "Unix"
 			}
 		},
@@ -1198,7 +1250,7 @@
 			"file": "src/Cole/IntranetBundle/Resources/views/Profesor/asistencia.html.twig",
 			"settings":
 			{
-				"buffer_size": 12446,
+				"buffer_size": 15966,
 				"line_ending": "Unix"
 			}
 		},
@@ -1206,7 +1258,7 @@
 			"file": "src/Cole/IntranetBundle/Resources/views/Profesor/claseAsignada.html.twig",
 			"settings":
 			{
-				"buffer_size": 8133,
+				"buffer_size": 8559,
 				"line_ending": "Unix"
 			}
 		},
@@ -1218,6 +1270,22 @@
 			"settings":
 			{
 				"buffer_size": 11276,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "src/Cole/IntranetBundle/Resources/views/Profesor/mensajes.html.twig",
+			"settings":
+			{
+				"buffer_size": 7985,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "src/Cole/IntranetBundle/Resources/views/Comunicacion/destinatarios.html.twig",
+			"settings":
+			{
+				"buffer_size": 974,
 				"line_ending": "Unix"
 			}
 		},
@@ -1273,7 +1341,7 @@
 			"file": "src/Cole/IntranetBundle/Resources/views/Profesor/boletin_evaluacion.html.twig",
 			"settings":
 			{
-				"buffer_size": 7689,
+				"buffer_size": 8677,
 				"line_ending": "Unix"
 			}
 		},
@@ -1593,7 +1661,7 @@
 			"file": "src/Cole/BackendBundle/Entity/ProfesorRepository.php",
 			"settings":
 			{
-				"buffer_size": 2987,
+				"buffer_size": 3310,
 				"line_ending": "Unix"
 			}
 		},
@@ -1633,7 +1701,7 @@
 			"file": "src/Cole/IntranetBundle/Entity/Ausencia.php",
 			"settings":
 			{
-				"buffer_size": 4656,
+				"buffer_size": 5194,
 				"line_ending": "Unix"
 			}
 		},
@@ -1657,7 +1725,7 @@
 			"file": "src/Cole/IntranetBundle/Entity/AusenciaRepository.php",
 			"settings":
 			{
-				"buffer_size": 1825,
+				"buffer_size": 2953,
 				"line_ending": "Unix"
 			}
 		},
@@ -1665,7 +1733,7 @@
 			"file": "src/Cole/IntranetBundle/Form/AusenciaType.php",
 			"settings":
 			{
-				"buffer_size": 3192,
+				"buffer_size": 3224,
 				"line_ending": "Unix"
 			}
 		},
@@ -1674,6 +1742,14 @@
 			"settings":
 			{
 				"buffer_size": 585,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "src/Cole/IntranetBundle/Resources/views/Ausencia/confirmar.html.twig",
+			"settings":
+			{
+				"buffer_size": 1088,
 				"line_ending": "Unix"
 			}
 		}
@@ -1833,7 +1909,7 @@
 	],
 	"find":
 	{
-		"height": 47.0
+		"height": 35.0
 	},
 	"find_in_files":
 	{
@@ -1849,6 +1925,83 @@
 		"case_sensitive": false,
 		"find_history":
 		[
+			"fecha",
+			"FECHA",
+			"\",\n",
+			"comunicacion",
+			"toggle",
+			"cerrar",
+			"lista_mensaje_modal",
+			"AlumnosGrupoAsignatura",
+			"seguimientos",
+			"btn_responder",
+			"evaluacion_alumno",
+			"Nuevo",
+			"Borrar",
+			"tinymce",
+			"form-control",
+			";\n",
+			"bloque-menu",
+			"bloque",
+			"form_start",
+			"textarea",
+			"createCreate",
+			"$form",
+			"createCreate",
+			"fade-scale",
+			"fade",
+			"fade-scale",
+			"eliminar_tarea_modal",
+			"evaluacion_alumno",
+			"btn",
+			"shadow: ",
+			"box-shadow: ",
+			"Comunicación",
+			"segui",
+			"Comunicación",
+			"califica",
+			"mensajes",
+			"seguimientos",
+			"comprobarAlumno",
+			"comprobarHijo",
+			"$faltas",
+			"pendientes",
+			"justificacion",
+			"justificadas",
+			"pendien",
+			"Faltas de ",
+			"numtutorias",
+			"pendientes",
+			"nuevasTutorias",
+			"nuevas",
+			"nummensajes",
+			"pencil",
+			"Justificar",
+			"active",
+			"Motivo",
+			"absences",
+			"Responsable",
+			"Alumno",
+			"Alumno/a",
+			"form",
+			"fecha",
+			"No disponible",
+			"eliminar_ausencia_modal",
+			"editar_seguimiento_modal",
+			"btn-eli",
+			"btn-ed",
+			"btn-",
+			"btn",
+			"fec",
+			"verde",
+			"id_grupo",
+			"tabla_ausencia_profesor",
+			"tab-content",
+			"tutor_grupo",
+			"verde",
+			"tooltip",
+			"btn_",
+			"exc",
 			"alumno",
 			"form",
 			"edit",
@@ -1899,84 +2052,7 @@
 			"getAsignatura()->Opcional()",
 			"if($asignatura->getAsignatura()->getAsignatura()->Opcional()",
 			"+ 1 days",
-			"request",
-			"locale",
-			"Alumnos de",
-			"old_student_active",
-			"datatables",
-			"createEditNotasForm",
-			"findOneByTarea",
-			"evaluarta",
-			"tabla_tareas_profesor",
-			"Apellidos",
-			"Horario",
-			"Horario')->findAll();",
-			"findAll();",
-			"Horario')->findAll();",
-			"show",
-			"NuevoHorario",
-			"nuevo_horario",
-			"ComprobacionesHorarioNuevo",
-			"button_horario_save",
-			"appendTo",
-			"asignar",
-			":Horario')->findAll();",
-			"show.h",
-			"            $clase=\"fuera de horario\";\n",
-			"N",
-			"formar",
-			"\":\"",
-			"array",
-			"inicio",
-			"format",
-			"explode",
-			"exp",
-			"HorasImpartidaClaseProfesor",
-			"- 10 days",
-			"div_datos",
-			"seleccion_nuevo_seguimiento",
-			".size()>1){",
-			"días",
-			"selected",
-			"hidden",
-			"[]",
-			"array[]",
-			"exc",
-			"dia_semanal",
-			"getErrorMessages",
-			"ini_nav",
-			"AsignaturasGrupoProfesor",
-			"califica",
-			"cali",
-			"asignaturasGrupo_profesor",
-			"$(\"#seleccion_ausencias #asignatura\").empty();",
-			"seleccion_nuevo_seguimiento",
-			"event",
-			"orden.attr(\"id\")==\"2\"",
-			"AlumnosGrupo",
-			"Alumnosgrupoasi",
-			"blocker",
-			"swal",
-			"avi",
-			"sw",
-			"PNotify",
-			"aviso",
-			"seleccion_nuevo_seguimiento",
-			"tutor_grupo",
-			"Selecc",
-			"asistencia",
-			"asiste",
-			"new.h",
-			"createEditConfirmacionProfesorForm",
-			"intranet_confirmar",
-			"datos_confirmacion",
-			"createEditConfirmacionProfesorForm",
-			"jefe",
-			"findRolProfesor",
-			"antigu",
-			"baja",
-			"Se va a asignar en el sistema al profesor",
-			"Se va asignar en el sistema al profesor"
+			"request"
 		],
 		"highlight": true,
 		"in_selection": false,
@@ -1989,12 +2065,12 @@
 		"show_context": true,
 		"use_buffer2": true,
 		"whole_word": false,
-		"wrap": true
+		"wrap": false
 	},
 	"groups":
 	[
 		{
-			"selected": 51,
+			"selected": 35,
 			"sheets":
 			[
 				{
@@ -2009,8 +2085,8 @@
 						"selection":
 						[
 							[
-								2997,
-								2997
+								2767,
+								2767
 							]
 						],
 						"settings":
@@ -2158,7 +2234,7 @@
 							"translate_tabs_to_spaces": true
 						},
 						"translation.x": 0.0,
-						"translation.y": 714.0,
+						"translation.y": 1581.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"
@@ -2820,7 +2896,7 @@
 							"syntax": "Packages/YAML/YAML.tmLanguage"
 						},
 						"translation.x": 0.0,
-						"translation.y": 0.0,
+						"translation.y": 102.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"
@@ -2986,7 +3062,7 @@
 							"translate_tabs_to_spaces": true
 						},
 						"translation.x": 0.0,
-						"translation.y": 255.0,
+						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"
@@ -3318,7 +3394,7 @@
 							"translate_tabs_to_spaces": true
 						},
 						"translation.x": 0.0,
-						"translation.y": 1173.0,
+						"translation.y": 765.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"
@@ -3499,8 +3575,8 @@
 						"selection":
 						[
 							[
-								1751,
-								1751
+								3310,
+								3310
 							]
 						],
 						"settings":
@@ -3647,7 +3723,7 @@
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 4825.0,
+						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"
@@ -3813,7 +3889,7 @@
 							"translate_tabs_to_spaces": true
 						},
 						"translation.x": 0.0,
-						"translation.y": 136.0,
+						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"
@@ -3830,8 +3906,8 @@
 						"selection":
 						[
 							[
-								12451,
-								12451
+								1576,
+								1576
 							]
 						],
 						"settings":
@@ -3979,7 +4055,7 @@
 							"translate_tabs_to_spaces": true
 						},
 						"translation.x": 0.0,
-						"translation.y": 3901.0,
+						"translation.y": 408.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"
@@ -4476,7 +4552,7 @@
 							"translate_tabs_to_spaces": true
 						},
 						"translation.x": 0.0,
-						"translation.y": 0.0,
+						"translation.y": 255.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"
@@ -4984,15 +5060,15 @@
 					"file": "src/Cole/IntranetBundle/Resources/views/Default/index.html.twig",
 					"settings":
 					{
-						"buffer_size": 29328,
+						"buffer_size": 29376,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								9735,
-								9735
+								3850,
+								3850
 							]
 						],
 						"settings":
@@ -5139,7 +5215,7 @@
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 1377.0,
+						"translation.y": 1132.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"
@@ -5974,15 +6050,15 @@
 					"file": "src/Cole/IntranetBundle/Resources/public/js/intranet.js",
 					"settings":
 					{
-						"buffer_size": 92033,
+						"buffer_size": 95634,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								91869,
-								91869
+								95615,
+								95615
 							]
 						],
 						"settings":
@@ -6130,7 +6206,7 @@
 							"translate_tabs_to_spaces": true
 						},
 						"translation.x": 0.0,
-						"translation.y": 32680.0,
+						"translation.y": 34174.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"
@@ -6140,15 +6216,15 @@
 					"file": "src/Cole/IntranetBundle/Resources/public/css/intranet.css",
 					"settings":
 					{
-						"buffer_size": 80059,
+						"buffer_size": 83924,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								80005,
-								80005
+								83924,
+								83924
 							]
 						],
 						"settings":
@@ -6297,7 +6373,7 @@
 							"translate_tabs_to_spaces": true
 						},
 						"translation.x": 0.0,
-						"translation.y": 60996.0,
+						"translation.y": 64048.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"
@@ -7134,15 +7210,15 @@
 					"file": "src/Cole/BackendBundle/Resources/translations/messages.en.yml",
 					"settings":
 					{
-						"buffer_size": 20560,
+						"buffer_size": 21634,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								20249,
-								20249
+								21634,
+								21634
 							]
 						],
 						"settings":
@@ -7288,7 +7364,7 @@
 							"syntax": "Packages/YAML/YAML.tmLanguage"
 						},
 						"translation.x": 0.0,
-						"translation.y": 6101.0,
+						"translation.y": 6480.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"
@@ -7462,15 +7538,15 @@
 					"file": "src/Cole/IntranetBundle/Controller/AlumnoController.php",
 					"settings":
 					{
-						"buffer_size": 57177,
+						"buffer_size": 57538,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								30853,
-								30853
+								8068,
+								8068
 							]
 						],
 						"settings":
@@ -7618,7 +7694,7 @@
 							"translate_tabs_to_spaces": true
 						},
 						"translation.x": 0.0,
-						"translation.y": 13086.0,
+						"translation.y": 3315.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"
@@ -7635,8 +7711,8 @@
 						"selection":
 						[
 							[
-								7096,
-								7096
+								3088,
+								3088
 							]
 						],
 						"settings":
@@ -7784,7 +7860,7 @@
 							"translate_tabs_to_spaces": true
 						},
 						"translation.x": 0.0,
-						"translation.y": 4507.0,
+						"translation.y": 1802.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"
@@ -7794,15 +7870,15 @@
 					"file": "src/Cole/IntranetBundle/Controller/ProfesorController.php",
 					"settings":
 					{
-						"buffer_size": 90608,
+						"buffer_size": 98640,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								70874,
-								70874
+								24144,
+								24144
 							]
 						],
 						"settings":
@@ -7950,7 +8026,7 @@
 							"translate_tabs_to_spaces": true
 						},
 						"translation.x": 0.0,
-						"translation.y": 30167.0,
+						"translation.y": 10384.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"
@@ -8292,15 +8368,15 @@
 					"file": "src/Cole/BackendBundle/Entity/Padres.php",
 					"settings":
 					{
-						"buffer_size": 13955,
+						"buffer_size": 14940,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								4616,
-								4616
+								4993,
+								4993
 							]
 						],
 						"settings":
@@ -8447,8 +8523,8 @@
 							"tab_size": 4,
 							"translate_tabs_to_spaces": true
 						},
-						"translation.x": 0.0,
-						"translation.y": 3262.0,
+						"translation.x": 48.0,
+						"translation.y": 3185.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"
@@ -8614,7 +8690,7 @@
 							"translate_tabs_to_spaces": true
 						},
 						"translation.x": 0.0,
-						"translation.y": 528.0,
+						"translation.y": 2568.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"
@@ -9295,8 +9371,8 @@
 						"selection":
 						[
 							[
-								26298,
-								26298
+								26354,
+								26354
 							]
 						],
 						"settings":
@@ -9620,15 +9696,15 @@
 					"file": "src/Cole/BackendBundle/Entity/Profesor.php",
 					"settings":
 					{
-						"buffer_size": 25336,
+						"buffer_size": 26317,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								7774,
-								7774
+								8550,
+								8550
 							]
 						],
 						"settings":
@@ -9776,7 +9852,7 @@
 							"translate_tabs_to_spaces": true
 						},
 						"translation.x": 0.0,
-						"translation.y": 5712.0,
+						"translation.y": 5967.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"
@@ -10108,7 +10184,7 @@
 							"translate_tabs_to_spaces": true
 						},
 						"translation.x": 0.0,
-						"translation.y": 0.0,
+						"translation.y": 663.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"
@@ -10274,7 +10350,7 @@
 							"translate_tabs_to_spaces": true
 						},
 						"translation.x": 0.0,
-						"translation.y": 8558.0,
+						"translation.y": 8609.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"
@@ -10450,15 +10526,15 @@
 					"file": "src/Cole/IntranetBundle/Controller/AusenciaController.php",
 					"settings":
 					{
-						"buffer_size": 9522,
+						"buffer_size": 14008,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								7069,
-								7069
+								11271,
+								11271
 							]
 						],
 						"settings":
@@ -10606,7 +10682,671 @@
 							"translate_tabs_to_spaces": true
 						},
 						"translation.x": 0.0,
-						"translation.y": 3674.0,
+						"translation.y": 5488.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 52,
+					"file": "src/Cole/IntranetBundle/Form/ComunicacionType.php",
+					"settings":
+					{
+						"buffer_size": 1268,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								457,
+								457
+							]
+						],
+						"settings":
+						{
+							"BracketHighlighterBusy": false,
+							"annotations":
+							[
+								"TODO",
+								"README",
+								"FIXME"
+							],
+							"bh_regions":
+							[
+								"bh_regex",
+								"bh_regex_center",
+								"bh_regex_open",
+								"bh_regex_close",
+								"bh_double_quote",
+								"bh_double_quote_center",
+								"bh_double_quote_open",
+								"bh_double_quote_close",
+								"bh_square",
+								"bh_square_center",
+								"bh_square_open",
+								"bh_square_close",
+								"bh_angle",
+								"bh_angle_center",
+								"bh_angle_open",
+								"bh_angle_close",
+								"bh_curly",
+								"bh_curly_center",
+								"bh_curly_open",
+								"bh_curly_close",
+								"bh_c_define",
+								"bh_c_define_center",
+								"bh_c_define_open",
+								"bh_c_define_close",
+								"bh_default",
+								"bh_default_center",
+								"bh_default_open",
+								"bh_default_close",
+								"bh_unmatched",
+								"bh_unmatched_center",
+								"bh_unmatched_open",
+								"bh_unmatched_close",
+								"bh_round",
+								"bh_round_center",
+								"bh_round_open",
+								"bh_round_close",
+								"bh_tag",
+								"bh_tag_center",
+								"bh_tag_open",
+								"bh_tag_close",
+								"bh_single_quote",
+								"bh_single_quote_center",
+								"bh_single_quote_open",
+								"bh_single_quote_close"
+							],
+							"csslint_options":
+							{
+								"adjoining-classes": "warning",
+								"box-model": true,
+								"box-sizing": "warning",
+								"compatible-vendor-prefixes": "warning",
+								"display-property-grouping": true,
+								"duplicate-background-images": "warning",
+								"duplicate-properties": true,
+								"empty-rules": true,
+								"errors": true,
+								"fallback-colors": "warning",
+								"floats": "warning",
+								"font-faces": "warning",
+								"font-sizes": "warning",
+								"gradients": "warning",
+								"ids": "warning",
+								"import": "warning",
+								"important": "warning",
+								"known-properties": true,
+								"outline-none": "warning",
+								"overqualified-elements": "warning",
+								"qualified-headings": "warning",
+								"regex-selectors": "warning",
+								"rules-count": "warning",
+								"shorthand": "warning",
+								"star-property-hack": "warning",
+								"text-indent": "warning",
+								"underscore-property-hack": "warning",
+								"unique-headings": "warning",
+								"universal-selector": "warning",
+								"vendor-prefix": true,
+								"zero-units": "warning"
+							},
+							"gjslint_ignore":
+							[
+								110
+							],
+							"gjslint_options":
+							[
+							],
+							"javascript_linter": "jshint",
+							"jshint_options":
+							{
+								"browser": true,
+								"devel": true,
+								"evil": true,
+								"regexdash": true,
+								"sub": true,
+								"trailing": true,
+								"wsh": true
+							},
+							"pep8": true,
+							"pep8_ignore":
+							[
+								"E501"
+							],
+							"perl_linter": "perlcritic",
+							"pyflakes_ignore":
+							[
+							],
+							"pyflakes_ignore_import_*": true,
+							"sublimelinter": "load-save",
+							"sublimelinter_delay": 2,
+							"sublimelinter_disable":
+							[
+							],
+							"sublimelinter_executable_map":
+							{
+							},
+							"sublimelinter_fill_outlines": false,
+							"sublimelinter_gutter_marks": true,
+							"sublimelinter_gutter_marks_theme": "simple",
+							"sublimelinter_mark_style": "none",
+							"sublimelinter_notes": false,
+							"sublimelinter_objj_check_ascii": false,
+							"sublimelinter_popup_errors_on_save": false,
+							"sublimelinter_syntax_map":
+							{
+								"C++": "c",
+								"Python Django": "python",
+								"Ruby on Rails": "ruby"
+							},
+							"sublimelinter_wrap_find": true,
+							"syntax": "Packages/PHP/PHP.tmLanguage",
+							"tab_size": 4,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 53,
+					"file": "src/Cole/IntranetBundle/Entity/Comunicacion.php",
+					"settings":
+					{
+						"buffer_size": 8994,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								8284,
+								8284
+							]
+						],
+						"settings":
+						{
+							"BracketHighlighterBusy": false,
+							"annotations":
+							[
+								"TODO",
+								"README",
+								"FIXME"
+							],
+							"bh_regions":
+							[
+								"bh_regex",
+								"bh_regex_center",
+								"bh_regex_open",
+								"bh_regex_close",
+								"bh_double_quote",
+								"bh_double_quote_center",
+								"bh_double_quote_open",
+								"bh_double_quote_close",
+								"bh_square",
+								"bh_square_center",
+								"bh_square_open",
+								"bh_square_close",
+								"bh_angle",
+								"bh_angle_center",
+								"bh_angle_open",
+								"bh_angle_close",
+								"bh_curly",
+								"bh_curly_center",
+								"bh_curly_open",
+								"bh_curly_close",
+								"bh_c_define",
+								"bh_c_define_center",
+								"bh_c_define_open",
+								"bh_c_define_close",
+								"bh_default",
+								"bh_default_center",
+								"bh_default_open",
+								"bh_default_close",
+								"bh_unmatched",
+								"bh_unmatched_center",
+								"bh_unmatched_open",
+								"bh_unmatched_close",
+								"bh_round",
+								"bh_round_center",
+								"bh_round_open",
+								"bh_round_close",
+								"bh_tag",
+								"bh_tag_center",
+								"bh_tag_open",
+								"bh_tag_close",
+								"bh_single_quote",
+								"bh_single_quote_center",
+								"bh_single_quote_open",
+								"bh_single_quote_close"
+							],
+							"csslint_options":
+							{
+								"adjoining-classes": "warning",
+								"box-model": true,
+								"box-sizing": "warning",
+								"compatible-vendor-prefixes": "warning",
+								"display-property-grouping": true,
+								"duplicate-background-images": "warning",
+								"duplicate-properties": true,
+								"empty-rules": true,
+								"errors": true,
+								"fallback-colors": "warning",
+								"floats": "warning",
+								"font-faces": "warning",
+								"font-sizes": "warning",
+								"gradients": "warning",
+								"ids": "warning",
+								"import": "warning",
+								"important": "warning",
+								"known-properties": true,
+								"outline-none": "warning",
+								"overqualified-elements": "warning",
+								"qualified-headings": "warning",
+								"regex-selectors": "warning",
+								"rules-count": "warning",
+								"shorthand": "warning",
+								"star-property-hack": "warning",
+								"text-indent": "warning",
+								"underscore-property-hack": "warning",
+								"unique-headings": "warning",
+								"universal-selector": "warning",
+								"vendor-prefix": true,
+								"zero-units": "warning"
+							},
+							"gjslint_ignore":
+							[
+								110
+							],
+							"gjslint_options":
+							[
+							],
+							"javascript_linter": "jshint",
+							"jshint_options":
+							{
+								"browser": true,
+								"devel": true,
+								"evil": true,
+								"regexdash": true,
+								"sub": true,
+								"trailing": true,
+								"wsh": true
+							},
+							"pep8": true,
+							"pep8_ignore":
+							[
+								"E501"
+							],
+							"perl_linter": "perlcritic",
+							"pyflakes_ignore":
+							[
+							],
+							"pyflakes_ignore_import_*": true,
+							"sublimelinter": "load-save",
+							"sublimelinter_delay": 2,
+							"sublimelinter_disable":
+							[
+							],
+							"sublimelinter_executable_map":
+							{
+							},
+							"sublimelinter_fill_outlines": false,
+							"sublimelinter_gutter_marks": true,
+							"sublimelinter_gutter_marks_theme": "simple",
+							"sublimelinter_mark_style": "none",
+							"sublimelinter_notes": false,
+							"sublimelinter_objj_check_ascii": false,
+							"sublimelinter_popup_errors_on_save": false,
+							"sublimelinter_syntax_map":
+							{
+								"C++": "c",
+								"Python Django": "python",
+								"Ruby on Rails": "ruby"
+							},
+							"sublimelinter_wrap_find": true,
+							"syntax": "Packages/PHP/PHP.tmLanguage",
+							"tab_size": 4,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 7242.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 54,
+					"file": "src/Cole/IntranetBundle/Controller/ComunicacionController.php",
+					"settings":
+					{
+						"buffer_size": 8552,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								8342,
+								8342
+							]
+						],
+						"settings":
+						{
+							"BracketHighlighterBusy": false,
+							"annotations":
+							[
+								"TODO",
+								"README",
+								"FIXME"
+							],
+							"bh_regions":
+							[
+								"bh_regex",
+								"bh_regex_center",
+								"bh_regex_open",
+								"bh_regex_close",
+								"bh_double_quote",
+								"bh_double_quote_center",
+								"bh_double_quote_open",
+								"bh_double_quote_close",
+								"bh_square",
+								"bh_square_center",
+								"bh_square_open",
+								"bh_square_close",
+								"bh_angle",
+								"bh_angle_center",
+								"bh_angle_open",
+								"bh_angle_close",
+								"bh_curly",
+								"bh_curly_center",
+								"bh_curly_open",
+								"bh_curly_close",
+								"bh_c_define",
+								"bh_c_define_center",
+								"bh_c_define_open",
+								"bh_c_define_close",
+								"bh_default",
+								"bh_default_center",
+								"bh_default_open",
+								"bh_default_close",
+								"bh_unmatched",
+								"bh_unmatched_center",
+								"bh_unmatched_open",
+								"bh_unmatched_close",
+								"bh_round",
+								"bh_round_center",
+								"bh_round_open",
+								"bh_round_close",
+								"bh_tag",
+								"bh_tag_center",
+								"bh_tag_open",
+								"bh_tag_close",
+								"bh_single_quote",
+								"bh_single_quote_center",
+								"bh_single_quote_open",
+								"bh_single_quote_close"
+							],
+							"csslint_options":
+							{
+								"adjoining-classes": "warning",
+								"box-model": true,
+								"box-sizing": "warning",
+								"compatible-vendor-prefixes": "warning",
+								"display-property-grouping": true,
+								"duplicate-background-images": "warning",
+								"duplicate-properties": true,
+								"empty-rules": true,
+								"errors": true,
+								"fallback-colors": "warning",
+								"floats": "warning",
+								"font-faces": "warning",
+								"font-sizes": "warning",
+								"gradients": "warning",
+								"ids": "warning",
+								"import": "warning",
+								"important": "warning",
+								"known-properties": true,
+								"outline-none": "warning",
+								"overqualified-elements": "warning",
+								"qualified-headings": "warning",
+								"regex-selectors": "warning",
+								"rules-count": "warning",
+								"shorthand": "warning",
+								"star-property-hack": "warning",
+								"text-indent": "warning",
+								"underscore-property-hack": "warning",
+								"unique-headings": "warning",
+								"universal-selector": "warning",
+								"vendor-prefix": true,
+								"zero-units": "warning"
+							},
+							"gjslint_ignore":
+							[
+								110
+							],
+							"gjslint_options":
+							[
+							],
+							"javascript_linter": "jshint",
+							"jshint_options":
+							{
+								"browser": true,
+								"devel": true,
+								"evil": true,
+								"regexdash": true,
+								"sub": true,
+								"trailing": true,
+								"wsh": true
+							},
+							"pep8": true,
+							"pep8_ignore":
+							[
+								"E501"
+							],
+							"perl_linter": "perlcritic",
+							"pyflakes_ignore":
+							[
+							],
+							"pyflakes_ignore_import_*": true,
+							"sublimelinter": "load-save",
+							"sublimelinter_delay": 2,
+							"sublimelinter_disable":
+							[
+							],
+							"sublimelinter_executable_map":
+							{
+							},
+							"sublimelinter_fill_outlines": false,
+							"sublimelinter_gutter_marks": true,
+							"sublimelinter_gutter_marks_theme": "simple",
+							"sublimelinter_mark_style": "none",
+							"sublimelinter_notes": false,
+							"sublimelinter_objj_check_ascii": false,
+							"sublimelinter_popup_errors_on_save": false,
+							"sublimelinter_syntax_map":
+							{
+								"C++": "c",
+								"Python Django": "python",
+								"Ruby on Rails": "ruby"
+							},
+							"sublimelinter_wrap_find": true,
+							"syntax": "Packages/PHP/PHP.tmLanguage",
+							"tab_size": 4,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 4432.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 55,
+					"file": "src/Cole/IntranetBundle/Resources/config/routing/comunicacion.yml",
+					"settings":
+					{
+						"buffer_size": 1049,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								618,
+								618
+							]
+						],
+						"settings":
+						{
+							"BracketHighlighterBusy": false,
+							"annotations":
+							[
+								"TODO",
+								"README",
+								"FIXME"
+							],
+							"bh_regions":
+							[
+								"bh_regex",
+								"bh_regex_center",
+								"bh_regex_open",
+								"bh_regex_close",
+								"bh_double_quote",
+								"bh_double_quote_center",
+								"bh_double_quote_open",
+								"bh_double_quote_close",
+								"bh_square",
+								"bh_square_center",
+								"bh_square_open",
+								"bh_square_close",
+								"bh_angle",
+								"bh_angle_center",
+								"bh_angle_open",
+								"bh_angle_close",
+								"bh_curly",
+								"bh_curly_center",
+								"bh_curly_open",
+								"bh_curly_close",
+								"bh_c_define",
+								"bh_c_define_center",
+								"bh_c_define_open",
+								"bh_c_define_close",
+								"bh_default",
+								"bh_default_center",
+								"bh_default_open",
+								"bh_default_close",
+								"bh_unmatched",
+								"bh_unmatched_center",
+								"bh_unmatched_open",
+								"bh_unmatched_close",
+								"bh_round",
+								"bh_round_center",
+								"bh_round_open",
+								"bh_round_close",
+								"bh_tag",
+								"bh_tag_center",
+								"bh_tag_open",
+								"bh_tag_close",
+								"bh_single_quote",
+								"bh_single_quote_center",
+								"bh_single_quote_open",
+								"bh_single_quote_close"
+							],
+							"csslint_options":
+							{
+								"adjoining-classes": "warning",
+								"box-model": true,
+								"box-sizing": "warning",
+								"compatible-vendor-prefixes": "warning",
+								"display-property-grouping": true,
+								"duplicate-background-images": "warning",
+								"duplicate-properties": true,
+								"empty-rules": true,
+								"errors": true,
+								"fallback-colors": "warning",
+								"floats": "warning",
+								"font-faces": "warning",
+								"font-sizes": "warning",
+								"gradients": "warning",
+								"ids": "warning",
+								"import": "warning",
+								"important": "warning",
+								"known-properties": true,
+								"outline-none": "warning",
+								"overqualified-elements": "warning",
+								"qualified-headings": "warning",
+								"regex-selectors": "warning",
+								"rules-count": "warning",
+								"shorthand": "warning",
+								"star-property-hack": "warning",
+								"text-indent": "warning",
+								"underscore-property-hack": "warning",
+								"unique-headings": "warning",
+								"universal-selector": "warning",
+								"vendor-prefix": true,
+								"zero-units": "warning"
+							},
+							"gjslint_ignore":
+							[
+								110
+							],
+							"gjslint_options":
+							[
+							],
+							"javascript_linter": "jshint",
+							"jshint_options":
+							{
+								"browser": true,
+								"devel": true,
+								"evil": true,
+								"regexdash": true,
+								"sub": true,
+								"trailing": true,
+								"wsh": true
+							},
+							"pep8": true,
+							"pep8_ignore":
+							[
+								"E501"
+							],
+							"perl_linter": "perlcritic",
+							"pyflakes_ignore":
+							[
+							],
+							"pyflakes_ignore_import_*": true,
+							"sublimelinter": "load-save",
+							"sublimelinter_delay": 2,
+							"sublimelinter_disable":
+							[
+							],
+							"sublimelinter_executable_map":
+							{
+							},
+							"sublimelinter_fill_outlines": false,
+							"sublimelinter_gutter_marks": true,
+							"sublimelinter_gutter_marks_theme": "simple",
+							"sublimelinter_mark_style": "none",
+							"sublimelinter_notes": false,
+							"sublimelinter_objj_check_ascii": false,
+							"sublimelinter_popup_errors_on_save": false,
+							"sublimelinter_syntax_map":
+							{
+								"C++": "c",
+								"Python Django": "python",
+								"Ruby on Rails": "ruby"
+							},
+							"sublimelinter_wrap_find": true,
+							"syntax": "Packages/YAML/YAML.tmLanguage",
+							"tab_size": 4,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 306.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"
@@ -10614,23 +11354,23 @@
 			]
 		},
 		{
-			"selected": 13,
+			"selected": 51,
 			"sheets":
 			[
 				{
-					"buffer": 52,
+					"buffer": 56,
 					"file": "src/Cole/ColeBundle/Resources/public/css/estilo.css",
 					"settings":
 					{
-						"buffer_size": 29315,
+						"buffer_size": 29388,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								28037,
-								28037
+								28747,
+								28747
 							]
 						],
 						"settings":
@@ -10778,13 +11518,13 @@
 							"translate_tabs_to_spaces": true
 						},
 						"translation.x": 0.0,
-						"translation.y": 22731.0,
+						"translation.y": 23285.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"
 				},
 				{
-					"buffer": 53,
+					"buffer": 57,
 					"file": "src/Cole/ColeBundle/Resources/public/js/load.js",
 					"settings":
 					{
@@ -10950,7 +11690,7 @@
 					"type": "text"
 				},
 				{
-					"buffer": 54,
+					"buffer": 58,
 					"file": "src/Cole/ColeBundle/Resources/public/js/e-calendar-master/js/jquery.e-calendar.js",
 					"settings":
 					{
@@ -11116,7 +11856,7 @@
 					"type": "text"
 				},
 				{
-					"buffer": 55,
+					"buffer": 59,
 					"file": "src/Cole/IntranetBundle/Controller/DefaultController.php",
 					"settings":
 					{
@@ -11127,8 +11867,8 @@
 						"selection":
 						[
 							[
-								16043,
-								16043
+								18881,
+								18881
 							]
 						],
 						"settings":
@@ -11276,13 +12016,13 @@
 							"translate_tabs_to_spaces": true
 						},
 						"translation.x": 0.0,
-						"translation.y": 7228.0,
+						"translation.y": 8452.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"
 				},
 				{
-					"buffer": 56,
+					"buffer": 60,
 					"file": "src/Cole/BackendBundle/Resources/views/Log/listalog.html.twig",
 					"settings":
 					{
@@ -11448,19 +12188,19 @@
 					"type": "text"
 				},
 				{
-					"buffer": 57,
+					"buffer": 61,
 					"file": "src/Cole/IntranetBundle/Resources/config/routing.yml",
 					"settings":
 					{
-						"buffer_size": 2784,
+						"buffer_size": 2916,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								2784,
-								2784
+								2552,
+								2552
 							]
 						],
 						"settings":
@@ -11608,13 +12348,13 @@
 							"translate_tabs_to_spaces": true
 						},
 						"translation.x": 0.0,
-						"translation.y": 1377.0,
+						"translation.y": 1382.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"
 				},
 				{
-					"buffer": 58,
+					"buffer": 62,
 					"file": "src/Cole/IntranetBundle/Resources/config/routing/tutorias.yml",
 					"settings":
 					{
@@ -11780,7 +12520,7 @@
 					"type": "text"
 				},
 				{
-					"buffer": 59,
+					"buffer": 63,
 					"file": "src/Cole/IntranetBundle/Resources/config/routing/seguimiento.yml",
 					"settings":
 					{
@@ -11791,8 +12531,8 @@
 						"selection":
 						[
 							[
-								0,
-								0
+								794,
+								794
 							]
 						],
 						"settings":
@@ -11940,13 +12680,13 @@
 							"translate_tabs_to_spaces": true
 						},
 						"translation.x": 0.0,
-						"translation.y": 357.0,
+						"translation.y": 372.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"
 				},
 				{
-					"buffer": 60,
+					"buffer": 64,
 					"file": "src/Cole/IntranetBundle/Resources/config/routing/alumnos.yml",
 					"settings":
 					{
@@ -11957,8 +12697,8 @@
 						"selection":
 						[
 							[
-								1537,
-								1537
+								1297,
+								1297
 							]
 						],
 						"settings":
@@ -12112,19 +12852,19 @@
 					"type": "text"
 				},
 				{
-					"buffer": 61,
+					"buffer": 65,
 					"file": "src/Cole/IntranetBundle/Resources/config/routing/profesores.yml",
 					"settings":
 					{
-						"buffer_size": 7355,
+						"buffer_size": 7717,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								2526,
-								2526
+								2531,
+								2531
 							]
 						],
 						"settings":
@@ -12272,25 +13012,25 @@
 							"translate_tabs_to_spaces": true
 						},
 						"translation.x": 0.0,
-						"translation.y": 1516.0,
+						"translation.y": 1430.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"
 				},
 				{
-					"buffer": 62,
+					"buffer": 66,
 					"file": "src/Cole/IntranetBundle/Resources/views/Profesor/index.html.twig",
 					"settings":
 					{
-						"buffer_size": 6136,
+						"buffer_size": 7076,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								2236,
-								2236
+								3623,
+								3623
 							]
 						],
 						"settings":
@@ -12437,25 +13177,25 @@
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 918.0,
+						"translation.y": 1575.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"
 				},
 				{
-					"buffer": 63,
+					"buffer": 67,
 					"file": "src/Cole/IntranetBundle/Resources/views/Alumno/index.html.twig",
 					"settings":
 					{
-						"buffer_size": 17126,
+						"buffer_size": 17273,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								11958,
-								11958
+								17017,
+								17017
 							]
 						],
 						"settings":
@@ -12601,13 +13341,13 @@
 							"syntax": "Packages/Twig/Syntaxes/HTML (Twig).tmLanguage"
 						},
 						"translation.x": 0.0,
-						"translation.y": 5637.0,
+						"translation.y": 7848.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"
 				},
 				{
-					"buffer": 64,
+					"buffer": 68,
 					"file": "src/Cole/IntranetBundle/Resources/views/Alumno/curso.html.twig",
 					"settings":
 					{
@@ -12772,19 +13512,19 @@
 					"type": "text"
 				},
 				{
-					"buffer": 65,
+					"buffer": 69,
 					"file": "src/Cole/IntranetBundle/Resources/views/Alumno/asistencia.html.twig",
 					"settings":
 					{
-						"buffer_size": 5805,
+						"buffer_size": 6118,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								5486,
-								5486
+								5828,
+								5828
 							]
 						],
 						"settings":
@@ -12932,13 +13672,13 @@
 							"translate_tabs_to_spaces": true
 						},
 						"translation.x": 0.0,
-						"translation.y": 2128.0,
+						"translation.y": 2122.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"
 				},
 				{
-					"buffer": 66,
+					"buffer": 70,
 					"file": "src/Cole/IntranetBundle/Resources/views/Alumno/calificaciones.html.twig",
 					"settings":
 					{
@@ -13104,7 +13844,7 @@
 					"type": "text"
 				},
 				{
-					"buffer": 67,
+					"buffer": 71,
 					"file": "src/Cole/IntranetBundle/Resources/views/Alumno/calificacionesTareas.html.twig",
 					"settings":
 					{
@@ -13270,7 +14010,7 @@
 					"type": "text"
 				},
 				{
-					"buffer": 68,
+					"buffer": 72,
 					"file": "src/Cole/IntranetBundle/Resources/views/Profesor/cursos.html.twig",
 					"settings":
 					{
@@ -13281,8 +14021,8 @@
 						"selection":
 						[
 							[
-								12968,
-								12968
+								6524,
+								6524
 							]
 						],
 						"settings":
@@ -13429,13 +14169,13 @@
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 5652.0,
+						"translation.y": 3536.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"
 				},
 				{
-					"buffer": 69,
+					"buffer": 73,
 					"file": "src/Cole/IntranetBundle/Resources/views/Profesor/datos_alumnos_grupo.html.twig",
 					"settings":
 					{
@@ -13446,8 +14186,8 @@
 						"selection":
 						[
 							[
-								9114,
-								9114
+								203,
+								203
 							]
 						],
 						"settings":
@@ -13594,13 +14334,13 @@
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 3691.0,
+						"translation.y": 2890.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"
 				},
 				{
-					"buffer": 70,
+					"buffer": 74,
 					"file": "src/Cole/IntranetBundle/Resources/views/Alumno/noticias.html.twig",
 					"settings":
 					{
@@ -13766,7 +14506,7 @@
 					"type": "text"
 				},
 				{
-					"buffer": 71,
+					"buffer": 75,
 					"file": "src/Cole/IntranetBundle/Resources/views/Profesor/noticias.html.twig",
 					"settings":
 					{
@@ -13932,7 +14672,7 @@
 					"type": "text"
 				},
 				{
-					"buffer": 72,
+					"buffer": 76,
 					"file": "src/Cole/IntranetBundle/Resources/views/Alumno/noticia.html.twig",
 					"settings":
 					{
@@ -14098,7 +14838,7 @@
 					"type": "text"
 				},
 				{
-					"buffer": 73,
+					"buffer": 77,
 					"file": "src/Cole/IntranetBundle/Resources/views/Profesor/noticia.html.twig",
 					"settings":
 					{
@@ -14264,7 +15004,7 @@
 					"type": "text"
 				},
 				{
-					"buffer": 74,
+					"buffer": 78,
 					"file": "src/Cole/IntranetBundle/Resources/views/Default/lista_alumnos_grupo.html.twig",
 					"settings":
 					{
@@ -14275,8 +15015,8 @@
 						"selection":
 						[
 							[
-								0,
-								0
+								341,
+								341
 							]
 						],
 						"settings":
@@ -14430,7 +15170,7 @@
 					"type": "text"
 				},
 				{
-					"buffer": 75,
+					"buffer": 79,
 					"file": "src/Cole/IntranetBundle/Resources/views/Default/lista_alumnos_optativas.html.twig",
 					"settings":
 					{
@@ -14596,7 +15336,7 @@
 					"type": "text"
 				},
 				{
-					"buffer": 76,
+					"buffer": 80,
 					"file": "src/Cole/IntranetBundle/Resources/views/Alumno/datos_horarios.html.twig",
 					"settings":
 					{
@@ -14762,7 +15502,7 @@
 					"type": "text"
 				},
 				{
-					"buffer": 77,
+					"buffer": 81,
 					"file": "src/Cole/IntranetBundle/Resources/views/Profesor/datos_horario.html.twig",
 					"settings":
 					{
@@ -14928,7 +15668,7 @@
 					"type": "text"
 				},
 				{
-					"buffer": 78,
+					"buffer": 82,
 					"file": "src/Cole/IntranetBundle/Resources/views/Default/datos_horario_grupo.html.twig",
 					"settings":
 					{
@@ -15094,7 +15834,7 @@
 					"type": "text"
 				},
 				{
-					"buffer": 79,
+					"buffer": 83,
 					"file": "src/Cole/IntranetBundle/Resources/views/Alumno/horario_de_clase.html.twig",
 					"settings":
 					{
@@ -15260,7 +16000,7 @@
 					"type": "text"
 				},
 				{
-					"buffer": 80,
+					"buffer": 84,
 					"file": "src/Cole/IntranetBundle/Resources/views/Default/header.html.twig",
 					"settings":
 					{
@@ -15426,7 +16166,7 @@
 					"type": "text"
 				},
 				{
-					"buffer": 81,
+					"buffer": 85,
 					"file": "src/Cole/IntranetBundle/Resources/views/Default/header_boletin.html.twig",
 					"settings":
 					{
@@ -15592,7 +16332,7 @@
 					"type": "text"
 				},
 				{
-					"buffer": 82,
+					"buffer": 86,
 					"file": "src/Cole/IntranetBundle/Controller/SeguimientoController.php",
 					"settings":
 					{
@@ -15603,8 +16343,8 @@
 						"selection":
 						[
 							[
-								15850,
-								15850
+								22289,
+								22289
 							]
 						],
 						"settings":
@@ -15751,14 +16491,14 @@
 							"tab_size": 4,
 							"translate_tabs_to_spaces": true
 						},
-						"translation.x": 104.0,
-						"translation.y": 6913.0,
+						"translation.x": 0.0,
+						"translation.y": 9714.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"
 				},
 				{
-					"buffer": 83,
+					"buffer": 87,
 					"file": "src/Cole/BackendBundle/Resources/views/Curso/ratio.html.twig",
 					"settings":
 					{
@@ -15924,7 +16664,7 @@
 					"type": "text"
 				},
 				{
-					"buffer": 84,
+					"buffer": 88,
 					"file": "src/Cole/BackendBundle/Controller/ReservaController.php",
 					"settings":
 					{
@@ -16090,7 +16830,7 @@
 					"type": "text"
 				},
 				{
-					"buffer": 85,
+					"buffer": 89,
 					"file": "src/Cole/BackendBundle/Form/ReservaType.php",
 					"settings":
 					{
@@ -16256,7 +16996,7 @@
 					"type": "text"
 				},
 				{
-					"buffer": 86,
+					"buffer": 90,
 					"file": "src/Cole/BackendBundle/Resources/config/routing/reserva.yml",
 					"settings":
 					{
@@ -16422,7 +17162,7 @@
 					"type": "text"
 				},
 				{
-					"buffer": 87,
+					"buffer": 91,
 					"file": "src/Cole/IntranetBundle/Resources/views/Profesor/tutorias.html.twig",
 					"settings":
 					{
@@ -16588,7 +17328,7 @@
 					"type": "text"
 				},
 				{
-					"buffer": 88,
+					"buffer": 92,
 					"file": "src/Cole/IntranetBundle/Resources/views/Alumno/tutorias.html.twig",
 					"settings":
 					{
@@ -16754,7 +17494,7 @@
 					"type": "text"
 				},
 				{
-					"buffer": 89,
+					"buffer": 93,
 					"file": "src/Cole/IntranetBundle/Resources/views/Tutorias/new.html.twig",
 					"settings":
 					{
@@ -16920,7 +17660,7 @@
 					"type": "text"
 				},
 				{
-					"buffer": 90,
+					"buffer": 94,
 					"file": "src/Cole/IntranetBundle/Form/TutoriasType.php",
 					"settings":
 					{
@@ -17086,7 +17826,7 @@
 					"type": "text"
 				},
 				{
-					"buffer": 91,
+					"buffer": 95,
 					"file": "src/Cole/IntranetBundle/Form/ConfirmacionType.php",
 					"settings":
 					{
@@ -17246,13 +17986,13 @@
 							"translate_tabs_to_spaces": true
 						},
 						"translation.x": 0.0,
-						"translation.y": 0.0,
+						"translation.y": 102.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"
 				},
 				{
-					"buffer": 92,
+					"buffer": 96,
 					"file": "src/Cole/IntranetBundle/Controller/TutoriasController.php",
 					"settings":
 					{
@@ -17418,7 +18158,7 @@
 					"type": "text"
 				},
 				{
-					"buffer": 93,
+					"buffer": 97,
 					"file": "src/Cole/IntranetBundle/Controller/TareaController.php",
 					"settings":
 					{
@@ -17584,7 +18324,7 @@
 					"type": "text"
 				},
 				{
-					"buffer": 94,
+					"buffer": 98,
 					"file": "src/Cole/IntranetBundle/Resources/views/Profesor/alumnos_grupo_asignatura.html.twig",
 					"settings":
 					{
@@ -17595,8 +18335,8 @@
 						"selection":
 						[
 							[
-								742,
-								742
+								1083,
+								1083
 							]
 						],
 						"settings":
@@ -17744,13 +18484,86 @@
 							"translate_tabs_to_spaces": true
 						},
 						"translation.x": 0.0,
-						"translation.y": 277.0,
+						"translation.y": 490.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"
 				},
 				{
-					"buffer": 95,
+					"buffer": 99,
+					"settings":
+					{
+						"buffer_size": 0,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								0,
+								0
+							]
+						],
+						"settings":
+						{
+							"BracketHighlighterBusy": false,
+							"bh_regions":
+							[
+								"bh_regex",
+								"bh_regex_center",
+								"bh_regex_open",
+								"bh_regex_close",
+								"bh_double_quote",
+								"bh_double_quote_center",
+								"bh_double_quote_open",
+								"bh_double_quote_close",
+								"bh_square",
+								"bh_square_center",
+								"bh_square_open",
+								"bh_square_close",
+								"bh_angle",
+								"bh_angle_center",
+								"bh_angle_open",
+								"bh_angle_close",
+								"bh_curly",
+								"bh_curly_center",
+								"bh_curly_open",
+								"bh_curly_close",
+								"bh_c_define",
+								"bh_c_define_center",
+								"bh_c_define_open",
+								"bh_c_define_close",
+								"bh_default",
+								"bh_default_center",
+								"bh_default_open",
+								"bh_default_close",
+								"bh_unmatched",
+								"bh_unmatched_center",
+								"bh_unmatched_open",
+								"bh_unmatched_close",
+								"bh_round",
+								"bh_round_center",
+								"bh_round_open",
+								"bh_round_close",
+								"bh_tag",
+								"bh_tag_center",
+								"bh_tag_open",
+								"bh_tag_close",
+								"bh_single_quote",
+								"bh_single_quote_center",
+								"bh_single_quote_open",
+								"bh_single_quote_close"
+							],
+							"syntax": "Packages/Text/Plain text.tmLanguage"
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 100,
 					"file": "src/Cole/IntranetBundle/Form/CursaType.php",
 					"settings":
 					{
@@ -17916,7 +18729,7 @@
 					"type": "text"
 				},
 				{
-					"buffer": 96,
+					"buffer": 101,
 					"file": "src/Cole/IntranetBundle/Controller/CursaController.php",
 					"settings":
 					{
@@ -17927,8 +18740,8 @@
 						"selection":
 						[
 							[
-								237,
-								237
+								5252,
+								5252
 							]
 						],
 						"settings":
@@ -18076,13 +18889,13 @@
 							"translate_tabs_to_spaces": true
 						},
 						"translation.x": 0.0,
-						"translation.y": 0.0,
+						"translation.y": 3111.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"
 				},
 				{
-					"buffer": 97,
+					"buffer": 102,
 					"file": "src/Cole/IntranetBundle/Resources/config/routing/cursa.yml",
 					"settings":
 					{
@@ -18248,7 +19061,7 @@
 					"type": "text"
 				},
 				{
-					"buffer": 98,
+					"buffer": 103,
 					"file": "src/Cole/IntranetBundle/Resources/config/routing/tarea.yml",
 					"settings":
 					{
@@ -18414,7 +19227,7 @@
 					"type": "text"
 				},
 				{
-					"buffer": 99,
+					"buffer": 104,
 					"file": "src/Cole/BackendBundle/Resources/views/Reserva/index.html.twig",
 					"settings":
 					{
@@ -18580,7 +19393,7 @@
 					"type": "text"
 				},
 				{
-					"buffer": 100,
+					"buffer": 105,
 					"file": "src/Cole/BackendBundle/Resources/config/routing/horario.yml",
 					"settings":
 					{
@@ -18746,19 +19559,19 @@
 					"type": "text"
 				},
 				{
-					"buffer": 101,
+					"buffer": 106,
 					"file": "src/Cole/IntranetBundle/Resources/config/routing/ausencia.yml",
 					"settings":
 					{
-						"buffer_size": 1021,
+						"buffer_size": 1350,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								442,
-								442
+								892,
+								892
 							]
 						],
 						"settings":
@@ -18906,7 +19719,171 @@
 							"translate_tabs_to_spaces": true
 						},
 						"translation.x": 0.0,
-						"translation.y": 204.0,
+						"translation.y": 357.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 107,
+					"file": "src/Cole/IntranetBundle/Entity/ComunicacionRepository.php",
+					"settings":
+					{
+						"buffer_size": 1590,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								323,
+								323
+							]
+						],
+						"settings":
+						{
+							"BracketHighlighterBusy": false,
+							"annotations":
+							[
+								"TODO",
+								"README",
+								"FIXME"
+							],
+							"bh_regions":
+							[
+								"bh_regex",
+								"bh_regex_center",
+								"bh_regex_open",
+								"bh_regex_close",
+								"bh_double_quote",
+								"bh_double_quote_center",
+								"bh_double_quote_open",
+								"bh_double_quote_close",
+								"bh_square",
+								"bh_square_center",
+								"bh_square_open",
+								"bh_square_close",
+								"bh_angle",
+								"bh_angle_center",
+								"bh_angle_open",
+								"bh_angle_close",
+								"bh_curly",
+								"bh_curly_center",
+								"bh_curly_open",
+								"bh_curly_close",
+								"bh_c_define",
+								"bh_c_define_center",
+								"bh_c_define_open",
+								"bh_c_define_close",
+								"bh_default",
+								"bh_default_center",
+								"bh_default_open",
+								"bh_default_close",
+								"bh_unmatched",
+								"bh_unmatched_center",
+								"bh_unmatched_open",
+								"bh_unmatched_close",
+								"bh_round",
+								"bh_round_center",
+								"bh_round_open",
+								"bh_round_close",
+								"bh_tag",
+								"bh_tag_center",
+								"bh_tag_open",
+								"bh_tag_close",
+								"bh_single_quote",
+								"bh_single_quote_center",
+								"bh_single_quote_open",
+								"bh_single_quote_close"
+							],
+							"csslint_options":
+							{
+								"adjoining-classes": "warning",
+								"box-model": true,
+								"box-sizing": "warning",
+								"compatible-vendor-prefixes": "warning",
+								"display-property-grouping": true,
+								"duplicate-background-images": "warning",
+								"duplicate-properties": true,
+								"empty-rules": true,
+								"errors": true,
+								"fallback-colors": "warning",
+								"floats": "warning",
+								"font-faces": "warning",
+								"font-sizes": "warning",
+								"gradients": "warning",
+								"ids": "warning",
+								"import": "warning",
+								"important": "warning",
+								"known-properties": true,
+								"outline-none": "warning",
+								"overqualified-elements": "warning",
+								"qualified-headings": "warning",
+								"regex-selectors": "warning",
+								"rules-count": "warning",
+								"shorthand": "warning",
+								"star-property-hack": "warning",
+								"text-indent": "warning",
+								"underscore-property-hack": "warning",
+								"unique-headings": "warning",
+								"universal-selector": "warning",
+								"vendor-prefix": true,
+								"zero-units": "warning"
+							},
+							"gjslint_ignore":
+							[
+								110
+							],
+							"gjslint_options":
+							[
+							],
+							"javascript_linter": "jshint",
+							"jshint_options":
+							{
+								"browser": true,
+								"devel": true,
+								"evil": true,
+								"regexdash": true,
+								"sub": true,
+								"trailing": true,
+								"wsh": true
+							},
+							"pep8": true,
+							"pep8_ignore":
+							[
+								"E501"
+							],
+							"perl_linter": "perlcritic",
+							"pyflakes_ignore":
+							[
+							],
+							"pyflakes_ignore_import_*": true,
+							"sublimelinter": "load-save",
+							"sublimelinter_delay": 2,
+							"sublimelinter_disable":
+							[
+							],
+							"sublimelinter_executable_map":
+							{
+							},
+							"sublimelinter_fill_outlines": false,
+							"sublimelinter_gutter_marks": true,
+							"sublimelinter_gutter_marks_theme": "simple",
+							"sublimelinter_mark_style": "none",
+							"sublimelinter_notes": false,
+							"sublimelinter_objj_check_ascii": false,
+							"sublimelinter_popup_errors_on_save": false,
+							"sublimelinter_syntax_map":
+							{
+								"C++": "c",
+								"Python Django": "python",
+								"Ruby on Rails": "ruby"
+							},
+							"sublimelinter_wrap_find": true,
+							"syntax": "Packages/PHP/PHP.tmLanguage"
+						},
+						"translation.x": 0.0,
+						"translation.y": 212.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"
@@ -18914,11 +19891,11 @@
 			]
 		},
 		{
-			"selected": 76,
+			"selected": 20,
 			"sheets":
 			[
 				{
-					"buffer": 102,
+					"buffer": 108,
 					"file": "src/Cole/BackendBundle/Resources/public/css/backend.css",
 					"settings":
 					{
@@ -18929,8 +19906,8 @@
 						"selection":
 						[
 							[
-								0,
-								0
+								27792,
+								27792
 							]
 						],
 						"settings":
@@ -19076,13 +20053,13 @@
 							"syntax": "Packages/CSS/CSS.tmLanguage"
 						},
 						"translation.x": 0.0,
-						"translation.y": 0.0,
+						"translation.y": 24410.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"
 				},
 				{
-					"buffer": 103,
+					"buffer": 109,
 					"file": "src/Cole/ColeBundle/Resources/views/Noticias/index.html.twig",
 					"settings":
 					{
@@ -19248,7 +20225,7 @@
 					"type": "text"
 				},
 				{
-					"buffer": 104,
+					"buffer": 110,
 					"file": "src/Cole/BackendBundle/Resources/public/js/general.js",
 					"settings":
 					{
@@ -19414,7 +20391,7 @@
 					"type": "text"
 				},
 				{
-					"buffer": 105,
+					"buffer": 111,
 					"file": "src/Cole/BackendBundle/Resources/public/js/load.js",
 					"settings":
 					{
@@ -19580,7 +20557,7 @@
 					"type": "text"
 				},
 				{
-					"buffer": 106,
+					"buffer": 112,
 					"file": "src/Cole/BackendBundle/Resources/views/Matricula/anular_matricula.html.twig",
 					"settings":
 					{
@@ -19746,7 +20723,7 @@
 					"type": "text"
 				},
 				{
-					"buffer": 107,
+					"buffer": 113,
 					"file": "src/Cole/ColeBundle/ListenerExcepcion.php",
 					"settings":
 					{
@@ -19910,7 +20887,7 @@
 					"type": "text"
 				},
 				{
-					"buffer": 108,
+					"buffer": 114,
 					"file": "src/Cole/ColeBundle/InteractiveLoginListener.php",
 					"settings":
 					{
@@ -20076,7 +21053,7 @@
 					"type": "text"
 				},
 				{
-					"buffer": 109,
+					"buffer": 115,
 					"file": "src/Cole/ColeBundle/AuthenticationHandler.php",
 					"settings":
 					{
@@ -20242,7 +21219,7 @@
 					"type": "text"
 				},
 				{
-					"buffer": 110,
+					"buffer": 116,
 					"file": "src/Cole/ColeBundle/AccessDeniedHandler.php",
 					"settings":
 					{
@@ -20409,7 +21386,7 @@
 					"type": "text"
 				},
 				{
-					"buffer": 111,
+					"buffer": 117,
 					"file": "src/Cole/IntranetBundle/Entity/Seguimiento.php",
 					"settings":
 					{
@@ -20575,7 +21552,7 @@
 					"type": "text"
 				},
 				{
-					"buffer": 112,
+					"buffer": 118,
 					"file": "src/Cole/IntranetBundle/Resources/views/Profesor/seguimientos.html.twig",
 					"settings":
 					{
@@ -20586,8 +21563,8 @@
 						"selection":
 						[
 							[
-								18353,
-								18353
+								8884,
+								8884
 							]
 						],
 						"settings":
@@ -20735,13 +21712,13 @@
 							"translate_tabs_to_spaces": true
 						},
 						"translation.x": 0.0,
-						"translation.y": 6732.0,
+						"translation.y": 3417.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"
 				},
 				{
-					"buffer": 113,
+					"buffer": 119,
 					"file": "src/Cole/IntranetBundle/Resources/views/Profesor/lista_seguimiento.html.twig",
 					"settings":
 					{
@@ -20907,7 +21884,7 @@
 					"type": "text"
 				},
 				{
-					"buffer": 114,
+					"buffer": 120,
 					"file": "src/Cole/IntranetBundle/Resources/views/Profesor/seguimiento.html.twig",
 					"settings":
 					{
@@ -20918,8 +21895,8 @@
 						"selection":
 						[
 							[
-								2554,
-								2554
+								8357,
+								8357
 							]
 						],
 						"settings":
@@ -21067,13 +22044,13 @@
 							"translate_tabs_to_spaces": true
 						},
 						"translation.x": 0.0,
-						"translation.y": 109.0,
+						"translation.y": 3105.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"
 				},
 				{
-					"buffer": 115,
+					"buffer": 121,
 					"file": "src/Cole/IntranetBundle/Resources/views/Alumno/seguimientos.html.twig",
 					"settings":
 					{
@@ -21084,8 +22061,8 @@
 						"selection":
 						[
 							[
-								0,
-								0
+								3255,
+								3255
 							]
 						],
 						"settings":
@@ -21233,13 +22210,13 @@
 							"translate_tabs_to_spaces": true
 						},
 						"translation.x": 0.0,
-						"translation.y": 3949.0,
+						"translation.y": 1178.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"
 				},
 				{
-					"buffer": 116,
+					"buffer": 122,
 					"file": "src/Cole/IntranetBundle/Resources/views/Alumno/lista_seguimiento.html.twig",
 					"settings":
 					{
@@ -21405,7 +22382,7 @@
 					"type": "text"
 				},
 				{
-					"buffer": 117,
+					"buffer": 123,
 					"file": "src/Cole/IntranetBundle/Resources/views/Alumno/seguimiento.html.twig",
 					"settings":
 					{
@@ -21416,8 +22393,8 @@
 						"selection":
 						[
 							[
-								0,
-								0
+								3373,
+								3373
 							]
 						],
 						"settings":
@@ -21565,13 +22542,13 @@
 							"translate_tabs_to_spaces": true
 						},
 						"translation.x": 0.0,
-						"translation.y": 0.0,
+						"translation.y": 1369.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"
 				},
 				{
-					"buffer": 118,
+					"buffer": 124,
 					"file": "src/Cole/IntranetBundle/Resources/views/Seguimiento/new.html.twig",
 					"settings":
 					{
@@ -21582,8 +22559,8 @@
 						"selection":
 						[
 							[
-								897,
-								897
+								4338,
+								4338
 							]
 						],
 						"settings":
@@ -21731,25 +22708,25 @@
 							"translate_tabs_to_spaces": true
 						},
 						"translation.x": 0.0,
-						"translation.y": 2126.0,
+						"translation.y": 340.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"
 				},
 				{
-					"buffer": 119,
+					"buffer": 125,
 					"file": "src/Cole/IntranetBundle/Resources/views/Profesor/asistencia.html.twig",
 					"settings":
 					{
-						"buffer_size": 12446,
+						"buffer_size": 15966,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								2428,
-								2428
+								15719,
+								15719
 							]
 						],
 						"settings":
@@ -21897,25 +22874,25 @@
 							"translate_tabs_to_spaces": true
 						},
 						"translation.x": 0.0,
-						"translation.y": 935.0,
+						"translation.y": 408.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"
 				},
 				{
-					"buffer": 120,
+					"buffer": 126,
 					"file": "src/Cole/IntranetBundle/Resources/views/Profesor/claseAsignada.html.twig",
 					"settings":
 					{
-						"buffer_size": 8133,
+						"buffer_size": 8559,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								2370,
-								2370
+								4630,
+								4630
 							]
 						],
 						"settings":
@@ -22063,13 +23040,13 @@
 							"translate_tabs_to_spaces": true
 						},
 						"translation.x": 0.0,
-						"translation.y": 884.0,
+						"translation.y": 1607.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"
 				},
 				{
-					"buffer": 121,
+					"buffer": 127,
 					"file": "src/Cole/IntranetBundle/Resources/views/Profesor/calificaciones.html.twig",
 					"settings":
 					{
@@ -22080,8 +23057,8 @@
 						"selection":
 						[
 							[
-								9181,
-								9181
+								9210,
+								9210
 							]
 						],
 						"settings":
@@ -22229,13 +23206,349 @@
 							"translate_tabs_to_spaces": true
 						},
 						"translation.x": 0.0,
-						"translation.y": 3058.0,
+						"translation.y": 3367.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"
 				},
 				{
-					"buffer": 122,
+					"buffer": 128,
+					"file": "src/Cole/IntranetBundle/Resources/views/Profesor/mensajes.html.twig",
+					"settings":
+					{
+						"buffer_size": 7985,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								2230,
+								2230
+							],
+							[
+								2517,
+								2517
+							]
+						],
+						"settings":
+						{
+							"BracketHighlighterBusy": false,
+							"annotations":
+							[
+								"TODO",
+								"README",
+								"FIXME"
+							],
+							"bh_regions":
+							[
+								"bh_regex",
+								"bh_regex_center",
+								"bh_regex_open",
+								"bh_regex_close",
+								"bh_double_quote",
+								"bh_double_quote_center",
+								"bh_double_quote_open",
+								"bh_double_quote_close",
+								"bh_square",
+								"bh_square_center",
+								"bh_square_open",
+								"bh_square_close",
+								"bh_angle",
+								"bh_angle_center",
+								"bh_angle_open",
+								"bh_angle_close",
+								"bh_curly",
+								"bh_curly_center",
+								"bh_curly_open",
+								"bh_curly_close",
+								"bh_c_define",
+								"bh_c_define_center",
+								"bh_c_define_open",
+								"bh_c_define_close",
+								"bh_default",
+								"bh_default_center",
+								"bh_default_open",
+								"bh_default_close",
+								"bh_unmatched",
+								"bh_unmatched_center",
+								"bh_unmatched_open",
+								"bh_unmatched_close",
+								"bh_round",
+								"bh_round_center",
+								"bh_round_open",
+								"bh_round_close",
+								"bh_tag",
+								"bh_tag_center",
+								"bh_tag_open",
+								"bh_tag_close",
+								"bh_single_quote",
+								"bh_single_quote_center",
+								"bh_single_quote_open",
+								"bh_single_quote_close"
+							],
+							"csslint_options":
+							{
+								"adjoining-classes": "warning",
+								"box-model": true,
+								"box-sizing": "warning",
+								"compatible-vendor-prefixes": "warning",
+								"display-property-grouping": true,
+								"duplicate-background-images": "warning",
+								"duplicate-properties": true,
+								"empty-rules": true,
+								"errors": true,
+								"fallback-colors": "warning",
+								"floats": "warning",
+								"font-faces": "warning",
+								"font-sizes": "warning",
+								"gradients": "warning",
+								"ids": "warning",
+								"import": "warning",
+								"important": "warning",
+								"known-properties": true,
+								"outline-none": "warning",
+								"overqualified-elements": "warning",
+								"qualified-headings": "warning",
+								"regex-selectors": "warning",
+								"rules-count": "warning",
+								"shorthand": "warning",
+								"star-property-hack": "warning",
+								"text-indent": "warning",
+								"underscore-property-hack": "warning",
+								"unique-headings": "warning",
+								"universal-selector": "warning",
+								"vendor-prefix": true,
+								"zero-units": "warning"
+							},
+							"gjslint_ignore":
+							[
+								110
+							],
+							"gjslint_options":
+							[
+							],
+							"javascript_linter": "jshint",
+							"jshint_options":
+							{
+								"browser": true,
+								"devel": true,
+								"evil": true,
+								"regexdash": true,
+								"sub": true,
+								"trailing": true,
+								"wsh": true
+							},
+							"pep8": true,
+							"pep8_ignore":
+							[
+								"E501"
+							],
+							"perl_linter": "perlcritic",
+							"pyflakes_ignore":
+							[
+							],
+							"pyflakes_ignore_import_*": true,
+							"sublimelinter": "load-save",
+							"sublimelinter_delay": 2,
+							"sublimelinter_disable":
+							[
+							],
+							"sublimelinter_executable_map":
+							{
+							},
+							"sublimelinter_fill_outlines": false,
+							"sublimelinter_gutter_marks": true,
+							"sublimelinter_gutter_marks_theme": "simple",
+							"sublimelinter_mark_style": "none",
+							"sublimelinter_notes": false,
+							"sublimelinter_objj_check_ascii": false,
+							"sublimelinter_popup_errors_on_save": false,
+							"sublimelinter_syntax_map":
+							{
+								"C++": "c",
+								"Python Django": "python",
+								"Ruby on Rails": "ruby"
+							},
+							"sublimelinter_wrap_find": true,
+							"syntax": "Packages/Twig/Syntaxes/HTML (Twig).tmLanguage",
+							"tab_size": 4,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 918.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 129,
+					"file": "src/Cole/IntranetBundle/Resources/views/Comunicacion/destinatarios.html.twig",
+					"settings":
+					{
+						"buffer_size": 974,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								200,
+								200
+							]
+						],
+						"settings":
+						{
+							"BracketHighlighterBusy": false,
+							"annotations":
+							[
+								"TODO",
+								"README",
+								"FIXME"
+							],
+							"bh_regions":
+							[
+								"bh_regex",
+								"bh_regex_center",
+								"bh_regex_open",
+								"bh_regex_close",
+								"bh_double_quote",
+								"bh_double_quote_center",
+								"bh_double_quote_open",
+								"bh_double_quote_close",
+								"bh_square",
+								"bh_square_center",
+								"bh_square_open",
+								"bh_square_close",
+								"bh_angle",
+								"bh_angle_center",
+								"bh_angle_open",
+								"bh_angle_close",
+								"bh_curly",
+								"bh_curly_center",
+								"bh_curly_open",
+								"bh_curly_close",
+								"bh_c_define",
+								"bh_c_define_center",
+								"bh_c_define_open",
+								"bh_c_define_close",
+								"bh_default",
+								"bh_default_center",
+								"bh_default_open",
+								"bh_default_close",
+								"bh_unmatched",
+								"bh_unmatched_center",
+								"bh_unmatched_open",
+								"bh_unmatched_close",
+								"bh_round",
+								"bh_round_center",
+								"bh_round_open",
+								"bh_round_close",
+								"bh_tag",
+								"bh_tag_center",
+								"bh_tag_open",
+								"bh_tag_close",
+								"bh_single_quote",
+								"bh_single_quote_center",
+								"bh_single_quote_open",
+								"bh_single_quote_close"
+							],
+							"csslint_options":
+							{
+								"adjoining-classes": "warning",
+								"box-model": true,
+								"box-sizing": "warning",
+								"compatible-vendor-prefixes": "warning",
+								"display-property-grouping": true,
+								"duplicate-background-images": "warning",
+								"duplicate-properties": true,
+								"empty-rules": true,
+								"errors": true,
+								"fallback-colors": "warning",
+								"floats": "warning",
+								"font-faces": "warning",
+								"font-sizes": "warning",
+								"gradients": "warning",
+								"ids": "warning",
+								"import": "warning",
+								"important": "warning",
+								"known-properties": true,
+								"outline-none": "warning",
+								"overqualified-elements": "warning",
+								"qualified-headings": "warning",
+								"regex-selectors": "warning",
+								"rules-count": "warning",
+								"shorthand": "warning",
+								"star-property-hack": "warning",
+								"text-indent": "warning",
+								"underscore-property-hack": "warning",
+								"unique-headings": "warning",
+								"universal-selector": "warning",
+								"vendor-prefix": true,
+								"zero-units": "warning"
+							},
+							"gjslint_ignore":
+							[
+								110
+							],
+							"gjslint_options":
+							[
+							],
+							"javascript_linter": "jshint",
+							"jshint_options":
+							{
+								"browser": true,
+								"devel": true,
+								"evil": true,
+								"regexdash": true,
+								"sub": true,
+								"trailing": true,
+								"wsh": true
+							},
+							"pep8": true,
+							"pep8_ignore":
+							[
+								"E501"
+							],
+							"perl_linter": "perlcritic",
+							"pyflakes_ignore":
+							[
+							],
+							"pyflakes_ignore_import_*": true,
+							"sublimelinter": "load-save",
+							"sublimelinter_delay": 2,
+							"sublimelinter_disable":
+							[
+							],
+							"sublimelinter_executable_map":
+							{
+							},
+							"sublimelinter_fill_outlines": false,
+							"sublimelinter_gutter_marks": true,
+							"sublimelinter_gutter_marks_theme": "simple",
+							"sublimelinter_mark_style": "none",
+							"sublimelinter_notes": false,
+							"sublimelinter_objj_check_ascii": false,
+							"sublimelinter_popup_errors_on_save": false,
+							"sublimelinter_syntax_map":
+							{
+								"C++": "c",
+								"Python Django": "python",
+								"Ruby on Rails": "ruby"
+							},
+							"sublimelinter_wrap_find": true,
+							"syntax": "Packages/Twig/Syntaxes/HTML (Twig).tmLanguage",
+							"tab_size": 2,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 130,
 					"file": "src/Cole/IntranetBundle/Resources/views/Ausencia/eliminarAusencia.html.twig",
 					"settings":
 					{
@@ -22399,7 +23712,7 @@
 					"type": "text"
 				},
 				{
-					"buffer": 123,
+					"buffer": 131,
 					"file": "src/Cole/IntranetBundle/Resources/views/Profesor/evaluar_asignatura.html.twig",
 					"settings":
 					{
@@ -22410,8 +23723,8 @@
 						"selection":
 						[
 							[
-								7474,
-								7474
+								303,
+								303
 							]
 						],
 						"settings":
@@ -22559,13 +23872,13 @@
 							"translate_tabs_to_spaces": true
 						},
 						"translation.x": 0.0,
-						"translation.y": 816.0,
+						"translation.y": 2280.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"
 				},
 				{
-					"buffer": 124,
+					"buffer": 132,
 					"file": "src/Cole/IntranetBundle/Resources/views/Profesor/evaluar_tarea.html.twig",
 					"settings":
 					{
@@ -22576,8 +23889,8 @@
 						"selection":
 						[
 							[
-								11922,
-								11922
+								10313,
+								10313
 							]
 						],
 						"settings":
@@ -22725,13 +24038,13 @@
 							"translate_tabs_to_spaces": true
 						},
 						"translation.x": 0.0,
-						"translation.y": 3856.0,
+						"translation.y": 4281.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"
 				},
 				{
-					"buffer": 125,
+					"buffer": 133,
 					"file": "src/Cole/IntranetBundle/Resources/views/Profesor/evaluar_trimestre.html.twig",
 					"settings":
 					{
@@ -22742,8 +24055,8 @@
 						"selection":
 						[
 							[
-								505,
-								505
+								8594,
+								8594
 							]
 						],
 						"settings":
@@ -22891,13 +24204,13 @@
 							"translate_tabs_to_spaces": true
 						},
 						"translation.x": 0.0,
-						"translation.y": 187.0,
+						"translation.y": 3279.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"
 				},
 				{
-					"buffer": 126,
+					"buffer": 134,
 					"file": "src/Cole/IntranetBundle/Resources/views/Profesor/evaluacion_grupo.html.twig",
 					"settings":
 					{
@@ -22908,8 +24221,8 @@
 						"selection":
 						[
 							[
-								3149,
-								3149
+								3321,
+								3321
 							]
 						],
 						"settings":
@@ -23057,13 +24370,13 @@
 							"translate_tabs_to_spaces": true
 						},
 						"translation.x": 0.0,
-						"translation.y": 0.0,
+						"translation.y": 1146.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"
 				},
 				{
-					"buffer": 127,
+					"buffer": 135,
 					"file": "src/Cole/IntranetBundle/Resources/views/Profesor/evaluacion_alumno.html.twig",
 					"settings":
 					{
@@ -23223,25 +24536,25 @@
 							"translate_tabs_to_spaces": true
 						},
 						"translation.x": 0.0,
-						"translation.y": 0.0,
+						"translation.y": 1003.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"
 				},
 				{
-					"buffer": 128,
+					"buffer": 136,
 					"file": "src/Cole/IntranetBundle/Resources/views/Profesor/boletin_evaluacion.html.twig",
 					"settings":
 					{
-						"buffer_size": 7689,
+						"buffer_size": 8677,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								1831,
-								1831
+								8017,
+								8017
 							]
 						],
 						"settings":
@@ -23389,13 +24702,13 @@
 							"translate_tabs_to_spaces": true
 						},
 						"translation.x": 0.0,
-						"translation.y": 0.0,
+						"translation.y": 107.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"
 				},
 				{
-					"buffer": 129,
+					"buffer": 137,
 					"file": "src/Cole/IntranetBundle/Resources/views/Profesor/lista_tareas_alumno.html.twig",
 					"settings":
 					{
@@ -23555,13 +24868,13 @@
 							"translate_tabs_to_spaces": true
 						},
 						"translation.x": 0.0,
-						"translation.y": 51.0,
+						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"
 				},
 				{
-					"buffer": 130,
+					"buffer": 138,
 					"file": "src/Cole/ColeBundle/Resources/views/Noticias/noticia.html.twig",
 					"settings":
 					{
@@ -23727,7 +25040,7 @@
 					"type": "text"
 				},
 				{
-					"buffer": 131,
+					"buffer": 139,
 					"file": "src/Cole/IntranetBundle/Resources/views/Seguimiento/newTutoria.html.twig",
 					"settings":
 					{
@@ -23893,7 +25206,7 @@
 					"type": "text"
 				},
 				{
-					"buffer": 132,
+					"buffer": 140,
 					"file": "src/Cole/IntranetBundle/Resources/views/Seguimiento/respuestaSeguimiento.html.twig",
 					"settings":
 					{
@@ -24058,7 +25371,7 @@
 					"type": "text"
 				},
 				{
-					"buffer": 133,
+					"buffer": 141,
 					"file": "src/Cole/IntranetBundle/Resources/views/Seguimiento/respuestaSeguimientoInfantil.html.twig",
 					"settings":
 					{
@@ -24223,7 +25536,7 @@
 					"type": "text"
 				},
 				{
-					"buffer": 134,
+					"buffer": 142,
 					"file": "src/Cole/IntranetBundle/Resources/views/Seguimiento/edit.html.twig",
 					"settings":
 					{
@@ -24388,7 +25701,7 @@
 					"type": "text"
 				},
 				{
-					"buffer": 135,
+					"buffer": 143,
 					"file": "src/Cole/IntranetBundle/Resources/views/Seguimiento/eliminarSeguimiento.html.twig",
 					"settings":
 					{
@@ -24553,7 +25866,7 @@
 					"type": "text"
 				},
 				{
-					"buffer": 136,
+					"buffer": 144,
 					"file": "src/Cole/IntranetBundle/Resources/views/Tarea/eliminarTarea.html.twig",
 					"settings":
 					{
@@ -24718,7 +26031,7 @@
 					"type": "text"
 				},
 				{
-					"buffer": 137,
+					"buffer": 145,
 					"file": "src/Cole/IntranetBundle/Resources/views/Tutorias/eliminarTutorias.html.twig",
 					"settings":
 					{
@@ -24883,7 +26196,7 @@
 					"type": "text"
 				},
 				{
-					"buffer": 138,
+					"buffer": 146,
 					"file": "src/Cole/IntranetBundle/Resources/views/Profesor/eliminarReserva.html.twig",
 					"settings":
 					{
@@ -25047,7 +26360,7 @@
 					"type": "text"
 				},
 				{
-					"buffer": 139,
+					"buffer": 147,
 					"file": "src/Cole/IntranetBundle/Entity/AvisosRepository.php",
 					"settings":
 					{
@@ -25206,13 +26519,13 @@
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 0.0,
+						"translation.y": 1377.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"
 				},
 				{
-					"buffer": 140,
+					"buffer": 148,
 					"file": "src/Cole/IntranetBundle/Entity/SeguimientoRepository.php",
 					"settings":
 					{
@@ -25223,8 +26536,8 @@
 						"selection":
 						[
 							[
-								0,
-								0
+								22369,
+								22369
 							]
 						],
 						"settings":
@@ -25371,13 +26684,13 @@
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 0.0,
+						"translation.y": 9384.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"
 				},
 				{
-					"buffer": 141,
+					"buffer": 149,
 					"file": "src/Cole/IntranetBundle/Resources/views/Profesor/info_alumno.html.twig",
 					"settings":
 					{
@@ -25388,8 +26701,8 @@
 						"selection":
 						[
 							[
-								0,
-								0
+								1826,
+								1826
 							]
 						],
 						"settings":
@@ -25536,13 +26849,13 @@
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 0.0,
+						"translation.y": 102.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"
 				},
 				{
-					"buffer": 142,
+					"buffer": 150,
 					"file": "src/Cole/IntranetBundle/Resources/views/Profesor/info_tutoria.html.twig",
 					"settings":
 					{
@@ -25707,7 +27020,7 @@
 					"type": "text"
 				},
 				{
-					"buffer": 143,
+					"buffer": 151,
 					"file": "src/Cole/IntranetBundle/Resources/views/Alumno/info_tutoria.html.twig",
 					"settings":
 					{
@@ -25872,7 +27185,7 @@
 					"type": "text"
 				},
 				{
-					"buffer": 144,
+					"buffer": 152,
 					"file": "src/Cole/ColeBundle/Entity/NoticiasRepository.php",
 					"settings":
 					{
@@ -26037,7 +27350,7 @@
 					"type": "text"
 				},
 				{
-					"buffer": 145,
+					"buffer": 153,
 					"file": "src/Cole/IntranetBundle/Entity/Avisos.php",
 					"settings":
 					{
@@ -26048,8 +27361,8 @@
 						"selection":
 						[
 							[
-								0,
-								0
+								79,
+								79
 							]
 						],
 						"settings":
@@ -26197,13 +27510,13 @@
 							"translate_tabs_to_spaces": true
 						},
 						"translation.x": 0.0,
-						"translation.y": 765.0,
+						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"
 				},
 				{
-					"buffer": 146,
+					"buffer": 154,
 					"file": "src/Cole/IntranetBundle/Resources/views/Profesor/reservas.html.twig",
 					"settings":
 					{
@@ -26369,7 +27682,7 @@
 					"type": "text"
 				},
 				{
-					"buffer": 147,
+					"buffer": 155,
 					"file": "src/Cole/IntranetBundle/Form/SeguimientoType.php",
 					"settings":
 					{
@@ -26535,7 +27848,7 @@
 					"type": "text"
 				},
 				{
-					"buffer": 148,
+					"buffer": 156,
 					"file": "src/Cole/IntranetBundle/Entity/TutoriasRepository.php",
 					"settings":
 					{
@@ -26700,7 +28013,7 @@
 					"type": "text"
 				},
 				{
-					"buffer": 149,
+					"buffer": 157,
 					"file": "src/Cole/IntranetBundle/Resources/views/Profesor/seguimiento_tutoria.html.twig",
 					"settings":
 					{
@@ -26866,7 +28179,7 @@
 					"type": "text"
 				},
 				{
-					"buffer": 150,
+					"buffer": 158,
 					"file": "src/Cole/IntranetBundle/Resources/views/Alumno/seguimiento_tutoria.html.twig",
 					"settings":
 					{
@@ -27032,7 +28345,7 @@
 					"type": "text"
 				},
 				{
-					"buffer": 151,
+					"buffer": 159,
 					"file": "src/Cole/BackendBundle/Resources/views/Profesor/equipo_directivo.html.twig",
 					"settings":
 					{
@@ -27198,7 +28511,7 @@
 					"type": "text"
 				},
 				{
-					"buffer": 152,
+					"buffer": 160,
 					"file": "src/Cole/BackendBundle/Controller/GrupoController.php",
 					"settings":
 					{
@@ -27364,7 +28677,7 @@
 					"type": "text"
 				},
 				{
-					"buffer": 153,
+					"buffer": 161,
 					"file": "src/Cole/ColeBundle/Resources/views/Noticias/new.html.twig",
 					"settings":
 					{
@@ -27375,8 +28688,8 @@
 						"selection":
 						[
 							[
-								0,
-								0
+								268,
+								268
 							]
 						],
 						"settings":
@@ -27530,7 +28843,7 @@
 					"type": "text"
 				},
 				{
-					"buffer": 154,
+					"buffer": 162,
 					"file": "src/Cole/IntranetBundle/Entity/TareaRepository.php",
 					"settings":
 					{
@@ -27541,8 +28854,8 @@
 						"selection":
 						[
 							[
-								0,
-								0
+								1353,
+								1353
 							]
 						],
 						"settings":
@@ -27689,13 +29002,13 @@
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 0.0,
+						"translation.y": 663.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"
 				},
 				{
-					"buffer": 155,
+					"buffer": 163,
 					"file": "src/Cole/BackendBundle/Controller/AdministrativoController.php",
 					"settings":
 					{
@@ -27861,7 +29174,7 @@
 					"type": "text"
 				},
 				{
-					"buffer": 156,
+					"buffer": 164,
 					"file": "src/Cole/BackendBundle/Resources/config/routing/administrativo.yml",
 					"settings":
 					{
@@ -28027,7 +29340,7 @@
 					"type": "text"
 				},
 				{
-					"buffer": 157,
+					"buffer": 165,
 					"file": "src/Cole/BackendBundle/Form/BusquedaAdministrativoType.php",
 					"settings":
 					{
@@ -28193,7 +29506,7 @@
 					"type": "text"
 				},
 				{
-					"buffer": 158,
+					"buffer": 166,
 					"file": "src/Cole/BackendBundle/Resources/views/Administrativo/search_old.html.twig",
 					"settings":
 					{
@@ -28359,7 +29672,7 @@
 					"type": "text"
 				},
 				{
-					"buffer": 159,
+					"buffer": 167,
 					"file": "src/Cole/BackendBundle/Resources/views/Profesor/search_old.html.twig",
 					"settings":
 					{
@@ -28525,7 +29838,7 @@
 					"type": "text"
 				},
 				{
-					"buffer": 160,
+					"buffer": 168,
 					"file": "src/Cole/BackendBundle/Resources/views/Administrativo/datos_antiguo_administrativo.html.twig",
 					"settings":
 					{
@@ -28691,7 +30004,7 @@
 					"type": "text"
 				},
 				{
-					"buffer": 161,
+					"buffer": 169,
 					"file": "src/Cole/BackendBundle/Entity/ImparteRepository.php",
 					"settings":
 					{
@@ -28702,8 +30015,8 @@
 						"selection":
 						[
 							[
-								12663,
-								12663
+								10825,
+								10825
 							]
 						],
 						"settings":
@@ -28850,13 +30163,13 @@
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 5807.0,
+						"translation.y": 5181.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"
 				},
 				{
-					"buffer": 162,
+					"buffer": 170,
 					"file": "src/Cole/IntranetBundle/Entity/Cursa.php",
 					"settings":
 					{
@@ -29016,13 +30329,13 @@
 							"translate_tabs_to_spaces": true
 						},
 						"translation.x": 0.0,
-						"translation.y": 612.0,
+						"translation.y": 1071.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"
 				},
 				{
-					"buffer": 163,
+					"buffer": 171,
 					"file": "src/Cole/IntranetBundle/Entity/CursaRepository.php",
 					"settings":
 					{
@@ -29181,13 +30494,13 @@
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 40.0,
-						"translation.y": 141.0,
+						"translation.y": 294.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"
 				},
 				{
-					"buffer": 164,
+					"buffer": 172,
 					"file": "src/Cole/BackendBundle/Entity/AlumnoRepository.php",
 					"settings":
 					{
@@ -29352,7 +30665,7 @@
 					"type": "text"
 				},
 				{
-					"buffer": 165,
+					"buffer": 173,
 					"file": "src/Cole/BackendBundle/Entity/AsignaturasCursosRepository.php",
 					"settings":
 					{
@@ -29517,7 +30830,7 @@
 					"type": "text"
 				},
 				{
-					"buffer": 166,
+					"buffer": 174,
 					"file": "src/Cole/BackendBundle/Resources/views/Profesor/new.html.twig",
 					"settings":
 					{
@@ -29683,7 +30996,7 @@
 					"type": "text"
 				},
 				{
-					"buffer": 167,
+					"buffer": 175,
 					"file": "src/Cole/BackendBundle/Resources/views/Profesor/edit.html.twig",
 					"settings":
 					{
@@ -29849,19 +31162,19 @@
 					"type": "text"
 				},
 				{
-					"buffer": 168,
+					"buffer": 176,
 					"file": "src/Cole/BackendBundle/Entity/ProfesorRepository.php",
 					"settings":
 					{
-						"buffer_size": 2987,
+						"buffer_size": 3310,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								0,
-								0
+								3302,
+								3302
 							]
 						],
 						"settings":
@@ -30008,13 +31321,13 @@
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 0.0,
+						"translation.y": 1636.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"
 				},
 				{
-					"buffer": 169,
+					"buffer": 177,
 					"file": "src/Cole/ColeBundle/Resources/views/Noticias/edit.html.twig",
 					"settings":
 					{
@@ -30180,7 +31493,7 @@
 					"type": "text"
 				},
 				{
-					"buffer": 170,
+					"buffer": 178,
 					"file": "src/Cole/BackendBundle/Controller/MatriculaController.php",
 					"settings":
 					{
@@ -30346,7 +31659,7 @@
 					"type": "text"
 				},
 				{
-					"buffer": 171,
+					"buffer": 179,
 					"file": "src/Cole/BackendBundle/Resources/views/Grupo/AsignarGrupoConCurso.html.twig",
 					"settings":
 					{
@@ -30512,7 +31825,7 @@
 					"type": "text"
 				},
 				{
-					"buffer": 172,
+					"buffer": 180,
 					"file": "src/Cole/BackendBundle/Entity/HorarioRepository.php",
 					"settings":
 					{
@@ -30677,19 +31990,19 @@
 					"type": "text"
 				},
 				{
-					"buffer": 173,
+					"buffer": 181,
 					"file": "src/Cole/IntranetBundle/Entity/Ausencia.php",
 					"settings":
 					{
-						"buffer_size": 4656,
+						"buffer_size": 5194,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								1369,
-								1369
+								1266,
+								1266
 							]
 						],
 						"settings":
@@ -30837,13 +32150,13 @@
 							"translate_tabs_to_spaces": true
 						},
 						"translation.x": 0.0,
-						"translation.y": 548.0,
+						"translation.y": 1307.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"
 				},
 				{
-					"buffer": 174,
+					"buffer": 182,
 					"file": "src/Cole/BackendBundle/Entity/AsignaturasCursos.php",
 					"settings":
 					{
@@ -31009,7 +32322,7 @@
 					"type": "text"
 				},
 				{
-					"buffer": 175,
+					"buffer": 183,
 					"file": "src/Cole/BackendBundle/Entity/Curso.php",
 					"settings":
 					{
@@ -31175,19 +32488,19 @@
 					"type": "text"
 				},
 				{
-					"buffer": 176,
+					"buffer": 184,
 					"file": "src/Cole/IntranetBundle/Entity/AusenciaRepository.php",
 					"settings":
 					{
-						"buffer_size": 1825,
+						"buffer_size": 2953,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								1444,
-								1444
+								732,
+								732
 							]
 						],
 						"settings":
@@ -31334,25 +32647,25 @@
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 766.0,
+						"translation.y": 1299.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"
 				},
 				{
-					"buffer": 177,
+					"buffer": 185,
 					"file": "src/Cole/IntranetBundle/Form/AusenciaType.php",
 					"settings":
 					{
-						"buffer_size": 3192,
+						"buffer_size": 3224,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								823,
-								823
+								2823,
+								2823
 							]
 						],
 						"settings":
@@ -31499,14 +32812,14 @@
 							"tab_size": 4,
 							"translate_tabs_to_spaces": true
 						},
-						"translation.x": 712.0,
+						"translation.x": 0.0,
 						"translation.y": 218.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"
 				},
 				{
-					"buffer": 178,
+					"buffer": 186,
 					"file": "src/Cole/IntranetBundle/Resources/views/Ausencia/edit.html.twig",
 					"settings":
 					{
@@ -31517,8 +32830,8 @@
 						"selection":
 						[
 							[
-								282,
-								282
+								436,
+								436
 							]
 						],
 						"settings":
@@ -31661,10 +32974,176 @@
 								"Ruby on Rails": "ruby"
 							},
 							"sublimelinter_wrap_find": true,
-							"syntax": "Packages/Twig/Syntaxes/HTML (Twig).tmLanguage"
+							"syntax": "Packages/Twig/Syntaxes/HTML (Twig).tmLanguage",
+							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
 						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 187,
+					"file": "src/Cole/IntranetBundle/Resources/views/Ausencia/confirmar.html.twig",
+					"settings":
+					{
+						"buffer_size": 1088,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								851,
+								851
+							]
+						],
+						"settings":
+						{
+							"BracketHighlighterBusy": false,
+							"annotations":
+							[
+								"TODO",
+								"README",
+								"FIXME"
+							],
+							"bh_regions":
+							[
+								"bh_regex",
+								"bh_regex_center",
+								"bh_regex_open",
+								"bh_regex_close",
+								"bh_double_quote",
+								"bh_double_quote_center",
+								"bh_double_quote_open",
+								"bh_double_quote_close",
+								"bh_square",
+								"bh_square_center",
+								"bh_square_open",
+								"bh_square_close",
+								"bh_angle",
+								"bh_angle_center",
+								"bh_angle_open",
+								"bh_angle_close",
+								"bh_curly",
+								"bh_curly_center",
+								"bh_curly_open",
+								"bh_curly_close",
+								"bh_c_define",
+								"bh_c_define_center",
+								"bh_c_define_open",
+								"bh_c_define_close",
+								"bh_default",
+								"bh_default_center",
+								"bh_default_open",
+								"bh_default_close",
+								"bh_unmatched",
+								"bh_unmatched_center",
+								"bh_unmatched_open",
+								"bh_unmatched_close",
+								"bh_round",
+								"bh_round_center",
+								"bh_round_open",
+								"bh_round_close",
+								"bh_tag",
+								"bh_tag_center",
+								"bh_tag_open",
+								"bh_tag_close",
+								"bh_single_quote",
+								"bh_single_quote_center",
+								"bh_single_quote_open",
+								"bh_single_quote_close"
+							],
+							"csslint_options":
+							{
+								"adjoining-classes": "warning",
+								"box-model": true,
+								"box-sizing": "warning",
+								"compatible-vendor-prefixes": "warning",
+								"display-property-grouping": true,
+								"duplicate-background-images": "warning",
+								"duplicate-properties": true,
+								"empty-rules": true,
+								"errors": true,
+								"fallback-colors": "warning",
+								"floats": "warning",
+								"font-faces": "warning",
+								"font-sizes": "warning",
+								"gradients": "warning",
+								"ids": "warning",
+								"import": "warning",
+								"important": "warning",
+								"known-properties": true,
+								"outline-none": "warning",
+								"overqualified-elements": "warning",
+								"qualified-headings": "warning",
+								"regex-selectors": "warning",
+								"rules-count": "warning",
+								"shorthand": "warning",
+								"star-property-hack": "warning",
+								"text-indent": "warning",
+								"underscore-property-hack": "warning",
+								"unique-headings": "warning",
+								"universal-selector": "warning",
+								"vendor-prefix": true,
+								"zero-units": "warning"
+							},
+							"gjslint_ignore":
+							[
+								110
+							],
+							"gjslint_options":
+							[
+							],
+							"javascript_linter": "jshint",
+							"jshint_options":
+							{
+								"browser": true,
+								"devel": true,
+								"evil": true,
+								"regexdash": true,
+								"sub": true,
+								"trailing": true,
+								"wsh": true
+							},
+							"pep8": true,
+							"pep8_ignore":
+							[
+								"E501"
+							],
+							"perl_linter": "perlcritic",
+							"pyflakes_ignore":
+							[
+							],
+							"pyflakes_ignore_import_*": true,
+							"sublimelinter": "load-save",
+							"sublimelinter_delay": 2,
+							"sublimelinter_disable":
+							[
+							],
+							"sublimelinter_executable_map":
+							{
+							},
+							"sublimelinter_fill_outlines": false,
+							"sublimelinter_gutter_marks": true,
+							"sublimelinter_gutter_marks_theme": "simple",
+							"sublimelinter_mark_style": "none",
+							"sublimelinter_notes": false,
+							"sublimelinter_objj_check_ascii": false,
+							"sublimelinter_popup_errors_on_save": false,
+							"sublimelinter_syntax_map":
+							{
+								"C++": "c",
+								"Python Django": "python",
+								"Ruby on Rails": "ruby"
+							},
+							"sublimelinter_wrap_find": true,
+							"syntax": "Packages/Twig/Syntaxes/HTML (Twig).tmLanguage",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 255.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"
@@ -31711,8 +33190,8 @@
 		"rows":
 		[
 			0.0,
-			0.434268833087,
-			0.651403249631,
+			0.17624740558,
+			0.346879535559,
 			1.0
 		]
 	},
@@ -31746,6 +33225,6 @@
 	"show_open_files": false,
 	"show_tabs": true,
 	"side_bar_visible": true,
-	"side_bar_width": 301.0,
+	"side_bar_width": 112.0,
 	"status_bar_visible": true
 }

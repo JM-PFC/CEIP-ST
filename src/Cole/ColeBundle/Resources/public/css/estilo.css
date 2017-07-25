@@ -1339,7 +1339,6 @@ tr {page-break-inside: avoid;}
 #boletin_evaluacion_pdf .faltas {
     width: 55%;
 }
-
 .div_datos {
     margin-left: 10% !important;
     width: 90%!important;
@@ -1372,6 +1371,12 @@ tr {page-break-inside: avoid;}
 #boletin_evaluacion_pdf .horarios{
     margin-top: 100px;
 }
+#boletin_evaluacion_pdf .faltas tr td{
+    padding: 8px !important;
+}
+
+
+
 
 @media (max-width: 1100px){
     .carrusel{

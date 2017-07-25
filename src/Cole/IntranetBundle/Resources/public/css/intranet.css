@@ -695,6 +695,9 @@ form{
     #tabla_justificaciones{
         padding: 0 !important;
     }
+    #tabla_mensajes_profesor {
+        border: 0  !important;
+    }
     
 }
 /* Estilos para Pc*/
@@ -2584,25 +2587,25 @@ table tr td a{
     cursor: pointer;
     border: 1px solid #ddd;
 }
-.lista_alumnos_seguimiento tr{
-    cursor: pointer;
+.lista_alumnos_seguimiento tr, #lista_mensaje_modal tbody tr{
+    cursor: pointer !important; 
     border-radius: 5px;
 }
 .lista_alumnos_seguimiento tr:nth-child(2n){
     background:#cdd6e0;
 }
-.lista_alumnos_seguimiento tr:hover{
+.lista_alumnos_seguimiento tr:hover, #lista_mensaje_modal tr:hover {
     background:#F7BD83 !important;
     border-radius: 3px !important;
 }
-.lista_alumnos_seguimiento tr th, .lista_alumnos_seguimiento tr td {
+.lista_alumnos_seguimiento tr th, .lista_alumnos_seguimiento tr td , #lista_mensaje_modal tr th, #lista_mensaje_modal tr td{
    padding: 4px !important;
 }
 .lista_alumnos_seguimiento tr th:first-child, .lista_alumnos_seguimiento tr td:first-child {
     max-width: 70px;
     text-align: center;
 }
-.lista_alumnos_seguimiento tr th {
+.lista_alumnos_seguimiento tr th, #lista_mensaje_modal tr th {
     background: #23527c;
     color: white;
 }
@@ -3263,12 +3266,12 @@ table tr td a{
     min-width: 55px;
 }
 .notas  {
-    max-width: 50px !important;
+    max-width: 45px !important;
     text-align: center !important;
 }
 .tab_tareas>div{
-    min-height: 150px;
-    max-height: 150px;
+    min-height: 150px !important;
+    max-height: 150px !important;
     overflow: auto;
 }
 .tab_tareas .tab-content{
@@ -3641,4 +3644,199 @@ table[class*='lista-alumnos']{
 #confirmar_justificacion_modal .active {
     background: #e57200 none repeat scroll 0 0 !important;
     border: 1px grey inset !important;
+}
+.numasistencia{
+    margin: 0 20px !important;
+    top: -55px !important;
+}
+#tabla_mensajes_profesor{
+    padding: 0;
+    min-height: 440px !important
+}
+.contenedor-menu-mensajeria{
+    padding: 0 !important;
+}
+.contenedor-menu-mensajeria ul{
+    list-style: none;
+    padding: 10px 0;
+    clear: both;
+}
+.contenedor-menu-mensajeria li{
+    padding: 7px 10px;
+}
+.contenedor-contenido-mensajeria{
+    border-top: 1px solid grey;
+    padding: 0 !important;
+    border-left: 1px solid #23527c; 
+}
+.menu_mensajeria{
+    height: 31px;
+    background: #4f7692;
+
+}
+.carpetas{
+    background: #4f7692 none repeat scroll 0 0;
+    color: white;
+    font-family: Verdana;
+    font-size: 17px;
+    height: 32px;
+    padding: 3px !important;
+    text-align: center;
+}
+.contenido_mensajeria{
+    min-height: 406px !important;
+    max-height: 406px;
+    background: white;
+    border-radius: 0 0 5px 0;
+    padding-top: 20px;
+    overflow: auto;
+}
+.mce-menubtn span {
+  display: inline-block
+}
+
+.contenedor-menu-mensajeria i{
+    margin: 0 5px;
+}
+.contenedor-menu-mensajeria li:hover{
+    cursor: pointer;
+    background: #cdd6e0 !important;
+    color: #334c73 !important;
+}
+.font_weight{
+    font-weight: bold;
+}
+.num_mensajes, .mensajes_eliminados{
+    padding-left: 10px;
+}
+.menu_mensajeria>div{
+    padding: 5px 10px;
+    width: 110px;
+    text-align: center;
+    color: white;
+}
+.menu_mensajeria>div:hover{
+    background: #f5f5f5;
+    color: #4f7692;
+    cursor: pointer;
+}
+.menu_mensajeria i{
+    font-size: 16px !important;
+}
+
+#nuevo_mensaje .modal-dialog{
+    margin-top: 150px !important;
+}
+#tabla_mensajes_profesor textarea{
+    height: 200px;
+    resize: none;
+    overflow: auto;
+}
+#destinatarios{
+    border:1px solid #ccc ;
+    min-height: 32px;
+    border-radius: 0 5px 5px 0;
+}
+#destinatarios>span, #destinatarios>a {
+    display: inline-block;
+    padding: 5px 8px;
+    text-decoration: none;
+}
+#destinatarios i{
+    font-size: 14px;
+}
+.fichero{
+    padding: 3px;
+}
+#formulario_nuevo_mensaje .form-group input{
+    border-radius: 5px;
+}
+#formulario_nuevo_mensaje i{
+    min-width: 0 !important;
+}
+#formulario_nuevo_mensaje .boton_enviar{
+    margin-bottom: 10px;
+}
+#adjuntar{
+    text-decoration: none;
+}
+#nuevo_mensaje{
+    text-align: center;
+    color: white;
+    margin: 0 !important;
+    padding: 3px;
+    font-size: 16px;
+}
+.recibidos{
+    color: #337ab7;
+}
+.asunto{
+    font-weight: bold;
+    font-size: 15px;
+}
+.font_we{
+    font-weight: bold;
+}
+.nombre{
+    font-family: serif;
+    font-size: 12px;
+}
+.contenido_mensajeria{
+    padding: 8px 0 !important;
+}
+.contenido_mensajeria .men{
+    background: #eff3f9 none repeat scroll 0 0 !important;
+    border-top: 1px solid lightgrey;
+    border-bottom: 1px solid lightgrey;
+    margin-bottom: 5px;
+}
+.contenido_mensajeria .men:hover{
+   cursor: pointer;
+   color: #e57200 !important;
+}
+#tabla_mensajes_profesor .selec{
+    background: lightgrey;
+    border-top: 1px solid grey;
+    border-bottom: 1px solid grey;
+}
+#tabla_mensajes_profesor #mensaje_nuevo{
+    padding-top: 20px;
+}
+.men{
+    color: #555;
+}
+.mensaje_asunto{
+    color: #31708f;
+    font-size: 25px;
+    padding: 6px 26px;
+}
+.mensaje_nombre{
+    font-size: 17px;
+    padding-left: 27px;
+    padding-top: 20px;
+}
+.mensaje_fecha{
+    border-bottom: 2px solid #4f7692 !important;
+    font-size: 12px;
+    margin: 0 27px;
+    padding-bottom: 7px;
+}
+.mensaje_mensaje{
+    font-size: 13px;
+    font-size: 14px;
+    margin-top: 23px;
+    padding-left: 30px;
+}
+.mensaje_fichero{
+    margin-top: 13px;
+    margin-bottom: 40px;
+}
+.mensaje_fichero a{
+    font-size: 15px;
+    border: 1px solid lightgrey;
+    padding: 5px;
+    border-radius: 5px;
+    font-size: 14px;
+    margin-top: 0px;
+    margin-left: 30px;
 }

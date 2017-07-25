@@ -1,0 +1,13 @@
+<div id="contenedor_mensaje" user="{{entity.id}}">
+    <div class="mensaje_asunto">{{entity.asunto}}</div>
+    <div class="mensaje_nombre">{{entity.profesorReceptor}}</div>
+    <div class="mensaje_fecha">{{ entity.fecha | localizeddate('long', 'none', app.request.getLocale()) | capitalize}}</div>
+
+    {% if entity.fichero %}
+    <div class="mensaje_fichero"><a href="{{ asset('uploads/ficheros/' ~ entity.fichero) }}">Archivo adjunto</a></div>
+    {% endif %}
+    <div class="mensaje_mensaje">{{entity.mensaje}}</div>  
+</div>
+
+
+

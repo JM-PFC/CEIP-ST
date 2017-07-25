@@ -359,8 +359,6 @@ nav{
 	position: relative;
 	display: block;
 	background: #D8D8D8;
-	width: 70%;
-	min-width: 855px;
 	height: 120px;
 	-moz-box-shadow:  black 2px 2px 15px;
    	-webkit-box-shadow:  black 2px 2px 15px;
@@ -371,6 +369,10 @@ nav{
    	margin-right: auto;
    	background: -moz-linear-gradient(bottom,  #E4E0E0 30%,  #D8D8D8 45%, #E4E0E0 58%);
 	margin-bottom: 20px;
+	/*width: 70%;*/
+	/*min-width: 855px;*/
+	min-width: 852px;
+    width: 66%;
 }
 .contenedor div div{
 	position: relative;

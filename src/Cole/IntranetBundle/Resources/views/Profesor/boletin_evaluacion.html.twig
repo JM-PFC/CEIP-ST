@@ -78,15 +78,15 @@
         <tbody>
             <tr id="completo">
                 <td class="col-xs-7">Día/s Completo/s</td>
-                <td class="col-xs-2 center"></td>
-                <td class="col-xs-2 center"></td>
+                <td id="justificadas" class="col-xs-2 center"></td>
+                <td id="injustificadas" class="col-xs-2 center"></td>
                 <td class="col-xs-2 center" style="color:grey;"></td>
             </tr>
             <tr id="tramos">
                 <td class="col-xs-7">Tramo/s Horario/s</td>
-                <td class="col-xs-2 center"></td>
-                <td class="col-xs-2 center"></td>
-                <td class="col-xs-2 center"></td>
+                <td id="justificadas" class="col-xs-2 center"></td>
+                <td id="injustificadas" class="col-xs-2 center"></td>
+                <td id="retrasos" class="col-xs-2 center"></td>
             </tr>
         </tbody>
     </table>
@@ -175,8 +175,24 @@
     for(var i=0; i < array.length ; i++){
         horario=reemplazarDatos(array[i]);
         $(".horario").append('<p class="">'+horario+'</p');
-
     };
+
+    //Se insertan las faltasen la tabla.
+    justificadasDia={{justificadasDia|json_encode()|raw}};
+        $("#boletin_evaluacion_pdf .faltas tr[id='completo'] td[id='justificadas']").text(justificadasDia);
+    
+    injustificadasDia={{injustificadasDia|json_encode()|raw}};
+        $("#boletin_evaluacion_pdf .faltas tr[id='completo'] td[id='injustificadas']").text(injustificadasDia);
+    
+    justificadasTramo={{justificadasTramo|json_encode()|raw}};
+        $("#boletin_evaluacion_pdf .faltas tr[id='tramos'] td[id='justificadas']").text(justificadasTramo);
+    
+    injustificadasTramo={{injustificadasTramo|json_encode()|raw}};
+        $("#boletin_evaluacion_pdf .faltas tr[id='tramos'] td[id='injustificadas']").text(injustificadasTramo);
+    
+    retrasos={{retrasos|json_encode()|raw}};
+        $("#boletin_evaluacion_pdf .faltas tr[id='tramos'] td[id='retrasos']").text(retrasos);
+    
 
     </script>
   </body>

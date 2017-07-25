@@ -17,9 +17,10 @@ use Cole\IntranetBundle\Entity\Seguimiento;
 use Cole\IntranetBundle\Form\SeguimientoType;
 use Cole\IntranetBundle\Entity\Tarea;
 use Cole\IntranetBundle\Form\TareaType;
-
 use Cole\IntranetBundle\Entity\Ausencia;
 use Cole\IntranetBundle\Form\AusenciaType;
+use Cole\IntranetBundle\Entity\Comunicacion;
+use Cole\IntranetBundle\Form\ComunicacionType;
 
 use Cole\BackendBundle\Form\AlumnoIntranetType;
 use Symfony\Component\HttpFoundation\Response;
@@ -27,6 +28,49 @@ use Symfony\Component\HttpFoundation\Response;
 
 class ProfesorController extends Controller
 {
+
+
+    protected function comprobarAlumno($id) 
+    {
+        $em = $this->getDoctrine()->getManager();
+        $entity= $em->getRepository('BackendBundle:Alumno')->findOneById($id);
+        if(!$entity){
+            throw $this->createNotFoundException('Unable to find Role entity.');
+        }
+        $user=$this->get('security.context')->getToken()->getUser();
+
+        if($entity->getGrupo()){
+            $profesores_grupo=$em->getRepository('BackendBundle:Imparte')->findProfesoresGrupoSinRepetir($entity->getGrupo());
+            $cont=0;
+            foreach($profesores_grupo as $profesor){
+                if($profesor->getProfesor()==$user){
+                    $cont=1;
+                }
+            }
+            if($cont==0){
+                throw $this->createNotFoundException('No profesor.');
+            }
+        }
+        else{
+            throw $this->createNotFoundException('Unable to find Role entity.');
+        }
+    }
+
+    protected function comprobarSeguimiento($id) 
+    {
+        $em = $this->getDoctrine()->getManager();
+        $entity= $em->getRepository('IntranetBundle:Seguimiento')->findOneById($id);
+        if(!$entity){
+            throw $this->createNotFoundException('Unable to find Role entity.');
+        }
+
+        $user=$this->get('security.context')->getToken()->getUser();
+
+        if($entity->getProfesor()!=$user){
+            throw $this->createNotFoundException('Unable to find Role entity.');
+        }
+    }
+
 
     public function indexAction()
     {
@@ -379,6 +423,8 @@ class ProfesorController extends Controller
         $em = $this->getDoctrine()->getManager();
         $entity = $this->get('security.context')->getToken()->getUser();
         $seguimiento=$em->getRepository('IntranetBundle:Seguimiento')->findOneById($num);
+        $this->comprobarSeguimiento($seguimiento);
+
         $respuestas=$em->getRepository('IntranetBundle:Seguimiento')->findRespuestas($num);
 
         return $this->render('IntranetBundle:Profesor:seguimiento.html.twig', array(
@@ -530,6 +576,80 @@ class ProfesorController extends Controller
             'entities'=>$entities));
     }
 
+
+    ///////////////////////////////////////////
+    //               comunicación             //
+    ///////////////////////////////////////////
+
+
+    private function createCreateComunicacionForm(Comunicacion $entity)
+    {
+        $form = $this->createForm(new ComunicacionType(), $entity, array(
+            'action' => $this->generateUrl('comunicacion_create'),
+            'method' => 'POST',
+        ));
+
+        $titulo=$this->get("translator")->trans("Enviar");
+        $form->add('submit', 'submit', array('label' => $titulo, 'attr' => array('class' => 'btn btn-success')));
+
+
+        return $form;
+    }
+
+
+
+    public function comunicacionAction(Request $request)
+    {
+        $em = $this->getDoctrine()->getManager();
+
+        $entity = $this->get('security.context')->getToken()->getUser();
+        $comunicacion = new Comunicacion();
+        $form = $this->createCreateComunicacionForm($comunicacion);
+        
+        $recibidos = $em->getRepository('IntranetBundle:Comunicacion')->findRecibidosProfesor($entity);
+        $entrada = $em->getRepository('IntranetBundle:Comunicacion')->findEntradaProfesor($entity);
+        $salida = $em->getRepository('IntranetBundle:Comunicacion')->findSalidaProfesor($entity);
+        $papelera = $em->getRepository('IntranetBundle:Comunicacion')->findPapeleraProfesor($entity);
+        $numRecibidos=count($recibidos);
+        $numEliminados=count($papelera);
+
+        $array=null;
+        foreach($recibidos as $recibido){
+            $array[]=$recibido->getId();
+        }
+
+        return $this->render('IntranetBundle:Profesor:mensajes.html.twig', array(
+            'entity' => $entity, 
+            'form'   => $form->createView(),
+            'entrada'=>$entrada,
+            'salida'=>$salida,
+            'papelera'=>$papelera,
+            'recibidos'=>$array,
+            'numRecibidos'=>$numRecibidos,
+            'numEliminados'=>$numEliminados,
+
+        ));
+    }
+
+
+
+    public function comprobarMensajesNuevosAction($id)
+    {
+        $em = $this->getDoctrine()->getManager();
+
+        $entity= $em->getRepository('BackendBundle:Profesor')->findOneById($id);
+        $mensajes =$em->getRepository('IntranetBundle:Comunicacion')->findRecibidosProfesor($entity);
+    
+        $num=count($mensajes);
+
+        return new JsonResponse(array(
+            'num'=> $num,
+            'id' => $id,
+            'success' => true), 200);
+    }
+
+
+
     ///////////////////////////////////////////
     //               asistencia              //
     ///////////////////////////////////////////
@@ -653,7 +773,7 @@ class ProfesorController extends Controller
         if($tutor_grupo){
             $id_grupo=$tutor_grupo->getId();
 
-            //Se obtiene las faltas justificadas pendientes de de confirmación.
+            //Se obtiene las faltas justificadas pendientes de confirmación.
             $pendientes=$em->getRepository('IntranetBundle:Ausencia')->findFaltasPendientes($tutor_grupo); 
         }
         else{
@@ -1087,17 +1207,26 @@ class ProfesorController extends Controller
 
     }
 
+    public function comprobarJustificacionesNuevasAction($id)
+    {
+        $em = $this->getDoctrine()->getManager();
 
+        $entity= $em->getRepository('BackendBundle:Profesor')->findOneById($id);
+        $tutor_grupo= $em->getRepository('BackendBundle:Grupo')->findOneByProfesor($entity);
+        
+        $num=0;
+        //Se obtiene las faltas justificadas pendientes de de confirmación.
+        $pendientes=$em->getRepository('IntranetBundle:Ausencia')->findFaltasPendientes($tutor_grupo); 
 
+         if($pendientes){
+            $num=count($pendientes);
+         }
 
-
-
-
-
-
-
-
-
+        return new JsonResponse(array(
+            'num'=> $num,
+            'id' => $id,
+            'success' => true), 200);
+    }
 
 
     ///////////////////////////////////////////
@@ -1333,7 +1462,10 @@ class ProfesorController extends Controller
         $em = $this->getDoctrine()->getManager();
 
         $profesor = $this->get('security.context')->getToken()->getUser();
-        $alumno=$em->getRepository('BackendBundle:Alumno')->findOneById($id);        
+        $alumno=$em->getRepository('BackendBundle:Alumno')->findOneById($id); 
+
+        $this->comprobarAlumno($alumno);
+
         $asignaturas=$em->getRepository('BackendBundle:AsignaturasCursos')->findAsignaturasAlumno($alumno->getCurso(), $alumno->getOptativa());
 
         $centro =$em->getRepository('BackendBundle:Centro')->findCentro();
@@ -1404,6 +1536,45 @@ class ProfesorController extends Controller
             $array3[$registro->getAsignaturasCursos()->getId()."-".$registro->getTarea()->getTrimestre()."-".$registro->getOrd()]=$nota;
         }
 
+        //Se optienes las faltas para mostrarlas en la tabla.
+        $faltas=$em->getRepository('IntranetBundle:Ausencia')->findFaltasAlumnoPorDia($alumno);
+        $retrasos=$em->getRepository('IntranetBundle:Ausencia')->findRetrasosAlumnoPorDia($alumno);
+        $horarios=$em->getRepository('BackendBundle:Horario')->findClases();
+        
+        $justificadasDia=null;
+        $injustificadasDia=null;
+        $justificadasTramo=null;
+        $injustificadasTramo=null;
+        foreach($faltas as $falta){
+            $dia=$falta->getFecha()->format('d/m/Y');
+            
+            $faltas_dia=$em->getRepository('IntranetBundle:Ausencia')->findFaltasAlumnoDia($alumno, $dia);
+
+
+            //Se comprueba si tiene falta en todas las clases del día o solo en algún tramo.
+            if(count($faltas_dia)==count($horarios)){
+                if($falta->getConfirmada()==1){
+                    $justificadasDia[]=$falta;
+                }
+                else{
+                    $injustificadasDia[]=$falta;
+                }
+            }
+            else{
+                if($falta->getConfirmada()==1){
+                    $justificadasTramo[]=$falta;
+                }
+                else{
+                    $injustificadasTramo[]=$falta;
+                }
+            }
+        }
+        $numjustificadasDia=count($justificadasDia);
+        $numinjustificadasDia=count($injustificadasDia);
+        $numjustificadasTramo=count($justificadasTramo);
+        $numinjustificadasTramo=count($injustificadasTramo);
+        $numretrasos=count($retrasos);
+
         return $this->render('IntranetBundle:Profesor:boletin_evaluacion.html.twig', array(
             'entity' => $profesor,
             'asignaturas' => $asignaturas,
@@ -1412,7 +1583,12 @@ class ProfesorController extends Controller
             'trimestre1' => $array1,
             'trimestre2' => $array2, 
             'trimestre3' => $array3,
-            'h_tutorias' => $horario  
+            'h_tutorias' => $horario,  
+            'justificadasDia'=>$numjustificadasDia,
+            'injustificadasDia'=>$numinjustificadasDia,
+            'justificadasTramo'=>$numjustificadasTramo,
+            'injustificadasTramo'=>$numinjustificadasTramo,
+            'retrasos'=>$numretrasos
         ));
     }
 
@@ -1424,6 +1600,7 @@ class ProfesorController extends Controller
 
         $profesor = $this->get('security.context')->getToken()->getUser();
         $alumno=$em->getRepository('BackendBundle:Alumno')->findOneById($id);
+        $this->comprobarAlumno($alumno);
 
         $asignaturas=$em->getRepository('BackendBundle:AsignaturasCursos')->findAsignaturasAlumno($alumno->getCurso(), $alumno->getOptativa());
         
@@ -1480,7 +1657,6 @@ class ProfesorController extends Controller
                 $nota="";
             }
             $array2[$registro->getAsignaturasCursos()->getId()."-".$registro->getTarea()->getTrimestre()]=$nota;
-
         }
 
         $array3=[];
@@ -1505,6 +1681,47 @@ class ProfesorController extends Controller
             $titulo="3ª Evaluación";
         }
         $subtitulo=null;
+
+        //Se optienes las faltas para mostrarlas en la tabla.
+        $faltas=$em->getRepository('IntranetBundle:Ausencia')->findFaltasAlumnoPorDia($alumno);
+        $retrasos=$em->getRepository('IntranetBundle:Ausencia')->findRetrasosAlumnoPorDia($alumno);
+        $horarios=$em->getRepository('BackendBundle:Horario')->findClases();
+        
+        $justificadasDia=null;
+        $injustificadasDia=null;
+        $justificadasTramo=null;
+        $injustificadasTramo=null;
+        foreach($faltas as $falta){
+            $dia=$falta->getFecha()->format('d/m/Y');
+            
+            $faltas_dia=$em->getRepository('IntranetBundle:Ausencia')->findFaltasAlumnoDia($alumno, $dia);
+
+
+            //Se comprueba si tiene falta en todas las clases del día o solo en algún tramo.
+            if(count($faltas_dia)==count($horarios)){
+                if($falta->getConfirmada()==1){
+                    $justificadasDia[]=$falta;
+                }
+                else{
+                    $injustificadasDia[]=$falta;
+                }
+            }
+            else{
+                if($falta->getConfirmada()==1){
+                    $justificadasTramo[]=$falta;
+                }
+                else{
+                    $injustificadasTramo[]=$falta;
+                }
+            }
+        }
+
+        $numjustificadasDia=count($justificadasDia);
+        $numinjustificadasDia=count($injustificadasDia);
+        $numjustificadasTramo=count($justificadasTramo);
+        $numinjustificadasTramo=count($injustificadasTramo);
+        $numretrasos=count($retrasos);
+
         $html = $this->renderView('IntranetBundle:Profesor:boletin_evaluacion.html.twig', array(
             'entity' => $profesor,
             'asignaturas' => $asignaturas,
@@ -1513,7 +1730,12 @@ class ProfesorController extends Controller
             'trimestre1' => $array1,
             'trimestre2' => $array2, 
             'trimestre3' => $array3,
-            'h_tutorias' => $horario   
+            'h_tutorias' => $horario,
+            'justificadasDia'=>$numjustificadasDia,
+            'injustificadasDia'=>$numinjustificadasDia,
+            'justificadasTramo'=>$numjustificadasTramo,
+            'injustificadasTramo'=>$numinjustificadasTramo,
+            'retrasos'=>$numretrasos
         ));
         $header = $this->renderView('IntranetBundle:Default:header_boletin.html.twig', array(
             'inicio' => $ini_curso,
@@ -1656,7 +1878,7 @@ class ProfesorController extends Controller
                 'trimestre1' => $array1,
                 'trimestre2' => $array2, 
                 'trimestre3' => $array3,
-                'h_tutorias' => $horario   
+                'h_tutorias' => $horario,   
             ));
         } 
 
@@ -1952,8 +2174,10 @@ class ProfesorController extends Controller
         $em = $this->getDoctrine()->getManager();
         $entity = $this->get('security.context')->getToken()->getUser();
         $tutor_grupo= $em->getRepository('BackendBundle:Grupo')->findOneByProfesor($entity);
-
         $seguimiento=$em->getRepository('IntranetBundle:Seguimiento')->findOneById($num);
+
+        $this->comprobarSeguimiento($seguimiento);
+
         $respuestas=$em->getRepository('IntranetBundle:Seguimiento')->findRespuestasTutorias($num);
 
         //Se comprueba si la consulta tiene tutoria asignada.

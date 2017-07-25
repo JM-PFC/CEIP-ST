@@ -1,0 +1,173 @@
+{% extends  'IntranetBundle:Profesor:index.html.twig' %}
+
+{% block body %}
+    {{parent()}}
+    <script>
+    	$(".menu li").removeClass('active');
+		$(".menu #comunicacion").addClass('active');
+
+    array={{recibidos|json_encode()|raw}};
+    for (var key in array){
+        $("#tabla_mensajes_profesor #entrada .men[id='"+array[key]+"'] div").addClass('recibidos');
+    }
+
+    </script>
+ {% endblock %}
+
+{% block migas %}
+	<li class="tipo">
+			{% trans %}Profesorado{% endtrans %}
+	</li>
+	<li>
+		<a href="{{path('intranet_profesor')}}">
+			{% trans %}Panel principal{% endtrans %}
+		</a>
+	</li>
+	<li class="active no-seleccion">
+		{% trans %}Comunicación{% endtrans %}
+	</li>
+{% endblock %}
+
+{% block titulo_cabecera %}
+	<i class="fa fa-list-alt page-header-icon"></i>
+	{% trans %}Comunicación{% endtrans %}
+{% endblock %}
+{% block titulo_cabecera_movil %}
+    <i class="fa fa-list-alt page-header-icon"></i>
+    {% trans %}Comunicación{% endtrans %}
+{% endblock %}
+
+{% block contenido %}
+<h4 id="titulo-seccion" class="titulo-seccion">{% trans %}Comunicación interna{% endtrans %}</h4>
+
+<div id="tabla_mensajes_profesor" class="panel panel-default tab-content tablas">
+    <div class="col-sm-3 contenedor-menu-mensajeria">
+        <div class="carpetas col-xs-12">{% trans %}Carpetas{% endtrans %}</div>
+        <ul>
+            {% if numRecibidos %}
+            <li id="entrada" class="selec font_we"><i class="fa fa-sign-in"></i>{% trans %}Bandeja de entrada{% endtrans %}<span class="num_mensajes recibidos">{{numRecibidos}}</span></li>
+            {% else %}
+            <li id="entrada" class="active"><i class="fa fa-sign-in"></i>{% trans %}Bandeja de entrada{% endtrans %}<span class="num_mensajes"></span></li>
+            {% endif %}
+            <li id="salida"><i class="fa fa-sign-out"></i>{% trans %}Bandeja de salida{% endtrans %}</li>
+            {% if numEliminados %}
+                <li id="papelera"><i class="fa fa-trash"></i>{% trans %}Papelera{% endtrans %}<span class="mensajes_eliminados recibidos">{{numEliminados}}</span></li>
+            {% else %}
+                <li id="papelera"><i class="fa fa-trash"></i>{% trans %}Papelera{% endtrans %}<span class="mensajes_eliminados recibidos"></span></li>
+            {% endif %}
+        </ul>
+    </div>
+    <div class="col-sm-9 contenedor-contenido-mensajeria">
+        <div class="menu_mensajeria col-xs-12">
+            <div id="nuevo" class="pull-left"> <i class=" fa fa-plus-circle"> {% trans %}Nuevo{% endtrans %}</i></div>
+            <p id="nuevo_mensaje" class="hidden">{% trans %}Nuevo Mensaje{% endtrans %}</p>
+            <div id="eliminar" class="pull-left hidden"> <i class=" fa fa-trash-o"> {% trans %}Eliminar{% endtrans %}</i></div>           
+        </div>
+        <div id="entrada" class="contenido_mensajeria col-xs-12">
+            {% for entity in entrada %}
+                <div id="{{entity.id}}" class="col-xs-12 men no-padding">
+                    <div class="col-xs-8 col-sm-10 asunto">{{entity.asunto}}</div>
+                    <div class="col-xs-4 col-sm-2 asunto">{{ entity.fecha | localizeddate('medium', 'none', app.request.getLocale()) | capitalize}}</div>
+                    <div class="col-xs-12 nombre">{{entity.profesorReceptor}}</div>
+                </div>
+            {% endfor %}
+        </div>
+        <div id="salida" class="contenido_mensajeria col-xs-12 hidden">
+            {% for entity in salida %}
+                <div id="{{entity.id}}" class="col-xs-12 men no-padding">
+                    <div class="col-xs-8 col-sm-10 asunto">{{entity.asunto}}</div>
+                    <div class="col-xs-4 col-sm-2 asunto">{{ entity.fecha | localizeddate('medium', 'none', app.request.getLocale()) | capitalize}}</div>
+                    <div class="col-xs-12 nombre">{{entity.profesorReceptor}}</div>
+                </div>
+            {% endfor %}
+        </div>
+        <div id="papelera" class="contenido_mensajeria col-xs-12 hidden">
+            {% for entity in papelera %}
+                <div id="{{entity.id}}" class="col-xs-12 men no-padding">
+                    <div class="col-xs-8 col-sm-10 asunto">{{entity.asunto}}</div>
+                    <div class="col-xs-4 col-sm-2 asunto">{{ entity.fecha | localizeddate('medium', 'none', app.request.getLocale()) | capitalize}}</div>
+                    <div class="col-xs-12 nombre">{{entity.profesorReceptor}}</div>
+                </div>
+            {% endfor %}
+        </div>
+        <div id="nuevo" class="contenido_mensajeria col-xs-12 hidden">
+
+
+    {{form_start(form, {'method':'Post','attr':{'id':'mensaje_nuevo', 'tipo':'', 'data-toggle':"validator", 'role':"form" ,'novalidate':'novalidate', 'autocomplete':'off'}})}}
+        {% if is_granted("ROLE_USUARIO") %}
+        <div id="formulario_nuevo_mensaje" user="{{entity.id}}" class="col-xs-12 no-padding" > 
+        {% else %}
+        <div id="formulario_nuevo_mensaje" user="{{entity.id}}" class="col-xs-12 no-padding" > 
+        {% endif %}
+            {{ form_errors(form) }}
+                <div class="col-xs-12">
+                    <div class="form-group">
+                        <label class="sr-only control-label">Destinatarios</label>
+                        <div class="form-group input-group col-xs-12">
+                        <span class="input-group-addon"><i class="fa fa-user"></i></span>
+                        <div id="destinatarios">
+                            <span id="lista"><span class="nombre_dest"></span></span>
+                            <a id="abre-dialogo" href="javascript:void(0)" data-target="#lista_mensaje_modal" data-toggle="modal" class="insertar_dest" data-backdrop="static" data-keyboard="false">{% trans %}Añadir destinatario{% endtrans %} <i class="fa fa-external-link"></i></a>
+                            <a id="abre-dialogo" class="cambiar_dest hidden" href="javascript:void(0)" data-target="#lista_mensaje_modal" data-toggle="modal" data-backdrop="static" data-keyboard="false">{% trans %}Cambiar destinatario{% endtrans %} <i class="fa fa-refresh"></i></a>
+                        </div>
+                    </div>
+                <div class="form-group ">
+                    <div class="input-group col-xs-12">
+                    {% if locale == "es" %}
+                        {{ form_widget(form.asunto,{'attr':{'class': 'form-control','data-error': 'Debes añadir un asunto', 'placeholder': 'Agregar un asunto'}}) }}
+                    {% elseif locale == "en" %}
+                        {{ form_widget(form.asunto,{'attr':{'class': 'form-control','data-error': 'You must add a subject', 'placeholder': 'Add a subject'}}) }}
+                    {% endif %}
+                    </div>
+                </div>
+                <div class="form-group ">
+                    <div class="input-group col-xs-12">
+                    {% if locale == "es" %}
+                        {{ form_widget(form.mensaje,{'attr':{'class': 'form-control', 'type': 'textarea','data-error': 'Debes añadir un mensaje', 'placeholder': 'Agregar un mensaje'}}) }}
+                    {% elseif locale == "en" %}
+                        {{ form_widget(form.mensaje,{'attr':{'class': 'form-control', 'type': 'textarea','data-error': 'You must add a message', 'placeholder': 'Add a message'}}) }}
+                    {% endif %}
+                    </div>
+                </div>
+                <div class="col-xs-12">
+                    <div>
+                        <a id="adjuntar" href="javascript:void(0)">Adjuntar archivo <i class="fa  fa-file-text-o"></i></a>
+                        <div id="fichero" class="hidden">
+                            {{ form_widget(form.fichero) }}
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="boton_enviar col-sm-12"> 
+                {{ form_row(form.submit,{'id':'intranet_'~form.submit.vars.id , 'attr':{'class': 'btn btn-success pull-right' }}) }}
+            </div>
+        </div>
+        <div class="hidden">
+            {{ form_rest(form) }}
+        </div>
+    {{ form_end(form) }}
+        </div>
+
+    </div>
+
+    <div id="mostrar_mensaje" class="contenido_mensajeria col-xs-12 hidden"></div>
+
+
+</div>
+
+    <div id="lista_mensaje_modal" class="modal fade lista_tareas_alumno" role="dialog" data-backdrop="true" >
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    <h4 class="modal-title">{% trans %}Lista de destinatarios{% endtrans %}</h4>
+                </div>
+                <div class="modal-body"></div>
+                <div class="class-footer">
+                    <button type="button" class="btn btn_azul" data-dismiss="modal">{% trans %}Cerrar{% endtrans %}</button>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

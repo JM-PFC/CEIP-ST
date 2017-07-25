@@ -194,10 +194,12 @@
 							<img src="{{ asset('bundles/backend/images/menu/alumno-ficha.png')}}">
 							<span> Ficha <br> Alumno</span>
 						</a>
+						{#
 						<a id="listado_alumnos"title="Listas de Alumnos" href="javascript:void(0);">
 							<img src="{{ asset('bundles/backend/images/menu/lista_alumnos.png')}}">
 							<span> Listado de <br> Alumnos </span>
 						</a>
+						#}
 						<span> Información </span>
 					</div>
 					<div>
@@ -310,6 +312,7 @@
 						</a>
 						<span> Noticias </span>
 					</div>
+				{#
 					<div>
 						<a id="registrar_noticias" title="Contenido Estático" href="javascript:void(0);">
 							<img src="{{ asset('bundles/backend/images/menu/editar_publica.png')}}">
@@ -317,6 +320,7 @@
 						</a>
 						<span> Contenido Estático</span>
 					</div>
+					#}
 				</div>
 			{# Jefe de Estudios #}
 			{% elseif is_granted("ROLE_JEFE_ESTUDIO") %}
@@ -340,10 +344,12 @@
 							<img src="{{ asset('bundles/backend/images/menu/cursos-impartidos.png')}}">
 							<span>Clases<br>Docentes</span>
 						</a>
+						{#
 						<a id="listado_alumnos"title="Listas de Alumnos" href="javascript:void(0);">
 							<img src="{{ asset('bundles/backend/images/menu/lista_alumnos.png')}}">
 							<span> Listado de <br> Alumnos </span>
 						</a>
+						#}
 						<span> Información </span>
 					</div>
 					<div>
@@ -511,6 +517,7 @@
 						</a>
 						<span> Noticias </span>
 					</div>
+					{#
 					<div>
 						<a id="registrar_noticias" title="Contenido Estático" href="javascript:void(0);">
 							<img src="{{ asset('bundles/backend/images/menu/editar_publica.png')}}">
@@ -518,6 +525,7 @@
 						</a>
 						<span> Contenido Estático</span>
 					</div>
+					#}
 				</div>
 			{% endif %}
 				<div  class="oculto" id="dialog-message" title="Número máximo de Pestañas">

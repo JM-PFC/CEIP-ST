@@ -13,7 +13,7 @@
 	</div>
 	<div>
 		<label class="col-xs-2">{% trans %}Fecha{% endtrans %}:</label>
-		<span >{{ fecha | localizeddate('none', 'none', 'none',none , "d/MM/Y")}}</span>
+		<span >{{fecha| localizeddate('long','none', app.request.getLocale()) }}</span>
 	</div>
 	<label>{% trans %}Motivo{% endtrans %}</label>
 	{{ form_widget(edit_form.justificacion, {'attr':{'disabled':'disabled'}}) }}
@@ -24,6 +24,7 @@
 	</div>
 
 	<div class="class-footer">
+		<button class="btn btn-primary" type="button" data-dismiss="modal" title="">{% trans %}Cancelar{% endtrans %}</button>
 		{{ form_widget(edit_form.submit) }}
 	</div>
 	<div class="hidden">

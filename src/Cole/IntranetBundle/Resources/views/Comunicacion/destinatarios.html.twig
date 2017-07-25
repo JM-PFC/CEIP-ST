@@ -1,0 +1,30 @@
+{%  if entities %}	
+  <div class="panel panel-default">
+      <table class="table table-striped" user="{{user.id}}">
+        <thead>
+          <tr >
+            <th class="cold-md-10">{% trans %}Apellidos, Nombre{% endtrans %}</th>
+            <th class="cold-md-2">{% trans %}Nivel{% endtrans %}</th>
+          </tr>
+        </thead>
+        <tbody class="">
+        {% for entity in entities %}
+          <tr id="{{ entity.id }}" nombre="{{entity}}" sexo="{{entity.sexo}}">
+            <td class="cold-md-10" >
+            	{{entity.apellido1 ~ " " ~ entity.apellido2 ~ ", " ~ entity.nombre }}
+            </td>
+            <td class="cold-md-10" >
+              {{entity.nivel }}
+            </td>
+          </tr>
+        {% endfor %}
+        </tbody>
+      </table>
+  </div>
+{% else %}
+  <div class="alert alert-info alert-block">
+    <small>
+      <h4>{% trans %}Actualmente no tienes ningún destinatario disponible{% endtrans %}.</h4>
+    </small>
+  </div>
+{% endif %}

@@ -88,6 +88,18 @@ AlumnosGrupo:
     options:
         expose: true
 
+intranet_profesor_comunicacion:
+    path:     /comunicacion
+    defaults: { _controller: IntranetBundle:Profesor:comunicacion}
+    options:
+        expose: true
+
+nuevos_mensajes:
+    path:     /{id}/nuevos_mensajes
+    defaults: { _controller: IntranetBundle:Profesor:comprobarMensajesNuevos}
+    options:
+        expose: true
+
 intranet_profesor_ausencia:
     path:     /ausencia
     defaults: { _controller: IntranetBundle:Profesor:ausencia}
@@ -107,6 +119,12 @@ horasImpartidaClase_profesor:
 claseSeleccionada_profesor:
     path:     /claseSeleccionada/{fecha}/{horario}/{asig}/{grupo}
     defaults: { _controller: IntranetBundle:Profesor:claseSeleccionadaProfesor}
+    options:
+        expose: true
+
+nuevas_justificaciones_profesor:
+    path:     /{id}/nuevas_justificaciones
+    defaults: { _controller: IntranetBundle:Profesor:comprobarJustificacionesNuevas}
     options:
         expose: true
 

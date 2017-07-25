@@ -22,8 +22,7 @@
       //Se marca las faltas justificadas confirmadas por el tutor.
       justificadas={{justificadas|json_encode()|raw}};
       for (var key in justificadas){
-      
-          $("#tabla_asistencia div[id='"+fecha+"'] #justificar").append('<i class="fa fa-check-square item-verde"></i>');
+          $("#tabla_asistencia div[id='"+justificadas[key]+"'] #justificar").append('<i class="fa fa-check-square item-verde"></i>');
       }
     </script>
  {% endblock %}

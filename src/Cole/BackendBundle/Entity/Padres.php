@@ -202,6 +202,12 @@ class Padres implements UserInterface, \Serializable
     */
     private $faltas;
 
+    /**
+     * @ORM\OneToMany(targetEntity="Cole\IntranetBundle\Entity\Comunicacion", mappedBy="responsableEmisor")
+     * @ORM\OneToMany(targetEntity="Cole\IntranetBundle\Entity\Comunicacion", mappedBy="responsableReceptor")
+     */
+    private $mensajes;
+
     public function __construct()
     {
         $this->activo = true;
@@ -732,5 +738,38 @@ class Padres implements UserInterface, \Serializable
     public function getFaltas()
     {
         return $this->faltas;
+    }
+
+    /**
+     * Add mensajes
+     *
+     * @param \Cole\IntranetBundle\Entity\Comunicacion $mensajes
+     * @return Padres
+     */
+    public function addMensaje(\Cole\IntranetBundle\Entity\Comunicacion $mensajes)
+    {
+        $this->mensajes[] = $mensajes;
+
+        return $this;
+    }
+
+    /**
+     * Remove mensajes
+     *
+     * @param \Cole\IntranetBundle\Entity\Comunicacion $mensajes
+     */
+    public function removeMensaje(\Cole\IntranetBundle\Entity\Comunicacion $mensajes)
+    {
+        $this->mensajes->removeElement($mensajes);
+    }
+
+    /**
+     * Get mensajes
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getMensajes()
+    {
+        return $this->mensajes;
     }
 }

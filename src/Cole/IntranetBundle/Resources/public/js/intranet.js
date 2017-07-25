@@ -1967,6 +1967,144 @@ $(document).ready(function () {
 
 
 
+  ////////////////////////////////////////
+  //            Comunicación            //
+  ////////////////////////////////////////
+
+  //Se habilita el contenido de la opción marcada.
+  $(document).on('click','#tabla_mensajes_profesor .contenedor-menu-mensajeria li',function() {
+    id=$(this).attr("id");
+
+    $("#tabla_mensajes_profesor .contenido_mensajeria").addClass('hidden');
+    $("#tabla_mensajes_profesor .contenido_mensajeria[id='"+id+"']").removeClass('hidden');
+    $("#tabla_mensajes_profesor .menu_mensajeria #nuevo").removeClass('hidden');
+    $("#tabla_mensajes_profesor .menu_mensajeria #mostrar_mensaje").addClass('hidden');
+
+    $("#tabla_mensajes_profesor .contenedor-menu-mensajeria li").removeClass('selec');
+    $(this).addClass('selec');
+    $(".menu_mensajeria #nuevo_mensaje").addClass('hidden');
+        $("#tabla_mensajes_profesor .menu_mensajeria #eliminar").addClass('hidden');
+
+  });
+
+
+  $(document).on('click','#tabla_mensajes_profesor .menu_mensajeria #nuevo',function() {
+    $("#tabla_mensajes_profesor .contenido_mensajeria").addClass('hidden');
+    $("#tabla_mensajes_profesor .contenido_mensajeria[id='nuevo']").removeClass('hidden');
+    $("#tabla_mensajes_profesor .menu_mensajeria #nuevo").addClass('hidden');
+    $("#tabla_mensajes_profesor .menu_mensajeria #mostrar_mensaje").addClass('hidden');
+    $(".menu_mensajeria #nuevo_mensaje").removeClass('hidden');
+    $(".menu_mensajeria #nuevo").addClass('hidden');
+
+    $("#tabla_mensajes_profesor .contenedor-menu-mensajeria li").removeClass('selec');
+
+    //Se vacia el formulario cada vez que se entra.
+    $("#formulario_nuevo_mensaje textarea").val("");
+    $("#formulario_nuevo_mensaje #comunicacion_asunto").val("");
+    $("#formulario_nuevo_mensaje #destinatarios #lista").text("");
+    $("#formulario_nuevo_mensaje #destinatarios #cambiar_dest").addClass('hidden');
+    $("#formulario_nuevo_mensaje #destinatarios #insertar_dest").removeClass('hidden');
+
+
+  });
+
+  //Se muestra y se selecciona el input file.
+  $(document).on('click','#tabla_mensajes_profesor #adjuntar',function() {
+    $("#tabla_mensajes_profesor #comunicacion_fichero").click();
+  });
+
+  $(document).on('change','#tabla_mensajes_profesor #comunicacion_fichero',function() {
+      $("#tabla_mensajes_profesor #fichero").removeClass('hidden');
+      $("#tabla_mensajes_profesor #adjuntar").addClass('hidden');
+  });
+
+  //Se carga en la ventana modal los destinatarios disponibles del usuario.
+  $(document).on('click','#tabla_mensajes_profesor #abre-dialogo',function() {
+    id=$(this).closest("#formulario_nuevo_mensaje").attr("user");
+    $("#lista_mensaje_modal .modal-body").load(Routing.generate("listar_destinatarios", {id:id, _locale:locale}), function(){
+    
+    }); 
+  });
+
+  $(document).on('click','#lista_mensaje_modal tr',function() {
+    id=$(this).attr("id");
+    nombre=$(this).attr("nombre");
+    emisor=$(this).closest("table").attr("user");
+    $("#mensaje_nuevo #comunicacion_receptor").val(id);
+    $("#mensaje_nuevo #comunicacion_emisor").val(emisor);
+    $("#mensaje_nuevo #comunicacion_tipoEmisor").val(1);
+    $("#mensaje_nuevo #comunicacion_tipoReceptor").val(1);
+    
+    $("#mensaje_nuevo #destinatarios #lista").empty();
+    $("#mensaje_nuevo #destinatarios #lista").text(nombre);
+
+    $("#mensaje_nuevo .insertar_dest").addClass('hidden');
+    $("#mensaje_nuevo .cambiar_dest").removeClass('hidden');
+    $('#lista_mensaje_modal').modal('toggle');
+    
+    if($("#mensaje_nuevo textarea").val()!=""){
+      $("#mensaje_nuevo textarea").blur();
+    }
+
+  });
+
+
+  $(document).on('click','.contenido_mensajeria .men',function() {
+    id=$(this).attr("id");
+    $("#tabla_mensajes_profesor .contenido_mensajeria").addClass('hidden');
+    $("#tabla_mensajes_profesor .menu_mensajeria #nuevo").removeClass('hidden');
+    $("#tabla_mensajes_profesor  #mostrar_mensaje").load(Routing.generate("comunicacion_show", {id:id, _locale:locale}), function(){
+      $("#tabla_mensajes_profesor #mostrar_mensaje").removeClass('hidden');
+      $(".menu_mensajeria #eliminar").removeClass('hidden');
+    }); 
+    //Se elimina la marca del mensaje nuevo.
+    $(this).find("div").removeClass('recibidos');
+
+    $.ajax({
+      type: 'POST',
+      url: Routing.generate('comprobar_mensajes_leidos', {id:id, _locale:locale}),
+      success: function(response){
+        if(response.leido==1){
+          num=$("#tabla_mensajes_profesor .num_mensajes").text();
+          if(num>=2){
+            $("#tabla_mensajes_profesor .num_mensajes").text(parseInt(num)-1);
+            $(".nummensajes").text(parseInt(num)-1);
+          }
+          else{
+            $("#tabla_mensajes_profesor .num_mensajes").text("");
+            $("#tabla_mensajes_profesor #entrada").removeClass('font_we');
+            $(".nummensajes").text(parseInt(num)-1);
+          }
+
+        }
+      
+      }
+    })
+  });
+
+  $(document).on('click','.menu_mensajeria #eliminar',function() {
+    id=$("#mostrar_mensaje #contenedor_mensaje").attr("user");
+    $.ajax({
+      type: 'POST',
+      url: Routing.generate('mensaje_a_papelera', {id:id, _locale:locale}),
+      success: function(response){
+        if(response.leido==1){
+          num=$("#tabla_mensajes_profesor .mensajes_eliminados").text();
+          if(num!=""){
+            $("#tabla_mensajes_profesor .num_mensajes").text(parseInt(num)+1);
+          }
+          else{
+            $("#tabla_mensajes_profesor .num_mensajes").text("1");
+          }
+
+        }
+      
+      }
+    })
+  });
+
+
+
 });
 
 

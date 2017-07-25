@@ -362,6 +362,12 @@ class Profesor implements UserInterface, \Serializable
     * @ORM\OneToMany(targetEntity="Cole\IntranetBundle\Entity\Tarea", mappedBy="profesor", cascade={"remove"})
     */
     private $tarea;
+
+    /**
+     * @ORM\OneToMany(targetEntity="Cole\IntranetBundle\Entity\Comunicacion", mappedBy="profesorEmisor")
+     * @ORM\OneToMany(targetEntity="Cole\IntranetBundle\Entity\Comunicacion", mappedBy="profesorReceptor")
+     */
+    private $mensajes;
     
     public function __construct()
     {
@@ -1350,5 +1356,38 @@ class Profesor implements UserInterface, \Serializable
     public function getTarea()
     {
         return $this->tarea;
+    }
+
+    /**
+     * Add mensajes
+     *
+     * @param \Cole\IntranetBundle\Entity\Comunicacion $mensajes
+     * @return Profesor
+     */
+    public function addMensaje(\Cole\IntranetBundle\Entity\Comunicacion $mensajes)
+    {
+        $this->mensajes[] = $mensajes;
+
+        return $this;
+    }
+
+    /**
+     * Remove mensajes
+     *
+     * @param \Cole\IntranetBundle\Entity\Comunicacion $mensajes
+     */
+    public function removeMensaje(\Cole\IntranetBundle\Entity\Comunicacion $mensajes)
+    {
+        $this->mensajes->removeElement($mensajes);
+    }
+
+    /**
+     * Get mensajes
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getMensajes()
+    {
+        return $this->mensajes;
     }
 }
